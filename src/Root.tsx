@@ -1083,7 +1083,7 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={bundesligaTop10BarChartSchema}
 				defaultProps={{
-					dateString: '10. December 2023',
+					dateString: '22. Januar 2024',
 					year: 2023,
 					apiData: null,
 				}}

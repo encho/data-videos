@@ -1,15 +1,47 @@
+import {AbsoluteFill} from 'remotion';
 import {z} from 'zod';
 import {HorizontalBarsStar} from '../HorizontalBarsStar/HorizontalBarsStar';
+import LorenzoBertoliniLogo from './LorenzoBertoliniLogo';
 
-const COLORS = {
-	background: '#1c2541',
-	text: '#CAD8DE',
-	placements: {
-		champions: '#76E7CD',
-		uefa: '#9B7EDE',
-		uefaConference: '#C45BAA',
+const LORENZO_BLACK = '#222';
+const LORENZO_WHITE = '#FFF';
+
+// const COLORS = {
+// 	background: '#1c2541',
+// 	text: '#CAD8DE',
+// 	placements: {
+// 		champions: '#76E7CD',
+// 		uefa: '#9B7EDE',
+// 		uefaConference: '#C45BAA',
+// 	},
+// };
+
+const FLIC_COLORS = {
+	background: LORENZO_BLACK,
+	progressColor: 'transparent',
+	title: LORENZO_WHITE,
+	bar: {
+		// background: LORENZO_BLACK,
+		background: LORENZO_WHITE,
+		text: LORENZO_BLACK,
+		placements: {
+			champions: '#76E7CD',
+			uefa: '#9B7EDE',
+			uefaConference: '#C45BAA',
+		},
 	},
 };
+
+// these colors are BAR_COLORS
+// const COLORS = {
+// 	background: LORENZO_BLACK,
+// 	text: LORENZO_WHITE,
+// 	placements: {
+// 		champions: '#76E7CD',
+// 		uefa: '#9B7EDE',
+// 		uefaConference: '#C45BAA',
+// 	},
+// };
 
 export const bundesligaTop10BarChartSchema = z.object({
 	year: z.number(),
@@ -42,15 +74,15 @@ export const BundesligaTop10BarChart: React.FC<
 				description: `${it.points} Punkte`,
 				value: it.points,
 				colors: {
-					background: COLORS.background,
-					text: COLORS.text,
+					background: FLIC_COLORS.bar.background,
+					text: FLIC_COLORS.bar.text,
 					border:
 						i < 4
-							? COLORS.placements.champions
+							? FLIC_COLORS.bar.placements.champions
 							: i === 4
-							? COLORS.placements.uefa
+							? FLIC_COLORS.bar.placements.uefa
 							: i === 5
-							? COLORS.placements.uefaConference
+							? FLIC_COLORS.bar.placements.uefaConference
 							: 'transparent',
 				},
 				imageSource: it.teamIconUrl,
@@ -60,11 +92,16 @@ export const BundesligaTop10BarChart: React.FC<
 	const horizontalBarsStarProps = {
 		titleText: `Top 10 Bundesliga Teams | ${dateString}`,
 		titleFontSize: 44,
-		titleColor: '#CAD8DE',
-		backgroundColor: '#0b132b',
-		progressColor: '#CAD8DE',
+		titleColor: FLIC_COLORS.title,
+		backgroundColor: FLIC_COLORS.background,
+		progressColor: FLIC_COLORS.progressColor,
 		items: horizontalBarsStartDataItems,
 	};
 
-	return <HorizontalBarsStar {...horizontalBarsStarProps} />;
+	return (
+		<AbsoluteFill>
+			<HorizontalBarsStar {...horizontalBarsStarProps} />
+			<LorenzoBertoliniLogo />
+		</AbsoluteFill>
+	);
 };

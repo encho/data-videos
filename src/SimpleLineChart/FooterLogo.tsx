@@ -1,18 +1,7 @@
 // import {Img} from 'remotion';
-import {
-	Img,
-	interpolate,
-	Sequence,
-	useCurrentFrame,
-	useVideoConfig,
-} from 'remotion';
+import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
-export const FooterLogo: React.FC<{
-	// watermark?: boolean | null;
-	// watermark?: boolean;
-	// theme: Theme;
-	// baselines: (n: number) => number;
-}> = (
+export const FooterLogo: React.FC<{}> = (
 	{
 		// theme,
 		// watermark,
