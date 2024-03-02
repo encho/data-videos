@@ -89,15 +89,6 @@ function getEnterUpdateExits(
 	return {enter, update, exit};
 }
 
-interface Item {
-	id: string;
-	// other fields...
-}
-
-// function findItemById(items: Item[], id: string): Item | undefined {
-// 	return items.find((item) => item.id === id);
-// }
-
 function findItemById<T extends {id: string}>(
 	items: T[],
 	id: string
@@ -262,6 +253,44 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		};
 	});
 
+	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
+		const endLabel = findItemById(axisEnd.labels, labelId);
+		invariant(endLabel);
+
+		const startX = xScaleStart(endLabel.value);
+		const endX = xScaleEnd(endLabel.value);
+
+		const interpolatedX = interpolate(
+			animationPercentage,
+			[0, 1],
+			[startX, endX],
+			{
+				// easing: Easing.bezier(0.25, 1, 0.5, 1),
+				easing: Easing.linear,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 1],
+			[0, 1],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			mappedValue: interpolatedX,
+			opacity: interpolatedOpacity,
+			label: endLabel.label,
+		};
+	});
+
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
 			<h1 style={{color: textColor, fontSize: 50}}>
@@ -422,6 +451,26 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								strokeWidth={4}
 								opacity={it.opacity}
 							/>
+						</g>
+					);
+				})}
+				{/* enter labels  */}
+				{enterLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={'green'}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
