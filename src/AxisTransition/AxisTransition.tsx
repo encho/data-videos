@@ -48,7 +48,7 @@ const axisStart: AxisSpec = {
 
 const axisEnd: AxisSpec = {
 	domain: [new Date(2020, 10, 20), new Date(2023, 10, 5)],
-	range: [300, 1080 - 300],
+	range: [100, 1080 - 100],
 	ticks: [
 		{id: '01-02-2021', value: new Date(2021, 1, 1)},
 		{id: '01-02-2022', value: new Date(2022, 1, 1)},
@@ -121,6 +121,28 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 
 	const axisEnd_lineX1 = xScaleEnd(axisEnd.domain[0]);
 	const axisEnd_lineX2 = xScaleEnd(axisEnd.domain[1]);
+
+	const aAxis_lineX1 = interpolate(
+		animationPercentage,
+		[0, 1],
+		[axisStart_lineX1, axisEnd_lineX1],
+		{
+			easing: Easing.bezier(0.25, 1, 0.5, 1),
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const aAxis_lineX2 = interpolate(
+		animationPercentage,
+		[0, 1],
+		[axisStart_lineX2, axisEnd_lineX2],
+		{
+			easing: Easing.bezier(0.25, 1, 0.5, 1),
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 
 	// console.log({axisStart_lineX1, axisStart_lineX2});
 
@@ -478,6 +500,18 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 
 			<h1 style={{color: textColor, fontSize: 30}}>ALL Ticks</h1>
 			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
+				{/* startAxis: x axis line */}
+				<g>
+					<line
+						x1={aAxis_lineX1}
+						x2={aAxis_lineX2}
+						y1={40}
+						y2={40}
+						stroke={textColor}
+						strokeWidth={4}
+					/>
+				</g>
+
 				{/* enter ticks  */}
 				{enterTicks.map((it, i) => {
 					return (
