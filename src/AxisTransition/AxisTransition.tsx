@@ -200,6 +200,31 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		};
 	});
 
+	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
+		const startLabel = findItemById(axisStart.labels, labelId);
+		invariant(startLabel);
+
+		const startX = xScaleStart(startLabel.value);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 1],
+			[1, 0],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			mappedValue: startX,
+			opacity: interpolatedOpacity,
+			label: startLabel.label,
+		};
+	});
+
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const endTick = findItemById(axisEnd.ticks, tickId);
 		invariant(endTick);
@@ -315,7 +340,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								x2={it.mappedValue}
 								y1={40}
 								y2={60}
-								stroke={'orange'}
+								stroke={'#0099cc'}
 								strokeWidth={4}
 							/>
 						</g>
@@ -328,7 +353,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 							<text
 								textAnchor="middle"
 								alignmentBaseline="baseline"
-								fill={'orange'}
+								fill={'#0099cc'}
 								// fontFamily={fontFamilyXTicklabels}
 								// fontSize={styling.xTickValuesFontSize}
 								fontSize={16}
@@ -357,6 +382,26 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								strokeWidth={4}
 								opacity={it.opacity}
 							/>
+						</g>
+					);
+				})}
+				{/* exit labels  */}
+				{exitLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={'red'}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
@@ -410,7 +455,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								x2={it.mappedValue}
 								y1={40}
 								y2={60}
-								stroke={'orange'}
+								stroke={'#0099cc'}
 								strokeWidth={4}
 							/>
 						</g>
