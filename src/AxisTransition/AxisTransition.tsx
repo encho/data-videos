@@ -19,11 +19,17 @@ type TickSpec = {
 	value: Date;
 };
 
+type LabelSpec = {
+	id: string;
+	value: Date;
+	label: string;
+};
+
 type AxisSpec = {
 	domain: [Date, Date];
 	range: [number, number];
 	ticks: TickSpec[];
-	// labels: LabelsSpec[];
+	labels: LabelSpec[];
 };
 
 const axisStart: AxisSpec = {
@@ -32,6 +38,10 @@ const axisStart: AxisSpec = {
 	ticks: [
 		{id: '01-01-2020', value: new Date(2020, 0, 1)},
 		{id: '01-02-2021', value: new Date(2021, 1, 1)},
+	],
+	labels: [
+		{id: '01-01-2020_label', value: new Date(2020, 0, 1), label: '01/01/20'},
+		{id: '01-02-2021_label', value: new Date(2021, 1, 1), label: '01/02/21'},
 	],
 	// labels:
 };
@@ -43,6 +53,11 @@ const axisEnd: AxisSpec = {
 		{id: '01-02-2021', value: new Date(2021, 1, 1)},
 		{id: '01-02-2022', value: new Date(2022, 1, 1)},
 		{id: '01-10-2022', value: new Date(2022, 9, 1)},
+	],
+	labels: [
+		{id: '01-02-2021_label', value: new Date(2021, 1, 1), label: '01/02/21'},
+		{id: '01-02-2022_label', value: new Date(2022, 1, 1), label: '01/02/22'},
+		{id: '01-10-2022_label', value: new Date(2022, 9, 1), label: '01/10/22'},
 	],
 	// labels:
 };
@@ -123,7 +138,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		axisEnd.ticks.map((it) => it.id)
 	);
 
-	console.log({ticksEnterUpdateExits});
+	const labelsEnterUpdateExits = getEnterUpdateExits(
+		axisStart.labels.map((it) => it.id),
+		axisEnd.labels.map((it) => it.id)
+	);
+
+	// console.log({ticksEnterUpdateExits});
 
 	// update ticks positions in time
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
@@ -139,6 +159,21 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 			(1 - animationPercentage) * startX + animationPercentage * endX;
 
 		return {id: tickId, mappedValue: currentX};
+	});
+
+	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
+		const startLabel = findItemById(axisStart.labels, labelId);
+		const endLabel = findItemById(axisEnd.labels, labelId);
+		invariant(startLabel);
+		invariant(endLabel);
+
+		const startX = xScaleStart(startLabel.value);
+		const endX = xScaleEnd(endLabel.value);
+
+		const currentX =
+			(1 - animationPercentage) * startX + animationPercentage * endX;
+
+		return {id: labelId, mappedValue: currentX, label: startLabel.label};
 	});
 
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
@@ -269,7 +304,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 				})}
 			</svg>
 
-			<h1 style={{color: textColor, fontSize: 30}}>Update Ticks</h1>
+			<h1 style={{color: textColor, fontSize: 30}}>Update Ticks & Labels</h1>
 			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
 				{/* update ticks  */}
 				{updateTicks.map((it, i) => {
@@ -283,6 +318,25 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								stroke={'orange'}
 								strokeWidth={4}
 							/>
+						</g>
+					);
+				})}
+				{/* update labels  */}
+				{updateLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={'orange'}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
