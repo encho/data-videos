@@ -19,8 +19,6 @@ import {
 	nerdyPriceChartSchema,
 } from './NerdyPriceChart/NerdyPriceChart';
 
-import {nerdyFinancePriceChartData} from './SimpleLineChart/mockData';
-
 import './tailwind.css';
 
 const squareVideo = {
@@ -1083,7 +1081,7 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={bundesligaTop10BarChartSchema}
 				defaultProps={{
-					dateString: '22. Januar 2024',
+					dateString: '20. Februar 2024',
 					year: 2023,
 					apiData: null,
 				}}
