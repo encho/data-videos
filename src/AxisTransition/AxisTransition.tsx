@@ -1,10 +1,18 @@
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, Easing, interpolate} from 'remotion';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 import {max, min} from 'd3-array';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 import {scaleLinear, scaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
+
+function formatToPercentage(number: number): string {
+	// Convert the number to percentage with two decimal places
+	const percentage = (number * 100).toFixed(2);
+
+	// Append '%' symbol
+	return `${percentage}%`;
+}
 
 type TickSpec = {
 	id: string;
@@ -123,7 +131,6 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		const endTick = findItemById(axisEnd.ticks, tickId);
 		invariant(startTick);
 		invariant(endTick);
-		console.log({startTick, endTick});
 
 		const startX = xScaleStart(startTick.value);
 		const endX = xScaleEnd(endTick.value);
@@ -134,21 +141,84 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		return {id: tickId, mappedValue: currentX};
 	});
 
-	console.log(updateTicks);
+	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
+		const startTick = findItemById(axisStart.ticks, tickId);
+		invariant(startTick);
+
+		const startX = xScaleStart(startTick.value);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 1],
+			[1, 0],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: tickId,
+			mappedValue: startX,
+			opacity: interpolatedOpacity,
+		};
+	});
+
+	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
+		const endTick = findItemById(axisEnd.ticks, tickId);
+		invariant(endTick);
+
+		const startX = xScaleStart(endTick.value);
+		const endX = xScaleEnd(endTick.value);
+
+		const interpolatedX = interpolate(
+			animationPercentage,
+			[0, 1],
+			[startX, endX],
+			{
+				// easing: Easing.bezier(0.25, 1, 0.5, 1),
+				easing: Easing.linear,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 1],
+			[0, 1],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: tickId,
+			mappedValue: interpolatedX,
+			opacity: interpolatedOpacity,
+		};
+	});
 
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
-			<h1 style={{color: textColor, fontSize: 50}}>hello axis transition</h1>
-			<h1 style={{color: textColor, fontSize: 50}}>{animationPercentage}</h1>
+			<h1 style={{color: textColor, fontSize: 50}}>
+				Transitioning between 2 Time Axes
+			</h1>
+			<h1 style={{color: textColor, fontSize: 30}}>
+				Animation Percentage: {formatToPercentage(animationPercentage)}
+			</h1>
 
-			<svg width={1080} height={500} style={{backgroundColor: 'green'}}>
+			<svg width={1080} height={220} style={{backgroundColor: '#222222'}}>
 				{/* startAxis: x axis line */}
 				<g>
 					<line
 						x1={axisStart_lineX1}
 						x2={axisStart_lineX2}
-						y1={100}
-						y2={100}
+						y1={50}
+						y2={50}
 						stroke={textColor}
 						strokeWidth={4}
 					/>
@@ -159,28 +229,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 					<line
 						x1={axisEnd_lineX1}
 						x2={axisEnd_lineX2}
-						y1={300}
-						y2={300}
+						y1={150}
+						y2={150}
 						stroke={textColor}
 						strokeWidth={4}
 					/>
 				</g>
-
-				{/* update ticks  */}
-				{updateTicks.map((it, i) => {
-					return (
-						<g key={i}>
-							<line
-								x1={it.mappedValue}
-								x2={it.mappedValue}
-								y1={400}
-								y2={420}
-								stroke={'orange'}
-								strokeWidth={4}
-							/>
-						</g>
-					);
-				})}
 
 				{/* axis start: x ticks */}
 				{axisStart.ticks.map((it, i) => {
@@ -189,8 +243,8 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 							<line
 								x1={xScaleStart(it.value)}
 								x2={xScaleStart(it.value)}
-								y1={100}
-								y2={120}
+								y1={50}
+								y2={70}
 								stroke={textColor}
 								strokeWidth={4}
 							/>
@@ -205,10 +259,122 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 							<line
 								x1={xScaleEnd(it.value)}
 								x2={xScaleEnd(it.value)}
-								y1={300}
-								y2={320}
+								y1={150}
+								y2={170}
 								stroke={textColor}
 								strokeWidth={4}
+							/>
+						</g>
+					);
+				})}
+			</svg>
+
+			<h1 style={{color: textColor, fontSize: 30}}>Update Ticks</h1>
+			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
+				{/* update ticks  */}
+				{updateTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'orange'}
+								strokeWidth={4}
+							/>
+						</g>
+					);
+				})}
+			</svg>
+
+			<h1 style={{color: textColor, fontSize: 30}}>Exit Ticks</h1>
+			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
+				{/* exit ticks  */}
+				{exitTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'red'}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+			</svg>
+
+			<h1 style={{color: textColor, fontSize: 30}}>Enter Ticks</h1>
+			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
+				{/* enter ticks  */}
+				{enterTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'green'}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+			</svg>
+
+			<h1 style={{color: textColor, fontSize: 30}}>ALL Ticks</h1>
+			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
+				{/* enter ticks  */}
+				{enterTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'green'}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+
+				{/* update ticks  */}
+				{updateTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'orange'}
+								strokeWidth={4}
+							/>
+						</g>
+					);
+				})}
+
+				{/* exit ticks  */}
+				{exitTicks.map((it, i) => {
+					return (
+						<g key={i}>
+							<line
+								x1={it.mappedValue}
+								x2={it.mappedValue}
+								y1={40}
+								y2={60}
+								stroke={'red'}
+								strokeWidth={4}
+								opacity={it.opacity}
 							/>
 						</g>
 					);
