@@ -48,7 +48,7 @@ const axisStart: AxisSpec = {
 
 const axisEnd: AxisSpec = {
 	domain: [new Date(2020, 10, 20), new Date(2023, 10, 5)],
-	range: [100, 1080 - 100],
+	range: [300, 1080 - 300],
 	ticks: [
 		{id: '01-02-2021', value: new Date(2021, 1, 1)},
 		{id: '01-02-2022', value: new Date(2022, 1, 1)},
@@ -487,10 +487,30 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								x2={it.mappedValue}
 								y1={40}
 								y2={60}
-								stroke={'green'}
+								stroke={textColor}
 								strokeWidth={4}
 								opacity={it.opacity}
 							/>
+						</g>
+					);
+				})}
+				{/* enter labels  */}
+				{enterLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={textColor}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
@@ -504,9 +524,28 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								x2={it.mappedValue}
 								y1={40}
 								y2={60}
-								stroke={'#0099cc'}
+								stroke={textColor}
 								strokeWidth={4}
 							/>
+						</g>
+					);
+				})}
+				{/* update labels  */}
+				{updateLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={textColor}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
@@ -520,10 +559,30 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								x2={it.mappedValue}
 								y1={40}
 								y2={60}
-								stroke={'red'}
+								stroke={textColor}
 								strokeWidth={4}
 								opacity={it.opacity}
 							/>
+						</g>
+					);
+				})}
+				{/* exit labels  */}
+				{exitLabels.map((it, i) => {
+					return (
+						<g key={i}>
+							<text
+								textAnchor="middle"
+								alignmentBaseline="baseline"
+								fill={textColor}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								fontSize={16}
+								x={it.mappedValue}
+								y={80}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
 						</g>
 					);
 				})}
