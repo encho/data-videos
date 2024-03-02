@@ -5,6 +5,14 @@ import {max, min} from 'd3-array';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 import {scaleLinear, scaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
+import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
+import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
+
+import {format} from 'date-fns';
+
+function formatDate(date: Date): string {
+	return format(date, 'dd/MM/yy');
+}
 
 function formatToPercentage(number: number): string {
 	// Convert the number to percentage with two decimal places
@@ -32,34 +40,70 @@ type AxisSpec = {
 	labels: LabelSpec[];
 };
 
+const start_timeSeries = generateBrownianMotionTimeSeries(
+	new Date(2020, 0, 1),
+	new Date(2020, 0, 20)
+);
+
+const start_xAxis_domain = getTimeSeriesDateSpan(start_timeSeries);
+
+const start_xAxis_range = [100, 1080 - 100] as [number, number];
+
+const start_xAxis_xScale = scaleTime()
+	.domain(start_xAxis_domain)
+	.range(start_xAxis_range);
+
+const start_xAxis_tickValues = start_xAxis_xScale.nice().ticks(4);
+
+const start_xAxis_ticks = start_xAxis_tickValues.map((date) => {
+	const id = date.getTime().toString();
+	return {id, value: date};
+});
+
+const start_xAxis_labels = start_xAxis_tickValues.map((date) => {
+	const id = date.getTime().toString();
+	const label = formatDate(date);
+	return {id, label, value: date};
+});
+
 const axisStart: AxisSpec = {
-	domain: [new Date(2019, 10, 20), new Date(2022, 10, 5)],
-	range: [100, 1080 - 100],
-	ticks: [
-		{id: '01-01-2020', value: new Date(2020, 0, 1)},
-		{id: '01-02-2021', value: new Date(2021, 1, 1)},
-	],
-	labels: [
-		{id: '01-01-2020_label', value: new Date(2020, 0, 1), label: '01/01/20'},
-		{id: '01-02-2021_label', value: new Date(2021, 1, 1), label: '01/02/21'},
-	],
-	// labels:
+	domain: start_xAxis_domain,
+	range: start_xAxis_range,
+	ticks: start_xAxis_ticks,
+	labels: start_xAxis_labels,
 };
 
+const end_timeSeries = generateBrownianMotionTimeSeries(
+	new Date(2020, 0, 1),
+	new Date(2020, 0, 31)
+);
+
+const end_xAxis_domain = getTimeSeriesDateSpan(end_timeSeries);
+
+const end_xAxis_range = [100, 1080 - 100] as [number, number];
+
+const end_xAxis_xScale = scaleTime()
+	.domain(end_xAxis_domain)
+	.range(end_xAxis_range);
+
+const end_xAxis_tickValues = end_xAxis_xScale.nice().ticks(4);
+
+const end_xAxis_ticks = end_xAxis_tickValues.map((date) => {
+	const id = date.getTime().toString();
+	return {id, value: date};
+});
+
+const end_xAxis_labels = end_xAxis_tickValues.map((date) => {
+	const id = date.getTime().toString();
+	const label = formatDate(date);
+	return {id, label, value: date};
+});
+
 const axisEnd: AxisSpec = {
-	domain: [new Date(2020, 10, 20), new Date(2023, 10, 5)],
-	range: [100, 1080 - 100],
-	ticks: [
-		{id: '01-02-2021', value: new Date(2021, 1, 1)},
-		{id: '01-02-2022', value: new Date(2022, 1, 1)},
-		{id: '01-10-2022', value: new Date(2022, 9, 1)},
-	],
-	labels: [
-		{id: '01-02-2021_label', value: new Date(2021, 1, 1), label: '01/02/21'},
-		{id: '01-02-2022_label', value: new Date(2022, 1, 1), label: '01/02/22'},
-		{id: '01-10-2022_label', value: new Date(2022, 9, 1), label: '01/10/22'},
-	],
-	// labels:
+	domain: end_xAxis_domain,
+	range: end_xAxis_range,
+	ticks: end_xAxis_ticks,
+	labels: end_xAxis_labels,
 };
 
 function getEnterUpdateExits(
