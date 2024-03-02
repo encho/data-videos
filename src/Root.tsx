@@ -19,6 +19,11 @@ import {
 	nerdyPriceChartSchema,
 } from './NerdyPriceChart/NerdyPriceChart';
 
+import {
+	AxisTransition,
+	AxisTransitionSchema,
+} from './AxisTransition/AxisTransition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -29,6 +34,22 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="AxisTransition"
+				component={AxisTransition}
+				durationInFrames={240}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={30}
+				{...squareVideo}
+				schema={AxisTransitionSchema}
+				defaultProps={{
+					backgroundColor: '#ff0000',
+					textColor: '#ffff00',
+				}}
+			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
