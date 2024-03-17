@@ -36,7 +36,20 @@ export const AxisTransition2: React.FC<{
 	endTimeSeries: TimeSeries;
 	backgroundColor: string;
 	textColor: string;
-}> = ({startTimeSeries, endTimeSeries, backgroundColor, textColor}) => {
+	top?: number;
+	left?: number;
+	tickSize?: number;
+	tickLabelMargin?: number;
+}> = ({
+	startTimeSeries,
+	endTimeSeries,
+	backgroundColor,
+	textColor,
+	top = 0,
+	left = 0,
+	tickSize = 10,
+	tickLabelMargin = 0,
+}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -298,132 +311,155 @@ export const AxisTransition2: React.FC<{
 
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
-			<h1 style={{color: textColor, fontSize: 30}}>
-				Animation Percentage: {formatToPercentage(animationPercentage)}
-			</h1>
+			<div
+				style={{
+					position: 'absolute',
+					top: 250,
+					left: 250,
+					backgroundColor: 'green',
+				}}
+			>
+				<h1 style={{color: textColor, fontSize: 30}}>
+					Animation Percentage: {formatToPercentage(animationPercentage)}
+				</h1>
+			</div>
 
-			<svg width={1080} height={100} style={{backgroundColor: '#222222'}}>
-				{/* startAxis: x axis line */}
-				<g>
-					<line
-						x1={aAxis_lineX1}
-						x2={aAxis_lineX2}
-						y1={40}
-						y2={40}
-						stroke={textColor}
-						strokeWidth={4}
-					/>
-				</g>
+			<div
+				style={{
+					position: 'absolute',
+					top,
+					left,
+				}}
+			>
+				<svg
+					overflow="visible"
+					width={1080}
+					height={100}
+					style={{backgroundColor: '#222222'}}
+				>
+					{/* startAxis: x axis line */}
+					<g>
+						<line
+							x1={aAxis_lineX1}
+							x2={aAxis_lineX2}
+							y1={0}
+							y2={0}
+							stroke={textColor}
+							// TODO strokeWidth as variable
+							strokeWidth={4}
+						/>
+					</g>
 
-				{/* enter ticks  */}
-				{enterTicks.map((it, i) => {
-					return (
-						<g key={i}>
-							<line
-								x1={it.mappedValue}
-								x2={it.mappedValue}
-								y1={40}
-								y2={60}
-								stroke={textColor}
-								strokeWidth={4}
-								opacity={it.opacity}
-							/>
-						</g>
-					);
-				})}
-				{/* enter labels  */}
-				{enterLabels.map((it, i) => {
-					return (
-						<g key={i}>
-							<text
-								textAnchor="middle"
-								alignmentBaseline="baseline"
-								fill={textColor}
-								// fontFamily={fontFamilyXTicklabels}
-								// fontSize={styling.xTickValuesFontSize}
-								fontSize={16}
-								x={it.mappedValue}
-								y={80}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
+					{/* enter ticks  */}
+					{enterTicks.map((it, i) => {
+						return (
+							<g key={i}>
+								<line
+									x1={it.mappedValue}
+									x2={it.mappedValue}
+									y1={0}
+									y2={tickSize}
+									stroke={textColor}
+									strokeWidth={4}
+									opacity={it.opacity}
+								/>
+							</g>
+						);
+					})}
+					{/* enter labels  */}
+					{enterLabels.map((it, i) => {
+						return (
+							<g key={i}>
+								<text
+									textAnchor="middle"
+									alignmentBaseline="hanging"
+									fill={textColor}
+									// fontFamily={fontFamilyXTicklabels}
+									// fontSize={styling.xTickValuesFontSize}
+									fontSize={16}
+									x={it.mappedValue}
+									y={tickSize + tickLabelMargin}
+									opacity={it.opacity}
+								>
+									{it.label}
+								</text>
+							</g>
+						);
+					})}
 
-				{/* update ticks  */}
-				{updateTicks.map((it, i) => {
-					return (
-						<g key={i}>
-							<line
-								x1={it.mappedValue}
-								x2={it.mappedValue}
-								y1={40}
-								y2={60}
-								stroke={textColor}
-								strokeWidth={4}
-							/>
-						</g>
-					);
-				})}
-				{/* update labels  */}
-				{updateLabels.map((it, i) => {
-					return (
-						<g key={i}>
-							<text
-								textAnchor="middle"
-								alignmentBaseline="baseline"
-								fill={textColor}
-								// fontFamily={fontFamilyXTicklabels}
-								// fontSize={styling.xTickValuesFontSize}
-								fontSize={16}
-								x={it.mappedValue}
-								y={80}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
+					{/* update ticks  */}
+					{updateTicks.map((it, i) => {
+						return (
+							<g key={i}>
+								<line
+									x1={it.mappedValue}
+									x2={it.mappedValue}
+									y1={0}
+									y2={tickSize}
+									stroke={textColor}
+									strokeWidth={4}
+								/>
+							</g>
+						);
+					})}
+					{/* update labels  */}
+					{updateLabels.map((it, i) => {
+						return (
+							<g key={i}>
+								<text
+									textAnchor="middle"
+									alignmentBaseline="hanging"
+									fill={textColor}
+									// fontFamily={fontFamilyXTicklabels}
+									// fontSize={styling.xTickValuesFontSize}
+									fontSize={16}
+									x={it.mappedValue}
+									y={tickSize + tickLabelMargin}
+								>
+									{it.label}
+								</text>
+							</g>
+						);
+					})}
 
-				{/* exit ticks  */}
-				{exitTicks.map((it, i) => {
-					return (
-						<g key={i}>
-							<line
-								x1={it.mappedValue}
-								x2={it.mappedValue}
-								y1={40}
-								y2={60}
-								stroke={textColor}
-								strokeWidth={4}
-								opacity={it.opacity}
-							/>
-						</g>
-					);
-				})}
-				{/* exit labels  */}
-				{exitLabels.map((it, i) => {
-					return (
-						<g key={i}>
-							<text
-								textAnchor="middle"
-								alignmentBaseline="baseline"
-								fill={textColor}
-								// fontFamily={fontFamilyXTicklabels}
-								// fontSize={styling.xTickValuesFontSize}
-								fontSize={16}
-								x={it.mappedValue}
-								y={80}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
-			</svg>
+					{/* exit ticks  */}
+					{exitTicks.map((it, i) => {
+						return (
+							<g key={i}>
+								<line
+									x1={it.mappedValue}
+									x2={it.mappedValue}
+									y1={0}
+									y2={tickSize}
+									stroke={textColor}
+									strokeWidth={4}
+									opacity={it.opacity}
+								/>
+							</g>
+						);
+					})}
+					{/* exit labels  */}
+					{exitLabels.map((it, i) => {
+						return (
+							<g key={i}>
+								<text
+									textAnchor="middle"
+									alignmentBaseline="hanging"
+									fill={textColor}
+									// fontFamily={fontFamilyXTicklabels}
+									// fontSize={styling.xTickValuesFontSize}
+									fontSize={16}
+									x={it.mappedValue}
+									y={tickSize + tickLabelMargin}
+									opacity={it.opacity}
+								>
+									{it.label}
+								</text>
+							</g>
+						);
+					})}
+				</svg>
+			</div>
 		</AbsoluteFill>
 	);
 };

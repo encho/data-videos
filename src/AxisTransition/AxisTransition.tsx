@@ -106,6 +106,10 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	// const currentFrame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
+	// TODO consider adding major and minor ticks
+	const TICK_SIZE = 16;
+	const TICK_LABEL_MARGIN = 6;
+
 	const tsLengths = generateRange(100, 2000, 200);
 	const tsLengthPairs = getAdjacentPairs(tsLengths);
 	const numberOfTransitions = tsLengthPairs.length;
@@ -129,12 +133,20 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 				// if (currentFrame >= from && currentFrame < from + durationInFrames) {
 				if (true) {
 					return (
-						<Sequence from={from} durationInFrames={durationInFrames}>
+						<Sequence
+							from={from}
+							durationInFrames={durationInFrames}
+							layout="none"
+						>
 							<AxisTransition2
 								backgroundColor={backgroundColor}
 								textColor={textColor}
 								startTimeSeries={tsStart}
 								endTimeSeries={tsEnd}
+								top={700}
+								left={0}
+								tickSize={TICK_SIZE}
+								tickLabelMargin={TICK_LABEL_MARGIN}
 							/>
 						</Sequence>
 					);
