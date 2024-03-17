@@ -12,7 +12,9 @@ import {
 	scaleTime,
 } from 'd3-scale';
 import invariant from 'tiny-invariant';
-import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
+import generateBrownianMotionTimeSeries, {
+	TimeSeries,
+} from './generateBrownianMotionTimeSeries';
 import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
 import {
 	formatDate,
@@ -20,7 +22,6 @@ import {
 	findItemById,
 	getEnterUpdateExits,
 } from './utils';
-import {AxisTransition2} from './AxisTransition2';
 
 type TickSpec = {
 	id: string;
@@ -132,10 +133,10 @@ export const AxisTransitionSchema = z.object({
 // ****************************************************************
 // ****************************************************************
 
-export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
-	backgroundColor,
-	textColor,
-}) => {
+export const AxisTransition2: React.FC<{
+	axisStart: AxisSpec;
+	axisEnd: AxisSpec;
+}> = ({axisStart, axisEnd}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -146,6 +147,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	const xScaleStart = scaleTime()
 		.domain(axisStart.domain)
 		.range(axisStart.range);
+
 	const xScaleEnd = scaleTime().domain(axisEnd.domain).range(axisEnd.range);
 
 	const axisStart_lineX1 = xScaleStart(axisStart.domain[0]);
@@ -345,11 +347,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 		};
 	});
 
-	return <AxisTransition2 axisStart={axisStart} axisEnd={axisEnd} />;
+	const backgroundColor = '#f05122';
+	const textColor = '#ffffff';
 
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
-			<h1 style={{color: textColor, fontSize: 50}}>
+			<h1 style={{color: 'blue', fontSize: 50}}>
 				Transitioning between 2 Time Axes
 			</h1>
 			<h1 style={{color: textColor, fontSize: 30}}>

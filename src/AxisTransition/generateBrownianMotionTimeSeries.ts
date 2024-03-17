@@ -1,7 +1,9 @@
+export type TimeSeries = {date: Date; value: number}[];
+
 function generateBrownianMotionTimeSeries(
 	startDate: Date,
 	endDate: Date
-): {date: Date; value: number}[] {
+): TimeSeries {
 	// Calculate the number of days between start and end dates
 	const days = Math.floor(
 		(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
