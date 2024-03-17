@@ -1,7 +1,7 @@
 import {
 	Sequence,
 	useVideoConfig,
-	useCurrentFrame,
+	// useCurrentFrame,
 	// spring
 } from 'remotion';
 
@@ -11,6 +11,46 @@ import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries
 import {AxisTransition2} from './AxisTransition2';
 import {getFirstNItems} from './utils';
 
+/**
+ * Generates a range of numbers within a specified range with a given step size.
+ *
+ * @param startNumber The starting number of the range (inclusive).
+ * @param endNumber The ending number of the range (inclusive).
+ * @param step The step size between each number in the range.
+ * @returns An array containing numbers within the specified range with the given step size.
+ *
+ * @example
+ * // Example usage:
+ * const startNumber = 10;
+ * const endNumber = 30;
+ * const step = 5;
+ * const result = generateRange(startNumber, endNumber, step);
+ * console.log(result); // Output: [10, 15, 20, 25, 30]
+ *
+ * @example
+ * // Example usage with a negative step:
+ * const startNumber = 20;
+ * const endNumber = 0;
+ * const step = -4;
+ * const result = generateRange(startNumber, endNumber, step);
+ * console.log(result); // Output: [20, 16, 12, 8, 4, 0]
+ *
+ * @example
+ * // Example usage with a step larger than the range:
+ * const startNumber = 1;
+ * const endNumber = 10;
+ * const step = 20;
+ * const result = generateRange(startNumber, endNumber, step);
+ * console.log(result); // Output: [1]
+ *
+ * @example
+ * // Example usage with a single number range:
+ * const startNumber = 5;
+ * const endNumber = 5;
+ * const step = 1;
+ * const result = generateRange(startNumber, endNumber, step);
+ * console.log(result); // Output: [5]
+ */
 function generateRange(
 	startNumber: number,
 	endNumber: number,
@@ -63,10 +103,10 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	backgroundColor,
 	textColor,
 }) => {
-	const currentFrame = useCurrentFrame();
+	// const currentFrame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
-	const tsLengths = generateRange(100, 2000, 100);
+	const tsLengths = generateRange(100, 2000, 200);
 	const tsLengthPairs = getAdjacentPairs(tsLengths);
 	const numberOfTransitions = tsLengthPairs.length;
 	const transitionDuration = Math.floor(durationInFrames / numberOfTransitions);
