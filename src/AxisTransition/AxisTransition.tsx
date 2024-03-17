@@ -65,6 +65,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 			{tsLengthPairs.map((lengthPair, i) => {
 				const tsStart = getFirstNItems(timeSeries, lengthPair[0]);
 				const tsEnd = getFirstNItems(timeSeries, lengthPair[1]);
+				// TODO only render relevant sequence where from <= currentFrame < from + durationInFrames
 				return (
 					<Sequence
 						from={0 + i * transitionDuration}
