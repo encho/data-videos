@@ -1098,11 +1098,7 @@ export const RemotionRoot: React.FC = () => {
 				fps={30}
 				{...squareVideo}
 				schema={bundesligaTop10BarChartSchema}
-				defaultProps={{
-					dateString: '20. Februar 2024',
-					year: 2023,
-					apiData: null,
-				}}
+				defaultProps={{dateString: '4. März 2024', year: 2023, apiData: null}}
 				calculateMetadata={async ({props}) => {
 					const apiUrl = `https://api.openligadb.de/getbltable/bl1/${props.year}`;
 					const data = await fetch(apiUrl);
