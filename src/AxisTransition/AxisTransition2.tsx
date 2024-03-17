@@ -1,16 +1,6 @@
 import {AbsoluteFill, Easing, interpolate} from 'remotion';
-// import {z} from 'zod';
-// import {zColor} from '@remotion/zod-types';
-// import {max, min} from 'd3-array';
-import {
-	useCurrentFrame,
-	useVideoConfig,
-	// spring
-} from 'remotion';
-import {
-	// scaleLinear,
-	scaleTime,
-} from 'd3-scale';
+import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {scaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
@@ -39,30 +29,7 @@ type AxisSpec = {
 	labels: LabelSpec[];
 };
 
-// export const AxisTransitionSchema = z.object({
-// 	backgroundColor: zColor(),
-// 	textColor: zColor(),
-// });
-
 // ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-// ****************************************************************
-
-// export const AxisTransition2: React.FC<{
-// 	axisStart: AxisSpec;
-// 	axisEnd: AxisSpec;
-// }> = ({axisStart, axisEnd}) => {
 
 export const AxisTransition2: React.FC<{
 	startTimeSeries: TimeSeries;
@@ -215,7 +182,7 @@ export const AxisTransition2: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
-			[0, 0.2],
+			[0, 0.8],
 			[1, 0],
 			{
 				easing: Easing.bezier(0.25, 1, 0.5, 1),
@@ -239,7 +206,7 @@ export const AxisTransition2: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
-			[0, 0.2],
+			[0, 0.8],
 			[1, 0],
 			{
 				easing: Easing.bezier(0.25, 1, 0.5, 1),
