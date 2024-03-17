@@ -1,6 +1,6 @@
 import {AbsoluteFill, Easing, interpolate} from 'remotion';
-import {z} from 'zod';
-import {zColor} from '@remotion/zod-types';
+// import {z} from 'zod';
+// import {zColor} from '@remotion/zod-types';
 // import {max, min} from 'd3-array';
 import {
 	useCurrentFrame,
@@ -12,9 +12,7 @@ import {
 	scaleTime,
 } from 'd3-scale';
 import invariant from 'tiny-invariant';
-import generateBrownianMotionTimeSeries, {
-	TimeSeries,
-} from './generateBrownianMotionTimeSeries';
+import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
 import {
 	formatDate,
@@ -41,82 +39,10 @@ type AxisSpec = {
 	labels: LabelSpec[];
 };
 
-const start_timeSeries = generateBrownianMotionTimeSeries(
-	new Date(2020, 0, 1),
-	new Date(2020, 0, 20)
-);
-
-const start_xAxis_domain = getTimeSeriesDateSpan(start_timeSeries);
-
-const start_xAxis_range = [100, 1080 - 100] as [number, number];
-
-const start_xAxis_xScale = scaleTime()
-	.domain(start_xAxis_domain)
-	.range(start_xAxis_range);
-
-const start_xAxis_tickValues = start_xAxis_xScale.nice().ticks(4);
-
-const start_xAxis_ticks = start_xAxis_tickValues.map((date) => {
-	const id = date.getTime().toString();
-	return {id, value: date};
-});
-
-const start_xAxis_labels = start_xAxis_tickValues.map((date) => {
-	const id = date.getTime().toString();
-	const label = formatDate(date);
-	return {id, label, value: date};
-});
-
-const axisStart: AxisSpec = {
-	domain: start_xAxis_domain,
-	range: start_xAxis_range,
-	ticks: start_xAxis_ticks,
-	labels: start_xAxis_labels,
-};
-
-const end_timeSeries = generateBrownianMotionTimeSeries(
-	new Date(2020, 0, 1),
-	new Date(2020, 0, 31)
-);
-
-const end_xAxis_domain = getTimeSeriesDateSpan(end_timeSeries);
-
-const end_xAxis_range = [100, 1080 - 100] as [number, number];
-
-const end_xAxis_xScale = scaleTime()
-	.domain(end_xAxis_domain)
-	.range(end_xAxis_range);
-
-const end_xAxis_tickValues = end_xAxis_xScale.nice().ticks(4);
-
-const end_xAxis_ticks = end_xAxis_tickValues.map((date) => {
-	const id = date.getTime().toString();
-	return {id, value: date};
-});
-
-const end_xAxis_labels = end_xAxis_tickValues.map((date) => {
-	const id = date.getTime().toString();
-	const label = formatDate(date);
-	return {
-		id,
-		label,
-		value: date,
-		// textAnchor: TODO
-		// TODO more text props 'center', etc...
-	};
-});
-
-const axisEnd: AxisSpec = {
-	domain: end_xAxis_domain,
-	range: end_xAxis_range,
-	ticks: end_xAxis_ticks,
-	labels: end_xAxis_labels,
-};
-
-export const AxisTransitionSchema = z.object({
-	backgroundColor: zColor(),
-	textColor: zColor(),
-});
+// export const AxisTransitionSchema = z.object({
+// 	backgroundColor: zColor(),
+// 	textColor: zColor(),
+// });
 
 // ****************************************************************
 // ****************************************************************
@@ -132,15 +58,77 @@ export const AxisTransitionSchema = z.object({
 // ****************************************************************
 // ****************************************************************
 // ****************************************************************
+
+// export const AxisTransition2: React.FC<{
+// 	axisStart: AxisSpec;
+// 	axisEnd: AxisSpec;
+// }> = ({axisStart, axisEnd}) => {
 
 export const AxisTransition2: React.FC<{
-	axisStart: AxisSpec;
-	axisEnd: AxisSpec;
-}> = ({axisStart, axisEnd}) => {
+	startTimeSeries: TimeSeries;
+	endTimeSeries: TimeSeries;
+	backgroundColor: string;
+	textColor: string;
+}> = ({startTimeSeries, endTimeSeries, backgroundColor, textColor}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
 	const animationPercentage = frame / durationInFrames;
+
+	// TODO possibly as props
+	const XAXIS_RANGE = [100, 1080 - 100] as [number, number];
+
+	const start_xAxis_domain = getTimeSeriesDateSpan(startTimeSeries);
+	const start_xAxis_range = XAXIS_RANGE;
+	const start_xAxis_xScale = scaleTime()
+		.domain(start_xAxis_domain)
+		.range(start_xAxis_range);
+	// const start_xAxis_tickValues = start_xAxis_xScale.nice().ticks(4);
+	const start_xAxis_tickValues = start_xAxis_xScale.ticks(4);
+	const start_xAxis_ticks = start_xAxis_tickValues.map((date) => {
+		const id = date.getTime().toString();
+		return {id, value: date};
+	});
+	const start_xAxis_labels = start_xAxis_tickValues.map((date) => {
+		const id = date.getTime().toString();
+		const label = formatDate(date);
+		return {id, label, value: date};
+	});
+	const axisStart: AxisSpec = {
+		domain: start_xAxis_domain,
+		range: start_xAxis_range,
+		ticks: start_xAxis_ticks,
+		labels: start_xAxis_labels,
+	};
+
+	const end_xAxis_domain = getTimeSeriesDateSpan(endTimeSeries);
+	const end_xAxis_range = XAXIS_RANGE;
+	const end_xAxis_xScale = scaleTime()
+		.domain(end_xAxis_domain)
+		.range(end_xAxis_range);
+	// const end_xAxis_tickValues = end_xAxis_xScale.nice().ticks(4);
+	const end_xAxis_tickValues = end_xAxis_xScale.ticks(4);
+	const end_xAxis_ticks = end_xAxis_tickValues.map((date) => {
+		const id = date.getTime().toString();
+		return {id, value: date};
+	});
+	const end_xAxis_labels = end_xAxis_tickValues.map((date) => {
+		const id = date.getTime().toString();
+		const label = formatDate(date);
+		return {
+			id,
+			label,
+			value: date,
+			// textAnchor: TODO
+			// TODO more text props 'center', etc...
+		};
+	});
+	const axisEnd: AxisSpec = {
+		domain: end_xAxis_domain,
+		range: end_xAxis_range,
+		ticks: end_xAxis_ticks,
+		labels: end_xAxis_labels,
+	};
 
 	// TODO inside 'real' AxisTransition2
 	// TODO perhaps part of AxisSpec?
@@ -178,8 +166,6 @@ export const AxisTransition2: React.FC<{
 		}
 	);
 
-	// console.log({axisStart_lineX1, axisStart_lineX2});
-
 	const ticksEnterUpdateExits = getEnterUpdateExits(
 		axisStart.ticks.map((it) => it.id),
 		axisEnd.ticks.map((it) => it.id)
@@ -189,8 +175,6 @@ export const AxisTransition2: React.FC<{
 		axisStart.labels.map((it) => it.id),
 		axisEnd.labels.map((it) => it.id)
 	);
-
-	// console.log({ticksEnterUpdateExits});
 
 	// update ticks positions in time
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
@@ -231,7 +215,7 @@ export const AxisTransition2: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
-			[0, 1],
+			[0, 0.2],
 			[1, 0],
 			{
 				easing: Easing.bezier(0.25, 1, 0.5, 1),
@@ -255,7 +239,7 @@ export const AxisTransition2: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
-			[0, 1],
+			[0, 0.2],
 			[1, 0],
 			{
 				easing: Easing.bezier(0.25, 1, 0.5, 1),
@@ -275,7 +259,6 @@ export const AxisTransition2: React.FC<{
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const endTick = findItemById(axisEnd.ticks, tickId);
 		invariant(endTick);
-
 		const startX = xScaleStart(endTick.value);
 		const endX = xScaleEnd(endTick.value);
 
@@ -284,7 +267,6 @@ export const AxisTransition2: React.FC<{
 			[0, 1],
 			[startX, endX],
 			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
 				easing: Easing.linear,
 				extrapolateLeft: 'clamp',
 				extrapolateRight: 'clamp',
@@ -347,12 +329,9 @@ export const AxisTransition2: React.FC<{
 		};
 	});
 
-	const backgroundColor = '#f05122';
-	const textColor = '#ffffff';
-
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
-			<h1 style={{color: 'blue', fontSize: 50}}>
+			<h1 style={{color: textColor, fontSize: 50}}>
 				Transitioning between 2 Time Axes
 			</h1>
 			<h1 style={{color: textColor, fontSize: 30}}>

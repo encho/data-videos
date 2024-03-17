@@ -16,7 +16,7 @@
 // import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
 
 import {format} from 'date-fns';
-
+import {TimeSeries} from './generateBrownianMotionTimeSeries';
 // *********************************************************
 // FORMATTERS
 // *********************************************************
@@ -68,4 +68,10 @@ export function getEnterUpdateExits(
 	}
 
 	return {enter, update, exit};
+}
+
+// TIMESERIES NAMESPACE
+// *********************
+export function getFirstNItems(timeSeries: TimeSeries, n: number): TimeSeries {
+	return timeSeries.slice(0, n);
 }
