@@ -1,7 +1,7 @@
 import {
 	Sequence,
 	useVideoConfig,
-	// useCurrentFrame,
+	useCurrentFrame,
 	// spring
 } from 'remotion';
 
@@ -23,6 +23,24 @@ function generateRange(
 	return result;
 }
 
+/**
+ * Generates pairs of adjacent elements from an array.
+ *
+ * @param arr An array of numbers.
+ * @returns An array of pairs, each containing two adjacent elements from the input array.
+ *
+ * @example
+ * // Example usage:
+ * const inputArray = [10, 20, 30];
+ * const result = getAdjacentPairs(inputArray);
+ * console.log(result); // Output: [[10, 20], [20, 30]]
+ *
+ * @example
+ * // Example usage with an empty array:
+ * const emptyArray: number[] = [];
+ * const result = getAdjacentPairs(emptyArray);
+ * console.log(result); // Output: []
+ */
 function getAdjacentPairs(arr: number[]): number[][] {
 	const pairs: number[][] = [];
 	for (let i = 0; i < arr.length - 1; i++) {
@@ -45,7 +63,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	backgroundColor,
 	textColor,
 }) => {
-	// const frame = useCurrentFrame();
+	const currentFrame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
 	const tsLengths = generateRange(100, 2000, 100);
@@ -63,22 +81,25 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	return (
 		<div>
 			{tsLengthPairs.map((lengthPair, i) => {
+				const durationInFrames = transitionDuration;
+				const from = 0 + i * durationInFrames;
 				const tsStart = getFirstNItems(timeSeries, lengthPair[0]);
 				const tsEnd = getFirstNItems(timeSeries, lengthPair[1]);
-				// TODO only render relevant sequence where from <= currentFrame < from + durationInFrames
-				return (
-					<Sequence
-						from={0 + i * transitionDuration}
-						durationInFrames={transitionDuration}
-					>
-						<AxisTransition2
-							backgroundColor={backgroundColor}
-							textColor={textColor}
-							startTimeSeries={tsStart}
-							endTimeSeries={tsEnd}
-						/>
-					</Sequence>
-				);
+				// TODO: check if this is actually improving performance
+				// if (currentFrame >= from && currentFrame < from + durationInFrames) {
+				if (true) {
+					return (
+						<Sequence from={from} durationInFrames={durationInFrames}>
+							<AxisTransition2
+								backgroundColor={backgroundColor}
+								textColor={textColor}
+								startTimeSeries={tsStart}
+								endTimeSeries={tsEnd}
+							/>
+						</Sequence>
+					);
+				}
+				return <div />;
 			})}
 		</div>
 	);
