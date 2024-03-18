@@ -17,6 +17,7 @@ import {
 import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
 import {AxisTransition2} from './AxisTransition2';
 import {getFirstNItems} from './utils';
+import {LineChart} from './LineChart';
 
 /**
  * Generates a range of numbers within a specified range with a given step size.
@@ -184,6 +185,9 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 				width={width}
 				height={height}
 			/>
+
+			{/* the chart line */}
+			<LineChart area={chartLayout.areas.plot} />
 
 			<div>
 				{tsLengthPairs.map((lengthPair, i) => {
