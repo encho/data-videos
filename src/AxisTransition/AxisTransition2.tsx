@@ -410,6 +410,7 @@ export const AxisTransition2: React.FC<{
 									textAnchor="middle"
 									alignmentBaseline="hanging"
 									fill={textColor}
+									stroke={textColor}
 									// fontFamily={fontFamilyXTicklabels}
 									// fontSize={styling.xTickValuesFontSize}
 									fontSize={16}
