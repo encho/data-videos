@@ -4,9 +4,15 @@ import {
 	// useCurrentFrame,
 	// spring
 } from 'remotion';
-
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
+
+import {
+	DisplayGridLayout,
+	TGridLayoutAreaSpec,
+	TGridRailSpec,
+	useGridLayout,
+} from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
 import {AxisTransition2} from './AxisTransition2';
 import {getFirstNItems} from './utils';
@@ -110,6 +116,50 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	const TICK_SIZE = 16;
 	const TICK_LABEL_MARGIN = 6;
 
+	const chartRowsRailSpec: TGridRailSpec = [
+		{type: 'fr', value: 1, name: 'plot'},
+		{type: 'pixel', value: 100, name: 'xAxis'},
+	];
+	const chartColsRailSpec: TGridRailSpec = [
+		{type: 'fr', value: 1, name: 'plot'},
+		{type: 'pixel', value: 50, name: 'space'},
+		{type: 'pixel', value: 100, name: 'yAxis'},
+	];
+
+	const chartGridLayoutSpec = {
+		padding: 0,
+		columnGap: 0,
+		rowGap: 0,
+		rows: chartRowsRailSpec,
+		columns: chartColsRailSpec,
+		areas: {
+			xAxis: [
+				{name: 'xAxis'},
+				{name: 'plot'},
+				{name: 'xAxis'},
+				{name: 'plot'},
+			] as TGridLayoutAreaSpec,
+			yAxis: [
+				{name: 'plot'},
+				{name: 'yAxis'},
+				{name: 'plot'},
+				{name: 'yAxis'},
+			] as TGridLayoutAreaSpec,
+			plot: [
+				{name: 'plot'},
+				{name: 'plot'},
+				{name: 'plot'},
+				{name: 'plot'},
+			] as TGridLayoutAreaSpec,
+		},
+	};
+
+	const chartLayout = useGridLayout({
+		width: 300,
+		height: 300,
+		gridLayoutSpec: chartGridLayoutSpec,
+	});
+
 	const tsLengths = generateRange(100, 2000, 200);
 	const tsLengthPairs = getAdjacentPairs(tsLengths);
 	const numberOfTransitions = tsLengthPairs.length;
@@ -123,36 +173,48 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	});
 
 	return (
-		<div>
-			{tsLengthPairs.map((lengthPair, i) => {
-				const durationInFrames = transitionDuration;
-				const from = 0 + i * durationInFrames;
-				const tsStart = getFirstNItems(timeSeries, lengthPair[0]);
-				const tsEnd = getFirstNItems(timeSeries, lengthPair[1]);
-				// TODO: check if this is actually improving performance
-				// if (currentFrame >= from && currentFrame < from + durationInFrames) {
-				if (true) {
-					return (
-						<Sequence
-							from={from}
-							durationInFrames={durationInFrames}
-							layout="none"
-						>
-							<AxisTransition2
-								backgroundColor={backgroundColor}
-								textColor={textColor}
-								startTimeSeries={tsStart}
-								endTimeSeries={tsEnd}
-								top={700}
-								left={0}
-								tickSize={TICK_SIZE}
-								tickLabelMargin={TICK_LABEL_MARGIN}
-							/>
-						</Sequence>
-					);
-				}
-				return <div />;
-			})}
-		</div>
+		<>
+			<div>
+				{tsLengthPairs.map((lengthPair, i) => {
+					const durationInFrames = transitionDuration;
+					const from = 0 + i * durationInFrames;
+					const tsStart = getFirstNItems(timeSeries, lengthPair[0]);
+					const tsEnd = getFirstNItems(timeSeries, lengthPair[1]);
+					// TODO: check if this is actually improving performance
+					// if (currentFrame >= from && currentFrame < from + durationInFrames) {
+					if (true) {
+						return (
+							<Sequence
+								from={from}
+								durationInFrames={durationInFrames}
+								layout="none"
+							>
+								<AxisTransition2
+									backgroundColor={backgroundColor}
+									textColor={textColor}
+									startTimeSeries={tsStart}
+									endTimeSeries={tsEnd}
+									top={700}
+									left={0}
+									tickSize={TICK_SIZE}
+									tickLabelMargin={TICK_LABEL_MARGIN}
+								/>
+							</Sequence>
+						);
+					}
+					return <div />;
+				})}
+			</div>
+			<div style={{position: 'relative'}}>
+				<div style={{position: 'absolute'}}>
+					<DisplayGridLayout
+						hide={false}
+						areas={chartLayout.areas}
+						width={300}
+						height={300}
+					/>
+				</div>
+			</div>
+		</>
 	);
 };
