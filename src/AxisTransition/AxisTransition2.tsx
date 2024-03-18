@@ -1,15 +1,21 @@
-import {AbsoluteFill, Easing, interpolate} from 'remotion';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {
+	AbsoluteFill,
+	Easing,
+	interpolate,
+	useCurrentFrame,
+	useVideoConfig,
+} from 'remotion';
 import {scaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
 import {
 	formatDate,
-	formatToPercentage,
+	// formatToPercentage,
 	findItemById,
 	getEnterUpdateExits,
 } from './utils';
+import {TGridLayoutArea} from '../acetti-viz';
 
 type TickSpec = {
 	id: string;
@@ -36,6 +42,7 @@ export const AxisTransition2: React.FC<{
 	endTimeSeries: TimeSeries;
 	backgroundColor: string;
 	textColor: string;
+	area: TGridLayoutArea;
 	top?: number;
 	left?: number;
 	tickSize?: number;
@@ -45,8 +52,9 @@ export const AxisTransition2: React.FC<{
 	endTimeSeries,
 	backgroundColor,
 	textColor,
-	top = 0,
-	left = 0,
+	area,
+	// top = 0,
+	// left = 0,
 	tickSize = 10,
 	tickLabelMargin = 0,
 }) => {
@@ -56,7 +64,8 @@ export const AxisTransition2: React.FC<{
 	const animationPercentage = frame / durationInFrames;
 
 	// TODO possibly as props
-	const XAXIS_RANGE = [100, 1080 - 100] as [number, number];
+	// const XAXIS_RANGE = [100, 1080 - 100] as [number, number];
+	const XAXIS_RANGE = [area.x1, area.x2] as [number, number];
 
 	const start_xAxis_domain = getTimeSeriesDateSpan(startTimeSeries);
 	const start_xAxis_range = XAXIS_RANGE;
@@ -310,8 +319,10 @@ export const AxisTransition2: React.FC<{
 	});
 
 	return (
-		<AbsoluteFill style={{backgroundColor}}>
-			<div
+		<AbsoluteFill
+		// style={{backgroundColor}}
+		>
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: 250,
@@ -322,20 +333,20 @@ export const AxisTransition2: React.FC<{
 				<h1 style={{color: textColor, fontSize: 30}}>
 					Animation Percentage: {formatToPercentage(animationPercentage)}
 				</h1>
-			</div>
+			</div> */}
 
 			<div
 				style={{
 					position: 'absolute',
-					top,
-					left,
+					top: area.y1,
+					left: area.x1,
 				}}
 			>
 				<svg
 					overflow="visible"
 					width={1080}
 					height={100}
-					style={{backgroundColor: '#222222'}}
+					// style={{backgroundColor: '#222222'}}
 				>
 					{/* startAxis: x axis line */}
 					<g>

@@ -1,6 +1,7 @@
 import {
 	Sequence,
 	useVideoConfig,
+	AbsoluteFill,
 	// useCurrentFrame,
 	// spring
 } from 'remotion';
@@ -110,7 +111,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	textColor,
 }) => {
 	// const currentFrame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
+	const {durationInFrames, height, width} = useVideoConfig();
 
 	// TODO consider adding major and minor ticks
 	const TICK_SIZE = 16;
@@ -118,11 +119,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},
+		{type: 'pixel', value: 20, name: 'space'},
 		{type: 'pixel', value: 100, name: 'xAxis'},
 	];
 	const chartColsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},
-		{type: 'pixel', value: 50, name: 'space'},
+		{type: 'pixel', value: 20, name: 'space'},
 		{type: 'pixel', value: 100, name: 'yAxis'},
 	];
 
@@ -155,10 +157,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	};
 
 	const chartLayout = useGridLayout({
-		width: 300,
-		height: 300,
+		width,
+		height,
 		gridLayoutSpec: chartGridLayoutSpec,
 	});
+
+	const xAxisArea = chartLayout.areas['xAxis'];
 
 	const tsLengths = generateRange(100, 2000, 200);
 	const tsLengthPairs = getAdjacentPairs(tsLengths);
@@ -173,7 +177,14 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	});
 
 	return (
-		<>
+		<AbsoluteFill style={{backgroundColor}}>
+			<DisplayGridLayout
+				hide={false}
+				areas={chartLayout.areas}
+				width={width}
+				height={height}
+			/>
+
 			<div>
 				{tsLengthPairs.map((lengthPair, i) => {
 					const durationInFrames = transitionDuration;
@@ -196,6 +207,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 									endTimeSeries={tsEnd}
 									top={700}
 									left={0}
+									area={xAxisArea}
 									tickSize={TICK_SIZE}
 									tickLabelMargin={TICK_LABEL_MARGIN}
 								/>
@@ -205,16 +217,6 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 					return <div />;
 				})}
 			</div>
-			<div style={{position: 'relative'}}>
-				<div style={{position: 'absolute'}}>
-					<DisplayGridLayout
-						hide={false}
-						areas={chartLayout.areas}
-						width={300}
-						height={300}
-					/>
-				</div>
-			</div>
-		</>
+		</AbsoluteFill>
 	);
 };
