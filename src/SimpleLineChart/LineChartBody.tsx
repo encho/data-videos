@@ -4,6 +4,8 @@ import {scaleLinear, scaleTime} from 'd3-scale';
 import {line} from 'd3-shape';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
+import {TAxisSpec} from '../AxisTransition/AxisTransition2';
+
 import {FontFamiliesUnionType} from '../fontSpecs';
 import {
 	DisplayGridLayout,
@@ -11,6 +13,7 @@ import {
 	TGridRailSpec,
 	useGridLayout,
 } from '../acetti-viz';
+import {getDateSpanCategory} from './utils';
 
 export function LineChartBody({
 	areaWidth,
@@ -106,6 +109,11 @@ export function LineChartBody({
 	const minDate = min(data.map((it) => it.index)) as Date;
 	const maxDate = max(data.map((it) => it.index)) as Date;
 
+	// information to determine looks of x-axis
+	const dateSpanCategory = getDateSpanCategory(minDate, maxDate);
+	console.log({dateSpanCategory});
+
+	// TODO this only in specific dateSpanCategories, otherwise keep minDate,maxDate domain
 	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
 		minDate,
 		maxDate
@@ -114,11 +122,16 @@ export function LineChartBody({
 	const xScaleDomain = [
 		xTickValuesMonthBoundaries[0],
 		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
-	];
+	] as [Date, Date];
 
-	const xScale = scaleTime()
-		.domain(xScaleDomain)
-		.range([chartLayout.areas.plot.x1, chartLayout.areas.plot.x2]);
+	const xAxisSpec: TAxisSpec = {
+		domain: xScaleDomain,
+		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
+		ticks: [],
+		labels: [],
+	};
+
+	const xScale = scaleTime().domain(xAxisSpec.domain).range(xAxisSpec.range);
 
 	// TODO if we ensure that array is not empty we would not have to perform the casting
 	const yDomainMin = min(data, (it) => it.value) as number;
@@ -156,10 +169,12 @@ export function LineChartBody({
 		getMonthString(it, 'veryShort')
 	);
 
+	// TODO: here we have mapped values already we may need to integrate this in axisSpec
 	const xTickValuesMonthStartsMapped = xTickValuesMonthBoundaries.map((d) =>
 		xScale(d)
 	);
 
+	// TODO: here we have mapped values already we may need to integrate this in axisSpec
 	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(
 		xTickValuesMonthStartsMapped
 	);

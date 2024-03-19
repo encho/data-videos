@@ -28,7 +28,7 @@ type LabelSpec = {
 	label: string;
 };
 
-type AxisSpec = {
+export type TAxisSpec = {
 	domain: [Date, Date];
 	range: [number, number];
 	ticks: TickSpec[];
@@ -83,7 +83,7 @@ export const AxisTransition2: React.FC<{
 		const label = formatDate(date);
 		return {id, label, value: date};
 	});
-	const axisStart: AxisSpec = {
+	const axisStart: TAxisSpec = {
 		domain: start_xAxis_domain,
 		range: start_xAxis_range,
 		ticks: start_xAxis_ticks,
@@ -112,7 +112,7 @@ export const AxisTransition2: React.FC<{
 			// TODO more text props 'center', etc...
 		};
 	});
-	const axisEnd: AxisSpec = {
+	const axisEnd: TAxisSpec = {
 		domain: end_xAxis_domain,
 		range: end_xAxis_range,
 		ticks: end_xAxis_ticks,
