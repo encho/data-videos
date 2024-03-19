@@ -1,10 +1,10 @@
 import {evolvePath, getLength, getPointAtLength} from '@remotion/paths';
 import {max, min} from 'd3-array';
-import {scaleLinear, scaleTime} from 'd3-scale';
+import {scaleLinear, scaleTime, ScaleTime} from 'd3-scale';
 import {line} from 'd3-shape';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
-import {TAxisSpec} from '../AxisTransition/AxisTransition2';
+import {TAxisSpec} from '../AxisTransition/axisSpec';
 
 import {FontFamiliesUnionType} from '../fontSpecs';
 import {
@@ -124,14 +124,20 @@ export function LineChartBody({
 		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
 	] as [Date, Date];
 
+	const xScaleRange = [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2];
+
+	// QUICK-FIX determine why we have to cast to any here
+	const xScale: ScaleTime<Date, number> = scaleTime()
+		.domain(xScaleDomain)
+		.range(xScaleRange) as any;
+
 	const xAxisSpec: TAxisSpec = {
 		domain: xScaleDomain,
 		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
+		scale: xScale,
 		ticks: [],
 		labels: [],
 	};
-
-	const xScale = scaleTime().domain(xAxisSpec.domain).range(xAxisSpec.range);
 
 	// TODO if we ensure that array is not empty we would not have to perform the casting
 	const yDomainMin = min(data, (it) => it.value) as number;
@@ -170,9 +176,23 @@ export function LineChartBody({
 	);
 
 	// TODO: here we have mapped values already we may need to integrate this in axisSpec
+	// these tick values
 	const xTickValuesMonthStartsMapped = xTickValuesMonthBoundaries.map((d) =>
 		xScale(d)
 	);
+
+	const axisTickSpecs = xTickValuesMonthStartsMapped.map((n: number) => {
+		const id = n.toString();
+		return {id, value: n, type: 'MAPPED_VALUE' as const};
+	});
+
+	const xAxisSpecFull: TAxisSpec = {
+		domain: xScaleDomain,
+		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
+		scale: xScale,
+		ticks: axisTickSpecs,
+		labels: [],
+	};
 
 	// TODO: here we have mapped values already we may need to integrate this in axisSpec
 	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(

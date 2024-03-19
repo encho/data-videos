@@ -5,7 +5,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
-import {scaleTime} from 'd3-scale';
+import {scaleTime, ScaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
@@ -16,26 +16,12 @@ import {
 	getEnterUpdateExits,
 } from './utils';
 import {TGridLayoutArea} from '../acetti-viz';
-
-type TickSpec = {
-	id: string;
-	value: Date;
-};
-
-type LabelSpec = {
-	id: string;
-	value: Date;
-	label: string;
-};
-
-export type TAxisSpec = {
-	domain: [Date, Date];
-	range: [number, number];
-	ticks: TickSpec[];
-	labels: LabelSpec[];
-};
-
-// ****************************************************************
+import {
+	getLabelMappedValue,
+	getTickMappedValue,
+	TAxisSpec,
+	getTickValue,
+} from './axisSpec';
 
 export const AxisTransition2: React.FC<{
 	startTimeSeries: TimeSeries;
@@ -53,8 +39,6 @@ export const AxisTransition2: React.FC<{
 	backgroundColor,
 	textColor,
 	area,
-	// top = 0,
-	// left = 0,
 	tickSize = 10,
 	tickLabelMargin = 0,
 }) => {
@@ -69,37 +53,43 @@ export const AxisTransition2: React.FC<{
 
 	const start_xAxis_domain = getTimeSeriesDateSpan(startTimeSeries);
 	const start_xAxis_range = XAXIS_RANGE;
-	const start_xAxis_xScale = scaleTime()
+
+	// QUICK-FIX determine why we have to cast to any here
+	const start_xAxis_xScale: ScaleTime<Date, number> = scaleTime()
 		.domain(start_xAxis_domain)
-		.range(start_xAxis_range);
-	// const start_xAxis_tickValues = start_xAxis_xScale.nice().ticks(4);
+		.range(start_xAxis_range) as any;
+
 	const start_xAxis_tickValues = start_xAxis_xScale.ticks(4);
 	const start_xAxis_ticks = start_xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
-		return {id, value: date};
+		return {id, value: date, type: 'DOMAIN_VALUE' as const};
 	});
 	const start_xAxis_labels = start_xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
 		const label = formatDate(date);
-		return {id, label, value: date};
+		return {id, label, value: date, type: 'DOMAIN_VALUE' as const};
 	});
+
 	const axisStart: TAxisSpec = {
 		domain: start_xAxis_domain,
 		range: start_xAxis_range,
+		scale: start_xAxis_xScale,
 		ticks: start_xAxis_ticks,
 		labels: start_xAxis_labels,
 	};
 
 	const end_xAxis_domain = getTimeSeriesDateSpan(endTimeSeries);
 	const end_xAxis_range = XAXIS_RANGE;
-	const end_xAxis_xScale = scaleTime()
+
+	// QUICK-FIX determine why we have to cast to any here
+	const end_xAxis_xScale: ScaleTime<Date, number> = scaleTime()
 		.domain(end_xAxis_domain)
-		.range(end_xAxis_range);
-	// const end_xAxis_tickValues = end_xAxis_xScale.nice().ticks(4);
+		.range(end_xAxis_range) as any;
+
 	const end_xAxis_tickValues = end_xAxis_xScale.ticks(4);
 	const end_xAxis_ticks = end_xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
-		return {id, value: date};
+		return {id, value: date, type: 'DOMAIN_VALUE' as const};
 	});
 	const end_xAxis_labels = end_xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
@@ -108,30 +98,25 @@ export const AxisTransition2: React.FC<{
 			id,
 			label,
 			value: date,
+			type: 'DOMAIN_VALUE' as const,
 			// textAnchor: TODO
 			// TODO more text props 'center', etc...
 		};
 	});
+
 	const axisEnd: TAxisSpec = {
 		domain: end_xAxis_domain,
 		range: end_xAxis_range,
+		scale: end_xAxis_xScale,
 		ticks: end_xAxis_ticks,
 		labels: end_xAxis_labels,
 	};
 
-	// TODO inside 'real' AxisTransition2
-	// TODO perhaps part of AxisSpec?
-	const xScaleStart = scaleTime()
-		.domain(axisStart.domain)
-		.range(axisStart.range);
+	const axisStart_lineX1 = axisStart.scale(axisStart.domain[0]);
+	const axisStart_lineX2 = axisStart.scale(axisStart.domain[1]);
 
-	const xScaleEnd = scaleTime().domain(axisEnd.domain).range(axisEnd.range);
-
-	const axisStart_lineX1 = xScaleStart(axisStart.domain[0]);
-	const axisStart_lineX2 = xScaleStart(axisStart.domain[1]);
-
-	const axisEnd_lineX1 = xScaleEnd(axisEnd.domain[0]);
-	const axisEnd_lineX2 = xScaleEnd(axisEnd.domain[1]);
+	const axisEnd_lineX1 = axisEnd.scale(axisEnd.domain[0]);
+	const axisEnd_lineX2 = axisEnd.scale(axisEnd.domain[1]);
 
 	const aAxis_lineX1 = interpolate(
 		animationPercentage,
@@ -167,13 +152,8 @@ export const AxisTransition2: React.FC<{
 
 	// update ticks positions in time
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
-		const startTick = findItemById(axisStart.ticks, tickId);
-		const endTick = findItemById(axisEnd.ticks, tickId);
-		invariant(startTick);
-		invariant(endTick);
-
-		const startX = xScaleStart(startTick.value);
-		const endX = xScaleEnd(endTick.value);
+		const startX = getTickMappedValue(axisStart, tickId);
+		const endX = getTickMappedValue(axisEnd, tickId);
 
 		const currentX =
 			(1 - animationPercentage) * startX + animationPercentage * endX;
@@ -183,12 +163,10 @@ export const AxisTransition2: React.FC<{
 
 	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
 		const startLabel = findItemById(axisStart.labels, labelId);
-		const endLabel = findItemById(axisEnd.labels, labelId);
 		invariant(startLabel);
-		invariant(endLabel);
 
-		const startX = xScaleStart(startLabel.value);
-		const endX = xScaleEnd(endLabel.value);
+		const startX = getLabelMappedValue(axisStart, labelId);
+		const endX = getLabelMappedValue(axisEnd, labelId);
 
 		const currentX =
 			(1 - animationPercentage) * startX + animationPercentage * endX;
@@ -200,7 +178,7 @@ export const AxisTransition2: React.FC<{
 		const startTick = findItemById(axisStart.ticks, tickId);
 		invariant(startTick);
 
-		const startX = xScaleStart(startTick.value);
+		const startX = axisStart.scale(startTick.value);
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
@@ -224,7 +202,7 @@ export const AxisTransition2: React.FC<{
 		const startLabel = findItemById(axisStart.labels, labelId);
 		invariant(startLabel);
 
-		const startX = xScaleStart(startLabel.value);
+		const startX = getLabelMappedValue(axisStart, labelId);
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
@@ -248,8 +226,9 @@ export const AxisTransition2: React.FC<{
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const endTick = findItemById(axisEnd.ticks, tickId);
 		invariant(endTick);
-		const startX = xScaleStart(endTick.value);
-		const endX = xScaleEnd(endTick.value);
+
+		const startX = axisStart.scale(getTickValue(axisEnd, tickId));
+		const endX = getTickMappedValue(axisEnd, tickId);
 
 		const interpolatedX = interpolate(
 			animationPercentage,
@@ -284,8 +263,8 @@ export const AxisTransition2: React.FC<{
 		const endLabel = findItemById(axisEnd.labels, labelId);
 		invariant(endLabel);
 
-		const startX = xScaleStart(endLabel.value);
-		const endX = xScaleEnd(endLabel.value);
+		const startX = axisStart.scale(endLabel.value);
+		const endX = axisEnd.scale(endLabel.value);
 
 		const interpolatedX = interpolate(
 			animationPercentage,
