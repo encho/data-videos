@@ -106,11 +106,18 @@ export function LineChartBody({
 	const minDate = min(data.map((it) => it.index)) as Date;
 	const maxDate = max(data.map((it) => it.index)) as Date;
 
+	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
+		minDate,
+		maxDate
+	);
+
+	const xScaleDomain = [
+		xTickValuesMonthBoundaries[0],
+		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
+	];
+
 	const xScale = scaleTime()
-		.domain([
-			min(data.map((it) => it.index)) as Date,
-			max(data.map((it) => it.index)) as Date,
-		])
+		.domain(xScaleDomain)
 		.range([chartLayout.areas.plot.x1, chartLayout.areas.plot.x2]);
 
 	// TODO if we ensure that array is not empty we would not have to perform the casting
@@ -143,11 +150,6 @@ export function LineChartBody({
 	const evolvedPath = evolvePath(percentageAnimation, d);
 
 	const tickValues = yScale.nice().ticks(5);
-
-	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
-		minDate,
-		maxDate
-	);
 
 	const monthStrings = getAllButLast(xTickValuesMonthBoundaries).map((it) =>
 		// TODO paramterrization from props
