@@ -19,11 +19,12 @@ import {TGridLayoutArea} from '../acetti-viz';
 import {
 	getLabelMappedValue,
 	getTickMappedValue,
-	TAxisSpec,
+	// TAxisSpec,
 	getTickValue,
 	getLabelValue,
 } from '../acetti-axis/axisSpec';
-import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
+// import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
+import {getXAxisSpecStandard} from '../acetti-axis/getXAxisSpecStandard';
 
 export const AxisTransition2: React.FC<{
 	startTimeSeries: TimeSeries;
@@ -49,11 +50,13 @@ export const AxisTransition2: React.FC<{
 
 	const animationPercentage = frame / durationInFrames;
 
-	const startXAxisSpec = getXAxisSpec(
+	// const startXAxisSpec = getXAxisSpec(
+	const startXAxisSpec = getXAxisSpecStandard(
 		startTimeSeries.map((it) => it.date),
 		area
 	);
-	const endXAxisSpec = getXAxisSpec(
+	// const endXAxisSpec = getXAxisSpec(
+	const endXAxisSpec = getXAxisSpecStandard(
 		endTimeSeries.map((it) => it.date),
 		area
 	);
@@ -315,22 +318,7 @@ export const AxisTransition2: React.FC<{
 	});
 
 	return (
-		<AbsoluteFill
-		// style={{backgroundColor}}
-		>
-			{/* <div
-				style={{
-					position: 'absolute',
-					top: 250,
-					left: 250,
-					backgroundColor: 'green',
-				}}
-			>
-				<h1 style={{color: textColor, fontSize: 30}}>
-					Animation Percentage: {formatToPercentage(animationPercentage)}
-				</h1>
-			</div> */}
-
+		<AbsoluteFill>
 			<div
 				style={{
 					position: 'absolute',
@@ -338,12 +326,7 @@ export const AxisTransition2: React.FC<{
 					left: area.x1,
 				}}
 			>
-				<svg
-					overflow="visible"
-					width={1080}
-					height={100}
-					// style={{backgroundColor: '#222222'}}
-				>
+				<svg overflow="visible" width={1080} height={100}>
 					{/* startAxis: x axis line */}
 					<g>
 						<line
