@@ -21,7 +21,9 @@ import {
 	getTickMappedValue,
 	TAxisSpec,
 	getTickValue,
-} from './axisSpec';
+	getLabelValue,
+} from '../acetti-axis/axisSpec';
+import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 
 export const AxisTransition2: React.FC<{
 	startTimeSeries: TimeSeries;
@@ -47,6 +49,15 @@ export const AxisTransition2: React.FC<{
 
 	const animationPercentage = frame / durationInFrames;
 
+	const startXAxisSpec = getXAxisSpec(
+		startTimeSeries.map((it) => it.date),
+		area
+	);
+	const endXAxisSpec = getXAxisSpec(
+		endTimeSeries.map((it) => it.date),
+		area
+	);
+
 	// TODO possibly as props
 	// const XAXIS_RANGE = [100, 1080 - 100] as [number, number];
 	const XAXIS_RANGE = [area.x1, area.x2] as [number, number];
@@ -70,13 +81,15 @@ export const AxisTransition2: React.FC<{
 		return {id, label, value: date, type: 'DOMAIN_VALUE' as const};
 	});
 
-	const axisStart: TAxisSpec = {
-		domain: start_xAxis_domain,
-		range: start_xAxis_range,
-		scale: start_xAxis_xScale,
-		ticks: start_xAxis_ticks,
-		labels: start_xAxis_labels,
-	};
+	// const axisStart: TAxisSpec = {
+	// 	domain: start_xAxis_domain,
+	// 	range: start_xAxis_range,
+	// 	scale: start_xAxis_xScale,
+	// 	ticks: start_xAxis_ticks,
+	// 	labels: start_xAxis_labels,
+	// };
+
+	const axisStart = startXAxisSpec;
 
 	const end_xAxis_domain = getTimeSeriesDateSpan(endTimeSeries);
 	const end_xAxis_range = XAXIS_RANGE;
@@ -104,13 +117,15 @@ export const AxisTransition2: React.FC<{
 		};
 	});
 
-	const axisEnd: TAxisSpec = {
-		domain: end_xAxis_domain,
-		range: end_xAxis_range,
-		scale: end_xAxis_xScale,
-		ticks: end_xAxis_ticks,
-		labels: end_xAxis_labels,
-	};
+	// const axisEnd: TAxisSpec = {
+	// 	domain: end_xAxis_domain,
+	// 	range: end_xAxis_range,
+	// 	scale: end_xAxis_xScale,
+	// 	ticks: end_xAxis_ticks,
+	// 	labels: end_xAxis_labels,
+	// };
+
+	const axisEnd = endXAxisSpec;
 
 	const axisStart_lineX1 = axisStart.scale(axisStart.domain[0]);
 	const axisStart_lineX2 = axisStart.scale(axisStart.domain[1]);
@@ -263,8 +278,10 @@ export const AxisTransition2: React.FC<{
 		const endLabel = findItemById(axisEnd.labels, labelId);
 		invariant(endLabel);
 
-		const startX = axisStart.scale(endLabel.value);
-		const endX = axisEnd.scale(endLabel.value);
+		const endLabelValue = getLabelValue(axisEnd, labelId);
+
+		const startX = axisStart.scale(endLabelValue);
+		const endX = getLabelMappedValue(axisEnd, labelId);
 
 		const interpolatedX = interpolate(
 			animationPercentage,

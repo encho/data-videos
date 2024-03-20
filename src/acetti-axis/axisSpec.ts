@@ -1,14 +1,6 @@
-// // TODO implement like so
-// // const startX = getTickValue(axisStart, tickId)
-// // const endX = getTickValue(axisEnd, tickId)
-// invariant(startTick.type === 'DOMAIN_VALUE');
-// invariant(endTick.type === 'DOMAIN_VALUE');
-// const startX = xScaleStart(startTick.value);
-// const endX = xScaleEnd(endTick.value);
-
 import {ScaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
-import {findItemById} from './utils';
+import {findItemById} from '../AxisTransition/utils';
 
 type TTickSpecMapped = {
 	id: string;
@@ -55,7 +47,6 @@ export function getTickValue(axisSpec: TAxisSpec, tickId: string): Date {
 	invariant(tick);
 
 	if (tick.type === 'DOMAIN_VALUE') {
-		// return axisSpec.scale(tick.value);
 		return tick.value;
 	} else {
 		return axisSpec.scale.invert(tick.value);
@@ -73,6 +64,17 @@ export function getTickMappedValue(
 		return axisSpec.scale(tick.value);
 	} else {
 		return tick.value;
+	}
+}
+
+export function getLabelValue(axisSpec: TAxisSpec, labelId: string): Date {
+	const label = findItemById(axisSpec.labels, labelId);
+	invariant(label);
+
+	if (label.type === 'DOMAIN_VALUE') {
+		return label.value;
+	} else {
+		return axisSpec.scale.invert(label.value);
 	}
 }
 

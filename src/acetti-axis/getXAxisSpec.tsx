@@ -2,7 +2,7 @@
 import {max, min} from 'd3-array';
 import {scaleTime, ScaleTime} from 'd3-scale';
 
-import {TAxisSpec} from '../AxisTransition/axisSpec';
+import {TAxisSpec} from './axisSpec';
 
 import {TGridLayoutArea} from '../acetti-viz';
 
@@ -46,8 +46,6 @@ export function getXAxisSpec(datesArray: Date[], area: TGridLayoutArea) {
 	);
 
 	const dateIds = getAllButLast(xTickValuesMonthBoundaries).map((it) =>
-		// TODO paramterrization from props
-		// getMonthString(it, 'veryShort')
 		it.toISOString()
 	);
 
@@ -57,10 +55,13 @@ export function getXAxisSpec(datesArray: Date[], area: TGridLayoutArea) {
 		xScale(d)
 	);
 
-	const axisTickSpecs = xTickValuesMonthStartsMapped.map((n: number) => {
-		const id = n.toString();
-		return {id, value: n, type: 'MAPPED_VALUE' as const};
-	});
+	const axisTickSpecs = xTickValuesMonthStartsMapped.map(
+		(n: number, i: number) => {
+			const date = xTickValuesMonthBoundaries[i];
+			const id = date.toISOString();
+			return {id, value: n, type: 'MAPPED_VALUE' as const};
+		}
+	);
 
 	// TODO: here we have mapped values already we may need to integrate this in axisSpec
 	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(

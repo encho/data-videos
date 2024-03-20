@@ -4,10 +4,7 @@ import {scaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
-import {
-	getLabelMappedValue,
-	getTickMappedValue,
-} from '../AxisTransition/axisSpec';
+import {getLabelMappedValue, getTickMappedValue} from '../acetti-axis/axisSpec';
 
 import {FontFamiliesUnionType} from '../fontSpecs';
 import {
