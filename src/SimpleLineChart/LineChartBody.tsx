@@ -4,7 +4,11 @@ import {scaleLinear, scaleTime, ScaleTime} from 'd3-scale';
 import {line} from 'd3-shape';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
-import {TAxisSpec} from '../AxisTransition/axisSpec';
+import {
+	getLabelMappedValue,
+	getTickMappedValue,
+	TAxisSpec,
+} from '../AxisTransition/axisSpec';
 
 import {FontFamiliesUnionType} from '../fontSpecs';
 import {
@@ -111,7 +115,8 @@ export function LineChartBody({
 
 	// information to determine looks of x-axis
 	const dateSpanCategory = getDateSpanCategory(minDate, maxDate);
-	console.log({dateSpanCategory});
+
+	// TODO const xAxisSpec = getXAxisSpec(timeseriesData)
 
 	// TODO this only in specific dateSpanCategories, otherwise keep minDate,maxDate domain
 	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
@@ -186,18 +191,27 @@ export function LineChartBody({
 		return {id, value: n, type: 'MAPPED_VALUE' as const};
 	});
 
+	// TODO: here we have mapped values already we may need to integrate this in axisSpec
+	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(
+		xTickValuesMonthStartsMapped
+	);
+
+	const xAxisLabels = xTickValuesMonthCentroids.map((it, i) => {
+		return {
+			id: monthStrings[i],
+			label: monthStrings[i],
+			value: it,
+			type: 'MAPPED_VALUE' as const,
+		};
+	});
+
 	const xAxisSpecFull: TAxisSpec = {
 		domain: xScaleDomain,
 		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
 		scale: xScale,
 		ticks: axisTickSpecs,
-		labels: [],
+		labels: xAxisLabels,
 	};
-
-	// TODO: here we have mapped values already we may need to integrate this in axisSpec
-	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(
-		xTickValuesMonthStartsMapped
-	);
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -252,58 +266,62 @@ export function LineChartBody({
 						);
 					})}
 
-					{/* x axis line */}
+					{/* xAxis line */}
 					<g>
 						<line
-							x1={xScale(xTickValuesMonthBoundaries[0])}
-							x2={xScale(
-								xTickValuesMonthBoundaries[
-									xTickValuesMonthBoundaries.length - 1
-								]
-							)}
+							x1={xAxisSpecFull.scale(xAxisSpecFull.domain[0])}
+							x2={xAxisSpecFull.scale(xAxisSpecFull.domain[1])}
 							y1={chartLayout.areas.xAxis.y1}
 							y2={chartLayout.areas.xAxis.y1}
-							stroke={styling.xTickValuesColor}
+							// stroke={styling.xTickValuesColor}
+							stroke={'blue'}
 							strokeWidth={styling.xTickValuesWidth}
 						/>
 					</g>
 
-					{/* x ticks */}
-					{xTickValuesMonthBoundaries.map((it, i) => {
+					{/* xAxis ticks */}
+					{xAxisSpecFull.ticks.map((it, i) => {
+						const tickMappedValue = getTickMappedValue(xAxisSpecFull, it.id);
+
 						return (
 							<g key={i}>
 								<line
-									x1={xScale(it)}
-									x2={xScale(it)}
+									x1={tickMappedValue}
+									x2={tickMappedValue}
 									y1={chartLayout.areas.xAxis.y1}
 									// TODO pass tickLength from styling
 									y2={chartLayout.areas.xAxis.y1 + styling.xTickValuesLength}
-									stroke={styling.xTickValuesColor}
+									// stroke={styling.xTickValuesColor}
+									stroke={'yellow'}
 									strokeWidth={styling.xTickValuesWidth}
 								/>
 							</g>
 						);
 					})}
 
-					{/* x month centroid labels */}
-					{xTickValuesMonthCentroids.map((it, i) => {
+					{/* xAxis labels */}
+					{xAxisSpecFull.labels.map((currentLabel, i) => {
 						return (
 							<g key={i}>
 								<text
+									// TODO textAnchor has to be specified in currentLabel
 									textAnchor="middle"
 									alignmentBaseline="baseline"
-									fill={styling.xLabelsColor}
+									// fill={styling.xLabelsColor}
+									fill={'cyan'}
 									fontFamily={fontFamilyXTicklabels}
 									fontSize={styling.xTickValuesFontSize}
-									x={it}
+									x={getLabelMappedValue(xAxisSpecFull, currentLabel.id)}
+									// x={currentLabel.value}
 									y={chartLayout.areas.xAxis.y2}
 								>
-									{monthStrings[i]}
+									{currentLabel.label}
 								</text>
 							</g>
 						);
 					})}
 
+					{/* the animated line */}
 					{d ? (
 						<g>
 							<path

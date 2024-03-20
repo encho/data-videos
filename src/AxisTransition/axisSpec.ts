@@ -78,7 +78,7 @@ export function getLabelMappedValue(
 	axisSpec: TAxisSpec,
 	labelId: string
 ): number {
-	const label = findItemById(axisSpec.ticks, labelId);
+	const label = findItemById(axisSpec.labels, labelId);
 	invariant(label);
 
 	if (label.type === 'DOMAIN_VALUE') {
