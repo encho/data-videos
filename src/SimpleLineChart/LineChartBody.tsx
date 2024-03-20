@@ -202,6 +202,7 @@ export function LineChartBody({
 			label: monthStrings[i],
 			value: it,
 			type: 'MAPPED_VALUE' as const,
+			textAnchor: 'middle' as const,
 		};
 	});
 
@@ -273,8 +274,7 @@ export function LineChartBody({
 							x2={xAxisSpecFull.scale(xAxisSpecFull.domain[1])}
 							y1={chartLayout.areas.xAxis.y1}
 							y2={chartLayout.areas.xAxis.y1}
-							// stroke={styling.xTickValuesColor}
-							stroke={'blue'}
+							stroke={styling.xTickValuesColor}
 							strokeWidth={styling.xTickValuesWidth}
 						/>
 					</g>
@@ -291,8 +291,7 @@ export function LineChartBody({
 									y1={chartLayout.areas.xAxis.y1}
 									// TODO pass tickLength from styling
 									y2={chartLayout.areas.xAxis.y1 + styling.xTickValuesLength}
-									// stroke={styling.xTickValuesColor}
-									stroke={'yellow'}
+									stroke={styling.xTickValuesColor}
 									strokeWidth={styling.xTickValuesWidth}
 								/>
 							</g>
@@ -305,7 +304,8 @@ export function LineChartBody({
 							<g key={i}>
 								<text
 									// TODO textAnchor has to be specified in currentLabel
-									textAnchor="middle"
+									// textAnchor="middle"
+									textAnchor={currentLabel.textAnchor || 'start'}
 									alignmentBaseline="baseline"
 									// fill={styling.xLabelsColor}
 									fill={'cyan'}

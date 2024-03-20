@@ -29,6 +29,7 @@ type TLabelSpecNormal = {
 	value: Date;
 	label: string;
 	type: 'DOMAIN_VALUE';
+	textAnchor?: 'start' | 'middle' | 'end';
 };
 
 type TLabelSpecMapped = {
@@ -36,6 +37,7 @@ type TLabelSpecMapped = {
 	value: number;
 	label: string;
 	type: 'MAPPED_VALUE';
+	textAnchor?: 'start' | 'middle' | 'end';
 };
 
 type TLabelSpec = TLabelSpecNormal | TLabelSpecMapped;
