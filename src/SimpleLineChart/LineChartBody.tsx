@@ -1,13 +1,12 @@
 import {evolvePath, getLength, getPointAtLength} from '@remotion/paths';
 import {max, min} from 'd3-array';
-import {scaleLinear, scaleTime, ScaleTime} from 'd3-scale';
+import {scaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
 import {
 	getLabelMappedValue,
 	getTickMappedValue,
-	TAxisSpec,
 } from '../AxisTransition/axisSpec';
 
 import {FontFamiliesUnionType} from '../fontSpecs';
@@ -17,7 +16,7 @@ import {
 	TGridRailSpec,
 	useGridLayout,
 } from '../acetti-viz';
-import {getDateSpanCategory} from './utils';
+import {getXAxisSpec} from './getXAxisSpec';
 
 export function LineChartBody({
 	areaWidth,
@@ -110,39 +109,10 @@ export function LineChartBody({
 		gridLayoutSpec: chartGridLayoutSpec,
 	});
 
-	const minDate = min(data.map((it) => it.index)) as Date;
-	const maxDate = max(data.map((it) => it.index)) as Date;
-
-	// information to determine looks of x-axis
-	const dateSpanCategory = getDateSpanCategory(minDate, maxDate);
-
-	// TODO const xAxisSpec = getXAxisSpec(timeseriesData)
-
-	// TODO this only in specific dateSpanCategories, otherwise keep minDate,maxDate domain
-	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
-		minDate,
-		maxDate
+	const xAxisSpecFull = getXAxisSpec(
+		data.map((it) => it.index),
+		chartLayout.areas.plot
 	);
-
-	const xScaleDomain = [
-		xTickValuesMonthBoundaries[0],
-		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
-	] as [Date, Date];
-
-	const xScaleRange = [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2];
-
-	// QUICK-FIX determine why we have to cast to any here
-	const xScale: ScaleTime<Date, number> = scaleTime()
-		.domain(xScaleDomain)
-		.range(xScaleRange) as any;
-
-	const xAxisSpec: TAxisSpec = {
-		domain: xScaleDomain,
-		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
-		scale: xScale,
-		ticks: [],
-		labels: [],
-	};
 
 	// TODO if we ensure that array is not empty we would not have to perform the casting
 	const yDomainMin = min(data, (it) => it.value) as number;
@@ -162,7 +132,7 @@ export function LineChartBody({
 		.range([chartLayout.areas.plot.y1, chartLayout.areas.plot.y2]);
 	// .nice();
 	const linePath = line<{index: Date; value: number}>()
-		.x((d) => xScale(d.index))
+		.x((d) => xAxisSpecFull.scale(d.index))
 		.y((d) => yScale(d.value));
 	// .curve(curveBasis);
 	// .curve(curveCatmullRom.alpha(0.5));
@@ -174,45 +144,6 @@ export function LineChartBody({
 	const evolvedPath = evolvePath(percentageAnimation, d);
 
 	const tickValues = yScale.nice().ticks(5);
-
-	const monthStrings = getAllButLast(xTickValuesMonthBoundaries).map((it) =>
-		// TODO paramterrization from props
-		getMonthString(it, 'veryShort')
-	);
-
-	// TODO: here we have mapped values already we may need to integrate this in axisSpec
-	// these tick values
-	const xTickValuesMonthStartsMapped = xTickValuesMonthBoundaries.map((d) =>
-		xScale(d)
-	);
-
-	const axisTickSpecs = xTickValuesMonthStartsMapped.map((n: number) => {
-		const id = n.toString();
-		return {id, value: n, type: 'MAPPED_VALUE' as const};
-	});
-
-	// TODO: here we have mapped values already we may need to integrate this in axisSpec
-	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(
-		xTickValuesMonthStartsMapped
-	);
-
-	const xAxisLabels = xTickValuesMonthCentroids.map((it, i) => {
-		return {
-			id: monthStrings[i],
-			label: monthStrings[i],
-			value: it,
-			type: 'MAPPED_VALUE' as const,
-			textAnchor: 'middle' as const,
-		};
-	});
-
-	const xAxisSpecFull: TAxisSpec = {
-		domain: xScaleDomain,
-		range: [chartLayout.areas.plot.x1, chartLayout.areas.plot.x2],
-		scale: xScale,
-		ticks: axisTickSpecs,
-		labels: xAxisLabels,
-	};
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -303,16 +234,12 @@ export function LineChartBody({
 						return (
 							<g key={i}>
 								<text
-									// TODO textAnchor has to be specified in currentLabel
-									// textAnchor="middle"
 									textAnchor={currentLabel.textAnchor || 'start'}
 									alignmentBaseline="baseline"
-									// fill={styling.xLabelsColor}
-									fill={'cyan'}
+									fill={styling.xLabelsColor}
 									fontFamily={fontFamilyXTicklabels}
 									fontSize={styling.xTickValuesFontSize}
 									x={getLabelMappedValue(xAxisSpecFull, currentLabel.id)}
-									// x={currentLabel.value}
 									y={chartLayout.areas.xAxis.y2}
 								>
 									{currentLabel.label}
@@ -345,94 +272,4 @@ export function LineChartBody({
 			</div>
 		</div>
 	);
-}
-
-function getAllButLast(arr: any[]): any[] {
-	if (arr.length <= 1) {
-		return [];
-	}
-
-	return arr.slice(0, arr.length - 1);
-}
-function getMonthString(
-	date: Date,
-	format: 'long' | 'short' | 'veryShort' = 'long'
-): string {
-	const months = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December',
-	];
-
-	const shortMonths = months.map((month) => month.slice(0, 3));
-	const veryShortMonths = months.map((month) => month.slice(0, 1));
-
-	switch (format) {
-		case 'long':
-			return months[date.getMonth()];
-		case 'short':
-			return shortMonths[date.getMonth()];
-		case 'veryShort':
-			return veryShortMonths[date.getMonth()];
-		default:
-			return months[date.getMonth()];
-	}
-}
-
-function generateMonthBoundariesDates(minDate: Date, maxDate: Date): Date[] {
-	const result: Date[] = [];
-
-	// Function to check if a date is the first day of the month
-	const isFirstDayOfMonth = (date: Date) => date.getDate() === 1;
-
-	// Function to get the last day of the month
-	const getLastDayOfMonth = (date: Date) =>
-		new Date(date.getFullYear(), date.getMonth() + 1, 0);
-
-	// Handle the minDate
-	if (!isFirstDayOfMonth(minDate)) {
-		result.push(new Date(minDate.getFullYear(), minDate.getMonth(), 1));
-	} else {
-		result.push(minDate);
-	}
-
-	// Generate the first day of each month between minDate and maxDate
-	let currentDate = new Date(minDate);
-	while (currentDate < maxDate) {
-		currentDate = new Date(
-			currentDate.getFullYear(),
-			currentDate.getMonth() + 1,
-			1
-		);
-		if (currentDate <= maxDate) {
-			result.push(currentDate);
-		}
-	}
-
-	// Handle the maxDate as an exception
-	if (maxDate <= getLastDayOfMonth(maxDate)) {
-		result.push(getLastDayOfMonth(maxDate));
-	}
-
-	return result;
-}
-
-function calculateAveragesBetweenNumbers(numbers: number[]): number[] {
-	const result: number[] = [];
-
-	for (let i = 0; i < numbers.length - 1; i++) {
-		const average = (numbers[i] + numbers[i + 1]) / 2;
-		result.push(average);
-	}
-
-	return result;
 }
