@@ -16,7 +16,7 @@ import {
 	TGridRailSpec,
 	useGridLayout,
 } from '../acetti-viz';
-import {getXAxisSpec} from './getXAxisSpec';
+import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 
 export function LineChartBody({
 	areaWidth,
