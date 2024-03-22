@@ -146,7 +146,8 @@ export function LineChartBody({
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					hide={!showLayout}
+					// hide={!showLayout}
+					hide={false}
 					areas={chartLayout.areas}
 					width={areaWidth}
 					height={areaHeight}
@@ -232,6 +233,7 @@ export function LineChartBody({
 							<g key={i}>
 								<text
 									textAnchor={currentLabel.textAnchor || 'start'}
+									// textAnchor={currentLabel.textAnchor}
 									alignmentBaseline="baseline"
 									fill={styling.xLabelsColor}
 									fontFamily={fontFamilyXTicklabels}

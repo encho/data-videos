@@ -29,12 +29,23 @@ export function getXAxisSpecStandard(
 	const xAxis_tickValues = xAxis_xScale.ticks(4);
 	const xAxis_ticks = xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
-		return {id, value: date, type: 'DOMAIN_VALUE' as const};
+		return {
+			id,
+			value: date,
+			type: 'DOMAIN_VALUE' as const,
+		};
 	});
+
 	const xAxis_labels = xAxis_tickValues.map((date) => {
 		const id = date.getTime().toString();
 		const label = formatDate(date);
-		return {id, label, value: date, type: 'DOMAIN_VALUE' as const};
+		return {
+			id,
+			label,
+			value: date,
+			type: 'DOMAIN_VALUE' as const,
+			textAnchor: 'middle' as const,
+		};
 	});
 
 	const axisSpec: TAxisSpec = {

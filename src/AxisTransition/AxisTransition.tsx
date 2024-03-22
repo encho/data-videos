@@ -15,87 +15,9 @@ import {
 	useGridLayout,
 } from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
-import {AxisTransition2} from './AxisTransition2';
-import {getFirstNItems} from './utils';
+import {Transition_HorizontalDateAxis} from './Transition_HorizontalDateAxis';
+import {getFirstNItems, generateRange, getAdjacentPairs} from './utils';
 import {LineChart} from './LineChart';
-
-/**
- * Generates a range of numbers within a specified range with a given step size.
- *
- * @param startNumber The starting number of the range (inclusive).
- * @param endNumber The ending number of the range (inclusive).
- * @param step The step size between each number in the range.
- * @returns An array containing numbers within the specified range with the given step size.
- *
- * @example
- * // Example usage:
- * const startNumber = 10;
- * const endNumber = 30;
- * const step = 5;
- * const result = generateRange(startNumber, endNumber, step);
- * console.log(result); // Output: [10, 15, 20, 25, 30]
- *
- * @example
- * // Example usage with a negative step:
- * const startNumber = 20;
- * const endNumber = 0;
- * const step = -4;
- * const result = generateRange(startNumber, endNumber, step);
- * console.log(result); // Output: [20, 16, 12, 8, 4, 0]
- *
- * @example
- * // Example usage with a step larger than the range:
- * const startNumber = 1;
- * const endNumber = 10;
- * const step = 20;
- * const result = generateRange(startNumber, endNumber, step);
- * console.log(result); // Output: [1]
- *
- * @example
- * // Example usage with a single number range:
- * const startNumber = 5;
- * const endNumber = 5;
- * const step = 1;
- * const result = generateRange(startNumber, endNumber, step);
- * console.log(result); // Output: [5]
- */
-function generateRange(
-	startNumber: number,
-	endNumber: number,
-	step: number
-): number[] {
-	const result: number[] = [];
-	for (let i = startNumber; i <= endNumber; i += step) {
-		result.push(i);
-	}
-	return result;
-}
-
-/**
- * Generates pairs of adjacent elements from an array.
- *
- * @param arr An array of numbers.
- * @returns An array of pairs, each containing two adjacent elements from the input array.
- *
- * @example
- * // Example usage:
- * const inputArray = [10, 20, 30];
- * const result = getAdjacentPairs(inputArray);
- * console.log(result); // Output: [[10, 20], [20, 30]]
- *
- * @example
- * // Example usage with an empty array:
- * const emptyArray: number[] = [];
- * const result = getAdjacentPairs(emptyArray);
- * console.log(result); // Output: []
- */
-function getAdjacentPairs(arr: number[]): number[][] {
-	const pairs: number[][] = [];
-	for (let i = 0; i < arr.length - 1; i++) {
-		pairs.push([arr[i], arr[i + 1]]);
-	}
-	return pairs;
-}
 
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
@@ -204,13 +126,11 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								durationInFrames={durationInFrames}
 								layout="none"
 							>
-								<AxisTransition2
+								<Transition_HorizontalDateAxis
 									backgroundColor={backgroundColor}
 									textColor={textColor}
 									startTimeSeries={tsStart}
 									endTimeSeries={tsEnd}
-									top={700}
-									left={0}
 									area={xAxisArea}
 									tickSize={TICK_SIZE}
 									tickLabelMargin={TICK_LABEL_MARGIN}
