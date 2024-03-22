@@ -27,6 +27,67 @@ const TICK_SIZE = 50;
 const TICK_LABEL_MARGIN = 0;
 const TEXT_COLOR = '#f05122';
 
+const Transition_HorizontalDateAxis_Line: React.FC<{
+	from: TAxisSpec;
+	to: TAxisSpec;
+}> = ({from: startSpec, to: endSpec}) => {
+	// TODO unnecessary?
+	const frame = useCurrentFrame();
+	// TODO unnecessary?
+	const {durationInFrames} = useVideoConfig();
+
+	// TODO get from prop
+	const animationPercentage = frame / durationInFrames;
+
+	const axisStart_line_x1 = startSpec.scale(startSpec.domain[0]);
+	const axisStart_line_x2 = startSpec.scale(startSpec.domain[1]);
+
+	const axisEnd_line_x1 = endSpec.scale(endSpec.domain[0]);
+	const axisEnd_line_x2 = endSpec.scale(endSpec.domain[1]);
+
+	const aAxis_line_x1 = interpolate(
+		animationPercentage,
+		[0, 1],
+		[axisStart_line_x1, axisEnd_line_x1],
+		{
+			easing: Easing.bezier(0.25, 1, 0.5, 1),
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const aAxis_line_x2 = interpolate(
+		animationPercentage,
+		[0, 1],
+		[axisStart_line_x2, axisEnd_line_x2],
+		{
+			easing: Easing.bezier(0.25, 1, 0.5, 1),
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	// const TICK_SIZE = 50;
+	// const TICK_LABEL_MARGIN = 0;
+	// const TEXT_COLOR = '#f05122';
+
+	return (
+		<g>
+			<rect width={100} height={100} fill="cyan" />
+
+			<line
+				x1={aAxis_line_x1}
+				x2={aAxis_line_x2}
+				y1={0}
+				y2={0}
+				stroke={TEXT_COLOR}
+				// TODO strokeWidth as variable
+				strokeWidth={4}
+			/>
+		</g>
+	);
+};
+
 const Transition_HorizontalDateAxis_Labels: React.FC<{
 	from: TAxisSpec;
 	to: TAxisSpec;
@@ -358,11 +419,6 @@ export const AxisTransition2: React.FC<{
 	tickSize = 10,
 	tickLabelMargin = 0,
 }) => {
-	const frame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
-
-	const animationPercentage = frame / durationInFrames;
-
 	const axisStart = getXAxisSpec(
 		startTimeSeries.map((it) => it.date),
 		area,
@@ -374,36 +430,10 @@ export const AxisTransition2: React.FC<{
 		'INTER_MONTHS'
 	);
 
-	const axisStart_line_x1 = axisStart.scale(axisStart.domain[0]);
-	const axisStart_line_x2 = axisStart.scale(axisStart.domain[1]);
-
-	const axisEnd_line_x1 = axisEnd.scale(axisEnd.domain[0]);
-	const axisEnd_line_x2 = axisEnd.scale(axisEnd.domain[1]);
-
-	const aAxis_line_x1 = interpolate(
-		animationPercentage,
-		[0, 1],
-		[axisStart_line_x1, axisEnd_line_x1],
-		{
-			easing: Easing.bezier(0.25, 1, 0.5, 1),
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
-
-	const aAxis_line_x2 = interpolate(
-		animationPercentage,
-		[0, 1],
-		[axisStart_line_x2, axisEnd_line_x2],
-		{
-			easing: Easing.bezier(0.25, 1, 0.5, 1),
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
-
 	return (
 		<AbsoluteFill>
+			{/* TODO  */}
+			{/* <Position top={area.y1} left={area.x1} />{...} */}
 			<div
 				style={{
 					position: 'absolute',
@@ -412,7 +442,6 @@ export const AxisTransition2: React.FC<{
 				}}
 			>
 				<svg overflow="visible" width={1080} height={100}>
-					{/* startAxis: x axis line */}
 					<g>
 						<Transition_HorizontalDateAxis_Ticks
 							from={axisStart}
@@ -422,23 +451,8 @@ export const AxisTransition2: React.FC<{
 							from={axisStart}
 							to={axisEnd}
 						/>
-
-						<line
-							x1={aAxis_line_x1}
-							x2={aAxis_line_x2}
-							y1={0}
-							y2={0}
-							stroke={textColor}
-							// TODO strokeWidth as variable
-							strokeWidth={4}
-						/>
+						<Transition_HorizontalDateAxis_Line from={axisStart} to={axisEnd} />
 					</g>
-
-					{/* TODO implement! */}
-					{/* <Transition_HorizontalDateAxis_Line
-						startSpec={axisStart}
-						endSpec={axisEnd}
-					/> */}
 				</svg>
 			</div>
 		</AbsoluteFill>

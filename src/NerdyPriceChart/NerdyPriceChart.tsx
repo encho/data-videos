@@ -139,7 +139,8 @@ export const NerdyPriceChart: React.FC<
 			}
 		}
 		fetchAndSetData();
-	}, [ticker, timePeriod, endDate, nerdyFinanceEnv]);
+		// }, [ticker, timePeriod, endDate, nerdyFinanceEnv]);
+	}, []);
 
 	const defaultStyling = {
 		titleFontSize: 50,
