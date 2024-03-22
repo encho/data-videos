@@ -23,10 +23,182 @@ import {
 import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 import {TAxisSpec} from '../acetti-axis/axisSpec';
 
+const TICK_SIZE = 50;
+const TICK_LABEL_MARGIN = 0;
+const TEXT_COLOR = '#f05122';
+
+const Transition_HorizontalDateAxis_Labels: React.FC<{
+	from: TAxisSpec;
+	to: TAxisSpec;
+}> = ({from: startSpec, to: endSpec}) => {
+	// TODO unnecessary?
+	const frame = useCurrentFrame();
+	// TODO unnecessary?
+	const {durationInFrames} = useVideoConfig();
+
+	// TODO get from prop
+	const animationPercentage = frame / durationInFrames;
+
+	// const TICK_SIZE = 50;
+	// const TICK_LABEL_MARGIN = 0;
+	// const TEXT_COLOR = '#f05122';
+
+	const labelsEnterUpdateExits = getEnterUpdateExits(
+		startSpec.labels.map((it) => it.id),
+		endSpec.labels.map((it) => it.id)
+	);
+
+	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
+		const endLabel = findItemById(endSpec.labels, labelId);
+		invariant(endLabel);
+
+		const endLabelValue = getLabelValue(endSpec, labelId);
+
+		const startX = startSpec.scale(endLabelValue);
+		const endX = getLabelMappedValue(endSpec, labelId);
+
+		const interpolatedX = interpolate(
+			animationPercentage,
+			[0, 1],
+			[startX, endX],
+			{
+				easing: Easing.linear,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 1],
+			[0, 1],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			mappedValue: interpolatedX,
+			opacity: interpolatedOpacity,
+			label: endLabel.label,
+		};
+	});
+
+	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
+		const startLabel = findItemById(startSpec.labels, labelId);
+		invariant(startLabel);
+
+		const startX = getLabelMappedValue(startSpec, labelId);
+		const endX = getLabelMappedValue(endSpec, labelId);
+
+		const currentX =
+			(1 - animationPercentage) * startX + animationPercentage * endX;
+
+		return {id: labelId, mappedValue: currentX, label: startLabel.label};
+	});
+
+	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
+		const startLabel = findItemById(startSpec.labels, labelId);
+		invariant(startLabel);
+
+		const startX = getLabelMappedValue(startSpec, labelId);
+
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 0.8],
+			[1, 0],
+			{
+				easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			mappedValue: startX,
+			opacity: interpolatedOpacity,
+			label: startLabel.label,
+		};
+	});
+
+	return (
+		<g>
+			{/* <rect width={100} height={100} fill="cyan" /> */}
+			{/* enter labels  */}
+
+			{enterLabels.map((it, i) => {
+				return (
+					<g key={i}>
+						<text
+							textAnchor="middle"
+							alignmentBaseline="hanging"
+							fill={TEXT_COLOR}
+							// fontFamily={fontFamilyXTicklabels}
+							// fontSize={styling.xTickValuesFontSize}
+							fontSize={16}
+							x={it.mappedValue}
+							y={TICK_SIZE + TICK_LABEL_MARGIN}
+							opacity={it.opacity}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+
+			{/* update labels  */}
+			{updateLabels.map((it, i) => {
+				return (
+					<g key={i}>
+						<text
+							textAnchor="middle"
+							alignmentBaseline="hanging"
+							fill={TEXT_COLOR}
+							stroke={TEXT_COLOR}
+							// fontFamily={fontFamilyXTicklabels}
+							// fontSize={styling.xTickValuesFontSize}
+							fontSize={16}
+							x={it.mappedValue}
+							y={TICK_SIZE + TICK_LABEL_MARGIN}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+
+			{/* exit labels  */}
+			{exitLabels.map((it, i) => {
+				return (
+					<g key={i}>
+						<text
+							textAnchor="middle"
+							alignmentBaseline="hanging"
+							fill={TEXT_COLOR}
+							// fontFamily={fontFamilyXTicklabels}
+							// fontSize={styling.xTickValuesFontSize}
+							fontSize={16}
+							x={it.mappedValue}
+							y={TICK_SIZE + TICK_LABEL_MARGIN}
+							opacity={it.opacity}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+		</g>
+	);
+};
+
 const Transition_HorizontalDateAxis_Ticks: React.FC<{
-	startSpec: TAxisSpec;
-	endSpec: TAxisSpec;
-}> = ({startSpec, endSpec}) => {
+	from: TAxisSpec;
+	to: TAxisSpec;
+}> = ({from: startSpec, to: endSpec}) => {
 	// TODO unnecessary?
 	const frame = useCurrentFrame();
 	// TODO unnecessary?
@@ -110,8 +282,8 @@ const Transition_HorizontalDateAxis_Ticks: React.FC<{
 		};
 	});
 
-	const TICK_SIZE = 80;
-	const TEXT_COLOR = '#f05122';
+	// const TICK_SIZE = 80;
+	// const TEXT_COLOR = '#f05122';
 
 	return (
 		<g>
@@ -193,11 +365,13 @@ export const AxisTransition2: React.FC<{
 
 	const axisStart = getXAxisSpec(
 		startTimeSeries.map((it) => it.date),
-		area
+		area,
+		'INTER_MONTHS'
 	);
 	const axisEnd = getXAxisSpec(
 		endTimeSeries.map((it) => it.date),
-		area
+		area,
+		'INTER_MONTHS'
 	);
 
 	const axisStart_line_x1 = axisStart.scale(axisStart.domain[0]);
@@ -228,164 +402,6 @@ export const AxisTransition2: React.FC<{
 		}
 	);
 
-	// const ticksEnterUpdateExits = getEnterUpdateExits(
-	// 	axisStart.ticks.map((it) => it.id),
-	// 	axisEnd.ticks.map((it) => it.id)
-	// );
-
-	const labelsEnterUpdateExits = getEnterUpdateExits(
-		axisStart.labels.map((it) => it.id),
-		axisEnd.labels.map((it) => it.id)
-	);
-
-	// update ticks positions in time
-	// const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
-	// 	const startX = getTickMappedValue(axisStart, tickId);
-	// 	const endX = getTickMappedValue(axisEnd, tickId);
-
-	// 	const currentX =
-	// 		(1 - animationPercentage) * startX + animationPercentage * endX;
-
-	// 	return {id: tickId, mappedValue: currentX};
-	// });
-
-	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
-		const startLabel = findItemById(axisStart.labels, labelId);
-		invariant(startLabel);
-
-		const startX = getLabelMappedValue(axisStart, labelId);
-		const endX = getLabelMappedValue(axisEnd, labelId);
-
-		const currentX =
-			(1 - animationPercentage) * startX + animationPercentage * endX;
-
-		return {id: labelId, mappedValue: currentX, label: startLabel.label};
-	});
-
-	// const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
-	// 	const startTick = findItemById(axisStart.ticks, tickId);
-	// 	invariant(startTick);
-
-	// 	const startX = axisStart.scale(startTick.value);
-
-	// 	const interpolatedOpacity = interpolate(
-	// 		animationPercentage,
-	// 		[0, 0.8],
-	// 		[1, 0],
-	// 		{
-	// 			easing: Easing.bezier(0.25, 1, 0.5, 1),
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
-
-	// 	return {
-	// 		id: tickId,
-	// 		mappedValue: startX,
-	// 		opacity: interpolatedOpacity,
-	// 	};
-	// });
-
-	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
-		const startLabel = findItemById(axisStart.labels, labelId);
-		invariant(startLabel);
-
-		const startX = getLabelMappedValue(axisStart, labelId);
-
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 0.8],
-			[1, 0],
-			{
-				easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-		return {
-			id: labelId,
-			mappedValue: startX,
-			opacity: interpolatedOpacity,
-			label: startLabel.label,
-		};
-	});
-
-	// const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
-	// 	const endTick = findItemById(axisEnd.ticks, tickId);
-	// 	invariant(endTick);
-
-	// 	const startX = axisStart.scale(getTickValue(axisEnd, tickId));
-	// 	const endX = getTickMappedValue(axisEnd, tickId);
-
-	// 	const interpolatedX = interpolate(
-	// 		animationPercentage,
-	// 		[0, 1],
-	// 		[startX, endX],
-	// 		{
-	// 			easing: Easing.linear,
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
-
-	// 	const interpolatedOpacity = interpolate(
-	// 		animationPercentage,
-	// 		[0, 1],
-	// 		[0, 1],
-	// 		{
-	// 			easing: Easing.bezier(0.25, 1, 0.5, 1),
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
-
-	// 	return {
-	// 		id: tickId,
-	// 		mappedValue: interpolatedX,
-	// 		opacity: interpolatedOpacity,
-	// 	};
-	// });
-
-	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
-		const endLabel = findItemById(axisEnd.labels, labelId);
-		invariant(endLabel);
-
-		const endLabelValue = getLabelValue(axisEnd, labelId);
-
-		const startX = axisStart.scale(endLabelValue);
-		const endX = getLabelMappedValue(axisEnd, labelId);
-
-		const interpolatedX = interpolate(
-			animationPercentage,
-			[0, 1],
-			[startX, endX],
-			{
-				easing: Easing.linear,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 1],
-			[0, 1],
-			{
-				easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-		return {
-			id: labelId,
-			mappedValue: interpolatedX,
-			opacity: interpolatedOpacity,
-			label: endLabel.label,
-		};
-	});
-
 	return (
 		<AbsoluteFill>
 			<div
@@ -398,6 +414,15 @@ export const AxisTransition2: React.FC<{
 				<svg overflow="visible" width={1080} height={100}>
 					{/* startAxis: x axis line */}
 					<g>
+						<Transition_HorizontalDateAxis_Ticks
+							from={axisStart}
+							to={axisEnd}
+						/>
+						<Transition_HorizontalDateAxis_Labels
+							from={axisStart}
+							to={axisEnd}
+						/>
+
 						<line
 							x1={aAxis_line_x1}
 							x2={aAxis_line_x2}
@@ -409,135 +434,11 @@ export const AxisTransition2: React.FC<{
 						/>
 					</g>
 
-					{/* TODO: this semantics are better */}
-					{/* 
-					<Transition_HorizontalDateAxis_Ticks
-					from={start_axisSpec}
-					to={end_axisSpec}
-					/>
-					 */}
-
-					{/* TODO implement! */}
-					{/* <Transition_HorizontalDateAxis_Labels
-						startSpec={axisStart}
-						endSpec={axisEnd}
-					/> */}
-
 					{/* TODO implement! */}
 					{/* <Transition_HorizontalDateAxis_Line
 						startSpec={axisStart}
 						endSpec={axisEnd}
 					/> */}
-
-					{/* enter ticks  */}
-					{/* {enterTicks.map((it, i) => {
-						return (
-							<g key={i}>
-								<line
-									x1={it.mappedValue}
-									x2={it.mappedValue}
-									y1={0}
-									y2={tickSize}
-									stroke={textColor}
-									strokeWidth={4}
-									opacity={it.opacity}
-								/>
-							</g>
-						);
-					})} */}
-					{/* enter labels  */}
-					{enterLabels.map((it, i) => {
-						return (
-							<g key={i}>
-								<text
-									textAnchor="middle"
-									alignmentBaseline="hanging"
-									fill={textColor}
-									// fontFamily={fontFamilyXTicklabels}
-									// fontSize={styling.xTickValuesFontSize}
-									fontSize={16}
-									x={it.mappedValue}
-									y={tickSize + tickLabelMargin}
-									opacity={it.opacity}
-								>
-									{it.label}
-								</text>
-							</g>
-						);
-					})}
-
-					{/* update ticks  */}
-					{/* {updateTicks.map((it, i) => {
-						return (
-							<g key={i}>
-								<line
-									x1={it.mappedValue}
-									x2={it.mappedValue}
-									y1={0}
-									y2={tickSize}
-									stroke={textColor}
-									strokeWidth={4}
-								/>
-							</g>
-						);
-					})} */}
-					{/* update labels  */}
-					{updateLabels.map((it, i) => {
-						return (
-							<g key={i}>
-								<text
-									textAnchor="middle"
-									alignmentBaseline="hanging"
-									fill={textColor}
-									stroke={textColor}
-									// fontFamily={fontFamilyXTicklabels}
-									// fontSize={styling.xTickValuesFontSize}
-									fontSize={16}
-									x={it.mappedValue}
-									y={tickSize + tickLabelMargin}
-								>
-									{it.label}
-								</text>
-							</g>
-						);
-					})}
-
-					{/* exit ticks  */}
-					{/* {exitTicks.map((it, i) => {
-						return (
-							<g key={i}>
-								<line
-									x1={it.mappedValue}
-									x2={it.mappedValue}
-									y1={0}
-									y2={tickSize}
-									stroke={textColor}
-									strokeWidth={4}
-									opacity={it.opacity}
-								/>
-							</g>
-						);
-					})} */}
-					{/* exit labels  */}
-					{exitLabels.map((it, i) => {
-						return (
-							<g key={i}>
-								<text
-									textAnchor="middle"
-									alignmentBaseline="hanging"
-									fill={textColor}
-									// fontFamily={fontFamilyXTicklabels}
-									// fontSize={styling.xTickValuesFontSize}
-									fontSize={16}
-									x={it.mappedValue}
-									y={tickSize + tickLabelMargin}
-									opacity={it.opacity}
-								>
-									{it.label}
-								</text>
-							</g>
-						);
-					})}
 				</svg>
 			</div>
 		</AbsoluteFill>
