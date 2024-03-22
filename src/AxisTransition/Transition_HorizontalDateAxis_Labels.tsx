@@ -8,15 +8,19 @@ import {
 import {getLabelMappedValue, getLabelValue} from '../acetti-axis/axisSpec';
 import {TAxisSpec} from '../acetti-axis/axisSpec';
 
-const TICK_SIZE = 50;
-const TICK_LABEL_MARGIN = 0;
-// const labelColor = '#f05122';
-
 export const Transition_HorizontalDateAxis_Labels: React.FC<{
 	from: TAxisSpec;
 	to: TAxisSpec;
 	labelColor: string;
-}> = ({from: startSpec, to: endSpec, labelColor}) => {
+	tickSize: number;
+	tickLabelMargin: number;
+}> = ({
+	from: startSpec,
+	to: endSpec,
+	labelColor,
+	tickSize,
+	tickLabelMargin,
+}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -126,7 +130,7 @@ export const Transition_HorizontalDateAxis_Labels: React.FC<{
 							// fontSize={styling.xTickValuesFontSize}
 							fontSize={16}
 							x={it.mappedValue}
-							y={TICK_SIZE + TICK_LABEL_MARGIN}
+							y={tickSize + tickLabelMargin}
 							opacity={it.opacity}
 						>
 							{it.label}
@@ -148,7 +152,7 @@ export const Transition_HorizontalDateAxis_Labels: React.FC<{
 							// fontSize={styling.xTickValuesFontSize}
 							fontSize={16}
 							x={it.mappedValue}
-							y={TICK_SIZE + TICK_LABEL_MARGIN}
+							y={tickSize + tickLabelMargin}
 						>
 							{it.label}
 						</text>
@@ -168,7 +172,7 @@ export const Transition_HorizontalDateAxis_Labels: React.FC<{
 							// fontSize={styling.xTickValuesFontSize}
 							fontSize={16}
 							x={it.mappedValue}
-							y={TICK_SIZE + TICK_LABEL_MARGIN}
+							y={tickSize + tickLabelMargin}
 							opacity={it.opacity}
 						>
 							{it.label}

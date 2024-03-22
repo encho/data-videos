@@ -27,11 +27,13 @@ const timeSeries = generateBrownianMotionTimeSeries(
 export const AxisTransitionSchema = z.object({
 	backgroundColor: zColor(),
 	textColor: zColor(),
+	axisSpecType: z.enum(['STANDARD', 'INTER_MONTHS']),
 });
 
 export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	backgroundColor,
 	textColor,
+	axisSpecType,
 }) => {
 	// const currentFrame = useCurrentFrame();
 	const {durationInFrames, height, width} = useVideoConfig();
@@ -41,11 +43,14 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	const TICK_LABEL_MARGIN = 6;
 
 	const chartRowsRailSpec: TGridRailSpec = [
+		{type: 'pixel', value: 60, name: 'space'},
 		{type: 'fr', value: 1, name: 'plot'},
 		{type: 'pixel', value: 20, name: 'space'},
 		{type: 'pixel', value: 100, name: 'xAxis'},
 	];
+
 	const chartColsRailSpec: TGridRailSpec = [
+		{type: 'pixel', value: 60, name: 'space'},
 		{type: 'fr', value: 1, name: 'plot'},
 		{type: 'pixel', value: 20, name: 'space'},
 		{type: 'pixel', value: 100, name: 'yAxis'},
@@ -102,7 +107,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
 			<DisplayGridLayout
-				hide={false}
+				hide={true}
 				areas={chartLayout.areas}
 				width={width}
 				height={height}
@@ -127,6 +132,7 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 								layout="none"
 							>
 								<Transition_HorizontalDateAxis
+									axisSpecType={axisSpecType}
 									backgroundColor={backgroundColor}
 									textColor={textColor}
 									startTimeSeries={tsStart}

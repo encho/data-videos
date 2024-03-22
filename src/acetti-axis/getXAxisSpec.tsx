@@ -7,7 +7,7 @@ import {getXAxisSpecInterMonths} from './getXAxisSpecInterMonths';
 // import {getDateSpanCategory} from './utils';
 // ************************************************************
 
-type TAxisSpecType = 'STANDARD' | 'INTER_MONTHS';
+export type TAxisSpecType = 'STANDARD' | 'INTER_MONTHS';
 
 export function getXAxisSpec(
 	datesArray: Date[],

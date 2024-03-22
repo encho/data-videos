@@ -4,14 +4,12 @@ import {findItemById, getEnterUpdateExits} from './utils';
 import {getTickMappedValue, getTickValue} from '../acetti-axis/axisSpec';
 import {TAxisSpec} from '../acetti-axis/axisSpec';
 
-const TICK_SIZE = 50;
-// const stroke = '#f05122';
-
 export const Transition_HorizontalDateAxis_Ticks: React.FC<{
 	from: TAxisSpec;
 	to: TAxisSpec;
 	tickColor: string;
-}> = ({from: startSpec, to: endSpec, tickColor}) => {
+	tickSize: number;
+}> = ({from: startSpec, to: endSpec, tickColor, tickSize}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -91,9 +89,6 @@ export const Transition_HorizontalDateAxis_Ticks: React.FC<{
 		};
 	});
 
-	// const TICK_SIZE = 80;
-	// const tickColor = '#f05122';
-
 	return (
 		<g>
 			{/* enter ticks  */}
@@ -104,7 +99,7 @@ export const Transition_HorizontalDateAxis_Ticks: React.FC<{
 							x1={it.mappedValue}
 							x2={it.mappedValue}
 							y1={0}
-							y2={TICK_SIZE / 2}
+							y2={tickSize}
 							stroke={tickColor}
 							strokeWidth={4}
 							opacity={it.opacity}
@@ -120,7 +115,7 @@ export const Transition_HorizontalDateAxis_Ticks: React.FC<{
 							x1={it.mappedValue}
 							x2={it.mappedValue}
 							y1={0}
-							y2={TICK_SIZE}
+							y2={tickSize}
 							stroke={tickColor}
 							strokeWidth={4}
 						/>
@@ -136,7 +131,7 @@ export const Transition_HorizontalDateAxis_Ticks: React.FC<{
 							x1={it.mappedValue}
 							x2={it.mappedValue}
 							y1={0}
-							y2={TICK_SIZE}
+							y2={tickSize}
 							stroke={tickColor}
 							strokeWidth={4}
 							opacity={it.opacity}

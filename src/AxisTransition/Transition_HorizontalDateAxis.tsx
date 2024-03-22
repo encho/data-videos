@@ -1,7 +1,7 @@
 import {AbsoluteFill} from 'remotion';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {TGridLayoutArea} from '../acetti-viz';
-import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
+import {getXAxisSpec, TAxisSpecType} from '../acetti-axis/getXAxisSpec';
 
 import {Transition_HorizontalDateAxis_Line} from './Transition_HorizontalDateAxis_Line';
 import {Transition_HorizontalDateAxis_Labels} from './Transition_HorizontalDateAxis_Labels';
@@ -15,6 +15,7 @@ import {Transition_HorizontalDateAxis_Ticks} from './Transition_HorizontalDateAx
 // TODO define type for props
 
 export const Transition_HorizontalDateAxis: React.FC<{
+	axisSpecType: TAxisSpecType;
 	startTimeSeries: TimeSeries;
 	endTimeSeries: TimeSeries;
 	backgroundColor: string;
@@ -24,6 +25,7 @@ export const Transition_HorizontalDateAxis: React.FC<{
 	tickSize?: number;
 	tickLabelMargin?: number;
 }> = ({
+	axisSpecType,
 	startTimeSeries,
 	endTimeSeries,
 	backgroundColor,
@@ -35,13 +37,15 @@ export const Transition_HorizontalDateAxis: React.FC<{
 	const axisStart = getXAxisSpec(
 		startTimeSeries.map((it) => it.date),
 		area,
-		'STANDARD'
+		axisSpecType
+		// 'STANDARD'
 		// 'INTER_MONTHS'
 	);
 	const axisEnd = getXAxisSpec(
 		endTimeSeries.map((it) => it.date),
 		area,
-		'STANDARD'
+		axisSpecType
+		// 'STANDARD'
 		// 'INTER_MONTHS'
 	);
 
@@ -62,11 +66,14 @@ export const Transition_HorizontalDateAxis: React.FC<{
 							from={axisStart}
 							to={axisEnd}
 							tickColor={textColor}
+							tickSize={tickSize}
 						/>
 						<Transition_HorizontalDateAxis_Labels
 							from={axisStart}
 							to={axisEnd}
 							labelColor={textColor}
+							tickSize={tickSize}
+							tickLabelMargin={tickLabelMargin}
 						/>
 						<Transition_HorizontalDateAxis_Line
 							from={axisStart}

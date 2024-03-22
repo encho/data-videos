@@ -36,7 +36,7 @@ export function getXAxisSpecInterMonths(
 		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
 	] as [Date, Date];
 
-	const xScaleRange = [area.x1, area.x2];
+	const xScaleRange = [0, area.width] as [number, number];
 
 	// QUICK-FIX determine why we have to cast to any here
 	const xScale: ScaleTime<Date, number> = scaleTime()

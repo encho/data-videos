@@ -17,9 +17,7 @@ export function getXAxisSpecStandard(
 	const maxDate = max(datesArray) as Date;
 
 	const xAxis_domain = [minDate, maxDate] as [Date, Date];
-
-	const XAXIS_RANGE = [area.x1, area.x2] as [number, number];
-	const xAxis_range = XAXIS_RANGE;
+	const xAxis_range = [0, area.width] as [number, number];
 
 	// QUICK-FIX determine why we have to cast to any here
 	const xAxis_xScale: ScaleTime<Date, number> = scaleTime()

@@ -44,7 +44,11 @@ export const RemotionRoot: React.FC = () => {
 				fps={30}
 				{...squareVideo}
 				schema={AxisTransitionSchema}
-				defaultProps={{backgroundColor: '#3d3d3d', textColor: '#ededed'}}
+				defaultProps={{
+					backgroundColor: '#1d1b1b',
+					textColor: '#92887c',
+					axisSpecType: 'INTER_MONTHS' as const,
+				}}
 			/>
 
 			<Composition
