@@ -5,12 +5,9 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
-import {scaleTime, ScaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
-import {getTimeSeriesDateSpan} from './getTimeSeriesDateSpan';
 import {
-	formatDate,
 	// formatToPercentage,
 	findItemById,
 	getEnterUpdateExits,
@@ -23,8 +20,7 @@ import {
 	getTickValue,
 	getLabelValue,
 } from '../acetti-axis/axisSpec';
-// import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
-import {getXAxisSpecStandard} from '../acetti-axis/getXAxisSpecStandard';
+import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 
 export const AxisTransition2: React.FC<{
 	startTimeSeries: TimeSeries;
@@ -50,96 +46,25 @@ export const AxisTransition2: React.FC<{
 
 	const animationPercentage = frame / durationInFrames;
 
-	// const startXAxisSpec = getXAxisSpec(
-	const startXAxisSpec = getXAxisSpecStandard(
+	const axisStart = getXAxisSpec(
 		startTimeSeries.map((it) => it.date),
 		area
 	);
-	// const endXAxisSpec = getXAxisSpec(
-	const endXAxisSpec = getXAxisSpecStandard(
+	const axisEnd = getXAxisSpec(
 		endTimeSeries.map((it) => it.date),
 		area
 	);
 
-	// TODO possibly as props
-	// const XAXIS_RANGE = [100, 1080 - 100] as [number, number];
-	const XAXIS_RANGE = [area.x1, area.x2] as [number, number];
+	const axisStart_line_x1 = axisStart.scale(axisStart.domain[0]);
+	const axisStart_line_x2 = axisStart.scale(axisStart.domain[1]);
 
-	const start_xAxis_domain = getTimeSeriesDateSpan(startTimeSeries);
-	const start_xAxis_range = XAXIS_RANGE;
+	const axisEnd_line_x1 = axisEnd.scale(axisEnd.domain[0]);
+	const axisEnd_line_x2 = axisEnd.scale(axisEnd.domain[1]);
 
-	// QUICK-FIX determine why we have to cast to any here
-	const start_xAxis_xScale: ScaleTime<Date, number> = scaleTime()
-		.domain(start_xAxis_domain)
-		.range(start_xAxis_range) as any;
-
-	const start_xAxis_tickValues = start_xAxis_xScale.ticks(4);
-	const start_xAxis_ticks = start_xAxis_tickValues.map((date) => {
-		const id = date.getTime().toString();
-		return {id, value: date, type: 'DOMAIN_VALUE' as const};
-	});
-	const start_xAxis_labels = start_xAxis_tickValues.map((date) => {
-		const id = date.getTime().toString();
-		const label = formatDate(date);
-		return {id, label, value: date, type: 'DOMAIN_VALUE' as const};
-	});
-
-	// const axisStart: TAxisSpec = {
-	// 	domain: start_xAxis_domain,
-	// 	range: start_xAxis_range,
-	// 	scale: start_xAxis_xScale,
-	// 	ticks: start_xAxis_ticks,
-	// 	labels: start_xAxis_labels,
-	// };
-
-	const axisStart = startXAxisSpec;
-
-	const end_xAxis_domain = getTimeSeriesDateSpan(endTimeSeries);
-	const end_xAxis_range = XAXIS_RANGE;
-
-	// QUICK-FIX determine why we have to cast to any here
-	const end_xAxis_xScale: ScaleTime<Date, number> = scaleTime()
-		.domain(end_xAxis_domain)
-		.range(end_xAxis_range) as any;
-
-	const end_xAxis_tickValues = end_xAxis_xScale.ticks(4);
-	const end_xAxis_ticks = end_xAxis_tickValues.map((date) => {
-		const id = date.getTime().toString();
-		return {id, value: date, type: 'DOMAIN_VALUE' as const};
-	});
-	const end_xAxis_labels = end_xAxis_tickValues.map((date) => {
-		const id = date.getTime().toString();
-		const label = formatDate(date);
-		return {
-			id,
-			label,
-			value: date,
-			type: 'DOMAIN_VALUE' as const,
-			// textAnchor: TODO
-			// TODO more text props 'center', etc...
-		};
-	});
-
-	// const axisEnd: TAxisSpec = {
-	// 	domain: end_xAxis_domain,
-	// 	range: end_xAxis_range,
-	// 	scale: end_xAxis_xScale,
-	// 	ticks: end_xAxis_ticks,
-	// 	labels: end_xAxis_labels,
-	// };
-
-	const axisEnd = endXAxisSpec;
-
-	const axisStart_lineX1 = axisStart.scale(axisStart.domain[0]);
-	const axisStart_lineX2 = axisStart.scale(axisStart.domain[1]);
-
-	const axisEnd_lineX1 = axisEnd.scale(axisEnd.domain[0]);
-	const axisEnd_lineX2 = axisEnd.scale(axisEnd.domain[1]);
-
-	const aAxis_lineX1 = interpolate(
+	const aAxis_line_x1 = interpolate(
 		animationPercentage,
 		[0, 1],
-		[axisStart_lineX1, axisEnd_lineX1],
+		[axisStart_line_x1, axisEnd_line_x1],
 		{
 			easing: Easing.bezier(0.25, 1, 0.5, 1),
 			extrapolateLeft: 'clamp',
@@ -147,10 +72,10 @@ export const AxisTransition2: React.FC<{
 		}
 	);
 
-	const aAxis_lineX2 = interpolate(
+	const aAxis_line_x2 = interpolate(
 		animationPercentage,
 		[0, 1],
-		[axisStart_lineX2, axisEnd_lineX2],
+		[axisStart_line_x2, axisEnd_line_x2],
 		{
 			easing: Easing.bezier(0.25, 1, 0.5, 1),
 			extrapolateLeft: 'clamp',
@@ -291,7 +216,6 @@ export const AxisTransition2: React.FC<{
 			[0, 1],
 			[startX, endX],
 			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
 				easing: Easing.linear,
 				extrapolateLeft: 'clamp',
 				extrapolateRight: 'clamp',
@@ -330,8 +254,8 @@ export const AxisTransition2: React.FC<{
 					{/* startAxis: x axis line */}
 					<g>
 						<line
-							x1={aAxis_lineX1}
-							x2={aAxis_lineX2}
+							x1={aAxis_line_x1}
+							x2={aAxis_line_x2}
 							y1={0}
 							y2={0}
 							stroke={textColor}
