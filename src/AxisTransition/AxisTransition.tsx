@@ -114,7 +114,14 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 			/>
 
 			{/* the chart line */}
-			<LineChart area={chartLayout.areas.plot} />
+			<LineChart
+				area={chartLayout.areas.plot}
+				timeSeries={timeSeries}
+				// startTimeSeries={tsStart}
+				// endTimeSeries={tsEnd}
+				// axisSpecStart={axisSpecStart}
+				// axisSpecEnd={axisSpecEnd}
+			/>
 
 			<div>
 				{tsLengthPairs.map((lengthPair, i) => {

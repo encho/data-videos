@@ -4,6 +4,8 @@ function generateBrownianMotionTimeSeries(
 	startDate: Date,
 	endDate: Date
 ): TimeSeries {
+	const DRIFT = 0.002;
+
 	// Calculate the number of days between start and end dates
 	const days = Math.floor(
 		(endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
@@ -18,7 +20,9 @@ function generateBrownianMotionTimeSeries(
 	// Generate values following Brownian motion
 	for (let i = 0; i <= days; i++) {
 		// Generate a random increment following a standard normal distribution
-		const randomIncrement = Math.sqrt(1 / 365) * randomNormalDistribution();
+		// const randomIncrement = Math.sqrt(1 / 365) * randomNormalDistribution();
+		const randomIncrement =
+			Math.sqrt(1 / 365) * randomNormalDistribution() + DRIFT;
 
 		// Update the current value
 		currentValue += randomIncrement;
