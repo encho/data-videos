@@ -38,6 +38,9 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	// const currentFrame = useCurrentFrame();
 	const {durationInFrames, height, width} = useVideoConfig();
 
+	const CHART_WIDTH = width * 0.95;
+	const CHART_HEIGHT = height * 0.8;
+
 	// TODO consider adding major and minor ticks
 	const TICK_SIZE = 16;
 	const TICK_LABEL_MARGIN = 6;
@@ -85,8 +88,8 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	};
 
 	const chartLayout = useGridLayout({
-		width,
-		height,
+		width: CHART_WIDTH,
+		height: CHART_HEIGHT,
 		gridLayoutSpec: chartGridLayoutSpec,
 	});
 

@@ -1,6 +1,12 @@
-import {AbsoluteFill} from 'remotion';
+import {
+	AbsoluteFill,
+	useCurrentFrame,
+	useVideoConfig,
+	interpolate,
+	Easing,
+} from 'remotion';
 import {max, min} from 'd3-array';
-import {scaleLinear} from 'd3-scale';
+import {scaleLinear, scaleTime, ScaleTime} from 'd3-scale';
 import {line} from 'd3-shape';
 
 import {TGridLayoutArea} from '../acetti-viz';
@@ -13,12 +19,62 @@ export const LineChart: React.FC<{
 	area: TGridLayoutArea;
 	timeSeries: TimeSeries;
 }> = ({area, timeSeries}) => {
+	const frame = useCurrentFrame();
+	const {durationInFrames} = useVideoConfig();
+
+	const animationPercentage = frame / durationInFrames;
+
 	const data = timeSeries;
 
-	const xAxisSpec = getXAxisSpec(
-		timeSeries.map((it) => it.date),
-		area
+	// const FROM_START_INDEX = 0;
+	// const FROM_END_INDEX = 3000 - 300;
+
+	// const TO_START_INDEX = 500;
+	// const TO_END_INDEX = 3500 - 300;
+	const FROM_START_INDEX = 0;
+	const FROM_END_INDEX = 100;
+
+	const TO_START_INDEX = 20;
+	const TO_END_INDEX = 120;
+
+	const from_startDate = timeSeries[FROM_START_INDEX].date;
+	const to_startDate = timeSeries[TO_START_INDEX].date;
+
+	const from_endDate = timeSeries[FROM_END_INDEX].date;
+	const to_endDate = timeSeries[TO_END_INDEX].date;
+
+	const from_startTime = from_startDate.getTime();
+	const to_startTime = to_startDate.getTime();
+
+	const from_endTime = from_endDate.getTime();
+	const to_endTime = to_endDate.getTime();
+
+	const animated_startTime = interpolate(
+		animationPercentage,
+		[0, 1],
+		[from_startTime, to_startTime],
+		{
+			easing: Easing.linear,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
 	);
+
+	const animated_endTime = interpolate(
+		animationPercentage,
+		[0, 1],
+		[from_endTime, to_endTime],
+		{
+			easing: Easing.linear,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	// QUICK-FIX determine why we have to cast to any here
+	const xScale: ScaleTime<Date, number> = scaleTime()
+		.domain([new Date(animated_startTime), new Date(animated_endTime)])
+		.range([0, area.width]) as any;
 
 	const yDomainMin = min(data, (it) => it.value) as number;
 	const yDomainMax = max(data, (it) => it.value) as number;
@@ -38,7 +94,8 @@ export const LineChart: React.FC<{
 		.range([0, area.height]);
 	// .nice();
 	const linePath = line<{date: Date; value: number}>()
-		.x((d) => xAxisSpec.scale(d.date))
+		// .x((d) => xAxisSpec.scale(d.date))
+		.x((d) => xScale(d.date))
 		.y((d) => yScale(d.value));
 
 	const d = linePath(timeSeries) || '';
@@ -58,10 +115,41 @@ export const LineChart: React.FC<{
 					height={area.height}
 					style={{backgroundColor: '#222'}}
 				>
+					<defs>
+						<clipPath id="myClip">
+							{/* <rect x="50" y="50" width="200" height="200" /> */}
+							<rect x={0} y={0} width={area.width} height={area.height} />
+						</clipPath>
+					</defs>
+
+					<rect
+						x={0}
+						y={0}
+						width={area.width}
+						height={area.height}
+						fill="#f05122"
+						opacity={0.05}
+					/>
+
 					{/* the animated line */}
 					{d ? (
 						<g>
 							<path
+								// clipPath="url(#myClip)"
+								d={d}
+								// strokeDasharray={evolvedPath.strokeDasharray}
+								// strokeDashoffset={evolvedPath.strokeDashoffset}
+								// stroke={styling.lineColor}
+								// strokeWidth={styling.lineStrokeWidth}
+								// fill="transparent"
+								stroke={'#f05122'}
+								strokeWidth={1}
+								fill="transparent"
+								opacity={0.35}
+							/>
+
+							<path
+								clipPath="url(#myClip)"
 								d={d}
 								// strokeDasharray={evolvedPath.strokeDasharray}
 								// strokeDashoffset={evolvedPath.strokeDashoffset}
