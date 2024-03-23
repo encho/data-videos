@@ -1,3 +1,7 @@
+import gen from 'random-seed';
+
+const randInt = gen.create('My Seed Value');
+
 export type TimeSeries = {date: Date; value: number}[];
 
 function generateBrownianMotionTimeSeries(
@@ -41,8 +45,8 @@ function generateBrownianMotionTimeSeries(
 function randomNormalDistribution(): number {
 	let u = 0,
 		v = 0;
-	while (u === 0) u = Math.random();
-	while (v === 0) v = Math.random();
+	while (u === 0) u = randInt(100) / 100;
+	while (v === 0) v = randInt(100) / 100;
 	return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
