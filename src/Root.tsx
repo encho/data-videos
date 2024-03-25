@@ -24,6 +24,11 @@ import {
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
 
+import {
+	AnimatedLineChartSchema,
+	AnimatedLineChart,
+} from './AnimatedLineChart/AnimatedLineChart';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -34,6 +39,23 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="AnimatedLineChart"
+				component={AnimatedLineChart}
+				durationInFrames={240}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={30}
+				{...squareVideo}
+				schema={AnimatedLineChartSchema}
+				defaultProps={{
+					backgroundColor: '#1d1b1b',
+					textColor: '#92887c',
+					axisSpecType: 'STANDARD' as const,
+				}}
+			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
