@@ -15,6 +15,90 @@ import {TGridLayoutArea} from '../acetti-viz';
 // import {getDateSpanCategory} from './utils';
 // ************************************************************
 
+export function getXAxisSpecInterMonthsFromScale(
+	scale: ScaleTime<Date, number>
+) {
+	const scaleDomain = scale.domain();
+	const xAxis_domain = [scaleDomain[0], scaleDomain[1]] as [Date, Date];
+
+	const axisRange = scale.range();
+	const xAxis_range: [number, number] = [axisRange[0], axisRange[1]] as any;
+
+	const minDate = xAxis_domain[0];
+	const maxDate = xAxis_domain[1];
+
+	// information to determine looks of x-axis
+	// const dateSpanCategory = getDateSpanCategory(minDate, maxDate);
+
+	// TODO this only in specific dateSpanCategories, otherwise keep minDate,maxDate domain
+	const xTickValuesMonthBoundaries = generateMonthBoundariesDates(
+		minDate,
+		maxDate
+	);
+
+	const xScaleDomain = [
+		xTickValuesMonthBoundaries[0],
+		xTickValuesMonthBoundaries[xTickValuesMonthBoundaries.length - 1],
+	] as [Date, Date];
+
+	// const xScaleRange = xAxis_range;
+
+	// QUICK-FIX determine why we have to cast to any here
+	// const xScale: ScaleTime<Date, number> = scaleTime()
+	// 	.domain(xScaleDomain)
+	// 	.range(xScaleRange) as any;
+
+	const xScale = scale;
+
+	const monthStrings = getAllButLast(xTickValuesMonthBoundaries).map((it) =>
+		// TODO paramterrization from props
+		getMonthString(it, 'veryShort')
+	);
+
+	const dateIds = getAllButLast(xTickValuesMonthBoundaries).map((it) =>
+		it.toISOString()
+	);
+
+	// TODO: here we have mapped values already we may need to integrate this in axisSpec
+	// these tick values
+	const xTickValuesMonthStartsMapped = xTickValuesMonthBoundaries.map((d) =>
+		xScale(d)
+	);
+
+	const axisTickSpecs = xTickValuesMonthStartsMapped.map(
+		(n: number, i: number) => {
+			const date = xTickValuesMonthBoundaries[i];
+			const id = date.toISOString();
+			return {id, value: n, type: 'MAPPED_VALUE' as const};
+		}
+	);
+
+	// TODO: here we have mapped values already we may need to integrate this in axisSpec
+	const xTickValuesMonthCentroids = calculateAveragesBetweenNumbers(
+		xTickValuesMonthStartsMapped
+	);
+
+	const xAxisLabels = xTickValuesMonthCentroids.map((it, i) => {
+		return {
+			id: dateIds[i],
+			label: monthStrings[i],
+			value: it,
+			type: 'MAPPED_VALUE' as const,
+			textAnchor: 'middle' as const,
+		};
+	});
+
+	const xAxisSpecFull: TAxisSpec = {
+		domain: xScaleDomain,
+		range: xAxis_range,
+		scale: xScale,
+		ticks: axisTickSpecs,
+		labels: xAxisLabels,
+	};
+
+	return xAxisSpecFull;
+}
+
 export function getXAxisSpecInterMonths(
 	datesArray: Date[],
 	area: TGridLayoutArea

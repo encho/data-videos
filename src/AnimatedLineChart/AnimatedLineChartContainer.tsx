@@ -23,6 +23,7 @@ type TDomainIndices = {
 };
 
 export const AnimatedLineChartContainer: React.FC<{
+	axisSpecType: 'STANDARD' | 'INTER_MONTHS';
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
@@ -33,6 +34,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	toDomainIndices: TDomainIndices;
 	textColor: string;
 }> = ({
+	axisSpecType,
 	layoutAreas,
 	timeSeries,
 	fromDomainIndices,
@@ -143,7 +145,12 @@ export const AnimatedLineChartContainer: React.FC<{
 					left: layoutAreas.xAxis.x1,
 				}}
 			>
-				<AnimatedXAxis area={layoutAreas.xAxis} xScaleCurrent={xScale} />
+				<AnimatedXAxis
+					area={layoutAreas.xAxis}
+					xScaleCurrent={xScale}
+					axisSpecType={axisSpecType}
+					linesColor={textColor}
+				/>
 			</div>
 
 			<AbsoluteFill>

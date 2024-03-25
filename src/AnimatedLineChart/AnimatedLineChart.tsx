@@ -60,8 +60,9 @@ export const AnimatedLineChart: React.FC<
 					}}
 					timeSeries={timeSeries}
 					fromDomainIndices={{start: 0, end: 10}}
-					toDomainIndices={{start: 0, end: 100}}
+					toDomainIndices={{start: 0, end: 1000}}
 					textColor={textColor}
+					axisSpecType={axisSpecType}
 				/>
 			</Sequence>
 		</AbsoluteFill>

@@ -8,7 +8,7 @@ import {
 	// getXAxisSpecStandard,
 	getXAxisSpecStandardFromScale,
 } from './getXAxisSpecStandard';
-// import {getXAxisSpecInterMonths} from './getXAxisSpecInterMonths';
+import {getXAxisSpecInterMonthsFromScale} from './getXAxisSpecInterMonths';
 
 // ************************************************************
 // TODO possibly use this
@@ -24,6 +24,6 @@ export function getXAxisSpecFromScale(
 	if (!type || type === 'STANDARD') {
 		return getXAxisSpecStandardFromScale(scale);
 	}
-	return getXAxisSpecStandardFromScale(scale);
-	// return getXAxisSpecInterMonths(datesArray, area);
+	// return getXAxisSpecStandardFromScale(scale);
+	return getXAxisSpecInterMonthsFromScale(scale);
 }
