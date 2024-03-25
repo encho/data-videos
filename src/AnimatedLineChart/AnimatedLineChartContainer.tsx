@@ -206,6 +206,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				}}
 			>
 				<AnimatedValueDot
+					dotColor={textColor}
 					area={layoutAreas.plot}
 					xScaleCurrent={xScale}
 					yScaleCurrent={yScale}

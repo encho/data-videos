@@ -24,14 +24,14 @@ type TTickSpecMapped = {
 type TTickSpecNormal = {
 	id: string;
 	type: 'DOMAIN_VALUE';
-	value: Date;
+	value: number;
 };
 
 type TTickSpec = TTickSpecNormal | TTickSpecMapped;
 
 type TLabelSpecNormal = {
 	id: string;
-	value: Date;
+	value: number;
 	label: string;
 	type: 'DOMAIN_VALUE';
 	textAnchor?: 'start' | 'middle' | 'end';
@@ -63,7 +63,8 @@ export function getYAxisSpecFromScale(
 ) {
 	// FOR NOW WE HAVE ONLY STANDARD
 
-	const yAxis_tickValues = scale.ticks(4);
+	// const yAxis_tickValues = scale.ticks(4);
+	const yAxis_tickValues = scale.ticks(6);
 
 	const yAxis_ticks = yAxis_tickValues.map((num) => {
 		// const id = date.getTime().toString();
@@ -74,13 +75,25 @@ export function getYAxisSpecFromScale(
 		};
 	});
 
+	const yAxis_labels = yAxis_tickValues.map((num) => {
+		// const id = date.getTime().toString();
+		return {
+			id: 'id-' + num,
+			value: num,
+			type: 'DOMAIN_VALUE' as const,
+			label: num.toString(),
+			textAnchor: 'middle' as const,
+		};
+	});
+
+	console.log({yAxis_tickValues, yAxis_labels});
+
 	const axisSpec: TAxisSpec_Linear_Numeric = {
 		domain: scale.domain() as [number, number],
 		range: scale.range() as [number, number],
 		scale,
 		ticks: yAxis_ticks,
-		// labels: xAxis_labels,
-		labels: [],
+		labels: yAxis_labels,
 	};
 
 	return axisSpec;

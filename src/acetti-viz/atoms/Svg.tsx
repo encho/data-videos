@@ -7,12 +7,17 @@ type TSvgProps = {
 	width?: number;
 	children: ReactNode;
 	style?: Object;
+	stroke?: string;
 };
 
-export default function Svg({width, height, children, style = {}}: TSvgProps) {
-	const defaultStrokeColor = 'magenta';
-
-	const debugStyle = {border: `3px solid ${defaultStrokeColor}`};
+export default function Svg({
+	width,
+	height,
+	children,
+	style = {},
+	stroke = 'magenta',
+}: TSvgProps) {
+	const debugStyle = {border: `3px solid ${stroke}`};
 
 	return (
 		<svg

@@ -51,7 +51,7 @@ export const RemotionRoot: React.FC = () => {
 				schema={AnimatedLineChartSchema}
 				defaultProps={{
 					backgroundColor: '#1d1b1b',
-					textColor: '#d78119',
+					textColor: '#2de696',
 					axisSpecType: 'STANDARD' as const,
 				}}
 			/>

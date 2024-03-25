@@ -22,40 +22,31 @@ type TDomainIndices = {
 };
 
 export const AnimatedValueDot: React.FC<{
-	// lineColor: string;
 	area: TGridLayoutArea;
-	// layoutAreas: {
-	// 	plot: TGridLayoutArea;
-	// 	xAxis: TGridLayoutArea;
-	// 	yAxis: TGridLayoutArea;
-	// };
-	// timeSeries: TimeSeries;
-	// fromDomainIndices: TDomainIndices;
-	// toDomainIndices: TDomainIndices;
+	dotColor: string;
 	xScaleCurrent: ScaleTime<Date, number>;
 	yScaleCurrent: ScaleLinear<number, number>;
 	interpolatedCurrentDotData: {date: Date; value: number};
-}> = ({area, xScaleCurrent, yScaleCurrent, interpolatedCurrentDotData}) => {
+}> = ({
+	dotColor,
+	area,
+	xScaleCurrent,
+	yScaleCurrent,
+	interpolatedCurrentDotData,
+}) => {
 	const x = xScaleCurrent(interpolatedCurrentDotData.date);
 	const y = yScaleCurrent(interpolatedCurrentDotData.value);
 
 	return (
-		<svg
-			overflow="visible"
-			width={area.width}
-			height={area.height}
-			// style={{backgroundColor: 'red'}}
-		>
+		<svg overflow="visible" width={area.width} height={area.height}>
 			{/* <defs>
 				<clipPath id="myClip">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs> */}
 
-			<circle cx={x} cy={y} r={7} fill="orange" />
-			<circle cx={x} cy={y} r={15} fill="orange" opacity={0.2} />
-
-			{/* the animated line */}
+			<circle cx={x} cy={y} r={10} fill={dotColor} />
+			<circle cx={x} cy={y} r={18} fill={dotColor} opacity={0.2} />
 		</svg>
 	);
 };

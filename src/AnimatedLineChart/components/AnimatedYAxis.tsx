@@ -34,6 +34,18 @@ export const AnimatedYAxis: React.FC<{
 				opacity={0}
 			/>
 
+			{/* zero line */}
+			<line
+				y1={yAxisSpec.scale(0)}
+				y2={yAxisSpec.scale(0)}
+				x1={0}
+				x2={50}
+				stroke={'gray'}
+				// TODO strokeWidth as variable
+				strokeWidth={12}
+				opacity={0.3}
+			/>
+
 			{/* update ticks  */}
 			{yAxisSpec.ticks.map((it, i) => {
 				// const tickMappedValue = getTickMappedValue(xAxisSpec, it.id);
@@ -54,26 +66,30 @@ export const AnimatedYAxis: React.FC<{
 			})}
 
 			{/* update labels  */}
-			{/* {yAxisSpec.labels.map((it, i) => {
-				const labelMappedValue = getLabelMappedValue(yAxisSpec, it.id);
+			{yAxisSpec.labels.map((it, i) => {
+				const labelMappedValue = yAxisSpec.scale(it.value);
 				return (
-					<g key={i}>
+					<g key={it.id}>
 						<text
-							textAnchor="middle"
-							alignmentBaseline="hanging"
-							fill={'red'}
-							stroke={'red'}
+							// textAnchor={it.textAnchor || 'middle'}
+							textAnchor="end"
+							// TODO middle or center?
+							// alignmentBaseline="hanging"
+							alignmentBaseline="middle"
+							// fill={'red'}
+							// stroke={'red'}
+							fill={linesColor}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
-							fontSize={16}
-							x={labelMappedValue}
-							y={24}
+							fontSize={30}
+							y={labelMappedValue}
+							x={70}
 						>
 							{it.label}
 						</text>
 					</g>
 				);
-			})} */}
+			})}
 
 			{/* horizontal line */}
 			{/* <g>
