@@ -38,6 +38,7 @@ export const AnimatedLineChart: React.FC<
 		<AbsoluteFill style={{backgroundColor}}>
 			<DisplayGridLayout
 				hide={true}
+				// hide={false}
 				areas={chartLayout.areas}
 				width={width}
 				height={height}
@@ -59,10 +60,23 @@ export const AnimatedLineChart: React.FC<
 						yAxis: chartLayout.areas.yAxis,
 					}}
 					timeSeries={timeSeries}
+					// fromDomainIndices={{
+					// 	start: timeSeries.length - 50,
+					// 	end: timeSeries.length - 20,
+					// }}
+					// toDomainIndices={{
+					// 	start: timeSeries.length - 50 + 19,
+					// 	end: timeSeries.length - 20 + 19,
+					// }}
+					// toDomainIndices={{start: 0, end: 20}}
+					// fromDomainIndices={{start: 0, end: 10}}
+					// toDomainIndices={{start: 0, end: 100}}
 					// fromDomainIndices={{start: 0, end: 10}}
 					// toDomainIndices={{start: 0, end: 1000}}
-					fromDomainIndices={{start: 0, end: 500}}
-					toDomainIndices={{start: 500, end: 1000}}
+					// fromDomainIndices={{start: 0, end: 500}}
+					// toDomainIndices={{start: 500, end: 1000}}
+					fromDomainIndices={{start: 0, end: 0}}
+					toDomainIndices={{start: 0, end: timeSeries.length - 1}}
 					textColor={textColor}
 					axisSpecType={axisSpecType}
 				/>

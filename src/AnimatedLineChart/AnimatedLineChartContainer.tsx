@@ -13,8 +13,13 @@ import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
-// import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
-// ****************************************************************
+import {AnimatedValueDot} from './components/AnimatedValueDot';
+import {
+	getTimeSeriesSlice,
+	findNearestDataPoints,
+	getInterpolatedValue,
+} from './utils/timeSeries/timeSeries';
+
 const SHOW_ZERO = false;
 
 type TDomainIndices = {
@@ -103,8 +108,60 @@ export const AnimatedLineChartContainer: React.FC<{
 		.domain([animated_startDate, animated_endDate])
 		.range([0, layoutAreas.plot.width]) as any;
 
-	const yDomainMin = min(data, (it) => it.value) as number;
-	const yDomainMax = max(data, (it) => it.value) as number;
+	const visibleTimeSeries = getTimeSeriesSlice(
+		data,
+		animated_startDate,
+		animated_endDate
+	);
+
+	const nearest_end_dataPoints = findNearestDataPoints(
+		timeSeries,
+		animated_endDate
+	);
+
+	const interpolatedStartValue = getInterpolatedValue(
+		timeSeries,
+		animated_startDate
+	);
+
+	const interpolatedEndValue = getInterpolatedValue(
+		timeSeries,
+		animated_endDate
+	);
+
+	const interpolatedCurrentDotData = {
+		date: animated_endDate,
+		value: interpolatedEndValue,
+	};
+
+	console.log({
+		nearest_end_dataPoints,
+		interpolatedEndValue,
+		interpolatedStartValue,
+	});
+
+	const yDomainMinVisiblePiece = min(
+		visibleTimeSeries,
+		(it) => it.value
+	) as number;
+
+	const yDomainMaxVisiblePiece = max(
+		visibleTimeSeries,
+		(it) => it.value
+	) as number;
+
+	const yDomainMin = min([
+		yDomainMinVisiblePiece,
+		interpolatedStartValue,
+		interpolatedEndValue,
+	]) as number;
+
+	const yDomainMax = max([
+		yDomainMaxVisiblePiece,
+		interpolatedStartValue,
+		interpolatedEndValue,
+	]) as number;
+
 	const yDomainDiff = yDomainMax - yDomainMin;
 	// TODO padding conditional on input flag
 	const yPadding = yDomainDiff * 0.1;
@@ -137,6 +194,21 @@ export const AnimatedLineChartContainer: React.FC<{
 					xScaleCurrent={xScale}
 					yScaleCurrent={yScale}
 					lineColor={textColor}
+				/>
+			</div>
+
+			<div
+				style={{
+					position: 'absolute',
+					top: layoutAreas.plot.y1,
+					left: layoutAreas.plot.x1,
+				}}
+			>
+				<AnimatedValueDot
+					area={layoutAreas.plot}
+					xScaleCurrent={xScale}
+					yScaleCurrent={yScale}
+					interpolatedCurrentDotData={interpolatedCurrentDotData}
 				/>
 			</div>
 

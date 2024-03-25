@@ -40,85 +40,9 @@ export const AnimatedLine: React.FC<{
 	timeSeries,
 	xScaleCurrent,
 	yScaleCurrent,
-	fromDomainIndices,
-	toDomainIndices,
+	// fromDomainIndices,
+	// toDomainIndices,
 }) => {
-	const frame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
-
-	// TODO adapt everywhere else, this is right
-	const animationPercentage = (frame + 1) / durationInFrames;
-
-	const data = timeSeries;
-
-	// const FROM_START_INDEX = fromDomainIndices.start;
-	// const FROM_END_INDEX = fromDomainIndices.end;
-
-	// const TO_START_INDEX = toDomainIndices.start;
-	// const TO_END_INDEX = toDomainIndices.end;
-
-	// const from_startDate = timeSeries[FROM_START_INDEX].date;
-	// const to_startDate = timeSeries[TO_START_INDEX].date;
-
-	// const from_endDate = timeSeries[FROM_END_INDEX].date;
-	// const to_endDate = timeSeries[TO_END_INDEX].date;
-
-	// const from_startTime = from_startDate.getTime();
-	// const to_startTime = to_startDate.getTime();
-
-	// const from_endTime = from_endDate.getTime();
-	// const to_endTime = to_endDate.getTime();
-
-	// const animated_startTime = interpolate(
-	// 	animationPercentage,
-	// 	[0, 1],
-	// 	[from_startTime, to_startTime],
-	// 	{
-	// 		// easing: Easing.linear,
-	// 		easing: Easing.bezier(0.33, 1, 0.68, 1),
-
-	// 		// in this case should not be necessary
-	// 		extrapolateLeft: 'clamp',
-	// 		extrapolateRight: 'clamp',
-	// 	}
-	// );
-
-	// const animated_endTime = interpolate(
-	// 	animationPercentage,
-	// 	[0, 1],
-	// 	[from_endTime, to_endTime],
-	// 	{
-	// 		// easing: Easing.linear,
-	// 		easing: Easing.bezier(0.33, 1, 0.68, 1),
-
-	// 		// in this case should not be necessary
-	// 		extrapolateLeft: 'clamp',
-	// 		extrapolateRight: 'clamp',
-	// 	}
-	// );
-
-	// // QUICK-FIX determine why we have to cast to any here
-	// const xScale: ScaleTime<Date, number> = scaleTime()
-	// 	.domain([new Date(animated_startTime), new Date(animated_endTime)])
-	// 	.range([0, area.width]) as any;
-
-	// const yDomainMin = min(data, (it) => it.value) as number;
-	// const yDomainMax = max(data, (it) => it.value) as number;
-	// const yDomainDiff = yDomainMax - yDomainMin;
-	// // TODO padding conditional on input flag
-	// const yPadding = yDomainDiff * 0.1;
-	// const yDomainBounded = [yDomainMax + yPadding, yDomainMin - yPadding];
-
-	// const yDomainZero = [yDomainMax, 0];
-
-	// const showZero = SHOW_ZERO;
-	// const yDomain = showZero ? yDomainZero : yDomainBounded;
-
-	// const yScale = scaleLinear()
-	// 	.domain(yDomain)
-	// 	// .domain([max(data.map((it) => it.value)) as number, 0])
-	// 	.range([0, area.height]);
-	// // .nice();
 	const linePath = line<{date: Date; value: number}>()
 		.x((d) => xScaleCurrent(d.date))
 		.y((d) => yScaleCurrent(d.value));
@@ -165,8 +89,8 @@ export const AnimatedLine: React.FC<{
 						stroke={lineColor}
 						strokeWidth={1}
 						fill="transparent"
-						opacity={0.35}
-						// opacity={0}
+						// opacity={0.35}
+						opacity={0}
 					/>
 
 					<path
