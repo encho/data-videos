@@ -1,5 +1,5 @@
 import {format} from 'date-fns';
-import {TimeSeries} from './generateBrownianMotionTimeSeries';
+import {TimeSeries} from './timeSeries/generateBrownianMotionTimeSeries';
 
 // *********************************************************
 // FORMATTERS

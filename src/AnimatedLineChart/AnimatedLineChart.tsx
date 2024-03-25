@@ -3,7 +3,7 @@ import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
 import {DisplayGridLayout} from '../acetti-viz';
-import generateBrownianMotionTimeSeries from './utils/generateBrownianMotionTimeSeries';
+import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
 

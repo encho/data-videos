@@ -11,7 +11,7 @@ import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 
 import {TGridLayoutArea} from '../../acetti-viz';
-import {TimeSeries} from '../utils/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
 // import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 // ****************************************************************
 const SHOW_ZERO = false;

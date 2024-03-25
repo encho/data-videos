@@ -10,7 +10,7 @@ import {max, min} from 'd3-array';
 import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../acetti-viz';
-import {TimeSeries} from './utils/generateBrownianMotionTimeSeries';
+import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
 // import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
@@ -95,9 +95,12 @@ export const AnimatedLineChartContainer: React.FC<{
 		}
 	);
 
+	const animated_startDate = new Date(animated_startTime);
+	const animated_endDate = new Date(animated_endTime);
+
 	// QUICK-FIX determine why we have to cast to any here
 	const xScale: ScaleTime<Date, number> = scaleTime()
-		.domain([new Date(animated_startTime), new Date(animated_endTime)])
+		.domain([animated_startDate, animated_endDate])
 		.range([0, layoutAreas.plot.width]) as any;
 
 	const yDomainMin = min(data, (it) => it.value) as number;
