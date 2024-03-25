@@ -59,8 +59,10 @@ export const AnimatedLineChart: React.FC<
 						yAxis: chartLayout.areas.yAxis,
 					}}
 					timeSeries={timeSeries}
-					fromDomainIndices={{start: 0, end: 10}}
-					toDomainIndices={{start: 0, end: 1000}}
+					// fromDomainIndices={{start: 0, end: 10}}
+					// toDomainIndices={{start: 0, end: 1000}}
+					fromDomainIndices={{start: 0, end: 500}}
+					toDomainIndices={{start: 500, end: 1000}}
 					textColor={textColor}
 					axisSpecType={axisSpecType}
 				/>
