@@ -10,8 +10,9 @@ const chartRowsRailSpec: TGridRailSpec = [
 const chartColsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 100, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
-	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: 40, name: 'space'},
 	{type: 'pixel', value: 100, name: 'yAxis'},
+	{type: 'pixel', value: 50, name: 'space'},
 ];
 
 const chartGridLayoutSpec = {

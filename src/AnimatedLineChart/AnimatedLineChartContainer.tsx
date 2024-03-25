@@ -14,6 +14,7 @@ import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
+import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {
 	getTimeSeriesSlice,
 	findNearestDataPoints,
@@ -224,6 +225,22 @@ export const AnimatedLineChartContainer: React.FC<{
 					area={layoutAreas.xAxis}
 					xScaleCurrent={xScale}
 					axisSpecType={axisSpecType}
+					linesColor={textColor}
+				/>
+			</div>
+
+			{/* TODO position component */}
+			<div
+				style={{
+					position: 'absolute',
+					top: layoutAreas.yAxis.y1,
+					left: layoutAreas.yAxis.x1,
+				}}
+			>
+				<AnimatedYAxis
+					area={layoutAreas.yAxis}
+					yScaleCurrent={yScale}
+					// axisSpecType={axisSpecType}
 					linesColor={textColor}
 				/>
 			</div>

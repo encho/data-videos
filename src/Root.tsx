@@ -52,7 +52,7 @@ export const RemotionRoot: React.FC = () => {
 				defaultProps={{
 					backgroundColor: '#1d1b1b',
 					textColor: '#d78119',
-					axisSpecType: 'INTER_MONTHS' as const,
+					axisSpecType: 'STANDARD' as const,
 				}}
 			/>
 
