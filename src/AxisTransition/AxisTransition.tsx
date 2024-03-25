@@ -38,8 +38,10 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	// const currentFrame = useCurrentFrame();
 	const {durationInFrames, height, width} = useVideoConfig();
 
-	const CHART_WIDTH = width * 0.95;
-	const CHART_HEIGHT = height * 0.8;
+	const CHART_WIDTH = width;
+	const CHART_HEIGHT = height;
+	// const CHART_WIDTH = width * 0.95;
+	// const CHART_HEIGHT = height * 0.8;
 
 	// TODO consider adding major and minor ticks
 	const TICK_SIZE = 16;
@@ -53,10 +55,10 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	];
 
 	const chartColsRailSpec: TGridRailSpec = [
-		{type: 'pixel', value: 200, name: 'space'},
+		{type: 'pixel', value: 100, name: 'space'},
 		{type: 'fr', value: 1, name: 'plot'},
 		{type: 'pixel', value: 20, name: 'space'},
-		{type: 'pixel', value: 200, name: 'yAxis'},
+		{type: 'pixel', value: 100, name: 'yAxis'},
 	];
 
 	const chartGridLayoutSpec = {

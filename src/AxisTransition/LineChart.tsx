@@ -32,10 +32,10 @@ export const LineChart: React.FC<{
 	// const TO_START_INDEX = 500;
 	// const TO_END_INDEX = 3500 - 300;
 	const FROM_START_INDEX = 0;
-	const FROM_END_INDEX = 100;
+	const FROM_END_INDEX = 0;
 
-	const TO_START_INDEX = 20;
-	const TO_END_INDEX = 120;
+	const TO_START_INDEX = 1;
+	const TO_END_INDEX = 3500;
 
 	const from_startDate = timeSeries[FROM_START_INDEX].date;
 	const to_startDate = timeSeries[TO_START_INDEX].date;
@@ -54,7 +54,10 @@ export const LineChart: React.FC<{
 		[0, 1],
 		[from_startTime, to_startTime],
 		{
-			easing: Easing.linear,
+			// easing: Easing.linear,
+			easing: Easing.bezier(0.33, 1, 0.68, 1),
+
+			// in this case should not be necessary
 			extrapolateLeft: 'clamp',
 			extrapolateRight: 'clamp',
 		}
@@ -65,7 +68,10 @@ export const LineChart: React.FC<{
 		[0, 1],
 		[from_endTime, to_endTime],
 		{
-			easing: Easing.linear,
+			// easing: Easing.linear,
+			easing: Easing.bezier(0.33, 1, 0.68, 1),
+
+			// in this case should not be necessary
 			extrapolateLeft: 'clamp',
 			extrapolateRight: 'clamp',
 		}
@@ -145,7 +151,8 @@ export const LineChart: React.FC<{
 								stroke={'#f05122'}
 								strokeWidth={1}
 								fill="transparent"
-								opacity={0.35}
+								// opacity={0.35}
+								opacity={0}
 							/>
 
 							<path
