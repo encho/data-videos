@@ -29,6 +29,11 @@ import {
 	AnimatedLineChart,
 } from './AnimatedLineChart/AnimatedLineChart';
 
+import {
+	AnimatedLineChartSchema as ScaleBandLineChartSchema,
+	AnimatedLineChart as ScaleBandLineChart,
+} from './AnimatedLineChartScaleBand/AnimatedLineChart';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -39,6 +44,24 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="ScaleBandLineChart"
+				component={ScaleBandLineChart}
+				// durationInFrames={240}
+				durationInFrames={30 * 12}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={30}
+				{...squareVideo}
+				schema={ScaleBandLineChartSchema}
+				defaultProps={{
+					backgroundColor: '#1d1b1b',
+					textColor: '#2de696',
+					axisSpecType: 'STANDARD' as const,
+				}}
+			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
