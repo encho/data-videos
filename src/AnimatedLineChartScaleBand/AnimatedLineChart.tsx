@@ -2,7 +2,7 @@ import {Sequence, useVideoConfig, AbsoluteFill} from 'remotion';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 import {min, max} from 'd3-array';
-import invariant from 'tiny-invariant';
+// import invariant from 'tiny-invariant';
 
 import {DisplayGridLayout} from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -77,8 +77,14 @@ const createTimeScaleBand = ({
 			(domainDate) => domainDate.getTime() === date.getTime()
 		);
 
+		const x1 = globalDateIndex * band_width - shiftLeft;
+		const x2 = x1 + band_width;
+		const centroid = (x1 + x2) / 2;
 		return {
-			x1: globalDateIndex * band_width - shiftLeft,
+			x1,
+			x2,
+			centroid,
+			width: band_width,
 		};
 	};
 
@@ -186,14 +192,13 @@ export const AnimatedLineChart: React.FC<
 							}}
 						>
 							{dates.map((date, i) => {
-								const bandInfo = myScaleForBands.getBand(date);
-								console.log(bandInfo);
+								const band = myScaleForBands.getBand(date);
 								return (
 									<g>
 										<rect
-											x={bandInfo.x1}
+											x={band.x1}
 											y={50}
-											width={myScaleForBands.band_width}
+											width={band.width}
 											height={100}
 											fill="darkblue"
 											stroke="yellow"
@@ -206,7 +211,7 @@ export const AnimatedLineChart: React.FC<
 												fill={'yellow'}
 												fontSize={18}
 												fontWeight={500}
-												x={bandInfo.x1 + myScaleForBands.band_width / 2}
+												x={band.centroid}
 												y={100}
 											>
 												{i.toString()}
@@ -217,13 +222,13 @@ export const AnimatedLineChart: React.FC<
 							})}
 
 							{dates.map((date, i) => {
-								const bandInfo = myScaleForBands2.getBand(date);
+								const band = myScaleForBands2.getBand(date);
 								return (
 									<g>
 										<rect
-											x={bandInfo.x1}
+											x={band.x1}
 											y={50 + 200}
-											width={myScaleForBands2.band_width}
+											width={band.width}
 											height={100}
 											fill="darkblue"
 											stroke="yellow"
@@ -236,7 +241,7 @@ export const AnimatedLineChart: React.FC<
 												fill={'yellow'}
 												fontSize={18}
 												fontWeight={500}
-												x={bandInfo.x1 + myScaleForBands2.band_width / 2}
+												x={band.centroid}
 												y={100 + 200}
 											>
 												{i.toString()}
