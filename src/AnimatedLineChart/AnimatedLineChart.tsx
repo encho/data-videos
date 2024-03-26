@@ -33,7 +33,6 @@ export const AnimatedLineChart: React.FC<
 	});
 
 	const TITLE_START_FRAME = 0;
-	// const TITLE_DURATION_IN_FRAMES = 45;
 	const TITLE_DURATION_IN_FRAMES = 30;
 
 	const FIRST_TS_START_FRAME = TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES;

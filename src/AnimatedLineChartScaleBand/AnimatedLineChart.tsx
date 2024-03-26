@@ -6,7 +6,7 @@ import {min, max} from 'd3-array';
 
 import {DisplayGridLayout} from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownianMotionTimeSeries';
-// import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
+import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
 
 function sliceList(list: Date[], startDate: Date, endDate: Date): Date[] {
@@ -41,11 +41,24 @@ type TTimeScaleBandArgs = {
 	visibleDomain: {startDomain: Date; endDomain: Date};
 };
 
-const createTimeScaleBand = ({
+export type TTimeBandScale = {
+	number_of_categories: number;
+	number_of_visible_categories: number;
+	// TODO deprecaet
+	band_width: number;
+	getBand: (d: Date) => {
+		x1: number;
+		x2: number;
+		width: number;
+		centroid: number;
+	};
+};
+
+export const createTimeScaleBand = ({
 	domain,
 	visibleDomain,
 	visibleRange,
-}: TTimeScaleBandArgs) => {
+}: TTimeScaleBandArgs): TTimeBandScale => {
 	// get the number of categories
 	// TODO add padding possibility
 	// const PADDING = in percent
@@ -106,11 +119,7 @@ export const AnimatedLineChart: React.FC<
 	z.infer<typeof AnimatedLineChartSchema>
 > = ({backgroundColor, textColor, axisSpecType}) => {
 	// const currentFrame = useCurrentFrame();
-	const {
-		// durationInFrames,
-		height,
-		width,
-	} = useVideoConfig();
+	const {durationInFrames, height, width} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -121,26 +130,46 @@ export const AnimatedLineChart: React.FC<
 	});
 
 	const TITLE_START_FRAME = 0;
-	// const TITLE_DURATION_IN_FRAMES = 45;
 	const TITLE_DURATION_IN_FRAMES = 30;
 
-	// const visibleDomain = {startDomain: min(dates), endDomain: max(dates)};
+	const FIRST_TS_START_FRAME = TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES;
+	const FIRST_TS_TRANSITION_IN_FRAMES = 3.5 * 30;
+
+	const SECOND_TS_START_FRAME =
+		FIRST_TS_START_FRAME + FIRST_TS_TRANSITION_IN_FRAMES;
+	const SECOND_TS_TRANSITION_IN_FRAMES = 3.5 * 30;
+	// durationInFrames - TITLE_DURATION_IN_FRAMES - FIRST_TS_TRANSITION_IN_FRAMES;
+
+	const THIRD_TS_START_FRAME =
+		SECOND_TS_START_FRAME + SECOND_TS_TRANSITION_IN_FRAMES;
+	const THIRD_TS_TRANSITION_IN_FRAMES =
+		durationInFrames -
+		TITLE_DURATION_IN_FRAMES -
+		FIRST_TS_TRANSITION_IN_FRAMES -
+		SECOND_TS_TRANSITION_IN_FRAMES;
+
+	const visibleRange = {startRange: 0, endRange: chartLayout.areas.plot.width};
+
 	const visibleDomain = {
+		startDomain: min(dates) as Date,
+		endDomain: dates[10] as Date,
+	};
+
+	const visibleDomain2 = {
 		startDomain: min(dates) as Date,
 		endDomain: max(dates) as Date,
 	};
-	const visibleRange = {startRange: 0, endRange: chartLayout.areas.plot.width};
+
+	// const visibleDomain2 = {
+	// 	startDomain: dates[dates.length - 5] as Date,
+	// 	endDomain: dates[dates.length - 1] as Date,
+	// };
 
 	const myScaleForBands = createTimeScaleBand({
 		domain: dates,
 		visibleRange,
 		visibleDomain,
 	});
-
-	const visibleDomain2 = {
-		startDomain: dates[dates.length - 5] as Date,
-		endDomain: dates[dates.length - 1] as Date,
-	};
 
 	const myScaleForBands2 = createTimeScaleBand({
 		domain: dates,
@@ -169,90 +198,56 @@ export const AnimatedLineChart: React.FC<
 				<h1 style={{color: textColor, fontSize: 300}}>Start</h1>
 			</Sequence>
 
-			<Sequence
-				from={TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES}
-				// from={TITLE_START_FRAME}
-				// durationInFrames={TITLE_DURATION_IN_FRAMES}
-			>
+			{/* <Sequence from={TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES}>
 				<AbsoluteFill>
 					<h1 style={{color: 'blue', fontSize: 100}}>ScaleBand Test</h1>
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.plot.y1,
-							left: chartLayout.areas.plot.x1,
-						}}
-					>
-						<svg
-							width={chartLayout.areas.plot.width}
-							height={500}
-							style={{
-								backgroundColor: 'blue',
-								overflow: 'visible',
-							}}
-						>
-							{dates.map((date, i) => {
-								const band = myScaleForBands.getBand(date);
-								return (
-									<g>
-										<rect
-											x={band.x1}
-											y={50}
-											width={band.width}
-											height={100}
-											fill="darkblue"
-											stroke="yellow"
-											strokeWidth={2}
-										/>
-										{i % 5 === 0 ? (
-											<text
-												textAnchor="middle"
-												alignmentBaseline="middle"
-												fill={'yellow'}
-												fontSize={18}
-												fontWeight={500}
-												x={band.centroid}
-												y={100}
-											>
-												{i.toString()}
-											</text>
-										) : null}
-									</g>
-								);
-							})}
-
-							{dates.map((date, i) => {
-								const band = myScaleForBands2.getBand(date);
-								return (
-									<g>
-										<rect
-											x={band.x1}
-											y={50 + 200}
-											width={band.width}
-											height={100}
-											fill="darkblue"
-											stroke="yellow"
-											strokeWidth={2}
-										/>
-										{i % 5 === 0 ? (
-											<text
-												textAnchor="middle"
-												alignmentBaseline="middle"
-												fill={'yellow'}
-												fontSize={18}
-												fontWeight={500}
-												x={band.centroid}
-												y={100 + 200}
-											>
-												{i.toString()}
-											</text>
-										) : null}
-									</g>
-								);
-							})}
-						</svg>
-					</div>
 				</AbsoluteFill>
+			</Sequence> */}
+
+			<Sequence
+				from={FIRST_TS_START_FRAME}
+				durationInFrames={FIRST_TS_TRANSITION_IN_FRAMES}
+			>
+				<AnimatedLineChartContainer
+					timeSeries={timeSeries}
+					fromVisibleDomain={visibleDomain}
+					toVisibleDomain={visibleDomain2}
+					layoutAreas={{
+						plot: chartLayout.areas.plot,
+						xAxis: chartLayout.areas.xAxis,
+						yAxis: chartLayout.areas.yAxis,
+					}}
+				/>
+			</Sequence>
+			<Sequence
+				from={SECOND_TS_START_FRAME}
+				durationInFrames={SECOND_TS_TRANSITION_IN_FRAMES}
+			>
+				<AnimatedLineChartContainer
+					timeSeries={timeSeries}
+					fromVisibleDomain={visibleDomain2}
+					toVisibleDomain={visibleDomain}
+					layoutAreas={{
+						plot: chartLayout.areas.plot,
+						xAxis: chartLayout.areas.xAxis,
+						yAxis: chartLayout.areas.yAxis,
+					}}
+				/>
+			</Sequence>
+			<Sequence
+				from={THIRD_TS_START_FRAME}
+				durationInFrames={THIRD_TS_TRANSITION_IN_FRAMES}
+			>
+				<AnimatedLineChartContainer
+					timeSeries={timeSeries}
+					fromVisibleDomain={visibleDomain}
+					toVisibleDomain={visibleDomain}
+					layoutAreas={{
+						plot: chartLayout.areas.plot,
+						xAxis: chartLayout.areas.xAxis,
+						yAxis: chartLayout.areas.yAxis,
+					}}
+				/>
 			</Sequence>
 		</AbsoluteFill>
 	);
