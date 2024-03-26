@@ -44,7 +44,8 @@ export const RemotionRoot: React.FC = () => {
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="AnimatedLineChart"
 				component={AnimatedLineChart}
-				durationInFrames={240}
+				// durationInFrames={240}
+				durationInFrames={30 * 12}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={30}
 				{...squareVideo}
