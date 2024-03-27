@@ -47,6 +47,7 @@ export const AnimatedXAxis: React.FC<{
 							height={40}
 							stroke="#555"
 							strokeWidth={1}
+							fill={i % 5 === 0 ? 'darkblue' : 'transparent'}
 						/>
 						{i % 5 === 0 ? (
 							<text

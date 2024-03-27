@@ -14,6 +14,7 @@ import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale} from './periodsScale';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
+import {AnimatedYAxis} from './components/AnimatedYAxis';
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -180,20 +181,35 @@ export const AnimatedLineChartContainer: React.FC<{
 				/>
 			</div>
 
+			<div
+				style={{
+					position: 'absolute',
+					top: layoutAreas.yAxis.y1,
+					left: layoutAreas.yAxis.x1,
+				}}
+			>
+				<AnimatedYAxis
+					area={layoutAreas.yAxis}
+					yScaleCurrent={yScale}
+					// axisSpecType={axisSpecType}
+					linesColor={'orange'}
+				/>
+			</div>
+
 			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
 					<div>
-						<h1 style={{color: 'gray', fontSize: 40}}>
+						<h1 style={{color: 'gray', fontSize: 20}}>
 							{fromVisibleDomainIndices.toString()}
 						</h1>
 					</div>
 					<div>
-						<h1 style={{color: 'gray', fontSize: 40}}>
+						<h1 style={{color: 'gray', fontSize: 20}}>
 							{toVisibleDomainIndices.toString()}
 						</h1>
 					</div>
 					<div>
-						<h1 style={{color: 'gray', fontSize: 40}}>
+						<h1 style={{color: 'gray', fontSize: 20}}>
 							current visible indices: {animatedVisibleDomainIndexStart} -{' '}
 							{animatedVisibleDomainIndexEnd}
 						</h1>

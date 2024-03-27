@@ -24,7 +24,7 @@ export const periodsScale = ({
 
 	// number of visible bands does not have to be an integer necessarily
 	const numberOfVisibleBands =
-		visibleDomainIndices[1] - visibleDomainIndices[0];
+		visibleDomainIndices[1] - visibleDomainIndices[0] + 1;
 
 	const bandWidth = visibleRangeSize / numberOfVisibleBands;
 
