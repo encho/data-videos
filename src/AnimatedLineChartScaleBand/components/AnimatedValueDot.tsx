@@ -45,9 +45,6 @@ export const AnimatedValueDot: React.FC<{
 					fill={dotColor}
 				/>
 			</g>
-
-			{/* <circle cx={x} cy={y} r={10} fill={dotColor} />
-			<circle cx={x} cy={y} r={18} fill={dotColor} opacity={0.2} /> */}
 		</svg>
 	);
 };
