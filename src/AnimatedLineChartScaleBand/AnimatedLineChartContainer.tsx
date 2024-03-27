@@ -2,34 +2,22 @@ import {
 	AbsoluteFill,
 	useCurrentFrame,
 	useVideoConfig,
-	interpolate,
 	Easing,
 	Sequence,
+	interpolate,
 } from 'remotion';
 import {max, min} from 'd3-array';
-import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
+import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {AnimatedLine} from './components/AnimatedLine';
-import {AnimatedXAxis} from './components/AnimatedXAxis';
-import {AnimatedValueDot} from './components/AnimatedValueDot';
-import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {
-	getTimeSeriesSlice,
-	findNearestDataPoints,
-	getInterpolatedValue,
-} from './utils/timeSeries/timeSeries';
-import {createTimeScaleBand, TTimeBandScale} from './AnimatedLineChart';
-import {times} from 'lodash';
+	createTimeScaleBand,
+	TTimeBandScale,
+	periodsScale,
+	TPeriodsScale,
+} from './periodsScale';
 import {line} from 'd3-shape';
-
-const SHOW_ZERO = false;
-
-type TDomainIndices = {
-	start: number;
-	end: number;
-};
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -38,6 +26,8 @@ export const AnimatedLineChartContainer: React.FC<{
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
+	fromVisibleDomainIndices: [number, number];
+	toVisibleDomainIndices: [number, number];
 	fromVisibleDomain: {
 		startDomain: Date;
 		endDomain: Date;
@@ -46,7 +36,14 @@ export const AnimatedLineChartContainer: React.FC<{
 		startDomain: Date;
 		endDomain: Date;
 	};
-}> = ({layoutAreas, timeSeries, fromVisibleDomain, toVisibleDomain}) => {
+}> = ({
+	layoutAreas,
+	timeSeries,
+	fromVisibleDomain,
+	toVisibleDomain,
+	fromVisibleDomainIndices,
+	toVisibleDomainIndices,
+}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -87,12 +84,59 @@ export const AnimatedLineChartContainer: React.FC<{
 
 	const visibleRange = {startRange: 0, endRange: layoutAreas.xAxis.width};
 
+	const fromPeriodsScale = periodsScale({
+		dates,
+		visibleDomainIndices: fromVisibleDomainIndices,
+		visibleRange: [0, layoutAreas.xAxis.width],
+	});
+
+	const toPeriodsScale = periodsScale({
+		dates,
+		visibleDomainIndices: toVisibleDomainIndices,
+		visibleRange: [0, layoutAreas.xAxis.width],
+	});
+
+	const animatedVisibleDomainIndexStart = interpolate(
+		animationPercentage,
+		[0, 1],
+		[fromVisibleDomainIndices[0], toVisibleDomainIndices[0]],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const animatedVisibleDomainIndexEnd = interpolate(
+		animationPercentage,
+		[0, 1],
+		[fromVisibleDomainIndices[1], toVisibleDomainIndices[1]],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const currentTimeBandsScale = periodsScale({
+		dates,
+		visibleDomainIndices: [
+			animatedVisibleDomainIndexStart,
+			animatedVisibleDomainIndexEnd,
+		],
+		visibleRange: [0, layoutAreas.xAxis.width],
+	});
+
+	// TODO deprecate
 	const from_timeBandsScale = createTimeScaleBand({
 		domain: dates,
 		visibleRange,
 		visibleDomain: fromVisibleDomain,
 	});
 
+	// TODO deprecate
 	const to_timeBandsScale = createTimeScaleBand({
 		domain: dates,
 		visibleRange,
@@ -164,6 +208,17 @@ export const AnimatedLineChartContainer: React.FC<{
 
 	const d = line()(allMappedXYs) as string;
 
+	const allMappedXYs_new = timeSeries.map((tsItem, i) => {
+		const band = currentTimeBandsScale.getBandFromIndex(i);
+		const cx = band.centroid;
+		const cy = yScale(tsItem.value);
+		return [cx, cy] as [number, number];
+	});
+
+	// const allMappedXYs = [[], allMappedXYs]
+
+	const d_new = line()(allMappedXYs_new) as string;
+
 	return (
 		<AbsoluteFill>
 			<div
@@ -182,25 +237,47 @@ export const AnimatedLineChartContainer: React.FC<{
 					}}
 				>
 					{/* dots */}
-					{timeSeries.map((timeSeriesItem) => {
+					{/* {timeSeries.map((timeSeriesItem) => {
 						const band = currentTimeBandScale.getBand(timeSeriesItem.date);
 						const cx = band.centroid;
 						const cy = yScale(timeSeriesItem.value);
-						// const cy = 50;
 						return (
 							<g>
 								<circle cx={cx} cy={cy} r={5} fill="cyan" />
 							</g>
 						);
-					})}
+					})} */}
 
-					<path
+					{/* <path
 						d={d}
 						stroke="yellow"
 						strokeWidth={2}
+						fill="none"
+					/> */}
+
+					<path
+						d={d_new}
+						stroke="blue"
+						strokeWidth={5}
 						// fill="rgba(255,0,0,0.5)"
 						fill="none"
 					/>
+
+					{/* dots */}
+					{timeSeries.map((timeSeriesItem) => {
+						const band = currentTimeBandsScale.getBandFromDate(
+							timeSeriesItem.date
+						);
+						const cx = band.centroid;
+						const cy = yScale(timeSeriesItem.value);
+						// const cy = 50;
+						return (
+							<g>
+								<circle cx={cx} cy={cy} r={5} fill="orange" />
+							</g>
+						);
+					})}
+
 					{[dotLeftTsItem, dotRightTsItem].map((timeSeriesItem) => {
 						const band = currentTimeBandScale.getBand(timeSeriesItem.date);
 						const cx = band.centroid;
@@ -231,7 +308,8 @@ export const AnimatedLineChartContainer: React.FC<{
 					}}
 				>
 					{dates.map((date, i) => {
-						const band = currentTimeBandScale.getBand(date);
+						// const band = currentTimeBandScale.getBand(date);
+						const band = currentTimeBandsScale.getBandFromDate(date);
 						return (
 							<g>
 								<rect
