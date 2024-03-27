@@ -59,8 +59,8 @@ export const AnimatedLineChart: React.FC<
 			<DisplayGridLayout
 				stroke={textColor}
 				fill="transparent"
-				// hide={true}
-				hide={false}
+				hide={true}
+				// hide={false}
 				areas={chartLayout.areas}
 				width={width}
 				height={height}

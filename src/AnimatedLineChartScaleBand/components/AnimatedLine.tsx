@@ -31,7 +31,7 @@ export const AnimatedLine: React.FC<{
 				stroke={lineColor}
 				strokeWidth={1}
 				fill="transparent"
-				opacity={0.5}
+				opacity={0.3}
 			/>
 
 			<g clipPath="url(#plotAreaClipPath)">
