@@ -15,6 +15,7 @@ import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale} from './periodsScale';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
+import {AnimatedLine} from './components/AnimatedLine';
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -123,6 +124,22 @@ export const AnimatedLineChartContainer: React.FC<{
 					left: layoutAreas.plot.x1,
 				}}
 			>
+				<AnimatedLine
+					lineColor={'yellow'}
+					periodsScale={currentTimeBandsScale}
+					yScale={yScale}
+					area={layoutAreas.plot}
+					timeSeries={timeSeries}
+				/>
+			</div>
+
+			<div
+				style={{
+					position: 'absolute',
+					top: layoutAreas.plot.y1,
+					left: layoutAreas.plot.x1,
+				}}
+			>
 				<svg
 					width={layoutAreas.plot.width}
 					height={layoutAreas.plot.height}
@@ -130,36 +147,11 @@ export const AnimatedLineChartContainer: React.FC<{
 						overflow: 'visible',
 					}}
 				>
-					<clipPath id="plotAreaClipPath">
-						<rect
-							x={0}
-							y={0}
-							width={layoutAreas.plot.width}
-							height={layoutAreas.plot.height}
-						/>
-					</clipPath>
-
-					<g clipPath="url(#plotAreaClipPath)">
-						<path d={d_new} stroke="blue" strokeWidth={5} fill="none" />
-						{/* dots */}
-						{timeSeries.map((timeSeriesItem) => {
-							const band = currentTimeBandsScale.getBandFromDate(
-								timeSeriesItem.date
-							);
-							const cx = band.centroid;
-							const cy = yScale(timeSeriesItem.value);
-							return (
-								<g>
-									<circle cx={cx} cy={cy} r={3} fill="lightblue" />
-								</g>
-							);
-						})}
-					</g>
 					<g>
 						<circle
 							cx={currentDot_circle_cx}
 							cy={currentDot_circle_cy}
-							r={8}
+							r={10}
 							fill="red"
 						/>
 					</g>

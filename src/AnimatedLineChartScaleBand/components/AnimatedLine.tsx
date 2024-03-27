@@ -1,108 +1,53 @@
-import {ScaleTime, ScaleLinear} from 'd3-scale';
+import {ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 
+import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
-// import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
-// ****************************************************************
-
-type TDomainIndices = {
-	start: number;
-	end: number;
-};
 
 export const AnimatedLine: React.FC<{
 	lineColor: string;
 	area: TGridLayoutArea;
-	// layoutAreas: {
-	// 	plot: TGridLayoutArea;
-	// 	xAxis: TGridLayoutArea;
-	// 	yAxis: TGridLayoutArea;
-	// };
 	timeSeries: TimeSeries;
-	fromDomainIndices: TDomainIndices;
-	toDomainIndices: TDomainIndices;
-	xScaleCurrent: ScaleTime<Date, number>;
-	yScaleCurrent: ScaleLinear<number, number>;
-}> = ({
-	lineColor,
-	area,
-	timeSeries,
-	xScaleCurrent,
-	yScaleCurrent,
-	// fromDomainIndices,
-	// toDomainIndices,
-}) => {
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+}> = ({lineColor, area, timeSeries, periodsScale, yScale}) => {
 	const linePath = line<{date: Date; value: number}>()
-		.x((d) => xScaleCurrent(d.date))
-		.y((d) => yScaleCurrent(d.value));
+		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
+		.y((d) => yScale(d.value));
 
 	const d = linePath(timeSeries) || '';
 
-	console.log(xScaleCurrent.range());
-	console.log(xScaleCurrent.domain());
-
 	return (
-		<svg
-			overflow="visible"
-			width={area.width}
-			height={area.height}
-			// style={{backgroundColor: lineColor}}
-		>
+		<svg overflow="visible" width={area.width} height={area.height}>
 			<defs>
-				<clipPath id="myClip">
-					{/* <rect x="50" y="50" width="200" height="200" /> */}
+				<clipPath id="plotAreaClipPath">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
 
-			{/* <rect
-				x={0}
-				y={0}
-				width={area.width}
-				height={area.height}
-				fill="#f05122"
-				opacity={0.05}
-			/> */}
+			<path
+				d={d}
+				stroke={lineColor}
+				strokeWidth={1}
+				fill="transparent"
+				opacity={0.5}
+			/>
 
-			{/* the animated line */}
-			{d ? (
-				<g>
-					<path
-						// clipPath="url(#myClip)"
-						d={d}
-						// strokeDasharray={evolvedPath.strokeDasharray}
-						// strokeDashoffset={evolvedPath.strokeDashoffset}
-						// stroke={styling.lineColor}
-						// strokeWidth={styling.lineStrokeWidth}
-						// fill="transparent"
-						stroke={lineColor}
-						strokeWidth={1}
-						fill="transparent"
-						// opacity={0.35}
-						opacity={0}
-					/>
-
-					<path
-						clipPath="url(#myClip)"
-						d={d}
-						// strokeDasharray={evolvedPath.strokeDasharray}
-						// strokeDashoffset={evolvedPath.strokeDashoffset}
-						// stroke={styling.lineColor}
-						// strokeWidth={styling.lineStrokeWidth}
-						// fill="transparent"
-						stroke={lineColor}
-						strokeWidth={2}
-						fill="transparent"
-					/>
-					{/* <circle
-								cx={pointAtLength.x}
-								cy={pointAtLength.y}
-								fill={styling.lineColor}
-								r={styling.lineCircleRadius}
-							/> */}
-				</g>
-			) : null}
+			<g clipPath="url(#plotAreaClipPath)">
+				<path d={d} stroke={lineColor} strokeWidth={5} fill="none" />
+				{/* dots */}
+				{timeSeries.map((timeSeriesItem) => {
+					const band = periodsScale.getBandFromDate(timeSeriesItem.date);
+					const cx = band.centroid;
+					const cy = yScale(timeSeriesItem.value);
+					return (
+						<g>
+							<circle cx={cx} cy={cy} r={5} fill="darkorange" />
+						</g>
+					);
+				})}
+			</g>
 		</svg>
 	);
 };

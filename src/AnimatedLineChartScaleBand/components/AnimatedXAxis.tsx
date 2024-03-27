@@ -1,14 +1,4 @@
-import {ScaleTime} from 'd3-scale';
-
 import {TGridLayoutArea} from '../../acetti-viz';
-import {getXAxisSpecFromScale} from '../../acetti-axis/getXAxisSpecFromScale';
-import {
-	getTickMappedValue,
-	getTickValue,
-	getLabelMappedValue,
-	getLabelValue,
-} from '../../acetti-axis/axisSpec';
-
 import {TPeriodsScale} from '../periodsScale';
 
 export const AnimatedXAxis: React.FC<{
