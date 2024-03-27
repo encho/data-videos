@@ -16,6 +16,7 @@ import {periodsScale} from './periodsScale';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
+import {AnimatedValueDot} from './components/AnimatedValueDot';
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -66,7 +67,7 @@ export const AnimatedLineChartContainer: React.FC<{
 		}
 	);
 
-	const currentTimeBandsScale = periodsScale({
+	const currentPeriodsScale = periodsScale({
 		dates,
 		visibleDomainIndices: [
 			animatedVisibleDomainIndexStart,
@@ -85,36 +86,6 @@ export const AnimatedLineChartContainer: React.FC<{
 		// .domain(yDomainZero)
 		.range([0, layoutAreas.plot.height]);
 
-	const allMappedXYs_new = timeSeries.map((tsItem, i) => {
-		const band = currentTimeBandsScale.getBandFromIndex(i);
-		const cx = band.centroid;
-		const cy: number = yScale(tsItem.value);
-		return [cx, cy] as [number, number];
-	});
-
-	const d_new = line()(allMappedXYs_new) as string;
-
-	// determine current Dot location
-	const leftEndIndex = Math.floor(animatedVisibleDomainIndexEnd);
-	const rightEndIndex = Math.ceil(animatedVisibleDomainIndexEnd);
-	const percRight = animatedVisibleDomainIndexEnd - leftEndIndex;
-
-	const leftValue = timeSeries[leftEndIndex].value;
-	const rightValue = timeSeries[rightEndIndex].value;
-
-	const currentDotValue = leftValue * (1 - percRight) + rightValue * percRight;
-	const currentDot_circle_cy = yScale(currentDotValue);
-
-	// TODO implement
-	// currentTimeBandsScale.scale(float)
-	const currentDot_circle_cx_left =
-		currentTimeBandsScale.getBandFromIndex(leftEndIndex).x1;
-	const currentDot_circle_cx_right =
-		currentTimeBandsScale.getBandFromIndex(rightEndIndex).x1;
-	const currentDot_circle_cx =
-		currentDot_circle_cx_left * (1 - percRight) +
-		currentDot_circle_cx_right * percRight;
-
 	return (
 		<AbsoluteFill>
 			<div
@@ -126,7 +97,7 @@ export const AnimatedLineChartContainer: React.FC<{
 			>
 				<AnimatedLine
 					lineColor={'yellow'}
-					periodsScale={currentTimeBandsScale}
+					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
@@ -140,22 +111,13 @@ export const AnimatedLineChartContainer: React.FC<{
 					left: layoutAreas.plot.x1,
 				}}
 			>
-				<svg
-					width={layoutAreas.plot.width}
-					height={layoutAreas.plot.height}
-					style={{
-						overflow: 'visible',
-					}}
-				>
-					<g>
-						<circle
-							cx={currentDot_circle_cx}
-							cy={currentDot_circle_cy}
-							r={10}
-							fill="red"
-						/>
-					</g>
-				</svg>
+				<AnimatedValueDot
+					periodsScale={currentPeriodsScale}
+					yScale={yScale}
+					timeSeries={timeSeries}
+					dotColor="green"
+					area={layoutAreas.plot}
+				/>
 			</div>
 
 			<div
@@ -167,7 +129,7 @@ export const AnimatedLineChartContainer: React.FC<{
 			>
 				<AnimatedXAxis
 					dates={dates}
-					periodsScale={currentTimeBandsScale}
+					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}
 					linesColor="magenta"
 				/>

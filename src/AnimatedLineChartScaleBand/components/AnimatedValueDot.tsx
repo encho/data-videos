@@ -1,52 +1,53 @@
-import {
-	AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	interpolate,
-	Easing,
-	Sequence,
-} from 'remotion';
-import {max, min} from 'd3-array';
-import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
-import {line} from 'd3-shape';
+import {ScaleLinear} from 'd3-scale';
 
+import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
-import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
-// import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
-// ****************************************************************
-const SHOW_ZERO = false;
-
-type TDomainIndices = {
-	start: number;
-	end: number;
-};
 
 export const AnimatedValueDot: React.FC<{
 	area: TGridLayoutArea;
 	dotColor: string;
-	xScaleCurrent: ScaleTime<Date, number>;
-	yScaleCurrent: ScaleLinear<number, number>;
-	interpolatedCurrentDotData: {date: Date; value: number};
-}> = ({
-	dotColor,
-	area,
-	xScaleCurrent,
-	yScaleCurrent,
-	interpolatedCurrentDotData,
-}) => {
-	const x = xScaleCurrent(interpolatedCurrentDotData.date);
-	const y = yScaleCurrent(interpolatedCurrentDotData.value);
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	// determine current Dot location
+	const leftEndIndex = Math.floor(visibleDomainIndexEnd);
+	const rightEndIndex = Math.ceil(visibleDomainIndexEnd);
+	const percRight = visibleDomainIndexEnd - leftEndIndex;
+
+	const leftValue = timeSeries[leftEndIndex].value;
+	const rightValue = timeSeries[rightEndIndex].value;
+
+	const currentDotValue = leftValue * (1 - percRight) + rightValue * percRight;
+	const currentDot_circle_cy = yScale(currentDotValue);
+
+	// TODO implement
+	// currentTimeBandsScale.scale(float)
+	const currentDot_circle_cx_left =
+		periodsScale.getBandFromIndex(leftEndIndex).x1;
+	const currentDot_circle_cx_right =
+		periodsScale.getBandFromIndex(rightEndIndex).x1;
+	const currentDot_circle_cx =
+		currentDot_circle_cx_left * (1 - percRight) +
+		currentDot_circle_cx_right * percRight;
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
-			{/* <defs>
-				<clipPath id="myClip">
-					<rect x={0} y={0} width={area.width} height={area.height} />
-				</clipPath>
-			</defs> */}
+			<g>
+				<circle
+					cx={currentDot_circle_cx}
+					cy={currentDot_circle_cy}
+					r={10}
+					fill={dotColor}
+				/>
+			</g>
 
-			<circle cx={x} cy={y} r={10} fill={dotColor} />
-			<circle cx={x} cy={y} r={18} fill={dotColor} opacity={0.2} />
+			{/* <circle cx={x} cy={y} r={10} fill={dotColor} />
+			<circle cx={x} cy={y} r={18} fill={dotColor} opacity={0.2} /> */}
 		</svg>
 	);
 };

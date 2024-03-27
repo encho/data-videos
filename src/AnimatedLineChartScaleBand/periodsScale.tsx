@@ -9,6 +9,7 @@ type TPeriodScaleBand = {
 export type TPeriodsScale = {
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
+	getVisibleDomainIndices: () => [number, number];
 };
 
 export const periodsScale = ({
@@ -66,5 +67,6 @@ export const periodsScale = ({
 	return {
 		getBandFromDate,
 		getBandFromIndex,
+		getVisibleDomainIndices: () => visibleDomainIndices,
 	};
 };
