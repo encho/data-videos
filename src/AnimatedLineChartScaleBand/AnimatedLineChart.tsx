@@ -29,8 +29,9 @@ function sliceList(list: Date[], startDate: Date, endDate: Date): Date[] {
 
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
-	new Date(2020, 2, 1)
-	// new Date(2030, 0, 20)
+	new Date(2022, 0, 1)
+	// new Date(2030, 0, 1)
+	// new Date(2023, 0, 1)
 );
 
 const dates = timeSeries.map((it) => it.date);
@@ -46,11 +47,15 @@ export type TTimeBandScale = {
 	number_of_visible_categories: number;
 	// TODO deprecaet
 	band_width: number;
+	domain: Date[];
 	getBand: (d: Date) => {
 		x1: number;
 		x2: number;
 		width: number;
 		centroid: number;
+	};
+	allBandsData: {
+		[key: string]: {x1: number; x2: number; centroid: number; width: number};
 	};
 };
 
@@ -85,27 +90,34 @@ export const createTimeScaleBand = ({
 
 	const shiftLeft = firstCategoryIndex * band_width;
 
-	const getBand = (date: Date) => {
-		const globalDateIndex = domain.findIndex(
-			(domainDate) => domainDate.getTime() === date.getTime()
-		);
+	const allBandsData: {
+		[key: string]: {x1: number; x2: number; centroid: number; width: number};
+	} = {};
 
-		const x1 = globalDateIndex * band_width - shiftLeft;
+	domain.forEach((date, i) => {
+		const x1 = i * band_width - shiftLeft;
 		const x2 = x1 + band_width;
 		const centroid = (x1 + x2) / 2;
-		return {
+		allBandsData[date.toISOString()] = {
 			x1,
 			x2,
 			centroid,
 			width: band_width,
 		};
+	});
+
+	const getBand = (date: Date) => {
+		const bandData = allBandsData[date.toISOString()];
+		return bandData;
 	};
 
 	return {
+		domain,
 		number_of_categories,
 		number_of_visible_categories,
 		band_width,
 		getBand,
+		allBandsData,
 	};
 };
 
@@ -148,36 +160,20 @@ export const AnimatedLineChart: React.FC<
 		FIRST_TS_TRANSITION_IN_FRAMES -
 		SECOND_TS_TRANSITION_IN_FRAMES;
 
-	const visibleRange = {startRange: 0, endRange: chartLayout.areas.plot.width};
+	// const visibleRange = {startRange: 0, endRange: chartLayout.areas.plot.width};
 
 	const visibleDomain = {
-		startDomain: min(dates) as Date,
-		endDomain: dates[10] as Date,
+		// startDomain: min(dates) as Date,
+		startDomain: dates[0] as Date,
+		endDomain: dates[0 + 10] as Date,
 	};
 
 	const visibleDomain2 = {
-		startDomain: min(dates) as Date,
-		endDomain: max(dates) as Date,
+		// startDomain: min(dates) as Date,
+		// endDomain: max(dates) as Date,
+		startDomain: dates[0] as Date,
+		endDomain: dates[0 + 80] as Date,
 	};
-
-	// const visibleDomain2 = {
-	// 	startDomain: dates[dates.length - 5] as Date,
-	// 	endDomain: dates[dates.length - 1] as Date,
-	// };
-
-	const myScaleForBands = createTimeScaleBand({
-		domain: dates,
-		visibleRange,
-		visibleDomain,
-	});
-
-	const myScaleForBands2 = createTimeScaleBand({
-		domain: dates,
-		visibleRange,
-		visibleDomain: visibleDomain2,
-	});
-
-	console.log(myScaleForBands);
 
 	return (
 		<AbsoluteFill style={{backgroundColor}}>
