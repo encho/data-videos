@@ -1,20 +1,10 @@
-import {
-	AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	interpolate,
-	Easing,
-	Sequence,
-} from 'remotion';
-import {max, min} from 'd3-array';
-import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
+import {ScaleTime, ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 
 import {TGridLayoutArea} from '../../acetti-viz';
 import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
 // import {getXAxisSpec} from '../acetti-axis/getXAxisSpec';
 // ****************************************************************
-const SHOW_ZERO = false;
 
 type TDomainIndices = {
 	start: number;

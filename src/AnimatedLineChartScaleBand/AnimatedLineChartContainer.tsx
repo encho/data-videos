@@ -13,6 +13,7 @@ import {line} from 'd3-shape';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale} from './periodsScale';
+import {AnimatedXAxis} from './components/AnimatedXAxis';
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -153,18 +154,6 @@ export const AnimatedLineChartContainer: React.FC<{
 							);
 						})}
 					</g>
-
-					{/* {[dotLeftTsItem, dotRightTsItem].map((timeSeriesItem) => {
-						const band = currentTimeBandScale.getBand(timeSeriesItem.date);
-						const cx = band.centroid;
-						const cy = yScale(timeSeriesItem.value);
-						// const cy = 50;
-						return (
-							<g>
-								<circle cx={cx} cy={cy} r={7} fill="red" />
-							</g>
-						);
-					})} */}
 					<g>
 						<circle
 							cx={currentDot_circle_cx}
@@ -183,55 +172,12 @@ export const AnimatedLineChartContainer: React.FC<{
 					left: layoutAreas.xAxis.x1,
 				}}
 			>
-				<svg
-					width={layoutAreas.xAxis.width}
-					height={layoutAreas.xAxis.height}
-					style={{
-						overflow: 'visible',
-						backgroundColor: 'black',
-					}}
-				>
-					<defs>
-						<clipPath id="xAxisAreaClipPath">
-							<rect
-								x={0}
-								y={0}
-								width={layoutAreas.xAxis.width}
-								height={layoutAreas.xAxis.height}
-							/>
-						</clipPath>
-					</defs>
-
-					{dates.map((date, i) => {
-						// const band = currentTimeBandScale.getBand(date);
-						const band = currentTimeBandsScale.getBandFromDate(date);
-						return (
-							<g clipPath="url(#xAxisAreaClipPath)">
-								<rect
-									x={band.x1}
-									y={0}
-									width={band.width}
-									height={40}
-									stroke="#555"
-									strokeWidth={1}
-								/>
-								{i % 5 === 0 ? (
-									<text
-										textAnchor="middle"
-										alignmentBaseline="middle"
-										fill={'yellow'}
-										fontSize={18}
-										fontWeight={500}
-										x={band.centroid}
-										y={20}
-									>
-										{i.toString()}
-									</text>
-								) : null}
-							</g>
-						);
-					})}
-				</svg>
+				<AnimatedXAxis
+					dates={dates}
+					periodsScale={currentTimeBandsScale}
+					area={layoutAreas.xAxis}
+					linesColor="magenta"
+				/>
 			</div>
 
 			<Sequence from={0} durationInFrames={durationInFrames}>

@@ -9,77 +9,61 @@ import {
 	getLabelValue,
 } from '../../acetti-axis/axisSpec';
 
+import {TPeriodsScale} from '../periodsScale';
+
 export const AnimatedXAxis: React.FC<{
 	linesColor: string;
 	area: TGridLayoutArea;
-	xScaleCurrent: ScaleTime<Date, number>;
-	axisSpecType: 'STANDARD' | 'INTER_MONTHS';
-}> = ({linesColor, area, xScaleCurrent, axisSpecType}) => {
-	const xAxisSpec = getXAxisSpecFromScale(xScaleCurrent, axisSpecType);
+	dates: Date[];
+	periodsScale: TPeriodsScale;
+	// xScaleCurrent: ScaleTime<Date, number>;
+	// axisSpecType: 'STANDARD' | 'INTER_MONTHS';
+}> = ({linesColor, area, dates, periodsScale}) => {
+	// const xAxisSpec = getXAxisSpecFromScale(xScaleCurrent, axisSpecType);
 
 	return (
-		<svg overflow="visible">
-			{/* <rect
-				x={0}
-				y={0}
-				width={area.width}
-				height={area.height}
-				fill="#f05122"
-				opacity={0.05}
-			/> */}
+		<svg
+			width={area.width}
+			height={area.height}
+			style={{
+				overflow: 'visible',
+				backgroundColor: 'black',
+			}}
+		>
+			<defs>
+				<clipPath id="xAxisAreaClipPath">
+					<rect x={0} y={0} width={area.width} height={area.height} />
+				</clipPath>
+			</defs>
 
-			{/* update ticks  */}
-			{xAxisSpec.ticks.map((it, i) => {
-				const tickMappedValue = getTickMappedValue(xAxisSpec, it.id);
-
+			{dates.map((date, i) => {
+				const band = periodsScale.getBandFromDate(date);
 				return (
-					<g key={i}>
-						<line
-							x1={tickMappedValue}
-							x2={tickMappedValue}
-							y1={0}
-							y2={20}
-							stroke={linesColor}
-							strokeWidth={4}
+					<g clipPath="url(#xAxisAreaClipPath)">
+						<rect
+							x={band.x1}
+							y={0}
+							width={band.width}
+							height={40}
+							stroke="#555"
+							strokeWidth={1}
 						/>
+						{i % 5 === 0 ? (
+							<text
+								textAnchor="middle"
+								alignmentBaseline="middle"
+								fill={'yellow'}
+								fontSize={18}
+								fontWeight={500}
+								x={band.centroid}
+								y={20}
+							>
+								{i.toString()}
+							</text>
+						) : null}
 					</g>
 				);
 			})}
-
-			{/* update labels  */}
-			{xAxisSpec.labels.map((it, i) => {
-				const labelMappedValue = getLabelMappedValue(xAxisSpec, it.id);
-				return (
-					<g key={i}>
-						<text
-							textAnchor="middle"
-							alignmentBaseline="hanging"
-							fill={linesColor}
-							stroke={linesColor}
-							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							fontSize={16}
-							x={labelMappedValue}
-							y={24}
-						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
-
-			{/* horizontal line */}
-			<g>
-				<line
-					x1={xAxisSpec.scale(xAxisSpec.scale.domain()[0])}
-					x2={xAxisSpec.scale(xAxisSpec.scale.domain()[1])}
-					y1={0}
-					y2={0}
-					stroke={linesColor}
-					// TODO strokeWidth as variable
-					strokeWidth={4}
-				/>
-			</g>
 		</svg>
 	);
 };
