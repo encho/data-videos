@@ -10,11 +10,7 @@ import {useChartLayout} from './useChartLayout';
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
 	new Date(2022, 0, 1)
-	// new Date(2030, 0, 1)
-	// new Date(2023, 0, 1)
 );
-
-const dates = timeSeries.map((it) => it.date);
 
 export const AnimatedLineChartSchema = z.object({
 	backgroundColor: zColor(),
@@ -53,16 +49,6 @@ export const AnimatedLineChart: React.FC<
 		FIRST_TS_TRANSITION_IN_FRAMES -
 		SECOND_TS_TRANSITION_IN_FRAMES;
 
-	const visibleDomain = {
-		startDomain: dates[0] as Date,
-		endDomain: dates[0 + 10] as Date,
-	};
-
-	const visibleDomain2 = {
-		startDomain: dates[0] as Date,
-		endDomain: dates[0 + 80] as Date,
-	};
-
 	const indicesView_1 = [0, 10] as [number, number];
 	const indicesView_2 = [0, 80] as [number, number];
 	const indicesView_3 = [80, 160] as [number, number];
@@ -87,20 +73,12 @@ export const AnimatedLineChart: React.FC<
 				<h1 style={{color: textColor, fontSize: 300}}>Start</h1>
 			</Sequence>
 
-			{/* <Sequence from={TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES}>
-				<AbsoluteFill>
-					<h1 style={{color: 'blue', fontSize: 100}}>ScaleBand Test</h1>
-				</AbsoluteFill>
-			</Sequence> */}
-
 			<Sequence
 				from={FIRST_TS_START_FRAME}
 				durationInFrames={FIRST_TS_TRANSITION_IN_FRAMES}
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
-					fromVisibleDomain={visibleDomain}
-					toVisibleDomain={visibleDomain2}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
 					layoutAreas={{
@@ -116,8 +94,6 @@ export const AnimatedLineChart: React.FC<
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
-					fromVisibleDomain={visibleDomain2}
-					toVisibleDomain={visibleDomain}
 					fromVisibleDomainIndices={indicesView_2}
 					toVisibleDomainIndices={indicesView_3}
 					layoutAreas={{
@@ -133,8 +109,6 @@ export const AnimatedLineChart: React.FC<
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
-					fromVisibleDomain={visibleDomain}
-					toVisibleDomain={visibleDomain}
 					fromVisibleDomainIndices={indicesView_3}
 					toVisibleDomainIndices={indicesView_4}
 					layoutAreas={{

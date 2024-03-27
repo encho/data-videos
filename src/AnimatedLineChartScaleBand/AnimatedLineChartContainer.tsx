@@ -3,21 +3,16 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
-	Sequence,
 	interpolate,
+	Sequence,
 } from 'remotion';
 import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {line} from 'd3-shape';
 
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {
-	createTimeScaleBand,
-	TTimeBandScale,
-	periodsScale,
-	TPeriodsScale,
-} from './periodsScale';
-import {line} from 'd3-shape';
+import {periodsScale} from './periodsScale';
 
 export const AnimatedLineChartContainer: React.FC<{
 	timeSeries: TimeSeries;
@@ -28,19 +23,9 @@ export const AnimatedLineChartContainer: React.FC<{
 	};
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
-	fromVisibleDomain: {
-		startDomain: Date;
-		endDomain: Date;
-	};
-	toVisibleDomain: {
-		startDomain: Date;
-		endDomain: Date;
-	};
 }> = ({
 	layoutAreas,
 	timeSeries,
-	fromVisibleDomain,
-	toVisibleDomain,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
 }) => {
@@ -52,49 +37,7 @@ export const AnimatedLineChartContainer: React.FC<{
 
 	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
 
-	const data = timeSeries;
 	const dates = timeSeries.map((it) => it.date);
-
-	const from_endIndex = dates.findIndex(
-		(date) => date.getTime() === fromVisibleDomain.endDomain.getTime()
-	);
-
-	const to_endIndex = dates.findIndex(
-		(date) => date.getTime() === toVisibleDomain.endDomain.getTime()
-	);
-
-	const currentFloatIndex =
-		from_endIndex * (1 - animationPercentage) +
-		to_endIndex * animationPercentage;
-
-	const nearIndices =
-		currentFloatIndex === from_endIndex || currentFloatIndex === to_endIndex
-			? [currentFloatIndex, currentFloatIndex]
-			: [Math.floor(currentFloatIndex), Math.ceil(currentFloatIndex)];
-
-	// const toVisibleIndices = {
-	// 	start: ,
-	// 	end:,
-	// }
-
-	const dotLeftTsItem = timeSeries[nearIndices[0]];
-	const dotRightTsItem = timeSeries[nearIndices[1]];
-
-	const area = layoutAreas.plot;
-
-	const visibleRange = {startRange: 0, endRange: layoutAreas.xAxis.width};
-
-	const fromPeriodsScale = periodsScale({
-		dates,
-		visibleDomainIndices: fromVisibleDomainIndices,
-		visibleRange: [0, layoutAreas.xAxis.width],
-	});
-
-	const toPeriodsScale = periodsScale({
-		dates,
-		visibleDomainIndices: toVisibleDomainIndices,
-		visibleRange: [0, layoutAreas.xAxis.width],
-	});
 
 	const animatedVisibleDomainIndexStart = interpolate(
 		animationPercentage,
@@ -129,61 +72,9 @@ export const AnimatedLineChartContainer: React.FC<{
 		visibleRange: [0, layoutAreas.xAxis.width],
 	});
 
-	// TODO deprecate
-	const from_timeBandsScale = createTimeScaleBand({
-		domain: dates,
-		visibleRange,
-		visibleDomain: fromVisibleDomain,
-	});
-
-	// TODO deprecate
-	const to_timeBandsScale = createTimeScaleBand({
-		domain: dates,
-		visibleRange,
-		visibleDomain: toVisibleDomain,
-	});
-
-	// TODO introduce easing here
-	const combineTimeBandScales = (
-		fromTimeBandScale: TTimeBandScale,
-		toTimeBandScale: TTimeBandScale,
-		percFrom: number
-	) => {
-		// TODO ensure that domains are the same!
-		// const domain = fromTimeBandScale.domain;
-
-		const getBand = (date: Date) => {
-			const from_x1 = fromTimeBandScale.getBand(date).x1;
-			const to_x1 = toTimeBandScale.getBand(date).x1;
-			const x1 = from_x1 + (to_x1 - from_x1) * (1 - percFrom);
-
-			const from_x2 = fromTimeBandScale.getBand(date).x2;
-			const to_x2 = toTimeBandScale.getBand(date).x2;
-			const x2 = from_x2 + (to_x2 - from_x2) * (1 - percFrom);
-
-			const from_width = fromTimeBandScale.getBand(date).width;
-			const to_width = toTimeBandScale.getBand(date).width;
-			const width = from_width + (to_width - from_width) * (1 - percFrom);
-
-			return {
-				x1,
-				x2,
-				width,
-				centroid: x1 + width / 2,
-			};
-		};
-
-		// TODO return eventually other fields?
-		return {getBand};
-	};
-
 	const yDomainMin = min(timeSeries.map((it) => it.value));
 	const yDomainMax = max(timeSeries.map((it) => it.value));
 
-	// const yDomainZero = [layoutAreas.plot.height, 0];
-
-	// const showZero = SHOW_ZERO;
-	// const yDomain = showZero ? yDomainZero : yDomainBounded;
 	const yDomain = [yDomainMin, yDomainMax] as [number, number];
 
 	const yScale: ScaleLinear<number, number> = scaleLinear()
@@ -191,33 +82,35 @@ export const AnimatedLineChartContainer: React.FC<{
 		// .domain(yDomainZero)
 		.range([0, layoutAreas.plot.height]);
 
-	const currentTimeBandScale = combineTimeBandScales(
-		from_timeBandsScale,
-		to_timeBandsScale,
-		1 - animationPercentage
-	);
-
-	const allMappedXYs = timeSeries.map((tsItem) => {
-		const band = currentTimeBandScale.getBand(tsItem.date);
-		const cx = band.centroid;
-		const cy = yScale(tsItem.value);
-		return [cx, cy] as [number, number];
-	});
-
-	// const allMappedXYs = [[], allMappedXYs]
-
-	const d = line()(allMappedXYs) as string;
-
 	const allMappedXYs_new = timeSeries.map((tsItem, i) => {
 		const band = currentTimeBandsScale.getBandFromIndex(i);
 		const cx = band.centroid;
-		const cy = yScale(tsItem.value);
+		const cy: number = yScale(tsItem.value);
 		return [cx, cy] as [number, number];
 	});
 
-	// const allMappedXYs = [[], allMappedXYs]
-
 	const d_new = line()(allMappedXYs_new) as string;
+
+	// determine current Dot location
+	const leftEndIndex = Math.floor(animatedVisibleDomainIndexEnd);
+	const rightEndIndex = Math.ceil(animatedVisibleDomainIndexEnd);
+	const percRight = animatedVisibleDomainIndexEnd - leftEndIndex;
+
+	const leftValue = timeSeries[leftEndIndex].value;
+	const rightValue = timeSeries[rightEndIndex].value;
+
+	const currentDotValue = leftValue * (1 - percRight) + rightValue * percRight;
+	const currentDot_circle_cy = yScale(currentDotValue);
+
+	// TODO implement
+	// currentTimeBandsScale.scale(float)
+	const currentDot_circle_cx_left =
+		currentTimeBandsScale.getBandFromIndex(leftEndIndex).x1;
+	const currentDot_circle_cx_right =
+		currentTimeBandsScale.getBandFromIndex(rightEndIndex).x1;
+	const currentDot_circle_cx =
+		currentDot_circle_cx_left * (1 - percRight) +
+		currentDot_circle_cx_right * percRight;
 
 	return (
 		<AbsoluteFill>
@@ -232,53 +125,36 @@ export const AnimatedLineChartContainer: React.FC<{
 					width={layoutAreas.plot.width}
 					height={layoutAreas.plot.height}
 					style={{
-						// backgroundColor: 'black',
 						overflow: 'visible',
 					}}
 				>
-					{/* dots */}
-					{/* {timeSeries.map((timeSeriesItem) => {
-						const band = currentTimeBandScale.getBand(timeSeriesItem.date);
-						const cx = band.centroid;
-						const cy = yScale(timeSeriesItem.value);
-						return (
-							<g>
-								<circle cx={cx} cy={cy} r={5} fill="cyan" />
-							</g>
-						);
-					})} */}
+					<clipPath id="plotAreaClipPath">
+						<rect
+							x={0}
+							y={0}
+							width={layoutAreas.plot.width}
+							height={layoutAreas.plot.height}
+						/>
+					</clipPath>
 
-					{/* <path
-						d={d}
-						stroke="yellow"
-						strokeWidth={2}
-						fill="none"
-					/> */}
+					<g clipPath="url(#plotAreaClipPath)">
+						<path d={d_new} stroke="blue" strokeWidth={5} fill="none" />
+						{/* dots */}
+						{timeSeries.map((timeSeriesItem) => {
+							const band = currentTimeBandsScale.getBandFromDate(
+								timeSeriesItem.date
+							);
+							const cx = band.centroid;
+							const cy = yScale(timeSeriesItem.value);
+							return (
+								<g>
+									<circle cx={cx} cy={cy} r={3} fill="lightblue" />
+								</g>
+							);
+						})}
+					</g>
 
-					<path
-						d={d_new}
-						stroke="blue"
-						strokeWidth={5}
-						// fill="rgba(255,0,0,0.5)"
-						fill="none"
-					/>
-
-					{/* dots */}
-					{timeSeries.map((timeSeriesItem) => {
-						const band = currentTimeBandsScale.getBandFromDate(
-							timeSeriesItem.date
-						);
-						const cx = band.centroid;
-						const cy = yScale(timeSeriesItem.value);
-						// const cy = 50;
-						return (
-							<g>
-								<circle cx={cx} cy={cy} r={5} fill="orange" />
-							</g>
-						);
-					})}
-
-					{[dotLeftTsItem, dotRightTsItem].map((timeSeriesItem) => {
+					{/* {[dotLeftTsItem, dotRightTsItem].map((timeSeriesItem) => {
 						const band = currentTimeBandScale.getBand(timeSeriesItem.date);
 						const cx = band.centroid;
 						const cy = yScale(timeSeriesItem.value);
@@ -288,7 +164,15 @@ export const AnimatedLineChartContainer: React.FC<{
 								<circle cx={cx} cy={cy} r={7} fill="red" />
 							</g>
 						);
-					})}
+					})} */}
+					<g>
+						<circle
+							cx={currentDot_circle_cx}
+							cy={currentDot_circle_cy}
+							r={8}
+							fill="red"
+						/>
+					</g>
 				</svg>
 			</div>
 
@@ -307,18 +191,29 @@ export const AnimatedLineChartContainer: React.FC<{
 						backgroundColor: 'black',
 					}}
 				>
+					<defs>
+						<clipPath id="xAxisAreaClipPath">
+							<rect
+								x={0}
+								y={0}
+								width={layoutAreas.xAxis.width}
+								height={layoutAreas.xAxis.height}
+							/>
+						</clipPath>
+					</defs>
+
 					{dates.map((date, i) => {
 						// const band = currentTimeBandScale.getBand(date);
 						const band = currentTimeBandsScale.getBandFromDate(date);
 						return (
-							<g>
+							<g clipPath="url(#xAxisAreaClipPath)">
 								<rect
 									x={band.x1}
 									y={0}
 									width={band.width}
 									height={40}
 									stroke="#555"
-									strokeWidth={2}
+									strokeWidth={1}
 								/>
 								{i % 5 === 0 ? (
 									<text
@@ -342,14 +237,19 @@ export const AnimatedLineChartContainer: React.FC<{
 			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
 					<div>
-						<h1 style={{color: 'gray', fontSize: 40}}>{from_endIndex}</h1>
-					</div>
-					<div>
-						<h1 style={{color: 'gray', fontSize: 40}}>{to_endIndex}</h1>
+						<h1 style={{color: 'gray', fontSize: 40}}>
+							{fromVisibleDomainIndices.toString()}
+						</h1>
 					</div>
 					<div>
 						<h1 style={{color: 'gray', fontSize: 40}}>
-							nearIndices: {nearIndices[0]} - {nearIndices[1]}
+							{toVisibleDomainIndices.toString()}
+						</h1>
+					</div>
+					<div>
+						<h1 style={{color: 'gray', fontSize: 40}}>
+							current visible indices: {animatedVisibleDomainIndexStart} -{' '}
+							{animatedVisibleDomainIndexEnd}
 						</h1>
 					</div>
 				</AbsoluteFill>
