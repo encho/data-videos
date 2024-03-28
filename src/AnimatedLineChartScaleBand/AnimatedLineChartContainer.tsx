@@ -152,8 +152,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				<AnimatedYAxis
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
-					// axisSpecType={axisSpecType}
-					linesColor={'orange'}
+					linesColor={textColor}
 				/>
 			</div>
 
