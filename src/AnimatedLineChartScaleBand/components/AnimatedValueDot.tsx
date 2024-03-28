@@ -136,6 +136,16 @@ export const AnimatedValueDot: React.FC<{
 				STATUS: {JSON.stringify(STATUS)}
 			</text>
 
+			{STATUS === 'SPOT_ON_CENTROID' ? (
+				<DotCircleSpotOnCentroid
+					area={area}
+					dotColor={dotColor}
+					periodsScale={periodsScale}
+					yScale={yScale}
+					timeSeries={timeSeries}
+				/>
+			) : null}
+
 			{STATUS === 'AFTER_CENTROID' ? (
 				<DotCircleAfterCentroid
 					area={area}
@@ -165,6 +175,38 @@ export const AnimatedValueDot: React.FC<{
 				/>
 			</g> */}
 		</svg>
+	);
+};
+
+export const DotCircleSpotOnCentroid: React.FC<{
+	area: TGridLayoutArea;
+	dotColor: string;
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	const spotOnPeriodIndex = Math.ceil(visibleDomainIndexEnd);
+
+	const spotOnCentroid =
+		periodsScale.getBandFromIndex(spotOnPeriodIndex).centroid;
+
+	// const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
+
+	// const percentNextCentroid = decimalPart - 0.5;
+	// const percentCurrentCentroid = 1 - percentNextCentroid;
+	const cx = spotOnCentroid;
+	const value = timeSeries[spotOnPeriodIndex].value;
+
+	const cy = yScale(value);
+
+	return (
+		<g>
+			{/* <rect x={cx} y={area.height} width={100} height={30} fill="cyan" /> */}
+			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+		</g>
 	);
 };
 
