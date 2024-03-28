@@ -175,9 +175,37 @@ export const DotCircleAfterCentroid: React.FC<{
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
 }> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	// TODO rename to lastFullPeriodIndex  and becomingPeriodIndex or so
+	const leftIndex = Math.ceil(visibleDomainIndexEnd);
+	const rightIndex = leftIndex + 1;
+
+	const currentVisibleCentroid =
+		periodsScale.getBandFromIndex(leftIndex).centroid;
+	const nextVisibleCentroid =
+		periodsScale.getBandFromIndex(rightIndex).centroid;
+
+	const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
+
+	const percentNextCentroid = decimalPart - 0.5;
+	const percentCurrentCentroid = 1 - percentNextCentroid;
+
+	const cx =
+		currentVisibleCentroid * percentCurrentCentroid +
+		nextVisibleCentroid * percentNextCentroid;
+
+	const leftValue = timeSeries[leftIndex].value;
+	const rightValue = timeSeries[rightIndex].value;
+
+	const cy = yScale(
+		leftValue * percentCurrentCentroid + rightValue * percentNextCentroid
+	);
+
 	return (
 		<g>
-			<rect x={100} y={area.height} width={100} height={30} fill="red" />
+			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 		</g>
 	);
 };
