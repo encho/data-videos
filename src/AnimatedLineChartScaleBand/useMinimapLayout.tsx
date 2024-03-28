@@ -1,21 +1,15 @@
 import {TGridLayoutAreaSpec, TGridRailSpec, useGridLayout} from '../acetti-viz';
 
 const chartRowsRailSpec: TGridRailSpec = [
-	{type: 'pixel', value: 60, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
-	{type: 'pixel', value: 20, name: 'space'},
-	{type: 'pixel', value: 100, name: 'xAxis'},
-	{type: 'pixel', value: 50, name: 'space'},
-	{type: 'pixel', value: 100, name: 'minimapPlot'},
-	{type: 'pixel', value: 30, name: 'space'},
+	{type: 'pixel', value: 10, name: 'space'},
+	{type: 'pixel', value: 20, name: 'xAxis'},
 ];
 
 const chartColsRailSpec: TGridRailSpec = [
-	{type: 'pixel', value: 100, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
-	{type: 'pixel', value: 40, name: 'space'},
-	{type: 'pixel', value: 100, name: 'yAxis'},
-	{type: 'pixel', value: 50, name: 'space'},
+	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: 20, name: 'yAxis'},
 ];
 
 const chartGridLayoutSpec = {
@@ -43,16 +37,10 @@ const chartGridLayoutSpec = {
 			{name: 'plot'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
-		minimapPlot: [
-			{name: 'minimapPlot'},
-			{name: 'plot'},
-			{name: 'minimapPlot'},
-			{name: 'plot'},
-		] as TGridLayoutAreaSpec,
 	},
 };
 
-export function useChartLayout({
+export function useMinimapLayout({
 	width,
 	height,
 }: {

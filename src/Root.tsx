@@ -56,7 +56,7 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={ScaleBandLineChartSchema}
 				defaultProps={{
-					backgroundColor: '#1d1b1b',
+					backgroundColor: '#230101',
 					textColor: '#e62da2',
 					axisSpecType: 'STANDARD' as const,
 				}}

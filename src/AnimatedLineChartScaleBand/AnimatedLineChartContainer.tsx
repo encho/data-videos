@@ -8,7 +8,6 @@ import {
 } from 'remotion';
 import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import {line} from 'd3-shape';
 
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -108,6 +107,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					yScale={yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
+					// displayDots={true}
 				/>
 			</div>
 

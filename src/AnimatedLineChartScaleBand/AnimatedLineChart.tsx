@@ -6,6 +6,7 @@ import {DisplayGridLayout} from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
+import {MinimapContainer} from './MinimapContainer';
 
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
@@ -85,11 +86,22 @@ export const AnimatedLineChart: React.FC<
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
+					// TODO the layout should be within the chartcontainer
+					// only pass width and height!!
 					layoutAreas={{
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
 					}}
+					lineColor={textColor}
+					textColor={textColor}
+				/>
+
+				<MinimapContainer
+					area={chartLayout.areas.minimapPlot}
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={indicesView_1}
+					toVisibleDomainIndices={indicesView_2}
 					lineColor={textColor}
 					textColor={textColor}
 				/>
@@ -110,6 +122,14 @@ export const AnimatedLineChart: React.FC<
 					lineColor={textColor}
 					textColor={textColor}
 				/>
+				<MinimapContainer
+					area={chartLayout.areas.minimapPlot}
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={indicesView_2}
+					toVisibleDomainIndices={indicesView_3}
+					lineColor={textColor}
+					textColor={textColor}
+				/>
 			</Sequence>
 			<Sequence
 				from={THIRD_TS_START_FRAME}
@@ -124,6 +144,14 @@ export const AnimatedLineChart: React.FC<
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
 					}}
+					lineColor={textColor}
+					textColor={textColor}
+				/>
+				<MinimapContainer
+					area={chartLayout.areas.minimapPlot}
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={indicesView_3}
+					toVisibleDomainIndices={indicesView_4}
 					lineColor={textColor}
 					textColor={textColor}
 				/>
