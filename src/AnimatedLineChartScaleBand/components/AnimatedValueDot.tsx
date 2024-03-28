@@ -146,6 +146,16 @@ export const AnimatedValueDot: React.FC<{
 				/>
 			) : null}
 
+			{STATUS === 'FULL_PERIOD_END' ? (
+				<DotCircleFullPeriodEnd
+					area={area}
+					dotColor={dotColor}
+					periodsScale={periodsScale}
+					yScale={yScale}
+					timeSeries={timeSeries}
+				/>
+			) : null}
+
 			{STATUS === 'AFTER_CENTROID' ? (
 				<DotCircleAfterCentroid
 					area={area}
@@ -205,6 +215,33 @@ export const DotCircleSpotOnCentroid: React.FC<{
 	return (
 		<g>
 			{/* <rect x={cx} y={area.height} width={100} height={30} fill="cyan" /> */}
+			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+		</g>
+	);
+};
+
+export const DotCircleFullPeriodEnd: React.FC<{
+	area: TGridLayoutArea;
+	dotColor: string;
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	const leftIndex = Math.floor(visibleDomainIndexEnd);
+	const rightIndex = leftIndex + 1;
+
+	const cx = periodsScale.getBandFromIndex(leftIndex).x2;
+
+	const leftValue = timeSeries[leftIndex].value;
+	const rightValue = timeSeries[rightIndex].value;
+
+	const cy = yScale(leftValue * 0.5 + rightValue * 0.5);
+
+	return (
+		<g>
 			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 		</g>
 	);
