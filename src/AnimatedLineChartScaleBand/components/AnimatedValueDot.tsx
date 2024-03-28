@@ -1,5 +1,4 @@
 import {ScaleLinear} from 'd3-scale';
-import invariant from 'tiny-invariant';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
@@ -51,19 +50,6 @@ export const AnimatedValueDot: React.FC<{
 
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
-	// const isFullPeriodEnd =
-	// 	Math.floor(visibleDomainIndexEnd) === visibleDomainIndexEnd;
-
-	// determine current Dot location
-	// const leftEndIndex = isFullPeriodEnd
-	// 	? visibleDomainIndexEnd
-	// 	: Math.floor(visibleDomainIndexEnd) + 1;
-	// const rightEndIndex = isFullPeriodEnd
-	// 	? visibleDomainIndexEnd
-	// 	: Math.ceil(visibleDomainIndexEnd) + 1;
-
-	// const isLastPeriod = leftEndIndex === timeSeries.length - 1;
-
 	let STATUS;
 	// (special) case 1: in last index
 	if (isLastPeriodVisible(visibleDomainIndexEnd, timeSeries)) {
@@ -80,61 +66,11 @@ export const AnimatedValueDot: React.FC<{
 		STATUS = 'AFTER_CENTROID';
 	}
 
-	// invariant(STATUS);
-
-	// const domainIndexEndDecimalPart =
-	// 	visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
-
-	// const percLeft =
-	// 	leftEndIndex === rightEndIndex ? 0.5 : 1 - domainIndexEndDecimalPart + 0.5;
-	// const percRight = 1 - percLeft;
-
-	// console.log({leftEndIndex, rightEndIndex, isLastPeriod});
-
-	// const leftValue = timeSeries[leftEndIndex].value;
-	// const rightValue = timeSeries[rightEndIndex].value;
-
-	// const currentDotValue = leftValue * (1 - percRight) + rightValue * percRight;
-	// const currentDot_circle_cy = yScale(currentDotValue);
-
-	// let currentDot_circle_cx;
-
-	// if (isFullPeriodEnd) {
-	// 	const band = periodsScale.getBandFromIndex(leftEndIndex);
-	// 	currentDot_circle_cx = band.x2;
-	// } else {
-	// 	const currentDot_circle_cx_left =
-	// 		periodsScale.getBandFromIndex(leftEndIndex).centroid;
-	// 	const currentDot_circle_cx_right =
-	// 		periodsScale.getBandFromIndex(rightEndIndex).centroid;
-	// 	currentDot_circle_cx =
-	// 		currentDot_circle_cx_left * (1 - percRight) +
-	// 		currentDot_circle_cx_right * percRight;
-	// }
-
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
-			{/* <text x={50} y={50} fill="yellow" fontSize={20}>
-				left: {leftEndIndex}
-			</text>
-			<text x={50} y={80} fill="yellow" fontSize={20}>
-				right: {rightEndIndex}
-			</text> */}
-			{/* <text x={50} y={110} fill="yellow" fontSize={20}>
-				percLeft: {percLeft}
-			</text>
-			<text x={50} y={140} fill="yellow" fontSize={20}>
-				percRight: {percRight}
-			</text> */}
-			{/* <text x={50} y={170} fill="yellow" fontSize={20}>
-				domainIndexEndDecimalPart: {domainIndexEndDecimalPart}
-			</text> */}
-			{/* <text x={50} y={200} fill="yellow" fontSize={20}>
-				isLastPeriod: {JSON.stringify(isLastPeriod)}
-			</text> */}
-			<text x={50} y={230} fill="yellow" fontSize={20}>
+			{/* <text x={50} y={230} fill="yellow" fontSize={20}>
 				STATUS: {JSON.stringify(STATUS)}
-			</text>
+			</text> */}
 
 			{STATUS === 'IN_LAST_PERIOD' ? (
 				<DotCircleInLastPeriod
@@ -185,15 +121,6 @@ export const AnimatedValueDot: React.FC<{
 					timeSeries={timeSeries}
 				/>
 			) : null}
-
-			{/* <g>
-				<circle
-					cx={currentDot_circle_cx}
-					cy={currentDot_circle_cy}
-					r={10}
-					fill={dotColor}
-				/>
-			</g> */}
 		</svg>
 	);
 };
@@ -331,10 +258,7 @@ export const DotCircleBeforeCentroid: React.FC<{
 
 	return (
 		<g>
-			<rect x={cx} y={area.height} width={100} height={30} fill="green" />
-			<g>
-				<circle cx={cx} cy={cy} r={10} fill={dotColor} />
-			</g>
+			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 		</g>
 	);
 };
@@ -359,14 +283,6 @@ export const DotCircleInLastPeriod: React.FC<{
 		const cy = yScale(value);
 		return (
 			<g>
-				<rect
-					x={100}
-					y={area.height - 100}
-					width={100}
-					height={100}
-					fill="green"
-				/>
-
 				<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 			</g>
 		);

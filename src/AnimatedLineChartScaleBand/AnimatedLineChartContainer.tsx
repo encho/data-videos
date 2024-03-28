@@ -122,7 +122,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
-					dotColor="green"
+					dotColor={textColor}
 					area={layoutAreas.plot}
 				/>
 			</div>

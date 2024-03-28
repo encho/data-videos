@@ -11,7 +11,15 @@ export const AnimatedLine: React.FC<{
 	timeSeries: TimeSeries;
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-}> = ({lineColor, area, timeSeries, periodsScale, yScale}) => {
+	displayDots?: boolean;
+}> = ({
+	lineColor,
+	area,
+	timeSeries,
+	periodsScale,
+	yScale,
+	displayDots = false,
+}) => {
 	const linePath = line<{date: Date; value: number}>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
@@ -37,16 +45,19 @@ export const AnimatedLine: React.FC<{
 			<g clipPath="url(#plotAreaClipPath)">
 				<path d={d} stroke={lineColor} strokeWidth={5} fill="none" />
 				{/* dots */}
-				{timeSeries.map((timeSeriesItem) => {
-					const band = periodsScale.getBandFromDate(timeSeriesItem.date);
-					const cx = band.centroid;
-					const cy = yScale(timeSeriesItem.value);
-					return (
-						<g>
-							<circle cx={cx} cy={cy} r={5} fill="darkorange" />
-						</g>
-					);
-				})}
+
+				{displayDots
+					? timeSeries.map((timeSeriesItem) => {
+							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
+							const cx = band.centroid;
+							const cy = yScale(timeSeriesItem.value);
+							return (
+								<g>
+									<circle cx={cx} cy={cy} r={5} fill="darkorange" />
+								</g>
+							);
+					  })
+					: null}
 			</g>
 		</svg>
 	);
