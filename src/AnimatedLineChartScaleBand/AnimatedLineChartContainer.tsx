@@ -19,6 +19,8 @@ import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
 
 export const AnimatedLineChartContainer: React.FC<{
+	lineColor: string;
+	textColor: string;
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
@@ -28,6 +30,8 @@ export const AnimatedLineChartContainer: React.FC<{
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
 }> = ({
+	lineColor,
+	textColor,
 	layoutAreas,
 	timeSeries,
 	fromVisibleDomainIndices,
@@ -35,6 +39,8 @@ export const AnimatedLineChartContainer: React.FC<{
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
+
+	console.log({timeSeries});
 
 	// TODO adapt everywhere else, this is right
 	const animationPercentage = (frame + 1) / durationInFrames;
@@ -84,7 +90,8 @@ export const AnimatedLineChartContainer: React.FC<{
 	const yScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomain)
 		// .domain(yDomainZero)
-		.range([0, layoutAreas.plot.height]);
+		// .range([0, layoutAreas.plot.height]);
+		.range([layoutAreas.plot.height, 0]);
 
 	return (
 		<AbsoluteFill>
@@ -96,7 +103,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				}}
 			>
 				<AnimatedLine
-					lineColor={'yellow'}
+					lineColor={lineColor}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
@@ -131,7 +138,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					dates={dates}
 					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}
-					linesColor="magenta"
+					linesColor={textColor}
 				/>
 			</div>
 

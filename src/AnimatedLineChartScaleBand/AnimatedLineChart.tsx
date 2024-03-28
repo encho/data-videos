@@ -86,6 +86,8 @@ export const AnimatedLineChart: React.FC<
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
 					}}
+					lineColor={textColor}
+					textColor={textColor}
 				/>
 			</Sequence>
 			<Sequence
@@ -101,6 +103,8 @@ export const AnimatedLineChart: React.FC<
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
 					}}
+					lineColor={textColor}
+					textColor={textColor}
 				/>
 			</Sequence>
 			<Sequence
@@ -116,6 +120,8 @@ export const AnimatedLineChart: React.FC<
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
 					}}
+					lineColor={textColor}
+					textColor={textColor}
 				/>
 			</Sequence>
 		</AbsoluteFill>

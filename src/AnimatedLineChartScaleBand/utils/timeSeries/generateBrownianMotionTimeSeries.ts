@@ -8,7 +8,7 @@ function generateBrownianMotionTimeSeries(
 	startDate: Date,
 	endDate: Date
 ): TimeSeries {
-	const DRIFT = 0.002;
+	const DRIFT = 0.008;
 
 	// Calculate the number of days between start and end dates
 	const days = Math.floor(

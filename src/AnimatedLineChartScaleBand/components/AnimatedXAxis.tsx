@@ -17,7 +17,6 @@ export const AnimatedXAxis: React.FC<{
 			height={area.height}
 			style={{
 				overflow: 'visible',
-				backgroundColor: 'black',
 			}}
 		>
 			<defs>
@@ -35,15 +34,15 @@ export const AnimatedXAxis: React.FC<{
 							y={0}
 							width={band.width}
 							height={40}
-							stroke="#555"
+							stroke={linesColor}
 							strokeWidth={1}
-							fill={i % 5 === 0 ? 'darkblue' : 'transparent'}
+							fill={i % 5 === 0 ? linesColor : 'transparent'}
 						/>
 						{i % 5 === 0 ? (
 							<text
 								textAnchor="middle"
 								alignmentBaseline="middle"
-								fill={'yellow'}
+								fill={'black'}
 								fontSize={18}
 								fontWeight={500}
 								x={band.centroid}
