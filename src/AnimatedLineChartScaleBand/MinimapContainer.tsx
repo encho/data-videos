@@ -4,6 +4,7 @@ import {DisplayGridLayout} from '../acetti-viz';
 import {useMinimapLayout} from './useMinimapLayout';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
+import {Position} from './components/Position';
 // import {periodsScale} from './periodsScale';
 // import {AnimatedXAxis} from './components/AnimatedXAxis';
 // import {AnimatedYAxis} from './components/AnimatedYAxis';
@@ -19,12 +20,12 @@ export const MinimapContainer: React.FC<{
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
 }> = ({
-	lineColor,
+	// lineColor,
 	textColor,
 	area,
-	timeSeries,
-	fromVisibleDomainIndices,
-	toVisibleDomainIndices,
+	// timeSeries,
+	// fromVisibleDomainIndices,
+	// toVisibleDomainIndices,
 }) => {
 	const frame = useCurrentFrame();
 	// const {durationInFrames} = useVideoConfig();
@@ -34,17 +35,9 @@ export const MinimapContainer: React.FC<{
 		height: area.height,
 	});
 
-	// const plotArea = minimapLayout.areas.plot;
-
 	return (
 		<AbsoluteFill>
-			<div
-				style={{
-					position: 'absolute',
-					top: area.y1,
-					left: area.x1,
-				}}
-			>
+			<Position position={{left: area.x1, top: area.y1}}>
 				<DisplayGridLayout
 					stroke={textColor}
 					fill="transparent"
@@ -53,7 +46,7 @@ export const MinimapContainer: React.FC<{
 					width={area.width}
 					height={area.height}
 				/>
-			</div>
+			</Position>
 		</AbsoluteFill>
 	);
 };

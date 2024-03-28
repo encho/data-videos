@@ -9,6 +9,7 @@ import {
 import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale} from './periodsScale';
@@ -94,12 +95,8 @@ export const AnimatedLineChartContainer: React.FC<{
 
 	return (
 		<AbsoluteFill>
-			<div
-				style={{
-					position: 'absolute',
-					top: layoutAreas.plot.y1,
-					left: layoutAreas.plot.x1,
-				}}
+			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
 					lineColor={lineColor}
@@ -109,14 +106,10 @@ export const AnimatedLineChartContainer: React.FC<{
 					timeSeries={timeSeries}
 					// displayDots={true}
 				/>
-			</div>
+			</Position>
 
-			<div
-				style={{
-					position: 'absolute',
-					top: layoutAreas.plot.y1,
-					left: layoutAreas.plot.x1,
-				}}
+			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedValueDot
 					periodsScale={currentPeriodsScale}
@@ -125,14 +118,10 @@ export const AnimatedLineChartContainer: React.FC<{
 					dotColor={textColor}
 					area={layoutAreas.plot}
 				/>
-			</div>
+			</Position>
 
-			<div
-				style={{
-					position: 'absolute',
-					top: layoutAreas.xAxis.y1,
-					left: layoutAreas.xAxis.x1,
-				}}
+			<Position
+				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<AnimatedXAxis
 					dates={dates}
@@ -140,21 +129,17 @@ export const AnimatedLineChartContainer: React.FC<{
 					area={layoutAreas.xAxis}
 					linesColor={textColor}
 				/>
-			</div>
+			</Position>
 
-			<div
-				style={{
-					position: 'absolute',
-					top: layoutAreas.yAxis.y1,
-					left: layoutAreas.yAxis.x1,
-				}}
+			<Position
+				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<AnimatedYAxis
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					linesColor={textColor}
 				/>
-			</div>
+			</Position>
 
 			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
