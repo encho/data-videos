@@ -136,6 +136,16 @@ export const AnimatedValueDot: React.FC<{
 				STATUS: {JSON.stringify(STATUS)}
 			</text>
 
+			{STATUS === 'IN_LAST_PERIOD' ? (
+				<DotCircleInLastPeriod
+					area={area}
+					dotColor={dotColor}
+					periodsScale={periodsScale}
+					yScale={yScale}
+					timeSeries={timeSeries}
+				/>
+			) : null}
+
 			{STATUS === 'SPOT_ON_CENTROID' ? (
 				<DotCircleSpotOnCentroid
 					area={area}
@@ -203,10 +213,6 @@ export const DotCircleSpotOnCentroid: React.FC<{
 	const spotOnCentroid =
 		periodsScale.getBandFromIndex(spotOnPeriodIndex).centroid;
 
-	// const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
-
-	// const percentNextCentroid = decimalPart - 0.5;
-	// const percentCurrentCentroid = 1 - percentNextCentroid;
 	const cx = spotOnCentroid;
 	const value = timeSeries[spotOnPeriodIndex].value;
 
@@ -214,7 +220,6 @@ export const DotCircleSpotOnCentroid: React.FC<{
 
 	return (
 		<g>
-			{/* <rect x={cx} y={area.height} width={100} height={30} fill="cyan" /> */}
 			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 		</g>
 	);
@@ -331,5 +336,49 @@ export const DotCircleBeforeCentroid: React.FC<{
 				<circle cx={cx} cy={cy} r={10} fill={dotColor} />
 			</g>
 		</g>
+	);
+};
+
+export const DotCircleInLastPeriod: React.FC<{
+	area: TGridLayoutArea;
+	dotColor: string;
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
+	const isCentroidThere = decimalPart >= 0.5;
+
+	if (isCentroidThere) {
+		const lastIndex = Math.ceil(visibleDomainIndexEnd);
+		const cx = periodsScale.getBandFromIndex(lastIndex).centroid;
+		const value = timeSeries[lastIndex].value;
+		const cy = yScale(value);
+		return (
+			<g>
+				<rect
+					x={100}
+					y={area.height - 100}
+					width={100}
+					height={100}
+					fill="green"
+				/>
+
+				<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+			</g>
+		);
+	}
+
+	return (
+		<DotCircleBeforeCentroid
+			area={area}
+			dotColor={dotColor}
+			periodsScale={periodsScale}
+			yScale={yScale}
+			timeSeries={timeSeries}
+		/>
 	);
 };
