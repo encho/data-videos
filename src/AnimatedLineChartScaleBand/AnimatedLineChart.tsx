@@ -50,13 +50,20 @@ export const AnimatedLineChart: React.FC<
 		FIRST_TS_TRANSITION_IN_FRAMES -
 		SECOND_TS_TRANSITION_IN_FRAMES;
 
-	const indicesView_1 = [0, 4] as [number, number];
-	const indicesView_2 = [0, 10] as [number, number];
+	const indicesView_1 = [0, 10] as [number, number];
+	const indicesView_2 = [50, Math.floor(timeSeries.length / 2)] as [
+		number,
+		number
+	];
 	// const indicesView_2 = [timeSeries.length - 3, timeSeries.length - 1] as [
 	// 	number,
 	// 	number
 	// ];
-	const indicesView_3 = [10, 20] as [number, number];
+	const indicesView_3 = [50 + 100, Math.floor(timeSeries.length / 2) + 100] as [
+		number,
+		number
+	];
+	// const indicesView_3 = [10, 20] as [number, number];
 	const indicesView_4 = [0, timeSeries.length - 1] as [number, number];
 
 	return (

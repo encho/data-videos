@@ -10,6 +10,7 @@ export type TPeriodsScale = {
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
 	getVisibleDomainIndices: () => [number, number];
+	mapFloatIndex: (i: number) => number;
 };
 
 export const periodsScale = ({
@@ -64,9 +65,22 @@ export const periodsScale = ({
 		return getBandFromDate(date);
 	};
 
+	const mapFloatIndex = (index: number) => {
+		const decimalPart = index - Math.floor(index);
+
+		const leftIndex = Math.floor(index);
+		const rightIndex = Math.ceil(index);
+
+		const leftValue = getBandFromIndex(leftIndex).x1;
+		const rightValue = getBandFromIndex(rightIndex).x1;
+
+		return leftValue * (1 - decimalPart) + rightValue * decimalPart;
+	};
+
 	return {
 		getBandFromDate,
 		getBandFromIndex,
 		getVisibleDomainIndices: () => visibleDomainIndices,
+		mapFloatIndex,
 	};
 };

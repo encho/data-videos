@@ -143,21 +143,34 @@ export const AnimatedLineChartContainer: React.FC<{
 
 			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
-					<div>
-						<h1 style={{color: 'gray', fontSize: 20}}>
-							{fromVisibleDomainIndices.toString()}
-						</h1>
-					</div>
-					<div>
-						<h1 style={{color: 'gray', fontSize: 20}}>
-							{toVisibleDomainIndices.toString()}
-						</h1>
-					</div>
-					<div>
-						<h1 style={{color: 'gray', fontSize: 20}}>
-							current visible indices: {animatedVisibleDomainIndexStart} -{' '}
-							{animatedVisibleDomainIndexEnd}
-						</h1>
+					<div
+						style={{
+							backgroundColor: '#000',
+							opacity: 0.5,
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 10,
+							margin: 10,
+							borderRadius: 5,
+							padding: 10,
+						}}
+					>
+						<div>
+							<h1 style={{color: 'gray', fontSize: 20}}>
+								{fromVisibleDomainIndices.toString()}
+							</h1>
+						</div>
+						<div>
+							<h1 style={{color: 'gray', fontSize: 20}}>
+								{toVisibleDomainIndices.toString()}
+							</h1>
+						</div>
+						<div>
+							<h1 style={{color: 'gray', fontSize: 20}}>
+								current visible indices: {animatedVisibleDomainIndexStart} -{' '}
+								{animatedVisibleDomainIndexEnd}
+							</h1>
+						</div>
 					</div>
 				</AbsoluteFill>
 			</Sequence>
