@@ -17,6 +17,7 @@ import {AnimatedXAxis} from './components/AnimatedXAxis';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
+import {AnimatedBars} from './components/AnimatedBars';
 
 export const AnimatedLineChartContainer: React.FC<{
 	lineColor: string;
@@ -92,6 +93,10 @@ export const AnimatedLineChartContainer: React.FC<{
 		// .range([0, layoutAreas.plot.height]);
 		.range([layoutAreas.plot.height, 0]);
 
+	const yScaleSubPlot: ScaleLinear<number, number> = scaleLinear()
+		.domain(yDomain)
+		.range([layoutAreas.subPlot.height, 0]);
+
 	return (
 		<AbsoluteFill>
 			<Position
@@ -137,6 +142,19 @@ export const AnimatedLineChartContainer: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					linesColor={textColor}
+				/>
+			</Position>
+
+			<Position
+				position={{left: layoutAreas.subPlot.x1, top: layoutAreas.subPlot.y1}}
+			>
+				<AnimatedBars
+					barsColor={lineColor}
+					periodsScale={currentPeriodsScale}
+					yScale={yScaleSubPlot}
+					area={layoutAreas.subPlot}
+					timeSeries={timeSeries}
+					// displayDots={true}
 				/>
 			</Position>
 
