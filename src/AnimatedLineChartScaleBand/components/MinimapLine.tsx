@@ -11,15 +11,7 @@ export const MinimapLine: React.FC<{
 	timeSeries: TimeSeries;
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	// displayDots?: boolean;
-}> = ({
-	lineColor,
-	area,
-	timeSeries,
-	periodsScale,
-	yScale,
-	// displayDots = false,
-}) => {
+}> = ({lineColor, area, timeSeries, periodsScale, yScale}) => {
 	const linePath = line<{date: Date; value: number}>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
@@ -34,31 +26,14 @@ export const MinimapLine: React.FC<{
 				</clipPath>
 			</defs>
 
-			<path
-				d={d}
-				stroke={lineColor}
-				strokeWidth={1}
-				fill="transparent"
-				opacity={0.3}
-			/>
-
 			<g clipPath="url(#plotAreaClipPath)">
-				{/* <path d={d} stroke={lineColor} strokeWidth={5} fill="none" /> */}
-				<path d={d} stroke={'#fff'} strokeWidth={2} fill="none" opacity={0.3} />
-				{/* dots */}
-
-				{/* {displayDots
-					? timeSeries.map((timeSeriesItem) => {
-							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
-							const cx = band.centroid;
-							const cy = yScale(timeSeriesItem.value);
-							return (
-								<g>
-									<circle cx={cx} cy={cy} r={5} fill="darkorange" />
-								</g>
-							);
-					  })
-					: null} */}
+				<path
+					d={d}
+					stroke={lineColor}
+					strokeWidth={2}
+					fill="none"
+					opacity={1}
+				/>
 			</g>
 		</svg>
 	);
