@@ -179,7 +179,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				  })
 				: null}
 
-			<Sequence from={0} durationInFrames={durationInFrames}>
+			{/* <Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
 					<div
 						style={{
@@ -211,7 +211,7 @@ export const AnimatedLineChartContainer: React.FC<{
 						</div>
 					</div>
 				</AbsoluteFill>
-			</Sequence>
+			</Sequence> */}
 		</AbsoluteFill>
 	);
 };

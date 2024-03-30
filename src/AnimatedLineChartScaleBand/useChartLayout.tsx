@@ -6,7 +6,7 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 10, name: 'space'},
 	{type: 'pixel', value: 80, name: 'subPlot'},
 	{type: 'pixel', value: 20, name: 'space'},
-	{type: 'pixel', value: 50, name: 'xAxis'},
+	{type: 'pixel', value: 100, name: 'xAxis'},
 	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'pixel', value: 70, name: 'minimapPlot'},
 	{type: 'pixel', value: 30, name: 'space'},
