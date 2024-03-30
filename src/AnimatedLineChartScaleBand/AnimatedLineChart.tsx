@@ -7,6 +7,8 @@ import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownia
 import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
 import {MinimapContainer} from './MinimapContainer';
+import {HighlightPeriods} from './components/HighlightPeriods';
+import {Position} from './components/Position';
 
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
@@ -157,7 +159,34 @@ export const AnimatedLineChart: React.FC<
 					}}
 					lineColor={textColor}
 					textColor={textColor}
-				/>
+				>
+					{({
+						periodsScale,
+						currentFrame,
+						durationInFrames,
+						// TODO add more global info to the sequence, and "build" the line chart here!
+						// ==> more flexibility/extensibility
+						// e.g. yScale,...
+					}) => {
+						return (
+							<Position
+								position={{
+									left: chartLayout.areas.plot.x1,
+									top: chartLayout.areas.plot.y1,
+								}}
+							>
+								<HighlightPeriods
+									area={chartLayout.areas.plot}
+									domainIndices={indicesView_3}
+									periodsScale={periodsScale}
+									currentFrame={currentFrame}
+									durationInFrames={durationInFrames}
+									fadeInDurationInFrames={50}
+								/>
+							</Position>
+						);
+					}}
+				</AnimatedLineChartContainer>
 				<MinimapContainer
 					area={chartLayout.areas.minimapPlot}
 					timeSeries={timeSeries}
@@ -166,6 +195,12 @@ export const AnimatedLineChart: React.FC<
 					lineColor={textColor}
 					textColor={textColor}
 				/>
+
+				{/* TODO pass periodsScale from here already! */}
+				{/* <HighlightPeriods
+					area={chartLayout.areas.plot}
+					domainIndices={indicesView_2}
+				/> */}
 			</Sequence>
 		</AbsoluteFill>
 	);

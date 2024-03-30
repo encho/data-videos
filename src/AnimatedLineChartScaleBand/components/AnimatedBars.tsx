@@ -1,5 +1,4 @@
 import {ScaleLinear} from 'd3-scale';
-import {line} from 'd3-shape';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';

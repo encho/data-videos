@@ -1,3 +1,4 @@
+import {ReactNode} from 'react';
 import {
 	AbsoluteFill,
 	useCurrentFrame,
@@ -12,14 +13,25 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale} from './periodsScale';
+import {periodsScale, TPeriodsScale} from './periodsScale';
 import {AnimatedXAxis} from './components/AnimatedXAxis';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
 
+type ChildrenFunction = ({
+	periodsScale,
+	currentFrame,
+	durationInFrames,
+}: {
+	periodsScale: TPeriodsScale;
+	currentFrame: number;
+	durationInFrames: number;
+}) => ReactNode;
+
 export const AnimatedLineChartContainer: React.FC<{
+	children?: ChildrenFunction;
 	lineColor: string;
 	textColor: string;
 	timeSeries: TimeSeries;
@@ -32,6 +44,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
 }> = ({
+	children,
 	lineColor,
 	textColor,
 	layoutAreas,
@@ -157,6 +170,14 @@ export const AnimatedLineChartContainer: React.FC<{
 					// displayDots={true}
 				/>
 			</Position>
+
+			{children
+				? children({
+						periodsScale: currentPeriodsScale,
+						currentFrame: frame,
+						durationInFrames,
+				  })
+				: null}
 
 			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
