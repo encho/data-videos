@@ -71,8 +71,8 @@ export const AnimatedLineChart: React.FC<
 			<DisplayGridLayout
 				stroke={textColor}
 				fill="transparent"
-				hide={true}
-				// hide={false}
+				// hide={true}
+				hide={false}
 				areas={chartLayout.areas}
 				width={width}
 				height={height}
@@ -99,6 +99,7 @@ export const AnimatedLineChart: React.FC<
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
+						subPlot: chartLayout.areas.subPlot,
 					}}
 					lineColor={textColor}
 					textColor={textColor}
@@ -125,6 +126,7 @@ export const AnimatedLineChart: React.FC<
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
+						subPlot: chartLayout.areas.subPlot,
 					}}
 					lineColor={textColor}
 					textColor={textColor}
@@ -150,6 +152,7 @@ export const AnimatedLineChart: React.FC<
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
+						subPlot: chartLayout.areas.subPlot,
 					}}
 					lineColor={textColor}
 					textColor={textColor}

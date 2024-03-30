@@ -26,6 +26,7 @@ export const AnimatedLineChartContainer: React.FC<{
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
+		subPlot: TGridLayoutArea;
 	};
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
@@ -39,8 +40,6 @@ export const AnimatedLineChartContainer: React.FC<{
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
-
-	console.log({timeSeries});
 
 	// TODO adapt everywhere else, this is right
 	const animationPercentage = (frame + 1) / durationInFrames;
