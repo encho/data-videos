@@ -1,5 +1,4 @@
 import {ScaleLinear} from 'd3-scale';
-import {line} from 'd3-shape';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
@@ -11,8 +10,8 @@ export const MinimapActiveArea: React.FC<{
 	yScale: ScaleLinear<number, number>;
 	activeDomainIndices: [number, number];
 }> = ({lineColor, area, periodsScale, activeDomainIndices}) => {
-	const x1 = periodsScale.mapFloatIndex(activeDomainIndices[0]);
-	const x2 = periodsScale.mapFloatIndex(activeDomainIndices[1]);
+	const x1 = periodsScale.mapFloatIndexToRange(activeDomainIndices[0]);
+	const x2 = periodsScale.mapFloatIndexToRange(activeDomainIndices[1]);
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>

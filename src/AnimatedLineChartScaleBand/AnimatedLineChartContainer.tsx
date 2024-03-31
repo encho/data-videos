@@ -5,7 +5,7 @@ import {
 	useVideoConfig,
 	Easing,
 	interpolate,
-	Sequence,
+	// Sequence,
 } from 'remotion';
 import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
@@ -19,7 +19,52 @@ import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
-import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
+// import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
+
+type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+
+const getYDomain = (
+	yDomainType: TYDomainType,
+	timeSeries: {date: Date; value: number}[],
+	visibleDomainIndices: [number, number]
+) => {
+	if (yDomainType === 'FULL') {
+		const yDomainMin = min(timeSeries.map((it) => it.value));
+		const yDomainMax = max(timeSeries.map((it) => it.value));
+		return [yDomainMin, yDomainMax] as [number, number];
+	} else if (yDomainType === 'ZERO_FULL') {
+		const yDomainMax = max(timeSeries.map((it) => it.value));
+		return [0, yDomainMax] as [number, number];
+	} else if (yDomainType === 'VISIBLE') {
+		const currentDomainIndices_Integers = [
+			Math.floor(visibleDomainIndices[0]),
+			Math.ceil(visibleDomainIndices[1]),
+		];
+
+		const visibleTimeSeriesSlice = timeSeries.slice(
+			currentDomainIndices_Integers[0],
+			currentDomainIndices_Integers[1] + 1
+		);
+
+		// the visible domain
+		const yDomainMin = min(visibleTimeSeriesSlice.map((it) => it.value));
+		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
+		return [yDomainMin, yDomainMax] as [number, number];
+	} else {
+		const currentDomainIndices_Integers = [
+			Math.floor(visibleDomainIndices[0]),
+			Math.ceil(visibleDomainIndices[1]),
+		];
+
+		const visibleTimeSeriesSlice = timeSeries.slice(
+			currentDomainIndices_Integers[0],
+			currentDomainIndices_Integers[1] + 1
+		);
+
+		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
+		return [0, yDomainMax] as [number, number];
+	}
+};
 
 type ChildrenFunction = ({
 	periodsScale,
@@ -44,6 +89,8 @@ export const AnimatedLineChartContainer: React.FC<{
 	};
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
+	yDomainType: TYDomainType;
+	yLabelsFontSize: number;
 }> = ({
 	children,
 	lineColor,
@@ -52,6 +99,8 @@ export const AnimatedLineChartContainer: React.FC<{
 	timeSeries,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
+	yDomainType,
+	yLabelsFontSize,
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
@@ -96,15 +145,15 @@ export const AnimatedLineChartContainer: React.FC<{
 		visibleRange: [0, layoutAreas.xAxis.width],
 	});
 
-	const yDomainMin = min(timeSeries.map((it) => it.value));
-	const yDomainMax = max(timeSeries.map((it) => it.value));
-
-	const yDomain = [yDomainMin, yDomainMax] as [number, number];
+	const yDomain = getYDomain(yDomainType, timeSeries, [
+		animatedVisibleDomainIndexStart,
+		animatedVisibleDomainIndexEnd,
+	] as [number, number]);
 
 	const yScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomain)
+		// TODO domain zero to be added via yDomainType
 		// .domain(yDomainZero)
-		// .range([0, layoutAreas.plot.height]);
 		.range([layoutAreas.plot.height, 0]);
 
 	const yScaleSubPlot: ScaleLinear<number, number> = scaleLinear()
@@ -159,6 +208,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					linesColor={textColor}
+					fontSize={yLabelsFontSize}
 				/>
 			</Position>
 

@@ -15,6 +15,13 @@ const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2022, 0, 1)
 );
 
+// const Y_DOMAIN_TYPE = 'FULL';
+// const Y_DOMAIN_TYPE = 'ZERO_FULL';
+// const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
+const Y_DOMAIN_TYPE = 'VISIBLE';
+
+const Y_LABELS_FONTSIZE = 24;
+
 export const AnimatedLineChartSchema = z.object({
 	backgroundColor: zColor(),
 	textColor: zColor(),
@@ -106,6 +113,8 @@ export const AnimatedLineChart: React.FC<
 					}}
 					lineColor={textColor}
 					textColor={textColor}
+					yDomainType={Y_DOMAIN_TYPE}
+					yLabelsFontSize={Y_LABELS_FONTSIZE}
 				/>
 
 				<MinimapContainer
@@ -133,6 +142,8 @@ export const AnimatedLineChart: React.FC<
 					}}
 					lineColor={textColor}
 					textColor={textColor}
+					yDomainType={Y_DOMAIN_TYPE}
+					yLabelsFontSize={Y_LABELS_FONTSIZE}
 				/>
 				<MinimapContainer
 					area={chartLayout.areas.minimapPlot}
@@ -159,6 +170,8 @@ export const AnimatedLineChart: React.FC<
 					}}
 					lineColor={textColor}
 					textColor={textColor}
+					yDomainType={Y_DOMAIN_TYPE}
+					yLabelsFontSize={Y_LABELS_FONTSIZE}
 				>
 					{({
 						periodsScale,

@@ -1,26 +1,14 @@
-import {ScaleTime, ScaleLinear} from 'd3-scale';
+import {ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../../acetti-viz';
-import {getXAxisSpecFromScale} from '../../acetti-axis/getXAxisSpecFromScale';
-import {
-	getTickMappedValue,
-	getTickValue,
-	getLabelMappedValue,
-	getLabelValue,
-} from '../../acetti-axis/axisSpec';
 import {getYAxisSpecFromScale} from '../../acetti-axis/getYAxisSpecFromScale';
 
 export const AnimatedYAxis: React.FC<{
 	linesColor: string;
 	area: TGridLayoutArea;
 	yScaleCurrent: ScaleLinear<number, number>;
-	// axisSpecType: 'STANDARD' | 'INTER_MONTHS';
-}> = ({
-	linesColor,
-	area,
-	yScaleCurrent,
-	// axisSpecType
-}) => {
+	fontSize: number;
+}> = ({linesColor, area, yScaleCurrent, fontSize}) => {
 	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent);
 
 	return (
@@ -48,7 +36,6 @@ export const AnimatedYAxis: React.FC<{
 
 			{/* update ticks  */}
 			{yAxisSpec.ticks.map((it, i) => {
-				// const tickMappedValue = getTickMappedValue(xAxisSpec, it.id);
 				const tickMappedValue = yAxisSpec.scale(it.value);
 
 				return (
@@ -71,17 +58,11 @@ export const AnimatedYAxis: React.FC<{
 				return (
 					<g key={it.id}>
 						<text
-							// textAnchor={it.textAnchor || 'middle'}
 							textAnchor="end"
-							// TODO middle or center?
-							// alignmentBaseline="hanging"
 							alignmentBaseline="middle"
-							// fill={'red'}
-							// stroke={'red'}
 							fill={linesColor}
 							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							fontSize={30}
+							fontSize={fontSize}
 							y={labelMappedValue}
 							x={70}
 						>
@@ -90,19 +71,6 @@ export const AnimatedYAxis: React.FC<{
 					</g>
 				);
 			})}
-
-			{/* horizontal line */}
-			{/* <g>
-				<line
-					x1={xAxisSpec.scale(xAxisSpec.scale.domain()[0])}
-					x2={xAxisSpec.scale(xAxisSpec.scale.domain()[1])}
-					y1={0}
-					y2={0}
-					stroke={linesColor}
-					// TODO strokeWidth as variable
-					strokeWidth={4}
-				/>
-			</g> */}
 		</svg>
 	);
 };
