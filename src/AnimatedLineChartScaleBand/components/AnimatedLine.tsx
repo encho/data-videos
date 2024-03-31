@@ -43,7 +43,7 @@ export const AnimatedLine: React.FC<{
 			/> */}
 
 			<g clipPath="url(#plotAreaClipPath)">
-				<path d={d} stroke={lineColor} strokeWidth={5} fill="none" />
+				<path d={d} stroke={lineColor} strokeWidth={4} fill="none" />
 				{/* dots */}
 
 				{displayDots
@@ -53,7 +53,14 @@ export const AnimatedLine: React.FC<{
 							const cy = yScale(timeSeriesItem.value);
 							return (
 								<g>
-									<circle cx={cx} cy={cy} r={5} fill="darkorange" />
+									<circle
+										cx={cx}
+										cy={cy}
+										r={6}
+										fill="darkorange"
+										opacity={0.3}
+									/>
+									{/* <circle cx={cx} cy={cy} r={3} fill="darkorange" /> */}
 								</g>
 							);
 					  })

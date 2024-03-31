@@ -14,11 +14,12 @@ import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale, TPeriodsScale} from './periodsScale';
-import {AnimatedXAxis} from './components/AnimatedXAxis';
+import {AnimatedXAxis_MonthStarts} from './components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
+import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
 type ChildrenFunction = ({
 	periodsScale,
@@ -134,13 +135,16 @@ export const AnimatedLineChartContainer: React.FC<{
 					timeSeries={timeSeries}
 					dotColor={textColor}
 					area={layoutAreas.plot}
+					radius={10}
 				/>
 			</Position>
 
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
+				// position={{left: 0, top: 0}}
 			>
-				<AnimatedXAxis
+				{/* <AnimatedXAxis_PeriodsScale */}
+				<AnimatedXAxis_MonthStarts
 					dates={dates}
 					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}

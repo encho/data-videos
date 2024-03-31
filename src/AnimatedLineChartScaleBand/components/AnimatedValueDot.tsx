@@ -45,7 +45,8 @@ export const AnimatedValueDot: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius?: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius = 20}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
@@ -79,6 +80,7 @@ export const AnimatedValueDot: React.FC<{
 					periodsScale={periodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
+					radius={radius}
 				/>
 			) : null}
 
@@ -89,6 +91,7 @@ export const AnimatedValueDot: React.FC<{
 					periodsScale={periodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
+					radius={radius}
 				/>
 			) : null}
 
@@ -99,6 +102,7 @@ export const AnimatedValueDot: React.FC<{
 					periodsScale={periodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
+					radius={radius}
 				/>
 			) : null}
 
@@ -109,6 +113,7 @@ export const AnimatedValueDot: React.FC<{
 					periodsScale={periodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
+					radius={radius}
 				/>
 			) : null}
 
@@ -119,9 +124,24 @@ export const AnimatedValueDot: React.FC<{
 					periodsScale={periodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
+					radius={radius}
 				/>
 			) : null}
 		</svg>
+	);
+};
+
+export const Dot: React.FC<{
+	cx: number;
+	cy: number;
+	r: number;
+	fill: string;
+}> = ({cx, cy, r, fill}) => {
+	return (
+		<g>
+			<circle cx={cx} cy={cy} r={r * 2} fill={fill} opacity={0.25} />
+			<circle cx={cx} cy={cy} r={r} fill={fill} />
+		</g>
 	);
 };
 
@@ -131,7 +151,8 @@ export const DotCircleSpotOnCentroid: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
@@ -147,7 +168,7 @@ export const DotCircleSpotOnCentroid: React.FC<{
 
 	return (
 		<g>
-			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+			<Dot cx={cx} cy={cy} r={radius} fill={dotColor} />
 		</g>
 	);
 };
@@ -158,7 +179,8 @@ export const DotCircleFullPeriodEnd: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
@@ -174,7 +196,7 @@ export const DotCircleFullPeriodEnd: React.FC<{
 
 	return (
 		<g>
-			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+			<Dot cx={cx} cy={cy} r={radius} fill={dotColor} />
 		</g>
 	);
 };
@@ -185,7 +207,8 @@ export const DotCircleAfterCentroid: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
@@ -216,7 +239,7 @@ export const DotCircleAfterCentroid: React.FC<{
 
 	return (
 		<g>
-			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+			<Dot cx={cx} cy={cy} r={radius} fill={dotColor} />
 		</g>
 	);
 };
@@ -227,7 +250,8 @@ export const DotCircleBeforeCentroid: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
@@ -258,7 +282,7 @@ export const DotCircleBeforeCentroid: React.FC<{
 
 	return (
 		<g>
-			<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+			<Dot cx={cx} cy={cy} r={radius} fill={dotColor} />
 		</g>
 	);
 };
@@ -269,7 +293,8 @@ export const DotCircleInLastPeriod: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
-}> = ({dotColor, area, yScale, periodsScale, timeSeries}) => {
+	radius: number;
+}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
@@ -283,7 +308,7 @@ export const DotCircleInLastPeriod: React.FC<{
 		const cy = yScale(value);
 		return (
 			<g>
-				<circle cx={cx} cy={cy} r={10} fill={dotColor} />
+				<Dot cx={cx} cy={cy} r={radius} fill={dotColor} />
 			</g>
 		);
 	}
@@ -295,6 +320,7 @@ export const DotCircleInLastPeriod: React.FC<{
 			periodsScale={periodsScale}
 			yScale={yScale}
 			timeSeries={timeSeries}
+			radius={radius}
 		/>
 	);
 };
