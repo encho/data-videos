@@ -31,13 +31,46 @@ export const AnimatedLineChartSchema = z.object({
 export const AnimatedLineChart: React.FC<
 	z.infer<typeof AnimatedLineChartSchema>
 > = ({backgroundColor, textColor, axisSpecType}) => {
-	const {durationInFrames, height, width} = useVideoConfig();
+	const {height, width} = useVideoConfig();
+
+	const lineChartWidth = width;
+	const lineChartHeight = height * 0.9;
+
+	return (
+		<Position position={{left: 0, top: (height - lineChartHeight) / 2}}>
+			<AnimatedLineChart2
+				backgroundColor={backgroundColor}
+				textColor={textColor}
+				axisSpecType={axisSpecType}
+				width={lineChartWidth}
+				height={lineChartHeight}
+			/>
+		</Position>
+	);
+};
+
+type TAnimatedLineChart2Props = {width: number; height: number} & z.infer<
+	typeof AnimatedLineChartSchema
+>;
+
+export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
+	backgroundColor,
+	textColor,
+	axisSpecType,
+	width,
+	height,
+}) => {
+	const {
+		durationInFrames,
+		// height, width
+	} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
 
 	const chartLayout = useChartLayout({
 		width: CHART_WIDTH,
+		// height: CHART_HEIGHT,
 		height: CHART_HEIGHT,
 	});
 
