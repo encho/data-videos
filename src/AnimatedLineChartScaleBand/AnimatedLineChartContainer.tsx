@@ -7,7 +7,6 @@ import {
 	interpolate,
 	// Sequence,
 } from 'remotion';
-import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {Position} from './components/Position';
@@ -19,61 +18,21 @@ import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedValueDot} from './components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
+import {getYDomain} from './utils/timeSeries/timeSeries';
 // import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
-
-const getYDomain = (
-	yDomainType: TYDomainType,
-	timeSeries: {date: Date; value: number}[],
-	visibleDomainIndices: [number, number]
-) => {
-	if (yDomainType === 'FULL') {
-		const yDomainMin = min(timeSeries.map((it) => it.value));
-		const yDomainMax = max(timeSeries.map((it) => it.value));
-		return [yDomainMin, yDomainMax] as [number, number];
-	} else if (yDomainType === 'ZERO_FULL') {
-		const yDomainMax = max(timeSeries.map((it) => it.value));
-		return [0, yDomainMax] as [number, number];
-	} else if (yDomainType === 'VISIBLE') {
-		const currentDomainIndices_Integers = [
-			Math.floor(visibleDomainIndices[0]),
-			Math.ceil(visibleDomainIndices[1]),
-		];
-
-		const visibleTimeSeriesSlice = timeSeries.slice(
-			currentDomainIndices_Integers[0],
-			currentDomainIndices_Integers[1] + 1
-		);
-
-		// the visible domain
-		const yDomainMin = min(visibleTimeSeriesSlice.map((it) => it.value));
-		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
-		return [yDomainMin, yDomainMax] as [number, number];
-	} else {
-		const currentDomainIndices_Integers = [
-			Math.floor(visibleDomainIndices[0]),
-			Math.ceil(visibleDomainIndices[1]),
-		];
-
-		const visibleTimeSeriesSlice = timeSeries.slice(
-			currentDomainIndices_Integers[0],
-			currentDomainIndices_Integers[1] + 1
-		);
-
-		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
-		return [0, yDomainMax] as [number, number];
-	}
-};
 
 type ChildrenFunction = ({
 	periodsScale,
 	currentFrame,
 	durationInFrames,
+	yScale,
 }: {
 	periodsScale: TPeriodsScale;
 	currentFrame: number;
 	durationInFrames: number;
+	yScale: ScaleLinear<number, number>;
 }) => ReactNode;
 
 export const AnimatedLineChartContainer: React.FC<{
@@ -227,6 +186,7 @@ export const AnimatedLineChartContainer: React.FC<{
 
 			{children
 				? children({
+						yScale,
 						periodsScale: currentPeriodsScale,
 						currentFrame: frame,
 						durationInFrames,

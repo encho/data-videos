@@ -8,6 +8,7 @@ import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
 import {MinimapContainer} from './MinimapContainer';
 import {HighlightPeriods} from './components/HighlightPeriods';
+import {HighlightPeriods2} from './components/HighlightPeriods2';
 import {Position} from './components/Position';
 
 const timeSeries = generateBrownianMotionTimeSeries(
@@ -210,6 +211,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						periodsScale,
 						currentFrame,
 						durationInFrames,
+						yScale,
 						// TODO add more global info to the sequence, and "build" the line chart here!
 						// ==> more flexibility/extensibility
 						// e.g. yScale,...
@@ -221,13 +223,16 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 									top: chartLayout.areas.plot.y1,
 								}}
 							>
-								<HighlightPeriods
+								<HighlightPeriods2
+									label="Dot-Com Bubble"
+									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
 									domainIndices={indicesView_3}
 									periodsScale={periodsScale}
 									currentFrame={currentFrame}
 									durationInFrames={durationInFrames}
 									fadeInDurationInFrames={50}
+									yScaleCurrent={yScale}
 								/>
 							</Position>
 						);

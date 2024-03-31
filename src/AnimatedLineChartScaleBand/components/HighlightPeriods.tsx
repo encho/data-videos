@@ -12,7 +12,6 @@ import {
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
-import {AnimatedValueDot} from './AnimatedValueDot';
 
 function calculatePulsingFactor(
 	value: number,
