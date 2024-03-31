@@ -2,33 +2,11 @@
 // import {line} from 'd3-shape';
 
 import {ScaleLinear} from 'd3-scale';
-import {
-	AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	Easing,
-	interpolate,
-	Sequence,
-} from 'remotion';
+import {Easing, interpolate} from 'remotion';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 import {getYDomain} from '../utils/timeSeries/timeSeries';
-
-function calculatePulsingFactor(
-	value: number,
-	max: number,
-	frequency: number
-): number {
-	// Ensure value is within the range 0 to max
-	value = Math.max(0, Math.min(value, max));
-
-	// Calculate pulsing Factor using a sine function with frequency to create pulsating effect
-	const pulsingFactor =
-		Math.sin((value / max) * frequency * Math.PI) * 0.5 + 0.5;
-
-	return pulsingFactor;
-}
 
 export const HighlightPeriods2: React.FC<{
 	timeSeries: {date: Date; value: number}[];
@@ -89,35 +67,46 @@ export const HighlightPeriods2: React.FC<{
 	);
 
 	return (
-		<svg overflow="visible" width={area.width} height={area.height}>
-			<text
-				textAnchor="start"
-				alignmentBaseline="baseline"
-				fill={'cyan'}
-				// fontFamily={fontFamilyXTicklabels}
-				// fontSize={styling.xTickValuesFontSize}
-				fontSize={24}
-				y={animatedTextYPosition}
-				x={x1}
-				opacity={animatedOpacityRect}
-			>
-				{label}
-			</text>
+		<div style={{zIndex: 0}}>
+			<svg overflow="visible" width={area.width} height={area.height}>
+				<text
+					textAnchor="start"
+					alignmentBaseline="baseline"
+					fill={'cyan'}
+					// fontFamily={fontFamilyXTicklabels}
+					// fontSize={styling.xTickValuesFontSize}
+					fontSize={24}
+					y={animatedTextYPosition}
+					x={x1}
+					opacity={animatedOpacityRect}
+				>
+					{label}
+				</text>
 
-			<rect
-				rx={8}
-				ry={8}
-				x={x1}
-				y={y1}
-				width={width}
-				height={rectHeight}
-				fill="transparent"
-				stroke="cyan"
-				strokeWidth={5}
-				opacity={animatedOpacityRect}
+				<rect
+					rx={8}
+					ry={8}
+					x={x1}
+					y={y1}
+					width={width}
+					height={rectHeight}
+					fill="cyan"
+					opacity={animatedOpacityRect / 8}
+				/>
 
-				// opacity={animatedOpacityRect}
-			/>
-		</svg>
+				<rect
+					rx={8}
+					ry={8}
+					x={x1}
+					y={y1}
+					width={width}
+					height={rectHeight}
+					fill="transparent"
+					stroke="cyan"
+					strokeWidth={2}
+					opacity={animatedOpacityRect}
+				/>
+			</svg>
+		</div>
 	);
 };

@@ -3,10 +3,12 @@ import {AbsoluteFill} from 'remotion';
 
 export const Position = ({
 	position,
+	zIndex,
 	children,
 	size = {},
 	fill = 'transparent',
 }: {
+	zIndex?: number;
 	position: {
 		left?: number | string;
 		top?: number | string;
@@ -21,14 +23,10 @@ export const Position = ({
 		<AbsoluteFill>
 			<div
 				style={{
+					zIndex: zIndex || 'auto',
 					position: 'relative',
 					width: '100%',
 					height: '100%',
-					// transformStyle: 'inherit',
-					// backgroundColor: 'rgba(0,0,255,0.8)',
-					// backgroundColor: 'rgba(0,0,255,0.8)',
-					// backgroundColor: 'rgba(255,0,0,0.1)',
-					// border: '5px solid magenta',
 				}}
 			>
 				<div

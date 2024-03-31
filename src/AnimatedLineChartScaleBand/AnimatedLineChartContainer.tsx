@@ -122,6 +122,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	return (
 		<AbsoluteFill>
 			<Position
+				zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
@@ -130,7 +131,6 @@ export const AnimatedLineChartContainer: React.FC<{
 					yScale={yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-					// displayDots={true}
 				/>
 			</Position>
 

@@ -227,11 +227,12 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 									label="Dot-Com Bubble"
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
-									domainIndices={indicesView_3}
+									// domainIndices={indicesView_3}
+									domainIndices={[100, 150]}
 									periodsScale={periodsScale}
 									currentFrame={currentFrame}
 									durationInFrames={durationInFrames}
-									fadeInDurationInFrames={50}
+									fadeInDurationInFrames={100}
 									yScaleCurrent={yScale}
 								/>
 							</Position>
