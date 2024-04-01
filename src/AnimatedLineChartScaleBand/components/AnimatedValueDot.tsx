@@ -1,12 +1,5 @@
 import {ScaleLinear} from 'd3-scale';
-import {
-	AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	Easing,
-	interpolate,
-	// Sequence,
-} from 'remotion';
+import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
@@ -30,14 +23,14 @@ const isSpotOnCentroid = (visibleDomainIndexEnd: number) => {
 	return domainIndexEndDecimalPart === 0.5;
 };
 
-// TODO on periodsScale
+// TODO on periodsScale?
 const isFullPeriodEndFunction = (visibleDomainIndexEnd: number) => {
 	const domainIndexEndDecimalPart =
 		visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
 	return domainIndexEndDecimalPart === 0;
 };
 
-// TODO on periodsScale
+// TODO on periodsScale?
 const isLastPeriodVisible = (
 	visibleDomainIndexEnd: number,
 	timeSeries: {date: Date}[]
@@ -189,19 +182,13 @@ export const Dot: React.FC<{
 	return (
 		<g>
 			<circle
-				// opacity={pulsingFactor}
 				opacity={animatedOpacity}
 				cx={cx}
 				cy={cy}
-				// r={r * 2}
 				r={animatedBigRadius}
 				fill={fill}
-				// opacity={0.25}
 			/>
 			<circle cx={cx} cy={cy} r={r} fill={fill} />
-			{/* <text x={50} y={50} fill="green" fontSize={20}>
-				{pulsingFactor}
-			</text> */}
 		</g>
 	);
 };
