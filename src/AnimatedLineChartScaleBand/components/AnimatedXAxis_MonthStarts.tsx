@@ -50,9 +50,9 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 								x1={band.x1}
 								x2={band.x1}
 								y1={0}
-								y2={25}
+								y2={20}
 								stroke={linesColor}
-								strokeWidth={3}
+								strokeWidth={2}
 							/>
 							<text
 								textAnchor="left"
@@ -60,8 +60,8 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 								fill={linesColor}
 								fontSize={16}
 								fontWeight={500}
-								x={band.x1 + 12}
-								y={25}
+								x={band.x1 + 6}
+								y={20}
 							>
 								{getMonthName(date)}
 							</text>
