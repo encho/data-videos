@@ -1,4 +1,9 @@
-import {Sequence, useVideoConfig, AbsoluteFill} from 'remotion';
+import {
+	Sequence,
+	useVideoConfig,
+	AbsoluteFill,
+	useCurrentFrame,
+} from 'remotion';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
@@ -40,6 +45,7 @@ export const AnimatedLineChart: React.FC<
 	return (
 		<Position position={{left: 0, top: (height - lineChartHeight) / 2}}>
 			<AnimatedLineChart2
+				timeSeries={timeSeries}
 				backgroundColor={backgroundColor}
 				textColor={textColor}
 				axisSpecType={axisSpecType}
@@ -50,9 +56,11 @@ export const AnimatedLineChart: React.FC<
 	);
 };
 
-type TAnimatedLineChart2Props = {width: number; height: number} & z.infer<
-	typeof AnimatedLineChartSchema
->;
+type TAnimatedLineChart2Props = {
+	width: number;
+	height: number;
+	timeSeries: {value: number; date: Date}[];
+} & z.infer<typeof AnimatedLineChartSchema>;
 
 export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 	backgroundColor,
@@ -60,7 +68,9 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 	axisSpecType,
 	width,
 	height,
+	timeSeries,
 }) => {
+	const frame = useCurrentFrame();
 	const {
 		durationInFrames,
 		// height, width
@@ -254,7 +264,8 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
 									// domainIndices={indicesView_3}
-									domainIndices={[100, 150]}
+									// domainIndices={[90, 150]}
+									domainIndices={[50, 150]}
 									periodsScale={periodsScale}
 									currentFrame={currentFrame}
 									durationInFrames={durationInFrames}
