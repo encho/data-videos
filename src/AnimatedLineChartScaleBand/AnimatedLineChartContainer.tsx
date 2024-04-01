@@ -143,7 +143,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					timeSeries={timeSeries}
 					dotColor={textColor}
 					area={layoutAreas.plot}
-					radius={10}
+					radius={8}
 				/>
 			</Position>
 

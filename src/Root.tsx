@@ -52,7 +52,7 @@ export const RemotionRoot: React.FC = () => {
 				// durationInFrames={240}
 				durationInFrames={30 * 12}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={30}
+				fps={60}
 				{...squareVideo}
 				schema={ScaleBandLineChartSchema}
 				defaultProps={{

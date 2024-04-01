@@ -129,6 +129,32 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 				<h1 style={{color: textColor, fontSize: 300}}>Start</h1>
 			</Sequence>
 
+			{/* TODO: from here wrap into
+		
+		<SpecificTitleAnimations
+
+		
+		<SpecificTitlesAnimation transitions={[
+				{id: "entering", durationInFrames: 50, from: null, to: [0,10]},
+				{id: "expand-a-bit", durationInFrames: 50, from: [0,10], to: [0,20]},
+			]} 
+			area={titleArea}
+			/> 
+
+		<SpecificLineChartAnimation transitions={[
+				{id: "entering", durationInFrames: 50, from: null, to: [0,10]},
+				{id: "expand-a-bit", durationInFrames: 50, from: [0,10], to: [0,20]},
+			]}
+			area={lineChartArea}	
+			// TODO even more color/styling props
+			// e.g. theme={{xAxis: {ticksColor: blue,...}}}
+			lineColor={textColor}
+			textColor={textColor}
+			/> 
+	
+				in this component, we can execute the below code for example:
+			*/}
+
 			<Sequence
 				from={FIRST_TS_START_FRAME}
 				durationInFrames={FIRST_TS_TRANSITION_IN_FRAMES}

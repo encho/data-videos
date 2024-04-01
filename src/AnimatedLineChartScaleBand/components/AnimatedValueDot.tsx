@@ -1,4 +1,12 @@
 import {ScaleLinear} from 'd3-scale';
+import {
+	AbsoluteFill,
+	useCurrentFrame,
+	useVideoConfig,
+	Easing,
+	interpolate,
+	// Sequence,
+} from 'remotion';
 
 import {TPeriodsScale} from '../periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
@@ -131,16 +139,69 @@ export const AnimatedValueDot: React.FC<{
 	);
 };
 
+function calculatePulsingFactor(
+	value: number,
+	max: number,
+	frequency: number
+): number {
+	// Ensure value is within the range 0 to max
+	value = Math.max(0, Math.min(value, max));
+
+	// Calculate pulsing Factor using a sine function with frequency to create pulsating effect
+	const pulsingFactor =
+		Math.sin((value / max) * frequency * Math.PI) * 0.5 + 0.5;
+
+	return pulsingFactor;
+}
+
 export const Dot: React.FC<{
 	cx: number;
 	cy: number;
 	r: number;
 	fill: string;
 }> = ({cx, cy, r, fill}) => {
+	const frame = useCurrentFrame();
+	const {durationInFrames} = useVideoConfig();
+
+	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
+
+	const pulsingFactor = calculatePulsingFactor(frame, durationInFrames, 10);
+
+	const animatedOpacity = interpolate(pulsingFactor, [0, 1], [0.5, 0.1], {
+		easing: EASING_FUNCTION,
+		// in this case should not be necessary
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+	});
+
+	const animatedBigRadius = interpolate(
+		pulsingFactor,
+		[0, 1],
+		[r * 1.5, r * 3],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
 	return (
 		<g>
-			<circle cx={cx} cy={cy} r={r * 2} fill={fill} opacity={0.25} />
+			<circle
+				// opacity={pulsingFactor}
+				opacity={animatedOpacity}
+				cx={cx}
+				cy={cy}
+				// r={r * 2}
+				r={animatedBigRadius}
+				fill={fill}
+				// opacity={0.25}
+			/>
 			<circle cx={cx} cy={cy} r={r} fill={fill} />
+			{/* <text x={50} y={50} fill="green" fontSize={20}>
+				{pulsingFactor}
+			</text> */}
 		</g>
 	);
 };
