@@ -12,7 +12,7 @@ import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownia
 import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
 import {useChartLayout} from './useChartLayout';
 import {MinimapContainer} from './MinimapContainer';
-import {HighlightPeriods} from './components/HighlightPeriods';
+// import {HighlightPeriods} from './components/HighlightPeriods';
 import {HighlightPeriods2} from './components/HighlightPeriods2';
 import {Position} from './components/Position';
 
@@ -26,7 +26,25 @@ const timeSeries = generateBrownianMotionTimeSeries(
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
 const Y_DOMAIN_TYPE = 'VISIBLE';
 
-const Y_LABELS_FONTSIZE = 24;
+const Y_LABELS_FONTSIZE = 18;
+// const Y_LABELS_FORMATTER = (x: number) => `${x} hehe`;
+
+function Y_LABELS_FORMATTER(num: number): string {
+	return num.toLocaleString('en-US', {
+		minimumFractionDigits: 2,
+		maximumFractionDigits: 2,
+	});
+}
+
+const THEME = {
+	yAxis: {
+		fontSize: Y_LABELS_FONTSIZE,
+		formatter: Y_LABELS_FORMATTER,
+		strokeWidth: 3,
+		color: '#fff',
+		tickColor: '#fff',
+	},
+};
 
 export const AnimatedLineChartSchema = z.object({
 	backgroundColor: zColor(),
@@ -65,23 +83,17 @@ type TAnimatedLineChart2Props = {
 export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 	backgroundColor,
 	textColor,
-	axisSpecType,
 	width,
 	height,
 	timeSeries,
 }) => {
-	const frame = useCurrentFrame();
-	const {
-		durationInFrames,
-		// height, width
-	} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
 
 	const chartLayout = useChartLayout({
 		width: CHART_WIDTH,
-		// height: CHART_HEIGHT,
 		height: CHART_HEIGHT,
 	});
 
@@ -185,6 +197,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					textColor={textColor}
 					yDomainType={Y_DOMAIN_TYPE}
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
+					theme={THEME}
 				/>
 
 				<MinimapContainer
@@ -214,6 +227,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					textColor={textColor}
 					yDomainType={Y_DOMAIN_TYPE}
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
+					theme={THEME}
 				/>
 				<MinimapContainer
 					area={chartLayout.areas.minimapPlot}
@@ -242,6 +256,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					textColor={textColor}
 					yDomainType={Y_DOMAIN_TYPE}
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
+					theme={THEME}
 				>
 					{({
 						periodsScale,

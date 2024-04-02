@@ -1,14 +1,4 @@
-import {
-	// scaleLinear, scaleTime,
-	// ScaleTime,
-	ScaleLinear,
-} from 'd3-scale';
-// import {TGridLayoutArea} from '../acetti-viz';
-import {
-	// getXAxisSpecStandard,
-	getXAxisSpecStandardFromScale,
-} from './getXAxisSpecStandard';
-import {getXAxisSpecInterMonthsFromScale} from './getXAxisSpecInterMonths';
+import {ScaleLinear} from 'd3-scale';
 
 // ************************************************************
 // TODO possibly use this
@@ -58,7 +48,8 @@ export type TAxisSpec_Linear_Numeric = {
 // export type TAxisSpecType = 'STANDARD' | 'INTER_MONTHS';
 
 export function getYAxisSpecFromScale(
-	scale: ScaleLinear<number, number>
+	scale: ScaleLinear<number, number>,
+	formatter?: (x: number) => string
 	// type?: TAxisSpecType
 ) {
 	// FOR NOW WE HAVE ONLY STANDARD
@@ -81,7 +72,8 @@ export function getYAxisSpecFromScale(
 			id: 'id-' + num,
 			value: num,
 			type: 'DOMAIN_VALUE' as const,
-			label: num.toString(),
+			// label: num.toString(),
+			label: formatter ? formatter(num) : num.toString(),
 			textAnchor: 'middle' as const,
 		};
 	});

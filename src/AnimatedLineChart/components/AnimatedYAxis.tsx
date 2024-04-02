@@ -1,24 +1,19 @@
-import {ScaleTime, ScaleLinear} from 'd3-scale';
+import {ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../../acetti-viz';
-import {getXAxisSpecFromScale} from '../../acetti-axis/getXAxisSpecFromScale';
-import {
-	getTickMappedValue,
-	getTickValue,
-	getLabelMappedValue,
-	getLabelValue,
-} from '../../acetti-axis/axisSpec';
 import {getYAxisSpecFromScale} from '../../acetti-axis/getYAxisSpecFromScale';
 
 export const AnimatedYAxis: React.FC<{
 	linesColor: string;
 	area: TGridLayoutArea;
 	yScaleCurrent: ScaleLinear<number, number>;
+	fontSize?: number;
 	// axisSpecType: 'STANDARD' | 'INTER_MONTHS';
 }> = ({
 	linesColor,
 	area,
 	yScaleCurrent,
+	fontSize = 12,
 	// axisSpecType
 }) => {
 	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent);
@@ -81,7 +76,7 @@ export const AnimatedYAxis: React.FC<{
 							fill={linesColor}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
-							fontSize={30}
+							fontSize={fontSize}
 							y={labelMappedValue}
 							x={70}
 						>

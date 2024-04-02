@@ -8,32 +8,24 @@ export const AnimatedYAxis: React.FC<{
 	area: TGridLayoutArea;
 	yScaleCurrent: ScaleLinear<number, number>;
 	fontSize: number;
-}> = ({linesColor, area, yScaleCurrent, fontSize}) => {
-	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent);
+	formatter: (x: number) => string;
+	strokeWidth: number;
+	textColor: string;
+	tickColor: string;
+}> = ({
+	linesColor,
+	area,
+	yScaleCurrent,
+	fontSize,
+	formatter,
+	strokeWidth,
+	textColor,
+	tickColor,
+}) => {
+	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
 
 	return (
 		<svg overflow="visible">
-			<rect
-				x={0}
-				y={0}
-				width={area.width}
-				height={area.height}
-				fill="#f05122"
-				opacity={0}
-			/>
-
-			{/* zero line */}
-			<line
-				y1={yAxisSpec.scale(0)}
-				y2={yAxisSpec.scale(0)}
-				x1={0}
-				x2={50}
-				stroke={'gray'}
-				// TODO strokeWidth as variable
-				strokeWidth={12}
-				opacity={0.3}
-			/>
-
 			{/* update ticks  */}
 			{yAxisSpec.ticks.map((it, i) => {
 				const tickMappedValue = yAxisSpec.scale(it.value);
@@ -45,8 +37,8 @@ export const AnimatedYAxis: React.FC<{
 							x2={20}
 							y1={tickMappedValue}
 							y2={tickMappedValue}
-							stroke={linesColor}
-							strokeWidth={4}
+							stroke={tickColor}
+							strokeWidth={strokeWidth}
 						/>
 					</g>
 				);
@@ -60,11 +52,11 @@ export const AnimatedYAxis: React.FC<{
 						<text
 							textAnchor="end"
 							alignmentBaseline="middle"
-							fill={linesColor}
+							fill={textColor}
 							// fontFamily={fontFamilyXTicklabels}
 							fontSize={fontSize}
 							y={labelMappedValue}
-							x={70}
+							x={area.width}
 						>
 							{it.label}
 						</text>

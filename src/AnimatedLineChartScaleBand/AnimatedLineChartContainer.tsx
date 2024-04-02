@@ -50,6 +50,15 @@ export const AnimatedLineChartContainer: React.FC<{
 	toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
 	yLabelsFontSize: number;
+	theme: {
+		yAxis: {
+			fontSize: number;
+			formatter: (x: number) => string;
+			strokeWidth: number;
+			color: string;
+			tickColor: string;
+		};
+	};
 }> = ({
 	children,
 	lineColor,
@@ -60,6 +69,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	toVisibleDomainIndices,
 	yDomainType,
 	yLabelsFontSize,
+	theme,
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
@@ -168,6 +178,10 @@ export const AnimatedLineChartContainer: React.FC<{
 					yScaleCurrent={yScale}
 					linesColor={textColor}
 					fontSize={yLabelsFontSize}
+					formatter={theme.yAxis.formatter}
+					strokeWidth={theme.yAxis.strokeWidth}
+					textColor={theme.yAxis.color}
+					tickColor={theme.yAxis.tickColor}
 				/>
 			</Position>
 
