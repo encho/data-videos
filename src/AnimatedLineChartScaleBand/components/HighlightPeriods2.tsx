@@ -8,6 +8,20 @@ import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 import {getYDomain} from '../utils/timeSeries/timeSeries';
 
+export type TTheme_HighlightArea = {
+	backgroundColor: string;
+	backgroundOpacity: number;
+	borderColor: string;
+	textColor: string;
+};
+
+const defaultHightlightAreaTheme = {
+	backgroundColor: 'red',
+	backgroundOpacity: 0.5,
+	borderColor: 'yellow',
+	textColor: 'yellow',
+};
+
 export const HighlightPeriods2: React.FC<{
 	timeSeries: {date: Date; value: number}[];
 	area: TGridLayoutArea;
@@ -18,7 +32,9 @@ export const HighlightPeriods2: React.FC<{
 	fadeInDurationInFrames: number;
 	yScaleCurrent: ScaleLinear<number, number>;
 	label: string;
+	theme?: TTheme_HighlightArea;
 }> = ({
+	theme = defaultHightlightAreaTheme,
 	label,
 	timeSeries,
 	yScaleCurrent,
@@ -48,7 +64,7 @@ export const HighlightPeriods2: React.FC<{
 	const animatedOpacityRect = interpolate(
 		currentFrame,
 		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[0, 0, 1],
+		[0, 0, theme.backgroundOpacity],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -77,13 +93,12 @@ export const HighlightPeriods2: React.FC<{
 				<text
 					textAnchor="start"
 					alignmentBaseline="baseline"
-					fill={'cyan'}
+					fill={theme.textColor}
 					// fontFamily={fontFamilyXTicklabels}
 					// fontSize={styling.xTickValuesFontSize}
 					fontSize={24}
 					y={animatedTextYPosition}
 					x={x1}
-					opacity={animatedOpacityRect}
 				>
 					{label}
 				</text>
@@ -95,8 +110,8 @@ export const HighlightPeriods2: React.FC<{
 					y={y1}
 					width={width}
 					height={rectHeight}
-					fill="cyan"
-					opacity={animatedOpacityRect / 8}
+					fill={theme.backgroundColor}
+					opacity={animatedOpacityRect}
 				/>
 
 				<rect
@@ -107,9 +122,9 @@ export const HighlightPeriods2: React.FC<{
 					width={width}
 					height={rectHeight}
 					fill="transparent"
-					stroke="cyan"
+					stroke={theme.borderColor}
 					strokeWidth={2}
-					opacity={animatedOpacityRect}
+					// opacity={animatedOpacityRect}
 				/>
 			</svg>
 		</div>

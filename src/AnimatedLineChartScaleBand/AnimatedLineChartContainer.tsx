@@ -40,8 +40,6 @@ type ChildrenFunction = ({
 
 export const AnimatedLineChartContainer: React.FC<{
 	children?: ChildrenFunction;
-	lineColor: string;
-	textColor: string;
 	timeSeries: TimeSeries;
 	ohlcSeries: {
 		date: Date;
@@ -59,19 +57,15 @@ export const AnimatedLineChartContainer: React.FC<{
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
-	yLabelsFontSize: number;
 	theme: TTheme;
 }> = ({
 	children,
-	lineColor,
-	textColor,
 	layoutAreas,
 	timeSeries,
 	ohlcSeries,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
 	yDomainType,
-	yLabelsFontSize,
 	theme,
 }) => {
 	const frame = useCurrentFrame();
@@ -142,13 +136,13 @@ export const AnimatedLineChartContainer: React.FC<{
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
-				<AnimatedCandlesticks
+				{/* <AnimatedCandlesticks
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
 					ohlcSeries={ohlcSeries}
 					theme={theme.candlesticks}
-				/>
+				/> */}
 			</Position>
 
 			<Position
@@ -156,7 +150,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={lineColor}
+					lineColor={theme.dataColors[0].BASE}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
@@ -172,7 +166,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries}
-					dotColor={textColor}
+					dotColor={theme.dataColors[0].BASE}
 					area={layoutAreas.plot}
 					radius={8}
 					// TODO theme
@@ -181,7 +175,6 @@ export const AnimatedLineChartContainer: React.FC<{
 
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
-				// position={{left: 0, top: 0}}
 			>
 				{/* <AnimatedXAxis_PeriodsScale */}
 				<AnimatedXAxis_MonthStarts
@@ -206,12 +199,11 @@ export const AnimatedLineChartContainer: React.FC<{
 				position={{left: layoutAreas.subPlot.x1, top: layoutAreas.subPlot.y1}}
 			>
 				<AnimatedBars
-					barsColor={lineColor}
+					barsColor={theme.dataColors[1].BASE}
 					periodsScale={currentPeriodsScale}
 					yScale={yScaleSubPlot}
 					area={layoutAreas.subPlot}
 					timeSeries={timeSeries}
-					// displayDots={true}
 				/>
 			</Position>
 
@@ -224,6 +216,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				  })
 				: null}
 
+			{/* TODO this is a debugging tool for current periodsScale, factor out of here */}
 			{/* <Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
 					<div

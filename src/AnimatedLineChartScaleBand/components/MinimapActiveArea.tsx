@@ -4,12 +4,13 @@ import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 
 export const MinimapActiveArea: React.FC<{
-	lineColor: string;
+	areaColor: string;
+	areaOpacity: number;
 	area: TGridLayoutArea;
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	activeDomainIndices: [number, number];
-}> = ({lineColor, area, periodsScale, activeDomainIndices}) => {
+}> = ({areaColor, areaOpacity, area, periodsScale, activeDomainIndices}) => {
 	const x1 = periodsScale.mapFloatIndexToRange(activeDomainIndices[0]);
 	const x2 = periodsScale.mapFloatIndexToRange(activeDomainIndices[1]);
 
@@ -18,8 +19,8 @@ export const MinimapActiveArea: React.FC<{
 			<rect
 				x={x1}
 				width={x2 - x1}
-				fill={lineColor}
-				opacity={0.2}
+				fill={areaColor}
+				opacity={areaOpacity}
 				height={area.height}
 			/>
 		</svg>

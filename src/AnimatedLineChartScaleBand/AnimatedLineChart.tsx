@@ -80,10 +80,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_HEIGHT,
 	});
 
-	const TITLE_START_FRAME = 0;
-	const TITLE_DURATION_IN_FRAMES = 30;
-
-	const FIRST_TS_START_FRAME = TITLE_START_FRAME + TITLE_DURATION_IN_FRAMES;
+	const FIRST_TS_START_FRAME = 0;
 	const FIRST_TS_TRANSITION_IN_FRAMES = 3.5 * 30;
 
 	const SECOND_TS_START_FRAME =
@@ -94,7 +91,6 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 		SECOND_TS_START_FRAME + SECOND_TS_TRANSITION_IN_FRAMES;
 	const THIRD_TS_TRANSITION_IN_FRAMES =
 		durationInFrames -
-		TITLE_DURATION_IN_FRAMES -
 		FIRST_TS_TRANSITION_IN_FRAMES -
 		SECOND_TS_TRANSITION_IN_FRAMES;
 
@@ -120,17 +116,8 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 				height={height}
 			/>
 
-			<Sequence
-				from={TITLE_START_FRAME}
-				durationInFrames={TITLE_DURATION_IN_FRAMES}
-			>
-				<h1 style={{color: 'cyan', fontSize: 300}}>Start</h1>
-			</Sequence>
-
 			{/* TODO: from here wrap into
-		
 		<SpecificTitleAnimations
-
 		
 		<SpecificTitlesAnimation transitions={[
 				{id: "entering", durationInFrames: 50, from: null, to: [0,10]},
@@ -170,11 +157,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={'cyan'}
-					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
-					// TODO deprecate
-					yLabelsFontSize={Y_LABELS_FONTSIZE}
 					theme={theme}
 				/>
 
@@ -183,8 +166,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
-					lineColor={'cyan'}
-					textColor={'cyan'}
+					theme={theme.minimap}
 				/>
 			</Sequence>
 			<Sequence
@@ -202,10 +184,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={'cyan'}
-					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
-					yLabelsFontSize={Y_LABELS_FONTSIZE}
 					theme={theme}
 				/>
 				<MinimapContainer
@@ -213,8 +192,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_2}
 					toVisibleDomainIndices={indicesView_3}
-					lineColor={'cyan'}
-					textColor={'cyan'}
+					theme={theme.minimap}
 				/>
 			</Sequence>
 			<Sequence
@@ -232,10 +210,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={'cyan'}
-					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
-					yLabelsFontSize={Y_LABELS_FONTSIZE}
 					theme={theme}
 				>
 					{({
@@ -254,18 +229,21 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 									top: chartLayout.areas.plot.y1,
 								}}
 							>
+								{/* TODO rename to <HighlightArea></HighlightArea> */}
 								<HighlightPeriods2
 									label="Dot-Com Bubble"
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
 									// domainIndices={indicesView_3}
 									// domainIndices={[90, 150]}
-									domainIndices={[50, 150]}
+									// domainIndices={[50, 150]}
+									domainIndices={[50, 70]}
 									periodsScale={periodsScale}
 									currentFrame={currentFrame}
 									durationInFrames={durationInFrames}
 									fadeInDurationInFrames={100}
 									yScaleCurrent={yScale}
+									theme={theme.highlightArea}
 								/>
 							</Position>
 						);
@@ -276,15 +254,8 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_3}
 					toVisibleDomainIndices={indicesView_4}
-					lineColor={'cyan'}
-					textColor={'cyan'}
+					theme={theme.minimap}
 				/>
-
-				{/* TODO pass periodsScale from here already! */}
-				{/* <HighlightPeriods
-					area={chartLayout.areas.plot}
-					domainIndices={indicesView_2}
-				/> */}
 			</Sequence>
 		</AbsoluteFill>
 	);

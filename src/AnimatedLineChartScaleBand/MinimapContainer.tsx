@@ -23,21 +23,31 @@ import {MinimapActiveArea} from './components/MinimapActiveArea';
 // import {AnimatedLine} from './components/AnimatedLine';
 // import {AnimatedValueDot} from './components/AnimatedValueDot';
 
+export type TTheme_Minimap = {
+	lineColor: string;
+	areaColor: string;
+	areaOpacity: number;
+};
+
+const minimapDefaultTheme = {
+	lineColor: 'yellow',
+	areaColor: 'orange',
+	areaOpacity: 0.2,
+};
+
 // TODO: pass in EASING function, s.t. it is shared between minimap and line animation
 export const MinimapContainer: React.FC<{
-	lineColor: string;
-	textColor: string;
 	timeSeries: TimeSeries;
 	area: TGridLayoutArea;
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
+	theme?: TTheme_Minimap;
 }> = ({
-	// lineColor,
-	textColor,
 	area,
 	timeSeries,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
+	theme = minimapDefaultTheme,
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
@@ -107,7 +117,7 @@ export const MinimapContainer: React.FC<{
 		<AbsoluteFill>
 			<Position position={{left: area.x1, top: area.y1}}>
 				<DisplayGridLayout
-					stroke={textColor}
+					stroke={'cyan'}
 					fill="transparent"
 					hide={true}
 					areas={minimapLayout.areas}
@@ -120,7 +130,7 @@ export const MinimapContainer: React.FC<{
 						periodsScale={fullPeriodsScale}
 						yScale={yScale}
 						timeSeries={timeSeries}
-						lineColor={textColor}
+						lineColor={theme.lineColor}
 						area={plotArea}
 					/>
 				</Position>
@@ -129,7 +139,8 @@ export const MinimapContainer: React.FC<{
 						activeDomainIndices={activeDomainIndices}
 						periodsScale={fullPeriodsScale}
 						yScale={yScale}
-						lineColor={textColor}
+						areaColor={theme.areaColor}
+						areaOpacity={theme.areaOpacity}
 						area={plotArea}
 					/>
 				</Position>
