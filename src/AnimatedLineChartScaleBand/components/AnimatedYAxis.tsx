@@ -3,26 +3,20 @@ import {ScaleLinear} from 'd3-scale';
 import {TGridLayoutArea} from '../../acetti-viz';
 import {getYAxisSpecFromScale} from '../../acetti-axis/getYAxisSpecFromScale';
 
-export const AnimatedYAxis: React.FC<{
-	linesColor: string;
-	area: TGridLayoutArea;
-	yScaleCurrent: ScaleLinear<number, number>;
+export type TTheme_YAxis = {
 	fontSize: number;
 	formatter: (x: number) => string;
 	strokeWidth: number;
-	textColor: string;
+	color: string;
 	tickColor: string;
-}> = ({
-	linesColor,
-	area,
-	yScaleCurrent,
-	fontSize,
-	formatter,
-	strokeWidth,
-	textColor,
-	tickColor,
-}) => {
-	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
+};
+
+export const AnimatedYAxis: React.FC<{
+	area: TGridLayoutArea;
+	yScaleCurrent: ScaleLinear<number, number>;
+	theme: TTheme_YAxis;
+}> = ({area, yScaleCurrent, theme}) => {
+	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, theme.formatter);
 
 	return (
 		<svg overflow="visible">
@@ -37,8 +31,8 @@ export const AnimatedYAxis: React.FC<{
 							x2={20}
 							y1={tickMappedValue}
 							y2={tickMappedValue}
-							stroke={tickColor}
-							strokeWidth={strokeWidth}
+							stroke={theme.tickColor}
+							strokeWidth={theme.strokeWidth}
 						/>
 					</g>
 				);
@@ -52,9 +46,9 @@ export const AnimatedYAxis: React.FC<{
 						<text
 							textAnchor="end"
 							alignmentBaseline="middle"
-							fill={textColor}
+							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
-							fontSize={fontSize}
+							fontSize={theme.fontSize}
 							y={labelMappedValue}
 							x={area.width}
 						>

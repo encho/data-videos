@@ -21,6 +21,12 @@ import {AnimatedBars} from './components/AnimatedBars';
 import {getYDomain} from './utils/timeSeries/timeSeries';
 // import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
+import {TTheme_YAxis} from './components/AnimatedYAxis';
+
+type TTheme = {
+	yAxis: TTheme_YAxis;
+};
+
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
 type ChildrenFunction = ({
@@ -50,15 +56,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
 	yLabelsFontSize: number;
-	theme: {
-		yAxis: {
-			fontSize: number;
-			formatter: (x: number) => string;
-			strokeWidth: number;
-			color: string;
-			tickColor: string;
-		};
-	};
+	theme: TTheme;
 }> = ({
 	children,
 	lineColor,
@@ -176,12 +174,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				<AnimatedYAxis
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
-					linesColor={textColor}
-					fontSize={yLabelsFontSize}
-					formatter={theme.yAxis.formatter}
-					strokeWidth={theme.yAxis.strokeWidth}
-					textColor={theme.yAxis.color}
-					tickColor={theme.yAxis.tickColor}
+					theme={theme.yAxis}
 				/>
 			</Position>
 

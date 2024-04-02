@@ -8,6 +8,7 @@ export const AnimatedYAxis: React.FC<{
 	area: TGridLayoutArea;
 	yScaleCurrent: ScaleLinear<number, number>;
 	fontSize?: number;
+
 	// axisSpecType: 'STANDARD' | 'INTER_MONTHS';
 }> = ({
 	linesColor,
