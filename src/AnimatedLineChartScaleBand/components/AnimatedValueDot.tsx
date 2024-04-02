@@ -1,4 +1,5 @@
 import {ScaleLinear} from 'd3-scale';
+import invariant from 'tiny-invariant';
 import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 
 import {TPeriodsScale} from '../periodsScale';
@@ -48,86 +49,11 @@ export const AnimatedValueDot: React.FC<{
 	timeSeries: {value: number; date: Date}[];
 	radius?: number;
 }> = ({dotColor, area, yScale, periodsScale, timeSeries, radius = 20}) => {
-	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
-
-	const visibleDomainIndexEnd = visibleDomainIndices[1];
-
-	let STATUS;
-	// (special) case 1: in last index
-	if (isLastPeriodVisible(visibleDomainIndexEnd, timeSeries)) {
-		STATUS = 'IN_LAST_PERIOD';
-	} else if (isFullPeriodEndFunction(visibleDomainIndexEnd) == true) {
-		STATUS = 'FULL_PERIOD_END';
-	} else if (isSpotOnCentroid(visibleDomainIndexEnd) == true) {
-		STATUS = 'SPOT_ON_CENTROID';
-	} else if (isBeforeCentroid(visibleDomainIndexEnd) === true) {
-		// case 4: 0.0 < x < 0.5
-		STATUS = 'BEFORE_CENTROID';
-	} else if (isAfterCentroid(visibleDomainIndexEnd) === true) {
-		// case 5: 0.5 < x < 1.0
-		STATUS = 'AFTER_CENTROID';
-	}
+	const {x, y} = getXY({periodsScale, timeSeries, yScale});
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
-			{/* <text x={50} y={230} fill="yellow" fontSize={20}>
-				STATUS: {JSON.stringify(STATUS)}
-			</text> */}
-
-			{STATUS === 'IN_LAST_PERIOD' ? (
-				<DotCircleInLastPeriod
-					area={area}
-					dotColor={dotColor}
-					periodsScale={periodsScale}
-					yScale={yScale}
-					timeSeries={timeSeries}
-					radius={radius}
-				/>
-			) : null}
-
-			{STATUS === 'SPOT_ON_CENTROID' ? (
-				<DotCircleSpotOnCentroid
-					area={area}
-					dotColor={dotColor}
-					periodsScale={periodsScale}
-					yScale={yScale}
-					timeSeries={timeSeries}
-					radius={radius}
-				/>
-			) : null}
-
-			{STATUS === 'FULL_PERIOD_END' ? (
-				<DotCircleFullPeriodEnd
-					area={area}
-					dotColor={dotColor}
-					periodsScale={periodsScale}
-					yScale={yScale}
-					timeSeries={timeSeries}
-					radius={radius}
-				/>
-			) : null}
-
-			{STATUS === 'AFTER_CENTROID' ? (
-				<DotCircleAfterCentroid
-					area={area}
-					dotColor={dotColor}
-					periodsScale={periodsScale}
-					yScale={yScale}
-					timeSeries={timeSeries}
-					radius={radius}
-				/>
-			) : null}
-
-			{STATUS === 'BEFORE_CENTROID' ? (
-				<DotCircleBeforeCentroid
-					area={area}
-					dotColor={dotColor}
-					periodsScale={periodsScale}
-					yScale={yScale}
-					timeSeries={timeSeries}
-					radius={radius}
-				/>
-			) : null}
+			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
 		</svg>
 	);
 };
@@ -193,8 +119,35 @@ export const Dot: React.FC<{
 	);
 };
 
-// const TODO
-// getXY()
+const getXY = ({
+	periodsScale,
+	yScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	let xy;
+
+	if (isLastPeriodVisible(visibleDomainIndexEnd, timeSeries)) {
+		xy = getXY_InLastPeriod({periodsScale, yScale, timeSeries});
+	} else if (isFullPeriodEndFunction(visibleDomainIndexEnd) == true) {
+		xy = getXY_FullPeriodEnd({periodsScale, yScale, timeSeries});
+	} else if (isSpotOnCentroid(visibleDomainIndexEnd) == true) {
+		xy = getXY_SpotOnCentroid({periodsScale, yScale, timeSeries});
+	} else if (isBeforeCentroid(visibleDomainIndexEnd) === true) {
+		xy = getXY_BeforeCentroid({periodsScale, yScale, timeSeries});
+	} else if (isAfterCentroid(visibleDomainIndexEnd) === true) {
+		xy = getXY_AfterCentroid({periodsScale, yScale, timeSeries});
+	}
+
+	invariant(xy);
+	return xy;
+};
 
 const getXY_SpotOnCentroid = ({
 	periodsScale,
@@ -221,23 +174,6 @@ const getXY_SpotOnCentroid = ({
 	return {x, y};
 };
 
-export const DotCircleSpotOnCentroid: React.FC<{
-	area: TGridLayoutArea;
-	dotColor: string;
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-	radius: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
-	const {x, y} = getXY_SpotOnCentroid({periodsScale, timeSeries, yScale});
-
-	return (
-		<g>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
-		</g>
-	);
-};
-
 const getXY_FullPeriodEnd = ({
 	periodsScale,
 	yScale,
@@ -261,23 +197,6 @@ const getXY_FullPeriodEnd = ({
 	const y = yScale(leftValue * 0.5 + rightValue * 0.5);
 
 	return {x, y};
-};
-
-export const DotCircleFullPeriodEnd: React.FC<{
-	area: TGridLayoutArea;
-	dotColor: string;
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-	radius: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
-	const {x, y} = getXY_FullPeriodEnd({periodsScale, timeSeries, yScale});
-
-	return (
-		<g>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
-		</g>
-	);
 };
 
 const getXY_AfterCentroid = ({
@@ -320,23 +239,6 @@ const getXY_AfterCentroid = ({
 	return {x, y};
 };
 
-export const DotCircleAfterCentroid: React.FC<{
-	area: TGridLayoutArea;
-	dotColor: string;
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-	radius: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
-	const {x, y} = getXY_AfterCentroid({periodsScale, timeSeries, yScale});
-
-	return (
-		<g>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
-		</g>
-	);
-};
-
 const getXY_BeforeCentroid = ({
 	periodsScale,
 	yScale,
@@ -377,23 +279,6 @@ const getXY_BeforeCentroid = ({
 	return {x, y};
 };
 
-export const DotCircleBeforeCentroid: React.FC<{
-	area: TGridLayoutArea;
-	dotColor: string;
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-	radius: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
-	const {x, y} = getXY_BeforeCentroid({periodsScale, timeSeries, yScale});
-
-	return (
-		<g>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
-		</g>
-	);
-};
-
 const getXY_InLastPeriod = ({
 	periodsScale,
 	yScale,
@@ -418,21 +303,4 @@ const getXY_InLastPeriod = ({
 	}
 
 	return getXY_BeforeCentroid({periodsScale, yScale, timeSeries});
-};
-
-export const DotCircleInLastPeriod: React.FC<{
-	area: TGridLayoutArea;
-	dotColor: string;
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-	radius: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius}) => {
-	const {x, y} = getXY_InLastPeriod({periodsScale, timeSeries, yScale});
-
-	return (
-		<g>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
-		</g>
-	);
 };

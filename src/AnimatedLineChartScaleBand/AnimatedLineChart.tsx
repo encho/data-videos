@@ -26,7 +26,7 @@ const timeSeries = generateBrownianMotionTimeSeries(
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
 const Y_DOMAIN_TYPE = 'VISIBLE';
 
-const Y_LABELS_FONTSIZE = 18;
+const Y_LABELS_FONTSIZE = 16;
 // const Y_LABELS_FORMATTER = (x: number) => `${x} hehe`;
 
 function Y_LABELS_FORMATTER(num: number): string {

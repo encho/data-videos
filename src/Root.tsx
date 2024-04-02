@@ -60,7 +60,7 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={nerdyPriceChartSchema2}
 				defaultProps={{
-					ticker: 'SPX_INDEX' as const,
+					ticker: 'BTC-USD' as const,
 					timePeriod: '2Y' as const,
 					showZero: true,
 					nerdyFinanceEnv: 'PROD' as const,
