@@ -14,7 +14,7 @@ import {useMinimapLayout} from './useMinimapLayout';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {Position} from './components/Position';
-import {periodsScale} from './periodsScale';
+import {periodsScale} from './periodsScale/periodsScale';
 import {MinimapActiveArea} from './components/MinimapActiveArea';
 // import {times} from 'lodash';
 // import {periodsScale} from './periodsScale';

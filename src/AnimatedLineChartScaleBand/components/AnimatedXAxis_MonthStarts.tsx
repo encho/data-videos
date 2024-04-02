@@ -1,5 +1,5 @@
 import {TGridLayoutArea} from '../../acetti-viz';
-import {TPeriodsScale} from '../periodsScale';
+import {TPeriodsScale} from '../periodsScale/periodsScale';
 
 export const AnimatedXAxis_MonthStarts: React.FC<{
 	linesColor: string;

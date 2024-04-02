@@ -10,7 +10,7 @@ import {
 	Sequence,
 } from 'remotion';
 
-import {TPeriodsScale} from '../periodsScale';
+import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 
 function calculatePulsingFactor(

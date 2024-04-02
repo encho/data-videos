@@ -12,7 +12,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale, TPeriodsScale} from './periodsScale';
+import {periodsScale, TPeriodsScale} from './periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from './components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';

@@ -4,7 +4,7 @@
 import {ScaleLinear} from 'd3-scale';
 import {Easing, interpolate} from 'remotion';
 
-import {TPeriodsScale} from '../periodsScale';
+import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 import {getYDomain} from '../utils/timeSeries/timeSeries';
 
