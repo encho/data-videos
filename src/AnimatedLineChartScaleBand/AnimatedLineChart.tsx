@@ -2,6 +2,7 @@ import {Sequence, useVideoConfig, AbsoluteFill} from 'remotion';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
+import {makeFakeOHLCSeries} from './utils/timeSeries/makeFakeOHLCSeries';
 import {DisplayGridLayout} from '../acetti-viz';
 import generateBrownianMotionTimeSeries from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLineChartContainer} from './AnimatedLineChartContainer';
@@ -10,42 +11,19 @@ import {MinimapContainer} from './MinimapContainer';
 // import {HighlightPeriods} from './components/HighlightPeriods';
 import {HighlightPeriods2} from './components/HighlightPeriods2';
 import {Position} from './components/Position';
+import {TTheme, myTheme} from './theme';
 
 const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2020, 0, 1),
 	new Date(2022, 0, 1)
 );
 
-const Y_DOMAIN_TYPE = 'FULL';
+// const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
-// const Y_DOMAIN_TYPE = 'VISIBLE';
+const Y_DOMAIN_TYPE = 'VISIBLE';
 
 const Y_LABELS_FONTSIZE = 16;
-// const Y_LABELS_FORMATTER = (x: number) => `${x} hehe`;
-
-function Y_LABELS_FORMATTER(num: number): string {
-	return num.toLocaleString('en-US', {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	});
-}
-
-const THEME = {
-	yAxis: {
-		fontSize: Y_LABELS_FONTSIZE,
-		formatter: Y_LABELS_FORMATTER,
-		strokeWidth: 3,
-		color: '#fff',
-		tickColor: '#fff',
-	},
-	xAxis: {
-		fontSize: Y_LABELS_FONTSIZE,
-		strokeWidth: 3,
-		color: '#fff',
-		tickColor: '#fff',
-	},
-};
 
 export const AnimatedLineChartSchema = z.object({
 	backgroundColor: zColor(),
@@ -79,16 +57,20 @@ type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
 	timeSeries: {value: number; date: Date}[];
+	theme?: TTheme;
 } & z.infer<typeof AnimatedLineChartSchema>;
 
 export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
-	backgroundColor,
-	textColor,
+	// backgroundColor,
+	// textColor,
 	width,
 	height,
 	timeSeries,
+	theme = myTheme,
 }) => {
 	const {durationInFrames} = useVideoConfig();
+
+	const ohlcSeries = makeFakeOHLCSeries(timeSeries);
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -118,25 +100,18 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 
 	const indicesView_1 = [0, 10] as [number, number];
 	const indicesView_2 = [0, 40] as [number, number];
-	// const indicesView_2 = [50, Math.floor(timeSeries.length / 2)] as [
+	const indicesView_3 = [0, 60] as [number, number];
+	const indicesView_4 = [0, 100] as [number, number];
+	// const indicesView_3 = [50 + 100, Math.floor(timeSeries.length / 2) + 100] as [
 	// 	number,
 	// 	number
 	// ];
-	// const indicesView_2 = [timeSeries.length - 3, timeSeries.length - 1] as [
-	// 	number,
-	// 	number
-	// ];
-	const indicesView_3 = [50 + 100, Math.floor(timeSeries.length / 2) + 100] as [
-		number,
-		number
-	];
-	// const indicesView_3 = [10, 20] as [number, number];
-	const indicesView_4 = [0, timeSeries.length - 1] as [number, number];
+	// const indicesView_4 = [0, timeSeries.length - 1] as [number, number];
 
 	return (
-		<AbsoluteFill style={{backgroundColor}}>
+		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
 			<DisplayGridLayout
-				stroke={textColor}
+				stroke={'cyan'}
 				fill="transparent"
 				hide={true}
 				// hide={false}
@@ -149,7 +124,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 				from={TITLE_START_FRAME}
 				durationInFrames={TITLE_DURATION_IN_FRAMES}
 			>
-				<h1 style={{color: textColor, fontSize: 300}}>Start</h1>
+				<h1 style={{color: 'cyan', fontSize: 300}}>Start</h1>
 			</Sequence>
 
 			{/* TODO: from here wrap into
@@ -184,6 +159,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
+					ohlcSeries={ohlcSeries}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
 					// TODO the layout should be within the chartcontainer
@@ -194,11 +170,12 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
+					// TODO deprecate
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
-					theme={THEME}
+					theme={theme}
 				/>
 
 				<MinimapContainer
@@ -206,8 +183,8 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 				/>
 			</Sequence>
 			<Sequence
@@ -216,6 +193,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
+					ohlcSeries={ohlcSeries}
 					fromVisibleDomainIndices={indicesView_2}
 					toVisibleDomainIndices={indicesView_3}
 					layoutAreas={{
@@ -224,19 +202,19 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
-					theme={THEME}
+					theme={theme}
 				/>
 				<MinimapContainer
 					area={chartLayout.areas.minimapPlot}
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_2}
 					toVisibleDomainIndices={indicesView_3}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 				/>
 			</Sequence>
 			<Sequence
@@ -245,6 +223,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 			>
 				<AnimatedLineChartContainer
 					timeSeries={timeSeries}
+					ohlcSeries={ohlcSeries}
 					fromVisibleDomainIndices={indicesView_3}
 					toVisibleDomainIndices={indicesView_4}
 					layoutAreas={{
@@ -253,11 +232,11 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 						yAxis: chartLayout.areas.yAxis,
 						subPlot: chartLayout.areas.subPlot,
 					}}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 					yDomainType={Y_DOMAIN_TYPE}
 					yLabelsFontSize={Y_LABELS_FONTSIZE}
-					theme={THEME}
+					theme={theme}
 				>
 					{({
 						periodsScale,
@@ -297,8 +276,8 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={indicesView_3}
 					toVisibleDomainIndices={indicesView_4}
-					lineColor={textColor}
-					textColor={textColor}
+					lineColor={'cyan'}
+					textColor={'cyan'}
 				/>
 
 				{/* TODO pass periodsScale from here already! */}

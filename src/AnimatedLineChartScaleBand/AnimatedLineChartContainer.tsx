@@ -9,6 +9,7 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {AnimatedCandlesticks} from './components/AnimatedCandlesticks';
 import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -48,6 +49,13 @@ export const AnimatedLineChartContainer: React.FC<{
 	lineColor: string;
 	textColor: string;
 	timeSeries: TimeSeries;
+	ohlcSeries: {
+		date: Date;
+		open: number;
+		high: number;
+		low: number;
+		close: number;
+	}[];
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
@@ -65,6 +73,7 @@ export const AnimatedLineChartContainer: React.FC<{
 	textColor,
 	layoutAreas,
 	timeSeries,
+	ohlcSeries,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
 	yDomainType,
@@ -137,16 +146,27 @@ export const AnimatedLineChartContainer: React.FC<{
 	return (
 		<AbsoluteFill>
 			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
+			>
+				<AnimatedCandlesticks
+					periodsScale={currentPeriodsScale}
+					yScale={yScale}
+					area={layoutAreas.plot}
+					ohlcSeries={ohlcSeries}
+				/>
+			</Position>
+
+			<Position
 				zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
-				<AnimatedLine
+				{/* <AnimatedLine
 					lineColor={lineColor}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-				/>
+				/> */}
 			</Position>
 
 			<Position
