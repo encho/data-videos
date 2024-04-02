@@ -16,10 +16,10 @@ const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2022, 0, 1)
 );
 
-// const Y_DOMAIN_TYPE = 'FULL';
+const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
-const Y_DOMAIN_TYPE = 'VISIBLE';
+// const Y_DOMAIN_TYPE = 'VISIBLE';
 
 const Y_LABELS_FONTSIZE = 16;
 // const Y_LABELS_FORMATTER = (x: number) => `${x} hehe`;

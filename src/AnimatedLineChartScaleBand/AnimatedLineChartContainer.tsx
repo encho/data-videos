@@ -172,7 +172,6 @@ export const AnimatedLineChartContainer: React.FC<{
 					dates={dates}
 					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}
-					linesColor={textColor}
 				/>
 			</Position>
 
