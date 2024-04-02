@@ -1,12 +1,19 @@
 import {TGridLayoutArea} from '../../acetti-viz';
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 
+export type TTheme_XAxis = {
+	fontSize: number;
+	strokeWidth: number;
+	color: string;
+	tickColor: string;
+};
+
 export const AnimatedXAxis_MonthStarts: React.FC<{
-	linesColor: string;
 	area: TGridLayoutArea;
 	dates: Date[];
 	periodsScale: TPeriodsScale;
-}> = ({linesColor, area, dates, periodsScale}) => {
+	theme: TTheme_XAxis;
+}> = ({area, dates, periodsScale, theme}) => {
 	// TODO these things inside some Axis namespace/object...
 	const monthStartsIndicators = generateMonthStartIndicatorList(dates);
 
@@ -51,13 +58,13 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 								x2={band.x1}
 								y1={0}
 								y2={20}
-								stroke={linesColor}
-								strokeWidth={2}
+								stroke={theme.tickColor}
+								strokeWidth={theme.strokeWidth}
 							/>
 							<text
 								textAnchor="left"
 								alignmentBaseline="baseline"
-								fill={linesColor}
+								fill={theme.color}
 								fontSize={16}
 								fontWeight={500}
 								x={band.x1 + 6}

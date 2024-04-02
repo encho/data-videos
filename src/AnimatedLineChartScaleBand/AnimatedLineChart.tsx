@@ -1,9 +1,4 @@
-import {
-	Sequence,
-	useVideoConfig,
-	AbsoluteFill,
-	useCurrentFrame,
-} from 'remotion';
+import {Sequence, useVideoConfig, AbsoluteFill} from 'remotion';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
@@ -40,6 +35,12 @@ const THEME = {
 	yAxis: {
 		fontSize: Y_LABELS_FONTSIZE,
 		formatter: Y_LABELS_FORMATTER,
+		strokeWidth: 3,
+		color: '#fff',
+		tickColor: '#fff',
+	},
+	xAxis: {
+		fontSize: Y_LABELS_FONTSIZE,
 		strokeWidth: 3,
 		color: '#fff',
 		tickColor: '#fff',

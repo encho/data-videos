@@ -22,9 +22,11 @@ import {getYDomain} from './utils/timeSeries/timeSeries';
 // import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
 import {TTheme_YAxis} from './components/AnimatedYAxis';
+import {TTheme_XAxis} from './components/AnimatedXAxis_MonthStarts';
 
 type TTheme = {
 	yAxis: TTheme_YAxis;
+	xAxis: TTheme_XAxis;
 };
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
@@ -166,6 +168,7 @@ export const AnimatedLineChartContainer: React.FC<{
 			>
 				{/* <AnimatedXAxis_PeriodsScale */}
 				<AnimatedXAxis_MonthStarts
+					theme={theme.xAxis}
 					dates={dates}
 					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}
