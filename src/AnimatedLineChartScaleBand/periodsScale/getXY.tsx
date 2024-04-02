@@ -34,7 +34,49 @@ const isLastPeriodVisible = (
 	return isLastPeriod;
 };
 
-// TODO into periodsScale namespace
+export const getInterpolated_VisibleDomainValue_End = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	let interpolatedLastDomainValue;
+
+	if (isLastPeriodVisible(visibleDomainIndexEnd, timeSeries)) {
+		interpolatedLastDomainValue = getInterpolated_InLastPeriod({
+			periodsScale,
+			timeSeries,
+		});
+	} else if (isFullPeriodEndFunction(visibleDomainIndexEnd) == true) {
+		interpolatedLastDomainValue = getInterpolated_FullPeriodEnd({
+			periodsScale,
+			timeSeries,
+		});
+	} else if (isSpotOnCentroid(visibleDomainIndexEnd) == true) {
+		interpolatedLastDomainValue = getInterpolated_SpotOnCentroid({
+			periodsScale,
+			timeSeries,
+		});
+	} else if (isBeforeCentroid(visibleDomainIndexEnd) === true) {
+		interpolatedLastDomainValue = getInterpolated_BeforeCentroid({
+			periodsScale,
+			timeSeries,
+		});
+	} else if (isAfterCentroid(visibleDomainIndexEnd) === true) {
+		interpolatedLastDomainValue = getInterpolated_AfterCentroid({
+			periodsScale,
+			timeSeries,
+		});
+	}
+
+	invariant(interpolatedLastDomainValue);
+	return interpolatedLastDomainValue;
+};
+
 export const getXY = ({
 	periodsScale,
 	yScale,
@@ -65,6 +107,21 @@ export const getXY = ({
 	return xy;
 };
 
+const getInterpolated_SpotOnCentroid = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+	const spotOnPeriodIndex = Math.ceil(visibleDomainIndexEnd);
+	const value = timeSeries[spotOnPeriodIndex].value;
+
+	return value;
+};
+
 const getXY_SpotOnCentroid = ({
 	periodsScale,
 	yScale,
@@ -83,11 +140,31 @@ const getXY_SpotOnCentroid = ({
 		periodsScale.getBandFromIndex(spotOnPeriodIndex).centroid;
 
 	const x = spotOnCentroid;
-	const value = timeSeries[spotOnPeriodIndex].value;
+
+	const value = getInterpolated_SpotOnCentroid({periodsScale, timeSeries});
 
 	const y = yScale(value);
 
 	return {x, y};
+};
+
+const getInterpolated_FullPeriodEnd = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	const leftIndex = Math.floor(visibleDomainIndexEnd);
+	const rightIndex = leftIndex + 1;
+
+	const leftValue = timeSeries[leftIndex].value;
+	const rightValue = timeSeries[rightIndex].value;
+
+	return leftValue * 0.5 + rightValue * 0.5;
 };
 
 const getXY_FullPeriodEnd = ({
@@ -103,16 +180,44 @@ const getXY_FullPeriodEnd = ({
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
 	const leftIndex = Math.floor(visibleDomainIndexEnd);
-	const rightIndex = leftIndex + 1;
 
 	const x = periodsScale.getBandFromIndex(leftIndex).x2;
+
+	const interpolatedValue = getInterpolated_FullPeriodEnd({
+		periodsScale,
+		timeSeries,
+	});
+
+	const y = yScale(interpolatedValue);
+
+	return {x, y};
+};
+
+const getInterpolated_AfterCentroid = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	const leftIndex = Math.ceil(visibleDomainIndexEnd);
+	const rightIndex = leftIndex + 1;
+
+	const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
+
+	const percentNextCentroid = decimalPart - 0.5;
+	const percentCurrentCentroid = 1 - percentNextCentroid;
 
 	const leftValue = timeSeries[leftIndex].value;
 	const rightValue = timeSeries[rightIndex].value;
 
-	const y = yScale(leftValue * 0.5 + rightValue * 0.5);
+	const interpolatedValue =
+		leftValue * percentCurrentCentroid + rightValue * percentNextCentroid;
 
-	return {x, y};
+	return interpolatedValue;
 };
 
 const getXY_AfterCentroid = ({
@@ -145,14 +250,39 @@ const getXY_AfterCentroid = ({
 		currentVisibleCentroid * percentCurrentCentroid +
 		nextVisibleCentroid * percentNextCentroid;
 
+	const interpolatedValue = getInterpolated_AfterCentroid({
+		periodsScale,
+		timeSeries,
+	});
+
+	const y = yScale(interpolatedValue);
+
+	return {x, y};
+};
+
+const getInterpolated_BeforeCentroid = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+
+	// TODO rename to lastFullPeriodIndex  and becomingPeriodIndex or so
+	const leftIndex = Math.floor(visibleDomainIndexEnd);
+	const rightIndex = Math.ceil(visibleDomainIndexEnd);
+
+	const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
+
+	const percentNextCentroid = decimalPart + 0.5;
+	const percentCurrentCentroid = 1 - percentNextCentroid;
+
 	const leftValue = timeSeries[leftIndex].value;
 	const rightValue = timeSeries[rightIndex].value;
 
-	const y = yScale(
-		leftValue * percentCurrentCentroid + rightValue * percentNextCentroid
-	);
-
-	return {x, y};
+	return leftValue * percentCurrentCentroid + rightValue * percentNextCentroid;
 };
 
 const getXY_BeforeCentroid = ({
@@ -185,14 +315,29 @@ const getXY_BeforeCentroid = ({
 		currentVisibleCentroid * percentCurrentCentroid +
 		nextVisibleCentroid * percentNextCentroid;
 
-	const leftValue = timeSeries[leftIndex].value;
-	const rightValue = timeSeries[rightIndex].value;
+	const interpolatedValue = getInterpolated_BeforeCentroid({
+		periodsScale,
+		timeSeries,
+	});
 
-	const y = yScale(
-		leftValue * percentCurrentCentroid + rightValue * percentNextCentroid
-	);
+	const y = yScale(interpolatedValue);
 
 	return {x, y};
+};
+
+const getInterpolated_InLastPeriod = ({
+	periodsScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
+	const lastIndex = Math.ceil(visibleDomainIndexEnd);
+
+	const interpolatedValue = timeSeries[lastIndex].value;
+	return interpolatedValue;
 };
 
 const getXY_InLastPeriod = ({
@@ -213,7 +358,7 @@ const getXY_InLastPeriod = ({
 	if (isCentroidThere) {
 		const lastIndex = Math.ceil(visibleDomainIndexEnd);
 		const x = periodsScale.getBandFromIndex(lastIndex).centroid;
-		const value = timeSeries[lastIndex].value;
+		const value = getInterpolated_InLastPeriod({timeSeries, periodsScale});
 		const y = yScale(value);
 		return {x, y};
 	}

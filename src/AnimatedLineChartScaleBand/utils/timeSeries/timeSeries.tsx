@@ -2,6 +2,9 @@ import invariant from 'tiny-invariant';
 import {max, min} from 'd3-array';
 
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
+import {TPeriodsScale} from '../../periodsScale/periodsScale';
+// import {getXY} from '../../periodsScale/getXY';
+import {getInterpolated_VisibleDomainValue_End} from '../../periodsScale/getXY';
 
 //TODO  TIMESERIES NAMESPACE
 // *********************
@@ -37,12 +40,12 @@ export function getTimeSeriesSlice(
  * @returns {TimeSeries} A new time series array containing only the data points
  * with dates between minDate and maxDate (inclusive).
  */
-export function getTimeSeriesSliceFromFloatIndices(
+export function getFullyVisibleTimeSeriesSliceFromFloatIndices(
 	timeSeries: TimeSeries,
 	startIndex: number,
 	endIndex: number
 ) {
-	return timeSeries.slice(Math.floor(startIndex), Math.ceil(endIndex) + 1);
+	return timeSeries.slice(Math.ceil(startIndex), Math.floor(endIndex) + 1);
 }
 
 /**
@@ -130,11 +133,24 @@ export function getInterpolatedValue(
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
+// TODO into periodsScale namespace
 export const getYDomain = (
 	yDomainType: TYDomainType,
 	timeSeries: {date: Date; value: number}[],
-	visibleDomainIndices: [number, number]
+	visibleDomainIndices: [number, number],
+	periodsScale: TPeriodsScale
 ) => {
+	// TODO implement and integrate!
+	// 	const interpolatedVisibleStartValue = getInterpolated_VisibleDomainValue_Start({
+	// 		periodsScale,
+	// 		timeSeries,
+	// 	});
+
+	const interpolatedVisibleEndValue = getInterpolated_VisibleDomainValue_End({
+		periodsScale,
+		timeSeries,
+	});
+
 	if (yDomainType === 'FULL') {
 		const yDomainMin = min(timeSeries.map((it) => it.value));
 		const yDomainMax = max(timeSeries.map((it) => it.value));
@@ -143,28 +159,37 @@ export const getYDomain = (
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [0, yDomainMax] as [number, number];
 	} else if (yDomainType === 'VISIBLE') {
-		const visibleTimeSeriesSlice = getTimeSeriesSliceFromFloatIndices(
-			timeSeries,
-			visibleDomainIndices[0],
-			visibleDomainIndices[1]
-		);
+		const visibleTimeSeriesSlice =
+			getFullyVisibleTimeSeriesSliceFromFloatIndices(
+				timeSeries,
+				visibleDomainIndices[0],
+				visibleDomainIndices[1]
+			);
 
 		// the visible domain
-		const yDomainMin = min(visibleTimeSeriesSlice.map((it) => it.value));
-		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
+		const fullyVisibleYDomainMin = min(
+			visibleTimeSeriesSlice.map((it) => it.value)
+		) as number;
+
+		const fullyVisibleYDomainMax = max(
+			visibleTimeSeriesSlice.map((it) => it.value)
+		) as number;
+
+		const yDomainMin = min([
+			fullyVisibleYDomainMin,
+			interpolatedVisibleEndValue,
+		]);
+
+		const yDomainMax = max([
+			fullyVisibleYDomainMax,
+			interpolatedVisibleEndValue,
+		]);
+
 		return [yDomainMin, yDomainMax] as [number, number];
-	} else {
-		const currentDomainIndices_Integers = [
-			Math.floor(visibleDomainIndices[0]),
-			Math.ceil(visibleDomainIndices[1]),
-		];
-
-		const visibleTimeSeriesSlice = timeSeries.slice(
-			currentDomainIndices_Integers[0],
-			currentDomainIndices_Integers[1] + 1
-		);
-
-		const yDomainMax = max(visibleTimeSeriesSlice.map((it) => it.value));
-		return [0, yDomainMax] as [number, number];
 	}
+
+	// fallback to the full domain
+	const yDomainMin = min(timeSeries.map((it) => it.value));
+	const yDomainMax = max(timeSeries.map((it) => it.value));
+	return [yDomainMin, yDomainMax] as [number, number];
 };

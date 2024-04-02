@@ -35,7 +35,12 @@ export const HighlightPeriods2: React.FC<{
 	const x2 = periodsScale.getBandFromIndex(domainIndices[1]).x2;
 	const width = x2 - x1;
 
-	const yDomain = getYDomain('VISIBLE', timeSeries, domainIndices);
+	const yDomain = getYDomain(
+		'VISIBLE',
+		timeSeries,
+		domainIndices,
+		periodsScale
+	);
 	const y1 = yScaleCurrent(yDomain[1]);
 	const y2 = yScaleCurrent(yDomain[0]);
 	const rectHeight = y2 - y1;

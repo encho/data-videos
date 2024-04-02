@@ -112,10 +112,15 @@ export const AnimatedLineChartContainer: React.FC<{
 		visibleRange: [0, layoutAreas.xAxis.width],
 	});
 
-	const yDomain = getYDomain(yDomainType, timeSeries, [
-		animatedVisibleDomainIndexStart,
-		animatedVisibleDomainIndexEnd,
-	] as [number, number]);
+	const yDomain = getYDomain(
+		yDomainType,
+		timeSeries,
+		[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
+			number,
+			number
+		],
+		currentPeriodsScale
+	);
 
 	const yScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomain)

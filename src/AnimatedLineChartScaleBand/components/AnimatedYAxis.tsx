@@ -20,7 +20,6 @@ export const AnimatedYAxis: React.FC<{
 
 	return (
 		<svg overflow="visible">
-			{/* update ticks  */}
 			{yAxisSpec.ticks.map((it, i) => {
 				const tickMappedValue = yAxisSpec.scale(it.value);
 
