@@ -56,7 +56,7 @@ export const RemotionRoot: React.FC = () => {
 				component={NerdyPriceChart2}
 				durationInFrames={600}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={60}
+				fps={90}
 				{...squareVideo}
 				schema={nerdyPriceChartSchema2}
 				defaultProps={{

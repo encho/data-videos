@@ -22,13 +22,7 @@ import {AnimatedBars} from './components/AnimatedBars';
 import {getYDomain} from './utils/timeSeries/timeSeries';
 // import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
-import {TTheme_YAxis} from './components/AnimatedYAxis';
-import {TTheme_XAxis} from './components/AnimatedXAxis_MonthStarts';
-
-type TTheme = {
-	yAxis: TTheme_YAxis;
-	xAxis: TTheme_XAxis;
-};
+import {TTheme} from './theme';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -153,6 +147,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					yScale={yScale}
 					area={layoutAreas.plot}
 					ohlcSeries={ohlcSeries}
+					theme={theme.candlesticks}
 				/>
 			</Position>
 
@@ -160,13 +155,14 @@ export const AnimatedLineChartContainer: React.FC<{
 				zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
-				{/* <AnimatedLine
+				<AnimatedLine
 					lineColor={lineColor}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-				/> */}
+					// TODO theme
+				/>
 			</Position>
 
 			<Position
@@ -179,6 +175,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					dotColor={textColor}
 					area={layoutAreas.plot}
 					radius={8}
+					// TODO theme
 				/>
 			</Position>
 

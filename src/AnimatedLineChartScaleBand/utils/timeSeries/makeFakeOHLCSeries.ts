@@ -59,9 +59,9 @@ function createRandomCandle(
 	const open = openValue;
 
 	const high =
-		(1 + Math.abs(randomNormalDistribution()) / 5) * Math.max(open, close);
+		(1 + Math.abs(randomNormalDistribution()) / 15) * Math.max(open, close);
 	const low =
-		(1 - Math.abs(randomNormalDistribution()) / 5) * Math.min(open, close);
+		(1 - Math.abs(randomNormalDistribution()) / 15) * Math.min(open, close);
 
 	return {date: tsItem.date, open, high, low, close};
 }

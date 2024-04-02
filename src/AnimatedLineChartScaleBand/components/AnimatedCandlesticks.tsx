@@ -1,9 +1,35 @@
 import {ScaleLinear} from 'd3-scale';
-import {line} from 'd3-shape';
 
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 // import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
+
+type TTheme_Candlesticks_Candle = {
+	bodyColor: string;
+	bodyStrokeColor: string;
+	lineColor: string;
+	strokeWidth: number;
+};
+
+export type TTheme_Candlesticks = {
+	up: TTheme_Candlesticks_Candle;
+	down: TTheme_Candlesticks_Candle;
+};
+
+export const candlesticksDefaultTheme: TTheme_Candlesticks = {
+	up: {
+		bodyColor: 'blue',
+		bodyStrokeColor: '#555',
+		lineColor: '#555',
+		strokeWidth: 2,
+	},
+	down: {
+		bodyColor: 'red',
+		bodyStrokeColor: '#555',
+		lineColor: '#555',
+		strokeWidth: 2,
+	},
+};
 
 export const AnimatedCandlesticks: React.FC<{
 	area: TGridLayoutArea;
@@ -17,7 +43,15 @@ export const AnimatedCandlesticks: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	displayDots?: boolean;
-}> = ({area, ohlcSeries, periodsScale, yScale, displayDots = false}) => {
+	theme?: TTheme_Candlesticks;
+}> = ({
+	area,
+	ohlcSeries,
+	periodsScale,
+	yScale,
+	displayDots = false,
+	theme = candlesticksDefaultTheme,
+}) => {
 	// const linePath = line<{date: Date; value: number}>()
 	// 	.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 	// 	.y((d) => yScale(d.value));
@@ -52,7 +86,12 @@ export const AnimatedCandlesticks: React.FC<{
 					const rectBottomY = yOpen < yClose ? yOpen : yClose;
 
 					const rectHeight = yOpen > yClose ? yOpen - yClose : yClose - yOpen;
-					const rectFill = yOpen > yClose ? 'green' : 'red';
+
+					const candleTheme = yOpen > yClose ? theme.up : theme.down;
+
+					// const rectFill = candleTheme.bodyColor;
+					const {bodyColor, bodyStrokeColor, lineColor, strokeWidth} =
+						candleTheme;
 
 					return (
 						<g>
@@ -62,8 +101,8 @@ export const AnimatedCandlesticks: React.FC<{
 								x2={band.centroid}
 								y1={yHigh}
 								y2={rectTopY}
-								stroke={'#222'}
-								strokeWidth={2}
+								stroke={lineColor}
+								strokeWidth={strokeWidth}
 							/>
 							{/* low line */}
 							<line
@@ -71,15 +110,17 @@ export const AnimatedCandlesticks: React.FC<{
 								x2={band.centroid}
 								y1={yLow}
 								y2={rectBottomY}
-								stroke={'#222'}
-								strokeWidth={2}
+								stroke={lineColor}
+								strokeWidth={strokeWidth}
 							/>
 							<rect
 								x={paddedX1}
 								width={paddedWidth}
 								y={rectTopY}
 								height={rectHeight}
-								fill={rectFill}
+								fill={bodyColor}
+								stroke={bodyStrokeColor}
+								strokeWidth={strokeWidth}
 							/>
 							{/* <circle cx={cx} cy={cy} r={6} fill="darkorange" opacity={0.3} /> */}
 							{/* <circle cx={cx} cy={cy} r={3} fill="darkorange" /> */}
