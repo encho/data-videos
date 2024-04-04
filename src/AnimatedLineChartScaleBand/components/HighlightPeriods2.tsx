@@ -73,12 +73,36 @@ export const HighlightPeriods2: React.FC<{
 		}
 	);
 
+	const animatedOpacityLine = interpolate(
+		currentFrame,
+		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
+		[0, 0, 1],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
 	const FONT_SIZE = 24;
 
 	const animatedTextYPosition = interpolate(
 		currentFrame,
 		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[0, y1, y1 - FONT_SIZE / 2],
+		[y1, y1, y1 - FONT_SIZE / 2],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const animatedOpacityText = interpolate(
+		currentFrame,
+		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
+		[0, 0, 1],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -99,6 +123,7 @@ export const HighlightPeriods2: React.FC<{
 					fontSize={24}
 					y={animatedTextYPosition}
 					x={x1}
+					opacity={animatedOpacityText}
 				>
 					{label}
 				</text>
@@ -123,8 +148,9 @@ export const HighlightPeriods2: React.FC<{
 					height={rectHeight}
 					fill="transparent"
 					stroke={theme.borderColor}
+					// stroke={'#neon-glow'}
 					strokeWidth={2}
-					// opacity={animatedOpacityRect}
+					opacity={animatedOpacityLine}
 				/>
 			</svg>
 		</div>

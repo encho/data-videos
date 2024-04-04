@@ -139,6 +139,7 @@ export const getYDomain = (
 	timeSeries: {date: Date; value: number}[],
 	visibleDomainIndices: [number, number],
 	periodsScale: TPeriodsScale
+	// withInterpolatedEndValue?: boolean
 ) => {
 	// TODO implement and integrate!
 	// 	const interpolatedVisibleStartValue = getInterpolated_VisibleDomainValue_Start({
@@ -146,6 +147,9 @@ export const getYDomain = (
 	// 		timeSeries,
 	// 	});
 
+	// let interpolatedVisibleEndValue;
+	// if (withInterpolatedEndValue) {
+	// }
 	const interpolatedVisibleEndValue = getInterpolated_VisibleDomainValue_End({
 		periodsScale,
 		timeSeries,
