@@ -2,46 +2,6 @@ import {ScaleLinear} from 'd3-scale';
 
 import {TPeriodsScale} from './periodsScale';
 
-export const getXYLeft = ({
-	periodsScale,
-	yScale,
-	timeSeries,
-}: {
-	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
-}) => {
-	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
-	const visibleDomainIndexStart = visibleDomainIndices[0];
-
-	// console.log({visibleDomainIndexStart});
-
-	const {x, y} = getY({
-		periodsScale,
-		yScale,
-		timeSeries,
-		domainIndex: visibleDomainIndexStart,
-	});
-
-	return {
-		x,
-		y,
-	};
-
-	// const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
-	// const visibleDomainIndexStart = visibleDomainIndices[0];
-
-	// const floorIndexStart = Math.floor(visibleDomainIndexStart);
-
-	// const value = timeSeries[floorIndexStart].value;
-	// const scaledValue = yScale(value);
-
-	// return {
-	// 	x: periodsScale.getBandFromIndex(floorIndexStart).centroid,
-	// 	y: scaledValue,
-	// };
-};
-
 type TGetY_Kwargs = {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
@@ -81,32 +41,9 @@ const getY = ({
 }: TGetY_Kwargs) => {
 	const x = getX({periodsScale, domainIndex});
 
-	// const adjustedDomainIndex = domainIndex + 0.5;
-
-	// const floorAdjustedIndex = Math.floor(adjustedDomainIndex);
-	// const nextAdjustedIndex = floorAdjustedIndex + 1;
-
-	// const percAdjustedFloorValue = 1 - (adjustedDomainIndex - floorAdjustedIndex);
-	// const percAdjustedNextValue = 1 - percAdjustedFloorValue;
-
-	// const floorTsItem = timeSeries[floorAdjustedIndex];
-	// const nextTsItem = timeSeries[nextAdjustedIndex];
-
-	// if (floorTsItem && nextTsItem) {
-	// 	const floorTsValue = floorTsItem.value;
-	// 	const nextTsValue = nextTsItem.value;
-
-	// 	return {
-	// 		x,
-	// 		y: yScale(
-	// 			floorTsValue * percAdjustedFloorValue +
-	// 				nextTsValue * percAdjustedNextValue
-	// 		),
-	// 	};
-
-	// const adjustedDomainIndex = domainIndex + 0.5;
 	const currentDomainIndex = Math.floor(domainIndex);
 	const percOfIndexComplete = domainIndex - currentDomainIndex;
+
 	const currentTsValueWeight = 1 - Math.abs(percOfIndexComplete - 0.5);
 
 	const nearestDomainIndex =
@@ -128,9 +65,11 @@ const getY = ({
 		};
 	}
 
-	// TODO implement edge cases
-	// console.log({x, y});
-	return {y: 0, x: 0};
+	// case if nearest is to the right
+	return {
+		x: 0,
+		y: 0,
+	};
 };
 
 export const getXYRight = ({
@@ -158,25 +97,57 @@ export const getXYRight = ({
 	};
 };
 
-// export const getXYRight = ({
-// 	periodsScale,
-// 	yScale,
-// 	timeSeries,
-// }: {
-// 	periodsScale: TPeriodsScale;
-// 	yScale: ScaleLinear<number, number>;
-// 	timeSeries: {value: number; date: Date}[];
-// }) => {
-// 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
-// 	const visibleDomainIndexEnd = visibleDomainIndices[1];
+export const getXYRightClamped = ({
+	periodsScale,
+	yScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
-// 	const floorIndexEnd = Math.floor(visibleDomainIndexEnd);
+	const isOverLastValuePoint =
+		visibleDomainIndexEnd > periodsScale.dates.length - 0.5;
 
-// 	const value = timeSeries[floorIndexEnd].value;
-// 	const scaledValue = yScale(value);
+	if (!isOverLastValuePoint) {
+		const {x, y} = getY({
+			periodsScale,
+			yScale,
+			timeSeries,
+			domainIndex: visibleDomainIndexEnd,
+		});
+		return {x, y};
+	}
 
-// 	return {
-// 		x: periodsScale.getBandFromIndex(floorIndexEnd).centroid,
-// 		y: scaledValue,
-// 	};
-// };
+	return {x: 0, y: 0};
+};
+
+export const getXYLeft = ({
+	periodsScale,
+	yScale,
+	timeSeries,
+}: {
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	timeSeries: {value: number; date: Date}[];
+}) => {
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndexStart = visibleDomainIndices[0];
+
+	// console.log({visibleDomainIndexStart});
+
+	const {x, y} = getY({
+		periodsScale,
+		yScale,
+		timeSeries,
+		domainIndex: visibleDomainIndexStart,
+	});
+
+	return {
+		x,
+		y,
+	};
+};

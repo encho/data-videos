@@ -19,9 +19,9 @@ const timeSeries = generateBrownianMotionTimeSeries(
 );
 
 // const Y_DOMAIN_TYPE = 'FULL';
-// const Y_DOMAIN_TYPE = 'ZERO_FULL';
+const Y_DOMAIN_TYPE = 'ZERO_FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
-const Y_DOMAIN_TYPE = 'VISIBLE';
+// const Y_DOMAIN_TYPE = 'VISIBLE';
 
 // TODO Y_DOMAIN_PADDING_PERC
 
@@ -96,13 +96,18 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 
 	const indicesView_1 = [0, 0] as [number, number];
 	const indicesView_2 = [0, 5] as [number, number];
-	const indicesView_3 = [10, 15] as [number, number];
-	const indicesView_4 = [20, 30] as [number, number];
+	const indicesView_3 = [30, 60] as [number, number];
+	// const indicesView_4 = [20, 30] as [number, number];
 	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length - 1] as [
 	// 	number,
 	// 	number
 	// ];
-	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length] as [
+	// const indicesView_4 = [timeSeries.length - 10, timeSeries.length - 0.05] as [
+	const indicesView_4 = [timeSeries.length - 5, timeSeries.length] as [
+		number,
+		number
+	];
+	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length - 0.05] as [
 	// 	number,
 	// 	number
 	// ];

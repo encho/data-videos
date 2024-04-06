@@ -234,6 +234,16 @@ export const AnimatedLineChartContainer: React.FC<{
 					>
 						<div>
 							<h1 style={{color: 'gray', fontSize: 20}}>
+								periodsScale.dates.length:{' '}
+								{JSON.stringify(currentPeriodsScale.dates.length)}
+							</h1>
+							<h1 style={{color: 'gray', fontSize: 20}}>
+								periodsScale.visibleDomainIndices:{' '}
+								{JSON.stringify(currentPeriodsScale.getVisibleDomainIndices())}
+							</h1>
+						</div>
+						<div>
+							<h1 style={{color: 'gray', fontSize: 20}}>
 								{fromVisibleDomainIndices.toString()}
 							</h1>
 						</div>

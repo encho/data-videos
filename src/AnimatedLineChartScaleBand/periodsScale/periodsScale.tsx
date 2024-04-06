@@ -78,15 +78,22 @@ export const periodsScale = ({
 		// });
 	});
 
+	const createBandFromIntegerIndex = (i: number) => {
+		const x1 = i * bandWidth - shiftLeft;
+		const x2 = x1 + bandWidth;
+		const centroid = (x1 + x2) / 2;
+		return {x1, x2, centroid, width: bandWidth, index: i};
+	};
+
 	const getBandFromDate = (date: Date) => {
 		const bandData = allBandsData[date.toISOString()];
 		return bandData;
 	};
 
 	const getBandFromIndex = (index: number) => {
-		const date = dates[index];
-		// return allBandsData[index];
-		return getBandFromDate(date);
+		return createBandFromIntegerIndex(index);
+		// const date = dates[index];
+		// return getBandFromDate(date);
 	};
 
 	const mapFloatIndexToRange = (index: number) => {

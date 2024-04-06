@@ -2,7 +2,11 @@ import {ScaleLinear} from 'd3-scale';
 import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 
 import {getXY} from '../periodsScale/getXY';
-import {getXYLeft, getXYRight} from '../periodsScale/getXYLeft';
+import {
+	getXYLeft,
+	getXYRight,
+	getXYRightClamped,
+} from '../periodsScale/getXYLeft';
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 
@@ -17,7 +21,12 @@ export const AnimatedValueDot: React.FC<{
 	// const {x, y} = getXY({periodsScale, timeSeries, yScale});
 
 	const {x: xLeft, y: yLeft} = getXYLeft({periodsScale, timeSeries, yScale});
-	const {x: xRight, y: yRight} = getXYRight({periodsScale, timeSeries, yScale});
+	// const {x: xRight, y: yRight} = getXYRight({periodsScale, timeSeries, yScale});
+	const {x: xRight, y: yRight} = getXYRightClamped({
+		periodsScale,
+		timeSeries,
+		yScale,
+	});
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
