@@ -1,5 +1,6 @@
 import {ReactNode} from 'react';
 import {
+	Sequence,
 	AbsoluteFill,
 	useCurrentFrame,
 	useVideoConfig,
@@ -128,7 +129,7 @@ export const AnimatedLineChartContainer: React.FC<{
 		.range([layoutAreas.plot.height, 0]);
 
 	const yScaleSubPlot: ScaleLinear<number, number> = scaleLinear()
-		.domain(yDomain)
+		.domain([0, yDomain[1]])
 		.range([layoutAreas.subPlot.height, 0]);
 
 	return (
@@ -217,7 +218,7 @@ export const AnimatedLineChartContainer: React.FC<{
 				: null}
 
 			{/* TODO this is a debugging tool for current periodsScale, factor out of here */}
-			{/* <Sequence from={0} durationInFrames={durationInFrames}>
+			<Sequence from={0} durationInFrames={durationInFrames}>
 				<AbsoluteFill>
 					<div
 						style={{
@@ -249,7 +250,7 @@ export const AnimatedLineChartContainer: React.FC<{
 						</div>
 					</div>
 				</AbsoluteFill>
-			</Sequence> */}
+			</Sequence>
 		</AbsoluteFill>
 	);
 };

@@ -150,10 +150,18 @@ export const getYDomain = (
 	// let interpolatedVisibleEndValue;
 	// if (withInterpolatedEndValue) {
 	// }
-	const interpolatedVisibleEndValue = getInterpolated_VisibleDomainValue_End({
-		periodsScale,
-		timeSeries,
-	});
+
+	// const interpolatedVisibleEndValue = getInterpolated_VisibleDomainValue_End({
+	// 	periodsScale,
+	// 	timeSeries,
+	// });
+
+	// ====================================================================
+	// !! ENCHO CONTINUE HERE AND TRY?AIM TO DEPRECATE THE ABOVE FUNCTIONS
+	// ====================================================================
+	// TODO implement these two and respect them in the min/max calculations
+	// const interpolatedStartValue = ;
+	// const interpolatedEndValue = ;
 
 	if (yDomainType === 'FULL') {
 		const yDomainMin = min(timeSeries.map((it) => it.value));
@@ -181,12 +189,12 @@ export const getYDomain = (
 
 		const yDomainMin = min([
 			fullyVisibleYDomainMin,
-			interpolatedVisibleEndValue,
+			// interpolatedVisibleEndValue,
 		]);
 
 		const yDomainMax = max([
 			fullyVisibleYDomainMax,
-			interpolatedVisibleEndValue,
+			// interpolatedVisibleEndValue,
 		]);
 
 		return [yDomainMin, yDomainMax] as [number, number];

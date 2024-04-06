@@ -2,6 +2,7 @@ import {ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 
 import {TPeriodsScale} from './periodsScale';
+import {getXYRight} from './getXYLeft';
 
 const isAfterCentroid = (visibleDomainIndexEnd: number) => {
 	const decimalPart = visibleDomainIndexEnd - Math.floor(visibleDomainIndexEnd);
@@ -41,6 +42,8 @@ export const getInterpolated_VisibleDomainValue_End = ({
 	periodsScale: TPeriodsScale;
 	timeSeries: {value: number; date: Date}[];
 }) => {
+	// const {x: xRight, y: yRight} = getXYRight({periodsScale, timeSeries, yScale});
+
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 

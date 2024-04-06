@@ -30,7 +30,8 @@ export const periodsScale = ({
 
 	// number of visible bands does not have to be an integer necessarily
 	const numberOfVisibleBands =
-		visibleDomainIndices[1] - visibleDomainIndices[0] + 1;
+		visibleDomainIndices[1] - visibleDomainIndices[0];
+	// visibleDomainIndices[1] - visibleDomainIndices[0] + 1;
 
 	const bandWidth = visibleRangeSize / numberOfVisibleBands;
 
@@ -46,6 +47,16 @@ export const periodsScale = ({
 		};
 	} = {};
 
+	// const allBandsData: {
+	// 	// [key: string]: {
+	// 	index: number;
+	// 	x1: number;
+	// 	x2: number;
+	// 	centroid: number;
+	// 	width: number;
+	// 	date: Date;
+	// }[] = [];
+
 	dates.forEach((date, i) => {
 		const x1 = i * bandWidth - shiftLeft;
 		const x2 = x1 + bandWidth;
@@ -57,6 +68,14 @@ export const periodsScale = ({
 			width: bandWidth,
 			index: i,
 		};
+		// allBandsData.push({
+		// 	date,
+		// 	x1,
+		// 	x2,
+		// 	centroid,
+		// 	width: bandWidth,
+		// 	index: i,
+		// });
 	});
 
 	const getBandFromDate = (date: Date) => {
@@ -66,6 +85,7 @@ export const periodsScale = ({
 
 	const getBandFromIndex = (index: number) => {
 		const date = dates[index];
+		// return allBandsData[index];
 		return getBandFromDate(date);
 	};
 

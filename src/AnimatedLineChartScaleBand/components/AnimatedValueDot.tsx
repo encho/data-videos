@@ -2,6 +2,7 @@ import {ScaleLinear} from 'd3-scale';
 import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 
 import {getXY} from '../periodsScale/getXY';
+import {getXYLeft, getXYRight} from '../periodsScale/getXYLeft';
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
 
@@ -13,11 +14,22 @@ export const AnimatedValueDot: React.FC<{
 	timeSeries: {value: number; date: Date}[];
 	radius?: number;
 }> = ({dotColor, area, yScale, periodsScale, timeSeries, radius = 20}) => {
-	const {x, y} = getXY({periodsScale, timeSeries, yScale});
+	// const {x, y} = getXY({periodsScale, timeSeries, yScale});
+
+	const {x: xLeft, y: yLeft} = getXYLeft({periodsScale, timeSeries, yScale});
+	const {x: xRight, y: yRight} = getXYRight({periodsScale, timeSeries, yScale});
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
-			<Dot cx={x} cy={y} r={radius} fill={dotColor} />
+			{/* <g>
+				<Dot cx={x} cy={y} r={radius} fill={dotColor} />
+			</g> */}
+			<g>
+				<Dot cx={xLeft} cy={yLeft} r={radius} fill={'#ffff00'} />
+			</g>
+			<g>
+				<Dot cx={xRight} cy={yRight} r={radius} fill={'#ffff00'} />
+			</g>
 		</svg>
 	);
 };

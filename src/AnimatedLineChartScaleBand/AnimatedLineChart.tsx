@@ -23,7 +23,7 @@ const timeSeries = generateBrownianMotionTimeSeries(
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
 const Y_DOMAIN_TYPE = 'VISIBLE';
 
-const Y_LABELS_FONTSIZE = 16;
+// TODO Y_DOMAIN_PADDING_PERC
 
 export const AnimatedLineChartSchema = z.object({
 	backgroundColor: zColor(),
@@ -94,10 +94,18 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 		FIRST_TS_TRANSITION_IN_FRAMES -
 		SECOND_TS_TRANSITION_IN_FRAMES;
 
-	const indicesView_1 = [0, 10] as [number, number];
-	const indicesView_2 = [0, 40] as [number, number];
-	const indicesView_3 = [0, 60] as [number, number];
-	const indicesView_4 = [0, 100] as [number, number];
+	const indicesView_1 = [0, 0] as [number, number];
+	const indicesView_2 = [0, 5] as [number, number];
+	const indicesView_3 = [10, 15] as [number, number];
+	const indicesView_4 = [20, 30] as [number, number];
+	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length - 1] as [
+	// 	number,
+	// 	number
+	// ];
+	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length] as [
+	// 	number,
+	// 	number
+	// ];
 	// const indicesView_3 = [50 + 100, Math.floor(timeSeries.length / 2) + 100] as [
 	// 	number,
 	// 	number

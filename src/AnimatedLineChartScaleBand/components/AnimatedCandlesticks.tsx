@@ -67,7 +67,8 @@ export const AnimatedCandlesticks: React.FC<{
 			</defs>
 
 			<g clipPath="url(#plotAreaClipPath)">
-				{ohlcSeries.map((ohlcItem) => {
+				{ohlcSeries.map((ohlcItem, i) => {
+					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(ohlcItem.date);
 					const x1 = band.x1;
 					const width = band.width;

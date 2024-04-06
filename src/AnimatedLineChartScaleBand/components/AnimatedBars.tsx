@@ -23,10 +23,12 @@ export const AnimatedBars: React.FC<{
 			</defs>
 
 			<g clipPath="url(#plotAreaClipPath)">
-				{timeSeries.map((timeSeriesItem) => {
+				{timeSeries.map((timeSeriesItem, i) => {
+					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 					const yValue = yScale(timeSeriesItem.value);
 					const height = area.height - yValue;
+					// const height = 30;
 
 					// const make padding part of scale ?
 					const barTotalPadding = band.width * BARS_PADDING_PERC;
