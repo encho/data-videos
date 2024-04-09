@@ -18,7 +18,7 @@ export const AnimatedLine: React.FC<{
 	timeSeries,
 	periodsScale,
 	yScale,
-	displayDots = true,
+	displayDots = false,
 }) => {
 	const linePath = line<{date: Date; value: number}>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)

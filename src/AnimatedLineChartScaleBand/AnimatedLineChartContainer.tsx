@@ -222,6 +222,8 @@ export const AnimatedLineChartContainer: React.FC<{
 				<AbsoluteFill>
 					<div
 						style={{
+							position: 'absolute',
+							bottom: 0,
 							backgroundColor: '#000',
 							opacity: 0.5,
 							display: 'flex',

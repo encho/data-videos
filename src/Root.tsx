@@ -61,7 +61,7 @@ export const RemotionRoot: React.FC = () => {
 				schema={nerdyPriceChartSchema2}
 				defaultProps={{
 					ticker: 'BTC-USD' as const,
-					timePeriod: '2Y' as const,
+					timePeriod: '1Y' as const,
 					showZero: true,
 					nerdyFinanceEnv: 'PROD' as const,
 					styling: {yAxisAreaWidth: 150},

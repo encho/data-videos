@@ -3,8 +3,6 @@ import {max, min} from 'd3-array';
 
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../periodsScale/periodsScale';
-// import {getXY} from '../../periodsScale/getXY';
-import {getInterpolated_VisibleDomainValue_End} from '../../periodsScale/getXY';
 
 //TODO  TIMESERIES NAMESPACE
 // *********************

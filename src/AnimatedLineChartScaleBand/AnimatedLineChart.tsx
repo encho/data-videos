@@ -18,8 +18,8 @@ const timeSeries = generateBrownianMotionTimeSeries(
 	new Date(2022, 0, 1)
 );
 
-// const Y_DOMAIN_TYPE = 'FULL';
-const Y_DOMAIN_TYPE = 'ZERO_FULL';
+const Y_DOMAIN_TYPE = 'FULL';
+// const Y_DOMAIN_TYPE = 'ZERO_FULL';
 // const Y_DOMAIN_TYPE = 'ZERO_VISIBLE';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
 
@@ -96,17 +96,20 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 
 	const indicesView_1 = [0, 0] as [number, number];
 	const indicesView_2 = [0, 5] as [number, number];
-	const indicesView_3 = [30, 60] as [number, number];
+	const indicesView_3 = [0, 40] as [number, number];
+	const dotComBubbleView = [20, 150] as [number, number];
+	const bullRunView = [200, 250] as [number, number];
+	const currentTrendView = [270, timeSeries.length] as [number, number];
 	// const indicesView_4 = [20, 30] as [number, number];
 	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length - 1] as [
 	// 	number,
 	// 	number
 	// ];
 	// const indicesView_4 = [timeSeries.length - 10, timeSeries.length - 0.05] as [
-	const indicesView_4 = [timeSeries.length - 5, timeSeries.length] as [
-		number,
-		number
-	];
+	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length] as [
+	// 	number,
+	// 	number
+	// ];
 	// const indicesView_4 = [timeSeries.length - 2, timeSeries.length - 0.05] as [
 	// 	number,
 	// 	number
@@ -115,7 +118,7 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 	// 	number,
 	// 	number
 	// ];
-	// const indicesView_4 = [0, timeSeries.length - 1] as [number, number];
+	const indicesView_4 = [0, timeSeries.length] as [number, number];
 
 	return (
 		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
@@ -242,22 +245,64 @@ export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
 									top: chartLayout.areas.plot.y1,
 								}}
 							>
-								{/* TODO rename to <HighlightArea></HighlightArea> */}
-								<HighlightPeriods2
-									label="Dot-Com Bubble"
-									timeSeries={timeSeries}
-									area={chartLayout.areas.plot}
-									// domainIndices={indicesView_3}
-									// domainIndices={[90, 150]}
-									// domainIndices={[50, 150]}
-									domainIndices={[50, 60]}
-									periodsScale={periodsScale}
-									currentFrame={currentFrame}
-									durationInFrames={durationInFrames}
-									fadeInDurationInFrames={100}
-									yScaleCurrent={yScale}
-									theme={theme.highlightArea}
-								/>
+								<div
+									style={{
+										position: 'relative',
+									}}
+								>
+									<div style={{position: 'absolute', top: 0, left: 0}}>
+										{/* TODO rename to <HighlightArea></HighlightArea> */}
+										<HighlightPeriods2
+											label="Dot-Com Bubble"
+											timeSeries={timeSeries}
+											area={chartLayout.areas.plot}
+											// domainIndices={indicesView_3}
+											// domainIndices={[90, 150]}
+											// domainIndices={[50, 150]}
+											domainIndices={dotComBubbleView}
+											periodsScale={periodsScale}
+											currentFrame={currentFrame}
+											durationInFrames={durationInFrames}
+											fadeInDurationInFrames={100}
+											yScaleCurrent={yScale}
+											theme={theme.highlightArea}
+										/>
+									</div>
+									<div style={{position: 'absolute', top: 0, left: 0}}>
+										<HighlightPeriods2
+											label="Bull-Run"
+											timeSeries={timeSeries}
+											area={chartLayout.areas.plot}
+											// domainIndices={indicesView_3}
+											// domainIndices={[90, 150]}
+											// domainIndices={[50, 150]}
+											domainIndices={bullRunView}
+											periodsScale={periodsScale}
+											currentFrame={currentFrame}
+											durationInFrames={durationInFrames}
+											fadeInDurationInFrames={100}
+											yScaleCurrent={yScale}
+											theme={theme.highlightArea}
+										/>
+									</div>
+									<div style={{position: 'absolute', top: 0, left: 0}}>
+										<HighlightPeriods2
+											label="Current Trend"
+											timeSeries={timeSeries}
+											area={chartLayout.areas.plot}
+											// domainIndices={indicesView_3}
+											// domainIndices={[90, 150]}
+											// domainIndices={[50, 150]}
+											domainIndices={currentTrendView}
+											periodsScale={periodsScale}
+											currentFrame={currentFrame}
+											durationInFrames={durationInFrames}
+											fadeInDurationInFrames={100}
+											yScaleCurrent={yScale}
+											theme={theme.highlightArea}
+										/>
+									</div>
+								</div>
 							</Position>
 						);
 					}}
