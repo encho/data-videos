@@ -3,44 +3,15 @@ import {
 	delayRender,
 	continueRender,
 	useVideoConfig,
-	// useCurrentFrame,
 } from 'remotion';
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 import {zColor} from '@remotion/zod-types';
 
-// import {find} from 'lodash';
-
 // import {SimpleLineChart} from '../SimpleLineChart/SimpleLineChart';
 import {AnimatedLineChart2} from '../AnimatedLineChartScaleBand/AnimatedLineChart';
-
-// import availableFontSpecs from '../fontSpecs';
-// import {useFontsLoader} from '../useFontsLoader';
-
-// TODOS
-// performance in title
-// api: deploy
-// update env flags to use deployed apis too
-// api: return the correct title and subtitle
-// animate logo
-// improve x axis to account for series length flexibly
-// logo becomes action card
-// add tooltip which becomes flag
-// toggle screen size?
-// nice to have: automatically determine necessary space for y axis
-// add performance information (in title, like the image?)
-
-// const nerdyThemeDark = {
-// 	background: '#000000',
-// 	title: '#ffffff',
-// 	text: '#ffffff',
-// 	softText: '#666666',
-// 	green: '#00FED8',
-// 	magenta: '#FE0097',
-// 	gridLines: '#222',
-// 	line: '#00FED8',
-// 	xTicks: '#444444',
-// };
+import {lorenzobertoliniTheme} from './lorenzobertoliniTheme';
+import {nerdyTheme} from './nerdyTheme';
 
 export const zTheme = z.object({
 	global: z.object({
@@ -98,7 +69,7 @@ export const zTheme = z.object({
 
 export type TTheme = z.infer<typeof zTheme>;
 
-export const nerdyPriceChartSchema2 = z.object({
+export const nerdyPriceChartSchema3 = z.object({
 	ticker: z.enum([
 		'BTC-USD',
 		'XAU-USD',
@@ -138,7 +109,8 @@ export const nerdyPriceChartSchema2 = z.object({
 			yAxisAreaWidth: z.number().optional(),
 		})
 		.optional(),
-	theme: zTheme.optional(),
+	// theme: zTheme.optional(),
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI']),
 });
 
 type TNerdyPriceChartApiResult = {
@@ -156,8 +128,8 @@ type TNerdyPriceChartApiResult = {
 	data: {value: number; index: Date}[];
 };
 
-export const NerdyPriceChart2: React.FC<
-	z.infer<typeof nerdyPriceChartSchema2>
+export const NerdyPriceChart3: React.FC<
+	z.infer<typeof nerdyPriceChartSchema3>
 > = ({
 	title,
 	subtitle,
@@ -166,7 +138,7 @@ export const NerdyPriceChart2: React.FC<
 	timePeriod,
 	nerdyFinanceEnv,
 	styling = {},
-	theme,
+	themeEnum,
 }) => {
 	// const frame = useCurrentFrame();
 	const {height, width} = useVideoConfig();
@@ -181,7 +153,7 @@ export const NerdyPriceChart2: React.FC<
 		null
 	);
 
-	// const theme = nerdyThemeDark;
+	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
@@ -204,28 +176,6 @@ export const NerdyPriceChart2: React.FC<
 		fetchAndSetData();
 		// }, [ticker, timePeriod, endDate, nerdyFinanceEnv]);
 	}, []);
-
-	// const defaultStyling = {
-	// 	titleFontSize: 50,
-	// 	subTitleFontSize: 40,
-	// 	backgroundColor: theme.background,
-	// 	titleColor: theme.title,
-	// 	gridLinesColor: theme.gridLines,
-	// 	yLabelsColor: theme.softText,
-	// 	xLabelsColor: theme.softText,
-	// 	xTickValuesColor: theme.xTicks,
-	// 	lineColor: theme.line,
-	// 	yAxisAreaWidth: 128,
-	// 	lineStrokeWidth: 4,
-	// 	lineCircleRadius: 10,
-	// 	yTickValuesFontSize: 40,
-	// 	xTickValuesFontSize: 40,
-	// 	xAxisAreaHeight: 60,
-	// 	gridLinesStrokeWidth: 3,
-	// 	yAxisAreaMarginLeft: 20,
-	// 	xTickValuesLength: 15,
-	// 	xTickValuesWidth: 2,
-	// };
 
 	// const mergedStyling = {...defaultStyling, ...styling};
 

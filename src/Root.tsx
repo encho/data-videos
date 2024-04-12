@@ -25,6 +25,11 @@ import {
 } from './NerdyPriceChart2/NerdyPriceChart2';
 
 import {
+	NerdyPriceChart3,
+	nerdyPriceChartSchema3,
+} from './NerdyPriceChart3/NerdyPriceChart3';
+
+import {
 	AxisTransition,
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
@@ -49,6 +54,26 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="NerdyPriceChart3"
+				component={NerdyPriceChart3}
+				durationInFrames={600}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={nerdyPriceChartSchema3}
+				defaultProps={{
+					ticker: 'BTC-USD' as const,
+					timePeriod: '1Y' as const,
+					showZero: true,
+					nerdyFinanceEnv: 'PROD' as const,
+					styling: {yAxisAreaWidth: 150},
+					themeEnum: 'LORENZOBERTOLINI' as const,
+				}}
+			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
