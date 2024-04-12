@@ -7,6 +7,8 @@ import {
 } from 'remotion';
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
+import {zColor} from '@remotion/zod-types';
+
 // import {find} from 'lodash';
 
 // import {SimpleLineChart} from '../SimpleLineChart/SimpleLineChart';
@@ -80,6 +82,61 @@ export const nerdyPriceChartSchema2 = z.object({
 			yAxisAreaWidth: z.number().optional(),
 		})
 		.optional(),
+	theme: z
+		.object({
+			global: z.object({
+				backgroundColor: zColor(),
+			}),
+			yAxis: z.object({
+				fontSize: z.number(),
+				strokeWidth: z.number(),
+				color: zColor(),
+				tickColor: zColor(),
+			}),
+			xAxis: z.object({
+				fontSize: z.number(),
+				strokeWidth: z.number(),
+				color: zColor(),
+				tickColor: zColor(),
+			}),
+			candlesticks: z.object({
+				up: z.object({
+					bodyColor: zColor(),
+					bodyStrokeColor: zColor(),
+					lineColor: zColor(),
+					strokeWidth: z.number(),
+				}),
+				down: z.object({
+					bodyColor: zColor(),
+					bodyStrokeColor: zColor(),
+					lineColor: zColor(),
+					strokeWidth: z.number(),
+				}),
+			}),
+			dataColors: z.array(
+				z.object({
+					M3: zColor(),
+					M2: zColor(),
+					M1: zColor(),
+					BASE: zColor(),
+					P1: zColor(),
+					P2: zColor(),
+					P3: zColor(),
+				})
+			),
+			minimap: z.object({
+				lineColor: zColor(),
+				areaColor: zColor(),
+				areaOpacity: z.number(),
+			}),
+			highlightArea: z.object({
+				backgroundColor: zColor(),
+				backgroundOpacity: z.number(),
+				borderColor: zColor(),
+				textColor: zColor(),
+			}),
+		})
+		.optional(),
 });
 
 type TNerdyPriceChartApiResult = {
@@ -107,6 +164,7 @@ export const NerdyPriceChart2: React.FC<
 	timePeriod,
 	nerdyFinanceEnv,
 	styling = {},
+	theme,
 }) => {
 	// const frame = useCurrentFrame();
 	const {height, width} = useVideoConfig();
@@ -190,6 +248,7 @@ export const NerdyPriceChart2: React.FC<
 				// height={height}
 				height={height * 0.7}
 				timeSeries={timeSeries}
+				theme={theme}
 			/>
 		</AbsoluteFill>
 	);

@@ -5,7 +5,7 @@ import {getYAxisSpecFromScale} from '../../acetti-axis/getYAxisSpecFromScale';
 
 export type TTheme_YAxis = {
 	fontSize: number;
-	formatter: (x: number) => string;
+	// formatter: (x: number) => string;
 	strokeWidth: number;
 	color: string;
 	tickColor: string;
@@ -15,8 +15,9 @@ export const AnimatedYAxis: React.FC<{
 	area: TGridLayoutArea;
 	yScaleCurrent: ScaleLinear<number, number>;
 	theme: TTheme_YAxis;
-}> = ({area, yScaleCurrent, theme}) => {
-	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, theme.formatter);
+	formatter: (x: number) => string;
+}> = ({area, yScaleCurrent, theme, formatter}) => {
+	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
 
 	return (
 		<svg overflow="visible">

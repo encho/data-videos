@@ -193,6 +193,7 @@ export const AnimatedLineChartContainer: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}
+					formatter={(x) => `${x}****`}
 				/>
 			</Position>
 

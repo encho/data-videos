@@ -45,12 +45,13 @@ export type TTheme = {
 const Y_LABELS_FONTSIZE = 16;
 // const Y_LABELS_FORMATTER = (x: number) => `${x} hehe`;
 
-function Y_LABELS_FORMATTER(num: number): string {
-	return num.toLocaleString('en-US', {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2,
-	});
-}
+// TODO how to pass the formatter in?
+// function Y_LABELS_FORMATTER(num: number): string {
+// 	return num.toLocaleString('en-US', {
+// 		minimumFractionDigits: 2,
+// 		maximumFractionDigits: 2,
+// 	});
+// }
 
 const dataColors = [
 	createDataColor('#f05122'),
@@ -76,7 +77,7 @@ export const myTheme: TTheme = {
 	},
 	yAxis: {
 		fontSize: Y_LABELS_FONTSIZE,
-		formatter: Y_LABELS_FORMATTER,
+		// formatter: Y_LABELS_FORMATTER,
 		strokeWidth: 3,
 		color: '#fff',
 		tickColor: '#fff',
