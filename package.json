@@ -25,6 +25,7 @@
     "@remotion/cli": "4.0.139",
     "@remotion/paths": "4.0.139",
     "@remotion/zod-types": "4.0.139",
+    "chroma-js": "^2.4.2",
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@remotion/eslint-config": "4.0.139",
     "@remotion/tailwind": "4.0.139",
+    "@types/chroma-js": "^2.4.4",
     "@types/d3-array": "^3.0.8",
     "@types/d3-scale": "^4.0.5",
     "@types/d3-shape": "^3.1.4",

@@ -10,8 +10,8 @@ import {zColor} from '@remotion/zod-types';
 
 // import {SimpleLineChart} from '../SimpleLineChart/SimpleLineChart';
 import {AnimatedLineChart2} from '../AnimatedLineChartScaleBand/AnimatedLineChart';
-import {lorenzobertoliniTheme} from './lorenzobertoliniTheme';
-import {nerdyTheme} from './nerdyTheme';
+import {lorenzobertoliniTheme} from './themes/lorenzobertolini';
+import {nerdyTheme} from './themes/nerdy';
 
 export const zTheme = z.object({
 	global: z.object({
@@ -202,6 +202,35 @@ export const NerdyPriceChart3: React.FC<
 				timeSeries={timeSeries}
 				theme={theme}
 			/>
+			<AbsoluteFill>
+				<div>
+					<h1
+						style={{fontSize: 30, color: theme.xAxis.color, marginBottom: 16}}
+					>
+						DataColors
+					</h1>
+					<div style={{display: 'flex', gap: 20}}>
+						{theme.dataColors.map((dataColorObj, i) => {
+							const dataColor = dataColorObj.BASE;
+							return (
+								<div
+									style={{
+										backgroundColor: dataColor,
+										borderRadius: 3,
+										paddingTop: 6,
+										paddingBottom: 6,
+										paddingLeft: 10,
+										paddingRight: 10,
+									}}
+								>
+									<div>dataColor[{i}]</div>
+									<div>{dataColor}</div>
+								</div>
+							);
+						})}
+					</div>
+				</div>
+			</AbsoluteFill>
 		</AbsoluteFill>
 	);
 };
