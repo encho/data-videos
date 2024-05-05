@@ -6,39 +6,17 @@ import chroma from 'chroma-js';
 
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
-import {ThemeDataColors} from '../acetti-flics/ThemeDataColors';
+// import {ThemeDataColors} from '../acetti-flics/ThemeDataColors';
 import {ColorsList} from '../acetti-flics/ColorsList';
 
 export const colorPaletteSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI']),
 });
 
-const textColor = chroma('#888').hex();
-const backgroundColor = chroma('#fff').hex();
-
-// TODO a component that visualizes the data colors!
-const colors_1 = chroma.scale(['#ff0000', '#888888']).mode('lab').colors(6);
-
-const colorsList_1 = colors_1.map((it, i) => {
-	return {label: 'hehe', color: it};
-});
-
-// const hehe = chroma.brewer.;
-
-const colors_2 = chroma.scale('BrBG').colors(6);
-const colorsList_2 = colors_2.map((it, i) => {
-	return {label: 'BrBG', color: it};
-});
-
-const colors_3 = chroma.scale('Blues').colors(6);
-const colorsList_3 = colors_3.map((it, i) => {
-	return {label: 'Blues', color: it};
-});
-
 const colorBrewerKeys = Object.keys(chroma.brewer);
 
 const colorsLists = colorBrewerKeys.map((colorBrewerKey) => {
-	const colors = chroma.scale(colorBrewerKey).colors(6);
+	const colors = chroma.scale(colorBrewerKey).colors(11);
 	const colorsList = colors.map((it, i) => {
 		return {label: colorBrewerKey, color: it};
 	});
