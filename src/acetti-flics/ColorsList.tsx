@@ -1,18 +1,22 @@
-import {AbsoluteFill, Sequence} from 'remotion';
+import {Sequence} from 'remotion';
 import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 
-import {ThemeType} from '../acetti-themes/themeTypes';
-
-type TDataColors = ThemeType['dataColors'];
+// TODO integrate in flics with zod...
+type TColorsListItem = {
+	label: string;
+	// TODO zod Color Type?
+	color: string;
+};
+type TColorsList = TColorsListItem[];
 
 // TODO React.FC
-export const DataColors = ({
-	dataColors,
+export const ColorsList = ({
+	colorsList,
 	width = 500,
 }: {
 	// duration?: number;
 	width?: number;
-	dataColors: TDataColors;
+	colorsList: TColorsList;
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
@@ -21,46 +25,45 @@ export const DataColors = ({
 	const waitDuration = 10;
 
 	const gapInPixels = 10;
-	const numberOfColors = dataColors.length;
+	const numberOfColors = colorsList.length;
 	const numberOfGaps = numberOfColors - 1;
 	const boxWidthInPixels =
 		(width - numberOfGaps * gapInPixels) / numberOfColors;
 
 	return (
-		<AbsoluteFill>
-			<div>
-				{/* <h1 style={{fontSize: 80, color: theme.xAxis.color, marginBottom: 16}}>
+		<div>
+			{/* <h1 style={{fontSize: 80, color: theme.xAxis.color, marginBottom: 16}}>
 					DataColors
 				</h1> */}
-				<div
-					style={{
-						display: 'flex',
-						gap: gapInPixels,
-						justifyContent: 'space-between',
-						width,
-						// backgroundColor: 'blue',
-					}}
-				>
-					{dataColors.map((dataColorObj, i) => {
-						const dataColor = dataColorObj.BASE;
-						const from = i * waitDuration;
+			<div
+				style={{
+					display: 'flex',
+					gap: gapInPixels,
+					justifyContent: 'space-between',
+					width,
+					// backgroundColor: 'blue',
+				}}
+			>
+				{colorsList.map((colorItem, i) => {
+					const dataColor = colorItem.color;
+					const from = i * waitDuration;
 
-						return (
-							<div
-								style={{
-									flex: '0 0 auto',
-									width: boxWidthInPixels,
-									textAlign: 'center',
-									// backgroundColor: 'rgba(255,255,255,0.5)',
-								}}
+					return (
+						<div
+							style={{
+								flex: '0 0 auto',
+								width: boxWidthInPixels,
+								textAlign: 'center',
+								// backgroundColor: 'rgba(255,255,255,0.5)',
+							}}
+						>
+							<Sequence
+								from={from}
+								// from={0}
+								durationInFrames={durationInFrames - from}
+								layout="none"
 							>
-								<Sequence
-									from={from}
-									// from={0}
-									durationInFrames={durationInFrames - from}
-									layout="none"
-								>
-									{/* TODO
+								{/* TODO
 								<ColorItemSequence
 								from={}
 								durationInFrames={}
@@ -69,19 +72,18 @@ export const DataColors = ({
 									label={`dataColor${i}`}
 									codeHex={dataColor}
 								/> */}
-									<ColorItem
-										// enterDuratonInFrames={20}
-										color={dataColor}
-										label={`dataColor${i}`}
-										codeHex={dataColor}
-									/>
-								</Sequence>
-							</div>
-						);
-					})}
-				</div>
+								<ColorItem
+									// enterDuratonInFrames={20}
+									color={dataColor}
+									label={colorItem.label}
+									codeHex={dataColor}
+								/>
+							</Sequence>
+						</div>
+					);
+				})}
 			</div>
-		</AbsoluteFill>
+		</div>
 	);
 };
 
