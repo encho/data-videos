@@ -44,6 +44,8 @@ import {
 	AnimatedLineChart as ScaleBandLineChart,
 } from './AnimatedLineChartScaleBand/AnimatedLineChart';
 
+import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -54,6 +56,19 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="ColorPalette"
+				component={ColorPalette}
+				durationInFrames={600}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={colorPaletteSchema}
+				defaultProps={{themeEnum: 'NERDY' as const}}
+			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
