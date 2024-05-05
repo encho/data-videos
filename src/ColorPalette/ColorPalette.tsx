@@ -1,13 +1,17 @@
-import {AbsoluteFill} from 'remotion';
+import {AbsoluteFill, Sequence} from 'remotion';
 import {z} from 'zod';
 import {useVideoConfig} from 'remotion';
-
 import chroma from 'chroma-js';
 
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 // import {ThemeDataColors} from '../acetti-flics/ThemeDataColors';
 import {ColorsList} from '../acetti-flics/ColorsList';
+// import {SubtleSlideIn, } from './SubtleSlideIn';
+import {TitleSlide} from './TitleSlide';
+
+// TODO into global components acetti-components
+import {Position} from '../AnimatedLineChartScaleBand/components/Position';
 
 export const colorPaletteSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI']),
@@ -20,35 +24,54 @@ const colorsLists = colorBrewerKeys.map((colorBrewerKey) => {
 	const colorsList = colors.map((it, i) => {
 		return {label: colorBrewerKey, color: it};
 	});
-	return colorsList;
+	return {name: colorBrewerKey, colorsList};
 });
 
 export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 	themeEnum,
 }) => {
-	const {width} = useVideoConfig();
+	const {width, durationInFrames} = useVideoConfig();
 	// TODO integrate into colorpalette
 	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
+	const titleSlideDuration = 200;
+
 	return (
 		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
-			{/* TODO integrate title animated */}
-			{/* <ThemeDataColors dataColors={theme.dataColors} width={width} /> */}
-			<div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
-				{/* <ThemeDataColors dataColors={nerdyTheme.dataColors} width={width} />
-				<ThemeDataColors dataColors={nerdyTheme.dataColors} width={width} />
-				<ThemeDataColors
-					dataColors={lorenzobertoliniTheme.dataColors}
-					width={width}
-				/> */}
-				{/* <ColorsList colorsList={colorsList_1} width={width} />
-				<ColorsList colorsList={colorsList_2} width={width} />
-				<ColorsList colorsList={colorsList_3} width={width} /> */}
-				{colorsLists.map((colorsList, i) => {
-					return <ColorsList key={i} colorsList={colorsList} width={width} />;
-				})}
-				{/* <div style={{color: 'red', fontSize: 20}}>{JSON.stringify(test)}</div> */}
-			</div>
+			<Sequence from={0} durationInFrames={titleSlideDuration}>
+				{/* TODO title colors, subtitle colors, font family in theme */}
+				<Position position={{top: 100, left: 100}}>
+					<TitleSlide
+						titleColor={theme.xAxis.tickColor}
+						title="Data Viz Color Palettes"
+						subTitle="Color Brewer Palettes with chroma.js"
+						titleFontSize={90}
+						subTitleFontSize={40}
+					/>
+				</Position>
+			</Sequence>
+
+			<Sequence
+				from={titleSlideDuration}
+				durationInFrames={durationInFrames - titleSlideDuration}
+			>
+				<div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
+					{colorsLists.map((colorsList, i) => {
+						return (
+							<div>
+								<h1 style={{color: 'white', fontSize: 20}}>
+									{colorsList.name}
+								</h1>
+								<ColorsList
+									key={i}
+									colorsList={colorsList.colorsList}
+									width={width}
+								/>
+							</div>
+						);
+					})}
+				</div>
+			</Sequence>
 		</AbsoluteFill>
 	);
 };
