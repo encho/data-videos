@@ -61,8 +61,6 @@ type TAnimatedLineChart2Props = {
 } & z.infer<typeof AnimatedLineChartSchema>;
 
 export const AnimatedLineChart2: React.FC<TAnimatedLineChart2Props> = ({
-	// backgroundColor,
-	// textColor,
 	width,
 	height,
 	timeSeries,
