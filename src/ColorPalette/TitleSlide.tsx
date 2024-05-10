@@ -1,18 +1,26 @@
-import {AbsoluteFill, Sequence} from 'remotion';
+import {Sequence} from 'remotion';
 
 // import {Position} from '../Position';
-import {Position} from '../AnimatedLineChartScaleBand/components/Position';
+// import {Position} from '../AnimatedLineChartScaleBand/components/Position';
 import {SubtleSlideIn, SubtleSlideOut} from './SubtleSlideIn';
 
 export const TitleSlide: React.FC<{
 	titleColor: string;
+	subTitleColor: string;
 	title: string;
 	subTitle: string;
 	titleFontSize: number;
 	subTitleFontSize: number;
-}> = ({titleColor, title, subTitle, titleFontSize, subTitleFontSize}) => {
+}> = ({
+	titleColor,
+	subTitleColor,
+	title,
+	subTitle,
+	titleFontSize,
+	subTitleFontSize,
+}) => {
 	return (
-		<div style={{display: 'flex', flexDirection: 'column'}}>
+		<div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
 			<Sequence layout="none">
 				<SubtleSlideIn>
 					<SubtleSlideOut>
@@ -23,6 +31,7 @@ export const TitleSlide: React.FC<{
 								fontSize: titleFontSize,
 								lineHeight: 1.2,
 								color: titleColor,
+								fontWeight: 600,
 								// letterSpacing: '-0.025em',
 							}}
 						>
@@ -40,8 +49,9 @@ export const TitleSlide: React.FC<{
 								// fontFamily: 'Inter-Variable',
 								// fontVariationSettings: `"wght" ${400}`,
 								fontSize: subTitleFontSize,
-								color: titleColor,
+								color: subTitleColor,
 								lineHeight: 1.1,
+								fontWeight: 400,
 								// letterSpacing: '-0.025em',
 							}}
 						>

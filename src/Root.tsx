@@ -61,7 +61,7 @@ export const RemotionRoot: React.FC = () => {
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="ColorPalette"
 				component={ColorPalette}
-				durationInFrames={600}
+				durationInFrames={8000}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}

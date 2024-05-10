@@ -1,5 +1,7 @@
 import chroma from 'chroma-js';
 
+import {ThemeType} from './themeTypes';
+
 const textColor = chroma('#888').hex();
 // const backgroundColor = chroma('#222222').darken().hex();
 const backgroundColor = chroma('#fff').hex();
@@ -14,8 +16,13 @@ const dataScale = chroma
 	.mode('lab')
 	.colors(6);
 
-export const lorenzobertoliniTheme = {
+export const lorenzobertoliniTheme: ThemeType = {
 	global: {backgroundColor},
+	typography: {
+		titleColor: '#ff0000',
+		subTitleColor: '#ff0000',
+		textColor: '#ff0000',
+	},
 	yAxis: {
 		fontSize: 15,
 		strokeWidth: 4,

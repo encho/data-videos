@@ -1,5 +1,7 @@
 import chroma from 'chroma-js';
 
+import {ThemeType} from './themeTypes';
+
 const textColor = chroma('#888').hex();
 const backgroundColor = chroma('#222222').darken().hex();
 
@@ -13,8 +15,13 @@ const dataScale = chroma
 	.mode('lab')
 	.colors(6);
 
-export const nerdyTheme = {
+export const nerdyTheme: ThemeType = {
 	global: {backgroundColor},
+	typography: {
+		titleColor: '#ffffff',
+		subTitleColor: '#888',
+		textColor: '#ffffff',
+	},
 	yAxis: {
 		fontSize: 15,
 		strokeWidth: 4,

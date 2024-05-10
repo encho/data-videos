@@ -18,5 +18,12 @@ export const ThemeDataColors = ({
 		};
 	});
 
-	return <ColorsList colorsList={colorsList} width={width} />;
+	return (
+		<ColorsList
+			colorsList={colorsList}
+			width={width}
+			textColorContrast="#ffffff"
+			textColorMain="#000000"
+		/>
+	);
 };

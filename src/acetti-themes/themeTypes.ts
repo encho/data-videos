@@ -5,6 +5,11 @@ export const zodThemeType = z.object({
 	global: z.object({
 		backgroundColor: zColor(),
 	}),
+	typography: z.object({
+		titleColor: zColor(),
+		subTitleColor: zColor(),
+		textColor: zColor(),
+	}),
 	yAxis: z.object({
 		fontSize: z.number(),
 		strokeWidth: z.number(),

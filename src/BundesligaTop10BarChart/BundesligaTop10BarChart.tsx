@@ -1,7 +1,7 @@
 import {AbsoluteFill} from 'remotion';
 import {z} from 'zod';
 import {HorizontalBarsStar} from '../HorizontalBarsStar/HorizontalBarsStar';
-import LorenzoBertoliniLogo from './LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 
 const LORENZO_BLACK = '#222';
 const LORENZO_WHITE = '#FFF';

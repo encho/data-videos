@@ -1,5 +1,6 @@
 import {Sequence} from 'remotion';
 import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
+import chroma from 'chroma-js';
 
 // TODO integrate in flics with zod...
 type TColorsListItem = {
@@ -13,10 +14,15 @@ type TColorsList = TColorsListItem[];
 export const ColorsList = ({
 	colorsList,
 	width = 500,
+	noLabel = false,
+	textColorMain,
+	textColorContrast,
 }: {
-	// duration?: number;
 	width?: number;
 	colorsList: TColorsList;
+	noLabel?: boolean;
+	textColorMain: string;
+	textColorContrast: string;
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
@@ -77,6 +83,9 @@ export const ColorsList = ({
 									color={dataColor}
 									label={colorItem.label}
 									codeHex={dataColor}
+									noLabel={noLabel}
+									textColorMain={textColorMain}
+									textColorContrast={textColorContrast}
 								/>
 							</Sequence>
 						</div>
@@ -91,12 +100,16 @@ const ColorItem = ({
 	color,
 	label,
 	codeHex,
-}: // enterDurationInFrames,
-{
+	noLabel,
+	textColorMain,
+	textColorContrast,
+}: {
 	color: string;
 	label: string;
 	codeHex: string;
-	// enterDurationInFrames: number;
+	noLabel: boolean;
+	textColorMain: string;
+	textColorContrast: string;
 }) => {
 	const frame = useCurrentFrame();
 	const enterDurationInFrames = 200;
@@ -118,21 +131,29 @@ const ColorItem = ({
 
 	const aScale = interpolate(aPerc, [0, 0.2, 1], [1.2, 1, 1]);
 
+	const contrastTextColorMain = chroma.contrast(textColorMain, codeHex);
+	const contrastTextColorContrast = chroma.contrast(textColorContrast, codeHex);
+
+	const textColor =
+		contrastTextColorMain > contrastTextColorContrast
+			? textColorMain
+			: textColorContrast;
+
 	return (
 		<div
 			style={{
 				opacity: aOpacity,
 				backgroundColor: color,
 				borderRadius: 10,
-				paddingTop: 5,
-				paddingBottom: 5,
+				paddingTop: 10,
+				paddingBottom: 10,
 				paddingLeft: 10,
 				paddingRight: 10,
 				transform: `scale(${aScale}) translateY(${aTranslateY}px) rotateX(${aRotationXDeg}deg) rotateY(${aRotationYDeg}deg) rotateZ(${aRotationZDeg}deg)`,
 			}}
 		>
-			<div>{label}</div>
-			<div>{codeHex}</div>
+			{noLabel ? null : <div>{label}</div>}
+			<div style={{color: textColor}}>{codeHex}</div>
 		</div>
 	);
 };

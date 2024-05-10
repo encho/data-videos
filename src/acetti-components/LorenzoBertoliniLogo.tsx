@@ -31,9 +31,12 @@ import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const LorenzoBertoliniLogo = () => {
 	const frame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
+	// const {durationInFrames} = useVideoConfig();
 
-	const percentageProgress = frame / durationInFrames;
+	const entryDurationInFrames = 30;
+
+	// const percentageProgress = frame / durationInFrames;
+	const percentageProgress = frame / entryDurationInFrames;
 
 	const barProgress = interpolate(percentageProgress, [0, 0.5], [0, 1], {
 		extrapolateRight: 'clamp',
@@ -44,9 +47,11 @@ const LorenzoBertoliniLogo = () => {
 
 	return (
 		<div
-			className="absolute bottom-8 right-8"
+			className="absolute"
 			style={{
 				opacity: zero_to_1,
+				bottom: 40,
+				right: 40,
 			}}
 		>
 			<div className="text-white text-3xl">
