@@ -6,6 +6,7 @@ import {TTheme, myTheme} from '../../theme';
 import {LineChartSingleSequence} from './LineChartSingleSequence';
 
 const Y_DOMAIN_TYPE = 'FULL';
+// const Y_DOMAIN_TYPE = 'VISIBLE';
 
 type TAnimatedLineChart2Props = {
 	width: number;

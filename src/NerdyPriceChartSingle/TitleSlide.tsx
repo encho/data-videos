@@ -20,7 +20,7 @@ export const TitleSlide: React.FC<{
 	subTitleFontSize,
 }) => {
 	return (
-		<div style={{display: 'flex', flexDirection: 'column', gap: 20}}>
+		<div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
 			<Sequence layout="none">
 				<SubtleSlideIn>
 					<SubtleSlideOut>
@@ -51,7 +51,8 @@ export const TitleSlide: React.FC<{
 								fontSize: subTitleFontSize,
 								color: subTitleColor,
 								lineHeight: 1.1,
-								fontWeight: 400,
+								// fontWeight: 400,
+								fontWeight: 600,
 								// letterSpacing: '-0.025em',
 							}}
 						>

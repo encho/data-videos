@@ -78,7 +78,7 @@ export function getYAxisSpecFromScale(
 		};
 	});
 
-	console.log({yAxis_tickValues, yAxis_labels});
+	// console.log({yAxis_tickValues, yAxis_labels});
 
 	const axisSpec: TAxisSpec_Linear_Numeric = {
 		domain: scale.domain() as [number, number],

@@ -77,6 +77,8 @@ export const NerdyPriceChartSingle: React.FC<
 		return <AbsoluteFill />;
 	}
 
+	console.log({apiResult});
+
 	// const percentageString = (apiResult?.percentageChange * 100).toFixed(2) + '%';
 
 	const timeSeries = apiResult.data.map((it) => ({
@@ -93,10 +95,24 @@ export const NerdyPriceChartSingle: React.FC<
 				<TitleSlide
 					titleColor={theme.typography.titleColor}
 					subTitleColor={theme.typography.subTitleColor}
-					title={ticker}
-					subTitle="Performance +80% (xx.xx.xx - xx.xx.xx)"
-					titleFontSize={80}
-					subTitleFontSize={40}
+					// title={ticker}
+					title={
+						apiResult.tickerMetadata.name +
+						' ' +
+						apiResult.timePeriod +
+						' Performance'
+					}
+					// title={apiResult.title}
+					// subTitle="Performance +80% (xx.xx.xx - xx.xx.xx)"
+					// subTitle={`${apiResult.timePeriod} Performance: ${formatPercentage(
+					// 	apiResult.percentageChange
+					// )}`}
+					// subTitle={`${formatPercentage(apiResult.percentageChange)} (${
+					// 	apiResult.timePeriod
+					// } Performance) `}
+					subTitle={`${formatPercentage(apiResult.percentageChange)}`}
+					titleFontSize={60}
+					subTitleFontSize={100}
 				/>
 			</Position>
 			<AbsoluteFill>
@@ -172,3 +188,31 @@ export const ObliquePlatte: React.FC<{
 		</div>
 	);
 };
+
+// function formatPercentageChange(value: number): string {
+// 	// Check if the value is exactly 1
+// 	if (value === 1) {
+// 		return '+0%';
+// 	}
+
+// 	// Calculate the percentage change
+// 	let percentageChange = (value - 1) * 100;
+
+// 	// Format the result with a sign and rounded to the nearest integer
+// 	return (percentageChange > 0 ? '+' : '') + percentageChange.toFixed(0) + '%';
+// }
+// // Usage examples:
+// // console.log(formatPercentageChange(1.26));  // Outputs: "+26%"
+// // console.log(formatPercentageChange(0.88));  // Outputs: "-12%"
+
+function formatPercentage(value: number): string {
+	// Calculate the percentage by multiplying the value by 100
+	let percentage = value * 100;
+
+	// Round to the nearest integer and format with a sign
+	// Directly use `toFixed(0)` which handles rounding
+	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';
+}
+// Usage examples:
+// console.log(formatPercentage(1.23));  // Outputs: "+123%"
+// console.log(formatPercentage(-0.5));  // Outputs: "-50%"
