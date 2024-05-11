@@ -2,14 +2,10 @@ import {
 	delayRender,
 	continueRender,
 	AbsoluteFill,
-	// interpolate,
-	// spring,
-	// useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
-import {zColor} from '@remotion/zod-types';
 
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 import {TitleSlide} from './TitleSlide';
@@ -22,63 +18,6 @@ import {LineChartSingle} from '../AnimatedLineChartScaleBand/flics/LineChartSing
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
-
-// TODO import from centralized place
-export const zTheme = z.object({
-	global: z.object({
-		backgroundColor: zColor(),
-	}),
-	yAxis: z.object({
-		fontSize: z.number(),
-		strokeWidth: z.number(),
-		color: zColor(),
-		tickColor: zColor(),
-	}),
-	xAxis: z.object({
-		fontSize: z.number(),
-		strokeWidth: z.number(),
-		color: zColor(),
-		tickColor: zColor(),
-	}),
-	candlesticks: z.object({
-		up: z.object({
-			bodyColor: zColor(),
-			bodyStrokeColor: zColor(),
-			lineColor: zColor(),
-			strokeWidth: z.number(),
-		}),
-		down: z.object({
-			bodyColor: zColor(),
-			bodyStrokeColor: zColor(),
-			lineColor: zColor(),
-			strokeWidth: z.number(),
-		}),
-	}),
-	dataColors: z.array(
-		z.object({
-			M3: zColor(),
-			M2: zColor(),
-			M1: zColor(),
-			BASE: zColor(),
-			P1: zColor(),
-			P2: zColor(),
-			P3: zColor(),
-		})
-	),
-	minimap: z.object({
-		lineColor: zColor(),
-		areaColor: zColor(),
-		areaOpacity: z.number(),
-	}),
-	highlightArea: z.object({
-		backgroundColor: zColor(),
-		backgroundOpacity: z.number(),
-		borderColor: zColor(),
-		textColor: zColor(),
-	}),
-});
-
-export type TTheme = z.infer<typeof zTheme>;
 
 export const nerdyPriceChartSingleSchema = z.object({
 	ticker: zNerdyTickers,
@@ -99,7 +38,10 @@ export const NerdyPriceChartSingle: React.FC<
 	z.infer<typeof nerdyPriceChartSingleSchema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
-	const {height, width} = useVideoConfig();
+	const {
+		// height,
+		width,
+	} = useVideoConfig();
 
 	const today = new Date();
 	const endDate = today.toISOString();
@@ -147,21 +89,6 @@ export const NerdyPriceChartSingle: React.FC<
 
 	return (
 		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
-			{/* <div
-				style={{
-					backgroundColor: 'green',
-					height: height * 0.5,
-					width,
-				}}
-			>
-				<LineChartSingle
-					width={width}
-					height={height * 0.5}
-					timeSeries={timeSeries}
-					theme={theme}
-				/>
-			</div> */}
-
 			<Position position={{left: 50, top: 50}}>
 				<TitleSlide
 					titleColor={theme.typography.titleColor}
@@ -230,7 +157,6 @@ export const ObliquePlatte: React.FC<{
 				style={{
 					// overflow: 'hidden',
 					overflow: 'visible',
-					// backgroundColor: '#232323',
 					backgroundColor: '#202020',
 					borderRadius: 8,
 					borderColor: '#292929',
