@@ -1,13 +1,19 @@
 import {
-	AbsoluteFill,
 	delayRender,
 	continueRender,
+	AbsoluteFill,
+	// interpolate,
+	// spring,
+	// useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 import {zColor} from '@remotion/zod-types';
 
+import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
+import {TitleSlide} from './TitleSlide';
+import {Position} from '../AnimatedLineChartScaleBand/components/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
@@ -136,14 +142,107 @@ export const NerdyPriceChartSingle: React.FC<
 		date: new Date(it.index),
 	}));
 
+	const platteWidth = width * 0.9;
+	const platteHeight = platteWidth * 0.61;
+
 	return (
-		<AbsoluteFill>
-			<LineChartSingle
-				width={width}
-				height={height * 0.5}
-				timeSeries={timeSeries}
-				theme={theme}
-			/>
+		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
+			{/* <div
+				style={{
+					backgroundColor: 'green',
+					height: height * 0.5,
+					width,
+				}}
+			>
+				<LineChartSingle
+					width={width}
+					height={height * 0.5}
+					timeSeries={timeSeries}
+					theme={theme}
+				/>
+			</div> */}
+
+			<Position position={{left: 50, top: 50}}>
+				<TitleSlide
+					titleColor={theme.typography.titleColor}
+					subTitleColor={theme.typography.subTitleColor}
+					title={ticker}
+					subTitle="Performance +80% (xx.xx.xx - xx.xx.xx)"
+					titleFontSize={80}
+					subTitleFontSize={40}
+				/>
+			</Position>
+			<AbsoluteFill>
+				<Position position={{left: 50, top: 280}}>
+					<ObliquePlatte width={platteWidth} height={platteHeight}>
+						<LineChartSingle
+							width={platteWidth}
+							height={platteHeight}
+							timeSeries={timeSeries}
+							theme={theme}
+						/>
+					</ObliquePlatte>
+				</Position>
+			</AbsoluteFill>
+			<LorenzoBertoliniLogo />
 		</AbsoluteFill>
+	);
+};
+
+// TODO pass theme
+export const ObliquePlatte: React.FC<{
+	children: React.ReactNode;
+	width: number;
+	height: number;
+}> = ({
+	children,
+	width,
+	height,
+	// themeEnum,
+	// contentWidth,
+	// theme,
+}) => {
+	// const { durationInFrames} = useVideoConfig();
+	// TODO integrate into colorpalette
+	// const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+
+	// const frame = useCurrentFrame();
+	// const {durationInFrames} = useVideoConfig();
+
+	// const aPerc = interpolate(frame, [0, durationInFrames], [0, 1]);
+	// const aTranslateY = interpolate(aPerc, [0, 1], [100, -8550]);
+
+	// const width = 700;
+
+	// const padding = 10;
+	// const contentWidthInner = contentWidth - 2 * padding;
+
+	return (
+		<div
+			style={{
+				perspective: '3000px',
+				// perspective: '4000px',
+				// perspective: '8000px',
+				transformStyle: 'preserve-3d',
+			}}
+		>
+			<div
+				style={{
+					// overflow: 'hidden',
+					overflow: 'visible',
+					// backgroundColor: '#232323',
+					backgroundColor: '#202020',
+					borderRadius: 8,
+					borderColor: '#292929',
+					borderStyle: 'solid',
+					borderWidth: 3,
+					height,
+					width,
+					transform: `translateX(-20px) rotateX(${20}deg) rotateY(${-20}deg) rotateZ(${1}deg)`,
+				}}
+			>
+				{children}
+			</div>
+		</div>
 	);
 };

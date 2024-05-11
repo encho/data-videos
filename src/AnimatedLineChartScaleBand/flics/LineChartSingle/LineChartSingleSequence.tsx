@@ -14,56 +14,31 @@ import {AnimatedCandlesticks} from '../../components/AnimatedCandlesticks';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale, TPeriodsScale} from '../../periodsScale/periodsScale';
+import {periodsScale} from '../../periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from '../../components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
-import {AnimatedBars} from '../../components/AnimatedBars';
 import {getYDomain} from '../../utils/timeSeries/timeSeries';
-// import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';
 
 import {TTheme} from '../../theme';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
-type ChildrenFunction = ({
-	periodsScale,
-	currentFrame,
-	durationInFrames,
-	yScale,
-}: {
-	periodsScale: TPeriodsScale;
-	currentFrame: number;
-	durationInFrames: number;
-	yScale: ScaleLinear<number, number>;
-}) => ReactNode;
-
 export const LineChartSingleSequence: React.FC<{
-	children?: ChildrenFunction;
 	timeSeries: TimeSeries;
-	ohlcSeries: {
-		date: Date;
-		open: number;
-		high: number;
-		low: number;
-		close: number;
-	}[];
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
-		subPlot: TGridLayoutArea;
 	};
 	fromVisibleDomainIndices: [number, number];
 	toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
 	theme: TTheme;
 }> = ({
-	children,
 	layoutAreas,
 	timeSeries,
-	ohlcSeries,
 	fromVisibleDomainIndices,
 	toVisibleDomainIndices,
 	yDomainType,
@@ -129,7 +104,7 @@ export const LineChartSingleSequence: React.FC<{
 		.range([layoutAreas.plot.height, 0]);
 
 	return (
-		<AbsoluteFill>
+		<div>
 			<Position
 				zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
@@ -180,62 +155,6 @@ export const LineChartSingleSequence: React.FC<{
 					formatter={(x) => `${x}****`}
 				/>
 			</Position>
-
-			{children
-				? children({
-						yScale,
-						periodsScale: currentPeriodsScale,
-						currentFrame: frame,
-						durationInFrames,
-				  })
-				: null}
-
-			{/* TODO this is a debugging tool for current periodsScale, factor out of here */}
-			<Sequence from={0} durationInFrames={durationInFrames}>
-				<AbsoluteFill>
-					<div
-						style={{
-							position: 'absolute',
-							bottom: 0,
-							backgroundColor: '#000',
-							opacity: 0.5,
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 10,
-							margin: 10,
-							borderRadius: 5,
-							padding: 10,
-						}}
-					>
-						<div>
-							<h1 style={{color: 'gray', fontSize: 20}}>
-								periodsScale.dates.length:{' '}
-								{JSON.stringify(currentPeriodsScale.dates.length)}
-							</h1>
-							<h1 style={{color: 'gray', fontSize: 20}}>
-								periodsScale.visibleDomainIndices:{' '}
-								{JSON.stringify(currentPeriodsScale.getVisibleDomainIndices())}
-							</h1>
-						</div>
-						<div>
-							<h1 style={{color: 'gray', fontSize: 20}}>
-								{fromVisibleDomainIndices.toString()}
-							</h1>
-						</div>
-						<div>
-							<h1 style={{color: 'gray', fontSize: 20}}>
-								{toVisibleDomainIndices.toString()}
-							</h1>
-						</div>
-						<div>
-							<h1 style={{color: 'gray', fontSize: 20}}>
-								current visible indices: {animatedVisibleDomainIndexStart} -{' '}
-								{animatedVisibleDomainIndexEnd}
-							</h1>
-						</div>
-					</div>
-				</AbsoluteFill>
-			</Sequence>
-		</AbsoluteFill>
+		</div>
 	);
 };

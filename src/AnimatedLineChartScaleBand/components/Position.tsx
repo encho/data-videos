@@ -1,5 +1,5 @@
 import {ReactNode} from 'react';
-import {AbsoluteFill} from 'remotion';
+// import {AbsoluteFill} from 'remotion';
 
 export const Position = ({
 	position,
@@ -20,26 +20,26 @@ export const Position = ({
 	fill?: string;
 }) => {
 	return (
-		<AbsoluteFill>
+		// <AbsoluteFill>
+		<div
+			style={{
+				zIndex: zIndex || 'auto',
+				position: 'relative',
+				width: '100%',
+				height: '100%',
+			}}
+		>
 			<div
 				style={{
-					zIndex: zIndex || 'auto',
-					position: 'relative',
-					width: '100%',
-					height: '100%',
+					position: 'absolute',
+					// backgroundColor: fill,
+					...position,
+					...size,
 				}}
 			>
-				<div
-					style={{
-						position: 'absolute',
-						backgroundColor: fill,
-						...position,
-						...size,
-					}}
-				>
-					{children}
-				</div>
+				{children}
 			</div>
-		</AbsoluteFill>
+		</div>
+		// </AbsoluteFill>
 	);
 };

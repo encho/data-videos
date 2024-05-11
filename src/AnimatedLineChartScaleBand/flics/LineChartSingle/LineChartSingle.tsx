@@ -1,6 +1,5 @@
-import {Sequence, useVideoConfig, AbsoluteFill} from 'remotion';
+import {Sequence, useVideoConfig} from 'remotion';
 
-import {makeFakeOHLCSeries} from '../../utils/timeSeries/makeFakeOHLCSeries';
 import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {TTheme, myTheme} from '../../theme';
@@ -23,8 +22,6 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
-	const ohlcSeries = makeFakeOHLCSeries(timeSeries);
-
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
 
@@ -40,38 +37,39 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 	const indicesView_2 = [0, timeSeries.length] as [number, number];
 
 	return (
-		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
-			<DisplayGridLayout
-				stroke={'cyan'}
-				fill="transparent"
-				hide={true}
-				// hide={false}
-				areas={chartLayout.areas}
-				width={width}
-				height={height}
-			/>
-
+		// <AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
+		<div style={{position: 'relative'}}>
+			<div style={{position: 'absolute'}}>
+				<DisplayGridLayout
+					stroke={'#f05122'}
+					fill="transparent"
+					// hide={true}
+					hide={false}
+					areas={chartLayout.areas}
+					width={width}
+					height={height}
+				/>
+			</div>
+			{/* Hello */}
 			<Sequence
 				from={FIRST_TS_START_FRAME}
 				durationInFrames={FIRST_TS_TRANSITION_IN_FRAMES}
+				layout="none"
 			>
 				<LineChartSingleSequence
 					timeSeries={timeSeries}
-					ohlcSeries={ohlcSeries}
 					fromVisibleDomainIndices={indicesView_1}
 					toVisibleDomainIndices={indicesView_2}
-					// TODO the layout should be within the chartcontainer
-					// only pass width and height!!
 					layoutAreas={{
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
 						yAxis: chartLayout.areas.yAxis,
-						subPlot: chartLayout.areas.subPlot,
 					}}
 					yDomainType={Y_DOMAIN_TYPE}
 					theme={theme}
 				/>
 			</Sequence>
-		</AbsoluteFill>
+		</div>
+		// </AbsoluteFill>
 	);
 };
