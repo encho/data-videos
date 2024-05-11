@@ -8,6 +8,7 @@ type TSvgProps = {
 	children: ReactNode;
 	style?: Object;
 	stroke?: string;
+	fill?: string;
 };
 
 export default function Svg({
@@ -16,8 +17,11 @@ export default function Svg({
 	children,
 	style = {},
 	stroke = 'magenta',
+	fill = 'rgba(255,0,0,0.2)',
 }: TSvgProps) {
-	const debugStyle = {border: `3px solid ${stroke}`};
+	// const debugStyle = {border: `3px solid ${stroke}`};
+	// const debugStyle = {border: `10px solid ${stroke}`};
+	const debugStyle = {border: `0px solid ${stroke}`};
 
 	return (
 		<svg
@@ -26,6 +30,8 @@ export default function Svg({
 			style={{
 				display: 'block',
 				overflow: 'visible',
+				backgroundColor: fill,
+				// vectorEffect: 'non-scaling-stroke',
 				...debugStyle,
 				...style,
 			}}

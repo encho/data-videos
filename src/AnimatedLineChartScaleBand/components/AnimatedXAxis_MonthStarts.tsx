@@ -11,6 +11,10 @@ export type TTheme_XAxis = {
 export const AnimatedXAxis_MonthStarts: React.FC<{
 	area: TGridLayoutArea;
 	dates: Date[];
+	// TODO periodsScaleStart (for transitioning)
+	// TODO periodsScaleEnd (for transitioning)
+	// from={frame}? (for transitioning) - or wrap in Sequence?
+	// to={frame}? (for transitioning) - or wrap in Sequence?
 	periodsScale: TPeriodsScale;
 	theme: TTheme_XAxis;
 }> = ({area, dates, periodsScale, theme}) => {
@@ -46,6 +50,8 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
+
+			<rect x={0} y={0} width={area.width} height={area.height} fill="black" />
 
 			{dates.map((date, i) => {
 				// if (monthStartsIndicators[i] === 1) {
