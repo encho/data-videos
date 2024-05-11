@@ -23,14 +23,14 @@ export const nerdyTheme: ThemeType = {
 		textColor: '#ffffff',
 	},
 	yAxis: {
-		fontSize: 15,
-		strokeWidth: 4,
+		fontSize: 16,
+		strokeWidth: 3,
 		color: textColor,
 		tickColor: textColor,
 	},
 	xAxis: {
 		fontSize: 16,
-		strokeWidth: 2,
+		strokeWidth: 3,
 		color: textColor,
 		tickColor: textColor,
 	},

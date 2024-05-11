@@ -17,6 +17,13 @@ export const AnimatedYAxis: React.FC<{
 	theme: TTheme_YAxis;
 	formatter: (x: number) => string;
 }> = ({area, yScaleCurrent, theme, formatter}) => {
+	// TODO ideally these are to be found in theme// BUT multiple size options somwehow...
+	// const TICK_LINE_SIZE = 20;
+	const TICK_LINE_SIZE = 24;
+	const TICK_TEXT_FONT_SIZE = 24;
+	const TICK_TEXT_FONT_WEIGHT = 500;
+	const TICK_TEXT_LEFT_PADDING = 5;
+
 	const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
 
 	return (
@@ -28,7 +35,7 @@ export const AnimatedYAxis: React.FC<{
 					<g key={i}>
 						<line
 							x1={0}
-							x2={20}
+							x2={TICK_LINE_SIZE}
 							y1={tickMappedValue}
 							y2={tickMappedValue}
 							stroke={theme.tickColor}
@@ -44,13 +51,16 @@ export const AnimatedYAxis: React.FC<{
 				return (
 					<g key={it.id}>
 						<text
-							textAnchor="end"
+							// textAnchor="end"
+							textAnchor="start"
 							alignmentBaseline="middle"
 							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
-							fontSize={theme.fontSize}
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={labelMappedValue}
-							x={area.width}
+							// x={area.width}
+							x={TICK_LINE_SIZE + TICK_TEXT_LEFT_PADDING}
 						>
 							{it.label}
 						</text>

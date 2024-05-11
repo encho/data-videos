@@ -152,7 +152,13 @@ export const LineChartSingleSequence: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}
-					formatter={(x) => `${x}****`}
+					formatter={(x) => {
+						const formatter = new Intl.NumberFormat('en-GB', {
+							maximumFractionDigits: 0, // Ensures no decimal places
+							minimumFractionDigits: 0, // Ensures no decimal places
+						});
+						return formatter.format(x);
+					}}
 				/>
 			</Position>
 		</div>

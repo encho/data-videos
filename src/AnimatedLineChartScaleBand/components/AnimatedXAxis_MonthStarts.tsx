@@ -18,6 +18,12 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 	periodsScale: TPeriodsScale;
 	theme: TTheme_XAxis;
 }> = ({area, dates, periodsScale, theme}) => {
+	// TODO ideally these are to be found in theme// BUT multiple size options somwehow...
+	const TICK_LINE_SIZE = 24;
+	const TICK_TEXT_FONT_SIZE = 24;
+	const TICK_TEXT_FONT_WEIGHT = 500;
+	const TICK_TEXT_LEFT_PADDING = 8;
+
 	// TODO these things inside some Axis namespace/object...
 	const monthStartsIndicators = generateMonthStartIndicatorList(dates);
 
@@ -32,10 +38,12 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 		(it) => it === 1
 	).length;
 
-	const monthIndicators =
-		amountSignals > 6
-			? generateQuarterStartIndicatorList(dates)
-			: monthStartsIndicators;
+	// const monthIndicators =
+	// 	amountSignals > 6
+	// 		? generateQuarterStartIndicatorList(dates)
+	// 		: monthStartsIndicators;
+	// const monthIndicators = monthStartsIndicators;
+	const monthIndicators = generateQuarterStartIndicatorList(dates);
 
 	return (
 		<svg
@@ -51,10 +59,9 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 				</clipPath>
 			</defs>
 
-			<rect x={0} y={0} width={area.width} height={area.height} fill="black" />
+			{/* <rect x={0} y={0} width={area.width} height={area.height} fill="black" /> */}
 
 			{dates.map((date, i) => {
-				// if (monthStartsIndicators[i] === 1) {
 				if (monthIndicators[i] === 1) {
 					const band = periodsScale.getBandFromDate(date);
 					return (
@@ -63,7 +70,7 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 								x1={band.x1}
 								x2={band.x1}
 								y1={0}
-								y2={20}
+								y2={TICK_LINE_SIZE}
 								stroke={theme.tickColor}
 								strokeWidth={theme.strokeWidth}
 							/>
@@ -71,10 +78,10 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 								textAnchor="left"
 								alignmentBaseline="baseline"
 								fill={theme.color}
-								fontSize={16}
-								fontWeight={500}
-								x={band.x1 + 6}
-								y={20}
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								x={band.x1 + TICK_TEXT_LEFT_PADDING}
+								y={TICK_TEXT_FONT_SIZE}
 							>
 								{getMonthName(date)}
 							</text>
@@ -104,6 +111,7 @@ function generateMonthStartIndicatorList(dates: Date[]): number[] {
 	return indicatorList;
 }
 
+// TODO rename: getQuarterStartsPointers
 function generateQuarterStartIndicatorList(dates: Date[]): number[] {
 	const indicatorList: number[] = [];
 
@@ -119,7 +127,8 @@ function generateQuarterStartIndicatorList(dates: Date[]): number[] {
 
 		// TODO quick fix improve on this
 		if (i === 0) {
-			indicatorList.push(1);
+			// indicatorList.push(1);
+			indicatorList.push(0);
 		} else {
 			const previousDate = dates[i - 1];
 			const previousMonthNumber = previousDate.getMonth() + 1;
@@ -142,6 +151,7 @@ function generateQuarterStartIndicatorList(dates: Date[]): number[] {
 
 function getMonthName(date: Date): string {
 	// Use options to get the month name in the desired language
-	const monthName = date.toLocaleString('default', {month: 'long'});
+	// const monthName = date.toLocaleString('default', {month: 'long'});
+	const monthName = date.toLocaleString('default', {month: 'short'});
 	return monthName;
 }

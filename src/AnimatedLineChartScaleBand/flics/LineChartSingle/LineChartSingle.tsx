@@ -43,8 +43,8 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				<DisplayGridLayout
 					stroke={'#f05122'}
 					fill="transparent"
-					// hide={true}
-					hide={false}
+					hide={true}
+					// hide={false}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
