@@ -1,16 +1,15 @@
-import {ReactNode} from 'react';
+// import {ReactNode} from 'react';
 import {
-	Sequence,
-	AbsoluteFill,
+	// Sequence,
+	// AbsoluteFill,
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
 	interpolate,
-	// Sequence,
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {AnimatedCandlesticks} from '../../components/AnimatedCandlesticks';
+// import {AnimatedCandlesticks} from '../../components/AnimatedCandlesticks';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -24,6 +23,16 @@ import {getYDomain} from '../../utils/timeSeries/timeSeries';
 import {TTheme} from '../../theme';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+
+// TODO: export use because of passed parametrization
+// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
+const currencyFormatter = (x: number) => {
+	const formatter = new Intl.NumberFormat('en-GB', {
+		maximumFractionDigits: 0, // Ensures no decimal places
+		minimumFractionDigits: 0, // Ensures no decimal places
+	});
+	return '$ ' + formatter.format(x);
+};
 
 export const LineChartSingleSequence: React.FC<{
 	timeSeries: TimeSeries;
@@ -152,13 +161,7 @@ export const LineChartSingleSequence: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}
-					formatter={(x) => {
-						const formatter = new Intl.NumberFormat('en-GB', {
-							maximumFractionDigits: 0, // Ensures no decimal places
-							minimumFractionDigits: 0, // Ensures no decimal places
-						});
-						return formatter.format(x);
-					}}
+					formatter={currencyFormatter}
 				/>
 			</Position>
 		</div>
