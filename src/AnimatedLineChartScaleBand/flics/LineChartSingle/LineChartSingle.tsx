@@ -4,6 +4,10 @@ import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {TTheme, myTheme} from '../../theme';
 import {LineChartSingleSequence} from './LineChartSingleSequence';
+import {LineChartSingleSequence2} from './LineChartSingleSequence2';
+
+import {LineChartTransitionContainer} from './LineChartTransitionContainer';
+import {periodsScale} from '../../periodsScale/periodsScale';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -63,7 +67,7 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				durationInFrames={sequence_1_durationInFrames}
 				layout="none"
 			>
-				<LineChartSingleSequence
+				{/* <LineChartSingleSequence
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={sequence_1_startView}
 					toVisibleDomainIndices={sequence_1_endView}
@@ -74,7 +78,42 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					}}
 					yDomainType={Y_DOMAIN_TYPE}
 					theme={theme}
-				/>
+				/> */}
+
+				<LineChartTransitionContainer
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={sequence_1_startView}
+					toVisibleDomainIndices={sequence_1_endView}
+					// TODO rename to plotArea
+					area={chartLayout.areas.plot}
+					// TODO pass yDomainType
+					// yDomainType={"FULL"}
+				>
+					{({periodsScale, yScale, easingPercentage}) => {
+						return (
+							<div>
+								{/* <div style={{backgroundColor: 'yellow'}}>
+									{easingPercentage}
+								</div> */}
+								<LineChartSingleSequence2
+									timeSeries={timeSeries}
+									// fromVisibleDomainIndices={sequence_2_startView}
+									// toVisibleDomainIndices={sequence_2_endView}
+									layoutAreas={{
+										plot: chartLayout.areas.plot,
+										xAxis: chartLayout.areas.xAxis,
+										yAxis: chartLayout.areas.yAxis,
+									}}
+									yDomainType={Y_DOMAIN_TYPE}
+									theme={theme}
+									//
+									yScale={yScale}
+									periodScale={periodsScale}
+								/>
+							</div>
+						);
+					}}
+				</LineChartTransitionContainer>
 			</Sequence>
 			{/* Sequence 2 */}
 			<Sequence
@@ -84,12 +123,16 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 			>
 				{/* TODO: API idea - to add the percentageChangeHighligher, perhaps set up a
 				container component like so:
-				<AnimatedTimeseriesContainer 
+				<LineChartTransitionContainer
 				timeSeries={timeSeries}
 				fromVisibleDomainIndices={...}
 				toVisibleDomainIndices={...}
+				area={}
+				// TODO perspektivisch:
+				// fromArea={}
+				// toArea={}
 				>
-					{({scaleBand, ...}) => {
+					{({periodsScale, yScale ...}) => {
 						return <div>
 							<LineChart timeSeries={timeSeries} scaleBand={scaleBand} {...}/>
 							<PercantageChangeHighlighter timeSeries={timeSeries} scaleBand={scaleBand} startIndex={0} endIndex={timeSeries.length} {...} />
@@ -97,7 +140,7 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					}}
 				</AnimatedTimeseriesContainer> */}
 
-				<LineChartSingleSequence
+				{/* <LineChartSingleSequence
 					timeSeries={timeSeries}
 					fromVisibleDomainIndices={sequence_2_startView}
 					toVisibleDomainIndices={sequence_2_endView}
@@ -108,7 +151,42 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					}}
 					yDomainType={Y_DOMAIN_TYPE}
 					theme={theme}
-				/>
+				/> */}
+
+				<LineChartTransitionContainer
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={sequence_2_startView}
+					toVisibleDomainIndices={sequence_2_endView}
+					// TODO rename to plotArea
+					area={chartLayout.areas.plot}
+					// TODO pass yDomainType
+					// yDomainType={"FULL"}
+				>
+					{({periodsScale, yScale, easingPercentage}) => {
+						return (
+							<div>
+								{/* <div style={{backgroundColor: 'yellow'}}>
+									{easingPercentage}
+								</div> */}
+								<LineChartSingleSequence2
+									timeSeries={timeSeries}
+									// fromVisibleDomainIndices={sequence_2_startView}
+									// toVisibleDomainIndices={sequence_2_endView}
+									layoutAreas={{
+										plot: chartLayout.areas.plot,
+										xAxis: chartLayout.areas.xAxis,
+										yAxis: chartLayout.areas.yAxis,
+									}}
+									yDomainType={Y_DOMAIN_TYPE}
+									theme={theme}
+									//
+									yScale={yScale}
+									periodScale={periodsScale}
+								/>
+							</div>
+						);
+					}}
+				</LineChartTransitionContainer>
 			</Sequence>
 		</div>
 	);

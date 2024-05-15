@@ -13,7 +13,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale} from '../../periodsScale/periodsScale';
+import {periodsScale, TPeriodsScale} from '../../periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from '../../components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
@@ -34,83 +34,34 @@ const currencyFormatter = (x: number) => {
 	return '$ ' + formatter.format(x);
 };
 
-export const LineChartSingleSequence: React.FC<{
+export const LineChartSingleSequence2: React.FC<{
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
-	fromVisibleDomainIndices: [number, number];
-	toVisibleDomainIndices: [number, number];
+	// fromVisibleDomainIndices: [number, number];
+	// toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
 	theme: TTheme;
+	//
+	// easingPercentage: number;
+	yScale: ScaleLinear<number, number>;
+	periodScale: TPeriodsScale;
 }> = ({
 	layoutAreas,
 	timeSeries,
-	fromVisibleDomainIndices,
-	toVisibleDomainIndices,
-	yDomainType,
+	// fromVisibleDomainIndices,
+	// toVisibleDomainIndices,
+	// yDomainType,
 	theme,
+	//
+	// easingPercentage,
+	yScale,
+	periodScale: currentPeriodsScale,
 }) => {
-	const frame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
-
-	// TODO adapt everywhere else, this is right
-	const animationPercentage = (frame + 1) / durationInFrames;
-
-	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
-
-	const easedAnimationPercentage = interpolate(
-		animationPercentage,
-		[0, 1],
-		[0, 1],
-		{
-			easing: EASING_FUNCTION,
-			// in this case should not be necessary
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
-
 	const dates = timeSeries.map((it) => it.date);
-
-	const animatedVisibleDomainIndexStart = interpolate(
-		easedAnimationPercentage,
-		[0, 1],
-		[fromVisibleDomainIndices[0], toVisibleDomainIndices[0]]
-	);
-
-	const animatedVisibleDomainIndexEnd = interpolate(
-		easedAnimationPercentage,
-		[0, 1],
-		[fromVisibleDomainIndices[1], toVisibleDomainIndices[1]]
-	);
-
-	const currentPeriodsScale = periodsScale({
-		dates,
-		visibleDomainIndices: [
-			animatedVisibleDomainIndexStart,
-			animatedVisibleDomainIndexEnd,
-		],
-		visibleRange: [0, layoutAreas.xAxis.width],
-	});
-
-	const yDomain = getYDomain(
-		yDomainType,
-		timeSeries,
-		[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
-			number,
-			number
-		],
-		currentPeriodsScale
-	);
-
-	const yScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(yDomain)
-		// TODO domain zero to be added via yDomainType
-		// .domain(yDomainZero)
-		.range([layoutAreas.plot.height, 0]);
 
 	return (
 		<div>
@@ -119,7 +70,8 @@ export const LineChartSingleSequence: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={theme.dataColors[0].BASE}
+					// lineColor={theme.dataColors[0].BASE}
+					lineColor={'yellow'}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
