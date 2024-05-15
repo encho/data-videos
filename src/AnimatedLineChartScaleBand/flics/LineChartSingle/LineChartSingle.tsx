@@ -31,11 +31,18 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_HEIGHT,
 	});
 
-	const FIRST_TS_START_FRAME = 0;
-	const FIRST_TS_TRANSITION_IN_FRAMES = durationInFrames;
+	const sequence_1_startFrame = 0;
+	const sequence_1_durationInFrames = durationInFrames - 60;
 
-	const indicesView_1 = [0, 0] as [number, number];
-	const indicesView_2 = [0, timeSeries.length] as [number, number];
+	const sequence_2_startFrame =
+		sequence_1_startFrame + sequence_1_durationInFrames;
+	const sequence_2_durationInFrames = 60;
+
+	const sequence_1_startView = [0, 0] as [number, number];
+	const sequence_1_endView = [0, timeSeries.length] as [number, number];
+
+	const sequence_2_startView = [0, timeSeries.length] as [number, number];
+	const sequence_2_endView = [0, timeSeries.length] as [number, number];
 
 	return (
 		// <AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
@@ -51,16 +58,49 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					height={height}
 				/>
 			</div>
-			{/* Hello */}
 			<Sequence
-				from={FIRST_TS_START_FRAME}
-				durationInFrames={FIRST_TS_TRANSITION_IN_FRAMES}
+				from={sequence_1_startFrame}
+				durationInFrames={sequence_1_durationInFrames}
 				layout="none"
 			>
 				<LineChartSingleSequence
 					timeSeries={timeSeries}
-					fromVisibleDomainIndices={indicesView_1}
-					toVisibleDomainIndices={indicesView_2}
+					fromVisibleDomainIndices={sequence_1_startView}
+					toVisibleDomainIndices={sequence_1_endView}
+					layoutAreas={{
+						plot: chartLayout.areas.plot,
+						xAxis: chartLayout.areas.xAxis,
+						yAxis: chartLayout.areas.yAxis,
+					}}
+					yDomainType={Y_DOMAIN_TYPE}
+					theme={theme}
+				/>
+			</Sequence>
+			{/* Sequence 2 */}
+			<Sequence
+				from={sequence_2_startFrame}
+				durationInFrames={sequence_2_durationInFrames}
+				layout="none"
+			>
+				{/* TODO: API idea - to add the percentageChangeHighligher, perhaps set up a
+				container component like so:
+				<AnimatedTimeseriesContainer 
+				timeSeries={timeSeries}
+				fromVisibleDomainIndices={...}
+				toVisibleDomainIndices={...}
+				>
+					{({scaleBand, ...}) => {
+						return <div>
+							<LineChart timeSeries={timeSeries} scaleBand={scaleBand} {...}/>
+							<PercantageChangeHighlighter timeSeries={timeSeries} scaleBand={scaleBand} startIndex={0} endIndex={timeSeries.length} {...} />
+						</div>
+					}}
+				</AnimatedTimeseriesContainer> */}
+
+				<LineChartSingleSequence
+					timeSeries={timeSeries}
+					fromVisibleDomainIndices={sequence_2_startView}
+					toVisibleDomainIndices={sequence_2_endView}
 					layoutAreas={{
 						plot: chartLayout.areas.plot,
 						xAxis: chartLayout.areas.xAxis,
@@ -71,6 +111,5 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				/>
 			</Sequence>
 		</div>
-		// </AbsoluteFill>
 	);
 };
