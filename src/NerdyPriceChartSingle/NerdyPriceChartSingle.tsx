@@ -18,6 +18,7 @@ import {LineChartSingle} from '../AnimatedLineChartScaleBand/flics/LineChartSing
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
+import {ObliquePlatte} from './ObliquePlatte';
 
 export const nerdyPriceChartSingleSchema = z.object({
 	ticker: zNerdyTickers,
@@ -95,21 +96,12 @@ export const NerdyPriceChartSingle: React.FC<
 				<TitleSlide
 					titleColor={theme.typography.titleColor}
 					subTitleColor={theme.typography.subTitleColor}
-					// title={ticker}
 					title={
 						apiResult.tickerMetadata.name +
 						' ' +
 						apiResult.timePeriod +
 						' Performance'
 					}
-					// title={apiResult.title}
-					// subTitle="Performance +80% (xx.xx.xx - xx.xx.xx)"
-					// subTitle={`${apiResult.timePeriod} Performance: ${formatPercentage(
-					// 	apiResult.percentageChange
-					// )}`}
-					// subTitle={`${formatPercentage(apiResult.percentageChange)} (${
-					// 	apiResult.timePeriod
-					// } Performance) `}
 					subTitle={`${formatPercentage(apiResult.percentageChange)}`}
 					titleFontSize={60}
 					subTitleFontSize={100}
@@ -117,7 +109,11 @@ export const NerdyPriceChartSingle: React.FC<
 			</Position>
 			<AbsoluteFill>
 				<Position position={{left: 50, top: 280}}>
-					<ObliquePlatte width={platteWidth} height={platteHeight}>
+					<ObliquePlatte
+						width={platteWidth}
+						height={platteHeight}
+						theme={theme.platte}
+					>
 						<LineChartSingle
 							width={platteWidth}
 							height={platteHeight}
@@ -132,83 +128,9 @@ export const NerdyPriceChartSingle: React.FC<
 	);
 };
 
-// TODO pass theme
-export const ObliquePlatte: React.FC<{
-	children: React.ReactNode;
-	width: number;
-	height: number;
-}> = ({
-	children,
-	width,
-	height,
-	// themeEnum,
-	// contentWidth,
-	// theme,
-}) => {
-	// const { durationInFrames} = useVideoConfig();
-	// TODO integrate into colorpalette
-	// const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
-
-	// const frame = useCurrentFrame();
-	// const {durationInFrames} = useVideoConfig();
-
-	// const aPerc = interpolate(frame, [0, durationInFrames], [0, 1]);
-	// const aTranslateY = interpolate(aPerc, [0, 1], [100, -8550]);
-
-	// const width = 700;
-
-	// const padding = 10;
-	// const contentWidthInner = contentWidth - 2 * padding;
-
-	return (
-		<div
-			style={{
-				perspective: '3000px',
-				// perspective: '4000px',
-				// perspective: '8000px',
-				transformStyle: 'preserve-3d',
-			}}
-		>
-			<div
-				style={{
-					// overflow: 'hidden',
-					overflow: 'visible',
-					backgroundColor: '#202020',
-					borderRadius: 8,
-					borderColor: '#292929',
-					borderStyle: 'solid',
-					borderWidth: 3,
-					height,
-					width,
-					transform: `translateX(-20px) rotateX(${20}deg) rotateY(${-20}deg) rotateZ(${1}deg)`,
-				}}
-			>
-				{children}
-			</div>
-		</div>
-	);
-};
-
-// function formatPercentageChange(value: number): string {
-// 	// Check if the value is exactly 1
-// 	if (value === 1) {
-// 		return '+0%';
-// 	}
-
-// 	// Calculate the percentage change
-// 	let percentageChange = (value - 1) * 100;
-
-// 	// Format the result with a sign and rounded to the nearest integer
-// 	return (percentageChange > 0 ? '+' : '') + percentageChange.toFixed(0) + '%';
-// }
-// // Usage examples:
-// // console.log(formatPercentageChange(1.26));  // Outputs: "+26%"
-// // console.log(formatPercentageChange(0.88));  // Outputs: "-12%"
-
 function formatPercentage(value: number): string {
 	// Calculate the percentage by multiplying the value by 100
 	let percentage = value * 100;
-
 	// Round to the nearest integer and format with a sign
 	// Directly use `toFixed(0)` which handles rounding
 	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';

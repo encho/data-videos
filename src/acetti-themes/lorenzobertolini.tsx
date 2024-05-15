@@ -4,7 +4,7 @@ import {ThemeType} from './themeTypes';
 
 const textColor = chroma('#888').hex();
 // const backgroundColor = chroma('#222222').darken().hex();
-const backgroundColor = chroma('#fff').hex();
+const backgroundColor = chroma('#f0f0f0').hex();
 
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
@@ -19,8 +19,8 @@ const dataScale = chroma
 export const lorenzobertoliniTheme: ThemeType = {
 	global: {backgroundColor},
 	typography: {
-		titleColor: '#ff0000',
-		subTitleColor: '#ff0000',
+		titleColor: '#222',
+		subTitleColor: '#bbb',
 		textColor: '#ff0000',
 	},
 	yAxis: {
@@ -116,5 +116,9 @@ export const lorenzobertoliniTheme: ThemeType = {
 		backgroundOpacity: 0.4,
 		borderColor: dataScale[3],
 		textColor: dataScale[3],
+	},
+	platte: {
+		backgroundColor: '#ffffff',
+		borderColor: '#e0e0e0',
 	},
 };

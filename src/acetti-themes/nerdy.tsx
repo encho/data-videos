@@ -5,6 +5,9 @@ import {ThemeType} from './themeTypes';
 const textColor = chroma('#888').hex();
 const backgroundColor = chroma('#222222').darken().hex();
 
+const platteBackground = '#202020';
+const platteBorder = '#292929';
+
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
 // const dataScale = chroma.scale(['#f05122', '#ffff00']).mode('lch').colors(6);
@@ -115,5 +118,9 @@ export const nerdyTheme: ThemeType = {
 		backgroundOpacity: 0.4,
 		borderColor: dataScale[3],
 		textColor: dataScale[3],
+	},
+	platte: {
+		backgroundColor: platteBackground,
+		borderColor: platteBorder,
 	},
 };

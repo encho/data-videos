@@ -58,6 +58,10 @@ export const zodThemeType = z.object({
 		borderColor: zColor(),
 		textColor: zColor(),
 	}),
+	platte: z.object({
+		backgroundColor: zColor(),
+		borderColor: zColor(),
+	}),
 });
 
 export type ThemeType = z.infer<typeof zodThemeType>;
