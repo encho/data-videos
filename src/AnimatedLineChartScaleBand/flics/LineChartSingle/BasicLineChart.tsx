@@ -34,7 +34,7 @@ const currencyFormatter = (x: number) => {
 	return '$ ' + formatter.format(x);
 };
 
-export const LineChartSingleSequence2: React.FC<{
+export const BasicLineChart: React.FC<{
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
