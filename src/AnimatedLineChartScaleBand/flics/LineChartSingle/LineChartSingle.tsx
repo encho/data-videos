@@ -1,4 +1,4 @@
-import {Sequence, useVideoConfig} from 'remotion';
+import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
 
 import {DisplayGridLayout, TGridLayoutArea} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
@@ -59,8 +59,8 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				<DisplayGridLayout
 					stroke={'#f05122'}
 					fill="transparent"
-					// hide={true}
-					hide={false}
+					hide={true}
+					// hide={false}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -80,6 +80,9 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					// TODO pass yDomainType
 					// yDomainType={"FULL"}
 				>
+					{/* TODO should return an array of axis specs to transition between...
+					... for enter update exit pattern
+					... togehter with info on when the pairs are active  */}
 					{({periodsScale, yScale, easingPercentage}) => {
 						return (
 							<div>
@@ -118,13 +121,8 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				>
 					{({periodsScale, yScale, easingPercentage}) => {
 						return (
-							<div style={{position: 'relative'}}>
-								<ThePercLine
-									periodsScale={periodsScale}
-									yScale={yScale}
-									easingPercentage={easingPercentage}
-									plotArea={chartLayout.areas.plot}
-								/>
+							// <div style={{position: 'relative'}}>
+							<div>
 								<BasicLineChart
 									timeSeries={timeSeries}
 									layoutAreas={{
@@ -137,6 +135,12 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 									//
 									yScale={yScale}
 									periodScale={periodsScale}
+								/>
+								<ThePercLine
+									periodsScale={periodsScale}
+									yScale={yScale}
+									easingPercentage={easingPercentage}
+									plotArea={chartLayout.areas.plot}
 								/>
 							</div>
 						);
@@ -154,10 +158,28 @@ export const ThePercLine: React.FC<{
 	plotArea: TGridLayoutArea;
 }> = ({
 	// periodsScale,
-	// yScale,
+	yScale,
 	easingPercentage,
 	plotArea,
 }) => {
+	const currentFrame = useCurrentFrame();
+	const {durationInFrames} = useVideoConfig();
+
+	const lineColor = '#00aa99';
+	const strokeWidth = 5;
+
+	const aPerc = currentFrame / durationInFrames;
+
+	const firstValue = 30000;
+	const lastValue = 70000;
+
+	const aLastValue = firstValue + aPerc * (lastValue - firstValue);
+
+	const mappedFirstValue = yScale(firstValue);
+	const mappedAnimatedLastValue = yScale(aLastValue);
+
+	const aPercentageChange = aLastValue / firstValue - 1;
+
 	return (
 		<Position
 			position={{
@@ -167,16 +189,70 @@ export const ThePercLine: React.FC<{
 		>
 			<svg
 				style={{
-					backgroundColor: 'cyan',
-					opacity: easingPercentage,
+					// backgroundColor: 'cyan',
+					// opacity: easingPercentage,
 					width: plotArea.width,
 					height: plotArea.height,
 				}}
 			>
-				<g transform="translate(0,100)">
-					<text>{easingPercentage}</text>
+				<rect
+					x={0}
+					y={mappedAnimatedLastValue}
+					width={plotArea.width}
+					// height={mappedAnimatedLastValue - mappedFirstValue}
+					height={mappedFirstValue - mappedAnimatedLastValue}
+					// fill="orange"
+					fill={lineColor}
+					opacity={0.2}
+				/>
+
+				{/* <rect
+					x1={0}
+					x2={plotArea.width}
+					y1={mappedAnimatedLastValue}
+					y2={mappedAnimatedLastValue}
+					fill="green"
+				/> */}
+
+				<line
+					x1={0}
+					x2={plotArea.width}
+					y1={mappedFirstValue}
+					y2={mappedFirstValue}
+					strokeWidth={strokeWidth}
+					stroke={lineColor}
+				/>
+
+				<line
+					x1={0}
+					x2={plotArea.width}
+					y1={mappedAnimatedLastValue}
+					y2={mappedAnimatedLastValue}
+					strokeWidth={strokeWidth}
+					stroke={lineColor}
+				/>
+
+				<g transform={`translate(100,${mappedAnimatedLastValue})`}>
+					<text style={{fontSize: 50}} fill={lineColor} opacity={aPerc}>
+						{formatPercentage(aPercentageChange)}
+					</text>
 				</g>
+				{/* <g transform="translate(0,130)">
+					<text>{durationInFrames}</text>
+				</g> */}
 			</svg>
 		</Position>
 	);
 };
+
+// TODO centralize
+function formatPercentage(value: number): string {
+	// Calculate the percentage by multiplying the value by 100
+	let percentage = value * 100;
+	// Round to the nearest integer and format with a sign
+	// Directly use `toFixed(0)` which handles rounding
+	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';
+}
+// Usage examples:
+// console.log(formatPercentage(1.23));  // Outputs: "+123%"
+// console.log(formatPercentage(-0.5));  // Outputs: "-50%"

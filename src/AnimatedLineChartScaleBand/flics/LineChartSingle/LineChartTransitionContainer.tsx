@@ -42,7 +42,8 @@ type TChildrenFuncArgs = {
 	// animationPercentage, currentFrame, durationInFrames,
 };
 
-const yDomainType: TYDomainType = 'FULL';
+// const yDomainType: TYDomainType = 'FULL';
+const yDomainType: TYDomainType = 'ZERO_FULL';
 
 export const LineChartTransitionContainer: React.FC<{
 	timeSeries: TimeSeries;

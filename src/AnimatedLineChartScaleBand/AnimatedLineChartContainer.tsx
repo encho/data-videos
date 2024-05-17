@@ -147,7 +147,7 @@ export const AnimatedLineChartContainer: React.FC<{
 			</Position>
 
 			<Position
-				zIndex={100}
+				// zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine

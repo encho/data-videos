@@ -64,14 +64,14 @@ export const BasicLineChart: React.FC<{
 	const dates = timeSeries.map((it) => it.date);
 
 	return (
-		<div>
+		<>
 			<Position
-				zIndex={100}
+				// zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					// lineColor={theme.dataColors[0].BASE}
-					lineColor={'yellow'}
+					lineColor={theme.dataColors[0].BASE}
+					// lineColor={'yellow'}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
@@ -116,6 +116,6 @@ export const BasicLineChart: React.FC<{
 					formatter={currencyFormatter}
 				/>
 			</Position>
-		</div>
+		</>
 	);
 };
