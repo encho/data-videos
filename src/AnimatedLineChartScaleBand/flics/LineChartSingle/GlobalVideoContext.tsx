@@ -1,15 +1,5 @@
-import {
-	createContext,
-	useContext,
-	//  useCallback, useMemo, useRef
-} from 'react';
-import {
-	useCurrentFrame,
-	// Sequence,
-	useVideoConfig,
-} from 'remotion';
-
-// type BufferState = {[key: string]: boolean};
+import {createContext, useContext} from 'react';
+import {useCurrentFrame, useVideoConfig} from 'remotion';
 
 type TGlobalVideoContext = {
 	globalCurrentFrame: number;
@@ -19,7 +9,6 @@ type TGlobalVideoContext = {
 };
 
 export const GlobalVideoContext = createContext<TGlobalVideoContext>({
-	// By default, do nothing if the context is not set, for example in rendering
 	globalCurrentFrame: 0,
 	globalDurationInFrames: 0,
 	globalAnimationPercentage: 0,
@@ -32,7 +21,6 @@ export const GlobalVideoContextWrapper: React.FC<{
 	const currentFrame = useCurrentFrame();
 	const {durationInFrames, fps} = useVideoConfig();
 	return (
-		// <Sequence durationInFrames={} layout="none">
 		<GlobalVideoContext.Provider
 			value={{
 				globalCurrentFrame: currentFrame,
@@ -43,7 +31,6 @@ export const GlobalVideoContextWrapper: React.FC<{
 		>
 			{children}
 		</GlobalVideoContext.Provider>
-		// </Sequence>
 	);
 };
 
