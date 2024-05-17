@@ -5,6 +5,7 @@ import {useChartLayout} from './useChartLayout';
 import {TTheme, myTheme} from '../../theme';
 import {BasicLineChart} from './BasicLineChart';
 import {LineChartTransitionContainer} from './LineChartTransitionContainer';
+import {Position} from '../../components/Position';
 // import {periodsScale} from '../../periodsScale/periodsScale';
 
 const Y_DOMAIN_TYPE = 'FULL';
@@ -113,10 +114,44 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				>
 					{({periodsScale, yScale, easingPercentage}) => {
 						return (
-							<div>
-								{/* <div style={{backgroundColor: 'yellow'}}>
-									{easingPercentage}
+							<div style={{position: 'relative'}}>
+								{/* <div style={{position: 'absolute', width: '100%'}}>
+									<div
+										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
+									>
+										{easingPercentage}
+									</div>
+									<div
+										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
+									>
+										{easingPercentage}
+									</div>
+									<div
+										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
+									>
+										{easingPercentage}
+									</div>
 								</div> */}
+								{/* THIS IS TO BE FACTORED OUT AS NEW COMPONENT! */}
+								<Position
+									position={{
+										left: chartLayout.areas.plot.x1,
+										top: chartLayout.areas.plot.y1,
+									}}
+								>
+									<svg
+										style={{
+											backgroundColor: 'orange',
+											opacity: easingPercentage,
+											width: chartLayout.areas.plot.width,
+											height: chartLayout.areas.plot.height,
+										}}
+									>
+										<g transform="translate(0,100)">
+											<text>{easingPercentage}</text>
+										</g>
+									</svg>
+								</Position>
 								<BasicLineChart
 									timeSeries={timeSeries}
 									layoutAreas={{
