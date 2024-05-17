@@ -6,7 +6,7 @@ import {TTheme, myTheme} from '../../theme';
 import {BasicLineChart} from './BasicLineChart';
 import {LineChartTransitionContainer} from './LineChartTransitionContainer';
 import {Position} from '../../components/Position';
-// import {periodsScale} from '../../periodsScale/periodsScale';
+import {useGlobalVideoContext} from './GlobalVideoContext';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -24,6 +24,7 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme = myTheme,
 }) => {
+	const globalVideoContext = useGlobalVideoContext();
 	const {durationInFrames} = useVideoConfig();
 
 	const CHART_WIDTH = width;
@@ -50,6 +51,7 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 	const sequence_2_endView = [0, timeSeries.length] as [number, number];
 
 	return (
+		// <GlobalVideoContextWrapper>
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
@@ -149,6 +151,9 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 									>
 										<g transform="translate(0,100)">
 											<text>{easingPercentage}</text>
+										</g>
+										<g transform="translate(0,120)">
+											<text>{JSON.stringify(globalVideoContext)}</text>
 										</g>
 									</svg>
 								</Position>

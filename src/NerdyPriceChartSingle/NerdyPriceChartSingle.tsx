@@ -19,6 +19,7 @@ import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
+import {GlobalVideoContextWrapper} from '../AnimatedLineChartScaleBand/flics/LineChartSingle/GlobalVideoContext';
 
 export const nerdyPriceChartSingleSchema = z.object({
 	ticker: zNerdyTickers,
@@ -91,40 +92,42 @@ export const NerdyPriceChartSingle: React.FC<
 	const platteHeight = platteWidth * 0.61;
 
 	return (
-		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
-			<Position position={{left: 50, top: 50}}>
-				<TitleSlide
-					titleColor={theme.typography.titleColor}
-					subTitleColor={theme.typography.subTitleColor}
-					title={
-						apiResult.tickerMetadata.name +
-						' ' +
-						apiResult.timePeriod +
-						' Performance'
-					}
-					subTitle={`${formatPercentage(apiResult.percentageChange)}`}
-					titleFontSize={60}
-					subTitleFontSize={100}
-				/>
-			</Position>
-			<AbsoluteFill>
-				<Position position={{left: 50, top: 280}}>
-					<ObliquePlatte
-						width={platteWidth}
-						height={platteHeight}
-						theme={theme.platte}
-					>
-						<LineChartSingle
+		<GlobalVideoContextWrapper>
+			<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
+				<Position position={{left: 50, top: 50}}>
+					<TitleSlide
+						titleColor={theme.typography.titleColor}
+						subTitleColor={theme.typography.subTitleColor}
+						title={
+							apiResult.tickerMetadata.name +
+							' ' +
+							apiResult.timePeriod +
+							' Performance'
+						}
+						subTitle={`${formatPercentage(apiResult.percentageChange)}`}
+						titleFontSize={60}
+						subTitleFontSize={100}
+					/>
+				</Position>
+				<AbsoluteFill>
+					<Position position={{left: 50, top: 280}}>
+						<ObliquePlatte
 							width={platteWidth}
 							height={platteHeight}
-							timeSeries={timeSeries}
-							theme={theme}
-						/>
-					</ObliquePlatte>
-				</Position>
+							theme={theme.platte}
+						>
+							<LineChartSingle
+								width={platteWidth}
+								height={platteHeight}
+								timeSeries={timeSeries}
+								theme={theme}
+							/>
+						</ObliquePlatte>
+					</Position>
+				</AbsoluteFill>
+				<LorenzoBertoliniLogo />
 			</AbsoluteFill>
-			<LorenzoBertoliniLogo />
-		</AbsoluteFill>
+		</GlobalVideoContextWrapper>
 	);
 };
 

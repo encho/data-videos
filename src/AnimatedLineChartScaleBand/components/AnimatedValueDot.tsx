@@ -4,6 +4,7 @@ import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 import {getXYRightClamped, getXYLeftClamped} from '../periodsScale/getXY';
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
+import {useGlobalVideoContext} from '../flics/LineChartSingle/GlobalVideoContext';
 
 export const AnimatedValueDot: React.FC<{
 	area: TGridLayoutArea;
@@ -61,8 +62,10 @@ export const Dot: React.FC<{
 	r: number;
 	fill: string;
 }> = ({cx, cy, r, fill}) => {
-	const frame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
+	const globalVideoContext = useGlobalVideoContext();
+
+	const frame = globalVideoContext.globalCurrentFrame;
+	const durationInFrames = globalVideoContext.globalDurationInFrames;
 
 	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
 
