@@ -1,12 +1,14 @@
 import {Sequence, useVideoConfig} from 'remotion';
 
-import {DisplayGridLayout} from '../../../acetti-viz';
+import {DisplayGridLayout, TGridLayoutArea} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {TTheme, myTheme} from '../../theme';
 import {BasicLineChart} from './BasicLineChart';
 import {LineChartTransitionContainer} from './LineChartTransitionContainer';
 import {Position} from '../../components/Position';
 import {useGlobalVideoContext} from '../../../acetti-components/GlobalVideoContext';
+import {TPeriodsScale} from '../../periodsScale/periodsScale';
+import {ScaleLinear} from 'd3-scale';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -117,46 +119,12 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 					{({periodsScale, yScale, easingPercentage}) => {
 						return (
 							<div style={{position: 'relative'}}>
-								{/* <div style={{position: 'absolute', width: '100%'}}>
-									<div
-										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
-									>
-										{easingPercentage}
-									</div>
-									<div
-										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
-									>
-										{easingPercentage}
-									</div>
-									<div
-										style={{backgroundColor: 'cyan', opacity: easingPercentage}}
-									>
-										{easingPercentage}
-									</div>
-								</div> */}
-								{/* THIS IS TO BE FACTORED OUT AS NEW COMPONENT! */}
-								<Position
-									position={{
-										left: chartLayout.areas.plot.x1,
-										top: chartLayout.areas.plot.y1,
-									}}
-								>
-									<svg
-										style={{
-											backgroundColor: 'orange',
-											opacity: easingPercentage,
-											width: chartLayout.areas.plot.width,
-											height: chartLayout.areas.plot.height,
-										}}
-									>
-										<g transform="translate(0,100)">
-											<text>{easingPercentage}</text>
-										</g>
-										<g transform="translate(0,120)">
-											<text>{JSON.stringify(globalVideoContext)}</text>
-										</g>
-									</svg>
-								</Position>
+								<ThePercLine
+									periodsScale={periodsScale}
+									yScale={yScale}
+									easingPercentage={easingPercentage}
+									plotArea={chartLayout.areas.plot}
+								/>
 								<BasicLineChart
 									timeSeries={timeSeries}
 									layoutAreas={{
@@ -176,5 +144,39 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				</LineChartTransitionContainer>
 			</Sequence>
 		</div>
+	);
+};
+
+export const ThePercLine: React.FC<{
+	periodsScale: TPeriodsScale;
+	yScale: ScaleLinear<number, number>;
+	easingPercentage: number;
+	plotArea: TGridLayoutArea;
+}> = ({
+	// periodsScale,
+	// yScale,
+	easingPercentage,
+	plotArea,
+}) => {
+	return (
+		<Position
+			position={{
+				left: plotArea.x1,
+				top: plotArea.y1,
+			}}
+		>
+			<svg
+				style={{
+					backgroundColor: 'cyan',
+					opacity: easingPercentage,
+					width: plotArea.width,
+					height: plotArea.height,
+				}}
+			>
+				<g transform="translate(0,100)">
+					<text>{easingPercentage}</text>
+				</g>
+			</svg>
+		</Position>
 	);
 };
