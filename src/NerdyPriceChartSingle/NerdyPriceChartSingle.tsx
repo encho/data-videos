@@ -19,7 +19,7 @@ import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
-import {GlobalVideoContextWrapper} from '../AnimatedLineChartScaleBand/flics/LineChartSingle/GlobalVideoContext';
+import {GlobalVideoContextWrapper} from '../acetti-components/GlobalVideoContext';
 
 export const nerdyPriceChartSingleSchema = z.object({
 	ticker: zNerdyTickers,

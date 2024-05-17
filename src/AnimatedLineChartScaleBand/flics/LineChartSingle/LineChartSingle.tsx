@@ -6,7 +6,7 @@ import {TTheme, myTheme} from '../../theme';
 import {BasicLineChart} from './BasicLineChart';
 import {LineChartTransitionContainer} from './LineChartTransitionContainer';
 import {Position} from '../../components/Position';
-import {useGlobalVideoContext} from './GlobalVideoContext';
+import {useGlobalVideoContext} from '../../../acetti-components/GlobalVideoContext';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';

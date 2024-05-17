@@ -4,7 +4,7 @@ import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
 import {getXYRightClamped, getXYLeftClamped} from '../periodsScale/getXY';
 import {TPeriodsScale} from '../periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-viz';
-import {useGlobalVideoContext} from '../flics/LineChartSingle/GlobalVideoContext';
+import {useGlobalVideoContext} from '../../acetti-components/GlobalVideoContext';
 
 export const AnimatedValueDot: React.FC<{
 	area: TGridLayoutArea;
