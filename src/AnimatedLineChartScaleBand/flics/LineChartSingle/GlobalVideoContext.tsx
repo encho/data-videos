@@ -47,17 +47,6 @@ export const GlobalVideoContextWrapper: React.FC<{
 	);
 };
 
-// export const GlobalVideoContextInner: React.FC<{
-// 	children: React.ReactNode;
-// }> = ({children}) => {
-// 	const currentFrame = useCurrentFrame();
-// 	return (
-// 		<GlobalVideoContext.Provider value={{globalCurrentFrame: currentFrame}}>
-// 			{children}
-// 		</GlobalVideoContext.Provider>
-// 	);
-// };
-
 export const useGlobalVideoContext = () => {
 	const contextValue = useContext(GlobalVideoContext);
 	return contextValue;
