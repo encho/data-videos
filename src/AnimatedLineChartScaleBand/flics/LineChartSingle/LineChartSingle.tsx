@@ -1,4 +1,10 @@
-import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
+import {
+	Sequence,
+	useCurrentFrame,
+	useVideoConfig,
+	interpolate,
+	spring,
+} from 'remotion';
 
 import {DisplayGridLayout, TGridLayoutArea} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
@@ -123,6 +129,15 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 						return (
 							// <div style={{position: 'relative'}}>
 							<div>
+								{/* <ThePercLine
+									firstValue={timeSeries[0].value}
+									lastValue={timeSeries[timeSeries.length - 1].value}
+									enterDurationInFrames={60}
+									periodsScale={periodsScale}
+									yScale={yScale}
+									easingPercentage={easingPercentage}
+									plotArea={chartLayout.areas.plot}
+								/> */}
 								<BasicLineChart
 									timeSeries={timeSeries}
 									layoutAreas={{
@@ -137,6 +152,9 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 									periodScale={periodsScale}
 								/>
 								<ThePercLine
+									firstValue={timeSeries[0].value}
+									lastValue={timeSeries[timeSeries.length - 1].value}
+									enterDurationInFrames={60}
 									periodsScale={periodsScale}
 									yScale={yScale}
 									easingPercentage={easingPercentage}
@@ -156,22 +174,55 @@ export const ThePercLine: React.FC<{
 	yScale: ScaleLinear<number, number>;
 	easingPercentage: number;
 	plotArea: TGridLayoutArea;
+	// TODO deprecate?
+	enterDurationInFrames: number;
+	firstValue: number;
+	lastValue: number;
 }> = ({
 	// periodsScale,
 	yScale,
-	easingPercentage,
+	// easingPercentage,
 	plotArea,
+	enterDurationInFrames,
+	firstValue,
+	lastValue,
 }) => {
 	const currentFrame = useCurrentFrame();
-	const {durationInFrames} = useVideoConfig();
+	const {fps} = useVideoConfig();
 
-	const lineColor = '#00aa99';
-	const strokeWidth = 5;
+	// const lineColor = '#00aa99';
+	// const lineColor = 'transparent';
+	const lineColor = '#F50274';
+	const gradientColor = '#F50274';
+	const textColor = '#F50274';
+	const lineStrokeWidth = 1.5;
+	const fontWeight = 600;
 
-	const aPerc = currentFrame / durationInFrames;
+	// const strokeWidth = 5;
+	const textBottomMargin = 10;
 
-	const firstValue = 30000;
-	const lastValue = 70000;
+	const aPerc = spring({
+		frame: currentFrame,
+		fps,
+		// config: {
+		// 	damping: 36,
+		// },
+		config: {
+			damping: 36,
+			mass: 4,
+			stiffness: 117,
+		},
+		durationInFrames: 48,
+		// config: {
+		// 	mass: 6.7,
+		// 	stiffness: 16,
+		// },
+	});
+
+	// const aPerc = interpolate(spring_0_1, [0, 1], [0, 200]);
+
+	// const firstValue = 30000;
+	// const lastValue = 60000;
 
 	const aLastValue = firstValue + aPerc * (lastValue - firstValue);
 
@@ -195,6 +246,22 @@ export const ThePercLine: React.FC<{
 					height: plotArea.height,
 				}}
 			>
+				<defs>
+					{/* <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%"> */}
+					<linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+						<stop
+							offset="0%"
+							// style={{stopColor: 'rgb(0,255,0)', stopOpacity: 1}}
+							style={{stopColor: gradientColor, stopOpacity: 1}}
+						/>
+						<stop
+							offset="100%"
+							// offset="50%"
+							// style={{stopColor: 'rgb(0,255,0)', stopOpacity: 0}}
+							style={{stopColor: gradientColor, stopOpacity: 0.2}}
+						/>
+					</linearGradient>
+				</defs>
 				<rect
 					x={0}
 					y={mappedAnimatedLastValue}
@@ -202,7 +269,8 @@ export const ThePercLine: React.FC<{
 					// height={mappedAnimatedLastValue - mappedFirstValue}
 					height={mappedFirstValue - mappedAnimatedLastValue}
 					// fill="orange"
-					fill={lineColor}
+					// fill={lineColor}
+					fill={'url(#greenGradient)'}
 					opacity={0.2}
 				/>
 
@@ -219,7 +287,7 @@ export const ThePercLine: React.FC<{
 					x2={plotArea.width}
 					y1={mappedFirstValue}
 					y2={mappedFirstValue}
-					strokeWidth={strokeWidth}
+					strokeWidth={lineStrokeWidth}
 					stroke={lineColor}
 				/>
 
@@ -228,12 +296,20 @@ export const ThePercLine: React.FC<{
 					x2={plotArea.width}
 					y1={mappedAnimatedLastValue}
 					y2={mappedAnimatedLastValue}
-					strokeWidth={strokeWidth}
+					strokeWidth={lineStrokeWidth}
 					stroke={lineColor}
 				/>
 
-				<g transform={`translate(100,${mappedAnimatedLastValue})`}>
-					<text style={{fontSize: 50}} fill={lineColor} opacity={aPerc}>
+				<g
+					transform={`translate(0,${
+						mappedAnimatedLastValue - textBottomMargin
+					})`}
+				>
+					<text
+						style={{fontSize: 50, fontWeight}}
+						fill={textColor}
+						opacity={aPerc}
+					>
 						{formatPercentage(aPercentageChange)}
 					</text>
 				</g>

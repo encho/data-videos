@@ -98,15 +98,23 @@ export const NerdyPriceChartSingle: React.FC<
 					<TitleSlide
 						titleColor={theme.typography.titleColor}
 						subTitleColor={theme.typography.subTitleColor}
+						// title={
+						// 	apiResult.tickerMetadata.name +
+						// 	' ' +
+						// 	apiResult.timePeriod +
+						// 	' Performance'
+						// }
+						// subTitle={`${formatPercentage(apiResult.percentageChange)}`}
 						title={
-							apiResult.tickerMetadata.name +
-							' ' +
-							apiResult.timePeriod +
-							' Performance'
+							apiResult.tickerMetadata.name + ''
+							// ' ' +
+							// apiResult.timePeriod +
+							// ' Performance'
 						}
-						subTitle={`${formatPercentage(apiResult.percentageChange)}`}
-						titleFontSize={60}
-						subTitleFontSize={100}
+						subTitle={apiResult.timePeriod + ' Performance in USD'}
+						// subTitle={`${formatPercentage(apiResult.percentageChange)}`}
+						titleFontSize={80}
+						subTitleFontSize={60}
 					/>
 				</Position>
 				<AbsoluteFill>

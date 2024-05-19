@@ -5,7 +5,8 @@ import {ThemeType} from './themeTypes';
 const textColor = chroma('#888').hex();
 const backgroundColor = chroma('#222222').darken().hex();
 
-const platteBackground = '#202020';
+// const platteBackground = '#202020';
+const platteBackground = '#232323';
 const platteBorder = '#292929';
 
 // TODO a component that visualizes the data colors!
