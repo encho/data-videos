@@ -33,7 +33,7 @@ export const lorenzobertoliniTheme: ThemeType = {
 	},
 	yAxis: {
 		fontSize: 15,
-		strokeWidth: 4,
+		strokeWidth: 2,
 		color: textColor,
 		tickColor: textColor,
 	},
