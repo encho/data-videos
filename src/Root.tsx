@@ -77,7 +77,7 @@ export const RemotionRoot: React.FC = () => {
 					showZero: true,
 					nerdyFinanceEnv: 'PROD' as const,
 					styling: {yAxisAreaWidth: 1000},
-					themeEnum: 'LORENZOBERTOLINI' as const,
+					themeEnum: 'NERDY' as const,
 				}}
 			/>
 			<Composition

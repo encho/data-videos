@@ -1,39 +1,12 @@
-// import {ReactNode} from 'react';
-import {
-	Sequence,
-	// AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	Easing,
-	interpolate,
-} from 'remotion';
+import {Sequence, useCurrentFrame, interpolate} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {LineChartTransitionContainer} from './LineChartTransitionContainer';
-// import {AnimatedCandlesticks} from '../../components/AnimatedCandlesticks';
-// import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
 import {periodsScale, TPeriodsScale} from '../../periodsScale/periodsScale';
-// import {AnimatedXAxis_MonthStarts} from '../../components/AnimatedXAxis_MonthStarts';
-// import {AnimatedYAxis} from '../../components/AnimatedYAxis';
-// import {AnimatedLine} from '../../components/AnimatedLine';
-// import {AnimatedValueDot} from '../../components/AnimatedValueDot';
 import {getYDomain} from '../../utils/timeSeries/timeSeries';
 
-// import {TTheme} from '../../theme';
-
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
-
-// TODO: export use because of passed parametrization
-// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
-// const currencyFormatter = (x: number) => {
-// 	const formatter = new Intl.NumberFormat('en-GB', {
-// 		maximumFractionDigits: 0, // Ensures no decimal places
-// 		minimumFractionDigits: 0, // Ensures no decimal places
-// 	});
-// 	return '$ ' + formatter.format(x);
-// };
 
 type TChildrenFuncArgs = {
 	periodsScale: TPeriodsScale;
@@ -60,12 +33,7 @@ export const LineChartAnimationContainer: React.FC<{
 	timeSeries: TimeSeries;
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
-	// area: TGridLayoutArea;
-	// fromVisibleDomainIndices: [number, number];
-	// toVisibleDomainIndices: [number, number];
-	// children: (x: TChildrenFuncArgs) => React.ReactNode | null;
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-	// TODO easing!!!
 }> = ({
 	// area,
 	timeSeries,
@@ -74,106 +42,51 @@ export const LineChartAnimationContainer: React.FC<{
 	// fromVisibleDomainIndices,
 	// toVisibleDomainIndices,
 	children,
-	// TODO
-	// easing,
 }) => {
-	const startFrames: number[] = transitionSpecs.reduce(
-		(acc, transition, index) => {
-			// For the first element, start frame is 0
-			if (index === 0) {
-				acc.push(0);
-			} else {
-				// Each subsequent element starts after the previous one ends
-				acc.push(acc[index - 1] + transitionSpecs[index - 1].durationInFrames);
-			}
-			return acc;
-		},
-		[] as number[]
-	);
-
-	const totalDuration = transitionSpecs.reduce(
-		(acc, transition) => acc + transition.durationInFrames,
-		0
-	);
-
-	return (
-		<Sequence from={0} durationInFrames={totalDuration} layout="none">
-			{transitionSpecs.map((transition, i) => {
-				const fromVisibleDomainIndices = viewSpecs[i].visibleDomainIndices;
-				const toVisibleDomainIndices = viewSpecs[i + 1].visibleDomainIndices;
-
-				// TODO implement moving area too
-				const area = viewSpecs[i].area;
-
-				return (
-					<Sequence
-						from={startFrames[i]}
-						durationInFrames={transitionSpecs[i].durationInFrames}
-					>
-						<LineChartTransitionContainer
-							timeSeries={timeSeries}
-							fromVisibleDomainIndices={fromVisibleDomainIndices}
-							toVisibleDomainIndices={toVisibleDomainIndices}
-							// TODO rename to plotArea
-							// area={chartLayout.areas.plot}
-							area={area}
-							// TODO pass yDomainType
-							// yDomainType={"FULL"}
-						>
-							{children}
-						</LineChartTransitionContainer>
-					</Sequence>
-				);
-			})}
-		</Sequence>
-	);
+	const frame = useCurrentFrame();
 
 	const dates = timeSeries.map((it) => it.date);
 
-	// ***************************************************
-	// only the first transition for now...
-	// ***************************************************
-	const transitionIndex = 0;
-	const fromVisibleDomainIndices =
-		viewSpecs[transitionIndex].visibleDomainIndices;
-	const toVisibleDomainIndices =
-		viewSpecs[transitionIndex + 1].visibleDomainIndices;
+	const frameRanges = calculateFrameRanges(transitionSpecs);
 
-	// TODO implement moving area too
-	const area = viewSpecs[transitionIndex].area;
+	const totalDuration = frameRanges[frameRanges.length - 1].endFrame;
 
-	const currentTransitionSpec = transitionSpecs[transitionIndex];
+	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
+	const currentTransition = transitionSpecs[currentTransitionIndex];
+	const currentFrameRange = frameRanges[currentTransitionIndex];
 
-	const EASING_FUNCTION = currentTransitionSpec.easingFunction;
-	const durationInFrames = currentTransitionSpec.durationInFrames;
+	const currentTransitionFrame = frame - currentFrameRange.startFrame;
 
-	// ***************************************************
+	const EASING_FUNCTION = currentTransition.easingFunction;
 
-	const frame = useCurrentFrame();
-	// const {durationInFrames} = useVideoConfig();
+	const currentAnimationPercentage =
+		(currentTransitionFrame + 1) / currentTransition.durationInFrames;
 
-	// TODO adapt everywhere else, this is right
-	const animationPercentage = (frame + 1) / durationInFrames;
+	const currentEasingPercentage = interpolate(
+		currentAnimationPercentage,
+		[0, 1],
+		[0, 1],
+		{
+			easing: EASING_FUNCTION,
+			// in this case should not be necessary
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 
-	// const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
-
-	const easingPercentage = interpolate(animationPercentage, [0, 1], [0, 1], {
-		easing: EASING_FUNCTION,
-		// in this case should not be necessary
-		extrapolateLeft: 'clamp',
-		extrapolateRight: 'clamp',
-	});
+	const fromViewSpec = viewSpecs[currentTransitionIndex];
+	const toViewSpec = viewSpecs[currentTransitionIndex + 1];
 
 	const animatedVisibleDomainIndexStart = interpolate(
-		easingPercentage,
+		currentEasingPercentage,
 		[0, 1],
-		[fromVisibleDomainIndices[0], toVisibleDomainIndices[0]]
+		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
 	);
 
 	const animatedVisibleDomainIndexEnd = interpolate(
-		easingPercentage,
+		currentEasingPercentage,
 		[0, 1],
-		[fromVisibleDomainIndices[1], toVisibleDomainIndices[1]]
+		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
 		// {
 		// 	easing: EASING_FUNCTION,
 		// 	// in this case should not be necessary
@@ -182,13 +95,15 @@ export const LineChartAnimationContainer: React.FC<{
 		// }
 	);
 
+	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
+
 	const currentPeriodsScale = periodsScale({
 		dates,
 		visibleDomainIndices: [
 			animatedVisibleDomainIndexStart,
 			animatedVisibleDomainIndexEnd,
 		],
-		visibleRange: [0, area.width],
+		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
 	});
 
 	const yDomain = getYDomain(
@@ -205,11 +120,72 @@ export const LineChartAnimationContainer: React.FC<{
 		.domain(yDomain)
 		// TODO domain zero to be added via yDomainType
 		// .domain(yDomainZero)
-		.range([area.height, 0]);
+		.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
 
-	return children({
-		periodsScale: currentPeriodsScale,
-		yScale,
-		easingPercentage,
-	});
+	return (
+		<Sequence from={0} durationInFrames={totalDuration} layout="none">
+			{children({
+				periodsScale: currentPeriodsScale,
+				yScale,
+				// TODO
+				// currentEasingPercentage...
+				easingPercentage: currentEasingPercentage,
+			})}
+		</Sequence>
+	);
 };
+
+type TFrameRange = {
+	startFrame: number;
+	endFrame: number;
+};
+
+const calculateFrameRanges = (transitions: TTransitionSpec[]) => {
+	// Calculate frame ranges
+	const frameRanges: TFrameRange[] = transitions.reduce(
+		(acc, transition, index) => {
+			if (index === 0) {
+				// For the first element, the start frame is 0
+				acc.push({startFrame: 0, endFrame: transition.durationInFrames});
+			} else {
+				// Calculate the start frame based on the end frame of the last item
+				const startFrame = acc[index - 1].endFrame;
+				const endFrame = startFrame + transition.durationInFrames;
+				acc.push({startFrame, endFrame});
+			}
+			return acc;
+		},
+		[] as TFrameRange[]
+	);
+
+	return frameRanges;
+};
+
+// Function to find the index of FrameRange that includes the current frame
+function findFrameRangeIndex(
+	currentFrame: number,
+	ranges: TFrameRange[]
+): number {
+	for (let i = 0; i < ranges.length; i++) {
+		if (
+			currentFrame >= ranges[i].startFrame &&
+			currentFrame < ranges[i].endFrame
+		) {
+			return i;
+		}
+	}
+	return -1; // Return -1 if no matching range is found
+}
+
+// Example FrameRanges and a test case
+// const frameRanges: TFrameRange[] = [
+// 	{startFrame: 0, endFrame: 30},
+// 	{startFrame: 30, endFrame: 75},
+// 	{startFrame: 75, endFrame: 135},
+// ];
+
+// console.log(findFrameRangeIndex(25, frameRanges)); // Output: 0
+// console.log(findFrameRangeIndex(30, frameRanges)); // Output: 1
+// console.log(findFrameRangeIndex(50, frameRanges)); // Output: 1
+// console.log(findFrameRangeIndex(135, frameRanges)); // Output: -1 (since it's exactly the end frame of last range)
+// console.log(findFrameRangeIndex(140, frameRanges)); // Output: -1

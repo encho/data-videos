@@ -12,7 +12,10 @@ import {DisplayGridLayout, TGridLayoutArea} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {TTheme, myTheme} from '../../theme';
 import {BasicLineChart} from './BasicLineChart';
-import {LineChartTransitionContainer} from './LineChartTransitionContainer';
+// ****
+// TODO deprecate
+// import {LineChartTransitionContainer} from './LineChartTransitionContainer';
+// ****
 import {Position} from '../../components/Position';
 // import {useGlobalVideoContext} from '../../../acetti-components/GlobalVideoContext';
 import {TPeriodsScale} from '../../periodsScale/periodsScale';
@@ -75,7 +78,6 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				/>
 			</div>
 
-			{/* <Sequence from={0} durationInFrames={60 + 60} layout="none"> */}
 			<LineChartAnimationContainer
 				timeSeries={timeSeries}
 				viewSpecs={[
@@ -95,12 +97,11 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 				transitionSpecs={[
 					{
 						durationInFrames: sequence_1_durationInFrames,
-						// durationInFrames: 60,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						// easingFunction: Easing.linear,
 					},
 					{
 						durationInFrames: sequence_2_durationInFrames,
-						// durationInFrames: 60,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 					},
 				]}
@@ -122,86 +123,7 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 								periodScale={periodsScale}
 							/>
 
-							<ThePercLine
-								firstValue={timeSeries[0].value}
-								lastValue={timeSeries[timeSeries.length - 1].value}
-								enterDurationInFrames={60}
-								periodsScale={periodsScale}
-								yScale={yScale}
-								easingPercentage={easingPercentage}
-								plotArea={chartLayout.areas.plot}
-							/>
-						</div>
-					);
-				}}
-			</LineChartAnimationContainer>
-			{/* </Sequence> */}
-
-			{/* <Sequence
-				from={sequence_1_startFrame}
-				durationInFrames={sequence_1_durationInFrames}
-				layout="none"
-			>
-				<LineChartTransitionContainer
-					timeSeries={timeSeries}
-					fromVisibleDomainIndices={sequence_1_startView}
-					toVisibleDomainIndices={sequence_1_endView}
-					// TODO rename to plotArea
-					area={chartLayout.areas.plot}
-					// TODO pass yDomainType
-					// yDomainType={"FULL"}
-				>
-					{({periodsScale, yScale, easingPercentage}) => {
-						return (
-							<div>
-								<BasicLineChart
-									timeSeries={timeSeries}
-									layoutAreas={{
-										plot: chartLayout.areas.plot,
-										xAxis: chartLayout.areas.xAxis,
-										yAxis: chartLayout.areas.yAxis,
-									}}
-									yDomainType={Y_DOMAIN_TYPE}
-									theme={theme}
-									//
-									yScale={yScale}
-									periodScale={periodsScale}
-								/>
-							</div>
-						);
-					}}
-				</LineChartTransitionContainer>
-			</Sequence> */}
-			{/* <Sequence
-				from={sequence_2_startFrame}
-				durationInFrames={sequence_2_durationInFrames}
-				layout="none"
-			>
-				<LineChartTransitionContainer
-					timeSeries={timeSeries}
-					fromVisibleDomainIndices={sequence_2_startView}
-					toVisibleDomainIndices={sequence_2_endView}
-					// TODO rename to plotArea
-					area={chartLayout.areas.plot}
-					// TODO pass yDomainType
-					// yDomainType={"FULL"}
-				>
-					{({periodsScale, yScale, easingPercentage}) => {
-						return (
-							<div>
-								<BasicLineChart
-									timeSeries={timeSeries}
-									layoutAreas={{
-										plot: chartLayout.areas.plot,
-										xAxis: chartLayout.areas.xAxis,
-										yAxis: chartLayout.areas.yAxis,
-									}}
-									yDomainType={Y_DOMAIN_TYPE}
-									theme={theme}
-									//
-									yScale={yScale}
-									periodScale={periodsScale}
-								/>
+							<Sequence from={sequence_1_durationInFrames + 100}>
 								<ThePercLine
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -211,11 +133,11 @@ export const LineChartSingle: React.FC<TAnimatedLineChart2Props> = ({
 									easingPercentage={easingPercentage}
 									plotArea={chartLayout.areas.plot}
 								/>
-							</div>
-						);
-					}}
-				</LineChartTransitionContainer>
-			</Sequence> */}
+							</Sequence>
+						</div>
+					);
+				}}
+			</LineChartAnimationContainer>
 		</div>
 	);
 };
