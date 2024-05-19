@@ -138,14 +138,3 @@ export const NerdyPriceChartSingle: React.FC<
 		</GlobalVideoContextWrapper>
 	);
 };
-
-function formatPercentage(value: number): string {
-	// Calculate the percentage by multiplying the value by 100
-	let percentage = value * 100;
-	// Round to the nearest integer and format with a sign
-	// Directly use `toFixed(0)` which handles rounding
-	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';
-}
-// Usage examples:
-// console.log(formatPercentage(1.23));  // Outputs: "+123%"
-// console.log(formatPercentage(-0.5));  // Outputs: "-50%"
