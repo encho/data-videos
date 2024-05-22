@@ -1,24 +1,13 @@
-// import {ReactNode} from 'react';
-import {
-	// Sequence,
-	// AbsoluteFill,
-	useCurrentFrame,
-	useVideoConfig,
-	Easing,
-	interpolate,
-} from 'remotion';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {ScaleLinear} from 'd3-scale';
 
-// import {AnimatedCandlesticks} from '../../components/AnimatedCandlesticks';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale, TPeriodsScale} from '../../periodsScale/periodsScale';
+import {TPeriodsScale} from '../../periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from '../../components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
-import {getYDomain} from '../../utils/timeSeries/timeSeries';
 
 import {TTheme} from '../../theme';
 
@@ -41,23 +30,14 @@ export const BasicLineChart: React.FC<{
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
-	// fromVisibleDomainIndices: [number, number];
-	// toVisibleDomainIndices: [number, number];
 	yDomainType: TYDomainType;
 	theme: TTheme;
-	//
-	// easingPercentage: number;
 	yScale: ScaleLinear<number, number>;
 	periodScale: TPeriodsScale;
 }> = ({
 	layoutAreas,
 	timeSeries,
-	// fromVisibleDomainIndices,
-	// toVisibleDomainIndices,
-	// yDomainType,
 	theme,
-	//
-	// easingPercentage,
 	yScale,
 	periodScale: currentPeriodsScale,
 }) => {
@@ -66,12 +46,10 @@ export const BasicLineChart: React.FC<{
 	return (
 		<>
 			<Position
-				// zIndex={100}
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
 					lineColor={theme.dataColors[0].BASE}
-					// lineColor={'yellow'}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}

@@ -124,4 +124,12 @@ export const nerdyTheme: ThemeType = {
 		backgroundColor: platteBackground,
 		borderColor: platteBorder,
 	},
+	timeseriesComponents: {
+		percentageChangeArea: {
+			lineColor: 'blue',
+			textColor: 'red',
+			gradientColor: 'blue',
+			lineStrokeWidth: 1.5,
+		},
+	},
 };

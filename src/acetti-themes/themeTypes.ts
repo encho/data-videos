@@ -62,6 +62,14 @@ export const zodThemeType = z.object({
 		backgroundColor: zColor(),
 		borderColor: zColor(),
 	}),
+	timeseriesComponents: z.object({
+		percentageChangeArea: z.object({
+			lineColor: zColor(),
+			textColor: zColor(),
+			gradientColor: zColor(),
+			lineStrokeWidth: z.number(),
+		}),
+	}),
 });
 
 export type ThemeType = z.infer<typeof zodThemeType>;

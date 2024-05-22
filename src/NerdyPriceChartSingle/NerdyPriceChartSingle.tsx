@@ -91,6 +91,8 @@ export const NerdyPriceChartSingle: React.FC<
 	const platteWidth = width * 0.9;
 	const platteHeight = platteWidth * 0.61;
 
+	console.log({apiResult});
+
 	return (
 		<GlobalVideoContextWrapper>
 			<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
@@ -98,23 +100,14 @@ export const NerdyPriceChartSingle: React.FC<
 					<TitleSlide
 						titleColor={theme.typography.titleColor}
 						subTitleColor={theme.typography.subTitleColor}
-						// title={
-						// 	apiResult.tickerMetadata.name +
-						// 	' ' +
-						// 	apiResult.timePeriod +
-						// 	' Performance'
-						// }
-						// subTitle={`${formatPercentage(apiResult.percentageChange)}`}
-						title={
-							apiResult.tickerMetadata.name + ''
-							// ' ' +
-							// apiResult.timePeriod +
-							// ' Performance'
-						}
-						subTitle={apiResult.timePeriod + ' Performance in USD'}
-						// subTitle={`${formatPercentage(apiResult.percentageChange)}`}
-						titleFontSize={80}
-						subTitleFontSize={60}
+						// title={apiResult.tickerMetadata.name}
+						// subTitle={apiResult.timePeriod + ' Performance in USD'}
+						title="Bitcoin 2 Years Performance"
+						subTitle="Price of a Bitcoin in USD"
+						titleFontSize={60}
+						subTitleFontSize={40}
+						titleFontWeight={600}
+						subTitleFontWeight={400}
 					/>
 				</Position>
 				<AbsoluteFill>

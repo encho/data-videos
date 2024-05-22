@@ -2,10 +2,16 @@ import chroma from 'chroma-js';
 
 import {ThemeType} from './themeTypes';
 
-const textColor = chroma('#888').hex();
+// this theme is a mono colored theme
+// const monoColor = "#f50274";
+// const monoColor = '#f05122';
+const monoColor = '#222';
+
+const textColor = chroma('#9b9b9b').hex();
+// const textColor = chroma(monoColor).brighten(2).hex();
 // const backgroundColor = chroma('#222222').darken().hex();
 // const backgroundColor = chroma('#f0f0f0').hex();
-const backgroundColor = chroma('#F50274').hex();
+const backgroundColor = chroma(monoColor).hex();
 
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
@@ -13,7 +19,7 @@ const backgroundColor = chroma('#F50274').hex();
 // const dataScale = chroma.scale(['lightgreen', 'magenta']).mode('lab').colors(6);
 // const dataScale = chroma.scale(['cyan', 'magenta']).mode('lab').colors(6);
 const dataScale = chroma
-	.scale(['#F50274', '#888888', '#0099cc'])
+	.scale([monoColor, '#888888', '#0099cc'])
 	.mode('lab')
 	.colors(6);
 
@@ -128,5 +134,13 @@ export const lorenzobertoliniTheme: ThemeType = {
 	platte: {
 		backgroundColor: '#ffffff',
 		borderColor: '#e0e0e0',
+	},
+	timeseriesComponents: {
+		percentageChangeArea: {
+			lineColor: monoColor,
+			textColor: monoColor,
+			gradientColor: monoColor,
+			lineStrokeWidth: 1.5,
+		},
 	},
 };

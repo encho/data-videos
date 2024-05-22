@@ -66,14 +66,14 @@ export const RemotionRoot: React.FC = () => {
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="NerdyPriceChartSingle"
 				component={NerdyPriceChartSingle}
-				durationInFrames={90 * 3}
+				durationInFrames={90 * 3.5}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
 				schema={nerdyPriceChartSingleSchema}
 				defaultProps={{
-					ticker: 'ETH-USD' as const,
-					timePeriod: '1Y' as const,
+					ticker: 'BTC-USD' as const,
+					timePeriod: '2Y' as const,
 					showZero: true,
 					nerdyFinanceEnv: 'PROD' as const,
 					styling: {yAxisAreaWidth: 1000},

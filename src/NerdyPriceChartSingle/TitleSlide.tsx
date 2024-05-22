@@ -11,6 +11,8 @@ export const TitleSlide: React.FC<{
 	subTitle: string;
 	titleFontSize: number;
 	subTitleFontSize: number;
+	titleFontWeight: number;
+	subTitleFontWeight: number;
 }> = ({
 	titleColor,
 	subTitleColor,
@@ -18,6 +20,8 @@ export const TitleSlide: React.FC<{
 	subTitle,
 	titleFontSize,
 	subTitleFontSize,
+	titleFontWeight,
+	subTitleFontWeight,
 }) => {
 	return (
 		<div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
@@ -31,7 +35,7 @@ export const TitleSlide: React.FC<{
 								fontSize: titleFontSize,
 								lineHeight: 1.2,
 								color: titleColor,
-								fontWeight: 600,
+								fontWeight: titleFontWeight,
 								// letterSpacing: '-0.025em',
 							}}
 						>
@@ -52,7 +56,8 @@ export const TitleSlide: React.FC<{
 								color: subTitleColor,
 								lineHeight: 1.1,
 								// fontWeight: 400,
-								fontWeight: 600,
+								fontWeight: subTitleFontWeight,
+								// fontWeight: 600,
 								// letterSpacing: '-0.025em',
 							}}
 						>

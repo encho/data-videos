@@ -1,5 +1,6 @@
 import {Sequence, useCurrentFrame, interpolate} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
+import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -34,21 +35,18 @@ export const LineChartAnimationContainer: React.FC<{
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-}> = ({
-	// area,
-	timeSeries,
-	viewSpecs,
-	transitionSpecs,
-	// fromVisibleDomainIndices,
-	// toVisibleDomainIndices,
-	children,
-}) => {
+}> = ({timeSeries, viewSpecs, transitionSpecs, children}) => {
+	// ensure the length of the passed props are as expected
+	invariant(
+		transitionSpecs.length === viewSpecs.length - 1,
+		'length of transitionSpecs and viewSpecs is not matching! there should be exactly one less transitionSpec than viewSpec!'
+	);
+
 	const frame = useCurrentFrame();
 
 	const dates = timeSeries.map((it) => it.date);
 
 	const frameRanges = calculateFrameRanges(transitionSpecs);
-
 	const totalDuration = frameRanges[frameRanges.length - 1].endFrame;
 
 	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
@@ -87,12 +85,6 @@ export const LineChartAnimationContainer: React.FC<{
 		currentEasingPercentage,
 		[0, 1],
 		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
-		// {
-		// 	easing: EASING_FUNCTION,
-		// 	// in this case should not be necessary
-		// 	extrapolateLeft: 'clamp',
-		// 	extrapolateRight: 'clamp',
-		// }
 	);
 
 	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
