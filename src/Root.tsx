@@ -35,6 +35,11 @@ import {
 } from './NerdyPriceChartSingle/NerdyPriceChartSingle';
 
 import {
+	SinglePriceChart,
+	singlePriceChartSchema,
+} from './SinglePriceChart/SinglePriceChart';
+
+import {
 	AxisTransition,
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
@@ -61,6 +66,23 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="SinglePriceChart"
+				component={SinglePriceChart}
+				durationInFrames={90 * 3.5}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={singlePriceChartSchema}
+				defaultProps={{
+					ticker: 'BTC-USD' as const,
+					timePeriod: '2Y' as const,
+					nerdyFinanceEnv: 'PROD' as const,
+					themeEnum: 'NERDY' as const,
+				}}
+			/>
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
