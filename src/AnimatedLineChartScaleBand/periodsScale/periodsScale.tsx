@@ -10,6 +10,8 @@ export type TPeriodsScale = {
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
 	getVisibleDomainIndices: () => [number, number];
+	getVisibleDomainDates: () => [Date, Date];
+	getVisibleDomain_NumberOfDays: () => number;
 	mapFloatIndexToRange: (i: number) => number;
 	visibleDomainIndices: [number, number];
 	visibleRange: [number, number];
@@ -108,20 +110,62 @@ export const periodsScale = ({
 		return leftValue * (1 - decimalPart) + rightValue * decimalPart;
 	};
 
+	const getRoundedVisibleDomainIndices = (): [number, number] => {
+		return [
+			Math.floor(visibleDomainIndices[0]),
+			Math.ceil(visibleDomainIndices[1]),
+		];
+	};
+
+	const getVisibleDomainIndices = () => visibleDomainIndices;
+
+	const getVisibleDomainDates = (): [Date, Date] => {
+		const [firstVisibleIndex, lastVisibleIndex] =
+			getRoundedVisibleDomainIndices();
+
+		const firstVisibleDate = dates[firstVisibleIndex];
+		const lastVisibleDate = dates[lastVisibleIndex - 1];
+
+		return [firstVisibleDate, lastVisibleDate];
+	};
+
+	const getVisibleDomain_NumberOfDays = () => {
+		const [firstVisibleDate, lastVisibleDate] = getVisibleDomainDates();
+		const numberOfVisibleDays = getDifferenceInDays(
+			firstVisibleDate,
+			lastVisibleDate
+		);
+		return numberOfVisibleDays;
+	};
+
 	return {
 		getBandFromDate,
 		getBandFromIndex,
-		getVisibleDomainIndices: () => visibleDomainIndices,
+		getVisibleDomainIndices,
+		getVisibleDomain_NumberOfDays,
+		getVisibleDomainDates,
 		mapFloatIndexToRange,
-		// TODO document what this is for
-		getRoundedVisibleDomainIndices: () => {
-			return [
-				Math.floor(visibleDomainIndices[0]),
-				Math.ceil(visibleDomainIndices[1]),
-			];
-		},
+		getRoundedVisibleDomainIndices,
 		visibleDomainIndices,
 		visibleRange,
 		dates,
 	};
 };
+
+function getDifferenceInDays(date1: Date, date2: Date): number {
+	console.log({date1, date2});
+
+	// Calculate the difference in time (in milliseconds)
+	const timeDifference = date2.getTime() - date1.getTime();
+
+	// Convert the time difference from milliseconds to days
+	const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+	// Return the absolute value of the difference in days
+	return Math.abs(daysDifference);
+}
+// // Example usage:
+// const date1 = new Date('2024-05-01');
+// const date2 = new Date('2024-05-24');
+// const difference = getDifferenceInDays(date1, date2);
+// console.log(difference); // Output: 23

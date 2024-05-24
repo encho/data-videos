@@ -1,5 +1,6 @@
 import {getMonth} from 'date-fns';
 import invariant from 'tiny-invariant';
+import {number} from 'zod';
 
 import {TGridLayoutArea} from '../../../../acetti-viz';
 import {TPeriodsScale} from '../../../periodsScale/periodsScale';
@@ -78,40 +79,29 @@ export const XAxis_SpecBased: React.FC<{
 	periodsScale: TPeriodsScale;
 	theme: TTheme_XAxis;
 }> = ({area, dates, periodsScale, theme}) => {
-	// TODO ideally these are to be found in theme// BUT multiple size options somwehow...
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
-	const TICK_TEXT_LEFT_PADDING = 8;
 
-	const SPEC_TYPE = 'month_starts';
+	// TODO the appropriate SPEC type should be inferred given the:
+	// - visible date range
+	// - width of the area
+	// - font size
+	// - etc...
+	// const visibleDates = periodsScale.getVisibleDomainDates()
+	const numberOfVisibleDays = periodsScale.getVisibleDomain_NumberOfDays();
 
-	const axisSpec = getMonthStartsAxisSpec(periodsScale, dates);
-	// const SPEC_TYPE = "quarter_start";
+	const SPEC_TYPE = numberOfVisibleDays < 200 ? 'monthStarts' : 'quarterStarts';
 
-	// TODO these things inside some Axis namespace/object...
-	// QUICK FIX: this is relatively inefficient, as we compute all monthstartsindicators for all dates
-	const monthStartsIndicators = generateMonthStartIndicatorList(dates);
+	// const SPEC_TYPE = 'monthStarts';
+	// const SPEC_TYPE = 'quarterStarts';
 
-	// how many monthStartsIndicators are visible?
-	const roundedVisibleIndices = periodsScale.getRoundedVisibleDomainIndices();
-	const slicedMonthStartsIndicators = monthStartsIndicators.slice(
-		roundedVisibleIndices[0],
-		roundedVisibleIndices[1] + 1
-	);
-	// const  = array.reduce((acc, curr) => acc + curr, 0);
-	const amountSignals = slicedMonthStartsIndicators.filter(
-		(it) => it === 1
-	).length;
+	const axisSpecFns = {
+		monthStarts: getMonthStartsAxisSpec,
+		quarterStarts: getQuarterStartsAxisSpec,
+	};
 
-	// const monthIndicators =
-	// 	amountSignals > 6
-	// 		? generateQuarterStartIndicatorList(dates)
-	// 		: monthStartsIndicators;
-	// const monthIndicators = monthStartsIndicators;
-
-	// const monthIndicators = generateQuarterStartIndicatorList(dates);
-	const monthIndicators = monthStartsIndicators;
+	const axisSpec = axisSpecFns[SPEC_TYPE](periodsScale, dates);
 
 	return (
 		<svg
@@ -164,24 +154,6 @@ export const XAxis_SpecBased: React.FC<{
 	);
 };
 
-function generateMonthStartIndicatorList(dates: Date[]): number[] {
-	const indicatorList: number[] = [];
-
-	for (let i = 0; i < dates.length; i++) {
-		const currentDate = dates[i];
-		const isFirstDayOfMonth = currentDate.getDate() === 1;
-
-		// Check if previous date is from a different month
-		const isPrecedingMonth =
-			i > 0 && dates[i - 1].getMonth() !== currentDate.getMonth();
-
-		// If it's the first day of the month or the previous date is from a different month, mark as 1
-		indicatorList.push(isFirstDayOfMonth || isPrecedingMonth ? 1 : 0);
-	}
-
-	return indicatorList;
-}
-
 function generateMonthStartsNearestDates(dates: Date[]): Date[] {
 	const datesList: Date[] = [];
 
@@ -201,8 +173,8 @@ function generateMonthStartsNearestDates(dates: Date[]): Date[] {
 	return datesList;
 }
 
+// TODO pass more info, e.g. area width?
 function getMonthStartsAxisSpec(
-	// TODO check if scale is necessary here
 	periodsScale: TPeriodsScale,
 	dates: Date[]
 ): TAxisSpec {
@@ -231,9 +203,37 @@ function getMonthStartsAxisSpec(
 	return {ticks, labels};
 }
 
-// TODO rename: getQuarterStartsPointers
-function generateQuarterStartIndicatorList(dates: Date[]): number[] {
-	const indicatorList: number[] = [];
+function getQuarterStartsAxisSpec(
+	periodsScale: TPeriodsScale,
+	dates: Date[]
+): TAxisSpec {
+	const ticksDates = generateQuarterStartsNearestDates(dates);
+
+	const ticks = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			value: periodsScale.getBandFromDate(date).x1,
+		};
+	});
+
+	const PADDING = 10;
+
+	const labels = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			value: periodsScale.getBandFromDate(date).x1 + PADDING,
+			textAnchor: 'start' as const,
+			label: getMonthName(date),
+		};
+	});
+
+	return {ticks, labels};
+}
+
+function generateQuarterStartsNearestDates(dates: Date[]): Date[] {
+	const datesList: Date[] = [];
 
 	for (let i = 0; i < dates.length; i++) {
 		const currentDate = dates[i];
@@ -245,11 +245,7 @@ function generateQuarterStartIndicatorList(dates: Date[]): number[] {
 			monthNumber === 7 ||
 			monthNumber === 10;
 
-		// TODO quick fix improve on this
-		if (i === 0) {
-			// indicatorList.push(1);
-			indicatorList.push(0);
-		} else {
+		if (i !== 0) {
 			const previousDate = dates[i - 1];
 			const previousMonthNumber = previousDate.getMonth() + 1;
 			const prevDateNoQuarterStartMonth =
@@ -259,14 +255,12 @@ function generateQuarterStartIndicatorList(dates: Date[]): number[] {
 				previousMonthNumber != 10;
 
 			if (isFirstMonthOfQuarter && prevDateNoQuarterStartMonth) {
-				indicatorList.push(1);
-			} else {
-				indicatorList.push(0);
+				datesList.push(currentDate);
 			}
 		}
 	}
 
-	return indicatorList;
+	return datesList;
 }
 
 function getMonthName(date: Date): string {
