@@ -69,20 +69,12 @@ export const SinglePriceChartComponent: React.FC<TAnimatedLineChart2Props> = ({
 						area: chartLayout.areas.plot,
 						visibleDomainIndices: visibleDomainIndices_1,
 					},
-					// {
-					// 	area: chartLayout.areas.plot,
-					// 	visibleDomainIndices: visibleDomainIndices_2,
-					// },
 				]}
 				transitionSpecs={[
 					{
 						durationInFrames: transitionDurationInFrames_0_1,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 					},
-					// {
-					// 	durationInFrames: transitionDurationInFrames_1_2,
-					// 	easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-					// },
 				]}
 			>
 				{({periodsScale, yScale, easingPercentage}) => {

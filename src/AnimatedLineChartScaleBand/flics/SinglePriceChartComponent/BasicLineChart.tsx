@@ -8,6 +8,10 @@ import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
+import {
+	getMonthStartsAxisSpec,
+	getQuarterStartsAxisSpec,
+} from './components/axisSpecs';
 
 import {TTheme} from '../../theme';
 
@@ -43,6 +47,23 @@ export const BasicLineChart: React.FC<{
 }) => {
 	const dates = timeSeries.map((it) => it.date);
 
+	// TODO the appropriate SPEC type should be inferred given the:
+	// - visible date range
+	// - width of the area
+	// - font size
+	// - etc...
+	const numberOfVisibleDays =
+		currentPeriodsScale.getVisibleDomain_NumberOfDays();
+	const SPEC_TYPE = numberOfVisibleDays < 200 ? 'monthStarts' : 'quarterStarts';
+
+	const axisSpecFunctions = {
+		monthStarts: getMonthStartsAxisSpec,
+		quarterStarts: getQuarterStartsAxisSpec,
+	};
+
+	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
+	const axisSpec = axisSpecFunctions[SPEC_TYPE](currentPeriodsScale, dates);
+
 	return (
 		<>
 			<Position
@@ -75,11 +96,9 @@ export const BasicLineChart: React.FC<{
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
-				{/* <AnimatedXAxis_PeriodsScale */}
 				<XAxis_SpecBased
+					axisSpec={axisSpec}
 					theme={theme.xAxis}
-					dates={dates}
-					periodsScale={currentPeriodsScale}
 					area={layoutAreas.xAxis}
 				/>
 			</Position>
