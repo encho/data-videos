@@ -113,6 +113,7 @@ export const periodsScale = ({
 		getBandFromIndex,
 		getVisibleDomainIndices: () => visibleDomainIndices,
 		mapFloatIndexToRange,
+		// TODO document what this is for
 		getRoundedVisibleDomainIndices: () => {
 			return [
 				Math.floor(visibleDomainIndices[0]),

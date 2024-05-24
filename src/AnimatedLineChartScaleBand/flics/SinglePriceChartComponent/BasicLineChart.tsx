@@ -4,7 +4,7 @@ import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../periodsScale/periodsScale';
-import {AnimatedXAxis_MonthStarts} from '../../components/AnimatedXAxis_MonthStarts';
+import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
@@ -76,7 +76,7 @@ export const BasicLineChart: React.FC<{
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				{/* <AnimatedXAxis_PeriodsScale */}
-				<AnimatedXAxis_MonthStarts
+				<XAxis_SpecBased
 					theme={theme.xAxis}
 					dates={dates}
 					periodsScale={currentPeriodsScale}

@@ -1,6 +1,66 @@
-import {TGridLayoutArea} from '../../acetti-viz';
-import {TPeriodsScale} from '../periodsScale/periodsScale';
+import {getMonth} from 'date-fns';
+import invariant from 'tiny-invariant';
 
+import {TGridLayoutArea} from '../../../../acetti-viz';
+import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+
+// type TTickSpecMapped = {
+// 	id: string;
+// 	type: 'MAPPED_VALUE';
+// 	value: number;
+// };
+
+type TTickSpec = {
+	id: string;
+	value: number;
+	// type: 'DOMAIN_VALUE';
+	// mappedValue: number;
+};
+
+// type TTickSpec = TTickSpecNormal | TTickSpecMapped;
+
+// type TLabelSpecNormal = {
+// 	id: string;
+// 	value: Date;
+// 	mappedValue: number;
+// 	label: string;
+// 	type: 'DOMAIN_VALUE';
+// 	textAnchor?: 'start' | 'middle' | 'end';
+// };
+
+type TLabelSpec = {
+	id: string;
+	value: number;
+	label: string;
+	// type: 'DOMAIN_VALUE';
+	textAnchor?: 'start' | 'middle' | 'end';
+};
+
+// type TLabelSpecNormal = {
+// 	id: string;
+// 	value: Date;
+// 	label: string;
+// 	type: 'DOMAIN_VALUE';
+// 	textAnchor?: 'start' | 'middle' | 'end';
+// };
+
+// type TLabelSpecMapped = {
+// 	id: string;
+// 	value: number;
+// 	label: string;
+// 	type: 'MAPPED_VALUE';
+// 	textAnchor?: 'start' | 'middle' | 'end';
+// };
+
+// type TLabelSpec = TLabelSpecNormal | TLabelSpecMapped;
+
+export type TAxisSpec = {
+	// scale: BandScale here
+	ticks: TTickSpec[];
+	labels: TLabelSpec[];
+};
+
+// TODO get key from global Theme
 export type TTheme_XAxis = {
 	fontSize: number;
 	strokeWidth: number;
@@ -8,7 +68,7 @@ export type TTheme_XAxis = {
 	tickColor: string;
 };
 
-export const AnimatedXAxis_MonthStarts: React.FC<{
+export const XAxis_SpecBased: React.FC<{
 	area: TGridLayoutArea;
 	dates: Date[];
 	// TODO periodsScaleStart (for transitioning)
@@ -23,6 +83,11 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 	const TICK_TEXT_LEFT_PADDING = 8;
+
+	const SPEC_TYPE = 'month_starts';
+
+	const axisSpec = getMonthStartsAxisSpec(periodsScale, dates);
+	// const SPEC_TYPE = "quarter_start";
 
 	// TODO these things inside some Axis namespace/object...
 	// QUICK FIX: this is relatively inefficient, as we compute all monthstartsindicators for all dates
@@ -62,35 +127,38 @@ export const AnimatedXAxis_MonthStarts: React.FC<{
 				</clipPath>
 			</defs>
 
-			{/* <rect x={0} y={0} width={area.width} height={area.height} fill="black" /> */}
+			{axisSpec.ticks.map((xTick) => {
+				return (
+					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+						<line
+							x1={xTick.value}
+							x2={xTick.value}
+							y1={0}
+							y2={TICK_LINE_SIZE}
+							stroke="yellow"
+							strokeWidth={4}
+						/>
+					</g>
+				);
+			})}
 
-			{dates.map((date, i) => {
-				if (monthIndicators[i] === 1) {
-					const band = periodsScale.getBandFromDate(date);
-					return (
-						<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-							<line
-								x1={band.x1}
-								x2={band.x1}
-								y1={0}
-								y2={TICK_LINE_SIZE}
-								stroke={theme.tickColor}
-								strokeWidth={theme.strokeWidth}
-							/>
-							<text
-								textAnchor="left"
-								alignmentBaseline="baseline"
-								fill={theme.color}
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								x={band.x1 + TICK_TEXT_LEFT_PADDING}
-								y={TICK_TEXT_FONT_SIZE}
-							>
-								{getMonthName(date)}
-							</text>
-						</g>
-					);
-				}
+			{axisSpec.labels.map((xLabel) => {
+				return (
+					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+						<text
+							textAnchor="left"
+							alignmentBaseline="baseline"
+							// fill={theme.color}
+							fill={'yellow'}
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							x={xLabel.value}
+							y={TICK_TEXT_FONT_SIZE}
+						>
+							{xLabel.label}
+						</text>
+					</g>
+				);
 			})}
 		</svg>
 	);
@@ -112,6 +180,55 @@ function generateMonthStartIndicatorList(dates: Date[]): number[] {
 	}
 
 	return indicatorList;
+}
+
+function generateMonthStartsNearestDates(dates: Date[]): Date[] {
+	const datesList: Date[] = [];
+
+	for (let i = 0; i < dates.length; i++) {
+		const currentDate = dates[i];
+		const isFirstDayOfMonth = currentDate.getDate() === 1;
+
+		// Check if previous date is from a different month
+		const isPrecedingMonth =
+			i > 0 && dates[i - 1].getMonth() !== currentDate.getMonth();
+
+		// If it's the first day of the month or the previous date is from a different month, mark as 1
+		if (isPrecedingMonth || isFirstDayOfMonth) {
+			datesList.push(currentDate);
+		}
+	}
+	return datesList;
+}
+
+function getMonthStartsAxisSpec(
+	// TODO check if scale is necessary here
+	periodsScale: TPeriodsScale,
+	dates: Date[]
+): TAxisSpec {
+	const ticksDates = generateMonthStartsNearestDates(dates);
+
+	const ticks = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			value: periodsScale.getBandFromDate(date).x1,
+		};
+	});
+
+	const PADDING = 10;
+
+	const labels = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			value: periodsScale.getBandFromDate(date).x1 + PADDING,
+			textAnchor: 'start' as const,
+			label: getMonthName(date),
+		};
+	});
+
+	return {ticks, labels};
 }
 
 // TODO rename: getQuarterStartsPointers
