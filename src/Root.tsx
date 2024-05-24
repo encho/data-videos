@@ -40,6 +40,11 @@ import {
 } from './SinglePriceChart/SinglePriceChart';
 
 import {
+	SinglePriceChartAnimatedAxis,
+	singlePriceChartAnimatedAxisSchema,
+} from './SinglePriceChartAnimatedAxis/SinglePriceChartAnimatedAxis';
+
+import {
 	AxisTransition,
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
@@ -66,6 +71,23 @@ const squareVideo = {
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="SinglePriceChartAnimatedAxis"
+				component={SinglePriceChartAnimatedAxis}
+				durationInFrames={90 * 3.5}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={singlePriceChartAnimatedAxisSchema}
+				defaultProps={{
+					ticker: 'BTC-USD' as const,
+					timePeriod: '2Y' as const,
+					nerdyFinanceEnv: 'PROD' as const,
+					themeEnum: 'LORENZOBERTOLINI' as const,
+				}}
+			/>
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
