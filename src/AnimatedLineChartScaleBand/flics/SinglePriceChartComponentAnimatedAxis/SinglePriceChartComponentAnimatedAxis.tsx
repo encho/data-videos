@@ -37,7 +37,8 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	// const transitionDurationInFrames_0_1 = durationInFrames - LAST_STILL_DURATION;
 	const transitionDurationInFrames_0_1 = durationInFrames;
 
-	const visibleDomainIndices_0 = [0, 0] as [number, number];
+	// TODO fix with [0,0] !!!!!!!!!
+	const visibleDomainIndices_0 = [0, 20] as [number, number];
 	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
 	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
@@ -74,7 +75,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 					},
 				]}
 			>
-				{({periodsScale, yScale, easingPercentage}) => {
+				{({periodsScale, yScale, easingPercentage, transitionInfo}) => {
 					return (
 						<div>
 							<BasicLineChart
@@ -89,6 +90,8 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 								//
 								yScale={yScale}
 								periodScale={periodsScale}
+								fromPeriodScale={transitionInfo.periodsScale.from}
+								toPeriodScale={transitionInfo.periodsScale.to}
 							/>
 
 							<Sequence from={transitionDurationInFrames_0_1}>

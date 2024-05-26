@@ -19,7 +19,8 @@ import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../acetti-components/GlobalVideoContext';
-import {SinglePriceChartComponent} from '../AnimatedLineChartScaleBand/flics/SinglePriceChartComponent/SinglePriceChartComponent';
+// import {SinglePriceChartComponent} from '../AnimatedLineChartScaleBand/flics/SinglePriceChartComponent/SinglePriceChartComponent';
+import {SinglePriceChartComponentAnimatedAxis} from '../AnimatedLineChartScaleBand/flics/SinglePriceChartComponentAnimatedAxis/SinglePriceChartComponentAnimatedAxis';
 
 export const singlePriceChartAnimatedAxisSchema = z.object({
 	ticker: zNerdyTickers,
@@ -107,7 +108,7 @@ export const SinglePriceChartAnimatedAxis: React.FC<
 							height={platteHeight}
 							theme={theme.platte}
 						>
-							<SinglePriceChartComponent
+							<SinglePriceChartComponentAnimatedAxis
 								width={platteWidth}
 								height={platteHeight}
 								timeSeries={timeSeries}

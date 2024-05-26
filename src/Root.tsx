@@ -83,7 +83,7 @@ export const RemotionRoot: React.FC = () => {
 				schema={singlePriceChartAnimatedAxisSchema}
 				defaultProps={{
 					ticker: 'BTC-USD' as const,
-					timePeriod: '2Y' as const,
+					timePeriod: '1Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
 					themeEnum: 'LORENZOBERTOLINI' as const,
 				}}

@@ -38,31 +38,62 @@ export const BasicLineChart: React.FC<{
 	theme: TTheme;
 	yScale: ScaleLinear<number, number>;
 	periodScale: TPeriodsScale;
+	fromPeriodScale: TPeriodsScale;
+	toPeriodScale: TPeriodsScale;
 }> = ({
 	layoutAreas,
 	timeSeries,
 	theme,
 	yScale,
 	periodScale: currentPeriodsScale,
+	fromPeriodScale,
+	toPeriodScale,
 }) => {
 	const dates = timeSeries.map((it) => it.date);
+
+	const AXIS_SPEC_FUNCTIONS = {
+		monthStarts: getMonthStartsAxisSpec,
+		quarterStarts: getQuarterStartsAxisSpec,
+	};
 
 	// TODO the appropriate SPEC type should be inferred given the:
 	// - visible date range
 	// - width of the area
 	// - font size
 	// - etc...
+
+	// currentAxisSpec (for no transition)
 	const numberOfVisibleDays =
 		currentPeriodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE = numberOfVisibleDays < 200 ? 'monthStarts' : 'quarterStarts';
 
-	const axisSpecFunctions = {
-		monthStarts: getMonthStartsAxisSpec,
-		quarterStarts: getQuarterStartsAxisSpec,
-	};
+	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
+	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE](currentPeriodsScale, dates);
+
+	// axisSpecFrom (for start transition state)
+	const numberOfVisibleDaysFrom =
+		fromPeriodScale.getVisibleDomain_NumberOfDays();
+	const SPEC_TYPE_FROM =
+		numberOfVisibleDaysFrom < 200 ? 'monthStarts' : 'quarterStarts';
 
 	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
-	const axisSpec = axisSpecFunctions[SPEC_TYPE](currentPeriodsScale, dates);
+	const axisSpecFrom = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](
+		// currentPeriodsScale,
+		fromPeriodScale,
+		dates
+	);
+
+	// axisSpecTo (for start transition state)
+	const numberOfVisibleDaysTo = toPeriodScale.getVisibleDomain_NumberOfDays();
+	const SPEC_TYPE_TO =
+		numberOfVisibleDaysTo < 200 ? 'monthStarts' : 'quarterStarts';
+
+	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
+	const axisSpecTo = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_TO](
+		// currentPeriodsScale,
+		toPeriodScale,
+		dates
+	);
 
 	return (
 		<>
@@ -98,7 +129,24 @@ export const BasicLineChart: React.FC<{
 			>
 				<XAxis_SpecBased
 					axisSpec={axisSpec}
-					theme={theme.xAxis}
+					// theme={theme.xAxis}
+					theme={{...theme.xAxis, tickColor: 'red', color: 'red'}}
+					area={layoutAreas.xAxis}
+				/>
+			</Position>
+
+			<Position position={{left: layoutAreas.xAxis.x1, top: 50}}>
+				<XAxis_SpecBased
+					axisSpec={axisSpecFrom}
+					theme={{...theme.xAxis, tickColor: 'blue', color: 'blue'}}
+					area={layoutAreas.xAxis}
+				/>
+			</Position>
+
+			<Position position={{left: layoutAreas.xAxis.x1, top: 100}}>
+				<XAxis_SpecBased
+					axisSpec={axisSpecTo}
+					theme={{...theme.xAxis, tickColor: 'green', color: 'green'}}
 					area={layoutAreas.xAxis}
 				/>
 			</Position>
