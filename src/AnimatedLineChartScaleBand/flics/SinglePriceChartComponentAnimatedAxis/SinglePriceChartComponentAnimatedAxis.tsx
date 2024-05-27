@@ -38,7 +38,10 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	const transitionDurationInFrames_0_1 = durationInFrames;
 
 	// TODO fix with [0,0] !!!!!!!!!
-	const visibleDomainIndices_0 = [0, 20] as [number, number];
+	const visibleDomainIndices_0 = [0, timeSeries.length - 200] as [
+		number,
+		number
+	];
 	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
 	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
