@@ -7,7 +7,9 @@ type TPeriodScaleBand = {
 };
 
 export type TPeriodsScale = {
+	// TODO should be getBandFromPeriod: (p: TPeriod) => TPeriodScaleBand;
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
+	// TODO should be getBandFromPeriodIndex: (pIndex: number) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
 	getVisibleDomainIndices: () => [number, number];
 	getVisibleDomainDates: () => [Date, Date];

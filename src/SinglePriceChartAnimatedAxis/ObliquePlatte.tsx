@@ -21,10 +21,12 @@ export const ObliquePlatte: React.FC<{
 
 	return (
 		<div
-			style={{
-				perspective: '3000px',
-				transformStyle: 'preserve-3d',
-			}}
+			style={
+				{
+					// perspective: '3000px',
+					// transformStyle: 'preserve-3d',
+				}
+			}
 		>
 			<div
 				style={{
@@ -36,7 +38,7 @@ export const ObliquePlatte: React.FC<{
 					borderWidth: 3,
 					height,
 					width,
-					transform: `translateX(-20px) rotateX(${20}deg) rotateY(${-20}deg) rotateZ(${1}deg)`,
+					// transform: `translateX(-20px) rotateX(${20}deg) rotateY(${-20}deg) rotateZ(${1}deg)`,
 				}}
 			>
 				{children}

@@ -41,6 +41,7 @@ export const BasicLineChart: React.FC<{
 	periodScale: TPeriodsScale;
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
+	easingPercentage: number;
 }> = ({
 	layoutAreas,
 	timeSeries,
@@ -49,6 +50,7 @@ export const BasicLineChart: React.FC<{
 	periodScale: currentPeriodsScale,
 	fromPeriodScale,
 	toPeriodScale,
+	easingPercentage,
 }) => {
 	const dates = timeSeries.map((it) => it.date);
 
@@ -154,6 +156,9 @@ export const BasicLineChart: React.FC<{
 					toAxisSpec={axisSpecTo}
 					theme={{...theme.xAxis, tickColor: 'magenta', color: 'magenta'}}
 					area={layoutAreas.xAxis}
+					easingPercentage={easingPercentage}
+					// easingPercentage={easingPercentage}
+					periodsScale={currentPeriodsScale}
 				/>
 			</Position>
 

@@ -38,7 +38,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	const transitionDurationInFrames_0_1 = durationInFrames;
 
 	// TODO fix with [0,0] !!!!!!!!!
-	const visibleDomainIndices_0 = [0, timeSeries.length - 200] as [
+	const visibleDomainIndices_0 = [0, timeSeries.length - 300] as [
 		number,
 		number
 	];
@@ -78,6 +78,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 					},
 				]}
 			>
+				{/* TODO rename easingPercentage into currentEasingPercentage */}
 				{({periodsScale, yScale, easingPercentage, transitionInfo}) => {
 					return (
 						<div>
@@ -95,6 +96,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 								periodScale={periodsScale}
 								fromPeriodScale={transitionInfo.periodsScale.from}
 								toPeriodScale={transitionInfo.periodsScale.to}
+								easingPercentage={easingPercentage}
 							/>
 
 							<Sequence from={transitionDurationInFrames_0_1}>
