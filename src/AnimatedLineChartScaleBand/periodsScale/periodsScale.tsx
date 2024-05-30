@@ -19,6 +19,8 @@ export type TPeriodsScale = {
 	visibleRange: [number, number];
 	dates: Date[];
 	getRoundedVisibleDomainIndices: () => [number, number];
+	// TODO shoud return TPeriod[]
+	getAllVisibleDates: () => Date[];
 };
 
 export const periodsScale = ({
@@ -140,6 +142,23 @@ export const periodsScale = ({
 		return numberOfVisibleDays;
 	};
 
+	const getAllVisibleDates = () => {
+		const indices = getRoundedVisibleDomainIndices();
+
+		// Ensure indices are within array bounds and ordered correctly
+		let [startIndex, endIndex] = indices.map((index) =>
+			Math.min(Math.max(index, 0), dates.length - 1)
+		);
+		if (startIndex > endIndex) {
+			[startIndex, endIndex] = [endIndex, startIndex];
+		}
+
+		// Extract the slice
+		const slicedDates: Date[] = dates.slice(startIndex, endIndex + 1);
+
+		return slicedDates;
+	};
+
 	return {
 		getBandFromDate,
 		getBandFromIndex,
@@ -151,6 +170,7 @@ export const periodsScale = ({
 		visibleDomainIndices,
 		visibleRange,
 		dates,
+		getAllVisibleDates,
 	};
 };
 

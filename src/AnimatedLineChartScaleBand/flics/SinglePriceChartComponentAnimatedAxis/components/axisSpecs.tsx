@@ -3,6 +3,7 @@ import {TPeriodsScale} from '../../../periodsScale/periodsScale';
 type TTickSpec = {
 	id: string;
 	value: number;
+	periodFloatIndex: number;
 };
 
 type TLabelSpec = {
@@ -20,16 +21,19 @@ export type TXAxisSpec = {
 
 // TODO pass more info, e.g. area width?
 export function getMonthStartsAxisSpec(
-	periodsScale: TPeriodsScale,
-	dates: Date[]
+	periodsScale: TPeriodsScale
+	// dates: Date[]
 ): TXAxisSpec {
-	const ticksDates = generateMonthStartsNearestDates(dates);
+	const visibleDates = periodsScale.getAllVisibleDates();
+
+	const ticksDates = generateMonthStartsNearestDates(visibleDates);
 
 	const ticks = ticksDates.map((date) => {
 		const id = date.getTime().toString();
 		return {
 			id,
 			value: periodsScale.getBandFromDate(date).x1,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
 		};
 	});
 
@@ -49,16 +53,18 @@ export function getMonthStartsAxisSpec(
 }
 
 export function getQuarterStartsAxisSpec(
-	periodsScale: TPeriodsScale,
-	dates: Date[]
+	periodsScale: TPeriodsScale
 ): TXAxisSpec {
-	const ticksDates = generateQuarterStartsNearestDates(dates);
+	const visibleDates = periodsScale.getAllVisibleDates();
+
+	const ticksDates = generateQuarterStartsNearestDates(visibleDates);
 
 	const ticks = ticksDates.map((date) => {
 		const id = date.getTime().toString();
 		return {
 			id,
 			value: periodsScale.getBandFromDate(date).x1,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
 		};
 	});
 

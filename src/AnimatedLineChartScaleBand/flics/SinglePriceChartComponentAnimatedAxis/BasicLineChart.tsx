@@ -52,8 +52,6 @@ export const BasicLineChart: React.FC<{
 	toPeriodScale,
 	easingPercentage,
 }) => {
-	const dates = timeSeries.map((it) => it.date);
-
 	const AXIS_SPEC_FUNCTIONS = {
 		monthStarts: getMonthStartsAxisSpec,
 		quarterStarts: getQuarterStartsAxisSpec,
@@ -71,27 +69,22 @@ export const BasicLineChart: React.FC<{
 	const SPEC_TYPE = numberOfVisibleDays < 200 ? 'monthStarts' : 'quarterStarts';
 
 	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
-	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE](currentPeriodsScale, dates);
+	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE](currentPeriodsScale);
 
 	// axisSpecFrom (for start transition state)
+	// ------------------------------------------------------------------------
 	const numberOfVisibleDaysFrom =
 		fromPeriodScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE_FROM =
 		numberOfVisibleDaysFrom < 200 ? 'monthStarts' : 'quarterStarts';
-
-	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
-	const axisSpecFrom = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](
-		fromPeriodScale,
-		dates
-	);
+	const axisSpecFrom = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](fromPeriodScale);
 
 	// axisSpecTo (for start transition state)
+	// ------------------------------------------------------------------------
 	const numberOfVisibleDaysTo = toPeriodScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE_TO =
 		numberOfVisibleDaysTo < 200 ? 'monthStarts' : 'quarterStarts';
-
-	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
-	const axisSpecTo = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_TO](toPeriodScale, dates);
+	const axisSpecTo = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_TO](toPeriodScale);
 
 	return (
 		<>
@@ -127,8 +120,8 @@ export const BasicLineChart: React.FC<{
 			>
 				<XAxis_SpecBased
 					axisSpec={axisSpec}
-					theme={theme.xAxis}
-					// theme={{...theme.xAxis, tickColor: 'red', color: 'red'}}
+					// theme={theme.xAxis}
+					theme={{...theme.xAxis, tickColor: 'cyan', color: 'cyan'}}
 					area={layoutAreas.xAxis}
 				/>
 			</Position>

@@ -20,6 +20,12 @@ const getTickValue = (axisSpec: TXAxisSpec, tickId: string) => {
 	return tickObj.value;
 };
 
+const getTick = (axisSpec: TXAxisSpec, tickId: string) => {
+	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);
+	invariant(tickObj);
+	return tickObj;
+};
+
 export const XAxis_Transition: React.FC<{
 	area: TGridLayoutArea;
 	fromAxisSpec: TXAxisSpec;
@@ -49,41 +55,42 @@ export const XAxis_Transition: React.FC<{
 		toAxisSpec.ticks.map((it) => it.id)
 	);
 
-	// update ticks positions in time
+	// // update ticks positions in time
+	// const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
+	// 	const startX = getTickValue(fromAxisSpec, tickId);
+	// 	const endX = getTickValue(toAxisSpec, tickId);
+	// 	const currentX = interpolate(animationPercentage, [0, 1], [startX, endX], {
+	// 		extrapolateLeft: 'clamp',
+	// 		extrapolateRight: 'clamp',
+	// 	});
+
+	// 	return {id: tickId, value: currentX};
+	// });
+
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
-		const startX = getTickValue(fromAxisSpec, tickId);
-		const endX = getTickValue(toAxisSpec, tickId);
-		// const startX = fromAxisSpec.ticks
-		// const currentX =
-		// 	(1 - animationPercentage) * startX + animationPercentage * endX;
+		const startTick = getTick(fromAxisSpec, tickId);
+		// TODO bring back mixing both
+		// const endTick = getTick(toAxisSpec, tickId);
 
-		const currentX = interpolate(animationPercentage, [0, 1], [startX, endX], {
-			// easing: Easing.linear,
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		// TODO linear animation percentage here is fine, normally floatIndices are identical anyway!!!
+		// const currentPeriodFloatIndex = interpolate(
+		// 	animationPercentage,
+		// 	[0, 1],
+		// 	[startTick.periodFloatIndex, endTick.periodFloatIndex],
+		// 	{
+		// 		extrapolateLeft: 'clamp',
+		// 		extrapolateRight: 'clamp',
+		// 	}
+		// );
 
-		return {id: tickId, value: currentX};
+		const currentPeriodFloatIndex = startTick.periodFloatIndex;
+		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
+
+		return {id: tickId, value};
 	});
 
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
-		// const endTick = findItemById(endSpec.ticks, tickId);
-		// invariant(endTick);
-
-		// const startX = startSpec.scale(getTickValue(endSpec, tickId));
-		const startX = 0; // QUICK-FIX utilise the right scale...
-		const endX = getTickValue(toAxisSpec, tickId);
-
-		const interpolatedX = interpolate(
-			animationPercentage,
-			[0, 1],
-			[startX, endX],
-			{
-				// easing: Easing.linear,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
+		const endTick = getTick(toAxisSpec, tickId);
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
@@ -96,37 +103,50 @@ export const XAxis_Transition: React.FC<{
 			}
 		);
 
+		const currentPeriodFloatIndex = endTick.periodFloatIndex;
+		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
+
 		return {
 			id: tickId,
-			value: interpolatedX,
-			// mappedValue: interpolatedX,
+			value,
 			opacity: interpolatedOpacity,
 		};
 	});
 
 	// TODO integrate
-	// const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
-	// 	const startTick = findItemById(startSpec.ticks, tickId);
-	// 	invariant(startTick);
-	// 	const startX = startSpec.scale(startTick.value);
-	// 	const interpolatedOpacity = interpolate(
-	// 		animationPercentage,
-	// 		[0, 0.8],
-	// 		[1, 0],
-	// 		{
-	// 			easing: Easing.bezier(0.25, 1, 0.5, 1),
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
-	// 	return {
-	// 		id: tickId,
-	// 		mappedValue: startX,
-	// 		opacity: interpolatedOpacity,
-	// 	};
-	// });
+	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
+		const startTick = getTick(fromAxisSpec, tickId);
 
-	console.log({updateTicks, enterTicks});
+		// const startTick = findItemById(startSpec.ticks, tickId);
+		// invariant(startTick);
+		// const startX = startSpec.scale(startTick.value);
+		const interpolatedOpacity = interpolate(
+			animationPercentage,
+			[0, 0.8],
+			[1, 0],
+			{
+				// easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		const currentPeriodFloatIndex = startTick.periodFloatIndex;
+		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
+
+		return {
+			id: tickId,
+			value,
+			opacity: interpolatedOpacity,
+		};
+		// return {
+		// 	id: tickId,
+		// 	mappedValue: startX,
+		// 	opacity: interpolatedOpacity,
+		// };
+	});
+
+	// console.log({updateTicks, enterTicks, exitTicks});
 
 	return (
 		<svg
@@ -155,8 +175,30 @@ export const XAxis_Transition: React.FC<{
 							x1={it.value}
 							x2={it.value}
 							y1={0}
-							y2={10}
+							y2={TICK_LINE_SIZE}
 							stroke={'green'}
+							strokeWidth={8}
+							opacity={it.opacity}
+						/>
+					</g>
+				);
+			})}
+
+			{/* exit ticks  */}
+			{exitTicks.map((it, i) => {
+				return (
+					<g
+						key={i}
+						clipPath="url(#xAxisAreaClipPath)"
+						transform="translate(0,40)"
+					>
+						{/* <g key={i}> */}
+						<line
+							x1={it.value}
+							x2={it.value}
+							y1={0}
+							y2={TICK_LINE_SIZE}
+							stroke={'red'}
 							strokeWidth={8}
 							opacity={it.opacity}
 						/>
@@ -172,14 +214,15 @@ export const XAxis_Transition: React.FC<{
 							x2={xTick.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							// stroke={theme.tickColor}
+							stroke={'orange'}
 							strokeWidth={8}
 						/>
 					</g>
 				);
 			})}
 
-			{fromAxisSpec.ticks.map((xTick) => {
+			{/* {fromAxisSpec.ticks.map((xTick) => {
 				return (
 					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
 						<line
@@ -192,9 +235,9 @@ export const XAxis_Transition: React.FC<{
 						/>
 					</g>
 				);
-			})}
+			})} */}
 
-			{fromAxisSpec.labels.map((xLabel) => {
+			{/* {fromAxisSpec.labels.map((xLabel) => {
 				return (
 					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
 						<text
@@ -210,7 +253,7 @@ export const XAxis_Transition: React.FC<{
 						</text>
 					</g>
 				);
-			})}
+			})} */}
 		</svg>
 	);
 };
