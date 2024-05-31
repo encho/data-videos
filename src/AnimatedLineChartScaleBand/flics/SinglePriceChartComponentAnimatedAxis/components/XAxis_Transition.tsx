@@ -14,12 +14,6 @@ import {TPeriodsScale} from '../../../periodsScale/periodsScale';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
-// const getTickValue = (axisSpec: TXAxisSpec, tickId: string) => {
-// 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);
-// 	invariant(tickObj);
-// 	return tickObj.value;
-// };
-
 const getTick = (axisSpec: TXAxisSpec, tickId: string) => {
 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);
 	invariant(tickObj);
@@ -197,12 +191,10 @@ export const XAxis_Transition: React.FC<{
 
 	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
 		const startLabel = getLabel(fromAxisSpec, labelId);
-		// const endLabel = getLabel(toAxisSpec, labelId);
 
 		const startX = periodsScale.mapFloatIndexToRange(
 			startLabel.periodFloatIndex
 		);
-		// const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
@@ -227,8 +219,6 @@ export const XAxis_Transition: React.FC<{
 		};
 	});
 
-	// console.log({updateTicks, enterTicks, exitTicks});
-
 	return (
 		<svg
 			width={area.width}
@@ -252,9 +242,7 @@ export const XAxis_Transition: React.FC<{
 						transform="translate(0,0)"
 					>
 						<text
-							// textAnchor="middle"
 							textAnchor={it.textAnchor}
-							// alignmentBaseline="hanging"
 							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
@@ -263,8 +251,6 @@ export const XAxis_Transition: React.FC<{
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={TICK_TEXT_FONT_SIZE}
 							x={it.value + it.marginLeft}
-							// y={tickSize + tickLabelMargin}
-							// y={0}
 							opacity={it.opacity}
 						>
 							{it.label}
@@ -282,21 +268,13 @@ export const XAxis_Transition: React.FC<{
 						transform="translate(0,0)"
 					>
 						<text
-							// textAnchor="middle"
 							textAnchor={it.textAnchor}
 							fill={theme.color}
-							// stroke={'magenta'}
-							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
 							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={TICK_TEXT_FONT_SIZE}
-							// TODO ??
-							// x={it.value + MARGIN??}
 							x={it.value + it.marginLeft}
-							// y={tickSize + tickLabelMargin}
-							// y={0}
 						>
 							{it.label}
 						</text>
@@ -313,18 +291,14 @@ export const XAxis_Transition: React.FC<{
 						transform="translate(0,0)"
 					>
 						<text
-							// textAnchor="middle"
 							textAnchor={it.textAnchor}
 							alignmentBaseline="baseline"
 							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							// fontSize={16}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={TICK_TEXT_FONT_SIZE}
 							x={it.value + it.marginLeft}
-							// y={tickSize + tickLabelMargin}
 							opacity={it.opacity}
 						>
 							{it.label}
