@@ -73,6 +73,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 					{
 						durationInFrames: transitionDurationInFrames_0_1,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						numberOfSlices: 3,
 					},
 				]}
 			>

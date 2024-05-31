@@ -34,6 +34,7 @@ type TViewSpec = {
 type TTransitionSpec = {
 	durationInFrames: number;
 	easingFunction: (t: number) => number;
+	numberOfSlices: number;
 };
 
 export const LineChartAnimationContainer: React.FC<{
@@ -52,12 +53,25 @@ export const LineChartAnimationContainer: React.FC<{
 
 	const dates = timeSeries.map((it) => it.date);
 
-	const frameRanges = calculateFrameRanges(transitionSpecs);
+	const frameRanges = calculateFrameRanges(transitionSpecs); // {startFrame, endFrame}[]
 	const totalDuration = frameRanges[frameRanges.length - 1].endFrame;
 
 	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
-	const currentTransition = transitionSpecs[currentTransitionIndex];
 	const currentFrameRange = frameRanges[currentTransitionIndex];
+
+	// TODO rename to currentTransitionSpec
+	const currentTransition = transitionSpecs[currentTransitionIndex];
+	// const currentTransitionSlices = currentTransition.numberOfSlices;
+
+	const currentTransitionSlicesFrameRanges = divideFrameRange(
+		currentFrameRange,
+		currentTransition.numberOfSlices
+	);
+
+	const currentTransitionSlice = findFrameRangeIndex(
+		frame,
+		currentTransitionSlicesFrameRanges
+	);
 
 	const currentTransitionFrame = frame - currentFrameRange.startFrame;
 
@@ -204,3 +218,47 @@ function findFrameRangeIndex(
 // console.log(findFrameRangeIndex(50, frameRanges)); // Output: 1
 // console.log(findFrameRangeIndex(135, frameRanges)); // Output: -1 (since it's exactly the end frame of last range)
 // console.log(findFrameRangeIndex(140, frameRanges)); // Output: -1
+
+// interface FrameRange {
+//   startFrame: number;
+//   endFrame: number;
+// }
+
+function divideFrameRange(
+	range: TFrameRange,
+	numberOfFragments: number
+): TFrameRange[] {
+	const {startFrame, endFrame} = range;
+	const totalFrames = endFrame - startFrame;
+	const fragmentSize = totalFrames / numberOfFragments;
+
+	const fragments: TFrameRange[] = [];
+
+	let previousEnd = startFrame;
+
+	for (let i = 0; i < numberOfFragments; i++) {
+		const fragmentStart = previousEnd;
+		let fragmentEnd;
+
+		if (i === numberOfFragments - 1) {
+			fragmentEnd = endFrame;
+		} else {
+			fragmentEnd = Math.round(fragmentStart + fragmentSize);
+		}
+
+		fragments.push({startFrame: fragmentStart, endFrame: fragmentEnd});
+		previousEnd = fragmentEnd;
+	}
+
+	return fragments;
+}
+// // Example usage:
+// const range: TFrameRange = {startFrame: 100, endFrame: 120};
+// const numberOfFragments = 3;
+// const fragments = divideFrameRange(range, numberOfFragments);
+// console.log(fragments);
+// [
+//   { startFrame: 100, endFrame: 107 },
+//   { startFrame: 107, endFrame: 114 },
+//   { startFrame: 114, endFrame: 120 }
+// ]
