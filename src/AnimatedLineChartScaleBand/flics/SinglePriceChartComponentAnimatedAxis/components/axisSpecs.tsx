@@ -12,6 +12,7 @@ type TLabelSpec = {
 	label: string;
 	padding?: number;
 	textAnchor?: 'start' | 'middle' | 'end';
+	marginLeft?: number;
 };
 
 export type TXAxisSpec = {
@@ -36,7 +37,7 @@ export function getMonthStartsAxisSpec(
 		};
 	});
 
-	const PADDING = 10;
+	const MARGIN_LEFT = 8;
 
 	const labels = ticksDates.map((date) => {
 		const id = date.getTime().toString();
@@ -45,8 +46,7 @@ export function getMonthStartsAxisSpec(
 			textAnchor: 'start' as const,
 			label: getMonthName(date),
 			periodFloatIndex: periodsScale.getBandFromDate(date).index,
-			// TODO implement
-			// padding: PADDING,
+			marginLeft: MARGIN_LEFT,
 		};
 	});
 
@@ -68,17 +68,16 @@ export function getQuarterStartsAxisSpec(
 		};
 	});
 
-	const PADDING = 10;
+	const MARGIN_LEFT = 8;
 
 	const labels = ticksDates.map((date) => {
 		const id = date.getTime().toString();
 		return {
 			id,
 			periodFloatIndex: periodsScale.getBandFromDate(date).index,
-			// TODO implement
-			padding: PADDING,
 			textAnchor: 'start' as const,
 			label: getMonthName(date),
+			marginLeft: MARGIN_LEFT,
 		};
 	});
 

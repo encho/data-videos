@@ -148,29 +148,29 @@ export const XAxis_Transition: React.FC<{
 		const currentX =
 			(1 - animationPercentage) * startX + animationPercentage * endX;
 
+		const marginLeft = interpolate(
+			animationPercentage,
+			[0, 1],
+			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
+			{
+				// easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
 		return {
 			id: labelId,
 			value: currentX,
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
+			marginLeft,
 		};
 	});
 
 	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
 		const endLabel = getLabel(toAxisSpec, labelId);
-
 		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
-
-		// const interpolatedX = interpolate(
-		// 	animationPercentage,
-		// 	[0, 1],
-		// 	[startX, endX],
-		// 	{
-		// 		easing: Easing.linear,
-		// 		extrapolateLeft: 'clamp',
-		// 		extrapolateRight: 'clamp',
-		// 	}
-		// );
 
 		const interpolatedOpacity = interpolate(
 			animationPercentage,
@@ -183,12 +183,15 @@ export const XAxis_Transition: React.FC<{
 			}
 		);
 
+		const marginLeft = endLabel.marginLeft || 0;
+
 		return {
 			id: labelId,
 			value: endX,
 			opacity: interpolatedOpacity,
 			label: endLabel.label,
 			textAnchor: endLabel.textAnchor,
+			marginLeft,
 		};
 	});
 
@@ -212,12 +215,15 @@ export const XAxis_Transition: React.FC<{
 			}
 		);
 
+		const marginLeft = startLabel.marginLeft || 0;
+
 		return {
 			id: labelId,
 			value: startX,
 			opacity: interpolatedOpacity,
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
+			marginLeft,
 		};
 	});
 
@@ -248,14 +254,17 @@ export const XAxis_Transition: React.FC<{
 						<text
 							// textAnchor="middle"
 							textAnchor={it.textAnchor}
-							alignmentBaseline="hanging"
-							fill={'green'}
+							// alignmentBaseline="hanging"
+							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
-							fontSize={16}
-							x={it.value}
+							alignmentBaseline="baseline"
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
+							x={it.value + it.marginLeft}
 							// y={tickSize + tickLabelMargin}
-							y={0}
+							// y={0}
 							opacity={it.opacity}
 						>
 							{it.label}
@@ -275,17 +284,19 @@ export const XAxis_Transition: React.FC<{
 						<text
 							// textAnchor="middle"
 							textAnchor={it.textAnchor}
-							alignmentBaseline="hanging"
-							fill={'magenta'}
-							stroke={'magenta'}
+							fill={theme.color}
+							// stroke={'magenta'}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
-							fontSize={16}
+							alignmentBaseline="baseline"
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
 							// TODO ??
 							// x={it.value + MARGIN??}
-							x={it.value}
+							x={it.value + it.marginLeft}
 							// y={tickSize + tickLabelMargin}
-							y={0}
+							// y={0}
 						>
 							{it.label}
 						</text>
@@ -304,14 +315,16 @@ export const XAxis_Transition: React.FC<{
 						<text
 							// textAnchor="middle"
 							textAnchor={it.textAnchor}
-							alignmentBaseline="hanging"
-							fill={'orange'}
+							alignmentBaseline="baseline"
+							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
-							fontSize={16}
-							x={it.value}
+							// fontSize={16}
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
+							x={it.value + it.marginLeft}
 							// y={tickSize + tickLabelMargin}
-							y={0}
 							opacity={it.opacity}
 						>
 							{it.label}
@@ -328,13 +341,12 @@ export const XAxis_Transition: React.FC<{
 						clipPath="url(#xAxisAreaClipPath)"
 						transform="translate(0,0)"
 					>
-						{/* <g key={i}> */}
 						<line
 							x1={it.value}
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={'green'}
+							stroke={theme.tickColor}
 							strokeWidth={4}
 							opacity={it.opacity}
 						/>
@@ -350,13 +362,12 @@ export const XAxis_Transition: React.FC<{
 						clipPath="url(#xAxisAreaClipPath)"
 						transform="translate(0,0)"
 					>
-						{/* <g key={i}> */}
 						<line
 							x1={it.value}
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={'red'}
+							stroke={theme.tickColor}
 							strokeWidth={4}
 							opacity={it.opacity}
 						/>
@@ -372,46 +383,12 @@ export const XAxis_Transition: React.FC<{
 							x2={xTick.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
-							stroke={'orange'}
-							strokeWidth={4}
-						/>
-					</g>
-				);
-			})}
-
-			{/* {fromAxisSpec.ticks.map((xTick) => {
-				return (
-					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-						<line
-							x1={xTick.value}
-							x2={xTick.value}
-							y1={0}
-							y2={TICK_LINE_SIZE}
 							stroke={theme.tickColor}
 							strokeWidth={4}
 						/>
 					</g>
 				);
-			})} */}
-
-			{/* {fromAxisSpec.labels.map((xLabel) => {
-				return (
-					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-						<text
-							textAnchor="left"
-							alignmentBaseline="baseline"
-							fill={theme.color}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							x={xLabel.value}
-							y={TICK_TEXT_FONT_SIZE}
-						>
-							{xLabel.label}
-						</text>
-					</g>
-				);
-			})} */}
+			})}
 		</svg>
 	);
 };

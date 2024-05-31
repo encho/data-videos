@@ -28,6 +28,25 @@ const currencyFormatter = (x: number) => {
 	return '$ ' + formatter.format(x);
 };
 
+const getAxisSpec = (periodsScale: TPeriodsScale) => {
+	const AXIS_SPEC_FUNCTIONS = {
+		monthStarts: getMonthStartsAxisSpec,
+		quarterStarts: getQuarterStartsAxisSpec,
+	};
+	// TODO the appropriate SPEC type should be inferred given the:
+	// - visible date range
+	// - width of the area
+	// - font size
+	// - etc...
+
+	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
+	const SPEC_TYPE_FROM =
+		numberOfVisibleDaysFrom < 200 ? 'monthStarts' : 'quarterStarts';
+	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](periodsScale);
+
+	return axisSpec;
+};
+
 export const BasicLineChart: React.FC<{
 	timeSeries: TimeSeries;
 	layoutAreas: {
@@ -52,39 +71,8 @@ export const BasicLineChart: React.FC<{
 	toPeriodScale,
 	easingPercentage,
 }) => {
-	const AXIS_SPEC_FUNCTIONS = {
-		monthStarts: getMonthStartsAxisSpec,
-		quarterStarts: getQuarterStartsAxisSpec,
-	};
-
-	// TODO the appropriate SPEC type should be inferred given the:
-	// - visible date range
-	// - width of the area
-	// - font size
-	// - etc...
-
-	// currentAxisSpec (for no transition)
-	const numberOfVisibleDays =
-		currentPeriodsScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE = numberOfVisibleDays < 200 ? 'monthStarts' : 'quarterStarts';
-
-	// TODO evtl. we will receive 2 axis specs from the container component (from, to)
-	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE](currentPeriodsScale);
-
-	// axisSpecFrom (for start transition state)
-	// ------------------------------------------------------------------------
-	const numberOfVisibleDaysFrom =
-		fromPeriodScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE_FROM =
-		numberOfVisibleDaysFrom < 200 ? 'monthStarts' : 'quarterStarts';
-	const axisSpecFrom = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](fromPeriodScale);
-
-	// axisSpecTo (for start transition state)
-	// ------------------------------------------------------------------------
-	const numberOfVisibleDaysTo = toPeriodScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE_TO =
-		numberOfVisibleDaysTo < 200 ? 'monthStarts' : 'quarterStarts';
-	const axisSpecTo = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_TO](toPeriodScale);
+	const axisSpecFrom = getAxisSpec(fromPeriodScale);
+	const axisSpecTo = getAxisSpec(toPeriodScale);
 
 	return (
 		<>
@@ -115,50 +103,15 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			{/* <Position
-				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
-			>
-				<XAxis_SpecBased
-					axisSpec={axisSpec}
-					// theme={theme.xAxis}
-					theme={{...theme.xAxis, tickColor: 'cyan', color: 'cyan'}}
-					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-				/>
-			</Position> */}
-
-			{/* <Position position={{left: layoutAreas.xAxis.x1, top: 50}}>
-				<XAxis_SpecBased
-					axisSpec={axisSpecFrom}
-					theme={{...theme.xAxis, tickColor: 'red', color: 'red'}}
-					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-				/>
-			</Position> */}
-
-			{/* <Position position={{left: layoutAreas.xAxis.x1, top: 100}}>
-				<XAxis_SpecBased
-					axisSpec={axisSpecTo}
-					theme={{...theme.xAxis, tickColor: 'green', color: 'green'}}
-					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-				/>
-			</Position> */}
-
 			<Position
-				// position={{left: layoutAreas.xAxis.x1, top: 150}}
-
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
-				{/* <h1 style={{fontSize: 30, marginBottom: 5}}>XAxis Transition:</h1> */}
 				<XAxis_Transition
 					fromAxisSpec={axisSpecFrom}
 					toAxisSpec={axisSpecTo}
-					// theme={{...theme.xAxis, tickColor: 'magenta', color: 'magenta'}}
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
 					easingPercentage={easingPercentage}
-					// easingPercentage={easingPercentage}
 					periodsScale={currentPeriodsScale}
 				/>
 			</Position>
