@@ -9,19 +9,35 @@ import {getYDomain} from '../../utils/timeSeries/timeSeries';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
+// TODO type TLineChartAnimationContext
 type TChildrenFuncArgs = {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	easingPercentage: number;
-	transitionInfo: {
-		periodsScale: {
-			from: TPeriodsScale;
-			to: TPeriodsScale;
-		};
+	// new API...
+	currentTransitionInfo: {
+		frameRange: TFrameRange;
+		durationInFrames: number;
+		// TODO rename to linearPercentage (also for currentSlice object)
+		framesPercentage: number;
+		easingPercentage: number;
 	};
-	// TODO
-	// animationPercentage, currentFrame, durationInFrames,
+	// TODO rename to currentSliceInfo
+	currentSliceInfo: {
+		index: number;
+		frameRange: TFrameRange;
+		frameRangeLinearPercentage: {startFrame: number; endFrame: number};
+		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
+		durationInFrames: number;
+		relativeFrame: number;
+		framesPercentage: number;
+		visibleDomainIndicesFrom: [number, number];
+		visibleDomainIndicesTo: [number, number];
+		periodsScaleFrom: TPeriodsScale;
+		periodsScaleTo: TPeriodsScale;
+	};
 };
+
+export type TLineChartAnimationContext = TChildrenFuncArgs;
 
 const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';
@@ -61,17 +77,6 @@ export const LineChartAnimationContainer: React.FC<{
 
 	// TODO rename to currentTransitionSpec
 	const currentTransition = transitionSpecs[currentTransitionIndex];
-	// const currentTransitionSlices = currentTransition.numberOfSlices;
-
-	const currentTransitionSlicesFrameRanges = divideFrameRange(
-		currentFrameRange,
-		currentTransition.numberOfSlices
-	);
-
-	const currentTransitionSlice = findFrameRangeIndex(
-		frame,
-		currentTransitionSlicesFrameRanges
-	);
 
 	const currentTransitionFrame = frame - currentFrameRange.startFrame;
 
@@ -95,6 +100,131 @@ export const LineChartAnimationContainer: React.FC<{
 	const fromViewSpec = viewSpecs[currentTransitionIndex];
 	const toViewSpec = viewSpecs[currentTransitionIndex + 1];
 
+	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
+
+	// ******** current transition information *************************************************
+
+	const currentTransitionInfo = {
+		frameRange: currentFrameRange,
+		durationInFrames: currentTransition.durationInFrames,
+		framesPercentage: currentAnimationPercentage,
+		easingPercentage: currentEasingPercentage,
+	};
+
+	// ******** current Slice information calculation *************************************************
+	const currentTransitionSlicesFrameRanges = divideFrameRange(
+		currentFrameRange,
+		currentTransition.numberOfSlices
+	);
+
+	// TODO clean up naming
+	const currentTransitionSlice = findFrameRangeIndex(
+		frame,
+		currentTransitionSlicesFrameRanges
+	);
+
+	const currentTransitionSliceFrameRange =
+		currentTransitionSlicesFrameRanges[currentTransitionSlice];
+	// const currentTransitionSliceSpec =
+
+	const sliceRelativeFrame =
+		frame - currentTransitionSliceFrameRange.startFrame;
+
+	const sliceDurationInFrames =
+		currentTransitionSliceFrameRange.endFrame -
+		currentTransitionSliceFrameRange.startFrame;
+
+	const sliceFramesPercentage =
+		(sliceRelativeFrame + 1) / sliceDurationInFrames;
+
+	const frameRangeLinearPercentage = {
+		startFrame:
+			(currentTransitionSliceFrameRange.startFrame -
+				currentTransitionInfo.frameRange.startFrame) /
+			currentTransitionInfo.durationInFrames,
+		endFrame:
+			(currentTransitionSliceFrameRange.endFrame -
+				currentTransitionInfo.frameRange.startFrame) /
+			currentTransitionInfo.durationInFrames,
+	};
+
+	const frameRangeEasingPercentage = {
+		startFrame: interpolate(
+			frameRangeLinearPercentage.startFrame,
+			[0, 1],
+			[0, 1],
+			{
+				easing: EASING_FUNCTION,
+			}
+		),
+		endFrame: interpolate(frameRangeLinearPercentage.endFrame, [0, 1], [0, 1], {
+			easing: EASING_FUNCTION,
+		}),
+	};
+
+	const visibleDomainIndicesFrom_start = interpolate(
+		frameRangeEasingPercentage.startFrame,
+		[0, 1],
+		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
+	);
+	const visibleDomainIndicesFrom_end = interpolate(
+		frameRangeEasingPercentage.startFrame,
+		[0, 1],
+		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
+	);
+
+	const visibleDomainIndicesTo_start = interpolate(
+		frameRangeEasingPercentage.endFrame,
+		[0, 1],
+		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
+	);
+	const visibleDomainIndicesTo_end = interpolate(
+		frameRangeEasingPercentage.endFrame,
+		[0, 1],
+		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
+	);
+
+	const visibleDomainIndicesFrom = [
+		visibleDomainIndicesFrom_start,
+		visibleDomainIndicesFrom_end,
+	] as [number, number];
+
+	const visibleDomainIndicesTo = [
+		visibleDomainIndicesTo_start,
+		visibleDomainIndicesTo_end,
+	] as [number, number];
+
+	const slicePeriodsScaleFrom = periodsScale({
+		dates,
+		visibleDomainIndices: visibleDomainIndicesFrom,
+		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+	});
+
+	const slicePeriodsScaleTo = periodsScale({
+		dates,
+		visibleDomainIndices: visibleDomainIndicesTo,
+		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+	});
+
+	const currentSliceInfo = {
+		index: currentTransitionSlice,
+		frameRange: currentTransitionSliceFrameRange,
+		durationInFrames: sliceDurationInFrames,
+		relativeFrame: sliceRelativeFrame,
+		framesPercentage: sliceFramesPercentage,
+		//
+		frameRangeLinearPercentage,
+		frameRangeEasingPercentage,
+		//
+		visibleDomainIndicesFrom,
+		visibleDomainIndicesTo,
+		//
+		periodsScaleFrom: slicePeriodsScaleFrom,
+		periodsScaleTo: slicePeriodsScaleTo,
+	};
+
+	// *********************************************************
+
 	const animatedVisibleDomainIndexStart = interpolate(
 		currentEasingPercentage,
 		[0, 1],
@@ -107,8 +237,6 @@ export const LineChartAnimationContainer: React.FC<{
 		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
 	);
 
-	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
-
 	const currentPeriodsScale = periodsScale({
 		dates,
 		visibleDomainIndices: [
@@ -118,16 +246,16 @@ export const LineChartAnimationContainer: React.FC<{
 		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
 	});
 
-	const fromPeriodScale = periodsScale({
-		dates,
-		visibleDomainIndices: fromViewSpec.visibleDomainIndices,
-		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
-	});
-	const toPeriodScale = periodsScale({
-		dates,
-		visibleDomainIndices: toViewSpec.visibleDomainIndices,
-		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
-	});
+	// const fromPeriodScale = periodsScale({
+	// 	dates,
+	// 	visibleDomainIndices: fromViewSpec.visibleDomainIndices,
+	// 	visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+	// });
+	// const toPeriodScale = periodsScale({
+	// 	dates,
+	// 	visibleDomainIndices: toViewSpec.visibleDomainIndices,
+	// 	visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+	// });
 
 	const yDomain = getYDomain(
 		yDomainType,
@@ -150,15 +278,8 @@ export const LineChartAnimationContainer: React.FC<{
 			{children({
 				periodsScale: currentPeriodsScale,
 				yScale,
-				// TODO
-				// currentEasingPercentage...
-				easingPercentage: currentEasingPercentage,
-				transitionInfo: {
-					periodsScale: {
-						from: fromPeriodScale,
-						to: toPeriodScale,
-					},
-				},
+				currentTransitionInfo,
+				currentSliceInfo,
 			})}
 		</Sequence>
 	);

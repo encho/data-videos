@@ -4,7 +4,8 @@ import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../periodsScale/periodsScale';
-import {XAxis_SpecBased} from './components/XAxis_SpecBased';
+// TODO evtl deprecate?
+// import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
@@ -60,7 +61,6 @@ export const BasicLineChart: React.FC<{
 	periodScale: TPeriodsScale;
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
-	easingPercentage: number;
 }> = ({
 	layoutAreas,
 	timeSeries,
@@ -69,7 +69,6 @@ export const BasicLineChart: React.FC<{
 	periodScale: currentPeriodsScale,
 	fromPeriodScale,
 	toPeriodScale,
-	easingPercentage,
 }) => {
 	const axisSpecFrom = getAxisSpec(fromPeriodScale);
 	const axisSpecTo = getAxisSpec(toPeriodScale);
@@ -111,7 +110,6 @@ export const BasicLineChart: React.FC<{
 					toAxisSpec={axisSpecTo}
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
-					easingPercentage={easingPercentage}
 					periodsScale={currentPeriodsScale}
 				/>
 			</Position>

@@ -76,7 +76,8 @@ export const RemotionRoot: React.FC = () => {
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="SinglePriceChartAnimatedAxis"
 				component={SinglePriceChartAnimatedAxis}
-				durationInFrames={90 * 3.5}
+				// durationInFrames={90 * 3.5}
+				durationInFrames={90 * 30}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}

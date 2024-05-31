@@ -1,4 +1,4 @@
-import {Sequence, useVideoConfig, Easing} from 'remotion';
+import {Sequence, useVideoConfig, Easing, AbsoluteFill} from 'remotion';
 
 // TODO deprecate! check if other components need this!
 // import {TTheme, myTheme} from '../../theme';
@@ -7,7 +7,10 @@ import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {BasicLineChart} from './BasicLineChart';
-import {LineChartAnimationContainer} from './LineChartAnimationContainer';
+import {
+	LineChartAnimationContainer,
+	TLineChartAnimationContext,
+} from './LineChartAnimationContainer';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -35,13 +38,14 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	// const LAST_STILL_DURATION = 2.5 * 90;
 
 	// const transitionDurationInFrames_0_1 = durationInFrames - LAST_STILL_DURATION;
-	const transitionDurationInFrames_0_1 = durationInFrames;
+	const transitionDurationInFrames_0_1 = durationInFrames - 90 * 5;
+	const transitionDurationInFrames_1_2 = 90 * 5;
 
 	// TODO fix with [0,0] !!!!!!!!!
 	// const visibleDomainIndices_0 = [0, 1] as [number, number];
-	const visibleDomainIndices_0 = [0, 50] as [number, number];
+	const visibleDomainIndices_0 = [0, 1] as [number, number];
 	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
-	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
+	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -68,29 +72,31 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 						area: chartLayout.areas.plot,
 						visibleDomainIndices: visibleDomainIndices_1,
 					},
+					{
+						area: chartLayout.areas.plot,
+						visibleDomainIndices: visibleDomainIndices_2,
+					},
 				]}
 				transitionSpecs={[
 					{
 						durationInFrames: transitionDurationInFrames_0_1,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						// easingFunction: Easing.bounce,
+						// easingFunction: Easing.linear, // TODO why linear is broken??
+						numberOfSlices: 3,
+					},
+					{
+						durationInFrames: transitionDurationInFrames_1_2,
+						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						numberOfSlices: 3,
 					},
 				]}
 			>
-				{/* TODO rename easingPercentage into currentEasingPercentage */}
-				{/* TODO periodsScale: {to: from: current:} */}
-				{/* TODO integrate concept:
-				{
-				currentTransition: 0,
-				currentTransitionSpec: {durationInFrames, easingFunction},
-				currentTransitionSlices: 3
-				currentTransitionSlice: 1,
-				currentTransitionSliceSpec: {durationInFrames, easingFunciton}
-				periodsScale: {to: from: current:},
-				} */}
-				{({periodsScale, yScale, easingPercentage, transitionInfo}) => {
+				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
 					return (
 						<div>
+							{/* TODO 1 pass forward lineChartAnimationContext */}
+							{/* TODO 2 useLineChartAnimationContext inside! */}
 							<BasicLineChart
 								timeSeries={timeSeries}
 								layoutAreas={{
@@ -100,30 +106,117 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 								}}
 								yDomainType={Y_DOMAIN_TYPE}
 								theme={theme}
-								//
 								yScale={yScale}
 								periodScale={periodsScale}
-								fromPeriodScale={transitionInfo.periodsScale.from}
-								toPeriodScale={transitionInfo.periodsScale.to}
-								easingPercentage={easingPercentage}
+								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
+								toPeriodScale={currentSliceInfo.periodsScaleTo}
 							/>
 
 							<Sequence from={transitionDurationInFrames_0_1}>
+								{/* TODO 1 pass forward lineChartAnimationContext */}
+								{/* TODO 2 useLineChartAnimationContext inside! */}
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
 									enterDurationInFrames={60}
 									periodsScale={periodsScale}
 									yScale={yScale}
-									easingPercentage={easingPercentage}
+									easingPercentage={currentTransitionInfo.easingPercentage}
 									plotArea={chartLayout.areas.plot}
 									theme={theme.timeseriesComponents.percentageChangeArea}
 								/>
 							</Sequence>
+
+							{/* <AbsoluteFill>
+								<LineChartAnimationContextDebugger
+									theme={theme}
+									periodsScale={periodsScale}
+									yScale={yScale}
+									currentSliceInfo={currentSliceInfo}
+									currentTransitionInfo={currentTransitionInfo}
+								/>
+							</AbsoluteFill> */}
 						</div>
 					);
 				}}
 			</LineChartAnimationContainer>
+		</div>
+	);
+};
+
+type TLineChartAnimationContextDebugger = TLineChartAnimationContext & {
+	theme: ThemeType;
+};
+
+export const LineChartAnimationContextDebugger: React.FC<
+	TLineChartAnimationContextDebugger
+> = ({
+	currentSliceInfo,
+	currentTransitionInfo,
+	periodsScale,
+	yScale,
+	theme,
+}) => {
+	return (
+		<div>
+			<div style={{color: theme.dataColors[2].BASE, fontSize: 20}}>
+				<h1>
+					currentTransitionInfo.frameRange:{' '}
+					{JSON.stringify(currentTransitionInfo.frameRange)}
+				</h1>
+				<h1>
+					currentTransitionInfo.durationInFrames:{' '}
+					{currentTransitionInfo.durationInFrames}
+				</h1>
+				<h1>
+					currentTransitionInfo.framesPercentage:{' '}
+					{currentTransitionInfo.framesPercentage}
+				</h1>
+				<h1>
+					currentTransitionInfo.easingPercentage:{' '}
+					{currentTransitionInfo.easingPercentage}
+				</h1>
+			</div>
+			<div style={{color: theme.dataColors[3].BASE, fontSize: 20}}>
+				<h1>currentSliceInfo.index: {currentSliceInfo.index}</h1>
+				<h1>
+					currentSliceInfo.frameRange:{' '}
+					{JSON.stringify(currentSliceInfo.frameRange)}
+				</h1>
+				<h1>
+					currentSliceInfo.frameRangeLinearPercentage:{' '}
+					{JSON.stringify(currentSliceInfo.frameRangeLinearPercentage)}
+				</h1>
+				<h1>
+					currentSliceInfo.frameRangeEasingPercentage:{' '}
+					{JSON.stringify(currentSliceInfo.frameRangeEasingPercentage)}
+				</h1>
+				<h1>
+					currentSliceInfo.durationInFrames: {currentSliceInfo.durationInFrames}
+				</h1>
+				<h1>
+					currentSliceInfo.relativeFrame: {currentSliceInfo.relativeFrame}
+				</h1>
+				<h1>
+					currentSliceInfo.framesPercentage: {currentSliceInfo.framesPercentage}
+				</h1>
+				<h1>
+					currentSliceInfo.visibleDomainIndicesFrom:{' '}
+					{JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom)}
+				</h1>
+				<h1>
+					currentSliceInfo.visibleDomainIndicesTo:{' '}
+					{JSON.stringify(currentSliceInfo.visibleDomainIndicesTo)}
+				</h1>
+				{/* <h1>
+		currentSliceInfo.periodsScaleFrom:{' '}
+		{JSON.stringify(currentSliceInfo.periodsScaleFrom)}
+	</h1> */}
+				{/* <h1>
+		currentSliceInfo.periodsScaleTo:{' '}
+		{JSON.stringify(currentSliceInfo.periodsScaleTo)}
+	</h1> */}
+			</div>
 		</div>
 	);
 };

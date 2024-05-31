@@ -1,8 +1,4 @@
-import {
-	// useCurrentFrame,
-	// useVideoConfig,
-	interpolate,
-} from 'remotion';
+import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../../acetti-viz';
@@ -31,24 +27,25 @@ export const XAxis_Transition: React.FC<{
 	fromAxisSpec: TXAxisSpec;
 	toAxisSpec: TXAxisSpec;
 	theme: TTheme_XAxis;
-	easingPercentage: number;
+	// easingPercentage: number;
 	periodsScale: TPeriodsScale;
 }> = ({
 	area,
 	theme,
 	fromAxisSpec,
 	toAxisSpec,
-	easingPercentage,
+	// easingPercentage,
 	periodsScale,
+	// TODO pass animation context data e.g. currentSliceInfo and currentTransitionInfo
 }) => {
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	// const frame = useCurrentFrame();
-	// const {durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
 	// const animationPercentage = frame / durationInFrames;
-	const animationPercentage = easingPercentage;
+	// const animationPercentage = easingPercentage;
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
 		fromAxisSpec.ticks.map((it) => it.id),
@@ -85,16 +82,10 @@ export const XAxis_Transition: React.FC<{
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const endTick = getTick(toAxisSpec, tickId);
 
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 1],
-			[0, 1],
-			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
+		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [0, 1], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		});
 
 		const currentPeriodFloatIndex = endTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
@@ -109,15 +100,10 @@ export const XAxis_Transition: React.FC<{
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
 
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 0.8],
-			[1, 0],
-			{
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
+		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [1, 0], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		});
 
 		const currentPeriodFloatIndex = startTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
@@ -139,9 +125,12 @@ export const XAxis_Transition: React.FC<{
 		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
 		// TODO evtl. refine
+		// TODO take info about animationPercentage from passed currentTransitionSlice object!
+		const animationPercentage = 0;
 		const currentX =
 			(1 - animationPercentage) * startX + animationPercentage * endX;
 
+		// TODO take info about animationPercentage from passed currentTransitionSlice object!
 		const marginLeft = interpolate(
 			animationPercentage,
 			[0, 1],
@@ -166,16 +155,10 @@ export const XAxis_Transition: React.FC<{
 		const endLabel = getLabel(toAxisSpec, labelId);
 		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 1],
-			[0, 1],
-			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
+		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [0, 1], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		});
 
 		const marginLeft = endLabel.marginLeft || 0;
 
@@ -196,16 +179,10 @@ export const XAxis_Transition: React.FC<{
 			startLabel.periodFloatIndex
 		);
 
-		const interpolatedOpacity = interpolate(
-			animationPercentage,
-			[0, 0.8],
-			[1, 0],
-			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
+		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [1, 0], {
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		});
 
 		const marginLeft = startLabel.marginLeft || 0;
 
