@@ -127,8 +127,10 @@ export const periodsScale = ({
 		const [firstVisibleIndex, lastVisibleIndex] =
 			getRoundedVisibleDomainIndices();
 
+		// console.log({firstVisibleIndex, lastVisibleIndex});
 		const firstVisibleDate = dates[firstVisibleIndex];
 		const lastVisibleDate = dates[lastVisibleIndex - 1];
+		// const lastVisibleDate = dates[Math.min(0, lastVisibleIndex - 1)];
 
 		return [firstVisibleDate, lastVisibleDate];
 	};

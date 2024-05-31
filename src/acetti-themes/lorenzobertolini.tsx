@@ -134,6 +134,8 @@ export const lorenzobertoliniTheme: ThemeType = {
 	platte: {
 		backgroundColor: '#ffffff',
 		borderColor: '#e0e0e0',
+		// borderColor: '#ff0000',
+		// backgroundColor: '#ffff00',
 	},
 	timeseriesComponents: {
 		percentageChangeArea: {
