@@ -2,14 +2,15 @@ import {TPeriodsScale} from '../../../periodsScale/periodsScale';
 
 type TTickSpec = {
 	id: string;
-	value: number;
 	periodFloatIndex: number;
 };
 
 type TLabelSpec = {
 	id: string;
-	value: number;
+	// value: number;
+	periodFloatIndex: number;
 	label: string;
+	padding?: number;
 	textAnchor?: 'start' | 'middle' | 'end';
 };
 
@@ -22,7 +23,6 @@ export type TXAxisSpec = {
 // TODO pass more info, e.g. area width?
 export function getMonthStartsAxisSpec(
 	periodsScale: TPeriodsScale
-	// dates: Date[]
 ): TXAxisSpec {
 	const visibleDates = periodsScale.getAllVisibleDates();
 
@@ -32,7 +32,6 @@ export function getMonthStartsAxisSpec(
 		const id = date.getTime().toString();
 		return {
 			id,
-			value: periodsScale.getBandFromDate(date).x1,
 			periodFloatIndex: periodsScale.getBandFromDate(date).index,
 		};
 	});
@@ -43,9 +42,11 @@ export function getMonthStartsAxisSpec(
 		const id = date.getTime().toString();
 		return {
 			id,
-			value: periodsScale.getBandFromDate(date).x1 + PADDING,
 			textAnchor: 'start' as const,
 			label: getMonthName(date),
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
+			// TODO implement
+			// padding: PADDING,
 		};
 	});
 
@@ -63,7 +64,6 @@ export function getQuarterStartsAxisSpec(
 		const id = date.getTime().toString();
 		return {
 			id,
-			value: periodsScale.getBandFromDate(date).x1,
 			periodFloatIndex: periodsScale.getBandFromDate(date).index,
 		};
 	});
@@ -74,7 +74,9 @@ export function getQuarterStartsAxisSpec(
 		const id = date.getTime().toString();
 		return {
 			id,
-			value: periodsScale.getBandFromDate(date).x1 + PADDING,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
+			// TODO implement
+			padding: PADDING,
 			textAnchor: 'start' as const,
 			label: getMonthName(date),
 		};

@@ -115,7 +115,7 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			<Position
+			{/* <Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<XAxis_SpecBased
@@ -123,31 +123,39 @@ export const BasicLineChart: React.FC<{
 					// theme={theme.xAxis}
 					theme={{...theme.xAxis, tickColor: 'cyan', color: 'cyan'}}
 					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
 				/>
-			</Position>
+			</Position> */}
 
-			<Position position={{left: layoutAreas.xAxis.x1, top: 50}}>
+			{/* <Position position={{left: layoutAreas.xAxis.x1, top: 50}}>
 				<XAxis_SpecBased
 					axisSpec={axisSpecFrom}
 					theme={{...theme.xAxis, tickColor: 'red', color: 'red'}}
 					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
 				/>
-			</Position>
+			</Position> */}
 
-			<Position position={{left: layoutAreas.xAxis.x1, top: 100}}>
+			{/* <Position position={{left: layoutAreas.xAxis.x1, top: 100}}>
 				<XAxis_SpecBased
 					axisSpec={axisSpecTo}
 					theme={{...theme.xAxis, tickColor: 'green', color: 'green'}}
 					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
 				/>
-			</Position>
+			</Position> */}
 
-			<Position position={{left: layoutAreas.xAxis.x1, top: 150}}>
-				<h1 style={{fontSize: 30, marginBottom: 5}}>XAxis Transition:</h1>
+			<Position
+				// position={{left: layoutAreas.xAxis.x1, top: 150}}
+
+				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
+			>
+				{/* <h1 style={{fontSize: 30, marginBottom: 5}}>XAxis Transition:</h1> */}
 				<XAxis_Transition
 					fromAxisSpec={axisSpecFrom}
 					toAxisSpec={axisSpecTo}
-					theme={{...theme.xAxis, tickColor: 'magenta', color: 'magenta'}}
+					// theme={{...theme.xAxis, tickColor: 'magenta', color: 'magenta'}}
+					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
 					easingPercentage={easingPercentage}
 					// easingPercentage={easingPercentage}
