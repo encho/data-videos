@@ -9,8 +9,7 @@ import {getYDomain} from '../../utils/timeSeries/timeSeries';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
-// TODO type TLineChartAnimationContext
-type TChildrenFuncArgs = {
+export type TLineChartAnimationContext = {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	// new API...
@@ -37,7 +36,7 @@ type TChildrenFuncArgs = {
 	};
 };
 
-export type TLineChartAnimationContext = TChildrenFuncArgs;
+type TChildrenFuncArgs = TLineChartAnimationContext;
 
 const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';

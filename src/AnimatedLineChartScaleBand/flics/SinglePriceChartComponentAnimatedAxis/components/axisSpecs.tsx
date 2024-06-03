@@ -21,6 +21,43 @@ export type TXAxisSpec = {
 	labels: TLabelSpec[];
 };
 
+function rangeBetween(numbers: [number, number]): number[] {
+	const [start, end] = numbers;
+	const length = end - start + 1;
+
+	return Array.from({length}, (_, index) => start + index);
+}
+// Example usage:
+// const input: [number, number] = [4, 8];
+// const output: number[] = rangeBetween(input);
+// console.log(output); // Output: [4, 5, 6, 7, 8]
+
+// TODO pass more info, e.g. area width?
+export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
+	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
+	const tickIndices = rangeBetween(visibleDomainIndices);
+
+	const ticks = tickIndices.map((tickIndex) => {
+		return {
+			id: `daysTick-index-${tickIndex}`,
+			periodFloatIndex: tickIndex,
+		};
+	});
+
+	const labels = tickIndices.map((tickIndex) => {
+		return {
+			id: `daysTick-label-${tickIndex + 0.5}`,
+			textAnchor: 'middle' as const,
+			label: `${tickIndex}`,
+			periodFloatIndex: tickIndex + 0.5,
+		};
+	});
+
+	console.log('asdfasfasdfasfasdf');
+	console.log({ticks, labels});
+	return {ticks, labels};
+}
+
 // TODO pass more info, e.g. area width?
 export function getMonthStartsAxisSpec(
 	periodsScale: TPeriodsScale

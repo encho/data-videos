@@ -43,9 +43,17 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 
 	// TODO fix with [0,0] !!!!!!!!!
 	// const visibleDomainIndices_0 = [0, 1] as [number, number];
+	// const visibleDomainIndices_0 = [0, 1] as [number, number];
+	// const visibleDomainIndices_1 = [0, 10] as [number, number];
+	// const visibleDomainIndices_2 = [0, 40] as [number, number];
+
 	const visibleDomainIndices_0 = [0, 1] as [number, number];
-	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
-	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
+	const visibleDomainIndices_1 = [0, 10] as [number, number];
+	// const visibleDomainIndices_2 = [20, 30] as [number, number];
+	const visibleDomainIndices_2 = [20, 90] as [number, number];
+
+	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
+	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -110,11 +118,13 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 								periodScale={periodsScale}
 								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
 								toPeriodScale={currentSliceInfo.periodsScaleTo}
+								//
+								currentSliceInfo={currentSliceInfo}
 							/>
 
-							<Sequence from={transitionDurationInFrames_0_1}>
-								{/* TODO 1 pass forward lineChartAnimationContext */}
-								{/* TODO 2 useLineChartAnimationContext inside! */}
+							{/* TODO 1 pass forward lineChartAnimationContext */}
+							{/* TODO 2 useLineChartAnimationContext inside! */}
+							{/* <Sequence from={transitionDurationInFrames_0_1}>
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -125,9 +135,9 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									plotArea={chartLayout.areas.plot}
 									theme={theme.timeseriesComponents.percentageChangeArea}
 								/>
-							</Sequence>
+							</Sequence> */}
 
-							{/* <AbsoluteFill>
+							<AbsoluteFill>
 								<LineChartAnimationContextDebugger
 									theme={theme}
 									periodsScale={periodsScale}
@@ -135,7 +145,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									currentSliceInfo={currentSliceInfo}
 									currentTransitionInfo={currentTransitionInfo}
 								/>
-							</AbsoluteFill> */}
+							</AbsoluteFill>
 						</div>
 					);
 				}}
@@ -147,6 +157,14 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 type TLineChartAnimationContextDebugger = TLineChartAnimationContext & {
 	theme: ThemeType;
 };
+
+function roundToTwoDecimals(num: number): number {
+	return parseFloat(num.toFixed(2));
+}
+// // Example usage:
+// const input: number = 123.456789;
+// const output: number = roundToTwoDecimals(input);
+// console.log(output); // Output: 123.46
 
 export const LineChartAnimationContextDebugger: React.FC<
 	TLineChartAnimationContextDebugger
@@ -160,53 +178,65 @@ export const LineChartAnimationContextDebugger: React.FC<
 	return (
 		<div>
 			<div style={{color: theme.dataColors[2].BASE, fontSize: 20}}>
-				<h1>
-					currentTransitionInfo.frameRange:{' '}
-					{JSON.stringify(currentTransitionInfo.frameRange)}
-				</h1>
-				<h1>
-					currentTransitionInfo.durationInFrames:{' '}
-					{currentTransitionInfo.durationInFrames}
-				</h1>
-				<h1>
-					currentTransitionInfo.framesPercentage:{' '}
-					{currentTransitionInfo.framesPercentage}
-				</h1>
-				<h1>
-					currentTransitionInfo.easingPercentage:{' '}
-					{currentTransitionInfo.easingPercentage}
-				</h1>
+				<h1 style={{fontWeight: 'bold'}}>Current Transition Info</h1>
+				<h1>frameRange: {JSON.stringify(currentTransitionInfo.frameRange)}</h1>
+				<h1>durationInFrames: {currentTransitionInfo.durationInFrames}</h1>
+				<h1>framesPercentage: {currentTransitionInfo.framesPercentage}</h1>
+				<h1>easingPercentage: {currentTransitionInfo.easingPercentage}</h1>
 			</div>
-			<div style={{color: theme.dataColors[3].BASE, fontSize: 20}}>
-				<h1>currentSliceInfo.index: {currentSliceInfo.index}</h1>
+			<div
+				style={{color: theme.dataColors[3].BASE, fontSize: 20, marginTop: 10}}
+			>
+				<h1 style={{fontWeight: 'bold'}}>Current Transition Slice Info</h1>
+				<h1>index: {currentSliceInfo.index}</h1>
+				<h1>frameRange: {JSON.stringify(currentSliceInfo.frameRange)}</h1>
 				<h1>
-					currentSliceInfo.frameRange:{' '}
-					{JSON.stringify(currentSliceInfo.frameRange)}
+					frameRangeLinearPercentage:{' '}
+					{JSON.stringify(
+						(() => {
+							const obj = currentSliceInfo.frameRangeLinearPercentage;
+							return {
+								startFrame: roundToTwoDecimals(obj.startFrame),
+								endFrame: roundToTwoDecimals(obj.endFrame),
+							};
+						})()
+					)}
 				</h1>
 				<h1>
-					currentSliceInfo.frameRangeLinearPercentage:{' '}
-					{JSON.stringify(currentSliceInfo.frameRangeLinearPercentage)}
+					frameRangeEasingPercentage:{' '}
+					{JSON.stringify(
+						(() => {
+							const obj = currentSliceInfo.frameRangeEasingPercentage;
+							return {
+								startFrame: roundToTwoDecimals(obj.startFrame),
+								endFrame: roundToTwoDecimals(obj.endFrame),
+							};
+						})()
+					)}
+				</h1>
+				<h1>durationInFrames: {currentSliceInfo.durationInFrames}</h1>
+				<h1>relativeFrame: {currentSliceInfo.relativeFrame}</h1>
+				<h1>
+					framesPercentage:{' '}
+					{roundToTwoDecimals(currentSliceInfo.framesPercentage)}
 				</h1>
 				<h1>
-					currentSliceInfo.frameRangeEasingPercentage:{' '}
-					{JSON.stringify(currentSliceInfo.frameRangeEasingPercentage)}
+					visibleDomainIndicesFrom:{' '}
+					{JSON.stringify(
+						(() => {
+							const arr = currentSliceInfo.visibleDomainIndicesFrom;
+							return arr.map((it) => roundToTwoDecimals(it));
+						})()
+					)}
 				</h1>
 				<h1>
-					currentSliceInfo.durationInFrames: {currentSliceInfo.durationInFrames}
-				</h1>
-				<h1>
-					currentSliceInfo.relativeFrame: {currentSliceInfo.relativeFrame}
-				</h1>
-				<h1>
-					currentSliceInfo.framesPercentage: {currentSliceInfo.framesPercentage}
-				</h1>
-				<h1>
-					currentSliceInfo.visibleDomainIndicesFrom:{' '}
-					{JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom)}
-				</h1>
-				<h1>
-					currentSliceInfo.visibleDomainIndicesTo:{' '}
-					{JSON.stringify(currentSliceInfo.visibleDomainIndicesTo)}
+					visibleDomainIndicesTo:{' '}
+					{JSON.stringify(
+						(() => {
+							const arr = currentSliceInfo.visibleDomainIndicesTo;
+							return arr.map((it) => roundToTwoDecimals(it));
+						})()
+					)}
 				</h1>
 				{/* <h1>
 		currentSliceInfo.periodsScaleFrom:{' '}

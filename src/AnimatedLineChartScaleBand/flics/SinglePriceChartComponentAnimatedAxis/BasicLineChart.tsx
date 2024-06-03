@@ -10,12 +10,15 @@ import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
 import {
+	getDaysAxisSpec,
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
 
 import {TTheme} from '../../theme';
 import {XAxis_Transition} from './components/XAxis_Transition';
+import {XAxis_SpecBased} from './components/XAxis_SpecBased';
+import {TLineChartAnimationContext} from './LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -29,8 +32,21 @@ const currencyFormatter = (x: number) => {
 	return '$ ' + formatter.format(x);
 };
 
+const getAxisSpecType = (periodsScale: TPeriodsScale) => {
+	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
+	const SPEC_TYPE =
+		numberOfVisibleDaysFrom < 60
+			? 'days'
+			: numberOfVisibleDaysFrom < 200
+			? 'monthStarts'
+			: 'quarterStarts';
+
+	return SPEC_TYPE;
+};
+
 const getAxisSpec = (periodsScale: TPeriodsScale) => {
 	const AXIS_SPEC_FUNCTIONS = {
+		days: getDaysAxisSpec,
 		monthStarts: getMonthStartsAxisSpec,
 		quarterStarts: getQuarterStartsAxisSpec,
 	};
@@ -42,7 +58,11 @@ const getAxisSpec = (periodsScale: TPeriodsScale) => {
 
 	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE_FROM =
-		numberOfVisibleDaysFrom < 200 ? 'monthStarts' : 'quarterStarts';
+		numberOfVisibleDaysFrom < 60
+			? 'days'
+			: numberOfVisibleDaysFrom < 200
+			? 'monthStarts'
+			: 'quarterStarts';
 	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](periodsScale);
 
 	return axisSpec;
@@ -61,6 +81,8 @@ export const BasicLineChart: React.FC<{
 	periodScale: TPeriodsScale;
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
+	//
+	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
 }> = ({
 	layoutAreas,
 	timeSeries,
@@ -69,9 +91,28 @@ export const BasicLineChart: React.FC<{
 	periodScale: currentPeriodsScale,
 	fromPeriodScale,
 	toPeriodScale,
+	//
+	currentSliceInfo,
 }) => {
+	const fromSpecType = getAxisSpecType(fromPeriodScale);
+	const toSpecType = getAxisSpecType(toPeriodScale);
+
+	// let axisSpecFrom;
+	// let axisSpecTo;
+	// if (fromSpecType !== toSpecType) {
+	// 	axisSpecFrom = getAxisSpec(fromPeriodScale);
+	// 	axisSpecTo = getAxisSpec(toPeriodScale);
+	// } else {
+	// 	const axisSpecCurrentTest = getAxisSpec(currentPeriodsScale);
+
+	// 	axisSpecFrom = axisSpecCurrentTest;
+	// 	axisSpecTo = axisSpecCurrentTest;
+	// }
+
 	const axisSpecFrom = getAxisSpec(fromPeriodScale);
 	const axisSpecTo = getAxisSpec(toPeriodScale);
+
+	// const axisSpecCurrentTest = getAxisSpec(currentPeriodsScale);
 
 	return (
 		<>
@@ -103,6 +144,18 @@ export const BasicLineChart: React.FC<{
 			</Position>
 
 			<Position
+				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1 - 100}}
+			>
+				<XAxis_SpecBased
+					axisSpec={axisSpecFrom}
+					// toAxisSpec={axisSpecTo}
+					theme={theme.xAxis}
+					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
+				/>
+			</Position>
+
+			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<XAxis_Transition
@@ -111,7 +164,18 @@ export const BasicLineChart: React.FC<{
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
 					periodsScale={currentPeriodsScale}
+					//
+					currentSliceInfo={currentSliceInfo}
 				/>
+				{/* <XAxis_Transition
+					fromAxisSpec={axisSpecCurrentTest}
+					toAxisSpec={axisSpecCurrentTest}
+					theme={theme.xAxis}
+					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
+					//
+					currentSliceInfo={currentSliceInfo}
+				/> */}
 			</Position>
 
 			<Position

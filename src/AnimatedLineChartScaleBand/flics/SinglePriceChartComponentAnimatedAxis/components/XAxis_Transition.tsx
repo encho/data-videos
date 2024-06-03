@@ -7,6 +7,7 @@ import {getEnterUpdateExits} from '../../../utils/utils';
 
 import {TXAxisSpec} from './axisSpecs';
 import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+import {TLineChartAnimationContext} from '../LineChartAnimationContainer';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
@@ -29,6 +30,10 @@ export const XAxis_Transition: React.FC<{
 	theme: TTheme_XAxis;
 	// easingPercentage: number;
 	periodsScale: TPeriodsScale;
+	//
+	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	//
+	// currentSliceInfo:
 }> = ({
 	area,
 	theme,
@@ -37,15 +42,22 @@ export const XAxis_Transition: React.FC<{
 	// easingPercentage,
 	periodsScale,
 	// TODO pass animation context data e.g. currentSliceInfo and currentTransitionInfo
+	currentSliceInfo,
 }) => {
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
 	const frame = useCurrentFrame();
+
+	const relativeFrame = currentSliceInfo.relativeFrame;
+	console.log({frame, relativeFrame});
 	const {fps} = useVideoConfig();
 	// const animationPercentage = frame / durationInFrames;
 	// const animationPercentage = easingPercentage;
+
+	// const FADE_IN_OUT_DURATION = fps * 3;
+	const FADE_IN_OUT_DURATION = fps * 0.8;
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
 		fromAxisSpec.ticks.map((it) => it.id),
@@ -56,6 +68,9 @@ export const XAxis_Transition: React.FC<{
 		fromAxisSpec.labels.map((it) => it.id),
 		toAxisSpec.labels.map((it) => it.id)
 	);
+
+	console.log('tickEntyerasdfsadadfs');
+	console.log({ticksEnterUpdateExits});
 
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
@@ -82,10 +97,15 @@ export const XAxis_Transition: React.FC<{
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const endTick = getTick(toAxisSpec, tickId);
 
-		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [0, 1], {
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[0, 1],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
 		const currentPeriodFloatIndex = endTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
@@ -100,10 +120,15 @@ export const XAxis_Transition: React.FC<{
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
 
-		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [1, 0], {
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[1, 0],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
 		const currentPeriodFloatIndex = startTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
@@ -148,6 +173,7 @@ export const XAxis_Transition: React.FC<{
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
+			// opacity: 1,
 		};
 	});
 
@@ -155,10 +181,15 @@ export const XAxis_Transition: React.FC<{
 		const endLabel = getLabel(toAxisSpec, labelId);
 		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
-		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [0, 1], {
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[0, 1],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
 		const marginLeft = endLabel.marginLeft || 0;
 
@@ -179,10 +210,15 @@ export const XAxis_Transition: React.FC<{
 			startLabel.periodFloatIndex
 		);
 
-		const interpolatedOpacity = interpolate(frame, [0, fps * 1], [1, 0], {
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		});
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[1, 0],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
 		const marginLeft = startLabel.marginLeft || 0;
 
@@ -216,7 +252,7 @@ export const XAxis_Transition: React.FC<{
 					<g
 						key={i}
 						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
+						transform="translate(0,25)"
 					>
 						<text
 							textAnchor={it.textAnchor}
@@ -321,6 +357,7 @@ export const XAxis_Transition: React.FC<{
 							stroke={theme.tickColor}
 							strokeWidth={4}
 							opacity={it.opacity}
+							// opacity={1}
 						/>
 					</g>
 				);
