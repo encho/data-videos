@@ -24,7 +24,6 @@ export type TXAxisSpec = {
 function rangeBetween(numbers: [number, number]): number[] {
 	const [start, end] = numbers;
 	const length = end - start + 1;
-
 	return Array.from({length}, (_, index) => start + index);
 }
 // Example usage:
@@ -32,8 +31,7 @@ function rangeBetween(numbers: [number, number]): number[] {
 // const output: number[] = rangeBetween(input);
 // console.log(output); // Output: [4, 5, 6, 7, 8]
 
-// TODO pass more info, e.g. area width?
-export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
+export function getIndicesAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
 	const tickIndices = rangeBetween(visibleDomainIndices);
 
@@ -53,8 +51,34 @@ export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	console.log('asdfasfasdfasfasdf');
-	console.log({ticks, labels});
+	return {ticks, labels};
+}
+
+// TODO pass more info, e.g. area width?
+export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
+	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
+	const tickIndices = rangeBetween(visibleDomainIndices);
+
+	const ticks = tickIndices.map((tickIndex) => {
+		return {
+			id: `daysTick-index-${tickIndex}`,
+			periodFloatIndex: tickIndex,
+		};
+	});
+
+	const labels = tickIndices.map((tickIndex) => {
+		const date = periodsScale.getDateFromIndex(tickIndex);
+		const dayNumberString = getDayNumber(date);
+		return {
+			id: `daysTick-label-${tickIndex + 0.5}`,
+			textAnchor: 'middle' as const,
+			label: dayNumberString,
+			periodFloatIndex: tickIndex + 0.5,
+		};
+	});
+
+	// console.log('asdfasfasdfasfasdf');
+	// console.log({ticks, labels});
 	return {ticks, labels};
 }
 
@@ -177,3 +201,14 @@ function getMonthName(date: Date): string {
 	const monthName = date.toLocaleString('default', {month: 'short'});
 	return monthName;
 }
+
+function getDayNumber(date: Date): string {
+	// Get the day of the month (1-31)
+	const day = date.getDate();
+	// Convert the day number to a string and pad it with a leading zero if necessary
+	const dayString = day.toString().padStart(2, '0');
+	return dayString;
+}
+// Example usage:
+// const date = new Date();
+// console.log(getDayNumber(date)); // Output will be something like "07" if the current day is the 7th

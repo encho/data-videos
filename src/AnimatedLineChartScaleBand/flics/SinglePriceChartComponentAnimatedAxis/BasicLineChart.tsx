@@ -10,15 +10,16 @@ import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
 import {
+	getIndicesAxisSpec,
 	getDaysAxisSpec,
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
-import {periodsScale} from '../../periodsScale/periodsScale';
+// import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
 import {XAxis_Transition} from './components/XAxis_Transition';
-import {XAxis_SpecBased} from './components/XAxis_SpecBased';
+// import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {TLineChartAnimationContext} from './LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
@@ -33,7 +34,16 @@ const currencyFormatter = (x: number) => {
 	return '$ ' + formatter.format(x);
 };
 
-const getAxisSpecType = (periodsScale: TPeriodsScale) => {
+const AXIS_SPEC_FUNCTIONS = {
+	indices: getIndicesAxisSpec,
+	days: getDaysAxisSpec,
+	monthStarts: getMonthStartsAxisSpec,
+	quarterStarts: getQuarterStartsAxisSpec,
+} as const;
+
+type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
+
+const getAxisSpecType = (periodsScale: TPeriodsScale): TSpecType => {
 	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE =
 		// numberOfVisibleDaysFrom < 60
@@ -45,14 +55,6 @@ const getAxisSpecType = (periodsScale: TPeriodsScale) => {
 
 	return SPEC_TYPE;
 };
-
-const AXIS_SPEC_FUNCTIONS = {
-	days: getDaysAxisSpec,
-	monthStarts: getMonthStartsAxisSpec,
-	quarterStarts: getQuarterStartsAxisSpec,
-} as const;
-
-type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
 
 const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
 	const AXIS_SPEC_FUNCTIONS = {

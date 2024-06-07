@@ -11,6 +11,7 @@ export type TPeriodsScale = {
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
 	// TODO should be getBandFromPeriodIndex: (pIndex: number) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
+	getDateFromIndex: (i: number) => Date;
 	getVisibleDomainIndices: () => [number, number];
 	getVisibleDomainDates: () => [Date, Date];
 	getVisibleDomain_NumberOfDays: () => number;
@@ -161,7 +162,13 @@ export const periodsScale = ({
 		return slicedDates;
 	};
 
+	const getDateFromIndex = (ix: number) => {
+		return dates[ix];
+	};
+
 	return {
+		// TODO getPeriodFromIndex
+		getDateFromIndex,
 		getBandFromDate,
 		getBandFromIndex,
 		getVisibleDomainIndices,
