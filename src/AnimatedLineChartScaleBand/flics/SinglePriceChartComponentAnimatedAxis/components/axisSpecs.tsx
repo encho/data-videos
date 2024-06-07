@@ -19,6 +19,7 @@ export type TXAxisSpec = {
 	// scale: TODO BandScale here?
 	ticks: TTickSpec[];
 	labels: TLabelSpec[];
+	secondaryLabels: TLabelSpec[];
 };
 
 function rangeBetween(numbers: [number, number]): number[] {
@@ -51,7 +52,9 @@ export function getIndicesAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	return {ticks, labels};
+	const secondaryLabels: TLabelSpec[] = [];
+
+	return {ticks, labels, secondaryLabels};
 }
 
 // TODO pass more info, e.g. area width?
@@ -77,9 +80,9 @@ export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	// console.log('asdfasfasdfasfasdf');
-	// console.log({ticks, labels});
-	return {ticks, labels};
+	const secondaryLabels: TLabelSpec[] = [];
+
+	return {ticks, labels, secondaryLabels};
 }
 
 // TODO pass more info, e.g. area width?
@@ -111,7 +114,9 @@ export function getMonthStartsAxisSpec(
 		};
 	});
 
-	return {ticks, labels};
+	const secondaryLabels: TLabelSpec[] = [];
+
+	return {ticks, labels, secondaryLabels};
 }
 
 export function getQuarterStartsAxisSpec(
@@ -142,7 +147,9 @@ export function getQuarterStartsAxisSpec(
 		};
 	});
 
-	return {ticks, labels};
+	const secondaryLabels: TLabelSpec[] = [];
+
+	return {ticks, labels, secondaryLabels};
 }
 
 function generateMonthStartsNearestDates(dates: Date[]): Date[] {
