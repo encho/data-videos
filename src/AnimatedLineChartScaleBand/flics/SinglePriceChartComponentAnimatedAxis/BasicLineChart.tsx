@@ -3,7 +3,10 @@ import {ScaleLinear} from 'd3-scale';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {TPeriodsScale} from '../../periodsScale/periodsScale';
+import {
+	TPeriodsScale,
+	// periodsScale
+} from '../../periodsScale/periodsScale';
 // TODO evtl deprecate?
 // import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
@@ -46,7 +49,6 @@ type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
 const getAxisSpecType = (periodsScale: TPeriodsScale): TSpecType => {
 	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE =
-		// numberOfVisibleDaysFrom < 60
 		numberOfVisibleDaysFrom < 20
 			? 'days'
 			: numberOfVisibleDaysFrom < 200
@@ -57,26 +59,7 @@ const getAxisSpecType = (periodsScale: TPeriodsScale): TSpecType => {
 };
 
 const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
-	const AXIS_SPEC_FUNCTIONS = {
-		days: getDaysAxisSpec,
-		monthStarts: getMonthStartsAxisSpec,
-		quarterStarts: getQuarterStartsAxisSpec,
-	};
-	// TODO the appropriate SPEC type should be inferred given the:
-	// - visible date range
-	// - width of the area
-	// - font size
-	// - etc...
-
-	// const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
-	// const SPEC_TYPE_FROM =
-	// 	numberOfVisibleDaysFrom < 60
-	// 		? 'days'
-	// 		: numberOfVisibleDaysFrom < 200
-	// 		? 'monthStarts'
-	// 		: 'quarterStarts';
 	const axisSpec = AXIS_SPEC_FUNCTIONS[specType](periodsScale);
-
 	return axisSpec;
 };
 
@@ -108,6 +91,21 @@ export const BasicLineChart: React.FC<{
 }) => {
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
+
+	// const [from_start, from_end] = fromPeriodScale.getVisibleDomainIndices();
+	// const [to_start, to_end] = toPeriodScale.getVisibleDomainIndices();
+
+	// const totalVisibleDomainIndices = [
+	// 	Math.min(from_start, to_start),
+	// 	Math.max(from_end, to_end),
+	// ] as [number, number];
+
+	// const slicePeriodsScaleFrom = periodsScale({
+	// 	dates,
+	// 	visibleDomainIndices: totalVisibleDomainIndices,
+	// 	// visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+	// 	visibleRange: currentPeriodsScale.visibleRange,
+	// });
 
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);

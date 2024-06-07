@@ -1,3 +1,4 @@
+import {getYear} from 'date-fns';
 import {TPeriodsScale} from '../../../periodsScale/periodsScale';
 
 type TTickSpec = {
@@ -80,10 +81,156 @@ export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	const secondaryLabels: TLabelSpec[] = [];
+	const visibleDates = periodsScale.getAllVisibleDates();
+
+	const firstDatesOfMonths = getFirstDateOfEachMonth(visibleDates);
+
+	const secondaryLabels = firstDatesOfMonths.map((d) => {
+		const index = periodsScale.getIndexFromDate(d);
+
+		return {
+			id: `secondaryLabel-month-${d.toISOString()}}`,
+			textAnchor: 'start' as const,
+			label: `${getMonthName(d)}`,
+			periodFloatIndex: index,
+		};
+	});
 
 	return {ticks, labels, secondaryLabels};
 }
+
+// TODO use/ test out
+function getFirstDateOfEachMonth(dates: Date[]): Date[] {
+	if (dates.length === 0) {
+		return [];
+	}
+
+	const result: Date[] = [];
+	let currentMonth = dates[0].getMonth();
+	let currentYear = dates[0].getFullYear();
+
+	// Add the first date to the result array
+	result.push(dates[0]);
+
+	for (let i = 1; i < dates.length; i++) {
+		const date = dates[i];
+		const month = date.getMonth();
+		const year = date.getFullYear();
+
+		// Check if the month or year has changed
+		if (month !== currentMonth || year !== currentYear) {
+			result.push(date);
+			currentMonth = month;
+			currentYear = year;
+		}
+	}
+
+	return result;
+}
+// // Example usage:
+// const dates = [
+// 	new Date('2024-12-01'),
+// 	new Date('2024-12-05'),
+// 	new Date('2024-12-10'),
+// 	new Date('2025-01-01'),
+// 	new Date('2025-01-15'),
+// 	new Date('2025-02-01')
+// ];
+// const firstDatesOfEachMonth = getFirstDateOfEachMonth(dates);
+// console.log(firstDatesOfEachMonth);
+// // Output: [
+// //   2024-12-01T00:00:00.000Z,
+// //   2025-01-01T00:00:00.000Z,
+// //   2025-02-01T00:00:00.000Z
+// // ]
+
+interface MonthInfo {
+	month: number;
+	year: number;
+	firstIndex: number;
+	lastIndex: number;
+}
+
+function getMonthYearInfo(dates: Date[]): MonthInfo[] {
+	const result: MonthInfo[] = [];
+	if (dates.length === 0) {
+		return result;
+	}
+
+	let currentMonth = dates[0].getMonth() + 1;
+	let currentYear = dates[0].getFullYear();
+	let firstIndex = 0;
+
+	for (let i = 1; i < dates.length; i++) {
+		const date = dates[i];
+		const month = date.getMonth() + 1;
+		const year = date.getFullYear();
+
+		if (month !== currentMonth || year !== currentYear) {
+			result.push({
+				month: currentMonth,
+				year: currentYear,
+				firstIndex,
+				lastIndex: i - 1,
+			});
+
+			currentMonth = month;
+			currentYear = year;
+			firstIndex = i;
+		}
+	}
+
+	// Add the last month/year info
+	result.push({
+		month: currentMonth,
+		year: currentYear,
+		firstIndex,
+		lastIndex: dates.length - 1,
+	});
+
+	return result;
+}
+// // Example usage:
+// const dates = [
+// 	new Date('2024-12-01'),
+// 	new Date('2024-12-05'),
+// 	new Date('2024-12-10'),
+// 	new Date('2025-01-01'),
+// 	new Date('2025-01-15'),
+// 	new Date('2025-02-01')
+// ];
+// const monthYearInfo = getMonthYearInfo(dates);
+// console.log(monthYearInfo);
+// // Output: [
+// //   { month: 12, year: 2024, firstIndex: 0, lastIndex: 2 },
+// //   { month: 1, year: 2025, firstIndex: 3, lastIndex: 4 },
+// //   { month: 2, year: 2025, firstIndex: 5, lastIndex: 5 }
+// // ]
+
+function averageWithPrevious(arr: number[]): number[] {
+	// Check if the array has fewer than 2 elements
+	if (arr.length < 2) {
+		// return [];
+		throw new Error('Input array must have at least 2 elements.');
+	}
+
+	// Initialize the result array
+	let result: number[] = [];
+
+	// Iterate through the array starting from the second element
+	for (let i = 1; i < arr.length; i++) {
+		// Calculate the average of the current and previous element
+		let average = (arr[i] + arr[i - 1]) / 2;
+		// Add the average to the result array
+		result.push(average);
+	}
+
+	return result;
+}
+// // Example usage:
+// const inputArray = [1, 2, 3, 5];
+// const outputArray = averageWithPrevious(inputArray);
+// console.log(outputArray); // Output: [1.5, 2.5, 4]
 
 // TODO pass more info, e.g. area width?
 export function getMonthStartsAxisSpec(
@@ -114,10 +261,62 @@ export function getMonthStartsAxisSpec(
 		};
 	});
 
-	const secondaryLabels: TLabelSpec[] = [];
+	const firstDatesOfYears = getFirstDateOfEachYear(visibleDates);
+
+	const secondaryLabels = firstDatesOfYears.map((d) => {
+		const index = periodsScale.getIndexFromDate(d);
+		const year = getYear(d);
+		return {
+			id: `secondaryLabel-year-${year}}`,
+			textAnchor: 'start' as const,
+			label: `${year}`,
+			periodFloatIndex: index,
+		};
+	});
 
 	return {ticks, labels, secondaryLabels};
 }
+
+function getFirstDateOfEachYear(dates: Date[]): Date[] {
+	if (dates.length === 0) {
+		return [];
+	}
+
+	const result: Date[] = [];
+	let currentYear = dates[0].getFullYear();
+
+	// Add the first date to the result array
+	result.push(dates[0]);
+
+	for (let i = 1; i < dates.length; i++) {
+		const date = dates[i];
+		const year = date.getFullYear();
+
+		// Check if the year has changed
+		if (year !== currentYear) {
+			result.push(date);
+			currentYear = year;
+		}
+	}
+
+	return result;
+}
+// // Example usage:
+// const dates = [
+// 	new Date('2024-12-01'),
+// 	new Date('2024-12-05'),
+// 	new Date('2024-12-10'),
+// 	new Date('2025-01-01'),
+// 	new Date('2025-01-15'),
+// 	new Date('2026-02-01')
+// ];
+// const firstDatesOfEachYear = getFirstDateOfEachYear(dates);
+// console.log(firstDatesOfEachYear);
+// // Output: [
+// //   2024-12-01T00:00:00.000Z,
+// //   2025-01-01T00:00:00.000Z,
+// //   2026-02-01T00:00:00.000Z
+// // ]
 
 export function getQuarterStartsAxisSpec(
 	periodsScale: TPeriodsScale
@@ -147,7 +346,18 @@ export function getQuarterStartsAxisSpec(
 		};
 	});
 
-	const secondaryLabels: TLabelSpec[] = [];
+	const firstDatesOfYears = getFirstDateOfEachYear(periodsScale.dates);
+
+	const secondaryLabels = firstDatesOfYears.map((d) => {
+		const index = periodsScale.getIndexFromDate(d);
+		const year = getYear(d);
+		return {
+			id: `secondaryLabel-year-xx-${year}}`,
+			textAnchor: 'start' as const,
+			label: `${year}`,
+			periodFloatIndex: index,
+		};
+	});
 
 	return {ticks, labels, secondaryLabels};
 }

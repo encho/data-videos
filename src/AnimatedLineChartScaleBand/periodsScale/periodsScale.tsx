@@ -9,6 +9,7 @@ type TPeriodScaleBand = {
 export type TPeriodsScale = {
 	// TODO should be getBandFromPeriod: (p: TPeriod) => TPeriodScaleBand;
 	getBandFromDate: (d: Date) => TPeriodScaleBand;
+	getIndexFromDate: (d: Date) => number;
 	// TODO should be getBandFromPeriodIndex: (pIndex: number) => TPeriodScaleBand;
 	getBandFromIndex: (i: number) => TPeriodScaleBand;
 	getDateFromIndex: (i: number) => Date;
@@ -166,8 +167,13 @@ export const periodsScale = ({
 		return dates[ix];
 	};
 
+	const getIndexFromDate = (d: Date) => {
+		return dates.indexOf(d);
+	};
+
 	return {
 		// TODO getPeriodFromIndex
+		getIndexFromDate,
 		getDateFromIndex,
 		getBandFromDate,
 		getBandFromIndex,

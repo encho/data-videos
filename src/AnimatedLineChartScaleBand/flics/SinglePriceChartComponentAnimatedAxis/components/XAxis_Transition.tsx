@@ -23,6 +23,12 @@ const getLabel = (axisSpec: TXAxisSpec, labelId: string) => {
 	return labelObj;
 };
 
+const getSecondaryLabel = (axisSpec: TXAxisSpec, labelId: string) => {
+	const labelObj = axisSpec.secondaryLabels.find((item) => item.id === labelId);
+	invariant(labelObj);
+	return labelObj;
+};
+
 export const XAxis_Transition: React.FC<{
 	area: TGridLayoutArea;
 	fromAxisSpec: TXAxisSpec;
@@ -72,8 +78,13 @@ export const XAxis_Transition: React.FC<{
 		toAxisSpec.labels.map((it) => it.id)
 	);
 
-	console.log('tickEntyerasdfsadadfs');
-	console.log({ticksEnterUpdateExits});
+	const secondaryLabelsEnterUpdateExits = getEnterUpdateExits(
+		fromAxisSpec.secondaryLabels.map((it) => it.id),
+		toAxisSpec.secondaryLabels.map((it) => it.id)
+	);
+
+	// console.log('tickEntyerasdfsadadfs');
+	// console.log({ticksEnterUpdateExits});
 
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
@@ -235,6 +246,109 @@ export const XAxis_Transition: React.FC<{
 		};
 	});
 
+	// secondary labels
+	// ***********************************************************
+
+	const updateSecondaryLabels = secondaryLabelsEnterUpdateExits.update.map(
+		(labelId) => {
+			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
+			const endLabel = getSecondaryLabel(toAxisSpec, labelId);
+
+			const startX = periodsScale.mapFloatIndexToRange(
+				startLabel.periodFloatIndex
+			);
+			const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
+
+			// TODO evtl. refine
+			// TODO take info about animationPercentage from passed currentTransitionSlice object!
+			const animationPercentage = 0;
+			const currentX =
+				(1 - animationPercentage) * startX + animationPercentage * endX;
+
+			// const currentX = endX;
+
+			// TODO take info about animationPercentage from passed currentTransitionSlice object!
+			const marginLeft = interpolate(
+				animationPercentage,
+				[0, 1],
+				[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
+				{
+					// easing: Easing.bezier(0.25, 1, 0.5, 1),
+					extrapolateLeft: 'clamp',
+					extrapolateRight: 'clamp',
+				}
+			);
+
+			return {
+				id: labelId,
+				value: currentX,
+				label: startLabel.label,
+				textAnchor: startLabel.textAnchor,
+				marginLeft,
+				// opacity: 1,
+			};
+		}
+	);
+
+	const enterSecondaryLabels = secondaryLabelsEnterUpdateExits.enter.map(
+		(labelId) => {
+			const endLabel = getSecondaryLabel(toAxisSpec, labelId);
+			const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
+
+			const interpolatedOpacity = interpolate(
+				relativeFrame,
+				[0, FADE_IN_OUT_DURATION],
+				[0, 1],
+				{
+					extrapolateLeft: 'clamp',
+					extrapolateRight: 'clamp',
+				}
+			);
+
+			const marginLeft = endLabel.marginLeft || 0;
+
+			return {
+				id: labelId,
+				value: endX,
+				opacity: interpolatedOpacity,
+				label: endLabel.label,
+				textAnchor: endLabel.textAnchor,
+				marginLeft,
+			};
+		}
+	);
+
+	const exitSecondaryLabels = secondaryLabelsEnterUpdateExits.exit.map(
+		(labelId) => {
+			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
+
+			const startX = periodsScale.mapFloatIndexToRange(
+				startLabel.periodFloatIndex
+			);
+
+			const interpolatedOpacity = interpolate(
+				relativeFrame,
+				[0, FADE_IN_OUT_DURATION],
+				[1, 0],
+				{
+					extrapolateLeft: 'clamp',
+					extrapolateRight: 'clamp',
+				}
+			);
+
+			const marginLeft = startLabel.marginLeft || 0;
+
+			return {
+				id: labelId,
+				value: startX,
+				opacity: interpolatedOpacity,
+				label: startLabel.label,
+				textAnchor: startLabel.textAnchor,
+				marginLeft,
+			};
+		}
+	);
+
 	return (
 		<svg
 			width={area.width}
@@ -305,6 +419,80 @@ export const XAxis_Transition: React.FC<{
 						key={i}
 						clipPath="url(#xAxisAreaClipPath)"
 						transform="translate(0,0)"
+					>
+						<text
+							textAnchor={it.textAnchor}
+							alignmentBaseline="baseline"
+							fill={theme.color}
+							// fontFamily={fontFamilyXTicklabels}
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
+							x={it.value + it.marginLeft}
+							opacity={it.opacity}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+
+			{/* update secondary labels  */}
+			{updateSecondaryLabels.map((it, i) => {
+				return (
+					<g
+						key={i}
+						// clipPath="url(#xAxisAreaClipPath)"
+						transform="translate(0,40)"
+					>
+						<text
+							textAnchor={it.textAnchor}
+							fill={theme.color}
+							alignmentBaseline="baseline"
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
+							x={it.value + it.marginLeft}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+
+			{/* enter secondary labels  */}
+			{enterSecondaryLabels.map((it, i) => {
+				return (
+					<g
+						key={i}
+						clipPath="url(#xAxisAreaClipPath)"
+						transform="translate(0,40)"
+					>
+						<text
+							textAnchor={it.textAnchor}
+							fill={theme.color}
+							// fontFamily={fontFamilyXTicklabels}
+							// fontSize={styling.xTickValuesFontSize}
+							alignmentBaseline="baseline"
+							fontSize={TICK_TEXT_FONT_SIZE}
+							fontWeight={TICK_TEXT_FONT_WEIGHT}
+							y={TICK_TEXT_FONT_SIZE}
+							x={it.value + it.marginLeft}
+							opacity={it.opacity}
+						>
+							{it.label}
+						</text>
+					</g>
+				);
+			})}
+
+			{/* exit secondary labels  */}
+			{exitSecondaryLabels.map((it, i) => {
+				return (
+					<g
+						key={i}
+						clipPath="url(#xAxisAreaClipPath)"
+						transform="translate(0,40)"
 					>
 						<text
 							textAnchor={it.textAnchor}
