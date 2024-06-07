@@ -92,21 +92,6 @@ export const BasicLineChart: React.FC<{
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
 
-	// const [from_start, from_end] = fromPeriodScale.getVisibleDomainIndices();
-	// const [to_start, to_end] = toPeriodScale.getVisibleDomainIndices();
-
-	// const totalVisibleDomainIndices = [
-	// 	Math.min(from_start, to_start),
-	// 	Math.max(from_end, to_end),
-	// ] as [number, number];
-
-	// const slicePeriodsScaleFrom = periodsScale({
-	// 	dates,
-	// 	visibleDomainIndices: totalVisibleDomainIndices,
-	// 	// visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
-	// 	visibleRange: currentPeriodsScale.visibleRange,
-	// });
-
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
@@ -159,18 +144,8 @@ export const BasicLineChart: React.FC<{
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
 					periodsScale={currentPeriodsScale}
-					//
 					currentSliceInfo={currentSliceInfo}
 				/>
-				{/* <XAxis_Transition
-					fromAxisSpec={axisSpecCurrentTest}
-					toAxisSpec={axisSpecCurrentTest}
-					theme={theme.xAxis}
-					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-					//
-					currentSliceInfo={currentSliceInfo}
-				/> */}
 			</Position>
 
 			<Position

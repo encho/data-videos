@@ -351,8 +351,8 @@ export const XAxis_Transition: React.FC<{
 
 	return (
 		<svg
-			width={area.width}
-			height={area.height}
+			// width={area.width}
+			// height={area.height}
 			style={{
 				overflow: 'visible',
 			}}
@@ -442,8 +442,9 @@ export const XAxis_Transition: React.FC<{
 				return (
 					<g
 						key={i}
-						// clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,40)"
+						clipPath="url(#xAxisAreaClipPath)"
+						// transform="translate(0,40)"
+						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
 					>
 						<text
 							textAnchor={it.textAnchor}
@@ -466,7 +467,8 @@ export const XAxis_Transition: React.FC<{
 					<g
 						key={i}
 						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,40)"
+						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
+						// transform="translate(0,40)"
 					>
 						<text
 							textAnchor={it.textAnchor}
@@ -492,7 +494,8 @@ export const XAxis_Transition: React.FC<{
 					<g
 						key={i}
 						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,40)"
+						// transform="translate(0,40)"
+						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
 					>
 						<text
 							textAnchor={it.textAnchor}

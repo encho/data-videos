@@ -8,7 +8,7 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 20, name: 'space'},
-	{type: 'pixel', value: 30, name: 'xAxis'},
+	{type: 'pixel', value: 55, name: 'xAxis'},
 	{type: 'pixel', value: 40, name: 'space'},
 ];
 

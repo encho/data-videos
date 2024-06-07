@@ -42,27 +42,18 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	const transitionDurationInFrames_1_2 = 90 * 5;
 
 	// TODO fix with [0,0] !!!!!!!!!
-	// const visibleDomainIndices_0 = [0, 1] as [number, number];
-	// const visibleDomainIndices_0 = [0, 1] as [number, number];
-	// const visibleDomainIndices_1 = [0, 10] as [number, number];
-	// const visibleDomainIndices_2 = [0, 40] as [number, number];
-
 	const visibleDomainIndices_0 = [0, 1] as [number, number];
-	const visibleDomainIndices_1 = [0, 10] as [number, number];
-	// const visibleDomainIndices_2 = [20, 30] as [number, number];
-	// const visibleDomainIndices_2 = [20, 90] as [number, number];
-
-	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
+	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
 	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					stroke={'#f05122'}
+					stroke={'magenta'}
 					fill="transparent"
-					hide={true}
-					// hide={false}
+					// hide={true}
+					hide={false}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -124,7 +115,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 
 							{/* TODO 1 pass forward lineChartAnimationContext */}
 							{/* TODO 2 useLineChartAnimationContext inside! */}
-							<Sequence from={transitionDurationInFrames_1_2}>
+							<Sequence from={transitionDurationInFrames_0_1}>
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -137,7 +128,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 								/>
 							</Sequence>
 
-							<AbsoluteFill>
+							{/* <AbsoluteFill>
 								<LineChartAnimationContextDebugger
 									theme={theme}
 									periodsScale={periodsScale}
@@ -145,7 +136,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									currentSliceInfo={currentSliceInfo}
 									currentTransitionInfo={currentTransitionInfo}
 								/>
-							</AbsoluteFill>
+							</AbsoluteFill> */}
 						</div>
 					);
 				}}
