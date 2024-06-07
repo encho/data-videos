@@ -50,10 +50,10 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	const visibleDomainIndices_0 = [0, 1] as [number, number];
 	const visibleDomainIndices_1 = [0, 10] as [number, number];
 	// const visibleDomainIndices_2 = [20, 30] as [number, number];
-	const visibleDomainIndices_2 = [20, 90] as [number, number];
+	// const visibleDomainIndices_2 = [20, 90] as [number, number];
 
 	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
-	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
+	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -96,7 +96,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 					{
 						durationInFrames: transitionDurationInFrames_1_2,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 3,
+						numberOfSlices: 40,
 					},
 				]}
 			>
@@ -124,7 +124,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 
 							{/* TODO 1 pass forward lineChartAnimationContext */}
 							{/* TODO 2 useLineChartAnimationContext inside! */}
-							{/* <Sequence from={transitionDurationInFrames_0_1}>
+							<Sequence from={transitionDurationInFrames_1_2}>
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -135,7 +135,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									plotArea={chartLayout.areas.plot}
 									theme={theme.timeseriesComponents.percentageChangeArea}
 								/>
-							</Sequence> */}
+							</Sequence>
 
 							<AbsoluteFill>
 								<LineChartAnimationContextDebugger
@@ -176,13 +176,19 @@ export const LineChartAnimationContextDebugger: React.FC<
 	theme,
 }) => {
 	return (
-		<div>
+		<div style={{marginTop: -200}}>
 			<div style={{color: theme.dataColors[2].BASE, fontSize: 20}}>
 				<h1 style={{fontWeight: 'bold'}}>Current Transition Info</h1>
 				<h1>frameRange: {JSON.stringify(currentTransitionInfo.frameRange)}</h1>
 				<h1>durationInFrames: {currentTransitionInfo.durationInFrames}</h1>
-				<h1>framesPercentage: {currentTransitionInfo.framesPercentage}</h1>
-				<h1>easingPercentage: {currentTransitionInfo.easingPercentage}</h1>
+				<h1>
+					framesPercentage:{' '}
+					{roundToTwoDecimals(currentTransitionInfo.framesPercentage)}
+				</h1>
+				<h1>
+					easingPercentage:{' '}
+					{roundToTwoDecimals(currentTransitionInfo.easingPercentage)}
+				</h1>
 			</div>
 			<div
 				style={{color: theme.dataColors[3].BASE, fontSize: 20, marginTop: 10}}

@@ -78,7 +78,7 @@ export const RemotionRoot: React.FC = () => {
 				component={SinglePriceChartAnimatedAxis}
 				// durationInFrames={90 * 3.5}
 				// durationInFrames={90 * 30}
-				durationInFrames={90 * 6}
+				durationInFrames={90 * 15}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
@@ -87,7 +87,7 @@ export const RemotionRoot: React.FC = () => {
 					ticker: 'BTC-USD' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'LORENZOBERTOLINI' as const,
+					themeEnum: 'NERDY' as const,
 				}}
 			/>
 			<Composition

@@ -14,6 +14,7 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
+import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
 import {XAxis_Transition} from './components/XAxis_Transition';
@@ -35,7 +36,8 @@ const currencyFormatter = (x: number) => {
 const getAxisSpecType = (periodsScale: TPeriodsScale) => {
 	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE =
-		numberOfVisibleDaysFrom < 60
+		// numberOfVisibleDaysFrom < 60
+		numberOfVisibleDaysFrom < 20
 			? 'days'
 			: numberOfVisibleDaysFrom < 200
 			? 'monthStarts'
@@ -44,7 +46,15 @@ const getAxisSpecType = (periodsScale: TPeriodsScale) => {
 	return SPEC_TYPE;
 };
 
-const getAxisSpec = (periodsScale: TPeriodsScale) => {
+const AXIS_SPEC_FUNCTIONS = {
+	days: getDaysAxisSpec,
+	monthStarts: getMonthStartsAxisSpec,
+	quarterStarts: getQuarterStartsAxisSpec,
+} as const;
+
+type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
+
+const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
 	const AXIS_SPEC_FUNCTIONS = {
 		days: getDaysAxisSpec,
 		monthStarts: getMonthStartsAxisSpec,
@@ -56,14 +66,14 @@ const getAxisSpec = (periodsScale: TPeriodsScale) => {
 	// - font size
 	// - etc...
 
-	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE_FROM =
-		numberOfVisibleDaysFrom < 60
-			? 'days'
-			: numberOfVisibleDaysFrom < 200
-			? 'monthStarts'
-			: 'quarterStarts';
-	const axisSpec = AXIS_SPEC_FUNCTIONS[SPEC_TYPE_FROM](periodsScale);
+	// const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
+	// const SPEC_TYPE_FROM =
+	// 	numberOfVisibleDaysFrom < 60
+	// 		? 'days'
+	// 		: numberOfVisibleDaysFrom < 200
+	// 		? 'monthStarts'
+	// 		: 'quarterStarts';
+	const axisSpec = AXIS_SPEC_FUNCTIONS[specType](periodsScale);
 
 	return axisSpec;
 };
@@ -97,22 +107,8 @@ export const BasicLineChart: React.FC<{
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
 
-	// let axisSpecFrom;
-	// let axisSpecTo;
-	// if (fromSpecType !== toSpecType) {
-	// 	axisSpecFrom = getAxisSpec(fromPeriodScale);
-	// 	axisSpecTo = getAxisSpec(toPeriodScale);
-	// } else {
-	// 	const axisSpecCurrentTest = getAxisSpec(currentPeriodsScale);
-
-	// 	axisSpecFrom = axisSpecCurrentTest;
-	// 	axisSpecTo = axisSpecCurrentTest;
-	// }
-
-	const axisSpecFrom = getAxisSpec(fromPeriodScale);
-	const axisSpecTo = getAxisSpec(toPeriodScale);
-
-	// const axisSpecCurrentTest = getAxisSpec(currentPeriodsScale);
+	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
+	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
 	return (
 		<>
@@ -143,17 +139,16 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			<Position
+			{/* <Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1 - 100}}
 			>
 				<XAxis_SpecBased
 					axisSpec={axisSpecFrom}
-					// toAxisSpec={axisSpecTo}
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
 					periodsScale={currentPeriodsScale}
 				/>
-			</Position>
+			</Position> */}
 
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}

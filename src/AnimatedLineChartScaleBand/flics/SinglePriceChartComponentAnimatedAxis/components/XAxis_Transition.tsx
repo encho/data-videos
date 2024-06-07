@@ -48,16 +48,19 @@ export const XAxis_Transition: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	const frame = useCurrentFrame();
+	// const frame = useCurrentFrame();
 
 	const relativeFrame = currentSliceInfo.relativeFrame;
-	console.log({frame, relativeFrame});
+	// console.log({frame, relativeFrame});
 	const {fps} = useVideoConfig();
 	// const animationPercentage = frame / durationInFrames;
 	// const animationPercentage = easingPercentage;
 
 	// const FADE_IN_OUT_DURATION = fps * 3;
-	const FADE_IN_OUT_DURATION = fps * 0.8;
+	const FADE_IN_OUT_DURATION = Math.min(
+		currentSliceInfo.durationInFrames,
+		fps * 0.8
+	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
 		fromAxisSpec.ticks.map((it) => it.id),
@@ -252,7 +255,7 @@ export const XAxis_Transition: React.FC<{
 					<g
 						key={i}
 						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,25)"
+						transform="translate(0,0)"
 					>
 						<text
 							textAnchor={it.textAnchor}
