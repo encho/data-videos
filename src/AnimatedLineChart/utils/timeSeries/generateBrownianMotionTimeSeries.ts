@@ -50,10 +50,10 @@ function randomNormalDistribution(): number {
 	return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
 }
 
-// Example usage:
-const startDate = new Date('2024-01-01');
-const endDate = new Date('2024-01-10');
-const timeSeries = generateBrownianMotionTimeSeries(startDate, endDate);
-console.log(timeSeries);
+// // Example usage:
+// const startDate = new Date('2024-01-01');
+// const endDate = new Date('2024-01-10');
+// const timeSeries = generateBrownianMotionTimeSeries(startDate, endDate);
+// // console.log(timeSeries);
 
 export default generateBrownianMotionTimeSeries;

@@ -79,7 +79,7 @@ export const NerdyPriceChartSingle: React.FC<
 		return <AbsoluteFill />;
 	}
 
-	console.log({apiResult});
+	// console.log({apiResult});
 
 	// const percentageString = (apiResult?.percentageChange * 100).toFixed(2) + '%';
 
@@ -91,7 +91,7 @@ export const NerdyPriceChartSingle: React.FC<
 	const platteWidth = width * 0.9;
 	const platteHeight = platteWidth * 0.61;
 
-	console.log({apiResult});
+	// console.log({apiResult});
 
 	return (
 		<GlobalVideoContextWrapper>

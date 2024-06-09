@@ -135,11 +135,11 @@ export const AnimatedLineChartContainer: React.FC<{
 		value: interpolatedEndValue,
 	};
 
-	console.log({
-		nearest_end_dataPoints,
-		interpolatedEndValue,
-		interpolatedStartValue,
-	});
+	// console.log({
+	// 	nearest_end_dataPoints,
+	// 	interpolatedEndValue,
+	// 	interpolatedStartValue,
+	// });
 
 	const yDomainMinVisiblePiece = min(
 		visibleTimeSeries,

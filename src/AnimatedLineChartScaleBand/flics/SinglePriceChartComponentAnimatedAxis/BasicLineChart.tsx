@@ -133,11 +133,11 @@ export const BasicLineChart: React.FC<{
 		.domain(yDomainTo)
 		.range([Y_RANGE_FIXED[0], 0]);
 
-	const yAxisSpec = getYAxisSpec(yScale, 3, currencyFormatter);
-	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 3, currencyFormatter);
-	const yAxisSpecTo = getYAxisSpec(yScaleTo, 3, currencyFormatter);
+	// const yAxisSpec = getYAxisSpec(yScale, 3, currencyFormatter);
+	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
+	const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
 
-	console.log({yDomainFrom, yDomainTo, yAxisSpecFrom, yAxisSpecTo, yAxisSpec});
+	// console.log({yDomainFrom, yDomainTo, yAxisSpecFrom, yAxisSpecTo, yAxisSpec});
 
 	// const yAxisDomainRangeFrom = periodsScaleFrom.getTimeSeriesExtent(timeSeries);
 

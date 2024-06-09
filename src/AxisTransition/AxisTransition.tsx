@@ -102,12 +102,12 @@ export const AxisTransition: React.FC<z.infer<typeof AxisTransitionSchema>> = ({
 	const numberOfTransitions = tsLengthPairs.length;
 	const transitionDuration = Math.floor(durationInFrames / numberOfTransitions);
 
-	console.log({
-		tsLengths,
-		tsLengthPairs,
-		numberOfTransitions,
-		transitionDuration,
-	});
+	// console.log({
+	// 	tsLengths,
+	// 	tsLengthPairs,
+	// 	numberOfTransitions,
+	// 	transitionDuration,
+	// });
 
 	return (
 		<AbsoluteFill style={{backgroundColor}}>

@@ -49,8 +49,8 @@ export const AnimatedLine: React.FC<{
 
 	const d = linePath(timeSeries) || '';
 
-	console.log(xScaleCurrent.range());
-	console.log(xScaleCurrent.domain());
+	// console.log(xScaleCurrent.range());
+	// console.log(xScaleCurrent.domain());
 
 	return (
 		<svg

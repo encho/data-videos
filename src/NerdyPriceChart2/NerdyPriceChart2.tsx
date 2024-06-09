@@ -275,7 +275,7 @@ const fetchNerdyFinancePriceCharts = async (
 
 	const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDate}&timePeriod=${timePeriod}`;
 
-	console.log(apiUrl);
+	// console.log(apiUrl);
 
 	const data = await fetch(apiUrl);
 
