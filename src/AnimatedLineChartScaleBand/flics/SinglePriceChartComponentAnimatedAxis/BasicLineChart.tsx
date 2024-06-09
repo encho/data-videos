@@ -18,6 +18,8 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
+import {YAxis_SpecBased} from './components/YAxis_SpecBased';
+import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
 // import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
@@ -95,6 +97,8 @@ export const BasicLineChart: React.FC<{
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
+	const yAxisSpec = getYAxisSpecFromScale(yScale, currencyFormatter);
+
 	return (
 		<>
 			<Position
@@ -156,6 +160,17 @@ export const BasicLineChart: React.FC<{
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}
 					formatter={currencyFormatter}
+				/>
+			</Position>
+			<Position
+				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
+			>
+				<YAxis_SpecBased
+					yAxisSpec={yAxisSpec}
+					area={layoutAreas.yAxis}
+					yScaleCurrent={yScale}
+					theme={theme.yAxis}
+					// formatter={currencyFormatter}
 				/>
 			</Position>
 		</>
