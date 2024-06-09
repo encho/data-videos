@@ -115,7 +115,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 
 							{/* TODO 1 pass forward lineChartAnimationContext */}
 							{/* TODO 2 useLineChartAnimationContext inside! */}
-							<Sequence from={transitionDurationInFrames_0_1}>
+							{/* <Sequence from={transitionDurationInFrames_0_1}>
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -126,9 +126,9 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									plotArea={chartLayout.areas.plot}
 									theme={theme.timeseriesComponents.percentageChangeArea}
 								/>
-							</Sequence>
+							</Sequence> */}
 
-							{/* <AbsoluteFill>
+							<AbsoluteFill>
 								<LineChartAnimationContextDebugger
 									theme={theme}
 									periodsScale={periodsScale}
@@ -136,7 +136,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 									currentSliceInfo={currentSliceInfo}
 									currentTransitionInfo={currentTransitionInfo}
 								/>
-							</AbsoluteFill> */}
+							</AbsoluteFill>
 						</div>
 					);
 				}}
@@ -235,6 +235,8 @@ export const LineChartAnimationContextDebugger: React.FC<
 						})()
 					)}
 				</h1>
+				<h1>periodsScaleFrom: {'<obj>'}</h1>
+				<h1>periodsScaleTo: {'<obj>'}</h1>
 				{/* <h1>
 		currentSliceInfo.periodsScaleFrom:{' '}
 		{JSON.stringify(currentSliceInfo.periodsScaleFrom)}

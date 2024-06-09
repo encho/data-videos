@@ -1,5 +1,10 @@
 import {ScaleLinear} from 'd3-scale';
-import {useCurrentFrame, useVideoConfig, Easing, interpolate} from 'remotion';
+import {
+	// useCurrentFrame,
+	// useVideoConfig,
+	Easing,
+	interpolate,
+} from 'remotion';
 
 import {getXYRightClamped, getXYLeftClamped} from '../periodsScale/getXY';
 import {TPeriodsScale} from '../periodsScale/periodsScale';

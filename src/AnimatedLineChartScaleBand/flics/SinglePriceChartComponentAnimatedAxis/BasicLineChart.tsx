@@ -1,4 +1,4 @@
-import {ScaleLinear} from 'd3-scale';
+// import {ScaleLinear} from 'd3-scale';
 
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
@@ -21,6 +21,7 @@ import {
 import {YAxis_SpecBased} from './components/YAxis_SpecBased';
 import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
 import {getYAxisSpec} from './components/axisSpecs_yAxis';
+import {scaleLinear, ScaleLinear} from 'd3-scale';
 // import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
@@ -98,7 +99,58 @@ export const BasicLineChart: React.FC<{
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
+	///// ***************************************************
+
+	// const yScale: ScaleLinear<number, number> = scaleLinear()
+	// 	.domain(yDomain)
+	// 	.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+	// ********
+	// ********
+	// ********
+	// const yScale: ScaleLinear<number, number> = scaleLinear()
+	// 	.domain(yDomain)
+	// 	.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+	// ********
+	// ********
+	// ********
+
+	const Y_RANGE_FIXED = yScale.range();
+
+	const yDomainFrom =
+		currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
+			timeSeries
+		);
+
+	const yDomainTo =
+		currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(timeSeries);
+
+	const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
+		.domain(yDomainFrom)
+		.range([Y_RANGE_FIXED[0], 0]);
+	// .range([0, Y_RANGE_FIXED[1]]);
+
+	const yScaleTo: ScaleLinear<number, number> = scaleLinear()
+		.domain(yDomainTo)
+		.range([Y_RANGE_FIXED[0], 0]);
+
 	const yAxisSpec = getYAxisSpec(yScale, 3, currencyFormatter);
+	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 3, currencyFormatter);
+	const yAxisSpecTo = getYAxisSpec(yScaleTo, 3, currencyFormatter);
+
+	console.log({yDomainFrom, yDomainTo, yAxisSpecFrom, yAxisSpecTo, yAxisSpec});
+
+	// const yAxisDomainRangeFrom = periodsScaleFrom.getTimeSeriesExtent(timeSeries);
+
+	// const {x: xLeft, y: yLeft} = getXYLeftClamped({
+	// 	periodsScale,
+	// 	timeSeries,
+	// 	yScale,
+	// });
+	// const {x: xRight, y: yRight} = getXYRightClamped({
+	// 	periodsScale,
+	// 	timeSeries,
+	// 	yScale,
+	// });
 
 	return (
 		<>
@@ -163,11 +215,33 @@ export const BasicLineChart: React.FC<{
 					formatter={currencyFormatter}
 				/>
 			</Position>
-			<Position
+			{/* <Position
 				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
 			>
 				<YAxis_SpecBased
 					yAxisSpec={yAxisSpec}
+					area={layoutAreas.yAxis}
+					yScaleCurrent={yScale}
+					theme={theme.yAxis}
+				/>
+			</Position> */}
+
+			<Position
+				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
+			>
+				<YAxis_SpecBased
+					yAxisSpec={yAxisSpecTo}
+					area={layoutAreas.yAxis}
+					yScaleCurrent={yScale}
+					theme={theme.yAxis}
+					// formatter={currencyFormatter}
+				/>
+			</Position>
+			<Position
+				position={{left: layoutAreas.yAxis.x1 - 450, top: layoutAreas.yAxis.y1}}
+			>
+				<YAxis_SpecBased
+					yAxisSpec={yAxisSpecFrom}
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}

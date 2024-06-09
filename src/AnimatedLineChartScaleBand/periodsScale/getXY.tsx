@@ -29,26 +29,14 @@ const getX = ({periodsScale, domainIndex}: TGetX_Kwargs) => {
 	return x;
 };
 
-// function isDivisibleByHalf(num: number): boolean {
-// 	return num % 0.5 === 0;
-// }
-
 // TODO rename to periodsScale.scale(domainIndex, yScale, timeSeries) or so
-const getY = ({
+const getXY = ({
 	periodsScale,
 	yScale,
 	timeSeries,
 	domainIndex,
 }: TGetY_Kwargs) => {
 	const x = getX({periodsScale, domainIndex});
-
-	// if (domainIndex - Math.floor(domainIndex) === 0.5) {
-	// 	return {
-	// 		x,
-	// 		y: yScale(
-	// 			timeSeries[Math.floor(domainIndex)].value
-	// 		)
-	// }
 
 	const currentDomainIndex = Math.floor(domainIndex);
 	const percOfIndexComplete = domainIndex - currentDomainIndex;
@@ -96,7 +84,7 @@ export const getXYRight = ({
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
 
-	const {x, y} = getY({
+	const {x, y} = getXY({
 		periodsScale,
 		yScale,
 		timeSeries,
@@ -125,7 +113,7 @@ export const getXYRightClamped = ({
 		visibleDomainIndexEnd > periodsScale.dates.length - 0.5;
 
 	if (!isOverLastValuePoint) {
-		const {x, y} = getY({
+		const {x, y} = getXY({
 			periodsScale,
 			yScale,
 			timeSeries,
@@ -135,7 +123,7 @@ export const getXYRightClamped = ({
 	}
 
 	// now this happens when we are over last value point
-	const {x, y} = getY({
+	const {x, y} = getXY({
 		periodsScale,
 		yScale,
 		timeSeries,
@@ -156,7 +144,7 @@ export const getXYLeft = ({
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexStart = visibleDomainIndices[0];
 
-	const {x, y} = getY({
+	const {x, y} = getXY({
 		periodsScale,
 		yScale,
 		timeSeries,
@@ -184,7 +172,7 @@ export const getXYLeftClamped = ({
 	const isUnderFirstValuePoint = visibleDomainIndexStart < 0.5;
 
 	if (!isUnderFirstValuePoint) {
-		const {x, y} = getY({
+		const {x, y} = getXY({
 			periodsScale,
 			yScale,
 			timeSeries,
@@ -194,7 +182,7 @@ export const getXYLeftClamped = ({
 	}
 
 	// now this happens when we are under first value point
-	const {x, y} = getY({
+	const {x, y} = getXY({
 		periodsScale,
 		yScale,
 		timeSeries,

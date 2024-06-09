@@ -1,3 +1,5 @@
+import {extent} from 'd3-array';
+
 type TPeriodScaleBand = {
 	index: number;
 	x1: number;
@@ -5,6 +7,8 @@ type TPeriodScaleBand = {
 	centroid: number;
 	width: number;
 };
+
+type TTimeSeries = {value: number; date: Date}[];
 
 export type TPeriodsScale = {
 	// TODO should be getBandFromPeriod: (p: TPeriod) => TPeriodScaleBand;
@@ -23,6 +27,8 @@ export type TPeriodsScale = {
 	getRoundedVisibleDomainIndices: () => [number, number];
 	// TODO shoud return TPeriod[]
 	getAllVisibleDates: () => Date[];
+	//
+	getTimeSeriesInterpolatedExtent: (x: TTimeSeries) => [number, number];
 };
 
 export const periodsScale = ({
@@ -171,6 +177,63 @@ export const periodsScale = ({
 		return dates.indexOf(d);
 	};
 
+	const getTimeSeriesInterpolatedExtent = (
+		timeSeries: {value: number; date: Date}[]
+	) => {
+		const [leftVisibleDomainIndex, rightVisibleDomainIndex] =
+			visibleDomainIndices;
+
+		const leftInterpolatedValue = getTimeSeriesInterpolatedValue({
+			timeSeries,
+			domainIndex: leftVisibleDomainIndex,
+		});
+		const rightInterpolatedValue = getTimeSeriesInterpolatedValue({
+			timeSeries,
+			domainIndex: rightVisibleDomainIndex,
+		});
+
+		const decimalPartLeftIndex = leftVisibleDomainIndex % 1;
+		const decimalPartRightIndex = rightVisibleDomainIndex % 1;
+
+		const lowerSliceIndex =
+			decimalPartLeftIndex <= 0.5
+				? Math.floor(leftVisibleDomainIndex)
+				: Math.ceil(leftVisibleDomainIndex);
+		const upperSliceIndex =
+			decimalPartRightIndex >= 0.5
+				? Math.ceil(rightVisibleDomainIndex)
+				: Math.floor(rightVisibleDomainIndex);
+
+		const fullyVisibleTimeSeriesPiece = timeSeries.slice(
+			lowerSliceIndex,
+			upperSliceIndex
+		);
+
+		// console.log({
+		// 	fullyVisibleTimeSeriesPiece,
+		// 	lowerSliceIndex,
+		// 	upperSliceIndex,
+		// });
+
+		const timeSeriesExtent = extent(
+			fullyVisibleTimeSeriesPiece,
+			(it) => it.value
+		) as [number, number];
+
+		let maybeValues = [];
+		if (leftInterpolatedValue) {
+			maybeValues.push(leftInterpolatedValue);
+		}
+		if (rightInterpolatedValue) {
+			maybeValues.push(rightInterpolatedValue);
+		}
+
+		const min = Math.min(...maybeValues, timeSeriesExtent[0]);
+		const max = Math.max(...maybeValues, timeSeriesExtent[1]);
+
+		return [min, max] as [number, number];
+	};
+
 	return {
 		// TODO getPeriodFromIndex
 		getIndexFromDate,
@@ -178,7 +241,7 @@ export const periodsScale = ({
 		getBandFromDate,
 		getBandFromIndex,
 		getVisibleDomainIndices,
-		getVisibleDomain_NumberOfDays,
+		getVisibleDomain_NumberOfDays, // TODO rename to getVisibleNumberOfDays or so
 		getVisibleDomainDates,
 		mapFloatIndexToRange,
 		getRoundedVisibleDomainIndices,
@@ -186,11 +249,51 @@ export const periodsScale = ({
 		visibleRange,
 		dates,
 		getAllVisibleDates,
+		//
+		getTimeSeriesInterpolatedExtent,
 	};
 };
 
+type TGetTimeSeriesInterpolatedValueArgs = {
+	// periodsScale: TPeriodsScale;
+	timeSeries: {value: number; date: Date}[];
+	domainIndex: number;
+};
+
+const getTimeSeriesInterpolatedValue = ({
+	timeSeries,
+	domainIndex,
+}: TGetTimeSeriesInterpolatedValueArgs) => {
+	const currentDomainIndex = Math.floor(domainIndex);
+	const percOfIndexComplete = domainIndex - currentDomainIndex;
+
+	const currentTsValueWeight = 1 - Math.abs(percOfIndexComplete - 0.5);
+
+	const nearestDomainIndex =
+		percOfIndexComplete === 0.5
+			? currentDomainIndex
+			: percOfIndexComplete < 0.5
+			? currentDomainIndex - 1
+			: currentDomainIndex + 1;
+
+	const currentTsItem = timeSeries[currentDomainIndex];
+	const nearestTsItem = timeSeries[nearestDomainIndex];
+
+	if (currentTsItem && nearestTsItem) {
+		const currentTsValue = currentTsItem.value;
+		const nearestTsValue = nearestTsItem.value;
+
+		return (
+			currentTsValue * currentTsValueWeight +
+			nearestTsValue * (1 - currentTsValueWeight)
+		);
+	}
+
+	return null;
+};
+
 function getDifferenceInDays(date1: Date, date2: Date): number {
-	console.log({date1, date2});
+	// console.log({date1, date2});
 
 	// Calculate the difference in time (in milliseconds)
 	const timeDifference = date2.getTime() - date1.getTime();
