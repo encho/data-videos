@@ -3,7 +3,8 @@ import {ScaleLinear} from 'd3-scale';
 import {TGridLayoutArea} from '../../../../acetti-viz';
 // import {getYAxisSpecFromScale} from '../../../../acetti-axis/getYAxisSpecFromScale';
 // TODO rename better!
-import {TAxisSpec_Linear_Numeric} from '../../../../acetti-axis/getYAxisSpecFromScale';
+// import {TAxisSpec_Linear_Numeric} from '../../../../acetti-axis/getYAxisSpecFromScale';
+import {TYAxisSpec} from './axisSpecs_yAxis';
 
 export type TTheme_YAxis = {
 	fontSize: number;
@@ -18,10 +19,11 @@ export const YAxis_SpecBased: React.FC<{
 	yScaleCurrent: ScaleLinear<number, number>;
 	theme: TTheme_YAxis;
 	// formatter: (x: number) => string;
-	yAxisSpec: TAxisSpec_Linear_Numeric;
+	// yAxisSpec: TAxisSpec_Linear_Numeric;
+	yAxisSpec: TYAxisSpec;
 }> = ({
 	// area,
-	// yScaleCurrent,
+	yScaleCurrent,
 	theme,
 	yAxisSpec,
 }) => {
@@ -37,7 +39,8 @@ export const YAxis_SpecBased: React.FC<{
 	return (
 		<svg overflow="visible">
 			{yAxisSpec.ticks.map((it, i) => {
-				const tickMappedValue = yAxisSpec.scale(it.value);
+				// const tickMappedValue = yAxisSpec.scale(it.value);
+				const tickMappedValue = yScaleCurrent(it.domainValue);
 
 				return (
 					<g key={i}>
@@ -55,7 +58,8 @@ export const YAxis_SpecBased: React.FC<{
 
 			{/* update labels  */}
 			{yAxisSpec.labels.map((it, i) => {
-				const labelMappedValue = yAxisSpec.scale(it.value);
+				// const labelMappedValue = yAxisSpec.scale(it.value);
+				const labelMappedValue = yScaleCurrent(it.domainValue);
 				return (
 					<g key={it.id}>
 						<text

@@ -20,6 +20,7 @@ import {
 } from './components/axisSpecs';
 import {YAxis_SpecBased} from './components/YAxis_SpecBased';
 import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
+import {getYAxisSpec} from './components/axisSpecs_yAxis';
 // import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
@@ -97,7 +98,7 @@ export const BasicLineChart: React.FC<{
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
-	const yAxisSpec = getYAxisSpecFromScale(yScale, currencyFormatter);
+	const yAxisSpec = getYAxisSpec(yScale, 3, currencyFormatter);
 
 	return (
 		<>
