@@ -1,4 +1,4 @@
-// import {ScaleLinear} from 'd3-scale';
+import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
@@ -21,7 +21,7 @@ import {
 import {YAxis_SpecBased} from './components/YAxis_SpecBased';
 import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
 import {getYAxisSpec} from './components/axisSpecs_yAxis';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {YAxis_Transition} from './components/YAxis_Transition';
 // import {periodsScale} from '../../periodsScale/periodsScale';
 
 import {TTheme} from '../../theme';
@@ -245,6 +245,19 @@ export const BasicLineChart: React.FC<{
 					area={layoutAreas.yAxis}
 					yScaleCurrent={yScale}
 					theme={theme.yAxis}
+					// formatter={currencyFormatter}
+				/>
+			</Position>
+			<Position
+				position={{left: layoutAreas.yAxis.x1 - 100, top: layoutAreas.yAxis.y1}}
+			>
+				<YAxis_Transition
+					fromAxisSpec={yAxisSpecFrom}
+					toAxisSpec={yAxisSpecTo}
+					area={layoutAreas.yAxis}
+					yScale={yScale}
+					theme={theme.yAxis}
+					currentSliceInfo={currentSliceInfo}
 					// formatter={currencyFormatter}
 				/>
 			</Position>

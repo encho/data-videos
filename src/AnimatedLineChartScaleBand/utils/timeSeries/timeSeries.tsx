@@ -169,33 +169,35 @@ export const getYDomain = (
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [0, yDomainMax] as [number, number];
 	} else if (yDomainType === 'VISIBLE') {
-		const visibleTimeSeriesSlice =
-			getFullyVisibleTimeSeriesSliceFromFloatIndices(
-				timeSeries,
-				visibleDomainIndices[0],
-				visibleDomainIndices[1]
-			);
+		// const visibleTimeSeriesSlice =
+		// 	getFullyVisibleTimeSeriesSliceFromFloatIndices(
+		// 		timeSeries,
+		// 		visibleDomainIndices[0],
+		// 		visibleDomainIndices[1]
+		// 	);
 
-		// the visible domain
-		const fullyVisibleYDomainMin = min(
-			visibleTimeSeriesSlice.map((it) => it.value)
-		) as number;
+		// // the visible domain
+		// const fullyVisibleYDomainMin = min(
+		// 	visibleTimeSeriesSlice.map((it) => it.value)
+		// ) as number;
 
-		const fullyVisibleYDomainMax = max(
-			visibleTimeSeriesSlice.map((it) => it.value)
-		) as number;
+		// const fullyVisibleYDomainMax = max(
+		// 	visibleTimeSeriesSlice.map((it) => it.value)
+		// ) as number;
 
-		const yDomainMin = min([
-			fullyVisibleYDomainMin,
-			// interpolatedVisibleEndValue,
-		]);
+		// const yDomainMin = min([
+		// 	fullyVisibleYDomainMin,
+		// 	// interpolatedVisibleEndValue,
+		// ]);
 
-		const yDomainMax = max([
-			fullyVisibleYDomainMax,
-			// interpolatedVisibleEndValue,
-		]);
+		// const yDomainMax = max([
+		// 	fullyVisibleYDomainMax,
+		// 	// interpolatedVisibleEndValue,
+		// ]);
 
-		return [yDomainMin, yDomainMax] as [number, number];
+		// return [yDomainMin, yDomainMax] as [number, number];
+
+		return periodsScale.getTimeSeriesInterpolatedExtent(timeSeries);
 	}
 
 	// fallback to the full domain

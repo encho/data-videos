@@ -42,7 +42,8 @@ export type TLineChartAnimationContext = {
 
 type TChildrenFuncArgs = TLineChartAnimationContext;
 
-const yDomainType: TYDomainType = 'FULL';
+const yDomainType: TYDomainType = 'VISIBLE';
+// const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';
 
 type TViewSpec = {

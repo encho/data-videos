@@ -3,7 +3,8 @@
 
 import {ScaleLinear} from 'd3-scale';
 
-export type TYAxis = ScaleLinear<number, number>;
+export type TYAxis = ScaleLinear<number, number>; // TODO deprecate
+export type TYAxisScale = ScaleLinear<number, number>;
 
 type TTickSpec_YAxis = {
 	id: string;
