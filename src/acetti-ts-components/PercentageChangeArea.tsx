@@ -1,12 +1,12 @@
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../../../../acetti-viz';
+import {TGridLayoutArea} from '../acetti-viz';
 
-import {Position} from '../../../components/Position';
-import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+import {Position} from '../AnimatedLineChartScaleBand/components/Position';
+import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {ThemeType} from '../acetti-themes/themeTypes';
 
 export type Theme_PercentageChangeArea =
 	ThemeType['timeseriesComponents']['percentageChangeArea'];

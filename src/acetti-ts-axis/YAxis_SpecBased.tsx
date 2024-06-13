@@ -1,10 +1,7 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../../../../acetti-viz';
-// import {getYAxisSpecFromScale} from '../../../../acetti-axis/getYAxisSpecFromScale';
-// TODO rename better!
-// import {TAxisSpec_Linear_Numeric} from '../../../../acetti-axis/getYAxisSpecFromScale';
-import {TYAxisSpec} from './axisSpecs_yAxis';
+import {TGridLayoutArea} from '../acetti-viz';
+import {TYAxisSpec} from './utils/axisSpecs_yAxis';
 
 export type TTheme_YAxis = {
 	fontSize: number;

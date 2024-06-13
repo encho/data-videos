@@ -5,13 +5,13 @@ import {
 } from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {TGridLayoutArea} from '../../../../acetti-viz';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {getEnterUpdateExits} from '../../../utils/utils';
+import {TGridLayoutArea} from '../acetti-viz';
+import {ThemeType} from '../acetti-themes/themeTypes';
+import {getEnterUpdateExits} from '../AnimatedLineChartScaleBand/utils/utils';
 
-import {TYAxisSpec, TYAxisScale} from './axisSpecs_yAxis';
-import {TPeriodsScale} from '../../../periodsScale/periodsScale';
-import {TLineChartAnimationContext} from '../LineChartAnimationContainer';
+import {TYAxisSpec, TYAxisScale} from './utils/axisSpecs_yAxis';
+// import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
 type TTheme_YAxis = ThemeType['yAxis'];
 

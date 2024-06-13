@@ -1,8 +1,6 @@
-import {Sequence, useVideoConfig, Easing, AbsoluteFill} from 'remotion';
+import {Sequence, useVideoConfig, Easing} from 'remotion';
 
-// TODO deprecate! check if other components need this!
-// import {TTheme, myTheme} from '../../theme';
-import {PercentageChangeArea} from './components/PercentageChangeArea';
+import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
 import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
@@ -10,7 +8,7 @@ import {BasicLineChart} from './BasicLineChart';
 import {
 	LineChartAnimationContainer,
 	TLineChartAnimationContext,
-} from './LineChartAnimationContainer';
+} from '../../../acetti-ts-base/LineChartAnimationContainer';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -35,9 +33,6 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 		height: CHART_HEIGHT,
 	});
 
-	// const LAST_STILL_DURATION = 2.5 * 90;
-
-	// const transitionDurationInFrames_0_1 = durationInFrames - LAST_STILL_DURATION;
 	const transitionDurationInFrames_0_1 = durationInFrames - 90 * 5;
 	const transitionDurationInFrames_1_2 = 90 * 5;
 
@@ -53,7 +48,6 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 					stroke={'magenta'}
 					fill="transparent"
 					hide={true}
-					// hide={false}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -82,7 +76,7 @@ export const SinglePriceChartComponentAnimatedAxis: React.FC<
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// easingFunction: Easing.bounce,
 						// easingFunction: Easing.linear, // TODO why linear is broken??
-						numberOfSlices: 3,
+						numberOfSlices: 20,
 					},
 					{
 						durationInFrames: transitionDurationInFrames_1_2,

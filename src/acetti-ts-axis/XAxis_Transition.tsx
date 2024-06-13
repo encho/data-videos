@@ -1,13 +1,13 @@
-import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
+import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {TGridLayoutArea} from '../../../../acetti-viz';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {getEnterUpdateExits} from '../../../utils/utils';
+import {TGridLayoutArea} from '../acetti-viz';
+import {ThemeType} from '../acetti-themes/themeTypes';
+import {getEnterUpdateExits} from '../AnimatedLineChartScaleBand/utils/utils';
 
-import {TXAxisSpec} from './axisSpecs';
-import {TPeriodsScale} from '../../../periodsScale/periodsScale';
-import {TLineChartAnimationContext} from '../LineChartAnimationContainer';
+import {TXAxisSpec} from './utils/axisSpecs_xAxis';
+import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
@@ -34,33 +34,22 @@ export const XAxis_Transition: React.FC<{
 	fromAxisSpec: TXAxisSpec;
 	toAxisSpec: TXAxisSpec;
 	theme: TTheme_XAxis;
-	// easingPercentage: number;
 	periodsScale: TPeriodsScale;
-	//
 	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
-	//
-	// currentSliceInfo:
 }> = ({
 	area,
 	theme,
 	fromAxisSpec,
 	toAxisSpec,
-	// easingPercentage,
 	periodsScale,
-	// TODO pass animation context data e.g. currentSliceInfo and currentTransitionInfo
 	currentSliceInfo,
 }) => {
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	// const frame = useCurrentFrame();
-
 	const relativeFrame = currentSliceInfo.relativeFrame;
-	// console.log({frame, relativeFrame});
 	const {fps} = useVideoConfig();
-	// const animationPercentage = frame / durationInFrames;
-	// const animationPercentage = easingPercentage;
 
 	// const FADE_IN_OUT_DURATION = fps * 3;
 	const FADE_IN_OUT_DURATION = Math.min(
@@ -82,9 +71,6 @@ export const XAxis_Transition: React.FC<{
 		fromAxisSpec.secondaryLabels.map((it) => it.id),
 		toAxisSpec.secondaryLabels.map((it) => it.id)
 	);
-
-	// console.log('tickEntyerasdfsadadfs');
-	// console.log({ticksEnterUpdateExits});
 
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
@@ -248,7 +234,6 @@ export const XAxis_Transition: React.FC<{
 
 	// secondary labels
 	// ***********************************************************
-
 	const updateSecondaryLabels = secondaryLabelsEnterUpdateExits.update.map(
 		(labelId) => {
 			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
@@ -285,7 +270,6 @@ export const XAxis_Transition: React.FC<{
 				label: startLabel.label,
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
-				// opacity: 1,
 			};
 		}
 	);
@@ -351,8 +335,6 @@ export const XAxis_Transition: React.FC<{
 
 	return (
 		<svg
-			// width={area.width}
-			// height={area.height}
 			style={{
 				overflow: 'visible',
 			}}

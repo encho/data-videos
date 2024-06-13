@@ -1,5 +1,5 @@
 import {getYear} from 'date-fns';
-import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+import {TPeriodsScale} from '../../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 
 type TTickSpec = {
 	id: string;

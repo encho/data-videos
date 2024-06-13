@@ -3,13 +3,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {Position} from '../../components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {
-	TPeriodsScale,
-	// periodsScale
-} from '../../periodsScale/periodsScale';
-// TODO evtl deprecate?
-// import {XAxis_SpecBased} from './components/XAxis_SpecBased';
-// import {AnimatedYAxis} from '../../components/AnimatedYAxis';
+import {TPeriodsScale} from '../../periodsScale/periodsScale';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
 import {
@@ -17,17 +11,12 @@ import {
 	getDaysAxisSpec,
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
-} from './components/axisSpecs';
-// import {YAxis_SpecBased} from './components/YAxis_SpecBased';
-// import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
-import {getYAxisSpec} from './components/axisSpecs_yAxis';
-import {YAxis_Transition} from './components/YAxis_Transition';
-// import {periodsScale} from '../../periodsScale/periodsScale';
-
+} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {getYAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_yAxis';
+import {YAxis_Transition} from '../../../acetti-ts-axis/YAxis_Transition';
+import {XAxis_Transition} from '../../../acetti-ts-axis/XAxis_Transition';
 import {TTheme} from '../../theme';
-import {XAxis_Transition} from './components/XAxis_Transition';
-// import {XAxis_SpecBased} from './components/XAxis_SpecBased';
-import {TLineChartAnimationContext} from './LineChartAnimationContainer';
+import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -99,21 +88,6 @@ export const BasicLineChart: React.FC<{
 	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 
-	///// ***************************************************
-
-	// const yScale: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomain)
-	// 	.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
-	// ********
-	// ********
-	// ********
-	// const yScale: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomain)
-	// 	.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
-	// ********
-	// ********
-	// ********
-
 	const Y_RANGE_FIXED = yScale.range();
 
 	const yDomainFrom =
@@ -127,30 +101,13 @@ export const BasicLineChart: React.FC<{
 	const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomainFrom)
 		.range([Y_RANGE_FIXED[0], 0]);
-	// .range([0, Y_RANGE_FIXED[1]]);
 
 	const yScaleTo: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomainTo)
 		.range([Y_RANGE_FIXED[0], 0]);
 
-	// const yAxisSpec = getYAxisSpec(yScale, 3, currencyFormatter);
 	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
 	const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
-
-	// console.log({yDomainFrom, yDomainTo, yAxisSpecFrom, yAxisSpecTo, yAxisSpec});
-
-	// const yAxisDomainRangeFrom = periodsScaleFrom.getTimeSeriesExtent(timeSeries);
-
-	// const {x: xLeft, y: yLeft} = getXYLeftClamped({
-	// 	periodsScale,
-	// 	timeSeries,
-	// 	yScale,
-	// });
-	// const {x: xRight, y: yRight} = getXYRightClamped({
-	// 	periodsScale,
-	// 	timeSeries,
-	// 	yScale,
-	// });
 
 	return (
 		<>
@@ -181,17 +138,6 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			{/* <Position
-				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1 - 100}}
-			>
-				<XAxis_SpecBased
-					axisSpec={axisSpecFrom}
-					theme={theme.xAxis}
-					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-				/>
-			</Position> */}
-
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
@@ -205,41 +151,7 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			{/* <Position
-				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
-			>
-				<AnimatedYAxis
-					area={layoutAreas.yAxis}
-					yScaleCurrent={yScale}
-					theme={theme.yAxis}
-					formatter={currencyFormatter}
-				/>
-			</Position> */}
-
-			{/* <Position
-				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
-			>
-				<YAxis_SpecBased
-					yAxisSpec={yAxisSpecTo}
-					area={layoutAreas.yAxis}
-					yScaleCurrent={yScale}
-					theme={theme.yAxis}
-					// formatter={currencyFormatter}
-				/>
-			</Position> */}
-			{/* <Position
-				position={{left: layoutAreas.yAxis.x1 - 450, top: layoutAreas.yAxis.y1}}
-			>
-				<YAxis_SpecBased
-					yAxisSpec={yAxisSpecFrom}
-					area={layoutAreas.yAxis}
-					yScaleCurrent={yScale}
-					theme={theme.yAxis}
-					// formatter={currencyFormatter}
-				/>
-			</Position> */}
 			<Position
-				// position={{left: layoutAreas.yAxis.x1 - 100, top: layoutAreas.yAxis.y1}}
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<YAxis_Transition
@@ -249,7 +161,6 @@ export const BasicLineChart: React.FC<{
 					yScale={yScale}
 					theme={theme.yAxis}
 					currentSliceInfo={currentSliceInfo}
-					// formatter={currencyFormatter}
 				/>
 			</Position>
 		</>
