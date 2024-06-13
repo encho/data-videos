@@ -9,7 +9,7 @@ import {
 } from '../../periodsScale/periodsScale';
 // TODO evtl deprecate?
 // import {XAxis_SpecBased} from './components/XAxis_SpecBased';
-import {AnimatedYAxis} from '../../components/AnimatedYAxis';
+// import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
 import {AnimatedValueDot} from '../../components/AnimatedValueDot';
 import {
@@ -18,8 +18,8 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
-import {YAxis_SpecBased} from './components/YAxis_SpecBased';
-import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
+// import {YAxis_SpecBased} from './components/YAxis_SpecBased';
+// import {getYAxisSpecFromScale} from '../../../acetti-axis/getYAxisSpecFromScale';
 import {getYAxisSpec} from './components/axisSpecs_yAxis';
 import {YAxis_Transition} from './components/YAxis_Transition';
 // import {periodsScale} from '../../periodsScale/periodsScale';
@@ -205,7 +205,7 @@ export const BasicLineChart: React.FC<{
 				/>
 			</Position>
 
-			<Position
+			{/* <Position
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<AnimatedYAxis
@@ -214,19 +214,9 @@ export const BasicLineChart: React.FC<{
 					theme={theme.yAxis}
 					formatter={currencyFormatter}
 				/>
-			</Position>
-			{/* <Position
-				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
-			>
-				<YAxis_SpecBased
-					yAxisSpec={yAxisSpec}
-					area={layoutAreas.yAxis}
-					yScaleCurrent={yScale}
-					theme={theme.yAxis}
-				/>
 			</Position> */}
 
-			<Position
+			{/* <Position
 				position={{left: layoutAreas.yAxis.x1 - 300, top: layoutAreas.yAxis.y1}}
 			>
 				<YAxis_SpecBased
@@ -236,8 +226,8 @@ export const BasicLineChart: React.FC<{
 					theme={theme.yAxis}
 					// formatter={currencyFormatter}
 				/>
-			</Position>
-			<Position
+			</Position> */}
+			{/* <Position
 				position={{left: layoutAreas.yAxis.x1 - 450, top: layoutAreas.yAxis.y1}}
 			>
 				<YAxis_SpecBased
@@ -247,9 +237,10 @@ export const BasicLineChart: React.FC<{
 					theme={theme.yAxis}
 					// formatter={currencyFormatter}
 				/>
-			</Position>
+			</Position> */}
 			<Position
-				position={{left: layoutAreas.yAxis.x1 - 100, top: layoutAreas.yAxis.y1}}
+				// position={{left: layoutAreas.yAxis.x1 - 100, top: layoutAreas.yAxis.y1}}
+				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<YAxis_Transition
 					fromAxisSpec={yAxisSpecFrom}

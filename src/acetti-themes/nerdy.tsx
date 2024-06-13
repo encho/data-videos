@@ -126,10 +126,10 @@ export const nerdyTheme: ThemeType = {
 	},
 	timeseriesComponents: {
 		percentageChangeArea: {
-			lineColor: 'blue',
-			textColor: 'red',
-			gradientColor: 'blue',
-			lineStrokeWidth: 1.5,
+			lineColor: '#f05122',
+			textColor: '#f05122',
+			gradientColor: '#f05122',
+			lineStrokeWidth: 0.8,
 		},
 	},
 };

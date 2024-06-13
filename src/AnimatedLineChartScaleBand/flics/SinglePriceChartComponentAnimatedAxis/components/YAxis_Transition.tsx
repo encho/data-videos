@@ -44,8 +44,8 @@ export const YAxis_Transition: React.FC<{
 	currentSliceInfo,
 }) => {
 	const TICK_LINE_SIZE = 24;
-	// const TICK_TEXT_FONT_SIZE = 24;
-	// const TICK_TEXT_FONT_WEIGHT = 500;
+	const TICK_TEXT_FONT_SIZE = 24;
+	const TICK_TEXT_FONT_WEIGHT = 500;
 
 	const relativeFrame = currentSliceInfo.relativeFrame;
 	const {fps} = useVideoConfig();
@@ -63,10 +63,10 @@ export const YAxis_Transition: React.FC<{
 		toAxisSpec.ticks.map((it) => it.id)
 	);
 
-	// const labelsEnterUpdateExits = getEnterUpdateExits(
-	// 	fromAxisSpec.labels.map((it) => it.id),
-	// 	toAxisSpec.labels.map((it) => it.id)
-	// );
+	const labelsEnterUpdateExits = getEnterUpdateExits(
+		fromAxisSpec.labels.map((it) => it.id),
+		toAxisSpec.labels.map((it) => it.id)
+	);
 
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const startTick = getTick(fromAxisSpec, tickId);
@@ -139,97 +139,93 @@ export const YAxis_Transition: React.FC<{
 		};
 	});
 
-	// const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
-	// 	const startLabel = getLabel(fromAxisSpec, labelId);
-	// 	const endLabel = getLabel(toAxisSpec, labelId);
+	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
+		const startLabel = getLabel(fromAxisSpec, labelId);
+		const endLabel = getLabel(toAxisSpec, labelId);
 
-	// 	const startX = periodsScale.mapFloatIndexToRange(
-	// 		startLabel.periodFloatIndex
-	// 	);
-	// 	const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
+		const startY = yScale(startLabel.domainValue);
+		const endY = yScale(endLabel.domainValue);
 
-	// 	// TODO evtl. refine
-	// 	// TODO take info about animationPercentage from passed currentTransitionSlice object!
-	// 	const animationPercentage = 0;
-	// 	const currentX =
-	// 		(1 - animationPercentage) * startX + animationPercentage * endX;
+		// TODO evtl. refine
+		// TODO take info about animationPercentage from passed currentTransitionSlice object!
+		const animationPercentage = 0;
+		const currentY =
+			(1 - animationPercentage) * startY + animationPercentage * endY;
 
-	// 	// TODO take info about animationPercentage from passed currentTransitionSlice object!
-	// 	const marginLeft = interpolate(
-	// 		animationPercentage,
-	// 		[0, 1],
-	// 		[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
-	// 		{
-	// 			// easing: Easing.bezier(0.25, 1, 0.5, 1),
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
+		// TODO take info about animationPercentage from passed currentTransitionSlice object!
+		const marginLeft = interpolate(
+			animationPercentage,
+			[0, 1],
+			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
+			{
+				// easing: Easing.bezier(0.25, 1, 0.5, 1),
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
-	// 	return {
-	// 		id: labelId,
-	// 		value: currentX,
-	// 		label: startLabel.label,
-	// 		textAnchor: startLabel.textAnchor,
-	// 		marginLeft,
-	// 		// opacity: 1,
-	// 	};
-	// });
+		return {
+			id: labelId,
+			value: currentY,
+			label: startLabel.label,
+			textAnchor: startLabel.textAnchor,
+			marginLeft,
+			// opacity: 1,
+		};
+	});
 
-	// const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
-	// 	const endLabel = getLabel(toAxisSpec, labelId);
-	// 	const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
+	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
+		const endLabel = getLabel(toAxisSpec, labelId);
+		const endY = yScale(endLabel.domainValue);
 
-	// 	const interpolatedOpacity = interpolate(
-	// 		relativeFrame,
-	// 		[0, FADE_IN_OUT_DURATION],
-	// 		[0, 1],
-	// 		{
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[0, 1],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
-	// 	const marginLeft = endLabel.marginLeft || 0;
+		const marginLeft = endLabel.marginLeft || 0;
 
-	// 	return {
-	// 		id: labelId,
-	// 		value: endX,
-	// 		opacity: interpolatedOpacity,
-	// 		label: endLabel.label,
-	// 		textAnchor: endLabel.textAnchor,
-	// 		marginLeft,
-	// 	};
-	// });
+		return {
+			id: labelId,
+			value: endY,
+			opacity: interpolatedOpacity,
+			label: endLabel.label,
+			textAnchor: endLabel.textAnchor,
+			marginLeft,
+		};
+	});
 
-	// const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
-	// 	const startLabel = getLabel(fromAxisSpec, labelId);
+	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
+		const startLabel = getLabel(fromAxisSpec, labelId);
 
-	// 	const startX = periodsScale.mapFloatIndexToRange(
-	// 		startLabel.periodFloatIndex
-	// 	);
+		const endY = yScale(startLabel.domainValue);
 
-	// 	const interpolatedOpacity = interpolate(
-	// 		relativeFrame,
-	// 		[0, FADE_IN_OUT_DURATION],
-	// 		[1, 0],
-	// 		{
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
+		const interpolatedOpacity = interpolate(
+			relativeFrame,
+			[0, FADE_IN_OUT_DURATION],
+			[1, 0],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
-	// 	const marginLeft = startLabel.marginLeft || 0;
+		const marginLeft = startLabel.marginLeft || 0;
 
-	// 	return {
-	// 		id: labelId,
-	// 		value: startX,
-	// 		opacity: interpolatedOpacity,
-	// 		label: startLabel.label,
-	// 		textAnchor: startLabel.textAnchor,
-	// 		marginLeft,
-	// 	};
-	// });
+		return {
+			id: labelId,
+			value: endY,
+			opacity: interpolatedOpacity,
+			label: startLabel.label,
+			textAnchor: startLabel.textAnchor,
+			marginLeft,
+		};
+	});
 
 	return (
 		<svg
@@ -240,93 +236,75 @@ export const YAxis_Transition: React.FC<{
 			}}
 		>
 			<defs>
-				<clipPath id="xAxisAreaClipPath">
+				<clipPath id="areaClipPath">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
 
 			{/* enterLabels labels  */}
-			{/* {enterLabels.map((it, i) => {
+			{enterLabels.map((it, i) => {
 				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<text
-							textAnchor={it.textAnchor}
+							textAnchor="start"
+							alignmentBaseline="middle"
 							fill={theme.color}
-							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
+							y={it.value}
+							x={TICK_LINE_SIZE + it.marginLeft}
 							opacity={it.opacity}
 						>
 							{it.label}
 						</text>
 					</g>
 				);
-			})} */}
+			})}
 
 			{/* update labels  */}
-			{/* {updateLabels.map((it, i) => {
+			{updateLabels.map((it, i) => {
 				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<text
-							textAnchor={it.textAnchor}
+							// textAnchor={it.textAnchor} // TODO use?
+							textAnchor="start"
+							alignmentBaseline="middle"
 							fill={theme.color}
-							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
+							y={it.value}
+							x={TICK_LINE_SIZE + it.marginLeft}
 						>
 							{it.label}
 						</text>
 					</g>
 				);
-			})} */}
+			})}
 
 			{/* exit labels  */}
-			{/* {exitLabels.map((it, i) => {
+			{exitLabels.map((it, i) => {
 				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<text
-							textAnchor={it.textAnchor}
-							alignmentBaseline="baseline"
+							textAnchor="start"
+							alignmentBaseline="middle"
 							fill={theme.color}
-							// fontFamily={fontFamilyXTicklabels}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
+							y={it.value}
+							x={TICK_LINE_SIZE + it.marginLeft}
 							opacity={it.opacity}
 						>
 							{it.label}
 						</text>
 					</g>
 				);
-			})} */}
+			})}
 
 			{/* enter ticks  */}
 			{enterTicks.map((it, i) => {
 				return (
-					<g
-						key={i}
-						// clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<line
 							y1={it.value}
 							y2={it.value}
@@ -343,11 +321,7 @@ export const YAxis_Transition: React.FC<{
 			{/* exit ticks  */}
 			{exitTicks.map((it, i) => {
 				return (
-					<g
-						key={i}
-						// clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<line
 							y1={it.value}
 							y2={it.value}
@@ -362,12 +336,9 @@ export const YAxis_Transition: React.FC<{
 				);
 			})}
 
-			{updateTicks.map((it) => {
+			{updateTicks.map((it, i) => {
 				return (
-					<g
-						// clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
+					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 						<line
 							y1={it.value}
 							y2={it.value}

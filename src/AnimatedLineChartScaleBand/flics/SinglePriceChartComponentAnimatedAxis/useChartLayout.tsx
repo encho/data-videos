@@ -16,7 +16,7 @@ const chartColsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 40, name: 'space'},
-	{type: 'pixel', value: 100, name: 'yAxis'},
+	{type: 'pixel', value: 135, name: 'yAxis'},
 	{type: 'pixel', value: 50, name: 'space'},
 ];
 
