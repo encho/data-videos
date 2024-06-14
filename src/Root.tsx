@@ -60,8 +60,8 @@ import {
 } from './AnimatedLineChartScaleBand/AnimatedLineChart';
 
 import {
-	highlightPeriods_01_schema,
-	HighlightPeriods_01,
+	highlightPeriods_01_example_schema,
+	HighlightPeriods_01_Example,
 } from './AcettiFlics/HighlightPeriods_01/HighlightPeriods_01';
 
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
@@ -80,14 +80,14 @@ export const RemotionRoot: React.FC = () => {
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="acetti-HighlightPeriods-01"
-				component={HighlightPeriods_01}
+				component={HighlightPeriods_01_Example}
 				// durationInFrames={90 * 3.5}
 				// durationInFrames={90 * 30}
 				durationInFrames={90 * 15}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
-				schema={highlightPeriods_01_schema}
+				schema={highlightPeriods_01_example_schema}
 				defaultProps={{
 					ticker: 'BTC-USD' as const,
 					timePeriod: '2Y' as const,

@@ -22,15 +22,15 @@ import {ObliquePlatte} from './ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {Performance_01} from '../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 
-export const highlightPeriods_01_schema = z.object({
+export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
-export const HighlightPeriods_01: React.FC<
-	z.infer<typeof highlightPeriods_01_schema>
+export const HighlightPeriods_01_Example: React.FC<
+	z.infer<typeof highlightPeriods_01_example_schema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {
