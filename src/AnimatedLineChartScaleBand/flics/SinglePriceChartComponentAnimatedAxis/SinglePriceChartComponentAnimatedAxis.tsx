@@ -20,6 +20,7 @@ type TAnimatedLineChart2Props = {
 	theme: ThemeType;
 };
 
+// TODO this shoud be in acetti-ts-scenes or so
 export const SinglePriceChartComponentAnimatedAxis: React.FC<
 	TAnimatedLineChart2Props
 > = ({width, height, timeSeries, theme}) => {

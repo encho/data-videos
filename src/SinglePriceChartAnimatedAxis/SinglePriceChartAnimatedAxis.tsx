@@ -14,6 +14,7 @@ import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from './fetchNerdyFinancePriceChartData';
+import {lorenzobertolinibrightTheme} from '../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
@@ -26,7 +27,7 @@ export const singlePriceChartAnimatedAxisSchema = z.object({
 	ticker: zNerdyTickers,
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI']),
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
 export const SinglePriceChartAnimatedAxis: React.FC<
@@ -44,7 +45,12 @@ export const SinglePriceChartAnimatedAxis: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+	const theme =
+		themeEnum === 'NERDY'
+			? nerdyTheme
+			: themeEnum === 'LORENZOBERTOLINI'
+			? lorenzobertoliniTheme
+			: lorenzobertolinibrightTheme;
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
@@ -117,7 +123,7 @@ export const SinglePriceChartAnimatedAxis: React.FC<
 						</ObliquePlatte>
 					</Position>
 				</AbsoluteFill>
-				<LorenzoBertoliniLogo />
+				<LorenzoBertoliniLogo color={theme.typography.logoColor} />
 			</AbsoluteFill>
 		</GlobalVideoContextWrapper>
 	);

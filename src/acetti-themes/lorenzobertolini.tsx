@@ -36,6 +36,7 @@ export const lorenzobertoliniTheme: ThemeType = {
 		titleColor: '#fff',
 		subTitleColor: '#fff',
 		textColor: '#ff0000',
+		logoColor: '#fff',
 	},
 	yAxis: {
 		fontSize: 15,

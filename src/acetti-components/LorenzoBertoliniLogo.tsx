@@ -29,7 +29,7 @@ import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 // 	},
 // };
 
-const LorenzoBertoliniLogo = () => {
+const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 	const frame = useCurrentFrame();
 	// const {durationInFrames} = useVideoConfig();
 
@@ -54,7 +54,7 @@ const LorenzoBertoliniLogo = () => {
 				right: 40,
 			}}
 		>
-			<div className="text-white text-3xl">
+			<div style={{color}} className="text-3xl">
 				<span className="font-thin">lorenzo</span>
 				<span className="font-medium">bertolini</span>
 			</div>

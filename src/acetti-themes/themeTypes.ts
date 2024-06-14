@@ -9,6 +9,7 @@ export const zodThemeType = z.object({
 		titleColor: zColor(),
 		subTitleColor: zColor(),
 		textColor: zColor(),
+		logoColor: zColor(),
 	}),
 	yAxis: z.object({
 		fontSize: z.number(),

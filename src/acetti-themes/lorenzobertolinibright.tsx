@@ -2,12 +2,17 @@ import chroma from 'chroma-js';
 
 import {ThemeType} from './themeTypes';
 
-const textColor = chroma('#888').hex();
-const backgroundColor = chroma('#222222').darken().hex();
+// this theme is a mono colored theme
+// const monoColor = "#f50274";
+// const monoColor = '#f05122';
+const monoColor = '#222';
 
-// const platteBackground = '#202020';
-const platteBackground = '#232323';
-const platteBorder = '#292929';
+const textColor = chroma('#9b9b9b').hex();
+// const textColor = chroma(monoColor).brighten(2).hex();
+// const backgroundColor = chroma('#222222').darken().hex();
+// const backgroundColor = chroma('#f0f0f0').hex();
+// const backgroundColor = chroma(monoColor).hex();
+const backgroundColor = chroma('#d0d0d0').hex();
 
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
@@ -15,27 +20,34 @@ const platteBorder = '#292929';
 // const dataScale = chroma.scale(['lightgreen', 'magenta']).mode('lab').colors(6);
 // const dataScale = chroma.scale(['cyan', 'magenta']).mode('lab').colors(6);
 const dataScale = chroma
-	.scale(['#fff', '#f05122', '#555'])
+	.scale([monoColor, '#888888', '#0099cc'])
 	.mode('lab')
 	.colors(6);
 
-export const nerdyTheme: ThemeType = {
+export const lorenzobertolinibrightTheme: ThemeType = {
 	global: {backgroundColor},
 	typography: {
-		titleColor: '#ffffff',
-		subTitleColor: '#888',
-		textColor: '#ffffff',
-		logoColor: '#ffffff',
+		// TODO add more info e.g.
+		// title {
+		// 	fontFamily:
+		// 	fontWeight:
+		// 	color:
+		// }
+		// titleColor: '#222',
+		titleColor: '#222222',
+		subTitleColor: '#888888',
+		textColor: '#ff0000',
+		logoColor: '#222222',
 	},
 	yAxis: {
-		fontSize: 16,
-		strokeWidth: 3,
+		fontSize: 15,
+		strokeWidth: 2,
 		color: textColor,
 		tickColor: textColor,
 	},
 	xAxis: {
 		fontSize: 16,
-		strokeWidth: 3,
+		strokeWidth: 2,
 		color: textColor,
 		tickColor: textColor,
 	},
@@ -122,15 +134,17 @@ export const nerdyTheme: ThemeType = {
 		textColor: dataScale[3],
 	},
 	platte: {
-		backgroundColor: platteBackground,
-		borderColor: platteBorder,
+		backgroundColor: '#ffffff',
+		borderColor: '#cccccc',
+		// borderColor: '#ff0000',
+		// backgroundColor: '#ffff00',
 	},
 	timeseriesComponents: {
 		percentageChangeArea: {
-			lineColor: '#f05122',
-			textColor: '#f05122',
-			gradientColor: '#f05122',
-			lineStrokeWidth: 0.8,
+			lineColor: monoColor,
+			textColor: monoColor,
+			gradientColor: monoColor,
+			lineStrokeWidth: 1.5,
 		},
 	},
 };
