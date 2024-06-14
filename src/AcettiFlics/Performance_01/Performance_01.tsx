@@ -7,30 +7,30 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {TitleSlide} from './TitleSlide';
-import {Position} from '../AnimatedLineChartScaleBand/components/Position';
+import {Position} from '../../AnimatedLineChartScaleBand/components/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from './fetchNerdyFinancePriceChartData';
-import {lorenzobertolinibrightTheme} from '../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../acetti-themes/nerdy';
+import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
+import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
+import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
-import {GlobalVideoContextWrapper} from '../acetti-components/GlobalVideoContext';
-import {Performance_01} from '../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
+import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
+import {Performance_01} from '../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 
-export const singlePriceChartAnimatedAxisSchema = z.object({
+export const performance_01_example_schema = z.object({
 	ticker: zNerdyTickers,
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
-export const SinglePriceChartAnimatedAxis: React.FC<
-	z.infer<typeof singlePriceChartAnimatedAxisSchema>
+export const Performance_01_Example: React.FC<
+	z.infer<typeof performance_01_example_schema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {
@@ -77,7 +77,7 @@ export const SinglePriceChartAnimatedAxis: React.FC<
 		return <AbsoluteFill />;
 	}
 
-	console.log({apiResult});
+	// console.log({apiResult});
 
 	// const percentageString = (apiResult?.percentageChange * 100).toFixed(2) + '%';
 

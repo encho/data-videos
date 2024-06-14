@@ -40,9 +40,9 @@ import {
 } from './SinglePriceChart/SinglePriceChart';
 
 import {
-	SinglePriceChartAnimatedAxis,
-	singlePriceChartAnimatedAxisSchema,
-} from './SinglePriceChartAnimatedAxis/SinglePriceChartAnimatedAxis';
+	Performance_01_Example,
+	performance_01_example_schema,
+} from './AcettiFlics/Performance_01/Performance_01';
 
 import {
 	AxisTransition,
@@ -59,6 +59,11 @@ import {
 	AnimatedLineChart as ScaleBandLineChart,
 } from './AnimatedLineChartScaleBand/AnimatedLineChart';
 
+import {
+	highlightPeriods_01_schema,
+	HighlightPeriods_01,
+} from './AcettiFlics/HighlightPeriods_01/HighlightPeriods_01';
+
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
 
 import './tailwind.css';
@@ -74,15 +79,34 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
-				id="SinglePriceChartAnimatedAxis"
-				component={SinglePriceChartAnimatedAxis}
+				id="acetti-HighlightPeriods-01"
+				component={HighlightPeriods_01}
 				// durationInFrames={90 * 3.5}
 				// durationInFrames={90 * 30}
 				durationInFrames={90 * 15}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
-				schema={singlePriceChartAnimatedAxisSchema}
+				schema={highlightPeriods_01_schema}
+				defaultProps={{
+					ticker: 'BTC-USD' as const,
+					timePeriod: '2Y' as const,
+					nerdyFinanceEnv: 'PROD' as const,
+					themeEnum: 'NERDY' as const,
+				}}
+			/>
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="acetti-Performance-01"
+				component={Performance_01_Example}
+				// durationInFrames={90 * 3.5}
+				// durationInFrames={90 * 30}
+				durationInFrames={90 * 15}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={performance_01_example_schema}
 				defaultProps={{
 					ticker: 'BTC-USD' as const,
 					timePeriod: '2Y' as const,
