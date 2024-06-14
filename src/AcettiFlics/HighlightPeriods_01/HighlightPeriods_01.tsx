@@ -20,7 +20,7 @@ import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
-import {Performance_01} from '../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
+import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -113,7 +113,7 @@ export const HighlightPeriods_01_Example: React.FC<
 							height={platteHeight}
 							theme={theme.platte}
 						>
-							<Performance_01
+							<HighlightPeriods_01
 								width={platteWidth}
 								height={platteHeight}
 								timeSeries={timeSeries}

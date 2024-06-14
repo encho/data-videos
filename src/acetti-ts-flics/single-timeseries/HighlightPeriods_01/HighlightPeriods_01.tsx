@@ -1,6 +1,7 @@
 import {Sequence, useVideoConfig, Easing} from 'remotion';
 
-import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
+// import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
+import {HighlightPeriods3} from '../../../acetti-ts-components/HighlightPeriods3';
 import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
@@ -37,13 +38,15 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_HEIGHT,
 	});
 
-	const transitionDurationInFrames_0_1 = durationInFrames - 90 * 5;
-	const transitionDurationInFrames_1_2 = 90 * 5;
+	const transitionDurationInFrames_0_1 = durationInFrames - 90 * 3 - 90 * 3;
+	const transitionDurationInFrames_1_2 = 90 * 3;
+	const transitionDurationInFrames_2_3 = 90 * 3;
 
 	// TODO fix with [0,0] !!!!!!!!!
 	const visibleDomainIndices_0 = [0, 1] as [number, number];
 	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
 	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
+	const visibleDomainIndices_3 = [220, 420] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -73,6 +76,10 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 						area: chartLayout.areas.plot,
 						visibleDomainIndices: visibleDomainIndices_2,
 					},
+					{
+						area: chartLayout.areas.plot,
+						visibleDomainIndices: visibleDomainIndices_3,
+					},
 				]}
 				transitionSpecs={[
 					{
@@ -87,13 +94,30 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						numberOfSlices: 40,
 					},
+					{
+						durationInFrames: transitionDurationInFrames_2_3,
+						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						numberOfSlices: 40,
+					},
 				]}
 			>
 				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
 					return (
 						<div>
-							{/* TODO 1 pass forward lineChartAnimationContext */}
-							{/* TODO 2 useLineChartAnimationContext inside! */}
+							<Sequence from={transitionDurationInFrames_0_1}>
+								<HighlightPeriods3
+									timeSeries={timeSeries}
+									area={chartLayout.areas.plot}
+									periodsScale={periodsScale}
+									domainIndices={[220, 420] as [number, number]}
+									currentFrame={22}
+									durationInFrames={200}
+									fadeInDurationInFrames={90}
+									yScaleCurrent={yScale}
+									label="Interesting Period"
+								/>
+							</Sequence>
+
 							<BasicLineChart
 								timeSeries={timeSeries}
 								layoutAreas={{
@@ -113,7 +137,7 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 
 							{/* TODO 1 pass forward lineChartAnimationContext */}
 							{/* TODO 2 useLineChartAnimationContext inside! */}
-							<Sequence from={transitionDurationInFrames_0_1}>
+							{/* <Sequence from={transitionDurationInFrames_0_1}>
 								<PercentageChangeArea
 									firstValue={timeSeries[0].value}
 									lastValue={timeSeries[timeSeries.length - 1].value}
@@ -124,7 +148,7 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 									plotArea={chartLayout.areas.plot}
 									theme={theme.timeseriesComponents.percentageChangeArea}
 								/>
-							</Sequence>
+							</Sequence> */}
 
 							{/* <AbsoluteFill>
 								<LineChartAnimationContextDebugger

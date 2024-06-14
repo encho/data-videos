@@ -2,11 +2,12 @@
 // import {line} from 'd3-shape';
 
 import {ScaleLinear} from 'd3-scale';
-import {Easing, interpolate} from 'remotion';
+import {Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
 import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-viz';
-import {getYDomain} from '../AnimatedLineChartScaleBand/utils/timeSeries/timeSeries';
+// import {getYDomain} from '../AnimatedLineChartScaleBand/utils/timeSeries/timeSeries';
+import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 
 export type TTheme_HighlightArea = {
 	backgroundColor: string;
@@ -41,30 +42,35 @@ export const HighlightPeriods3: React.FC<{
 	area,
 	periodsScale,
 	domainIndices,
-	currentFrame,
-	durationInFrames,
+	// currentFrame,
+	// durationInFrames,
 	fadeInDurationInFrames,
 }) => {
 	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
+
+	const frame = useCurrentFrame();
+	// const {durationInFrames} = useVideoConfig();
 
 	const x1 = periodsScale.getBandFromIndex(domainIndices[0]).x1;
 	const x2 = periodsScale.getBandFromIndex(domainIndices[1]).x2;
 	const width = x2 - x1;
 
-	const yDomain = getYDomain(
-		'VISIBLE',
+	const extent = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 		timeSeries,
-		domainIndices,
-		periodsScale
+		domainIndices
 	);
-	const y1 = yScaleCurrent(yDomain[1]);
-	const y2 = yScaleCurrent(yDomain[0]);
+
+	const paddedExtent = applyPaddingToExtent(extent, 0.2);
+
+	const y1 = yScaleCurrent(paddedExtent[1]);
+	const y2 = yScaleCurrent(paddedExtent[0]);
+
 	const rectHeight = y2 - y1;
 
 	const animatedOpacityRect = interpolate(
-		currentFrame,
-		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[0, 0, theme.backgroundOpacity],
+		frame,
+		[0, fadeInDurationInFrames],
+		[0, theme.backgroundOpacity],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -74,9 +80,9 @@ export const HighlightPeriods3: React.FC<{
 	);
 
 	const animatedOpacityLine = interpolate(
-		currentFrame,
-		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[0, 0, 1],
+		frame,
+		[0, fadeInDurationInFrames],
+		[0, 1],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -88,9 +94,9 @@ export const HighlightPeriods3: React.FC<{
 	const FONT_SIZE = 24;
 
 	const animatedTextYPosition = interpolate(
-		currentFrame,
-		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[y1, y1, y1 - FONT_SIZE / 2],
+		frame,
+		[0, fadeInDurationInFrames],
+		[y1, y1 - FONT_SIZE / 2],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -100,9 +106,9 @@ export const HighlightPeriods3: React.FC<{
 	);
 
 	const animatedOpacityText = interpolate(
-		currentFrame,
-		[0, durationInFrames - fadeInDurationInFrames, durationInFrames],
-		[0, 0, 1],
+		frame,
+		[0, fadeInDurationInFrames],
+		[0, 1],
 		{
 			easing: EASING_FUNCTION,
 			// in this case should not be necessary
@@ -113,7 +119,13 @@ export const HighlightPeriods3: React.FC<{
 
 	return (
 		<div style={{zIndex: 0}}>
-			<svg overflow="visible" width={area.width} height={area.height}>
+			<svg
+				overflow="visible"
+				width={area.width}
+				height={area.height}
+				transform={`translate(${area.x1}, ${area.y1})`}
+				// style={{backgroundColor: 'cyan', opacity: 0.5}}
+			>
 				<text
 					textAnchor="start"
 					alignmentBaseline="baseline"
@@ -156,3 +168,21 @@ export const HighlightPeriods3: React.FC<{
 		</div>
 	);
 };
+
+function applyPaddingToExtent(
+	extent: [number, number],
+	paddingPercent: number
+): [number, number] {
+	const distance = extent[1] - extent[0];
+	const padding = paddingPercent * distance;
+	const paddedExtent: [number, number] = [
+		extent[0] - padding,
+		extent[1] + padding,
+	];
+	return paddedExtent;
+}
+// // Example usage:
+// const extent: [number, number] = [10, 20];
+// const paddingPercent = 0.1; // 10% padding
+// const newExtent = applyPaddingToExtent(extent, paddingPercent);
+// console.log(newExtent); // Output: [9, 21]

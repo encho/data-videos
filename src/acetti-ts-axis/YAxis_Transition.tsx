@@ -1,16 +1,10 @@
-import {
-	// useCurrentFrame,
-	useVideoConfig,
-	interpolate,
-} from 'remotion';
+import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../acetti-viz';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {getEnterUpdateExits} from '../AnimatedLineChartScaleBand/utils/utils';
-
 import {TYAxisSpec, TYAxisScale} from './utils/axisSpecs_yAxis';
-// import {TPeriodsScale} from '../../../periodsScale/periodsScale';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
 type TTheme_YAxis = ThemeType['yAxis'];
@@ -49,10 +43,7 @@ export const YAxis_Transition: React.FC<{
 
 	const relativeFrame = currentSliceInfo.relativeFrame;
 	const {fps} = useVideoConfig();
-	// const animationPercentage = frame / durationInFrames;
-	// const animationPercentage = easingPercentage;
 
-	// const FADE_IN_OUT_DURATION = fps * 3;
 	const FADE_IN_OUT_DURATION = Math.min(
 		currentSliceInfo.durationInFrames,
 		fps * 0.8
@@ -129,9 +120,6 @@ export const YAxis_Transition: React.FC<{
 		const domainValue = startTick.domainValue;
 		const value = yScale(domainValue);
 
-		// const currentPeriodFloatIndex = startTick.periodFloatIndex;
-		// const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
-
 		return {
 			id: tickId,
 			value,
@@ -170,7 +158,6 @@ export const YAxis_Transition: React.FC<{
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
-			// opacity: 1,
 		};
 	});
 
@@ -229,8 +216,6 @@ export const YAxis_Transition: React.FC<{
 
 	return (
 		<svg
-			// width={area.width}
-			// height={area.height}
 			style={{
 				overflow: 'visible',
 			}}

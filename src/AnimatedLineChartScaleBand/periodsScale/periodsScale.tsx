@@ -180,58 +180,10 @@ export const periodsScale = ({
 	const getTimeSeriesInterpolatedExtent = (
 		timeSeries: {value: number; date: Date}[]
 	) => {
-		const [leftVisibleDomainIndex, rightVisibleDomainIndex] =
-			visibleDomainIndices;
-
-		const leftInterpolatedValue = getTimeSeriesInterpolatedValue({
+		return getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			domainIndex: leftVisibleDomainIndex,
-		});
-		const rightInterpolatedValue = getTimeSeriesInterpolatedValue({
-			timeSeries,
-			domainIndex: rightVisibleDomainIndex,
-		});
-
-		const decimalPartLeftIndex = leftVisibleDomainIndex % 1;
-		const decimalPartRightIndex = rightVisibleDomainIndex % 1;
-
-		const lowerSliceIndex =
-			decimalPartLeftIndex <= 0.5
-				? Math.floor(leftVisibleDomainIndex)
-				: Math.ceil(leftVisibleDomainIndex);
-		const upperSliceIndex =
-			decimalPartRightIndex >= 0.5
-				? Math.ceil(rightVisibleDomainIndex)
-				: Math.floor(rightVisibleDomainIndex);
-
-		const fullyVisibleTimeSeriesPiece = timeSeries.slice(
-			lowerSliceIndex,
-			upperSliceIndex
+			visibleDomainIndices
 		);
-
-		// console.log({
-		// 	fullyVisibleTimeSeriesPiece,
-		// 	lowerSliceIndex,
-		// 	upperSliceIndex,
-		// });
-
-		const timeSeriesExtent = extent(
-			fullyVisibleTimeSeriesPiece,
-			(it) => it.value
-		) as [number, number];
-
-		let maybeValues = [];
-		if (leftInterpolatedValue) {
-			maybeValues.push(leftInterpolatedValue);
-		}
-		if (rightInterpolatedValue) {
-			maybeValues.push(rightInterpolatedValue);
-		}
-
-		const min = Math.min(...maybeValues, timeSeriesExtent[0]);
-		const max = Math.max(...maybeValues, timeSeriesExtent[1]);
-
-		return [min, max] as [number, number];
 	};
 
 	return {
@@ -309,3 +261,61 @@ function getDifferenceInDays(date1: Date, date2: Date): number {
 // const date2 = new Date('2024-05-24');
 // const difference = getDifferenceInDays(date1, date2);
 // console.log(difference); // Output: 23
+
+export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
+	timeSeries: {value: number; date: Date}[],
+	visibleDomainIndices: [number, number]
+) => {
+	const [leftVisibleDomainIndex, rightVisibleDomainIndex] =
+		visibleDomainIndices;
+
+	const leftInterpolatedValue = getTimeSeriesInterpolatedValue({
+		timeSeries,
+		domainIndex: leftVisibleDomainIndex,
+	});
+	const rightInterpolatedValue = getTimeSeriesInterpolatedValue({
+		timeSeries,
+		domainIndex: rightVisibleDomainIndex,
+	});
+
+	const decimalPartLeftIndex = leftVisibleDomainIndex % 1;
+	const decimalPartRightIndex = rightVisibleDomainIndex % 1;
+
+	const lowerSliceIndex =
+		decimalPartLeftIndex <= 0.5
+			? Math.floor(leftVisibleDomainIndex)
+			: Math.ceil(leftVisibleDomainIndex);
+	const upperSliceIndex =
+		decimalPartRightIndex >= 0.5
+			? Math.ceil(rightVisibleDomainIndex)
+			: Math.floor(rightVisibleDomainIndex);
+
+	const fullyVisibleTimeSeriesPiece = timeSeries.slice(
+		lowerSliceIndex,
+		upperSliceIndex
+	);
+
+	// console.log({
+	// 	fullyVisibleTimeSeriesPiece,
+	// 	lowerSliceIndex,
+	// 	upperSliceIndex,
+	// });
+
+	const timeSeriesExtent = extent(
+		fullyVisibleTimeSeriesPiece,
+		(it) => it.value
+	) as [number, number];
+
+	let maybeValues = [];
+	if (leftInterpolatedValue) {
+		maybeValues.push(leftInterpolatedValue);
+	}
+	if (rightInterpolatedValue) {
+		maybeValues.push(rightInterpolatedValue);
+	}
+
+	const min = Math.min(...maybeValues, timeSeriesExtent[0]);
+	const max = Math.max(...maybeValues, timeSeriesExtent[1]);
+
+	return [min, max] as [number, number];
+};
