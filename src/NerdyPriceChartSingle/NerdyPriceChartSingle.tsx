@@ -126,7 +126,7 @@ export const NerdyPriceChartSingle: React.FC<
 						</ObliquePlatte>
 					</Position>
 				</AbsoluteFill>
-				<LorenzoBertoliniLogo />
+				<LorenzoBertoliniLogo color="magenta" />
 			</AbsoluteFill>
 		</GlobalVideoContextWrapper>
 	);

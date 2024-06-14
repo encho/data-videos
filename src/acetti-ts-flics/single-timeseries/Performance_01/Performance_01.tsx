@@ -21,9 +21,12 @@ type TAnimatedLineChart2Props = {
 };
 
 // TODO this shoud be in acetti-ts-scenes or so
-export const SinglePriceChartComponentAnimatedAxis: React.FC<
-	TAnimatedLineChart2Props
-> = ({width, height, timeSeries, theme}) => {
+export const Performance_01: React.FC<TAnimatedLineChart2Props> = ({
+	width,
+	height,
+	timeSeries,
+	theme,
+}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const CHART_WIDTH = width;

@@ -1,11 +1,11 @@
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {Position} from '../../components/Position';
+import {Position} from '../../../AnimatedLineChartScaleBand/components/Position';
 import {TGridLayoutArea} from '../../../acetti-viz';
-import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
-import {TPeriodsScale} from '../../periodsScale/periodsScale';
-import {AnimatedLine} from '../../components/AnimatedLine';
-import {AnimatedValueDot} from '../../components/AnimatedValueDot';
+import {TimeSeries} from '../../../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TPeriodsScale} from '../../../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {AnimatedLine} from '../../../AnimatedLineChartScaleBand/components/AnimatedLine';
+import {AnimatedValueDot} from '../../../AnimatedLineChartScaleBand/components/AnimatedValueDot';
 import {
 	getIndicesAxisSpec,
 	getDaysAxisSpec,
@@ -15,7 +15,7 @@ import {
 import {getYAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {YAxis_Transition} from '../../../acetti-ts-axis/YAxis_Transition';
 import {XAxis_Transition} from '../../../acetti-ts-axis/XAxis_Transition';
-import {TTheme} from '../../theme';
+import {TTheme} from '../../../AnimatedLineChartScaleBand/theme';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
