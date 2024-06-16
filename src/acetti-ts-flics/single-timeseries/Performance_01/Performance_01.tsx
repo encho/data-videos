@@ -4,7 +4,6 @@ import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChan
 import {DisplayGridLayout} from '../../../acetti-viz';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-// import {BasicLineChart} from './BasicLineChart';
 import {BasicLineChart} from '../../../acetti-ts-components/BasicLineChart';
 import {
 	LineChartAnimationContainer,
