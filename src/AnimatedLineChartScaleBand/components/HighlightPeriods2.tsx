@@ -6,7 +6,7 @@ import {Easing, interpolate} from 'remotion';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-layout';
-import {getYDomain} from '../utils/timeSeries/timeSeries';
+import {getYDomain} from '../../acetti-ts-utils/timeSeries/timeSeries';
 
 export type TTheme_HighlightArea = {
 	backgroundColor: string;

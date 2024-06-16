@@ -10,9 +10,9 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {MinimapLine} from '../acetti-ts-components/archive/MinimapLine';
 import {DisplayGridLayout} from '../acetti-layout';
-import {useMinimapLayout} from './useMinimapLayout';
+import {useMinimapLayout} from '../acetti-ts-components/archive/useMinimapLayout';
 import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {Position} from '../acetti-ts-base/Position';
 import {periodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {MinimapActiveArea} from '../acetti-ts-components/archive/MinimapActiveArea';

@@ -3,13 +3,13 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {
 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
 	periodsScale,
 	TPeriodsScale,
 } from '../acetti-ts-periodsScale/periodsScale';
-import {getYDomain} from '../AnimatedLineChartScaleBand/utils/timeSeries/timeSeries';
+import {getYDomain} from '../acetti-ts-utils/timeSeries/timeSeries';
 // import {TYAxis} from './components/axisSpecs_yAxis';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';

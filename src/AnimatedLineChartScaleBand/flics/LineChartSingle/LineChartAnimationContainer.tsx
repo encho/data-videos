@@ -3,12 +3,12 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../acetti-layout';
-import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {
 	periodsScale,
 	TPeriodsScale,
 } from '../../../acetti-ts-periodsScale/periodsScale';
-import {getYDomain} from '../../utils/timeSeries/timeSeries';
+import {getYDomain} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 

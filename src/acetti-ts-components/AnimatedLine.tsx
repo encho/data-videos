@@ -3,7 +3,7 @@ import {line} from 'd3-shape';
 
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 
 export const AnimatedLine: React.FC<{
 	lineColor: string;

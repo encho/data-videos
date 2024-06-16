@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
-import {getEnterUpdateExits} from '../AnimatedLineChartScaleBand/utils/utils';
+import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
 import {TYAxisSpec, TYAxisScale} from './utils/axisSpecs_yAxis';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
