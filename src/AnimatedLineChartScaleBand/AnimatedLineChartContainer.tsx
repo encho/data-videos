@@ -18,7 +18,7 @@ import {periodsScale, TPeriodsScale} from './periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from './components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
 import {AnimatedLine} from './components/AnimatedLine';
-import {AnimatedValueDot} from './components/AnimatedValueDot';
+import {AnimatedValueDot} from '../acetti-ts-components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
 import {getYDomain} from './utils/timeSeries/timeSeries';
 // import {AnimatedXAxis_PeriodsScale} from './components/AnimatedXAxis_PeriodsScale';

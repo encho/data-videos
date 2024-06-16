@@ -7,7 +7,7 @@ import {TPeriodsScale} from '../../periodsScale/periodsScale';
 import {XAxis_SpecBased} from './components/XAxis_SpecBased';
 import {AnimatedYAxis} from '../../components/AnimatedYAxis';
 import {AnimatedLine} from '../../components/AnimatedLine';
-import {AnimatedValueDot} from '../../components/AnimatedValueDot';
+import {AnimatedValueDot} from '../../../acetti-ts-components/AnimatedValueDot';
 import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,

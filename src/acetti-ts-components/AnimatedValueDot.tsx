@@ -1,15 +1,13 @@
 import {ScaleLinear} from 'd3-scale';
-import {
-	// useCurrentFrame,
-	// useVideoConfig,
-	Easing,
-	interpolate,
-} from 'remotion';
+import {Easing, interpolate} from 'remotion';
 
-import {getXYRightClamped, getXYLeftClamped} from '../periodsScale/getXY';
-import {TPeriodsScale} from '../periodsScale/periodsScale';
-import {TGridLayoutArea} from '../../acetti-viz';
-import {useGlobalVideoContext} from '../../acetti-components/GlobalVideoContext';
+import {
+	getXYRightClamped,
+	getXYLeftClamped,
+} from '../AnimatedLineChartScaleBand/periodsScale/getXY';
+import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TGridLayoutArea} from '../acetti-viz';
+import {useGlobalVideoContext} from '../acetti-components/GlobalVideoContext';
 
 export const AnimatedValueDot: React.FC<{
 	area: TGridLayoutArea;
@@ -32,16 +30,25 @@ export const AnimatedValueDot: React.FC<{
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
-			{yLeft ? (
-				<g>
-					<Dot cx={xLeft} cy={yLeft} r={radius} fill={dotColor} />
-				</g>
-			) : null}
-			{yRight ? (
-				<g>
-					<Dot cx={xRight} cy={yRight} r={radius} fill={dotColor} />
-				</g>
-			) : null}
+			{/* <defs>
+				<clipPath id="plotAreaClipPath">
+					<rect x={0} y={0} width={area.width} height={area.height} />
+				</clipPath>
+			</defs> */}
+			<g>
+				{/* ensures that the dot is not displayed, if out of bounds vertically */}
+				{yLeft && yLeft >= 0 && yLeft <= area.height ? (
+					<g>
+						<Dot cx={xLeft} cy={yLeft} r={radius} fill={dotColor} />
+					</g>
+				) : null}
+				{/* ensures that the dot is not displayed, if out of bounds vertically */}
+				{yRight && yRight >= 0 && yRight <= area.height ? (
+					<g>
+						<Dot cx={xRight} cy={yRight} r={radius} fill={dotColor} />
+					</g>
+				) : null}
+			</g>
 		</svg>
 	);
 };
