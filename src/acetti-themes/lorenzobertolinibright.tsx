@@ -127,12 +127,6 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		// areaColor: '#ff0000',
 		areaOpacity: 0.2,
 	},
-	highlightArea: {
-		backgroundColor: dataScale[3],
-		backgroundOpacity: 0.4,
-		borderColor: dataScale[3],
-		textColor: dataScale[3],
-	},
 	platte: {
 		backgroundColor: '#ffffff',
 		borderColor: '#cccccc',

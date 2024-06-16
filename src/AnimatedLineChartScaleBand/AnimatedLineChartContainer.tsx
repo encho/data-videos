@@ -10,7 +10,7 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {AnimatedCandlesticks} from './components/AnimatedCandlesticks';
+// import {AnimatedCandlesticks} from './components/AnimatedCandlesticks';
 import {Position} from './components/Position';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';

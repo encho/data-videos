@@ -15,7 +15,9 @@ import {
 import {getYAxisSpec} from '../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {YAxis_Transition} from '../acetti-ts-axis/YAxis_Transition';
 import {XAxis_Transition} from '../acetti-ts-axis/XAxis_Transition';
-import {TTheme} from '../AnimatedLineChartScaleBand/theme';
+// TODO deprecate TTheme
+// import {TTheme} from '../AnimatedLineChartScaleBand/theme';
+import {ThemeType} from '../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
@@ -64,7 +66,7 @@ export const BasicLineChart: React.FC<{
 		yAxis: TGridLayoutArea;
 	};
 	yDomainType: TYDomainType;
-	theme: TTheme;
+	theme: ThemeType;
 	yScale: ScaleLinear<number, number>;
 	periodScale: TPeriodsScale;
 	fromPeriodScale: TPeriodsScale;

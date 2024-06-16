@@ -1,22 +1,15 @@
-// import {ScaleLinear} from 'd3-scale';
-// import {line} from 'd3-shape';
-
 import {ScaleLinear} from 'd3-scale';
 import {Easing, interpolate, useCurrentFrame} from 'remotion';
 
 import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-viz';
-// import {getYDomain} from '../AnimatedLineChartScaleBand/utils/timeSeries/timeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {ThemeType} from '../acetti-themes/themeTypes';
 
-export type TTheme_HighlightArea = {
-	backgroundColor: string;
-	backgroundOpacity: number;
-	borderColor: string;
-	textColor: string;
-};
+type TTheme_HighlightPeriodsArea =
+	ThemeType['timeseriesComponents']['HighlightPeriodsArea'];
 
-const defaultHightlightAreaTheme = {
+const defaultHightlightAreaTheme: TTheme_HighlightPeriodsArea = {
 	backgroundColor: 'red',
 	backgroundOpacity: 0.5,
 	borderColor: 'yellow',
@@ -33,7 +26,7 @@ export const HighlightPeriods3: React.FC<{
 	fadeInDurationInFrames: number;
 	yScaleCurrent: ScaleLinear<number, number>;
 	label: string;
-	theme?: TTheme_HighlightArea;
+	theme?: TTheme_HighlightPeriodsArea;
 }> = ({
 	theme = defaultHightlightAreaTheme,
 	label,
@@ -42,14 +35,11 @@ export const HighlightPeriods3: React.FC<{
 	area,
 	periodsScale,
 	domainIndices,
-	// currentFrame,
-	// durationInFrames,
 	fadeInDurationInFrames,
 }) => {
 	const EASING_FUNCTION = Easing.bezier(0.33, 1, 0.68, 1);
 
 	const frame = useCurrentFrame();
-	// const {durationInFrames} = useVideoConfig();
 
 	const x1 = periodsScale.getBandFromIndex(domainIndices[0]).x1;
 	const x2 = periodsScale.getBandFromIndex(domainIndices[1]).x2;

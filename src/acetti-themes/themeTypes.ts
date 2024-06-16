@@ -53,12 +53,12 @@ export const zodThemeType = z.object({
 		areaColor: zColor(),
 		areaOpacity: z.number(),
 	}),
-	highlightArea: z.object({
-		backgroundColor: zColor(),
-		backgroundOpacity: z.number(),
-		borderColor: zColor(),
-		textColor: zColor(),
-	}),
+	// highlightArea: z.object({
+	// 	backgroundColor: zColor(),
+	// 	backgroundOpacity: z.number(),
+	// 	borderColor: zColor(),
+	// 	textColor: zColor(),
+	// }),
 	platte: z.object({
 		backgroundColor: zColor(),
 		borderColor: zColor(),

@@ -115,13 +115,6 @@ export const nerdyTheme: ThemeType = {
 		// areaColor: '#ff0000',
 		areaOpacity: 0.2,
 	},
-	// TODO deprecate
-	highlightArea: {
-		backgroundColor: dataScale[3],
-		backgroundOpacity: 0.4,
-		borderColor: dataScale[3],
-		textColor: dataScale[3],
-	},
 	platte: {
 		backgroundColor: platteBackground,
 		borderColor: platteBorder,
