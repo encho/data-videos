@@ -20,7 +20,7 @@ import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../acetti-ts-base/Position';
 
 export const colorPaletteSchema = z.object({
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI']),
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
 const colorBrewerKeys = Object.keys(chroma.brewer);
@@ -76,7 +76,7 @@ export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 				</TransitionSeries.Sequence>
 			</TransitionSeries>
 
-			<LorenzoBertoliniLogo />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</AbsoluteFill>
 	);
 };

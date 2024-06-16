@@ -1,6 +1,4 @@
-import {Sequence, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {ReactNode, useMemo} from 'react';
-import {SlideIn} from '../SlideIn';
+import {useMemo} from 'react';
 
 import availableFontSpecs, {FontFamiliesUnionType} from './fontSpecs';
 import {useFontsLoader} from './useFontsLoader';
