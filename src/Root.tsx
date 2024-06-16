@@ -20,11 +20,6 @@ import {
 } from './NerdyPriceChart/NerdyPriceChart';
 
 import {
-	NerdyPriceChart2,
-	nerdyPriceChartSchema2,
-} from './NerdyPriceChart2/NerdyPriceChart2';
-
-import {
 	NerdyPriceChartSingle,
 	nerdyPriceChartSingleSchema,
 } from './NerdyPriceChartSingle/NerdyPriceChartSingle';
@@ -132,85 +127,6 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={colorPaletteSchema}
 				defaultProps={{themeEnum: 'NERDY' as const}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="NerdyPriceChart2"
-				component={NerdyPriceChart2}
-				durationInFrames={600}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={90}
-				{...squareVideo}
-				schema={nerdyPriceChartSchema2}
-				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '1Y' as const,
-					showZero: true,
-					nerdyFinanceEnv: 'PROD' as const,
-					styling: {yAxisAreaWidth: 150},
-					theme: {
-						global: {backgroundColor: '#ffffff'},
-						yAxis: {
-							fontSize: 15,
-							strokeWidth: 4,
-							color: '#ff6b6b',
-							tickColor: '#ff6b6b',
-						},
-						xAxis: {
-							fontSize: 16,
-							strokeWidth: 2,
-							color: '#ff6b6b',
-							tickColor: '#ff6b6b',
-						},
-						candlesticks: {
-							up: {
-								bodyColor: '#222',
-								bodyStrokeColor: '#555',
-								lineColor: '#333',
-								strokeWidth: 2,
-							},
-							down: {
-								bodyColor: '#222',
-								bodyStrokeColor: '#111',
-								lineColor: '#444',
-								strokeWidth: 2,
-							},
-						},
-						dataColors: [
-							{
-								M3: '#333',
-								M2: '#555',
-								M1: '#ff0000',
-								BASE: '#f05122',
-								P1: '#666',
-								P2: '#566',
-								P3: '#444',
-							},
-							{
-								M3: '#333',
-								M2: '#555',
-								M1: 'cyan',
-								BASE: '#3f62ca',
-								P1: 'magenta',
-								P2: '#566',
-								P3: '#444',
-							},
-						],
-						minimap: {
-							lineColor: '#ff7575',
-							areaColor: '#ff0000',
-							areaOpacity: 0.2,
-						},
-						highlightArea: {
-							backgroundColor: '#c2bb00',
-							backgroundOpacity: 0.2,
-							borderColor: '#99b800',
-							textColor: '#ff7214',
-						},
-					},
-				}}
 			/>
 
 			<Composition
