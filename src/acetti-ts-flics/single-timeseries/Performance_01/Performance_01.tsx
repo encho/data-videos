@@ -81,11 +81,13 @@ export const Performance_01: React.FC<TAnimatedLineChart2Props> = ({
 						// easingFunction: Easing.bounce,
 						// easingFunction: Easing.linear, // TODO why linear is broken??
 						numberOfSlices: 20,
+						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: transitionDurationInFrames_1_2,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						numberOfSlices: 40,
+						transitionType: 'DEFAULT',
 					},
 				]}
 			>

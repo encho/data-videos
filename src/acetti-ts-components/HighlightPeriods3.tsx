@@ -60,7 +60,8 @@ export const HighlightPeriods3: React.FC<{
 		domainIndices
 	);
 
-	const paddedExtent = applyPaddingToExtent(extent, 0.2);
+	const paddedExtent = applyPaddingToExtent(extent, 0);
+	// const paddedExtent = applyPaddingToExtent(extent, 0.2);
 
 	const y1 = yScaleCurrent(paddedExtent[1]);
 	const y2 = yScaleCurrent(paddedExtent[0]);

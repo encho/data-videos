@@ -5,6 +5,7 @@ import invariant from 'tiny-invariant';
 import {TGridLayoutArea} from '../acetti-viz';
 import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
 import {
+	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
 	periodsScale,
 	TPeriodsScale,
 } from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
@@ -58,6 +59,7 @@ type TTransitionSpec = {
 	durationInFrames: number;
 	easingFunction: (t: number) => number;
 	numberOfSlices: number;
+	transitionType: 'DEFAULT' | 'ZOOM';
 };
 
 export const LineChartAnimationContainer: React.FC<{
@@ -110,7 +112,6 @@ export const LineChartAnimationContainer: React.FC<{
 	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
 
 	// ******** current transition information *************************************************
-
 	const currentTransitionInfo = {
 		frameRange: currentFrameRange,
 		durationInFrames: currentTransition.durationInFrames,
@@ -264,21 +265,60 @@ export const LineChartAnimationContainer: React.FC<{
 	// 	visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
 	// });
 
-	const yDomain = getYDomain(
-		yDomainType,
-		timeSeries,
-		[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
+	const currentTransitionType = currentTransition.transitionType;
+
+	let yScale: ScaleLinear<number, number>;
+
+	if (currentTransitionType === 'DEFAULT') {
+		// TODO yDomainType is not addressed here!
+		const yDomain = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			timeSeries,
+			[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
+				number,
+				number
+			]
+		);
+
+		yScale = scaleLinear()
+			.domain(yDomain)
+			// TODO domain zero to be added via yDomainType
+			// .domain(yDomainZero)
+			.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+		// } else if (currentTransitionType === 'ZOOM') {
+	} else if (currentTransitionType === 'ZOOM') {
+		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			timeSeries,
+			fromViewSpec.visibleDomainIndices
+		);
+		const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			timeSeries,
+			toViewSpec.visibleDomainIndices
+		);
+
+		const animatedYDomain_0 = interpolate(
+			currentEasingPercentage,
+			[0, 1],
+			[yDomainFrom[0], yDomainTo[0]]
+		);
+		const animatedYDomain_1 = interpolate(
+			currentEasingPercentage,
+			[0, 1],
+			[yDomainFrom[1], yDomainTo[1]]
+		);
+
+		const zoomingCurrentYDomain = [animatedYDomain_0, animatedYDomain_1] as [
 			number,
 			number
-		],
-		currentPeriodsScale
-	);
+		];
 
-	const yScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(yDomain)
-		// TODO domain zero to be added via yDomainType
-		// .domain(yDomainZero)
-		.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+		yScale = scaleLinear()
+			.domain(zoomingCurrentYDomain)
+			// TODO domain zero to be added via yDomainType
+			// .domain(yDomainZero)
+			.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+	} else {
+		throw Error('Unknown transitionType');
+	}
 
 	return (
 		<Sequence from={0} durationInFrames={totalDuration} layout="none">
