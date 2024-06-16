@@ -1,6 +1,10 @@
 // import {Img} from 'remotion';
 import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
+// USAGE EXAMPLE:
+// ****************************************************************
+// <FooterLogo />
+
 export const FooterLogo: React.FC<{}> = (
 	{
 		// theme,

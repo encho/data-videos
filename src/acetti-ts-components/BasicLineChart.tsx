@@ -1,6 +1,6 @@
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {Position} from '../AnimatedLineChartScaleBand/components/Position';
+import {Position} from '../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';

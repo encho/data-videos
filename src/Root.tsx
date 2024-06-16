@@ -1,5 +1,4 @@
 import {Composition} from 'remotion';
-import {MyComposition, myCompSchema} from './Composition';
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
@@ -13,16 +12,6 @@ import {
 	SimpleLineChart,
 	simpleLineChartSchema,
 } from './SimpleLineChart/SimpleLineChart';
-
-import {
-	NerdyPriceChart,
-	nerdyPriceChartSchema,
-} from './NerdyPriceChart/NerdyPriceChart';
-
-import {
-	NerdyPriceChartSingle,
-	nerdyPriceChartSingleSchema,
-} from './NerdyPriceChartSingle/NerdyPriceChartSingle';
 
 import {
 	Performance_01_Example,
@@ -89,26 +78,6 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
-				id="NerdyPriceChartSingle"
-				component={NerdyPriceChartSingle}
-				durationInFrames={90 * 3.5}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={90}
-				{...squareVideo}
-				schema={nerdyPriceChartSingleSchema}
-				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '2Y' as const,
-					showZero: true,
-					nerdyFinanceEnv: 'PROD' as const,
-					styling: {yAxisAreaWidth: 1000},
-					themeEnum: 'LORENZOBERTOLINI' as const,
-				}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
 				id="ColorPalette"
 				component={ColorPalette}
 				durationInFrames={8000}
@@ -117,25 +86,6 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={colorPaletteSchema}
 				defaultProps={{themeEnum: 'NERDY' as const}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="NerdyPriceChart"
-				component={NerdyPriceChart}
-				durationInFrames={240}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={30}
-				{...squareVideo}
-				schema={nerdyPriceChartSchema}
-				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '1Y' as const,
-					showZero: true,
-					nerdyFinanceEnv: 'PROD' as const,
-					styling: {yAxisAreaWidth: 150},
-				}}
 			/>
 
 			<Composition
@@ -1181,20 +1131,6 @@ export const RemotionRoot: React.FC = () => {
 							apiData: json,
 						},
 					};
-				}}
-			/>
-			<Composition
-				id="MyComp"
-				component={MyComposition}
-				durationInFrames={240}
-				fps={30}
-				width={1280}
-				height={720}
-				schema={myCompSchema}
-				defaultProps={{
-					titleText: 'Welcome to Remotion with Tailwind CSS',
-					titleColor: '#000000',
-					logoColor: '#00bfff',
 				}}
 			/>
 		</>

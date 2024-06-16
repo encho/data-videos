@@ -1,6 +1,6 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {Position} from '../../components/Position';
+import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
@@ -12,8 +12,7 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from './components/axisSpecs';
-
-import {TTheme} from '../../theme';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -35,7 +34,7 @@ export const BasicLineChart: React.FC<{
 		yAxis: TGridLayoutArea;
 	};
 	yDomainType: TYDomainType;
-	theme: TTheme;
+	theme: ThemeType;
 	yScale: ScaleLinear<number, number>;
 	periodScale: TPeriodsScale;
 }> = ({

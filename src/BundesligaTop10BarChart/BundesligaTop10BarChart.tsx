@@ -101,7 +101,7 @@ export const BundesligaTop10BarChart: React.FC<
 	return (
 		<AbsoluteFill>
 			<HorizontalBarsStar {...horizontalBarsStarProps} />
-			<LorenzoBertoliniLogo />
+			<LorenzoBertoliniLogo color="#ffffff" />
 		</AbsoluteFill>
 	);
 };

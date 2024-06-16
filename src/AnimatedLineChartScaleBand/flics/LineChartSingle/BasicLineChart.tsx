@@ -1,6 +1,6 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {Position} from '../../components/Position';
+import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';

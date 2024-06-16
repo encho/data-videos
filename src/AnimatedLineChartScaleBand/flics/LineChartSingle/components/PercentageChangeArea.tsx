@@ -3,7 +3,7 @@ import {ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 
-import {Position} from '../../../components/Position';
+import {Position} from '../../../../acetti-ts-base/Position';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 
 import {ThemeType} from '../../../../acetti-themes/themeTypes';

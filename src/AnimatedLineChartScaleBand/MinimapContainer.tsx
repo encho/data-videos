@@ -8,14 +8,14 @@ import {
 import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {MinimapLine} from './components/MinimapLine';
+import {MinimapLine} from '../acetti-ts-components/archive/MinimapLine';
 import {DisplayGridLayout} from '../acetti-layout';
 import {useMinimapLayout} from './useMinimapLayout';
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {Position} from './components/Position';
+import {Position} from '../acetti-ts-base/Position';
 import {periodsScale} from '../acetti-ts-periodsScale/periodsScale';
-import {MinimapActiveArea} from './components/MinimapActiveArea';
+import {MinimapActiveArea} from '../acetti-ts-components/archive/MinimapActiveArea';
 // import {times} from 'lodash';
 // import {periodsScale} from './periodsScale';
 // import {AnimatedXAxis} from './components/AnimatedXAxis';

@@ -9,7 +9,7 @@ import {useEffect, useState} from 'react';
 
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {TitleSlide} from './TitleSlide';
-import {Position} from '../../AnimatedLineChartScaleBand/components/Position';
+import {Position} from '../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,

@@ -1,6 +1,6 @@
 import {TTheme_XAxis} from './components/AnimatedXAxis_MonthStarts';
 import {TTheme_YAxis} from './components/AnimatedYAxis';
-import {TTheme_Candlesticks} from './components/AnimatedCandlesticks';
+import {TTheme_Candlesticks} from '../acetti-ts-components/archive/AnimatedCandlesticks';
 import {TTheme_Minimap} from './MinimapContainer';
 import {TTheme_HighlightArea} from './components/HighlightPeriods2';
 

@@ -14,7 +14,7 @@ import {useRef, useEffect, useState} from 'react';
 // TODO
 // implement this design: https://polygon.io/blog/universal-snapshot
 // import {Watermark} from '../GenericTools/Watermark';
-import {FooterLogo} from './FooterLogo';
+import {FooterLogo} from '../acetti-ts-components/archive/FooterLogo';
 import {SlideIn} from '../SlideIn';
 import {SlideTitleSequence} from '../slides/SlideTitleSequence';
 import {LineChartBody} from './LineChartBody';
