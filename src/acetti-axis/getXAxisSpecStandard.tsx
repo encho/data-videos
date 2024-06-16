@@ -7,7 +7,7 @@ import {TAxisSpec} from './axisSpec';
 import {TGridLayoutArea} from '../acetti-layout';
 
 // TODO bring here
-import {formatDate} from '../AxisTransition/utils';
+import {formatDate} from './utils';
 
 export function getXAxisSpecStandard(
 	datesArray: Date[],

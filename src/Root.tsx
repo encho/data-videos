@@ -30,16 +30,6 @@ import {
 } from './AcettiFlics/Performance_01/Performance_01';
 
 import {
-	AxisTransition,
-	AxisTransitionSchema,
-} from './AxisTransition/AxisTransition';
-
-import {
-	AnimatedLineChartSchema as ScaleBandLineChartSchema,
-	AnimatedLineChart as ScaleBandLineChart,
-} from './AnimatedLineChartScaleBand/AnimatedLineChart';
-
-import {
 	highlightPeriods_01_example_schema,
 	HighlightPeriods_01_Example,
 } from './AcettiFlics/HighlightPeriods_01/HighlightPeriods_01';
@@ -127,41 +117,6 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={colorPaletteSchema}
 				defaultProps={{themeEnum: 'NERDY' as const}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="ScaleBandLineChart"
-				component={ScaleBandLineChart}
-				// durationInFrames={240}
-				durationInFrames={30 * 12}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={60}
-				{...squareVideo}
-				schema={ScaleBandLineChartSchema}
-				defaultProps={{
-					backgroundColor: '#000000',
-					textColor: '#e11969',
-					axisSpecType: 'STANDARD' as const,
-				}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="AxisTransition"
-				component={AxisTransition}
-				durationInFrames={240}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={30}
-				{...squareVideo}
-				schema={AxisTransitionSchema}
-				defaultProps={{
-					backgroundColor: '#1d1b1b',
-					textColor: '#92887c',
-					axisSpecType: 'STANDARD' as const,
-				}}
 			/>
 
 			<Composition

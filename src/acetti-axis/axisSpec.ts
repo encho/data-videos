@@ -1,6 +1,6 @@
 import {ScaleTime} from 'd3-scale';
 import invariant from 'tiny-invariant';
-import {findItemById} from '../AxisTransition/utils';
+import {findItemById} from './utils';
 
 type TTickSpecMapped = {
 	id: string;
