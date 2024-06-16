@@ -146,5 +146,11 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 			gradientColor: monoColor,
 			lineStrokeWidth: 1.5,
 		},
+		HighlightPeriodsArea: {
+			backgroundColor: dataScale[3],
+			backgroundOpacity: 0.4,
+			borderColor: dataScale[3],
+			textColor: dataScale[3],
+		},
 	},
 };

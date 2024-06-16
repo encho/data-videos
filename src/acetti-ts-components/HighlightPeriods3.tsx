@@ -2,7 +2,7 @@
 // import {line} from 'd3-shape';
 
 import {ScaleLinear} from 'd3-scale';
-import {Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {Easing, interpolate, useCurrentFrame} from 'remotion';
 
 import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-viz';

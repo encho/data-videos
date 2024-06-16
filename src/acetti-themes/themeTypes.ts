@@ -70,6 +70,12 @@ export const zodThemeType = z.object({
 			gradientColor: zColor(),
 			lineStrokeWidth: z.number(),
 		}),
+		HighlightPeriodsArea: z.object({
+			backgroundColor: zColor(),
+			backgroundOpacity: z.number(),
+			borderColor: zColor(),
+			textColor: zColor(),
+		}),
 	}),
 });
 

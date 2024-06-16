@@ -38,15 +38,36 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_HEIGHT,
 	});
 
-	const transitionDurationInFrames_0_1 = durationInFrames - 90 * 3 - 90 * 3;
-	const transitionDurationInFrames_1_2 = 90 * 3;
-	const transitionDurationInFrames_2_3 = 90 * 3;
+	const td_buildup = 90 * 4;
+	const td_periodsAreaEnter = 90 * 3;
+	const td_periodsAreaZoomIn = 90 * 1;
+	const td_periodsAreaZoomed = 90 * 2;
+	const td_periodsAreaZoomOut = 90 * 1;
+	const td_periodsAreaExit =
+		durationInFrames -
+		td_buildup -
+		td_periodsAreaEnter -
+		td_periodsAreaZoomIn -
+		td_periodsAreaZoomed -
+		td_periodsAreaZoomOut;
 
-	// TODO fix with [0,0] !!!!!!!!!
-	const visibleDomainIndices_0 = [0, 1] as [number, number];
-	const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
-	const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
-	const visibleDomainIndices_3 = [220, 420] as [number, number];
+	// const transitionDurationInFrames_0_1 = durationInFrames - 90 * 3 - 90 * 3;
+	// const transitionDurationInFrames_1_2 = 90 * 3;
+	// const transitionDurationInFrames_2_3 = 90 * 3;
+
+	// // TODO fix with [0,0] !!!!!!!!!
+	// const visibleDomainIndices_0 = [0, 1] as [number, number];
+	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
+	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
+	// const visibleDomainIndices_3 = [220, 420] as [number, number];
+
+	const view_start = [0, 1] as [number, number];
+	const view_buildup = [0, timeSeries.length] as [number, number];
+	const view_periodsAreaEnter = [0, timeSeries.length] as [number, number];
+	const view_periodsAreaZoomIn = [220, 420] as [number, number];
+	const view_periodsAreaZoomed = [220, 420] as [number, number];
+	const view_periodsAreaZoomOut = [0, timeSeries.length] as [number, number];
+	const view_periodsAreaExit = [0, timeSeries.length] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -66,38 +87,67 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 				viewSpecs={[
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: visibleDomainIndices_0,
+						visibleDomainIndices: view_start,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: visibleDomainIndices_1,
+						visibleDomainIndices: view_buildup,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: visibleDomainIndices_2,
+						visibleDomainIndices: view_periodsAreaEnter,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: visibleDomainIndices_3,
+						visibleDomainIndices: view_periodsAreaZoomIn,
+					},
+					{
+						area: chartLayout.areas.plot,
+						visibleDomainIndices: view_periodsAreaZoomed,
+					},
+					{
+						area: chartLayout.areas.plot,
+						visibleDomainIndices: view_periodsAreaZoomOut,
+					},
+					{
+						area: chartLayout.areas.plot,
+						visibleDomainIndices: view_periodsAreaExit,
 					},
 				]}
 				transitionSpecs={[
 					{
-						durationInFrames: transitionDurationInFrames_0_1,
+						durationInFrames: td_buildup,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						// easingFunction: Easing.bounce,
 						// easingFunction: Easing.linear, // TODO why linear is broken??
 						numberOfSlices: 20,
 						transitionType: 'DEFAULT',
 					},
 					{
-						durationInFrames: transitionDurationInFrames_1_2,
+						durationInFrames: td_periodsAreaEnter,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						numberOfSlices: 40,
 						transitionType: 'DEFAULT',
 					},
 					{
-						durationInFrames: transitionDurationInFrames_2_3,
+						durationInFrames: td_periodsAreaZoomIn,
+						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						numberOfSlices: 40,
+						transitionType: 'ZOOM',
+					},
+					{
+						durationInFrames: td_periodsAreaZoomed,
+						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						numberOfSlices: 40,
+						transitionType: 'ZOOM',
+					},
+					{
+						durationInFrames: td_periodsAreaZoomOut,
+						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						numberOfSlices: 40,
+						transitionType: 'ZOOM',
+					},
+					{
+						durationInFrames: td_periodsAreaExit,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						numberOfSlices: 40,
 						transitionType: 'ZOOM',
@@ -107,7 +157,7 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
 					return (
 						<div>
-							<Sequence from={transitionDurationInFrames_0_1}>
+							<Sequence from={td_buildup}>
 								<HighlightPeriods3
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
@@ -118,6 +168,7 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 									fadeInDurationInFrames={90}
 									yScaleCurrent={yScale}
 									label="Interesting Period"
+									theme={theme.timeseriesComponents.HighlightPeriodsArea}
 								/>
 							</Sequence>
 
@@ -137,21 +188,6 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 								//
 								currentSliceInfo={currentSliceInfo}
 							/>
-
-							{/* TODO 1 pass forward lineChartAnimationContext */}
-							{/* TODO 2 useLineChartAnimationContext inside! */}
-							{/* <Sequence from={transitionDurationInFrames_0_1}>
-								<PercentageChangeArea
-									firstValue={timeSeries[0].value}
-									lastValue={timeSeries[timeSeries.length - 1].value}
-									enterDurationInFrames={60}
-									periodsScale={periodsScale}
-									yScale={yScale}
-									easingPercentage={currentTransitionInfo.easingPercentage}
-									plotArea={chartLayout.areas.plot}
-									theme={theme.timeseriesComponents.percentageChangeArea}
-								/>
-							</Sequence> */}
 
 							{/* <AbsoluteFill>
 								<LineChartAnimationContextDebugger

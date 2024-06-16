@@ -115,6 +115,7 @@ export const nerdyTheme: ThemeType = {
 		// areaColor: '#ff0000',
 		areaOpacity: 0.2,
 	},
+	// TODO deprecate
 	highlightArea: {
 		backgroundColor: dataScale[3],
 		backgroundOpacity: 0.4,
@@ -132,5 +133,12 @@ export const nerdyTheme: ThemeType = {
 			gradientColor: '#f05122',
 			lineStrokeWidth: 0.8,
 		},
+		HighlightPeriodsArea: {
+			backgroundColor: dataScale[3],
+			backgroundOpacity: 0.4,
+			borderColor: dataScale[3],
+			textColor: dataScale[3],
+		},
+		// TODO: bring highlightArea here!! and rename to HighlightPeriodsArea
 	},
 };
