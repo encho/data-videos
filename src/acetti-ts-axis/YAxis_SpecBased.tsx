@@ -1,6 +1,6 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TYAxisSpec} from './utils/axisSpecs_yAxis';
 
 export type TTheme_YAxis = {

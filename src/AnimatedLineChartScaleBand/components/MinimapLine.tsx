@@ -1,8 +1,8 @@
 import {ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
 
-import {TPeriodsScale} from '../periodsScale/periodsScale';
-import {TGridLayoutArea} from '../../acetti-viz';
+import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
+import {TGridLayoutArea} from '../../acetti-layout';
 import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
 
 export const MinimapLine: React.FC<{

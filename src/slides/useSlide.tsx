@@ -1,4 +1,8 @@
-import {TGridLayoutAreaSpec, TGridRailSpec, useGridLayout} from '../acetti-viz';
+import {
+	TGridLayoutAreaSpec,
+	TGridRailSpec,
+	useGridLayout,
+} from '../acetti-layout';
 
 export function useSlide({width, height}: {width: number; height: number}) {
 	// TODO should be passed to a provider, s.t. we can use within all deeply nested children

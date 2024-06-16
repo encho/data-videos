@@ -2,7 +2,7 @@ import {
 	TGridLayoutAreaSpec,
 	TGridRailSpec,
 	useGridLayout,
-} from '../../../acetti-viz';
+} from '../../../acetti-layout';
 
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 50, name: 'space'},

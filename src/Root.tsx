@@ -49,10 +49,10 @@ import {
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
 
-import {
-	AnimatedLineChartSchema,
-	AnimatedLineChart,
-} from './AnimatedLineChart/AnimatedLineChart';
+// import {
+// 	AnimatedLineChartSchema,
+// 	AnimatedLineChart,
+// } from './AnimatedLineChartXXX/AnimatedLineChart';
 
 import {
 	AnimatedLineChartSchema as ScaleBandLineChartSchema,
@@ -276,24 +276,6 @@ export const RemotionRoot: React.FC = () => {
 				defaultProps={{
 					backgroundColor: '#000000',
 					textColor: '#e11969',
-					axisSpecType: 'STANDARD' as const,
-				}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="AnimatedLineChart"
-				component={AnimatedLineChart}
-				// durationInFrames={240}
-				durationInFrames={30 * 12}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={30}
-				{...squareVideo}
-				schema={AnimatedLineChartSchema}
-				defaultProps={{
-					backgroundColor: '#1d1b1b',
-					textColor: '#2de696',
 					axisSpecType: 'STANDARD' as const,
 				}}
 			/>

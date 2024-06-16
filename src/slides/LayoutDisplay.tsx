@@ -1,6 +1,6 @@
 import {AbsoluteFill} from 'remotion';
 
-import {DisplayGridLayout, TGridLayout} from '../acetti-viz';
+import {DisplayGridLayout, TGridLayout} from '../acetti-layout';
 import {BaselineGrid} from './BaselineGrid';
 
 // import type {Theme} from '../theme';

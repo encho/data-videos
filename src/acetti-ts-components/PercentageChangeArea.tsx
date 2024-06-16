@@ -1,10 +1,10 @@
 import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 
 import {Position} from '../AnimatedLineChartScaleBand/components/Position';
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 
 import {ThemeType} from '../acetti-themes/themeTypes';
 

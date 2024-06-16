@@ -1,4 +1,8 @@
-import {TGridLayoutAreaSpec, TGridRailSpec, useGridLayout} from '../acetti-viz';
+import {
+	TGridLayoutAreaSpec,
+	TGridRailSpec,
+	useGridLayout,
+} from '../acetti-layout';
 
 export function useFullBodySlide({
 	width,

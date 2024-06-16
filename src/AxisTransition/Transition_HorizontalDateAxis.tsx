@@ -1,6 +1,6 @@
 import {AbsoluteFill} from 'remotion';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {getXAxisSpec, TAxisSpecType} from '../acetti-axis/getXAxisSpec';
 
 import {Transition_HorizontalDateAxis_Line} from './Transition_HorizontalDateAxis_Line';

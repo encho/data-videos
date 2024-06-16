@@ -9,7 +9,7 @@ import {
 import {max, min} from 'd3-array';
 import {scaleLinear, scaleTime, ScaleTime, ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from './components/AnimatedLine';
 import {AnimatedXAxis} from './components/AnimatedXAxis';

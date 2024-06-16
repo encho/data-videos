@@ -9,12 +9,12 @@ import {max, min} from 'd3-array';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {MinimapLine} from './components/MinimapLine';
-import {DisplayGridLayout} from '../acetti-viz';
+import {DisplayGridLayout} from '../acetti-layout';
 import {useMinimapLayout} from './useMinimapLayout';
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
 import {Position} from './components/Position';
-import {periodsScale} from './periodsScale/periodsScale';
+import {periodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {MinimapActiveArea} from './components/MinimapActiveArea';
 // import {times} from 'lodash';
 // import {periodsScale} from './periodsScale';

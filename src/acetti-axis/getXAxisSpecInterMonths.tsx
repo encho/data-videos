@@ -4,7 +4,7 @@ import {scaleTime, ScaleTime} from 'd3-scale';
 
 import {TAxisSpec} from './axisSpec';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 
 // ************************************************************
 // TODO factor out somewhere to be used also by animated x axis!

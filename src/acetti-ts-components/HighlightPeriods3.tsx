@@ -1,9 +1,9 @@
 import {ScaleLinear} from 'd3-scale';
 import {Easing, interpolate, useCurrentFrame} from 'remotion';
 
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
-import {TGridLayoutArea} from '../acetti-viz';
-import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
+import {TGridLayoutArea} from '../acetti-layout';
+import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../acetti-ts-periodsScale/periodsScale';
 import {ThemeType} from '../acetti-themes/themeTypes';
 
 type TTheme_HighlightPeriodsArea =

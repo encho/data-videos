@@ -1,8 +1,8 @@
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 

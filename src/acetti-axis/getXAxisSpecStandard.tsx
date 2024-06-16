@@ -4,7 +4,7 @@ import {scaleTime, ScaleTime} from 'd3-scale';
 
 import {TAxisSpec} from './axisSpec';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 
 // TODO bring here
 import {formatDate} from '../AxisTransition/utils';

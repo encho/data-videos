@@ -1,5 +1,5 @@
-import {TGridLayoutArea} from '../../acetti-viz';
-import {TPeriodsScale} from '../periodsScale/periodsScale';
+import {TGridLayoutArea} from '../../acetti-layout';
+import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
 export type TTheme_XAxis = {
 	fontSize: number;

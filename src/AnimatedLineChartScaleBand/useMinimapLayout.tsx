@@ -1,4 +1,8 @@
-import {TGridLayoutAreaSpec, TGridRailSpec, useGridLayout} from '../acetti-viz';
+import {
+	TGridLayoutAreaSpec,
+	TGridRailSpec,
+	useGridLayout,
+} from '../acetti-layout';
 
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'fr', value: 1, name: 'plot'},

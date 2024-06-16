@@ -1,10 +1,10 @@
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {Position} from '../AnimatedLineChartScaleBand/components/Position';
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
-import {AnimatedLine} from '../AnimatedLineChartScaleBand/components/AnimatedLine';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
+import {AnimatedLine} from './AnimatedLine';
 import {AnimatedValueDot} from './AnimatedValueDot';
 import {
 	getIndicesAxisSpec,

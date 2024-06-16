@@ -13,7 +13,7 @@ import {
 	TGridLayoutAreaSpec,
 	TGridRailSpec,
 	useGridLayout,
-} from '../acetti-viz';
+} from '../acetti-layout';
 import generateBrownianMotionTimeSeries from './generateBrownianMotionTimeSeries';
 import {Transition_HorizontalDateAxis} from './Transition_HorizontalDateAxis';
 import {getFirstNItems, generateRange, getAdjacentPairs} from './utils';

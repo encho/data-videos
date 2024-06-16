@@ -1,4 +1,4 @@
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {getXAxisSpecStandard} from './getXAxisSpecStandard';
 import {getXAxisSpecInterMonths} from './getXAxisSpecInterMonths';
 

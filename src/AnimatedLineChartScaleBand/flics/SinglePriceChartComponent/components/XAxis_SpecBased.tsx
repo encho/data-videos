@@ -1,4 +1,4 @@
-import {TGridLayoutArea} from '../../../../acetti-viz';
+import {TGridLayoutArea} from '../../../../acetti-layout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
 import {TXAxisSpec} from './axisSpecs';

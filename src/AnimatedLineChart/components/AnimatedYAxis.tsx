@@ -1,6 +1,6 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../../acetti-viz';
+import {TGridLayoutArea} from '../../acetti-layout';
 import {getYAxisSpecFromScale} from '../../acetti-axis/getYAxisSpecFromScale';
 
 export const AnimatedYAxis: React.FC<{

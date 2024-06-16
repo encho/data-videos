@@ -12,12 +12,15 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 // import {AnimatedCandlesticks} from './components/AnimatedCandlesticks';
 import {Position} from './components/Position';
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from './utils/timeSeries/generateBrownianMotionTimeSeries';
-import {periodsScale, TPeriodsScale} from './periodsScale/periodsScale';
+import {
+	periodsScale,
+	TPeriodsScale,
+} from '../acetti-ts-periodsScale/periodsScale';
 import {AnimatedXAxis_MonthStarts} from './components/AnimatedXAxis_MonthStarts';
 import {AnimatedYAxis} from './components/AnimatedYAxis';
-import {AnimatedLine} from './components/AnimatedLine';
+import {AnimatedLine} from '../acetti-ts-components/AnimatedLine';
 import {AnimatedValueDot} from '../acetti-ts-components/AnimatedValueDot';
 import {AnimatedBars} from './components/AnimatedBars';
 import {getYDomain} from './utils/timeSeries/timeSeries';

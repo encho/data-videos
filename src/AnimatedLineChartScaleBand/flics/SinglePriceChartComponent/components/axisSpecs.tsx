@@ -1,4 +1,4 @@
-import {TPeriodsScale} from '../../../periodsScale/periodsScale';
+import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 
 type TTickSpec = {
 	id: string;

@@ -4,9 +4,9 @@ import {Easing, interpolate} from 'remotion';
 import {
 	getXYRightClamped,
 	getXYLeftClamped,
-} from '../AnimatedLineChartScaleBand/periodsScale/getXY';
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
-import {TGridLayoutArea} from '../acetti-viz';
+} from '../acetti-ts-periodsScale/getXY';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
+import {TGridLayoutArea} from '../acetti-layout';
 import {useGlobalVideoContext} from '../acetti-components/GlobalVideoContext';
 
 export const AnimatedValueDot: React.FC<{

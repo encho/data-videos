@@ -3,7 +3,7 @@ import {Sequence, useVideoConfig, Easing} from 'remotion';
 // TODO deprecate! check if other components need this!
 // import {TTheme, myTheme} from '../../theme';
 import {PercentageChangeArea} from './components/PercentageChangeArea';
-import {DisplayGridLayout} from '../../../acetti-viz';
+import {DisplayGridLayout} from '../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {BasicLineChart} from './BasicLineChart';

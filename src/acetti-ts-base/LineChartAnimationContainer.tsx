@@ -2,13 +2,13 @@ import {Sequence, useCurrentFrame, interpolate} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../AnimatedLineChartScaleBand/utils/timeSeries/generateBrownianMotionTimeSeries';
 import {
 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
 	periodsScale,
 	TPeriodsScale,
-} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+} from '../acetti-ts-periodsScale/periodsScale';
 import {getYDomain} from '../AnimatedLineChartScaleBand/utils/timeSeries/timeSeries';
 // import {TYAxis} from './components/axisSpecs_yAxis';
 

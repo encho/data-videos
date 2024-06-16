@@ -1,6 +1,6 @@
 import {ScaleTime} from 'd3-scale';
 
-import {TGridLayoutArea} from '../../acetti-viz';
+import {TGridLayoutArea} from '../../acetti-layout';
 import {getXAxisSpecFromScale} from '../../acetti-axis/getXAxisSpecFromScale';
 import {
 	getTickMappedValue,

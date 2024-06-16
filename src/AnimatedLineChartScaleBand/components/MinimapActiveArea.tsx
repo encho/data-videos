@@ -1,7 +1,7 @@
 import {ScaleLinear} from 'd3-scale';
 
-import {TPeriodsScale} from '../periodsScale/periodsScale';
-import {TGridLayoutArea} from '../../acetti-viz';
+import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
+import {TGridLayoutArea} from '../../acetti-layout';
 
 export const MinimapActiveArea: React.FC<{
 	areaColor: string;

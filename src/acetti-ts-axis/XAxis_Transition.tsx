@@ -1,12 +1,12 @@
 import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {TGridLayoutArea} from '../acetti-viz';
+import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {getEnterUpdateExits} from '../AnimatedLineChartScaleBand/utils/utils';
 
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
-import {TPeriodsScale} from '../AnimatedLineChartScaleBand/periodsScale/periodsScale';
+import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 
 type TTheme_XAxis = ThemeType['xAxis'];
