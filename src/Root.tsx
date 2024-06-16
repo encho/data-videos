@@ -25,19 +25,9 @@ import {
 } from './NerdyPriceChart2/NerdyPriceChart2';
 
 import {
-	NerdyPriceChart3,
-	nerdyPriceChartSchema3,
-} from './NerdyPriceChart3/NerdyPriceChart3';
-
-import {
 	NerdyPriceChartSingle,
 	nerdyPriceChartSingleSchema,
 } from './NerdyPriceChartSingle/NerdyPriceChartSingle';
-
-import {
-	SinglePriceChart,
-	singlePriceChartSchema,
-} from './SinglePriceChart/SinglePriceChart';
 
 import {
 	Performance_01_Example,
@@ -48,11 +38,6 @@ import {
 	AxisTransition,
 	AxisTransitionSchema,
 } from './AxisTransition/AxisTransition';
-
-// import {
-// 	AnimatedLineChartSchema,
-// 	AnimatedLineChart,
-// } from './AnimatedLineChartXXX/AnimatedLineChart';
 
 import {
 	AnimatedLineChartSchema as ScaleBandLineChartSchema,
@@ -95,6 +80,7 @@ export const RemotionRoot: React.FC = () => {
 					themeEnum: 'NERDY' as const,
 				}}
 			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
@@ -114,23 +100,7 @@ export const RemotionRoot: React.FC = () => {
 					themeEnum: 'NERDY' as const,
 				}}
 			/>
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="SinglePriceChart"
-				component={SinglePriceChart}
-				durationInFrames={90 * 3.5}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={90}
-				{...squareVideo}
-				schema={singlePriceChartSchema}
-				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '2Y' as const,
-					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'NERDY' as const,
-				}}
-			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
@@ -150,6 +120,7 @@ export const RemotionRoot: React.FC = () => {
 					themeEnum: 'LORENZOBERTOLINI' as const,
 				}}
 			/>
+
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
@@ -161,26 +132,6 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={colorPaletteSchema}
 				defaultProps={{themeEnum: 'NERDY' as const}}
-			/>
-
-			<Composition
-				// You can take the "id" to render a video:
-				// npx remotion render src/index.ts <id> out/video.mp4
-				id="NerdyPriceChart3"
-				component={NerdyPriceChart3}
-				durationInFrames={600}
-				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-				fps={90}
-				{...squareVideo}
-				schema={nerdyPriceChartSchema3}
-				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '1Y' as const,
-					showZero: true,
-					nerdyFinanceEnv: 'PROD' as const,
-					styling: {yAxisAreaWidth: 150},
-					themeEnum: 'LORENZOBERTOLINI' as const,
-				}}
 			/>
 
 			<Composition
