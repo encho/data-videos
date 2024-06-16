@@ -102,8 +102,8 @@ export const RemotionRoot: React.FC = () => {
 					title: 'BTC-USD Performance 4234223',
 					subtitle: 'Prices in USD',
 					showZero: true,
-					fontFamilyTitle: 'SourceSerifPro-Bold' as const,
-					fontFamilySubtitle: 'SourceSerifPro-Regular' as const,
+					fontFamilyTitle: 'SourceSerifPro-Light' as const,
+					fontFamilySubtitle: 'Inter-Regular' as const,
 					fontFamilyXTicklabels: 'Inter-Regular' as const,
 					fontFamilyYTicklabels: 'Inter-Regular' as const,
 					data: [

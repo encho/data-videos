@@ -1,22 +1,9 @@
 import {Sequence, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {ReactNode, useMemo} from 'react';
+import {ReactNode} from 'react';
 import {SlideIn} from '../SlideIn';
 
-import availableFontSpecs, {FontFamiliesUnionType} from '../fontSpecs';
-import {useFontsLoader} from '../useFontsLoader';
-
-function uniqueStrings(inputArray: string[]): string[] {
-	// Create a Set to store unique strings
-	const uniqueSet = new Set<string>();
-
-	// Add the strings from the input array to the Set
-	inputArray.forEach((str) => uniqueSet.add(str));
-
-	// Convert the Set back to an array
-	const uniqueArray = Array.from(uniqueSet);
-
-	return uniqueArray;
-}
+import {FontFamiliesUnionType} from '../acetti-typography/fontSpecs';
+import {useTypographyLoader} from '../acetti-typography/useTypographyLoader';
 
 export function SlideTitleSequence({
 	title,
@@ -37,14 +24,8 @@ export function SlideTitleSequence({
 		subTitleFontSize: number;
 	};
 }) {
-	// load fonts
-	const fontSpecs = useMemo(() => {
-		const fontIds = uniqueStrings([fontFamilyTitle, fontFamilySubtitle]);
-		// @ts-ignore
-		const specs = fontIds.map((it) => availableFontSpecs[it]);
-		return specs;
-	}, [fontFamilyTitle, fontFamilySubtitle]);
-	useFontsLoader(fontSpecs);
+	// TODO the typography should be loaded at the top global level + TypographyContext
+	useTypographyLoader([fontFamilyTitle, fontFamilySubtitle]);
 
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();

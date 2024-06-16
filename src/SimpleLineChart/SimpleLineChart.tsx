@@ -18,7 +18,7 @@ import {FooterLogo} from '../acetti-ts-components/archive/FooterLogo';
 import {SlideIn} from '../SlideIn';
 import {SlideTitleSequence} from '../slides/SlideTitleSequence';
 import {LineChartBody} from './LineChartBody';
-import {fontFamilies} from '../fontSpecs';
+import {fontFamilies} from '../acetti-typography/fontSpecs';
 
 export const simpleLineChartSchema = z.object({
 	title: z.string(),

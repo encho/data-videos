@@ -6,7 +6,7 @@ import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
 import {getLabelMappedValue, getTickMappedValue} from '../acetti-axis/axisSpec';
 
-import {FontFamiliesUnionType} from '../fontSpecs';
+import {FontFamiliesUnionType} from '../acetti-typography/fontSpecs';
 import {
 	DisplayGridLayout,
 	TGridLayoutAreaSpec,
