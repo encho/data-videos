@@ -6,6 +6,14 @@ export const zodThemeType = z.object({
 		backgroundColor: zColor(),
 	}),
 	typography: z.object({
+		title: z.object({
+			fontFamily: z.string(),
+			color: zColor(),
+		}),
+		subTitle: z.object({
+			fontFamily: z.string(),
+			color: zColor(),
+		}),
 		titleColor: zColor(),
 		subTitleColor: zColor(),
 		textColor: zColor(),

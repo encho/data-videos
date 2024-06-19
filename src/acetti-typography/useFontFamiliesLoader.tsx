@@ -17,7 +17,9 @@ function uniqueStrings(inputArray: string[]): string[] {
 }
 
 // TODO create typography global context, s.t. typography info can be accessed from anywhere
-export const useTypographyLoader = (fontFamilies: FontFamiliesUnionType[]) => {
+export const useFontFamiliesLoader = (
+	fontFamilies: FontFamiliesUnionType[]
+) => {
 	// load fonts
 	const fontSpecs = useMemo(() => {
 		const fontIds = uniqueStrings(fontFamilies);

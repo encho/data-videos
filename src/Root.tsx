@@ -48,10 +48,10 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={highlightPeriods_01_example_schema}
 				defaultProps={{
-					ticker: 'BTC-USD' as const,
+					ticker: 'TESLA' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'LORENZOBERTOLINI' as const,
+					themeEnum: 'NERDY' as const,
 				}}
 			/>
 
@@ -68,8 +68,8 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={performance_01_example_schema}
 				defaultProps={{
-					ticker: 'BTC-USD' as const,
-					timePeriod: '2Y' as const,
+					ticker: 'AMZN' as const,
+					timePeriod: 'YTD' as const,
 					nerdyFinanceEnv: 'PROD' as const,
 					themeEnum: 'NERDY' as const,
 				}}

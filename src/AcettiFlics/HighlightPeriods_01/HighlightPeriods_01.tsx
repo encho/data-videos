@@ -8,7 +8,7 @@ import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
-import {TitleSlide} from './TitleSlide';
+import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
 import {Position} from '../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
@@ -21,6 +21,7 @@ import {zNerdyTickers} from './zNerdyTickers';
 import {ObliquePlatte} from './ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
+import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -51,6 +52,9 @@ export const HighlightPeriods_01_Example: React.FC<
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
+	// TODO generalize and factor out // bring into wrapper component?
+	useThemeFontsLoader(theme);
+
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
 		async function fetchAndSetData() {
@@ -77,10 +81,6 @@ export const HighlightPeriods_01_Example: React.FC<
 		return <AbsoluteFill />;
 	}
 
-	console.log({apiResult});
-
-	// const percentageString = (apiResult?.percentageChange * 100).toFixed(2) + '%';
-
 	const timeSeries = apiResult.data.map((it) => ({
 		value: it.value,
 		date: new Date(it.index),
@@ -89,21 +89,19 @@ export const HighlightPeriods_01_Example: React.FC<
 	const platteWidth = width * 0.9;
 	const platteHeight = platteWidth * 0.61;
 
-	console.log({apiResult});
-
 	return (
 		<GlobalVideoContextWrapper>
 			<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
 				<Position position={{left: 50, top: 50}}>
-					<TitleSlide
-						titleColor={theme.typography.titleColor}
-						subTitleColor={theme.typography.subTitleColor}
+					<TitleAndSubtitle
 						title={apiResult.tickerMetadata.name}
-						subTitle={apiResult.timePeriod}
+						titleColor={theme.typography.title.color}
+						titleFontFamily={theme.typography.title.fontFamily}
 						titleFontSize={60}
+						subTitle={apiResult.timePeriod}
+						subTitleColor={theme.typography.subTitle.color}
+						subTitleFontFamily={theme.typography.subTitle.fontFamily}
 						subTitleFontSize={40}
-						titleFontWeight={600}
-						subTitleFontWeight={400}
 					/>
 				</Position>
 				<AbsoluteFill>

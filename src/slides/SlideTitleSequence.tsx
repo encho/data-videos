@@ -3,7 +3,7 @@ import {ReactNode} from 'react';
 import {SlideIn} from '../SlideIn';
 
 import {FontFamiliesUnionType} from '../acetti-typography/fontSpecs';
-import {useTypographyLoader} from '../acetti-typography/useTypographyLoader';
+import {useFontFamiliesLoader} from '../acetti-typography/useFontFamiliesLoader';
 
 export function SlideTitleSequence({
 	title,
@@ -25,7 +25,7 @@ export function SlideTitleSequence({
 	};
 }) {
 	// TODO the typography should be loaded at the top global level + TypographyContext
-	useTypographyLoader([fontFamilyTitle, fontFamilySubtitle]);
+	useFontFamiliesLoader([fontFamilyTitle, fontFamilySubtitle]);
 
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();

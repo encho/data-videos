@@ -27,13 +27,14 @@ const dataScale = chroma
 export const lorenzobertolinibrightTheme: ThemeType = {
 	global: {backgroundColor},
 	typography: {
-		// TODO add more info e.g.
-		// title {
-		// 	fontFamily:
-		// 	fontWeight:
-		// 	color:
-		// }
-		// titleColor: '#222',
+		title: {
+			fontFamily: 'Inter-Bold',
+			color: '#999',
+		},
+		subTitle: {
+			fontFamily: 'Inter-Medium',
+			color: '#aaa',
+		},
 		titleColor: '#222222',
 		subTitleColor: '#888888',
 		textColor: '#ff0000',

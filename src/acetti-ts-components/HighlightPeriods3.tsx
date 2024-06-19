@@ -123,7 +123,7 @@ export const HighlightPeriods3: React.FC<{
 					fill={theme.textColor}
 					// fontFamily={fontFamilyXTicklabels}
 					// fontSize={styling.xTickValuesFontSize}
-					fontSize={24}
+					fontSize={36}
 					y={animatedTextYPosition}
 					x={x1}
 					opacity={animatedOpacityText}

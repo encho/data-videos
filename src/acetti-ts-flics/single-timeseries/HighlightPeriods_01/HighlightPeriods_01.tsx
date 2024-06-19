@@ -131,19 +131,19 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 					{
 						durationInFrames: td_periodsAreaZoomIn,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						numberOfSlices: 5,
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomed,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						numberOfSlices: 5,
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomOut,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						numberOfSlices: 20,
 						transitionType: 'ZOOM',
 					},
 					{

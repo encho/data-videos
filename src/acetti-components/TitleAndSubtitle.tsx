@@ -2,17 +2,23 @@ import {Sequence} from 'remotion';
 
 // import {Position} from '../Position';
 // import {Position} from '../AnimatedLineChartScaleBand/components/Position';
-import {SubtleSlideIn, SubtleSlideOut} from './SubtleSlideIn';
+import {
+	SubtleSlideIn,
+	SubtleSlideOut,
+} from '../AcettiFlics/HighlightPeriods_01/SubtleSlideIn';
 
-export const TitleSlide: React.FC<{
-	titleColor: string;
-	subTitleColor: string;
+export const TitleAndSubtitle: React.FC<{
 	title: string;
-	subTitle: string;
+	titleColor: string;
 	titleFontSize: number;
+	titleFontFamily: string;
+	subTitle: string;
+	subTitleColor: string;
 	subTitleFontSize: number;
-	titleFontWeight: number;
-	subTitleFontWeight: number;
+	subTitleFontFamily: string;
+	// titleFontWeight: number;
+	// subTitleFontWeight: number;
+	// TODO TFontFamilyEnum??
 }> = ({
 	titleColor,
 	subTitleColor,
@@ -20,8 +26,10 @@ export const TitleSlide: React.FC<{
 	subTitle,
 	titleFontSize,
 	subTitleFontSize,
-	titleFontWeight,
-	subTitleFontWeight,
+	// titleFontWeight,
+	// subTitleFontWeight,
+	titleFontFamily,
+	subTitleFontFamily,
 }) => {
 	return (
 		<div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
@@ -30,12 +38,13 @@ export const TitleSlide: React.FC<{
 					<SubtleSlideOut>
 						<div
 							style={{
+								fontFamily: titleFontFamily,
 								// fontFamily: 'Inter-Variable',
 								// fontVariationSettings: `"wght" ${600}`,
 								fontSize: titleFontSize,
 								lineHeight: 1.2,
 								color: titleColor,
-								fontWeight: titleFontWeight,
+								// fontWeight: titleFontWeight,
 								// letterSpacing: '-0.025em',
 							}}
 						>
@@ -50,13 +59,14 @@ export const TitleSlide: React.FC<{
 						<div
 							style={{
 								maxWidth: 1100,
+								fontFamily: subTitleFontFamily,
 								// fontFamily: 'Inter-Variable',
 								// fontVariationSettings: `"wght" ${400}`,
 								fontSize: subTitleFontSize,
 								color: subTitleColor,
 								lineHeight: 1.1,
 								// fontWeight: 400,
-								fontWeight: subTitleFontWeight,
+								// fontWeight: subTitleFontWeight,
 								// fontWeight: 600,
 								// letterSpacing: '-0.025em',
 							}}

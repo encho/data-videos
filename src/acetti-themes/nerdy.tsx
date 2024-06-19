@@ -22,6 +22,15 @@ const dataScale = chroma
 export const nerdyTheme: ThemeType = {
 	global: {backgroundColor},
 	typography: {
+		title: {
+			fontFamily: 'Inter-Bold',
+			// fontFamily: 'SourceSerifPro-Light',
+			color: '#ffffff',
+		},
+		subTitle: {
+			fontFamily: 'Inter-Medium',
+			color: '#ffffff',
+		},
 		titleColor: '#ffffff',
 		subTitleColor: '#888',
 		textColor: '#ffffff',
