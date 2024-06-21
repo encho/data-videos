@@ -2,6 +2,7 @@ import {Sequence, useVideoConfig, Easing} from 'remotion';
 
 // import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
 import {HighlightPeriods3} from '../../../acetti-ts-components/HighlightPeriods3';
+import {HighlightPeriodsMulti} from '../../../acetti-ts-components/HighlightPeriodsMulti';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
@@ -10,6 +11,8 @@ import {
 	LineChartAnimationContainer,
 	TLineChartAnimationContext,
 } from '../../../acetti-ts-base/LineChartAnimationContainer';
+import {MultiBasicLineChart} from './MultiBasicLineChart';
+import {MultiLineChartAnimationContainer} from '../../../acetti-ts-base/MultiLineChartAnimationContainer';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -18,6 +21,7 @@ type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
 	timeSeries: {value: number; date: Date}[];
+	timeSeries2: {value: number; date: Date}[];
 	theme: ThemeType;
 };
 
@@ -26,6 +30,7 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 	width,
 	height,
 	timeSeries,
+	timeSeries2,
 	theme,
 }) => {
 	const {durationInFrames} = useVideoConfig();
@@ -75,16 +80,17 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 				<DisplayGridLayout
 					stroke={'magenta'}
 					fill="transparent"
-					// hide={true}
-					hide={false}
+					hide={true}
+					// hide={false}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
 				/>
 			</div>
 
-			<LineChartAnimationContainer
+			<MultiLineChartAnimationContainer
 				timeSeries={timeSeries}
+				timeSeries2={timeSeries2}
 				viewSpecs={[
 					{
 						area: chartLayout.areas.plot,
@@ -159,8 +165,9 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 					return (
 						<div>
 							<Sequence from={td_buildup}>
-								<HighlightPeriods3
+								<HighlightPeriodsMulti
 									timeSeries={timeSeries}
+									timeSeries2={timeSeries2}
 									area={chartLayout.areas.plot}
 									periodsScale={periodsScale}
 									domainIndices={[220, 420] as [number, number]}
@@ -173,8 +180,10 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 								/>
 							</Sequence>
 
-							<BasicLineChart
+							{/* <BasicLineChart */}
+							<MultiBasicLineChart
 								timeSeries={timeSeries}
+								timeSeries2={timeSeries2}
 								layoutAreas={{
 									plot: chartLayout.areas.plot,
 									xAxis: chartLayout.areas.xAxis,
@@ -202,7 +211,7 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 						</div>
 					);
 				}}
-			</LineChartAnimationContainer>
+			</MultiLineChartAnimationContainer>
 		</div>
 	);
 };

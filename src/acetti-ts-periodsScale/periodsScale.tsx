@@ -1,4 +1,5 @@
 import {extent} from 'd3-array';
+import {merge} from 'lodash';
 
 type TPeriodScaleBand = {
 	index: number;
@@ -262,6 +263,26 @@ function getDifferenceInDays(date1: Date, date2: Date): number {
 // const difference = getDifferenceInDays(date1, date2);
 // console.log(difference); // Output: 23
 
+const mergeExtents = (extents: [number, number][]) => {
+	const min = Math.min(...extents.map((it) => it[0]));
+	const max = Math.max(...extents.map((it) => it[1]));
+	return [min, max] as [number, number];
+};
+
+export const getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
+	timeSeriesArray: {value: number; date: Date}[][],
+	visibleDomainIndices: [number, number]
+) => {
+	const tsExtents = timeSeriesArray.map((ts) => {
+		return getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			ts,
+			visibleDomainIndices
+		);
+	});
+
+	return mergeExtents(tsExtents);
+};
+
 export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 	timeSeries: {value: number; date: Date}[],
 	visibleDomainIndices: [number, number]
@@ -294,12 +315,6 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 		lowerSliceIndex,
 		upperSliceIndex
 	);
-
-	// console.log({
-	// 	fullyVisibleTimeSeriesPiece,
-	// 	lowerSliceIndex,
-	// 	upperSliceIndex,
-	// });
 
 	const timeSeriesExtent = extent(
 		fullyVisibleTimeSeriesPiece,

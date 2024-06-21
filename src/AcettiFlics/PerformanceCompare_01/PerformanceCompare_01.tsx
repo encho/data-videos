@@ -116,6 +116,11 @@ export const PerformanceCompare_01_Example: React.FC<
 								width={platteWidth}
 								height={platteHeight}
 								timeSeries={timeSeries}
+								// TODO temporary solution until we fetch the right data from nerdy
+								timeSeries2={timeSeries.map((it) => ({
+									...it,
+									value: it.value * 1.05,
+								}))}
 								theme={theme}
 							/>
 						</ObliquePlatte>
