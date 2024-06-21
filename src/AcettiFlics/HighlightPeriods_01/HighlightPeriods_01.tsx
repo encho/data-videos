@@ -13,12 +13,12 @@ import {Position} from '../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
-} from './fetchNerdyFinancePriceChartData';
+} from '../../acetti-http/fetchNerdyFinancePriceChartData';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
-import {zNerdyTickers} from './zNerdyTickers';
-import {ObliquePlatte} from './ObliquePlatte';
+import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
+import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
 import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';

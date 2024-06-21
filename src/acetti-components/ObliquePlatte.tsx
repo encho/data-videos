@@ -1,4 +1,4 @@
-import {ThemeType} from '../../acetti-themes/themeTypes';
+import {ThemeType} from '../acetti-themes/themeTypes';
 
 type Theme_Platte = ThemeType['platte'];
 

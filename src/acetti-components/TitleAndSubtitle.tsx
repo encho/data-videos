@@ -2,10 +2,7 @@ import {Sequence} from 'remotion';
 
 // import {Position} from '../Position';
 // import {Position} from '../AnimatedLineChartScaleBand/components/Position';
-import {
-	SubtleSlideIn,
-	SubtleSlideOut,
-} from '../AcettiFlics/HighlightPeriods_01/SubtleSlideIn';
+import {SubtleSlideIn, SubtleSlideOut} from './SubtleSlideIn';
 
 export const TitleAndSubtitle: React.FC<{
 	title: string;

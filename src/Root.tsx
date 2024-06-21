@@ -51,7 +51,7 @@ export const RemotionRoot: React.FC = () => {
 					ticker: 'TESLA' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'NERDY' as const,
+					themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 				}}
 			/>
 
