@@ -23,6 +23,11 @@ import {
 	HighlightPeriods_01_Example,
 } from './AcettiFlics/HighlightPeriods_01/HighlightPeriods_01';
 
+import {
+	performanceCompare_01_example_schema,
+	PerformanceCompare_01_Example,
+} from './AcettiFlics/PerformanceCompare_01/PerformanceCompare_01';
+
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
 
 import './tailwind.css';
@@ -39,19 +44,20 @@ export const RemotionRoot: React.FC = () => {
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="acetti-PerformanceCompare-01"
-				component={HighlightPeriods_01_Example}
+				component={PerformanceCompare_01_Example}
 				// durationInFrames={90 * 3.5}
 				// durationInFrames={90 * 30}
 				durationInFrames={90 * 15}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
-				schema={highlightPeriods_01_example_schema}
+				schema={performanceCompare_01_example_schema}
 				defaultProps={{
-					ticker: 'TESLA' as const,
+					ticker: 'XAU-USD' as const,
+					ticker2: 'AAPL' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+					themeEnum: 'LORENZOBERTOLINI' as const,
 				}}
 			/>
 
