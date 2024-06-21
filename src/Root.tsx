@@ -38,6 +38,26 @@ export const RemotionRoot: React.FC = () => {
 			<Composition
 				// You can take the "id" to render a video:
 				// npx remotion render src/index.ts <id> out/video.mp4
+				id="acetti-PerformanceCompare-01"
+				component={HighlightPeriods_01_Example}
+				// durationInFrames={90 * 3.5}
+				// durationInFrames={90 * 30}
+				durationInFrames={90 * 15}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={highlightPeriods_01_example_schema}
+				defaultProps={{
+					ticker: 'TESLA' as const,
+					timePeriod: '2Y' as const,
+					nerdyFinanceEnv: 'PROD' as const,
+					themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+				}}
+			/>
+
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
 				id="acetti-HighlightPeriods-01"
 				component={HighlightPeriods_01_Example}
 				// durationInFrames={90 * 3.5}
