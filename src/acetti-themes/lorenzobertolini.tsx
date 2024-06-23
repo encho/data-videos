@@ -15,13 +15,14 @@ const backgroundColor = chroma(monoColor).hex();
 
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
-// const dataScale = chroma.scale(['#f05122', '#ffff00']).mode('lch').colors(6);
+// const dataScale = chroma.scale(['#f05122', '#0033ff']).mode('lch').colors(6);
 // const dataScale = chroma.scale(['lightgreen', 'magenta']).mode('lab').colors(6);
 // const dataScale = chroma.scale(['cyan', 'magenta']).mode('lab').colors(6);
-const dataScale = chroma
-	.scale([monoColor, '#888888', '#0099cc'])
-	.mode('lab')
-	.colors(6);
+// const dataScale = chroma
+// 	.scale([monoColor, '#888888', '#0099cc'])
+// 	.mode('lab')
+// 	.colors(6);
+const dataScale = chroma.scale('Set1').colors(6);
 
 export const lorenzobertoliniTheme: ThemeType = {
 	global: {backgroundColor},

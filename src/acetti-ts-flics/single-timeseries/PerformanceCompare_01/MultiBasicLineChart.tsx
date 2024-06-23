@@ -132,8 +132,8 @@ export const MultiBasicLineChart: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					// lineColor={theme.dataColors[0].BASE}
-					lineColor={'red'}
+					lineColor={theme.dataColors[1].BASE}
+					// lineColor={'red'}
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					area={layoutAreas.plot}
@@ -163,8 +163,8 @@ export const MultiBasicLineChart: React.FC<{
 					periodsScale={currentPeriodsScale}
 					yScale={yScale}
 					timeSeries={timeSeries2}
-					// dotColor={theme.dataColors[0].BASE}
-					dotColor={'red'}
+					dotColor={theme.dataColors[1].BASE}
+					// dotColor={'red'}
 					area={layoutAreas.plot}
 					radius={8}
 					// TODO theme
