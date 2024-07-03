@@ -53,8 +53,8 @@ export const RemotionRoot: React.FC = () => {
 				{...squareVideo}
 				schema={performanceCompare_01_example_schema}
 				defaultProps={{
-					ticker: 'XAU-USD' as const,
-					ticker2: 'AAPL' as const,
+					ticker: 'BTC-USD' as const,
+					ticker2: 'XAU-USD' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
 					themeEnum: 'LORENZOBERTOLINI' as const,

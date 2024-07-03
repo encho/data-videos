@@ -3,7 +3,10 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
+import {
+	TPeriodsScale,
+	getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
+} from '../../../acetti-ts-periodsScale/periodsScale';
 import {AnimatedLine} from '../../../acetti-ts-components/AnimatedLine';
 import {AnimatedValueDot} from '../../../acetti-ts-components/AnimatedValueDot';
 import {
@@ -94,13 +97,17 @@ export const MultiBasicLineChart: React.FC<{
 
 	const Y_RANGE_FIXED = yScale.range();
 
+	// TODO put into container
 	const yDomainFrom =
-		currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-			timeSeries
+		getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			[timeSeries, timeSeries2],
+			currentSliceInfo.periodsScaleFrom.visibleDomainIndices
 		);
-
 	const yDomainTo =
-		currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(timeSeries);
+		getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			[timeSeries, timeSeries2],
+			currentSliceInfo.periodsScaleTo.visibleDomainIndices
+		);
 
 	const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
 		.domain(yDomainFrom)

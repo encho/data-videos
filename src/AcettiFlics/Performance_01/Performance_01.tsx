@@ -13,7 +13,7 @@ import {Position} from '../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
-} from '../../acetti-http/fetchNerdyFinancePriceChartData';
+} from '../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';

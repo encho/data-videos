@@ -91,6 +91,9 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 			<MultiLineChartAnimationContainer
 				timeSeries={timeSeries}
 				timeSeries2={timeSeries2}
+				// TODO more generic, like so e.g.:
+				// multiSeriesObject={multiSeriesObject}
+				// relevantSeriesTickers={["AAPL", "QQQ"]}
 				viewSpecs={[
 					{
 						area: chartLayout.areas.plot,

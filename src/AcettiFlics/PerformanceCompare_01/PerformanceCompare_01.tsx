@@ -10,10 +10,6 @@ import {useEffect, useState} from 'react';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
 import {Position} from '../../acetti-ts-base/Position';
-import {
-	fetchNerdyFinancePriceChartData,
-	TNerdyFinancePriceChartDataResult,
-} from '../../acetti-http/fetchNerdyFinancePriceChartData';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
@@ -22,6 +18,11 @@ import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
 import {PerformanceCompare_01} from '../../acetti-ts-flics/single-timeseries/PerformanceCompare_01/PerformanceCompare_01';
+
+import {
+	fetchNerdyFinancePerformanceCompareData,
+	TNerdyFinancePerformanceCompareChartDataResult,
+} from '../../acetti-http/nerdy-finance/fetchPerformanceCompareData';
 
 export const performanceCompare_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -33,7 +34,7 @@ export const performanceCompare_01_example_schema = z.object({
 
 export const PerformanceCompare_01_Example: React.FC<
 	z.infer<typeof performanceCompare_01_example_schema>
-> = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
+> = ({ticker, ticker2, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {
 		// height,
@@ -44,7 +45,7 @@ export const PerformanceCompare_01_Example: React.FC<
 	const endDate = today.toISOString();
 
 	const [apiResult, setApiResult] =
-		useState<null | TNerdyFinancePriceChartDataResult>(null);
+		useState<null | TNerdyFinancePerformanceCompareChartDataResult>(null);
 
 	const theme =
 		themeEnum === 'NERDY'
@@ -60,9 +61,10 @@ export const PerformanceCompare_01_Example: React.FC<
 		const handle = delayRender('FETCH_API_DATA');
 		async function fetchAndSetData() {
 			try {
-				const response = await fetchNerdyFinancePriceChartData(
+				const response = await fetchNerdyFinancePerformanceCompareData(
 					{
 						ticker,
+						ticker2,
 						endDate,
 						timePeriod,
 					},
@@ -82,10 +84,26 @@ export const PerformanceCompare_01_Example: React.FC<
 		return <AbsoluteFill />;
 	}
 
-	const timeSeries = apiResult.data.map((it) => ({
-		value: it.value,
-		date: new Date(it.index),
-	}));
+	const multiSeries = apiResult.data;
+
+	const dates = multiSeries.index;
+	const series1 = multiSeries.series[0];
+	const series2 = multiSeries.series[1];
+
+	const timeSeries: {date: Date; value: number}[] = [];
+	const timeSeries2: {date: Date; value: number}[] = [];
+
+	dates.forEach((date, i) => {
+		timeSeries.push({value: series1[i], date});
+		timeSeries2.push({value: series2[i], date});
+	});
+
+	console.log({timeSeries});
+
+	// const timeSeries = multiSeries.map((it) => ({
+	// 	value: it.value,
+	// 	date: new Date(it.index),
+	// }));
 
 	const platteWidth = width * 0.9;
 	const platteHeight = platteWidth * 0.61;
@@ -95,11 +113,13 @@ export const PerformanceCompare_01_Example: React.FC<
 			<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
 				<Position position={{left: 50, top: 50}}>
 					<TitleAndSubtitle
-						title={apiResult.tickerMetadata.name}
+						// title={apiResult.tickerMetadata.name}
+						title={'Title'}
 						titleColor={theme.typography.title.color}
 						titleFontFamily={theme.typography.title.fontFamily}
 						titleFontSize={60}
-						subTitle={apiResult.timePeriod}
+						// subTitle={apiResult.timePeriod}
+						subTitle={'Subtitle'}
 						subTitleColor={theme.typography.subTitle.color}
 						subTitleFontFamily={theme.typography.subTitle.fontFamily}
 						subTitleFontSize={40}
@@ -116,11 +136,12 @@ export const PerformanceCompare_01_Example: React.FC<
 								width={platteWidth}
 								height={platteHeight}
 								timeSeries={timeSeries}
+								timeSeries2={timeSeries2}
 								// TODO temporary solution until we fetch the right data from nerdy
-								timeSeries2={timeSeries.map((it) => ({
-									...it,
-									value: it.value * 1.05,
-								}))}
+								// timeSeries2={timeSeries.map((it) => ({
+								// 	...it,
+								// 	value: it.value * 1.05,
+								// }))}
 								theme={theme}
 							/>
 						</ObliquePlatte>

@@ -1,5 +1,4 @@
 import {extent} from 'd3-array';
-import {merge} from 'lodash';
 
 type TPeriodScaleBand = {
 	index: number;
