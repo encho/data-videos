@@ -86,6 +86,13 @@ const RIGHT_BAR_VALUE = 1000;
 // const LEFT_BAR_VALUE = 1000;
 // const RIGHT_BAR_VALUE = 1000;
 
+const formatToOneDecimalPlaceGerman = (num: number): string => {
+	return num.toLocaleString('de-DE', {
+		minimumFractionDigits: 1,
+		maximumFractionDigits: 1,
+	});
+};
+
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
 	startValue,
@@ -131,8 +138,15 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		.domain(BARS_VALUES_VISIBLE_DOMAIN)
 		.range([0, chartLayout.areas.firstBar.height]);
 
+	// const currentLeftBarHeight = getCurrentLeftBarHeight(
+	// 	getLeftBarCurrentDomain(percentageAnimation)
+	// );
+
+	const currentLeftBarDomainValue =
+		getLeftBarCurrentDomain(percentageAnimation);
+
 	const currentLeftBarHeight = getCurrentLeftBarHeight(
-		getLeftBarCurrentDomain(percentageAnimation)
+		currentLeftBarDomainValue
 	);
 
 	const finalLeftBarHeight = getCurrentLeftBarHeight(
@@ -147,8 +161,11 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		.domain(BARS_VALUES_VISIBLE_DOMAIN)
 		.range([0, chartLayout.areas.firstBar.height]);
 
+	const currentRightBarDomainValue =
+		getRightBarCurrentDomain(percentageAnimation);
+
 	const currentRightBarHeight = getCurrentRightBarHeight(
-		getRightBarCurrentDomain(percentageAnimation)
+		currentRightBarDomainValue
 	);
 
 	const finalRightBarHeight = getCurrentRightBarHeight(
@@ -296,12 +313,14 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							<TwoChangeBarsComponent
 								width={chartLayout.areas.firstBar.width}
 								height={chartLayout.areas.firstBar.height}
+								currentBarValue={currentLeftBarDomainValue}
 								currentBarHeight={currentLeftBarHeight}
 								// currentBarHeight={finalLeftBarHeight}
 								valueLabelFontSize={VALUE_TEXT_SIZE}
 								valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 								barColor={LEFT_BAR_COLOR}
 								valueLabelColor={LEFT_VALUE_COLOR}
+								formatter={formatToOneDecimalPlaceGerman}
 							/>
 						</div>
 						<div
@@ -338,11 +357,13 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 								width={chartLayout.areas.secondBar.width}
 								height={chartLayout.areas.secondBar.height}
 								currentBarHeight={currentRightBarHeight}
+								currentBarValue={currentRightBarDomainValue}
 								// currentBarHeight={finalRightBarHeight}
 								valueLabelFontSize={VALUE_TEXT_SIZE}
 								valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 								barColor={RIGHT_BAR_COLOR}
 								valueLabelColor={RIGHT_VALUE_COLOR}
+								formatter={formatToOneDecimalPlaceGerman}
 							/>
 						</div>
 

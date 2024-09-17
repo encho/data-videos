@@ -3,19 +3,23 @@
 export const TwoChangeBarsComponent: React.FC<{
 	height: number;
 	width: number;
+	currentBarValue: number;
 	currentBarHeight: number;
 	valueLabelFontSize: number;
 	valueLabelMarginBottom: number;
 	barColor: string;
 	valueLabelColor: string;
+	formatter: (x: number) => string;
 }> = ({
 	height,
 	width,
+	currentBarValue,
 	currentBarHeight,
 	valueLabelFontSize,
 	valueLabelMarginBottom,
 	barColor,
 	valueLabelColor,
+	formatter,
 }) => {
 	const currentBarHeightInPixels = currentBarHeight;
 
@@ -67,8 +71,7 @@ export const TwoChangeBarsComponent: React.FC<{
 						fontWeight: 600,
 					}}
 				>
-					{/* {percentageAnimation} */}
-					100%
+					{formatter(currentBarValue)}
 				</div>
 			</div>
 		</div>
