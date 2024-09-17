@@ -1,19 +1,47 @@
-// import {Sequence} from 'remotion';
+import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
 
-// import {Position} from '../Position';
-// import {Position} from '../AnimatedLineChartScaleBand/components/Position';
-// import {SubtleSlideIn, SubtleSlideOut} from './SubtleSlideIn';
-
+// TODO actually this is a single Bar animation! that spans the whole area!!
+// TODO rename to SingleBarAnimation
 export const TwoChangeBarsComponent: React.FC<{
 	height: number;
 	width: number;
-	startValue: number;
-	endValue: number;
-}> = ({height, width, startValue, endValue}) => {
+	// startValue: number;
+	endValuePerc: number;
+}> = ({height, width, endValuePerc}) => {
+	const frame = useCurrentFrame();
+	const {durationInFrames, fps} = useVideoConfig();
+
+	const spr = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		durationInFrames: durationInFrames / 2,
+	});
+
+	const percentageAnimation = spr;
+
+	// end value in percentage of height
+	// const endValueInPercOfHeight = 0.8;
+	const endValueInPercOfHeight = endValuePerc;
+
+	// const startBarHeightInPixels = 0;
+	const endBarHeightInPixels = height * endValueInPercOfHeight;
+
+	const currentBarHeightInPixels = endBarHeightInPixels * percentageAnimation;
+
 	return (
-		<div style={{backgroundColor: 'cyan', width, height}}>
-			<div style={{fontSize: 40}}>startValue: {startValue}</div>
-			<div style={{fontSize: 40}}>endValue: {endValue}</div>
+		<div style={{backgroundColor: 'cyan', width, height, position: 'relative'}}>
+			<div
+				style={{position: 'absolute', top: height - currentBarHeightInPixels}}
+			>
+				<div
+					style={{
+						height: currentBarHeightInPixels,
+						width,
+						backgroundColor: 'yellow',
+					}}
+				/>
+			</div>
 		</div>
 	);
 };

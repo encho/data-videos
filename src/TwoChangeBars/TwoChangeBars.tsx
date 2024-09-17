@@ -72,12 +72,10 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 			</Position>
 
 			<Position position={{top: 300, left: 200}} backgroundColor="red">
-				<TwoChangeBarsComponent
-					width={800}
-					height={600}
-					startValue={startValue}
-					endValue={endValue}
-				/>
+				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.8} />
+			</Position>
+			<Position position={{top: 300, left: 500}} backgroundColor="red">
+				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.4} />
 			</Position>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />

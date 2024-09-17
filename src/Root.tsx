@@ -110,7 +110,7 @@ export const RemotionRoot: React.FC = () => {
 				// npx remotion render src/index.ts <id> out/video.mp4
 				id="TwoChangeBars"
 				component={TwoChangeBars}
-				durationInFrames={8000}
+				durationInFrames={90 * 3}
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				{...squareVideo}
