@@ -52,8 +52,10 @@ interface Point {
 // const CHART_AREA_WIDTH = 300;
 // const CHART_AREA_HEIGHT = 300;
 
-const CHART_AREA_WIDTH = 600;
+const CHART_AREA_WIDTH = 500;
 const CHART_AREA_HEIGHT = 600;
+
+const SPACE_BETWEEN_BARS = 120;
 
 const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
 const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
@@ -118,6 +120,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		valueMarginTop: VALUE_MARGIN_TOP,
 		valueMarginBottom: VALUE_MARGIN_BOTTOM,
 		percChangeDisplayAreaHeight: PERC_CHANGE_DISPLAY_AREA_HEIGHT,
+		spaceBetweenBars: SPACE_BETWEEN_BARS,
 	});
 
 	const getLeftBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
@@ -227,132 +230,149 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 				/>
 			</Position>
 
-			<Position position={{top: 300, left: 200}} backgroundColor="red">
-				<div style={{position: 'relative'}}>
-					{/* <DisplayGridLayout
-						width={CHART_AREA_WIDTH}
-						height={CHART_AREA_HEIGHT}
-						areas={chartLayout.areas}
-					/> */}
-					{/* percentage change arrow and display */}
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.percChangeDisplay.y1,
-							left: chartLayout.areas.percChangeDisplay.x1,
-						}}
-					>
-						<svg
-							style={{
-								width: chartLayout.areas.percChangeDisplay.width,
-								height: chartLayout.areas.percChangeDisplay.height,
-								overflow: 'visible',
-							}}
-						>
-							<path
-								d={pathData}
-								stroke={pathColor}
-								fill="none"
-								strokeWidth={pathStrokeWidth}
-							/>
-
-							<g
-								transform={`translate(${
-									-24 / 2 + secondBarCenterX
-								},${rightBarPathEndY})`}
-							>
-								<Triangle
-									length={24}
-									stroke={pathColor}
-									strokeWidth={pathStrokeWidth}
-									direction="down"
-									cornerRadius={6}
-								/>
-							</g>
-						</svg>
-					</div>
-
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.firstBar.y1,
-							left: chartLayout.areas.firstBar.x1,
-						}}
-					>
-						<TwoChangeBarsComponent
-							width={chartLayout.areas.firstBar.width}
-							height={chartLayout.areas.firstBar.height}
-							currentBarHeight={currentLeftBarHeight}
-							// currentBarHeight={finalLeftBarHeight}
-							valueLabelFontSize={VALUE_TEXT_SIZE}
-							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
-							barColor={LEFT_BAR_COLOR}
-							valueLabelColor={LEFT_VALUE_COLOR}
+			{/* <Position position={{top: 300, left: 200}} backgroundColor="red"> */}
+			<div
+				style={{
+					marginTop: 280,
+					// width: '100%',
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+			>
+				<div>
+					<div style={{position: 'relative'}}>
+						<DisplayGridLayout
+							width={CHART_AREA_WIDTH}
+							height={CHART_AREA_HEIGHT}
+							areas={chartLayout.areas}
+							stroke={'#404040'}
+							fill={'#191919'}
 						/>
-					</div>
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.firstBarLabelText.y1,
-							left: chartLayout.areas.firstBarLabelText.x1,
-						}}
-					>
+						{/* percentage change arrow and display */}
 						<div
 							style={{
-								width: chartLayout.areas.firstBarLabelText.width,
-								height: chartLayout.areas.firstBarLabelText.height,
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
+								position: 'absolute',
+								top: chartLayout.areas.percChangeDisplay.y1,
+								left: chartLayout.areas.percChangeDisplay.x1,
 							}}
 						>
-							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
-								2023
+							<svg
+								style={{
+									width: chartLayout.areas.percChangeDisplay.width,
+									height: chartLayout.areas.percChangeDisplay.height,
+									overflow: 'visible',
+								}}
+							>
+								<path
+									d={pathData}
+									stroke={pathColor}
+									fill="none"
+									strokeWidth={pathStrokeWidth}
+								/>
+
+								<g
+									transform={`translate(${
+										-24 / 2 + secondBarCenterX
+									},${rightBarPathEndY})`}
+								>
+									<Triangle
+										length={24}
+										stroke={pathColor}
+										strokeWidth={pathStrokeWidth}
+										direction="down"
+										cornerRadius={6}
+									/>
+								</g>
+							</svg>
+						</div>
+
+						<div
+							style={{
+								position: 'absolute',
+								top: chartLayout.areas.firstBar.y1,
+								left: chartLayout.areas.firstBar.x1,
+							}}
+						>
+							<TwoChangeBarsComponent
+								width={chartLayout.areas.firstBar.width}
+								height={chartLayout.areas.firstBar.height}
+								currentBarHeight={currentLeftBarHeight}
+								// currentBarHeight={finalLeftBarHeight}
+								valueLabelFontSize={VALUE_TEXT_SIZE}
+								valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+								barColor={LEFT_BAR_COLOR}
+								valueLabelColor={LEFT_VALUE_COLOR}
+							/>
+						</div>
+						<div
+							style={{
+								position: 'absolute',
+								top: chartLayout.areas.firstBarLabelText.y1,
+								left: chartLayout.areas.firstBarLabelText.x1,
+							}}
+						>
+							<div
+								style={{
+									width: chartLayout.areas.firstBarLabelText.width,
+									height: chartLayout.areas.firstBarLabelText.height,
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<div
+									style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}
+								>
+									2023
+								</div>
 							</div>
 						</div>
-					</div>
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.secondBar.y1,
-							left: chartLayout.areas.secondBar.x1,
-						}}
-					>
-						<TwoChangeBarsComponent
-							width={chartLayout.areas.secondBar.width}
-							height={chartLayout.areas.secondBar.height}
-							currentBarHeight={currentRightBarHeight}
-							// currentBarHeight={finalRightBarHeight}
-							valueLabelFontSize={VALUE_TEXT_SIZE}
-							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
-							barColor={RIGHT_BAR_COLOR}
-							valueLabelColor={RIGHT_VALUE_COLOR}
-						/>
-					</div>
-
-					<div
-						style={{
-							position: 'absolute',
-							top: chartLayout.areas.secondBarLabelText.y1,
-							left: chartLayout.areas.secondBarLabelText.x1,
-						}}
-					>
 						<div
 							style={{
-								width: chartLayout.areas.secondBarLabelText.width,
-								height: chartLayout.areas.secondBarLabelText.height,
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
+								position: 'absolute',
+								top: chartLayout.areas.secondBar.y1,
+								left: chartLayout.areas.secondBar.x1,
 							}}
 						>
-							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
-								2024
+							<TwoChangeBarsComponent
+								width={chartLayout.areas.secondBar.width}
+								height={chartLayout.areas.secondBar.height}
+								currentBarHeight={currentRightBarHeight}
+								// currentBarHeight={finalRightBarHeight}
+								valueLabelFontSize={VALUE_TEXT_SIZE}
+								valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+								barColor={RIGHT_BAR_COLOR}
+								valueLabelColor={RIGHT_VALUE_COLOR}
+							/>
+						</div>
+
+						<div
+							style={{
+								position: 'absolute',
+								top: chartLayout.areas.secondBarLabelText.y1,
+								left: chartLayout.areas.secondBarLabelText.x1,
+							}}
+						>
+							<div
+								style={{
+									width: chartLayout.areas.secondBarLabelText.width,
+									height: chartLayout.areas.secondBarLabelText.height,
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+								}}
+							>
+								<div
+									style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}
+								>
+									2024
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</Position>
+			</div>
+			{/* </Position> */}
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
