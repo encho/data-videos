@@ -29,6 +29,10 @@ import {
 } from './AcettiFlics/PerformanceCompare_01/PerformanceCompare_01';
 
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
+import {
+	twoChangeBarsSchema,
+	TwoChangeBars,
+} from './TwoChangeBars/TwoChangeBars';
 
 import './tailwind.css';
 
@@ -98,6 +102,23 @@ export const RemotionRoot: React.FC = () => {
 					timePeriod: 'YTD' as const,
 					nerdyFinanceEnv: 'PROD' as const,
 					themeEnum: 'NERDY' as const,
+				}}
+			/>
+
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="TwoChangeBars"
+				component={TwoChangeBars}
+				durationInFrames={8000}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				{...squareVideo}
+				schema={twoChangeBarsSchema}
+				defaultProps={{
+					themeEnum: 'NERDY' as const,
+					startValue: 100,
+					endValue: 120,
 				}}
 			/>
 

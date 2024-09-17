@@ -1,5 +1,4 @@
 import {ReactNode} from 'react';
-// import {AbsoluteFill} from 'remotion';
 
 export const Position = ({
 	position,
@@ -7,6 +6,7 @@ export const Position = ({
 	children,
 	size = {},
 	fill = 'transparent',
+	backgroundColor,
 }: {
 	zIndex?: number;
 	position: {
@@ -18,15 +18,14 @@ export const Position = ({
 	size?: {width?: number | string; height?: number | string};
 	children: ReactNode;
 	fill?: string;
+	backgroundColor?: string;
 }) => {
 	return (
-		// <AbsoluteFill>
 		<div
 			style={{
 				zIndex: zIndex || 'auto',
 				position: 'relative',
-				width: '100%',
-				height: '100%',
+				backgroundColor: backgroundColor || 'transparent',
 			}}
 		>
 			<div
@@ -40,6 +39,5 @@ export const Position = ({
 				{children}
 			</div>
 		</div>
-		// </AbsoluteFill>
 	);
 };
