@@ -6,7 +6,7 @@ import {
 
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 60, name: 'percChangeDisplay'},
-	{type: 'pixel', value: 10, name: 'space'},
+	{type: 'pixel', value: 40, name: 'space'},
 	{type: 'pixel', value: 40, name: 'valueText'},
 	{type: 'pixel', value: 10, name: 'space'},
 	{type: 'fr', value: 1, name: 'bars'},
@@ -16,7 +16,7 @@ const chartRowsRailSpec: TGridRailSpec = [
 
 const chartColsRailSpec: TGridRailSpec = [
 	{type: 'fr', value: 1, name: 'firstBar'},
-	{type: 'pixel', value: 40, name: 'space'},
+	{type: 'pixel', value: 60, name: 'space'},
 	{type: 'fr', value: 1, name: 'secondBar'},
 ];
 

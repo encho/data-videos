@@ -101,8 +101,29 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						<TwoChangeBarsComponent
 							width={chartLayout.areas.firstBar.width}
 							height={chartLayout.areas.firstBar.height}
-							endValuePerc={0.8}
+							endValuePerc={1}
 						/>
+					</div>
+					<div
+						style={{
+							position: 'absolute',
+							top: chartLayout.areas.firstBarLabelText.y1,
+							left: chartLayout.areas.firstBarLabelText.x1,
+							opacity: 0.5,
+						}}
+					>
+						<div
+							style={{
+								width: chartLayout.areas.firstBarLabelText.width,
+								height: chartLayout.areas.firstBarLabelText.height,
+								backgroundColor: 'cyan',
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<div style={{color: 'red', fontSize: 30}}>label 1</div>
+						</div>
 					</div>
 					<div
 						style={{
@@ -117,6 +138,28 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							height={chartLayout.areas.secondBar.height}
 							endValuePerc={0.4}
 						/>
+					</div>
+
+					<div
+						style={{
+							position: 'absolute',
+							top: chartLayout.areas.secondBarLabelText.y1,
+							left: chartLayout.areas.secondBarLabelText.x1,
+							opacity: 0.5,
+						}}
+					>
+						<div
+							style={{
+								width: chartLayout.areas.secondBarLabelText.width,
+								height: chartLayout.areas.secondBarLabelText.height,
+								backgroundColor: 'cyan',
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<div style={{color: 'red', fontSize: 30}}>label 2</div>
+						</div>
 					</div>
 				</div>
 			</Position>
