@@ -3,11 +3,14 @@ import {
 	useVideoConfig,
 	useCurrentFrame,
 	interpolate,
+	// useVideoConfig
 } from 'remotion';
 import {z} from 'zod';
 import chroma from 'chroma-js';
 // import {linearTiming, TransitionSeries} from '@remotion/transitions';
 // import {slide} from '@remotion/transitions/slide';
+
+import {useChartLayout} from './useChartLayout';
 
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
@@ -19,6 +22,7 @@ import {TwoChangeBarsComponent} from './TwoChangeBarsComponent';
 
 // TODO into global components acetti-components
 import {Position} from '../acetti-ts-base/Position';
+import {DisplayGridLayout} from '../acetti-layout';
 
 export const twoChangeBarsSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -42,7 +46,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	startValue,
 	endValue,
 }) => {
-	// const {width, durationInFrames} = useVideoConfig();
+	// const {width, height} = useVideoConfig();
 	// TODO integrate into colorpalette
 	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
@@ -50,6 +54,14 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 
 	const paddingHorizontal = 40;
 	// const contentWidth = width - 2 * paddingHorizontal;
+
+	const chartAreaWidth = 600;
+	const chartAreaHeight = 600;
+
+	const chartLayout = useChartLayout({
+		width: chartAreaWidth,
+		height: chartAreaHeight,
+	});
 
 	return (
 		<div
@@ -72,11 +84,50 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 			</Position>
 
 			<Position position={{top: 300, left: 200}} backgroundColor="red">
+				<div style={{position: 'relative'}}>
+					<DisplayGridLayout
+						width={chartAreaWidth}
+						height={chartAreaHeight}
+						areas={chartLayout.areas}
+					/>
+					<div
+						style={{
+							position: 'absolute',
+							top: chartLayout.areas.firstBar.y1,
+							left: chartLayout.areas.firstBar.x1,
+							opacity: 0.5,
+						}}
+					>
+						<TwoChangeBarsComponent
+							width={chartLayout.areas.firstBar.width}
+							height={chartLayout.areas.firstBar.height}
+							endValuePerc={0.8}
+						/>
+					</div>
+					<div
+						style={{
+							position: 'absolute',
+							top: chartLayout.areas.secondBar.y1,
+							left: chartLayout.areas.secondBar.x1,
+							opacity: 0.5,
+						}}
+					>
+						<TwoChangeBarsComponent
+							width={chartLayout.areas.secondBar.width}
+							height={chartLayout.areas.secondBar.height}
+							endValuePerc={0.4}
+						/>
+					</div>
+				</div>
+			</Position>
+
+			{/* 
+			<Position position={{top: 300, left: 200}} backgroundColor="red">
 				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.8} />
 			</Position>
 			<Position position={{top: 300, left: 500}} backgroundColor="red">
 				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.4} />
-			</Position>
+			</Position> */}
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
