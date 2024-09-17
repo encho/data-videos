@@ -7,6 +7,7 @@ import {
 } from 'remotion';
 import {z} from 'zod';
 import chroma from 'chroma-js';
+import {Triangle} from '@remotion/shapes';
 // import {linearTiming, TransitionSeries} from '@remotion/transitions';
 // import {slide} from '@remotion/transitions/slide';
 
@@ -41,6 +42,11 @@ const colorsLists = colorBrewerKeys.map((colorBrewerKey) => {
 	return {name: colorBrewerKey, colorsList};
 });
 
+interface Point {
+	x: number;
+	y: number;
+}
+
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
 	startValue,
@@ -62,6 +68,40 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		width: chartAreaWidth,
 		height: chartAreaHeight,
 	});
+
+	const firstBarCenterX =
+		(chartLayout.areas.firstBar.x1 + chartLayout.areas.firstBar.x2) / 2;
+
+	const secondBarCenterX =
+		(chartLayout.areas.secondBar.x1 + chartLayout.areas.secondBar.x2) / 2;
+
+	const pathPoints: Point[] = [
+		{x: firstBarCenterX, y: 60},
+		{x: firstBarCenterX, y: 30},
+		{x: secondBarCenterX, y: 30},
+		{x: secondBarCenterX, y: 60},
+	];
+	// Function to convert points into a valid 'd' attribute for the path
+	const createPathFromPoints = (points: Point[]): string => {
+		if (points.length === 0) {
+			return '';
+		}
+
+		// Start at the first point (using M for "move to")
+		let path = `M ${points[0].x} ${points[0].y}`;
+
+		// Iterate through the remaining points, adding lines (using L for "line to")
+		for (let i = 1; i < points.length; i++) {
+			path += ` L ${points[i].x} ${points[i].y}`;
+		}
+
+		return path;
+	};
+
+	const pathData = createPathFromPoints(pathPoints);
+
+	const pathStrokeWidth = 4;
+	const pathColor = '#666';
 
 	return (
 		<div
@@ -90,6 +130,47 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						height={chartAreaHeight}
 						areas={chartLayout.areas}
 					/>
+					{/* percentage change arrow and display */}
+					<div
+						style={{
+							position: 'absolute',
+							top: chartLayout.areas.percChangeDisplay.y1,
+							left: chartLayout.areas.percChangeDisplay.x1,
+						}}
+					>
+						<svg
+							style={{
+								width: chartLayout.areas.percChangeDisplay.width,
+								height: chartLayout.areas.percChangeDisplay.height,
+								// backgroundColor: 'green',
+								overflow: 'visible',
+							}}
+						>
+							<path
+								d={pathData}
+								stroke={pathColor}
+								fill="none"
+								strokeWidth={pathStrokeWidth}
+							/>
+
+							{/* <circle r={6} cx={firstBarCenterX} cy={60} fill="yellow" />
+							<circle r={6} cx={firstBarCenterX} cy={30} fill="yellow" />
+							<circle r={6} cx={secondBarCenterX} cy={30} fill="yellow" />
+							<circle r={6} cx={secondBarCenterX} cy={60} fill="yellow" /> */}
+
+							<g transform={`translate(${-24 / 2 + secondBarCenterX},${60})`}>
+								<Triangle
+									length={24}
+									// fill="red"
+									stroke={pathColor}
+									strokeWidth={pathStrokeWidth}
+									direction="down"
+									cornerRadius={6}
+								/>
+							</g>
+						</svg>
+					</div>
+
 					<div
 						style={{
 							position: 'absolute',
