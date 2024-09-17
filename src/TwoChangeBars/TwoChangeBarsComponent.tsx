@@ -21,16 +21,20 @@ export const TwoChangeBarsComponent: React.FC<{
 	const percentageAnimation = spr;
 
 	// end value in percentage of height
-	// const endValueInPercOfHeight = 0.8;
 	const endValueInPercOfHeight = endValuePerc;
 
-	// const startBarHeightInPixels = 0;
 	const endBarHeightInPixels = height * endValueInPercOfHeight;
-
 	const currentBarHeightInPixels = endBarHeightInPixels * percentageAnimation;
 
 	return (
-		<div style={{backgroundColor: 'cyan', width, height, position: 'relative'}}>
+		<div
+			style={{
+				// backgroundColor: '#222',
+				width,
+				height,
+				position: 'relative',
+			}}
+		>
 			<div
 				style={{position: 'absolute', top: height - currentBarHeightInPixels}}
 			>
@@ -41,6 +45,25 @@ export const TwoChangeBarsComponent: React.FC<{
 						backgroundColor: 'yellow',
 					}}
 				/>
+			</div>
+
+			{/* value label */}
+			<div
+				style={{
+					position: 'absolute',
+					top: height - currentBarHeightInPixels - 40 - 20,
+					//
+					width,
+					// backgroundColor: 'cyan',
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				<div style={{color: 'yellow', fontSize: 40, fontWeight: 600}}>
+					{/* {percentageAnimation} */}
+					100%
+				</div>
 			</div>
 		</div>
 	);

@@ -95,7 +95,6 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							position: 'absolute',
 							top: chartLayout.areas.firstBar.y1,
 							left: chartLayout.areas.firstBar.x1,
-							opacity: 0.5,
 						}}
 					>
 						<TwoChangeBarsComponent
@@ -109,20 +108,18 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							position: 'absolute',
 							top: chartLayout.areas.firstBarLabelText.y1,
 							left: chartLayout.areas.firstBarLabelText.x1,
-							opacity: 0.5,
 						}}
 					>
 						<div
 							style={{
 								width: chartLayout.areas.firstBarLabelText.width,
 								height: chartLayout.areas.firstBarLabelText.height,
-								backgroundColor: 'cyan',
 								display: 'flex',
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}
 						>
-							<div style={{color: 'red', fontSize: 30}}>label 1</div>
+							<div style={{color: 'white', fontSize: 40}}>2023</div>
 						</div>
 					</div>
 					<div
@@ -130,7 +127,6 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							position: 'absolute',
 							top: chartLayout.areas.secondBar.y1,
 							left: chartLayout.areas.secondBar.x1,
-							opacity: 0.5,
 						}}
 					>
 						<TwoChangeBarsComponent
@@ -145,36 +141,25 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							position: 'absolute',
 							top: chartLayout.areas.secondBarLabelText.y1,
 							left: chartLayout.areas.secondBarLabelText.x1,
-							opacity: 0.5,
 						}}
 					>
 						<div
 							style={{
 								width: chartLayout.areas.secondBarLabelText.width,
 								height: chartLayout.areas.secondBarLabelText.height,
-								backgroundColor: 'cyan',
 								display: 'flex',
 								justifyContent: 'center',
 								alignItems: 'center',
 							}}
 						>
-							<div style={{color: 'red', fontSize: 30}}>label 2</div>
+							<div style={{color: 'white', fontSize: 40}}>2024</div>
 						</div>
 					</div>
 				</div>
 			</Position>
 
-			{/* 
-			<Position position={{top: 300, left: 200}} backgroundColor="red">
-				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.8} />
-			</Position>
-			<Position position={{top: 300, left: 500}} backgroundColor="red">
-				<TwoChangeBarsComponent width={200} height={600} endValuePerc={0.4} />
-			</Position> */}
-
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
-		// {/* </AbsoluteFill> */}
 	);
 };
 
