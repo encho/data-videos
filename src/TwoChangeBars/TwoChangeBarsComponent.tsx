@@ -6,12 +6,16 @@ export const TwoChangeBarsComponent: React.FC<{
 	currentBarHeight: number;
 	valueLabelFontSize: number;
 	valueLabelMarginBottom: number;
+	barColor: string;
+	valueLabelColor: string;
 }> = ({
 	height,
 	width,
 	currentBarHeight,
 	valueLabelFontSize,
 	valueLabelMarginBottom,
+	barColor,
+	valueLabelColor,
 }) => {
 	const currentBarHeightInPixels = currentBarHeight;
 
@@ -30,7 +34,9 @@ export const TwoChangeBarsComponent: React.FC<{
 					style={{
 						height: currentBarHeightInPixels,
 						width,
-						backgroundColor: 'yellow',
+						backgroundColor: barColor,
+						// QUICK-FIX: better to implement with svg as rendered border radius dependent on html div height
+						borderRadius: 3,
 					}}
 				/>
 			</div>
@@ -56,7 +62,7 @@ export const TwoChangeBarsComponent: React.FC<{
 			>
 				<div
 					style={{
-						color: 'yellow',
+						color: valueLabelColor,
 						fontSize: valueLabelFontSize,
 						fontWeight: 600,
 					}}

@@ -55,19 +55,34 @@ interface Point {
 const CHART_AREA_WIDTH = 600;
 const CHART_AREA_HEIGHT = 600;
 
+const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
+const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
+const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
+const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
+
 const LABEL_TEXT_SIZE = 40;
 const LABEL_MARGIN_TOP = 15;
 const LABEL_TEXT_COLOR = 'gray';
 
 const VALUE_TEXT_SIZE = 35;
-const VALUE_MARGIN_TOP = 20;
+const VALUE_MARGIN_TOP = 15;
 const VALUE_MARGIN_BOTTOM = 5;
+
+const RIGHT_BAR_COLOR = '#404040';
+const RIGHT_VALUE_COLOR = 'gray';
+
+const LEFT_BAR_COLOR = '#404040';
+const LEFT_VALUE_COLOR = 'gray';
 
 const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
 // const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
 
 const LEFT_BAR_VALUE = 700;
 const RIGHT_BAR_VALUE = 1000;
+// const LEFT_BAR_VALUE = 1000;
+// const RIGHT_BAR_VALUE = 800;
+// const LEFT_BAR_VALUE = 1000;
+// const RIGHT_BAR_VALUE = 1000;
 
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
@@ -102,6 +117,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		valueTextSize: VALUE_TEXT_SIZE,
 		valueMarginTop: VALUE_MARGIN_TOP,
 		valueMarginBottom: VALUE_MARGIN_BOTTOM,
+		percChangeDisplayAreaHeight: PERC_CHANGE_DISPLAY_AREA_HEIGHT,
 	});
 
 	const getLeftBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
@@ -143,20 +159,33 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		(chartLayout.areas.secondBar.x1 + chartLayout.areas.secondBar.x2) / 2;
 
 	const leftBarPathEndY =
-		60 + chartLayout.areas.firstBar.height - finalLeftBarHeight;
+		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.firstBar.height -
+		finalLeftBarHeight;
 
 	const rightBarPathEndY =
-		60 + chartLayout.areas.firstBar.height - finalRightBarHeight - 24;
+		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.firstBar.height -
+		finalRightBarHeight -
+		24;
 
 	const pathPoints: Point[] = [
 		{x: firstBarCenterX, y: leftBarPathEndY},
-		{x: firstBarCenterX, y: 30},
-		{x: secondBarCenterX, y: 30},
+		{x: firstBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		{x: secondBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
 		{
 			x: secondBarCenterX,
 			y: rightBarPathEndY,
 		},
 	];
+
+	const pathColor =
+		RIGHT_BAR_VALUE > LEFT_BAR_VALUE
+			? PERC_CHANGE_DISPLAY_PATH_COLOR_UP
+			: RIGHT_BAR_VALUE < LEFT_BAR_VALUE
+			? PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN
+			: PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL;
+
 	// Function to convert points into a valid 'd' attribute for the path
 	const createPathFromPoints = (points: Point[]): string => {
 		if (points.length === 0) {
@@ -177,7 +206,6 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	const pathData = createPathFromPoints(pathPoints);
 
 	const pathStrokeWidth = 4;
-	const pathColor = '#666';
 
 	return (
 		<div
@@ -201,11 +229,11 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 
 			<Position position={{top: 300, left: 200}} backgroundColor="red">
 				<div style={{position: 'relative'}}>
-					<DisplayGridLayout
+					{/* <DisplayGridLayout
 						width={CHART_AREA_WIDTH}
 						height={CHART_AREA_HEIGHT}
 						areas={chartLayout.areas}
-					/>
+					/> */}
 					{/* percentage change arrow and display */}
 					<div
 						style={{
@@ -258,6 +286,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							// currentBarHeight={finalLeftBarHeight}
 							valueLabelFontSize={VALUE_TEXT_SIZE}
 							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+							barColor={LEFT_BAR_COLOR}
+							valueLabelColor={LEFT_VALUE_COLOR}
 						/>
 					</div>
 					<div
@@ -295,6 +325,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							// currentBarHeight={finalRightBarHeight}
 							valueLabelFontSize={VALUE_TEXT_SIZE}
 							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+							barColor={RIGHT_BAR_COLOR}
+							valueLabelColor={RIGHT_VALUE_COLOR}
 						/>
 					</div>
 

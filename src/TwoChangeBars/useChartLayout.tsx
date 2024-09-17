@@ -10,15 +10,21 @@ const makeChartGridLayoutSpec = ({
 	valueTextSize,
 	valueMarginTop,
 	valueMarginBottom,
+	percChangeDisplayAreaHeight,
 }: {
 	labelTextSize: number;
 	labelMarginTop: number;
 	valueTextSize: number;
 	valueMarginTop: number;
 	valueMarginBottom: number;
+	percChangeDisplayAreaHeight: number;
 }) => {
 	const chartRowsRailSpec: TGridRailSpec = [
-		{type: 'pixel', value: 60, name: 'percChangeDisplay'},
+		{
+			type: 'pixel',
+			value: percChangeDisplayAreaHeight,
+			name: 'percChangeDisplay',
+		},
 		{type: 'pixel', value: valueMarginTop, name: 'space'},
 		{type: 'pixel', value: valueTextSize, name: 'valueText'},
 		{type: 'pixel', value: valueMarginBottom, name: 'space'},
@@ -96,6 +102,7 @@ export function useChartLayout({
 	valueTextSize,
 	valueMarginTop,
 	valueMarginBottom,
+	percChangeDisplayAreaHeight,
 }: {
 	width: number;
 	height: number;
@@ -105,6 +112,7 @@ export function useChartLayout({
 	valueTextSize: number;
 	valueMarginTop: number;
 	valueMarginBottom: number;
+	percChangeDisplayAreaHeight: number;
 }) {
 	const chartLayout = useGridLayout({
 		width,
@@ -116,6 +124,7 @@ export function useChartLayout({
 			valueTextSize,
 			valueMarginTop,
 			valueMarginBottom,
+			percChangeDisplayAreaHeight,
 		}),
 	});
 	return chartLayout;
