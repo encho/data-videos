@@ -39,6 +39,8 @@ const colorsLists = colorBrewerKeys.map((colorBrewerKey) => {
 
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
+	startValue,
+	endValue,
 }) => {
 	// const {width, durationInFrames} = useVideoConfig();
 	// TODO integrate into colorpalette
@@ -70,7 +72,12 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 			</Position>
 
 			<Position position={{top: 300, left: 200}} backgroundColor="red">
-				<TwoChangeBarsComponent width={800} height={600} />
+				<TwoChangeBarsComponent
+					width={800}
+					height={600}
+					startValue={startValue}
+					endValue={endValue}
+				/>
 			</Position>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />

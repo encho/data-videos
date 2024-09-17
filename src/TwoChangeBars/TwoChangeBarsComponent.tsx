@@ -7,6 +7,13 @@
 export const TwoChangeBarsComponent: React.FC<{
 	height: number;
 	width: number;
-}> = ({height, width}) => {
-	return <div style={{backgroundColor: 'cyan', width, height}}>hello</div>;
+	startValue: number;
+	endValue: number;
+}> = ({height, width, startValue, endValue}) => {
+	return (
+		<div style={{backgroundColor: 'cyan', width, height}}>
+			<div style={{fontSize: 40}}>startValue: {startValue}</div>
+			<div style={{fontSize: 40}}>endValue: {endValue}</div>
+		</div>
+	);
 };
