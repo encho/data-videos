@@ -1,35 +1,23 @@
-import {useCurrentFrame, useVideoConfig, spring} from 'remotion';
-
 // TODO actually this is a single Bar animation! that spans the whole area!!
 // TODO rename to SingleBarAnimation
 export const TwoChangeBarsComponent: React.FC<{
 	height: number;
 	width: number;
-	// startValue: number;
-	endValuePerc: number;
-}> = ({height, width, endValuePerc}) => {
-	const frame = useCurrentFrame();
-	const {durationInFrames, fps} = useVideoConfig();
-
-	const spr = spring({
-		fps,
-		frame,
-		config: {damping: 300},
-		durationInFrames: durationInFrames / 2,
-	});
-
-	const percentageAnimation = spr;
-
-	// end value in percentage of height
-	const endValueInPercOfHeight = endValuePerc;
-
-	const endBarHeightInPixels = height * endValueInPercOfHeight;
-	const currentBarHeightInPixels = endBarHeightInPixels * percentageAnimation;
+	currentBarHeight: number;
+	valueLabelFontSize: number;
+	valueLabelMarginBottom: number;
+}> = ({
+	height,
+	width,
+	currentBarHeight,
+	valueLabelFontSize,
+	valueLabelMarginBottom,
+}) => {
+	const currentBarHeightInPixels = currentBarHeight;
 
 	return (
 		<div
 			style={{
-				// backgroundColor: '#222',
 				width,
 				height,
 				position: 'relative',
@@ -47,20 +35,32 @@ export const TwoChangeBarsComponent: React.FC<{
 				/>
 			</div>
 
+			{/* TODO solve outside this component, with help of bars height knowledge */}
 			{/* value label */}
 			<div
 				style={{
 					position: 'absolute',
-					top: height - currentBarHeightInPixels - 40 - 20,
+					top:
+						height -
+						currentBarHeightInPixels -
+						valueLabelFontSize -
+						valueLabelMarginBottom -
+						// heuristic margin adjustment factor to center text vertically in its box (QUICK FIX FOR CAPSIZE)
+						(15 * valueLabelFontSize) / 50,
 					//
 					width,
-					// backgroundColor: 'cyan',
 					display: 'flex',
 					justifyContent: 'center',
 					alignItems: 'center',
 				}}
 			>
-				<div style={{color: 'yellow', fontSize: 40, fontWeight: 600}}>
+				<div
+					style={{
+						color: 'yellow',
+						fontSize: valueLabelFontSize,
+						fontWeight: 600,
+					}}
+				>
 					{/* {percentageAnimation} */}
 					100%
 				</div>

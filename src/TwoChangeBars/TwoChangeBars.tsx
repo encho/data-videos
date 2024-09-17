@@ -3,8 +3,10 @@ import {
 	useVideoConfig,
 	useCurrentFrame,
 	interpolate,
+	spring,
 	// useVideoConfig
 } from 'remotion';
+import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {z} from 'zod';
 import chroma from 'chroma-js';
 import {Triangle} from '@remotion/shapes';
@@ -47,6 +49,26 @@ interface Point {
 	y: number;
 }
 
+// const CHART_AREA_WIDTH = 300;
+// const CHART_AREA_HEIGHT = 300;
+
+const CHART_AREA_WIDTH = 600;
+const CHART_AREA_HEIGHT = 600;
+
+const LABEL_TEXT_SIZE = 40;
+const LABEL_MARGIN_TOP = 15;
+const LABEL_TEXT_COLOR = 'gray';
+
+const VALUE_TEXT_SIZE = 35;
+const VALUE_MARGIN_TOP = 20;
+const VALUE_MARGIN_BOTTOM = 5;
+
+const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
+// const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
+
+const LEFT_BAR_VALUE = 700;
+const RIGHT_BAR_VALUE = 1000;
+
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
 	startValue,
@@ -56,18 +78,63 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	// TODO integrate into colorpalette
 	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
-	// const titleSlideDuration = 200;
+	const frame = useCurrentFrame();
+	const {durationInFrames, fps} = useVideoConfig();
+
+	// TODO add delay for second bar eventually
+	const spr = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		durationInFrames: durationInFrames / 2,
+	});
+	const percentageAnimation = spr;
 
 	const paddingHorizontal = 40;
 	// const contentWidth = width - 2 * paddingHorizontal;
 
-	const chartAreaWidth = 600;
-	const chartAreaHeight = 600;
-
 	const chartLayout = useChartLayout({
-		width: chartAreaWidth,
-		height: chartAreaHeight,
+		width: CHART_AREA_WIDTH,
+		height: CHART_AREA_HEIGHT,
+		//
+		labelTextSize: LABEL_TEXT_SIZE,
+		labelMarginTop: LABEL_MARGIN_TOP,
+		valueTextSize: VALUE_TEXT_SIZE,
+		valueMarginTop: VALUE_MARGIN_TOP,
+		valueMarginBottom: VALUE_MARGIN_BOTTOM,
 	});
+
+	const getLeftBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
+		.domain([0, 1])
+		.range([Math.max(0, BARS_VALUES_VISIBLE_DOMAIN[0]), LEFT_BAR_VALUE]);
+
+	const getCurrentLeftBarHeight: ScaleLinear<number, number> = scaleLinear()
+		.domain(BARS_VALUES_VISIBLE_DOMAIN)
+		.range([0, chartLayout.areas.firstBar.height]);
+
+	const currentLeftBarHeight = getCurrentLeftBarHeight(
+		getLeftBarCurrentDomain(percentageAnimation)
+	);
+
+	const finalLeftBarHeight = getCurrentLeftBarHeight(
+		getLeftBarCurrentDomain(1.0)
+	);
+
+	const getRightBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
+		.domain([0, 1])
+		.range([Math.max(0, BARS_VALUES_VISIBLE_DOMAIN[0]), RIGHT_BAR_VALUE]);
+
+	const getCurrentRightBarHeight: ScaleLinear<number, number> = scaleLinear()
+		.domain(BARS_VALUES_VISIBLE_DOMAIN)
+		.range([0, chartLayout.areas.firstBar.height]);
+
+	const currentRightBarHeight = getCurrentRightBarHeight(
+		getRightBarCurrentDomain(percentageAnimation)
+	);
+
+	const finalRightBarHeight = getCurrentRightBarHeight(
+		getRightBarCurrentDomain(1.0)
+	);
 
 	const firstBarCenterX =
 		(chartLayout.areas.firstBar.x1 + chartLayout.areas.firstBar.x2) / 2;
@@ -75,11 +142,20 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	const secondBarCenterX =
 		(chartLayout.areas.secondBar.x1 + chartLayout.areas.secondBar.x2) / 2;
 
+	const leftBarPathEndY =
+		60 + chartLayout.areas.firstBar.height - finalLeftBarHeight;
+
+	const rightBarPathEndY =
+		60 + chartLayout.areas.firstBar.height - finalRightBarHeight - 24;
+
 	const pathPoints: Point[] = [
-		{x: firstBarCenterX, y: 60},
+		{x: firstBarCenterX, y: leftBarPathEndY},
 		{x: firstBarCenterX, y: 30},
 		{x: secondBarCenterX, y: 30},
-		{x: secondBarCenterX, y: 60},
+		{
+			x: secondBarCenterX,
+			y: rightBarPathEndY,
+		},
 	];
 	// Function to convert points into a valid 'd' attribute for the path
 	const createPathFromPoints = (points: Point[]): string => {
@@ -126,8 +202,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 			<Position position={{top: 300, left: 200}} backgroundColor="red">
 				<div style={{position: 'relative'}}>
 					<DisplayGridLayout
-						width={chartAreaWidth}
-						height={chartAreaHeight}
+						width={CHART_AREA_WIDTH}
+						height={CHART_AREA_HEIGHT}
 						areas={chartLayout.areas}
 					/>
 					{/* percentage change arrow and display */}
@@ -142,7 +218,6 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							style={{
 								width: chartLayout.areas.percChangeDisplay.width,
 								height: chartLayout.areas.percChangeDisplay.height,
-								// backgroundColor: 'green',
 								overflow: 'visible',
 							}}
 						>
@@ -153,15 +228,13 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 								strokeWidth={pathStrokeWidth}
 							/>
 
-							{/* <circle r={6} cx={firstBarCenterX} cy={60} fill="yellow" />
-							<circle r={6} cx={firstBarCenterX} cy={30} fill="yellow" />
-							<circle r={6} cx={secondBarCenterX} cy={30} fill="yellow" />
-							<circle r={6} cx={secondBarCenterX} cy={60} fill="yellow" /> */}
-
-							<g transform={`translate(${-24 / 2 + secondBarCenterX},${60})`}>
+							<g
+								transform={`translate(${
+									-24 / 2 + secondBarCenterX
+								},${rightBarPathEndY})`}
+							>
 								<Triangle
 									length={24}
-									// fill="red"
 									stroke={pathColor}
 									strokeWidth={pathStrokeWidth}
 									direction="down"
@@ -181,7 +254,10 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						<TwoChangeBarsComponent
 							width={chartLayout.areas.firstBar.width}
 							height={chartLayout.areas.firstBar.height}
-							endValuePerc={1}
+							currentBarHeight={currentLeftBarHeight}
+							// currentBarHeight={finalLeftBarHeight}
+							valueLabelFontSize={VALUE_TEXT_SIZE}
+							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 						/>
 					</div>
 					<div
@@ -200,7 +276,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 								alignItems: 'center',
 							}}
 						>
-							<div style={{color: 'white', fontSize: 40}}>2023</div>
+							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+								2023
+							</div>
 						</div>
 					</div>
 					<div
@@ -213,7 +291,10 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						<TwoChangeBarsComponent
 							width={chartLayout.areas.secondBar.width}
 							height={chartLayout.areas.secondBar.height}
-							endValuePerc={0.4}
+							currentBarHeight={currentRightBarHeight}
+							// currentBarHeight={finalRightBarHeight}
+							valueLabelFontSize={VALUE_TEXT_SIZE}
+							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 						/>
 					</div>
 
@@ -233,7 +314,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 								alignItems: 'center',
 							}}
 						>
-							<div style={{color: 'white', fontSize: 40}}>2024</div>
+							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+								2024
+							</div>
 						</div>
 					</div>
 				</div>
