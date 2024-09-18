@@ -34,6 +34,23 @@ interface Point {
 	y: number;
 }
 
+// Function to convert points into a valid 'd' attribute for the path
+const createPathFromPoints = (points: Point[]): string => {
+	if (points.length === 0) {
+		return '';
+	}
+
+	// Start at the first point (using M for "move to")
+	let path = `M ${points[0].x} ${points[0].y}`;
+
+	// Iterate through the remaining points, adding lines (using L for "line to")
+	for (let i = 1; i < points.length; i++) {
+		path += ` L ${points[i].x} ${points[i].y}`;
+	}
+
+	return path;
+};
+
 // const CHART_AREA_WIDTH = 300;
 // const CHART_AREA_HEIGHT = 300;
 
@@ -140,10 +157,6 @@ export const TwoChangeBarsComponent: React.FC<
 		.domain(BARS_VALUES_VISIBLE_DOMAIN)
 		.range([0, chartLayout.areas.firstBar.height]);
 
-	// const currentLeftBarHeight = getCurrentLeftBarHeight(
-	// 	getLeftBarCurrentDomain(percentageAnimation)
-	// );
-
 	const currentLeftBarDomainValue =
 		getLeftBarCurrentDomain(percentageAnimation);
 
@@ -241,23 +254,6 @@ export const TwoChangeBarsComponent: React.FC<
 			? PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN
 			: PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL;
 
-	// Function to convert points into a valid 'd' attribute for the path
-	const createPathFromPoints = (points: Point[]): string => {
-		if (points.length === 0) {
-			return '';
-		}
-
-		// Start at the first point (using M for "move to")
-		let path = `M ${points[0].x} ${points[0].y}`;
-
-		// Iterate through the remaining points, adding lines (using L for "line to")
-		for (let i = 1; i < points.length; i++) {
-			path += ` L ${points[i].x} ${points[i].y}`;
-		}
-
-		return path;
-	};
-
 	const pathData = createPathFromPoints(pathPoints);
 
 	const pathStrokeWidth = PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH;
@@ -268,11 +264,11 @@ export const TwoChangeBarsComponent: React.FC<
 				position: 'relative',
 			}}
 		>
-			<DisplayGridLayout
+			{/* <DisplayGridLayout
 				width={CHART_AREA_WIDTH}
 				height={CHART_AREA_HEIGHT}
 				areas={chartLayout.areas}
-			/>
+			/> */}
 			{/* percentage change arrow and display */}
 			<div
 				style={{
@@ -303,8 +299,6 @@ export const TwoChangeBarsComponent: React.FC<
 					>
 						<Triangle
 							length={24}
-							// stroke={pathColor}
-							// strokeWidth={pathStrokeWidth}
 							fill={pathColor}
 							direction="down"
 							cornerRadius={6}

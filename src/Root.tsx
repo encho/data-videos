@@ -34,6 +34,11 @@ import {
 	TwoChangeBars,
 } from './TwoChangeBars/TwoChangeBars';
 
+import {
+	twoChangeBarsWithImageSchema,
+	TwoChangeBarsWithImage,
+} from './TwoChangeBars/TwoChangeBarsWithImage';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -115,6 +120,31 @@ export const RemotionRoot: React.FC = () => {
 				fps={90}
 				{...squareVideo}
 				schema={twoChangeBarsSchema}
+				defaultProps={{
+					themeEnum: 'NERDY' as const,
+					title: 'Global Car Sales',
+					subTitle: '2023 vs. 2024 (in USD)',
+					leftBarValue: 845,
+					rightBarValue: 1000,
+					leftBarLabel: '2023',
+					rightBarLabel: '2024',
+					valueFormatString: '$ 0,0.',
+					percentageFormatString: '+0.00%',
+				}}
+			/>
+
+			<Composition
+				// You can take the "id" to render a video:
+				// npx remotion render src/index.ts <id> out/video.mp4
+				id="TwoChangeBarsWithImage"
+				component={TwoChangeBarsWithImage}
+				durationInFrames={90 * 5}
+				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+				fps={90}
+				// {...squareVideo}
+				width={(1080 * 3) / 2}
+				height={1080}
+				schema={twoChangeBarsWithImageSchema}
 				defaultProps={{
 					themeEnum: 'NERDY' as const,
 					title: 'Global Car Sales',
