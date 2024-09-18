@@ -134,6 +134,9 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		// borderColor: '#ff0000',
 		// backgroundColor: '#ffff00',
 	},
+	TwoChangeBars: {
+		barsColor: monoColor,
+	},
 	timeseriesComponents: {
 		percentageChangeArea: {
 			lineColor: monoColor,

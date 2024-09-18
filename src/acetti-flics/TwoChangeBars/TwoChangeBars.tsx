@@ -12,6 +12,7 @@ import numeral from 'numeral';
 
 import {useChartLayout} from '../../TwoChangeBars/useChartLayout';
 import {DisplayGridLayout} from '../../acetti-layout';
+import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {AnimatedBarWithValueLabel} from './AnimatedBarWithValueLabel';
@@ -53,12 +54,6 @@ const createPathFromPoints = (points: Point[]): string => {
 	return path;
 };
 
-// const CHART_AREA_WIDTH = 300;
-// const CHART_AREA_HEIGHT = 300;
-
-// const CHART_AREA_WIDTH = 500;
-// const CHART_AREA_HEIGHT = 600;
-
 const SPACE_BETWEEN_BARS = 120;
 
 const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
@@ -66,20 +61,6 @@ const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = 4;
 const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
 const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
 const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
-
-const LABEL_TEXT_SIZE = 40;
-const LABEL_MARGIN_TOP = 15;
-const LABEL_TEXT_COLOR = 'gray';
-
-const VALUE_TEXT_SIZE = 30;
-const VALUE_MARGIN_TOP = 20;
-const VALUE_MARGIN_BOTTOM = 10;
-
-const RIGHT_BAR_COLOR = '#404040';
-const RIGHT_VALUE_COLOR = '#aaa';
-
-const LEFT_BAR_COLOR = '#404040';
-const LEFT_VALUE_COLOR = '#aaa';
 
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
@@ -96,8 +77,30 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	minDomainValue,
 	maxDomainValue,
 }) => {
+	const theme =
+		themeEnum === 'NERDY'
+			? nerdyTheme
+			: themeEnum === 'LORENZOBERTOLINI'
+			? lorenzobertoliniTheme
+			: lorenzobertolinibrightTheme;
+
+	//
 	const LEFT_BAR_VALUE = leftBarValue;
 	const RIGHT_BAR_VALUE = rightBarValue;
+
+	const RIGHT_BAR_COLOR = theme.TwoChangeBars.barsColor;
+	const RIGHT_VALUE_COLOR = theme.typography.textColor;
+
+	const LEFT_BAR_COLOR = theme.TwoChangeBars.barsColor;
+	const LEFT_VALUE_COLOR = theme.typography.textColor;
+
+	const LABEL_TEXT_SIZE = 40;
+	const LABEL_MARGIN_TOP = 15;
+	const LABEL_TEXT_COLOR = theme.typography.textColor;
+
+	const VALUE_TEXT_SIZE = 30;
+	const VALUE_MARGIN_TOP = 30;
+	const VALUE_MARGIN_BOTTOM = 15;
 
 	const BARS_VALUES_VISIBLE_DOMAIN = [
 		minDomainValue || 0,
@@ -108,8 +111,6 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	const valueFormatter = (x: number) => numeral(x).format(valueFormatString);
 
 	// const {width, height} = useVideoConfig();
-	// TODO integrate into colorpalette
-	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
@@ -368,7 +369,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 					barColor={LEFT_BAR_COLOR}
 					valueLabelColor={LEFT_VALUE_COLOR}
 					formatter={valueFormatter}
-					displayTrimmer={true}
+					displayTrimmer={Boolean(minDomainValue)}
+					displayTrimmerAnimationPerc={percentageAnimation}
+					backgroundColor={theme.global.backgroundColor}
 				/>
 			</div>
 			<div
@@ -409,6 +412,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 					barColor={RIGHT_BAR_COLOR}
 					valueLabelColor={RIGHT_VALUE_COLOR}
 					formatter={valueFormatter}
+					displayTrimmer={Boolean(minDomainValue)}
+					displayTrimmerAnimationPerc={percentageAnimation}
+					backgroundColor={theme.global.backgroundColor}
 				/>
 			</div>
 

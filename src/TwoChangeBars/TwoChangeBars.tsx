@@ -5,6 +5,7 @@ import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
+import {lorenzobertolinibrightTheme} from '../acetti-themes/lorenzobertolinibright';
 import {Position} from '../acetti-ts-base/Position';
 
 export const twoChangeBarsComponentProps = z.object({
@@ -43,9 +44,14 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	maxDomainValue,
 }) => {
 	// TODO integrate into colorpalette
-	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+	const theme =
+		themeEnum === 'NERDY'
+			? nerdyTheme
+			: themeEnum === 'LORENZOBERTOLINI'
+			? lorenzobertoliniTheme
+			: lorenzobertolinibrightTheme;
 
-	const paddingHorizontal = 40;
+	const paddingHorizontal = 60;
 
 	return (
 		<div

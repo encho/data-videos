@@ -3,6 +3,7 @@ import {useVideoConfig, Img, staticFile} from 'remotion';
 
 import {TwoChangeBars as TwoChangeBarsComponent} from '../acetti-flics/TwoChangeBars/TwoChangeBars';
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
+import {lorenzobertolinibrightTheme} from '../acetti-themes/lorenzobertolinibright';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
@@ -42,9 +43,15 @@ export const TwoChangeBarsWithImage: React.FC<
 	} = useVideoConfig();
 
 	// TODO integrate into colorpalette
-	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+	// const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+	const theme =
+		themeEnum === 'NERDY'
+			? nerdyTheme
+			: themeEnum === 'LORENZOBERTOLINI'
+			? lorenzobertoliniTheme
+			: lorenzobertolinibrightTheme;
 
-	const paddingHorizontal = 40;
+	const paddingHorizontal = 60;
 
 	const leftPanelWidth = width / 2;
 	const rightPanelWidth = width / 2;
@@ -99,7 +106,7 @@ export const TwoChangeBarsWithImage: React.FC<
 					crossOrigin="anonymous"
 				/>
 
-				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+				<LorenzoBertoliniLogo color={theme.typography.logoColor} />
 			</div>
 		</div>
 	);

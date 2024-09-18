@@ -86,7 +86,7 @@ export const RemotionRoot: React.FC = () => {
 					ticker: 'TESLA' as const,
 					timePeriod: '2Y' as const,
 					nerdyFinanceEnv: 'PROD' as const,
-					themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+					themeEnum: 'NERDY' as const,
 				}}
 			/>
 
@@ -130,7 +130,7 @@ export const RemotionRoot: React.FC = () => {
 					rightBarLabel: '2024',
 					valueFormatString: '$ 0,0.',
 					percentageFormatString: '+0.00%',
-					minDomainValue: 850,
+					minDomainValue: 900,
 				}}
 			/>
 
@@ -143,7 +143,9 @@ export const RemotionRoot: React.FC = () => {
 				// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 				fps={90}
 				// {...squareVideo}
-				width={(1080 * 3) / 2}
+				// width={(1080 * 3) / 2}
+				// height={1080}
+				width={Math.floor(1080 * 1.62)}
 				height={1080}
 				schema={twoChangeBarsWithImageSchema}
 				defaultProps={{
@@ -156,7 +158,7 @@ export const RemotionRoot: React.FC = () => {
 					rightBarLabel: '2024',
 					valueFormatString: '$ 0,0.',
 					percentageFormatString: '+0.00%',
-					minDomainValue: 800,
+					minDomainValue: 600,
 				}}
 			/>
 

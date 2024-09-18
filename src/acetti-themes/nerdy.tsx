@@ -128,6 +128,9 @@ export const nerdyTheme: ThemeType = {
 		backgroundColor: platteBackground,
 		borderColor: platteBorder,
 	},
+	TwoChangeBars: {
+		barsColor: textColor,
+	},
 	timeseriesComponents: {
 		percentageChangeArea: {
 			lineColor: '#f05122',

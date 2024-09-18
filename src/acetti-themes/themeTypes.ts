@@ -71,6 +71,9 @@ export const zodThemeType = z.object({
 		backgroundColor: zColor(),
 		borderColor: zColor(),
 	}),
+	TwoChangeBars: z.object({
+		barsColor: zColor(),
+	}),
 	timeseriesComponents: z.object({
 		percentageChangeArea: z.object({
 			lineColor: zColor(),
