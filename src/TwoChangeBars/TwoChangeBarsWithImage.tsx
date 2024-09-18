@@ -1,24 +1,21 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, staticFile} from 'remotion';
 
-import {TwoChangeBarsComponent} from './TwoChangeBarsComponent';
+import {TwoChangeBars as TwoChangeBarsComponent} from '../acetti-flics/TwoChangeBars/TwoChangeBars';
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../acetti-ts-base/Position';
 
-export const twoChangeBarsWithImageSchema = z.object({
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
-	title: z.string(),
-	subTitle: z.string(),
-	leftBarValue: z.number(),
-	leftBarLabel: z.string(),
-	rightBarValue: z.number(),
-	rightBarLabel: z.string(),
-	valueFormatString: z.string(),
-	percentageFormatString: z.string(),
-});
+import {twoChangeBarsComponentProps} from './TwoChangeBars';
+
+export const twoChangeBarsWithImageSchema = twoChangeBarsComponentProps.merge(
+	z.object({
+		title: z.string(),
+		subTitle: z.string(),
+	})
+);
 
 const CHART_AREA_WIDTH = 500;
 const CHART_AREA_HEIGHT = 600;
@@ -35,6 +32,8 @@ export const TwoChangeBarsWithImage: React.FC<
 	rightBarLabel,
 	valueFormatString,
 	percentageFormatString,
+	maxDomainValue,
+	minDomainValue,
 }) => {
 	const {
 		width,
@@ -85,6 +84,8 @@ export const TwoChangeBarsWithImage: React.FC<
 							rightBarLabel,
 							valueFormatString,
 							percentageFormatString,
+							maxDomainValue,
+							minDomainValue,
 						}}
 					/>
 				</Position>

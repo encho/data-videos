@@ -10,10 +10,10 @@ import {z} from 'zod';
 import {Triangle} from '@remotion/shapes';
 import numeral from 'numeral';
 
-import {useChartLayout} from './useChartLayout';
-import {DisplayGridLayout} from '../acetti-layout';
-import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../acetti-themes/nerdy';
+import {useChartLayout} from '../../TwoChangeBars/useChartLayout';
+import {DisplayGridLayout} from '../../acetti-layout';
+import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
+import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {AnimatedBarWithValueLabel} from './AnimatedBarWithValueLabel';
 
 export const twoChangeBarsSchema = z.object({
@@ -27,6 +27,8 @@ export const twoChangeBarsSchema = z.object({
 	percentageFormatString: z.string(),
 	CHART_AREA_WIDTH: z.number(),
 	CHART_AREA_HEIGHT: z.number(),
+	minDomainValue: z.number().optional(),
+	maxDomainValue: z.number().optional(),
 });
 
 interface Point {
@@ -80,11 +82,9 @@ const LEFT_BAR_COLOR = '#404040';
 const LEFT_VALUE_COLOR = '#aaa';
 
 // const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
-const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
+// const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
 
-export const TwoChangeBarsComponent: React.FC<
-	z.infer<typeof twoChangeBarsSchema>
-> = ({
+export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
 	leftBarValue,
 	rightBarValue,
@@ -94,9 +94,17 @@ export const TwoChangeBarsComponent: React.FC<
 	percentageFormatString,
 	CHART_AREA_HEIGHT,
 	CHART_AREA_WIDTH,
+	minDomainValue,
+	maxDomainValue,
 }) => {
 	const LEFT_BAR_VALUE = leftBarValue;
 	const RIGHT_BAR_VALUE = rightBarValue;
+
+	const BARS_VALUES_VISIBLE_DOMAIN = [
+		minDomainValue || 0,
+		// 0,
+		maxDomainValue || Math.max(leftBarValue, rightBarValue),
+	];
 
 	const valueFormatter = (x: number) => numeral(x).format(valueFormatString);
 

@@ -1,23 +1,30 @@
 import {z} from 'zod';
 
-import {TwoChangeBarsComponent} from './TwoChangeBarsComponent';
+import {TwoChangeBars as TwoChangeBarsComponent} from '../acetti-flics/TwoChangeBars/TwoChangeBars';
 import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../acetti-ts-base/Position';
 
-export const twoChangeBarsSchema = z.object({
+export const twoChangeBarsComponentProps = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
-	title: z.string(),
-	subTitle: z.string(),
 	leftBarValue: z.number(),
 	leftBarLabel: z.string(),
 	rightBarValue: z.number(),
 	rightBarLabel: z.string(),
 	valueFormatString: z.string(),
 	percentageFormatString: z.string(),
+	minDomainValue: z.number().optional(),
+	maxDomainValue: z.number().optional(),
 });
+
+export const twoChangeBarsSchema = twoChangeBarsComponentProps.merge(
+	z.object({
+		title: z.string(),
+		subTitle: z.string(),
+	})
+);
 
 const CHART_AREA_WIDTH = 500;
 const CHART_AREA_HEIGHT = 600;
@@ -32,6 +39,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	rightBarLabel,
 	valueFormatString,
 	percentageFormatString,
+	minDomainValue,
+	maxDomainValue,
 }) => {
 	// TODO integrate into colorpalette
 	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
@@ -73,6 +82,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						rightBarLabel,
 						valueFormatString,
 						percentageFormatString,
+						minDomainValue,
+						maxDomainValue,
 					}}
 				/>
 			</Position>
