@@ -6,6 +6,7 @@ import {
 	spring,
 	// useVideoConfig
 } from 'remotion';
+import {measureText} from '@remotion/layout-utils';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {z} from 'zod';
 import chroma from 'chroma-js';
@@ -30,8 +31,10 @@ import {DisplayGridLayout} from '../acetti-layout';
 export const twoChangeBarsSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	//
-	startValue: z.number(),
-	endValue: z.number(),
+	leftBarValue: z.number(),
+	leftBarLabel: z.string(),
+	rightBarValue: z.number(),
+	rightBarLabel: z.string(),
 });
 
 const colorBrewerKeys = Object.keys(chroma.brewer);
@@ -77,15 +80,32 @@ const RIGHT_VALUE_COLOR = '#aaa';
 const LEFT_BAR_COLOR = '#404040';
 const LEFT_VALUE_COLOR = '#aaa';
 
-const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
-// const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
+// const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
+const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
 
-const LEFT_BAR_VALUE = 700;
-const RIGHT_BAR_VALUE = 1000;
 // const LEFT_BAR_VALUE = 1000;
 // const RIGHT_BAR_VALUE = 800;
 // const LEFT_BAR_VALUE = 1000;
 // const RIGHT_BAR_VALUE = 1000;
+
+const formatToPercentageGerman = (num: number): string => {
+	if (num < -1 || num > 1) {
+		throw new Error('Input must be between -1 and 1.');
+	}
+
+	const percentage = num * 100;
+
+	const percString =
+		percentage.toLocaleString('de-DE', {
+			minimumFractionDigits: 1,
+			maximumFractionDigits: 1,
+		}) + '%';
+
+	return percentage > 0 ? `+${percString}` : percString;
+};
+// Example usage:
+// const result = formatToPercentageGerman(0.5); // Returns "50,0%"
+// console.log(result);
 
 const formatToOneDecimalPlaceGerman = (num: number): string => {
 	return num.toLocaleString('de-DE', {
@@ -96,24 +116,49 @@ const formatToOneDecimalPlaceGerman = (num: number): string => {
 
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
-	startValue,
-	endValue,
+	leftBarValue,
+	rightBarValue,
+	leftBarLabel,
+	rightBarLabel,
 }) => {
+	const LEFT_BAR_VALUE = leftBarValue;
+	const RIGHT_BAR_VALUE = rightBarValue;
+
 	// const {width, height} = useVideoConfig();
 	// TODO integrate into colorpalette
 	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
 
 	const frame = useCurrentFrame();
-	const {durationInFrames, fps} = useVideoConfig();
+	const {fps} = useVideoConfig();
+
+	const DURATION_IN_SECONDS_BARS = 1;
+	const DISPLAY_DELAY_IN_SECONDS = 0.3;
+	const DURATION_IN_SECONDS_DISPLAY = 2.5;
+
+	const DURATION_IN_FRAMES_BARS = Math.floor(DURATION_IN_SECONDS_BARS * fps);
+	const DISPLAY_DELAY_IN_FRAMES =
+		DURATION_IN_FRAMES_BARS + Math.floor(DISPLAY_DELAY_IN_SECONDS * fps);
+	const DURATION_IN_FRAMES_DISPLAY = Math.floor(
+		DURATION_IN_SECONDS_DISPLAY * fps
+	);
 
 	// TODO add delay for second bar eventually
 	const spr = spring({
 		fps,
 		frame,
 		config: {damping: 300},
-		durationInFrames: durationInFrames / 2,
+		durationInFrames: DURATION_IN_FRAMES_BARS,
 	});
 	const percentageAnimation = spr;
+
+	const percentageAnimationDisplayArrow = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		// config: {damping: 100},
+		delay: DISPLAY_DELAY_IN_FRAMES,
+		durationInFrames: DURATION_IN_FRAMES_DISPLAY,
+	});
 
 	const paddingHorizontal = 40;
 	// const contentWidth = width - 2 * paddingHorizontal;
@@ -200,6 +245,38 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		},
 	];
 
+	const displayCenterX =
+		(chartLayout.areas.percChangeDisplay.x1 +
+			chartLayout.areas.percChangeDisplay.x2) /
+		2;
+
+	const displayCenterPoint = {
+		x: displayCenterX,
+		y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2,
+	};
+
+	const displayPercentageChangeText = formatToPercentageGerman(
+		RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1
+	);
+
+	const DISPLAY_FONT_SIZE = 30;
+	const DISPLAY_FONT_FAMILY = 'Arial';
+	const DISPLAY_FONT_WEIGHT = 600;
+
+	const displayTextWidth = measureText({
+		text: displayPercentageChangeText,
+		fontSize: DISPLAY_FONT_SIZE,
+		fontFamily: DISPLAY_FONT_FAMILY,
+		fontWeight: DISPLAY_FONT_WEIGHT,
+	});
+
+	const DISPLAY_RECT_BG_COLOR = theme.global.backgroundColor;
+	// const displayRectWidth = 130;
+	const displayRectWidth = displayTextWidth.width + 30;
+	const displayRectHeight = displayTextWidth.height + 10;
+	const displayRectPoint_x = displayCenterPoint.x - displayRectWidth / 2;
+	const displayRectPoint_y = displayCenterPoint.y - displayRectHeight / 2;
+
 	const pathColor =
 		RIGHT_BAR_VALUE > LEFT_BAR_VALUE
 			? PERC_CHANGE_DISPLAY_PATH_COLOR_UP
@@ -243,6 +320,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 					subTitleColor={theme.typography.subTitleColor}
 					title="Two Change Bars Example"
 					subTitle="Display a change of values over 2 periods"
+					// title={`${percentageAnimation}`}
+					// subTitle={`${percentageAnimationDisplayArrow}`}
 					titleFontSize={70}
 					subTitleFontSize={40}
 				/>
@@ -257,13 +336,11 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						position: 'relative',
 					}}
 				>
-					<DisplayGridLayout
+					{/* <DisplayGridLayout
 						width={CHART_AREA_WIDTH}
 						height={CHART_AREA_HEIGHT}
 						areas={chartLayout.areas}
-						// stroke={'#404040'}
-						// fill={'#191919'}
-					/>
+					/> */}
 					{/* percentage change arrow and display */}
 					<div
 						style={{
@@ -277,6 +354,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 								width: chartLayout.areas.percChangeDisplay.width,
 								height: chartLayout.areas.percChangeDisplay.height,
 								overflow: 'visible',
+								opacity: percentageAnimationDisplayArrow,
 							}}
 						>
 							<path
@@ -299,6 +377,39 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 									cornerRadius={6}
 								/>
 							</g>
+
+							<circle
+								cx={displayCenterPoint.x}
+								cy={displayCenterPoint.y}
+								r={10}
+								fill="orange"
+							/>
+
+							<rect
+								x={displayRectPoint_x}
+								y={displayRectPoint_y}
+								width={displayRectWidth}
+								height={displayRectHeight}
+								fill={DISPLAY_RECT_BG_COLOR}
+								stroke={pathColor}
+								strokeWidth={pathStrokeWidth}
+								rx={3}
+								ry={3}
+							/>
+
+							<text
+								x={displayCenterPoint.x}
+								y={displayCenterPoint.y}
+								text-anchor="middle"
+								dominant-baseline="middle"
+								fill={pathColor}
+								fontSize={DISPLAY_FONT_SIZE}
+								fontFamily={DISPLAY_FONT_FAMILY}
+								fontWeight={DISPLAY_FONT_WEIGHT}
+							>
+								{/* +23,5% */}
+								{displayPercentageChangeText}
+							</text>
 						</svg>
 					</div>
 
@@ -339,7 +450,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							}}
 						>
 							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
-								2023
+								{leftBarLabel}
 							</div>
 						</div>
 					</div>
@@ -381,7 +492,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							}}
 						>
 							<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
-								2024
+								{rightBarLabel}
 							</div>
 						</div>
 					</div>
