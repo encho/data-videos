@@ -1,77 +1,431 @@
-// TODO actually this is a single Bar animation! that spans the whole area!!
-// TODO rename to SingleBarAnimation
-export const TwoChangeBarsComponent: React.FC<{
-	height: number;
-	width: number;
-	currentBarValue: number;
-	currentBarHeight: number;
-	valueLabelFontSize: number;
-	valueLabelMarginBottom: number;
-	barColor: string;
-	valueLabelColor: string;
-	formatter: (x: number) => string;
-}> = ({
-	height,
-	width,
-	currentBarValue,
-	currentBarHeight,
-	valueLabelFontSize,
-	valueLabelMarginBottom,
-	barColor,
-	valueLabelColor,
-	formatter,
+import {
+	useVideoConfig,
+	useCurrentFrame,
+	spring,
+	// useVideoConfig
+} from 'remotion';
+import {measureText} from '@remotion/layout-utils';
+import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {z} from 'zod';
+import {Triangle} from '@remotion/shapes';
+import numeral from 'numeral';
+
+import {useChartLayout} from './useChartLayout';
+import {DisplayGridLayout} from '../acetti-layout';
+import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
+import {nerdyTheme} from '../acetti-themes/nerdy';
+import {AnimatedBarWithValueLabel} from './AnimatedBarWithValueLabel';
+
+export const twoChangeBarsSchema = z.object({
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	//
+	leftBarValue: z.number(),
+	leftBarLabel: z.string(),
+	rightBarValue: z.number(),
+	rightBarLabel: z.string(),
+	valueFormatString: z.string(),
+	percentageFormatString: z.string(),
+	CHART_AREA_WIDTH: z.number(),
+	CHART_AREA_HEIGHT: z.number(),
+});
+
+interface Point {
+	x: number;
+	y: number;
+}
+
+// const CHART_AREA_WIDTH = 300;
+// const CHART_AREA_HEIGHT = 300;
+
+// const CHART_AREA_WIDTH = 500;
+// const CHART_AREA_HEIGHT = 600;
+
+const SPACE_BETWEEN_BARS = 120;
+
+const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
+const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = 4;
+const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
+const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
+const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
+
+const LABEL_TEXT_SIZE = 40;
+const LABEL_MARGIN_TOP = 15;
+const LABEL_TEXT_COLOR = 'gray';
+
+const VALUE_TEXT_SIZE = 30;
+const VALUE_MARGIN_TOP = 20;
+const VALUE_MARGIN_BOTTOM = 10;
+
+const RIGHT_BAR_COLOR = '#404040';
+const RIGHT_VALUE_COLOR = '#aaa';
+
+const LEFT_BAR_COLOR = '#404040';
+const LEFT_VALUE_COLOR = '#aaa';
+
+// const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
+const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
+
+export const TwoChangeBarsComponent: React.FC<
+	z.infer<typeof twoChangeBarsSchema>
+> = ({
+	themeEnum,
+	leftBarValue,
+	rightBarValue,
+	leftBarLabel,
+	rightBarLabel,
+	valueFormatString,
+	percentageFormatString,
+	CHART_AREA_HEIGHT,
+	CHART_AREA_WIDTH,
 }) => {
-	const currentBarHeightInPixels = currentBarHeight;
+	const LEFT_BAR_VALUE = leftBarValue;
+	const RIGHT_BAR_VALUE = rightBarValue;
+
+	const valueFormatter = (x: number) => numeral(x).format(valueFormatString);
+
+	// const {width, height} = useVideoConfig();
+	// TODO integrate into colorpalette
+	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
+
+	const DURATION_IN_SECONDS_BARS = 1;
+	const DISPLAY_DELAY_IN_SECONDS = 0.3;
+	const DURATION_IN_SECONDS_DISPLAY = 2.5;
+
+	const DURATION_IN_FRAMES_BARS = Math.floor(DURATION_IN_SECONDS_BARS * fps);
+	const DISPLAY_DELAY_IN_FRAMES =
+		DURATION_IN_FRAMES_BARS + Math.floor(DISPLAY_DELAY_IN_SECONDS * fps);
+	const DURATION_IN_FRAMES_DISPLAY = Math.floor(
+		DURATION_IN_SECONDS_DISPLAY * fps
+	);
+
+	// TODO add delay for second bar eventually
+	const spr = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		durationInFrames: DURATION_IN_FRAMES_BARS,
+	});
+	const percentageAnimation = spr;
+
+	const percentageAnimationDisplayArrow = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		// config: {damping: 100},
+		delay: DISPLAY_DELAY_IN_FRAMES,
+		durationInFrames: DURATION_IN_FRAMES_DISPLAY,
+	});
+
+	const chartLayout = useChartLayout({
+		width: CHART_AREA_WIDTH,
+		height: CHART_AREA_HEIGHT,
+		//
+		labelTextSize: LABEL_TEXT_SIZE,
+		labelMarginTop: LABEL_MARGIN_TOP,
+		valueTextSize: VALUE_TEXT_SIZE,
+		valueMarginTop: VALUE_MARGIN_TOP,
+		valueMarginBottom: VALUE_MARGIN_BOTTOM,
+		percChangeDisplayAreaHeight: PERC_CHANGE_DISPLAY_AREA_HEIGHT,
+		spaceBetweenBars: SPACE_BETWEEN_BARS,
+	});
+
+	const getLeftBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
+		.domain([0, 1])
+		.range([Math.max(0, BARS_VALUES_VISIBLE_DOMAIN[0]), LEFT_BAR_VALUE]);
+
+	const getCurrentLeftBarHeight: ScaleLinear<number, number> = scaleLinear()
+		.domain(BARS_VALUES_VISIBLE_DOMAIN)
+		.range([0, chartLayout.areas.firstBar.height]);
+
+	// const currentLeftBarHeight = getCurrentLeftBarHeight(
+	// 	getLeftBarCurrentDomain(percentageAnimation)
+	// );
+
+	const currentLeftBarDomainValue =
+		getLeftBarCurrentDomain(percentageAnimation);
+
+	const currentLeftBarHeight = getCurrentLeftBarHeight(
+		currentLeftBarDomainValue
+	);
+
+	const finalLeftBarHeight = getCurrentLeftBarHeight(
+		getLeftBarCurrentDomain(1.0)
+	);
+
+	const getRightBarCurrentDomain: ScaleLinear<number, number> = scaleLinear()
+		.domain([0, 1])
+		.range([Math.max(0, BARS_VALUES_VISIBLE_DOMAIN[0]), RIGHT_BAR_VALUE]);
+
+	const getCurrentRightBarHeight: ScaleLinear<number, number> = scaleLinear()
+		.domain(BARS_VALUES_VISIBLE_DOMAIN)
+		.range([0, chartLayout.areas.firstBar.height]);
+
+	const currentRightBarDomainValue =
+		getRightBarCurrentDomain(percentageAnimation);
+
+	const currentRightBarHeight = getCurrentRightBarHeight(
+		currentRightBarDomainValue
+	);
+
+	const finalRightBarHeight = getCurrentRightBarHeight(
+		getRightBarCurrentDomain(1.0)
+	);
+
+	const firstBarCenterX =
+		(chartLayout.areas.firstBar.x1 + chartLayout.areas.firstBar.x2) / 2;
+
+	const secondBarCenterX =
+		(chartLayout.areas.secondBar.x1 + chartLayout.areas.secondBar.x2) / 2;
+
+	const leftBarPathEndY =
+		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.firstBar.height -
+		finalLeftBarHeight;
+
+	const rightBarPathEndY =
+		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.firstBar.height -
+		finalRightBarHeight -
+		24;
+
+	const pathPoints: Point[] = [
+		{x: firstBarCenterX, y: leftBarPathEndY},
+		{x: firstBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		{x: secondBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		{
+			x: secondBarCenterX,
+			y: rightBarPathEndY,
+		},
+	];
+
+	const displayCenterX =
+		(chartLayout.areas.percChangeDisplay.x1 +
+			chartLayout.areas.percChangeDisplay.x2) /
+		2;
+
+	const displayCenterPoint = {
+		x: displayCenterX,
+		y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2,
+	};
+
+	const percChange = RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1;
+	const displayPercentageChangeText = numeral(percChange).format(
+		percentageFormatString
+	);
+
+	const DISPLAY_FONT_SIZE = 30;
+	const DISPLAY_FONT_FAMILY = 'Arial';
+	const DISPLAY_FONT_WEIGHT = 600;
+
+	const displayTextWidth = measureText({
+		text: displayPercentageChangeText,
+		fontSize: DISPLAY_FONT_SIZE,
+		fontFamily: DISPLAY_FONT_FAMILY,
+		fontWeight: DISPLAY_FONT_WEIGHT,
+	});
+
+	const DISPLAY_RECT_BG_COLOR = theme.global.backgroundColor;
+	// const displayRectWidth = 130;
+	const displayRectWidth = displayTextWidth.width + 30;
+	const displayRectHeight = displayTextWidth.height + 10;
+	const displayRectPoint_x = displayCenterPoint.x - displayRectWidth / 2;
+	const displayRectPoint_y = displayCenterPoint.y - displayRectHeight / 2;
+
+	const pathColor =
+		RIGHT_BAR_VALUE > LEFT_BAR_VALUE
+			? PERC_CHANGE_DISPLAY_PATH_COLOR_UP
+			: RIGHT_BAR_VALUE < LEFT_BAR_VALUE
+			? PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN
+			: PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL;
+
+	// Function to convert points into a valid 'd' attribute for the path
+	const createPathFromPoints = (points: Point[]): string => {
+		if (points.length === 0) {
+			return '';
+		}
+
+		// Start at the first point (using M for "move to")
+		let path = `M ${points[0].x} ${points[0].y}`;
+
+		// Iterate through the remaining points, adding lines (using L for "line to")
+		for (let i = 1; i < points.length; i++) {
+			path += ` L ${points[i].x} ${points[i].y}`;
+		}
+
+		return path;
+	};
+
+	const pathData = createPathFromPoints(pathPoints);
+
+	const pathStrokeWidth = PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH;
 
 	return (
 		<div
 			style={{
-				width,
-				height,
 				position: 'relative',
 			}}
 		>
-			<div
-				style={{position: 'absolute', top: height - currentBarHeightInPixels}}
-			>
-				<div
-					style={{
-						height: currentBarHeightInPixels,
-						width,
-						backgroundColor: barColor,
-						// QUICK-FIX: better to implement with svg as rendered border radius dependent on html div height
-						borderRadius: 3,
-					}}
-				/>
-			</div>
-
-			{/* TODO solve outside this component, with help of bars height knowledge */}
-			{/* value label */}
+			<DisplayGridLayout
+				width={CHART_AREA_WIDTH}
+				height={CHART_AREA_HEIGHT}
+				areas={chartLayout.areas}
+			/>
+			{/* percentage change arrow and display */}
 			<div
 				style={{
 					position: 'absolute',
-					top:
-						height -
-						currentBarHeightInPixels -
-						valueLabelFontSize -
-						valueLabelMarginBottom -
-						// heuristic margin adjustment factor to center text vertically in its box (QUICK FIX FOR CAPSIZE)
-						(15 * valueLabelFontSize) / 50,
-					//
-					width,
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
+					top: chartLayout.areas.percChangeDisplay.y1,
+					left: chartLayout.areas.percChangeDisplay.x1,
+				}}
+			>
+				<svg
+					style={{
+						width: chartLayout.areas.percChangeDisplay.width,
+						height: chartLayout.areas.percChangeDisplay.height,
+						overflow: 'visible',
+						opacity: percentageAnimationDisplayArrow,
+					}}
+				>
+					<path
+						d={pathData}
+						stroke={pathColor}
+						fill="none"
+						strokeWidth={pathStrokeWidth}
+					/>
+
+					<g
+						transform={`translate(${
+							-24 / 2 + secondBarCenterX
+						},${rightBarPathEndY})`}
+					>
+						<Triangle
+							length={24}
+							// stroke={pathColor}
+							// strokeWidth={pathStrokeWidth}
+							fill={pathColor}
+							direction="down"
+							cornerRadius={6}
+						/>
+					</g>
+
+					<circle
+						cx={displayCenterPoint.x}
+						cy={displayCenterPoint.y}
+						r={10}
+						fill="orange"
+					/>
+
+					<rect
+						x={displayRectPoint_x}
+						y={displayRectPoint_y}
+						width={displayRectWidth}
+						height={displayRectHeight}
+						fill={DISPLAY_RECT_BG_COLOR}
+						stroke={pathColor}
+						strokeWidth={pathStrokeWidth}
+						rx={3}
+						ry={3}
+					/>
+
+					<text
+						x={displayCenterPoint.x}
+						y={displayCenterPoint.y}
+						text-anchor="middle"
+						dominant-baseline="middle"
+						dy={'0.06em'}
+						fill={pathColor}
+						fontSize={DISPLAY_FONT_SIZE}
+						fontFamily={DISPLAY_FONT_FAMILY}
+						fontWeight={DISPLAY_FONT_WEIGHT}
+					>
+						{/* +23,5% */}
+						{displayPercentageChangeText}
+					</text>
+				</svg>
+			</div>
+
+			<div
+				style={{
+					position: 'absolute',
+					top: chartLayout.areas.firstBar.y1,
+					left: chartLayout.areas.firstBar.x1,
+				}}
+			>
+				<AnimatedBarWithValueLabel
+					width={chartLayout.areas.firstBar.width}
+					height={chartLayout.areas.firstBar.height}
+					currentBarValue={currentLeftBarDomainValue}
+					currentBarHeight={currentLeftBarHeight}
+					valueLabelFontSize={VALUE_TEXT_SIZE}
+					valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+					barColor={LEFT_BAR_COLOR}
+					valueLabelColor={LEFT_VALUE_COLOR}
+					formatter={valueFormatter}
+				/>
+			</div>
+			<div
+				style={{
+					position: 'absolute',
+					top: chartLayout.areas.firstBarLabelText.y1,
+					left: chartLayout.areas.firstBarLabelText.x1,
 				}}
 			>
 				<div
 					style={{
-						color: valueLabelColor,
-						fontSize: valueLabelFontSize,
-						fontWeight: 600,
+						width: chartLayout.areas.firstBarLabelText.width,
+						height: chartLayout.areas.firstBarLabelText.height,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
 					}}
 				>
-					{formatter(currentBarValue)}
+					<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+						{leftBarLabel}
+					</div>
+				</div>
+			</div>
+			<div
+				style={{
+					position: 'absolute',
+					top: chartLayout.areas.secondBar.y1,
+					left: chartLayout.areas.secondBar.x1,
+				}}
+			>
+				<AnimatedBarWithValueLabel
+					width={chartLayout.areas.secondBar.width}
+					height={chartLayout.areas.secondBar.height}
+					currentBarHeight={currentRightBarHeight}
+					currentBarValue={currentRightBarDomainValue}
+					valueLabelFontSize={VALUE_TEXT_SIZE}
+					valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
+					barColor={RIGHT_BAR_COLOR}
+					valueLabelColor={RIGHT_VALUE_COLOR}
+					formatter={valueFormatter}
+				/>
+			</div>
+
+			<div
+				style={{
+					position: 'absolute',
+					top: chartLayout.areas.secondBarLabelText.y1,
+					left: chartLayout.areas.secondBarLabelText.x1,
+				}}
+			>
+				<div
+					style={{
+						width: chartLayout.areas.secondBarLabelText.width,
+						height: chartLayout.areas.secondBarLabelText.height,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+						{rightBarLabel}
+					</div>
 				</div>
 			</div>
 		</div>
