@@ -117,10 +117,12 @@ export const RemotionRoot: React.FC = () => {
 				schema={twoChangeBarsSchema}
 				defaultProps={{
 					themeEnum: 'NERDY' as const,
-					leftBarValue: 1000,
+					leftBarValue: 845,
 					rightBarValue: 849,
 					leftBarLabel: '1998',
 					rightBarLabel: '2024',
+					valueFormatString: '0,0.0',
+					percentageFormatString: '+0.00%',
 				}}
 			/>
 

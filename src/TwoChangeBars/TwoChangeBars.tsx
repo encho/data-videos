@@ -11,6 +11,8 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {z} from 'zod';
 import chroma from 'chroma-js';
 import {Triangle} from '@remotion/shapes';
+import numeral from 'numeral';
+
 // import {linearTiming, TransitionSeries} from '@remotion/transitions';
 // import {slide} from '@remotion/transitions/slide';
 
@@ -35,6 +37,8 @@ export const twoChangeBarsSchema = z.object({
 	leftBarLabel: z.string(),
 	rightBarValue: z.number(),
 	rightBarLabel: z.string(),
+	valueFormatString: z.string(),
+	percentageFormatString: z.string(),
 });
 
 const colorBrewerKeys = Object.keys(chroma.brewer);
@@ -88,31 +92,31 @@ const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
 // const LEFT_BAR_VALUE = 1000;
 // const RIGHT_BAR_VALUE = 1000;
 
-const formatToPercentageGerman = (num: number): string => {
-	if (num < -1 || num > 1) {
-		throw new Error('Input must be between -1 and 1.');
-	}
+// const formatToPercentageGerman = (num: number): string => {
+// 	if (num < -1 || num > 1) {
+// 		throw new Error('Input must be between -1 and 1.');
+// 	}
 
-	const percentage = num * 100;
+// 	const percentage = num * 100;
 
-	const percString =
-		percentage.toLocaleString('de-DE', {
-			minimumFractionDigits: 1,
-			maximumFractionDigits: 1,
-		}) + '%';
+// 	const percString =
+// 		percentage.toLocaleString('de-DE', {
+// 			minimumFractionDigits: 1,
+// 			maximumFractionDigits: 1,
+// 		}) + '%';
 
-	return percentage > 0 ? `+${percString}` : percString;
-};
+// 	return percentage > 0 ? `+${percString}` : percString;
+// };
 // Example usage:
 // const result = formatToPercentageGerman(0.5); // Returns "50,0%"
 // console.log(result);
 
-const formatToOneDecimalPlaceGerman = (num: number): string => {
-	return num.toLocaleString('de-DE', {
-		minimumFractionDigits: 1,
-		maximumFractionDigits: 1,
-	});
-};
+// const formatToOneDecimalPlaceGerman = (num: number): string => {
+// 	return num.toLocaleString('de-DE', {
+// 		minimumFractionDigits: 1,
+// 		maximumFractionDigits: 1,
+// 	});
+// };
 
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
@@ -120,9 +124,13 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	rightBarValue,
 	leftBarLabel,
 	rightBarLabel,
+	valueFormatString,
+	percentageFormatString,
 }) => {
 	const LEFT_BAR_VALUE = leftBarValue;
 	const RIGHT_BAR_VALUE = rightBarValue;
+
+	const valueFormatter = (x: number) => numeral(x).format(valueFormatString);
 
 	// const {width, height} = useVideoConfig();
 	// TODO integrate into colorpalette
@@ -255,8 +263,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2,
 	};
 
-	const displayPercentageChangeText = formatToPercentageGerman(
-		RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1
+	const percChange = RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1;
+	const displayPercentageChangeText = numeral(percChange).format(
+		percentageFormatString
 	);
 
 	const DISPLAY_FONT_SIZE = 30;
@@ -336,6 +345,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						position: 'relative',
 					}}
 				>
+					{/* TODO here <TwoChangeBars {...props} /> */}
 					{/* <DisplayGridLayout
 						width={CHART_AREA_WIDTH}
 						height={CHART_AREA_HEIGHT}
@@ -371,8 +381,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							>
 								<Triangle
 									length={24}
-									stroke={pathColor}
-									strokeWidth={pathStrokeWidth}
+									// stroke={pathColor}
+									// strokeWidth={pathStrokeWidth}
+									fill={pathColor}
 									direction="down"
 									cornerRadius={6}
 								/>
@@ -430,7 +441,8 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 							barColor={LEFT_BAR_COLOR}
 							valueLabelColor={LEFT_VALUE_COLOR}
-							formatter={formatToOneDecimalPlaceGerman}
+							// formatter={formatToOneDecimalPlaceGerman}
+							formatter={valueFormatter}
 						/>
 					</div>
 					<div
@@ -471,7 +483,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 							valueLabelMarginBottom={VALUE_MARGIN_BOTTOM}
 							barColor={RIGHT_BAR_COLOR}
 							valueLabelColor={RIGHT_VALUE_COLOR}
-							formatter={formatToOneDecimalPlaceGerman}
+							formatter={valueFormatter}
 						/>
 					</div>
 
