@@ -10,6 +10,7 @@ export const AnimatedBarWithValueLabel: React.FC<{
 	barColor: string;
 	valueLabelColor: string;
 	formatter: (x: number) => string;
+	displayTrimmer?: boolean;
 }> = ({
 	height,
 	width,
@@ -20,6 +21,7 @@ export const AnimatedBarWithValueLabel: React.FC<{
 	barColor,
 	valueLabelColor,
 	formatter,
+	displayTrimmer,
 }) => {
 	const currentBarHeightInPixels = currentBarHeight;
 
@@ -31,19 +33,26 @@ export const AnimatedBarWithValueLabel: React.FC<{
 				position: 'relative',
 			}}
 		>
-			<div
-				style={{position: 'absolute', top: height - currentBarHeightInPixels}}
+			<svg
+				style={{
+					width,
+					height,
+					overflow: 'visible',
+				}}
 			>
-				<div
-					style={{
-						height: currentBarHeightInPixels,
-						width,
-						backgroundColor: barColor,
-						// QUICK-FIX: better to implement with svg as rendered border radius dependent on html div height
-						borderRadius: 3,
-					}}
+				<rect
+					y={height - currentBarHeightInPixels}
+					x={0}
+					height={currentBarHeightInPixels}
+					width={width}
+					fill={barColor}
+					rx={3}
+					ry={3}
+					// fill={'yellow'}
+					// rx={10}
+					// ry={10}
 				/>
-			</div>
+			</svg>
 
 			{/* TODO solve outside this component, with help of bars height knowledge */}
 			{/* value label */}

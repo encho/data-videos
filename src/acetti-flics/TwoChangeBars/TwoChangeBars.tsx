@@ -81,11 +81,10 @@ const RIGHT_VALUE_COLOR = '#aaa';
 const LEFT_BAR_COLOR = '#404040';
 const LEFT_VALUE_COLOR = '#aaa';
 
-// const BARS_VALUES_VISIBLE_DOMAIN = [0, 1000];
-// const BARS_VALUES_VISIBLE_DOMAIN = [700, 1000];
-
 export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	themeEnum,
+	// TODO pass values directly, s.t. no theme object is necessary here
+	// theme object has to be handled by flics upstream
 	leftBarValue,
 	rightBarValue,
 	leftBarLabel,
@@ -266,6 +265,9 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 
 	const pathStrokeWidth = PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH;
 
+	// trimming indicators...
+	// TODO: only show if minDomainValue is bigger than 0
+
 	return (
 		<div
 			style={{
@@ -366,6 +368,7 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 					barColor={LEFT_BAR_COLOR}
 					valueLabelColor={LEFT_VALUE_COLOR}
 					formatter={valueFormatter}
+					displayTrimmer={true}
 				/>
 			</div>
 			<div
