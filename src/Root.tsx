@@ -222,12 +222,18 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="SimpleKPI"
 					component={SimpleKPIComposition}
-					durationInFrames={8000}
+					durationInFrames={90 * 5}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
 					{...squareVideo}
 					schema={simpleKPICompositionSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
+					defaultProps={{
+						themeEnum: 'NERDY' as const,
+						kpiValue: 0.015,
+						kpiValueFormatString: '+0.00%',
+						kpiLabel: 'Profit in 2024',
+						fontSize: 100,
+					}}
 				/>
 			</Folder>
 
