@@ -39,6 +39,11 @@ import {
 	TwoChangeBarsWithImage,
 } from './compositions/TwoChangeBars/TwoChangeBarsWithImage';
 
+import {
+	SimpleKPIComposition,
+	simpleKPICompositionSchema,
+} from './compositions/SimpleStats/SimpleKPI';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -216,12 +221,12 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="SimpleKPI"
-					component={ColorPalette}
+					component={SimpleKPIComposition}
 					durationInFrames={8000}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
 					{...squareVideo}
-					schema={colorPaletteSchema}
+					schema={simpleKPICompositionSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>
