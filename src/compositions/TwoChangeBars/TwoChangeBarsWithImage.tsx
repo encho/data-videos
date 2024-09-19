@@ -1,13 +1,13 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, staticFile} from 'remotion';
 
-import {TwoChangeBars as TwoChangeBarsComponent} from '../acetti-flics/TwoChangeBars/TwoChangeBars';
-import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
-import {lorenzobertolinibrightTheme} from '../acetti-themes/lorenzobertolinibright';
-import {nerdyTheme} from '../acetti-themes/nerdy';
+import {TwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/TwoChangeBars/TwoChangeBars';
+import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
+import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
+import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
-import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
-import {Position} from '../acetti-ts-base/Position';
+import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
+import {Position} from '../../acetti-ts-base/Position';
 
 import {twoChangeBarsComponentProps} from './TwoChangeBars';
 

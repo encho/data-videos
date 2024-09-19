@@ -10,7 +10,7 @@ import {z} from 'zod';
 import {Triangle} from '@remotion/shapes';
 import numeral from 'numeral';
 
-import {useChartLayout} from '../../TwoChangeBars/useChartLayout';
+import {useChartLayout} from '../../compositions/TwoChangeBars/useChartLayout';
 import {DisplayGridLayout} from '../../acetti-layout';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
