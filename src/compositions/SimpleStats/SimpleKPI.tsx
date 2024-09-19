@@ -1,6 +1,12 @@
 import {z} from 'zod';
 import numeral from 'numeral';
-import {measureText} from '@remotion/layout-utils';
+import {
+	Sequence,
+	useVideoConfig,
+	Easing,
+	useCurrentFrame,
+	interpolate,
+} from 'remotion';
 
 import {Position} from '../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
@@ -24,17 +30,6 @@ export const SimpleKPIComposition: React.FC<
 
 	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
 
-	const kpiFontProps = {
-		fontSize,
-		fontWeight: 700,
-		fontFamily: 'Arial',
-	};
-
-	const kpiTextWidth = measureText({
-		text: formattedKpiValue,
-		...kpiFontProps,
-	});
-
 	const kpiColor = theme.typography.textColor;
 
 	return (
@@ -51,35 +46,29 @@ export const SimpleKPIComposition: React.FC<
 					style={{
 						display: 'flex',
 						flexDirection: 'column',
-						fontSize: kpiFontProps.fontSize,
+						fontSize,
 					}}
 				>
 					<div
 						style={{
-							...kpiFontProps,
+							fontSize,
+							fontWeight: 700,
+							fontFamily: 'Arial',
 							color: kpiColor,
 						}}
 					>
-						<CharacterWrapper>{formattedKpiValue}</CharacterWrapper>
+						<AnimateText>{formattedKpiValue}</AnimateText>
 					</div>
 					<div
 						style={{
-							width: kpiTextWidth.width,
-							height: `${0.05}em`,
-							backgroundColor: kpiColor,
-							marginTop: -15,
-						}}
-					></div>
-					<div
-						style={{
-							color: kpiColor,
-							...kpiFontProps,
+							color: 'gray',
+							fontFamily: 'Arial',
 							fontSize: `${0.62}em`,
 							fontWeight: 500,
-							marginTop: 10,
+							marginTop: `-${0.5}em`,
 						}}
 					>
-						{kpiLabel}
+						<AnimateText>{kpiLabel}</AnimateText>
 					</div>
 				</div>
 			</Position>
@@ -88,17 +77,96 @@ export const SimpleKPIComposition: React.FC<
 	);
 };
 
-type Props = {
-	children: string;
-	tag?: keyof JSX.IntrinsicElements;
-};
+const AnimateText: React.FC<{children: string}> = ({children}) => {
+	const {durationInFrames} = useVideoConfig();
 
-const CharacterWrapper: React.FC<Props> = ({children, tag: Tag = 'span'}) => {
+	const characters = children.split('');
+
+	const enterSequenceDurationInFrames = 150;
+	const exitSequenceDurationInFrames = 120;
+	const displaySequenceDurationInFrames =
+		durationInFrames -
+		enterSequenceDurationInFrames -
+		exitSequenceDurationInFrames;
+
 	return (
 		<>
-			{children.split('').map((char, index) => (
-				<Tag key={index}>{char}</Tag>
-			))}
+			{/* enter animation */}
+			<Sequence durationInFrames={enterSequenceDurationInFrames} layout="none">
+				{characters.map((char, index) => (
+					<FadeInCharacter delay={index * 5} fadeInDurationInFrames={30}>
+						{char}
+					</FadeInCharacter>
+				))}
+			</Sequence>
+			{/* display */}
+			<Sequence
+				layout="none"
+				from={enterSequenceDurationInFrames}
+				durationInFrames={displaySequenceDurationInFrames}
+			>
+				{characters.map((char) => (
+					<span>{char}</span>
+				))}
+			</Sequence>
+			{/* exit animation */}
+			<Sequence
+				layout="none"
+				from={enterSequenceDurationInFrames + displaySequenceDurationInFrames}
+				durationInFrames={exitSequenceDurationInFrames}
+			>
+				{characters.map((char, index) => (
+					<FadeOutCharacter delay={index * 5} fadeOutDurationInFrames={50}>
+						{char}
+					</FadeOutCharacter>
+				))}
+			</Sequence>
 		</>
 	);
+};
+
+const FadeInCharacter: React.FC<{
+	children: string;
+	fadeInDurationInFrames?: number;
+	delay: number;
+}> = ({children, delay, fadeInDurationInFrames = 90}) => {
+	const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
+	const opacity = interpolate(
+		frame,
+		// [delay, delay + fadeInDurationInFrames],
+		[delay, durationInFrames],
+		[0, 1],
+		{
+			easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	return <span style={{opacity}}>{children}</span>;
+};
+
+const FadeOutCharacter: React.FC<{
+	children: string;
+	fadeOutDurationInFrames?: number;
+	delay: number;
+}> = ({children, delay, fadeOutDurationInFrames = 60}) => {
+	const frame = useCurrentFrame();
+	const {durationInFrames} = useVideoConfig();
+
+	const opacity = interpolate(
+		frame,
+		// [delay, delay + fadeOutDurationInFrames],
+		[delay, durationInFrames],
+		[1, 0],
+		{
+			easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	return <span style={{opacity}}>{children}</span>;
 };

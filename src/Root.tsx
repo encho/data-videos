@@ -232,7 +232,7 @@ export const RemotionRoot: React.FC = () => {
 						kpiValue: 0.015,
 						kpiValueFormatString: '+0.00%',
 						kpiLabel: 'Profit in 2024',
-						fontSize: 100,
+						fontSize: 120,
 					}}
 				/>
 			</Folder>
