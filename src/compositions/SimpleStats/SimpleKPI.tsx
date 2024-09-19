@@ -8,6 +8,7 @@ import {
 	interpolate,
 } from 'remotion';
 
+import {ThemeType} from '../../acetti-themes/themeTypes';
 import {Position} from '../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -28,9 +29,8 @@ export const SimpleKPIComposition: React.FC<
 > = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
-
-	const kpiColor = theme.typography.textColor;
+	// TODO kpi section in theme!!!
+	// const kpiColor = theme.typography.textColor;
 
 	return (
 		<div
@@ -42,34 +42,30 @@ export const SimpleKPIComposition: React.FC<
 			}}
 		>
 			<Position position={{top: 100, left: 100}}>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						fontSize,
-					}}
-				>
-					<div
-						style={{
-							fontSize,
-							fontWeight: 700,
-							fontFamily: 'Arial',
-							color: kpiColor,
-						}}
-					>
-						<AnimateText>{formattedKpiValue}</AnimateText>
-					</div>
-					<div
-						style={{
-							color: 'gray',
-							fontFamily: 'Arial',
-							fontSize: `${0.62}em`,
-							fontWeight: 500,
-							marginTop: `-${0.5}em`,
-						}}
-					>
-						<AnimateText>{kpiLabel}</AnimateText>
-					</div>
+				<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
+					<Sequence layout="none">
+						<SimpleKPI
+							{...{
+								themeEnum,
+								kpiValue,
+								kpiValueFormatString,
+								kpiLabel,
+								fontSize,
+							}}
+						/>
+					</Sequence>
+
+					<Sequence layout="none" from={90}>
+						<SimpleKPI
+							{...{
+								themeEnum,
+								kpiValue: 2000,
+								kpiValueFormatString: '$ 0.00',
+								kpiLabel: 'Investments',
+								fontSize,
+							}}
+						/>
+					</Sequence>
 				</div>
 			</Position>
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
@@ -77,13 +73,52 @@ export const SimpleKPIComposition: React.FC<
 	);
 };
 
-const AnimateText: React.FC<{children: string}> = ({children}) => {
+export const SimpleKPI: React.FC<
+	z.infer<typeof simpleKPICompositionSchema>
+> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
+	const theme = getThemeFromEnum(themeEnum as any);
+
+	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
+
+	// TODO kpi section in theme!!!
+	// const kpiColor = theme.typography.textColor;
+
+	return (
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				fontSize,
+			}}
+		>
+			<div
+				style={{
+					...getTitleStyles(theme),
+					fontSize,
+				}}
+			>
+				<FadeInAndOutText>{formattedKpiValue}</FadeInAndOutText>
+			</div>
+			<div
+				style={{
+					...getSubTitleStyles(theme),
+					fontSize: `${0.62}em`,
+					marginTop: `-${0.5}em`,
+				}}
+			>
+				<FadeInAndOutText>{kpiLabel}</FadeInAndOutText>
+			</div>
+		</div>
+	);
+};
+
+const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const characters = children.split('');
 
-	const enterSequenceDurationInFrames = 150;
-	const exitSequenceDurationInFrames = 120;
+	const enterSequenceDurationInFrames = 120;
+	const exitSequenceDurationInFrames = 200;
 	const displaySequenceDurationInFrames =
 		durationInFrames -
 		enterSequenceDurationInFrames -
@@ -159,6 +194,7 @@ const FadeOutCharacter: React.FC<{
 	const opacity = interpolate(
 		frame,
 		// [delay, delay + fadeOutDurationInFrames],
+		// [delay, durationInFrames],
 		[delay, durationInFrames],
 		[1, 0],
 		{
@@ -169,4 +205,22 @@ const FadeOutCharacter: React.FC<{
 	);
 
 	return <span style={{opacity}}>{children}</span>;
+};
+
+const getTitleStyles = (theme: ThemeType) => {
+	const titleStyles = {
+		fontWeight: 700,
+		fontFamily: theme.typography.title.fontFamily,
+		color: theme.typography.title.color,
+	};
+	return titleStyles;
+};
+
+const getSubTitleStyles = (theme: ThemeType) => {
+	const subTitleStyles = {
+		fontWeight: 500,
+		fontFamily: theme.typography.subTitle.fontFamily,
+		color: theme.typography.subTitle.color,
+	};
+	return subTitleStyles;
 };

@@ -231,7 +231,7 @@ export const RemotionRoot: React.FC = () => {
 						themeEnum: 'NERDY' as const,
 						kpiValue: 0.015,
 						kpiValueFormatString: '+0.00%',
-						kpiLabel: 'Profit in 2024',
+						kpiLabel: 'Net Profit ',
 						fontSize: 120,
 					}}
 				/>
