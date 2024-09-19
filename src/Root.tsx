@@ -1356,7 +1356,22 @@ export const RemotionRoot: React.FC = () => {
 				/>
 			</Folder>
 
-			<Folder name="DesignTools">
+			<Folder name="SimpleStats">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="SimpleKPI"
+					component={ColorPalette}
+					durationInFrames={8000}
+					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+					fps={90}
+					{...squareVideo}
+					schema={colorPaletteSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+			</Folder>
+
+			<Folder name="Colors">
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
