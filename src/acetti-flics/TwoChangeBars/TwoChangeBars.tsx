@@ -118,7 +118,11 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 	const DURATION_IN_SECONDS_BARS = 1;
 	const DISPLAY_DELAY_IN_SECONDS = 0.3;
 	const DURATION_IN_SECONDS_DISPLAY = 2.5;
+	const DURATION_IN_SECONDS_LABEL_APPEARANCE = 0.75;
 
+	const DURATION_IN_FRAMES_LABEL_APPEARANCE = Math.floor(
+		DURATION_IN_SECONDS_LABEL_APPEARANCE * fps
+	);
 	const DURATION_IN_FRAMES_BARS = Math.floor(DURATION_IN_SECONDS_BARS * fps);
 	const DISPLAY_DELAY_IN_FRAMES =
 		DURATION_IN_FRAMES_BARS + Math.floor(DISPLAY_DELAY_IN_SECONDS * fps);
@@ -134,6 +138,13 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 		durationInFrames: DURATION_IN_FRAMES_BARS,
 	});
 	const percentageAnimation = spr;
+
+	const labelOpacitySpring = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		durationInFrames: DURATION_IN_FRAMES_LABEL_APPEARANCE,
+	});
 
 	const percentageAnimationDisplayArrow = spring({
 		fps,
@@ -390,7 +401,14 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						alignItems: 'center',
 					}}
 				>
-					<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+					<div
+						style={{
+							color: LABEL_TEXT_COLOR,
+							fontSize: LABEL_TEXT_SIZE,
+
+							opacity: labelOpacitySpring,
+						}}
+					>
 						{leftBarLabel}
 					</div>
 				</div>
@@ -434,7 +452,13 @@ export const TwoChangeBars: React.FC<z.infer<typeof twoChangeBarsSchema>> = ({
 						alignItems: 'center',
 					}}
 				>
-					<div style={{color: LABEL_TEXT_COLOR, fontSize: LABEL_TEXT_SIZE}}>
+					<div
+						style={{
+							color: LABEL_TEXT_COLOR,
+							fontSize: LABEL_TEXT_SIZE,
+							opacity: labelOpacitySpring,
+						}}
+					>
 						{rightBarLabel}
 					</div>
 				</div>
