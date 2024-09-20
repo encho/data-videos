@@ -14,11 +14,17 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 	const characters = children.split('');
 
 	const enterSequenceDurationInFrames = 120;
-	const exitSequenceDurationInFrames = 200;
-	const displaySequenceDurationInFrames =
+	let exitSequenceDurationInFrames = 200;
+	let displaySequenceDurationInFrames =
 		durationInFrames -
 		enterSequenceDurationInFrames -
 		exitSequenceDurationInFrames;
+
+	if (displaySequenceDurationInFrames < 0) {
+		exitSequenceDurationInFrames =
+			exitSequenceDurationInFrames + displaySequenceDurationInFrames - 1;
+		displaySequenceDurationInFrames = 1;
+	}
 
 	return (
 		<>

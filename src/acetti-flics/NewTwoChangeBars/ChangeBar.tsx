@@ -66,7 +66,7 @@ export const ChangeBar: React.FC<{
 	const ANIMATION_SPECS = {
 		bar: {
 			from: 90 * 1,
-			durationInFrames: durationInFrames - 90 * 1, // auto-determine from total sequence duration
+			durationInFrames: durationInFrames - 90 * 1.75, // auto-determine from total sequence duration
 			enterDurationInFrames: 90 * 1,
 			exitDurationInFrames: 90 * 0.5,
 		},
@@ -118,6 +118,7 @@ export const ChangeBar: React.FC<{
 							value={value}
 							visibleDomain={visibleDomain}
 							area={barArea}
+							valueLabelArea={valueLabelArea}
 							valueFormatter={valueFormatter}
 							enterDurationInFrames={ANIMATION_SPECS.bar.enterDurationInFrames}
 							exitDurationInFrames={ANIMATION_SPECS.bar.exitDurationInFrames}
@@ -125,47 +126,6 @@ export const ChangeBar: React.FC<{
 						<g></g>
 					</Area>
 				</Sequence>
-
-				{/* <Sequence
-						name="Label"
-						layout="none"
-						from={ANIMATION_SPECS.label.from}
-						durationInFrames={ANIMATION_SPECS.label.durationInFrames}
-					>
-						<Area area={labelArea}>
-							<AnimatedSvgLabel
-								fontSize={labelArea.height}
-								areaWidth={labelArea.width}
-								areaHeight={labelArea.height}
-							>
-								{label}
-							</AnimatedSvgLabel>
-							<g></g>
-						</Area>
-					</Sequence> */}
-
-				{/* TODO these two into the isolated bar component within this file */}
-				{/* <mask id="barMask">
-					<rect
-						y={0}
-						x={0}
-						height={height}
-						width={width}
-						rx={3}
-						ry={3}
-						fill="white"
-					/>
-				</mask> */}
-
-				{/* <rect
-					y={height - currentBarHeightInPixels}
-					x={0}
-					height={currentBarHeightInPixels}
-					width={width}
-					fill={barColor}
-					rx={3}
-					ry={3}
-				/> */}
 			</svg>
 			<Sequence
 				name="LabelDiv"
@@ -177,7 +137,7 @@ export const ChangeBar: React.FC<{
 					<div
 						style={{
 							color: 'white',
-							fontSize: 40,
+							fontSize: labelArea.height,
 							fontWeight: 600,
 							fontFamily: 'Arial',
 							display: 'flex',
@@ -185,65 +145,11 @@ export const ChangeBar: React.FC<{
 							alignItems: 'center',
 						}}
 					>
-						<FadeInAndOutText>hello</FadeInAndOutText>
+						<FadeInAndOutText>{label}</FadeInAndOutText>
 					</div>
 				</HtmlArea>
 			</Sequence>
 		</div>
-	);
-};
-
-// TODO AnimatedSVGText...
-const AnimatedSvgLabel = ({
-	fontSize,
-	areaWidth,
-	areaHeight,
-	children,
-}: {
-	fontSize: number;
-	areaWidth: number;
-	areaHeight: number;
-	children: string;
-}) => {
-	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
-
-	const TEXT_ENTER_DURATION_IN_FRAMES = fps * 0.8;
-	const TEXT_EXIT_DURATION_IN_FRAMES = fps * 0.8;
-
-	const opacity = interpolate(
-		frame,
-		[
-			0,
-			TEXT_ENTER_DURATION_IN_FRAMES,
-			durationInFrames - TEXT_EXIT_DURATION_IN_FRAMES,
-			durationInFrames,
-		],
-		[0, 1, 1, 0],
-		{
-			easing: Easing.cubic,
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
-
-	return (
-		<g>
-			<text
-				opacity={opacity}
-				x={areaWidth / 2}
-				y={areaHeight / 2}
-				text-anchor="middle"
-				dominant-baseline="middle"
-				// dy={'0.06em'}
-				fill={'white'}
-				fontSize={fontSize}
-				fontFamily={'Arial'}
-				fontWeight={600}
-			>
-				{children}
-			</text>
-		</g>
 	);
 };
 
@@ -252,6 +158,7 @@ const AnimatedSvgBar = ({
 	valueFormatter,
 	visibleDomain,
 	area,
+	valueLabelArea,
 	enterDurationInFrames,
 	exitDurationInFrames,
 }: {
@@ -260,6 +167,7 @@ const AnimatedSvgBar = ({
 	valueFormatter: (x: number) => string;
 	// barScale: ScaleLinear<number, number>;
 	area: TGridLayoutArea;
+	valueLabelArea: TGridLayoutArea;
 	enterDurationInFrames: number;
 	exitDurationInFrames: number;
 }) => {
@@ -337,6 +245,14 @@ const AnimatedSvgBar = ({
 			? interpolateEnterBarHeight(frame)
 			: interpolateExitBarHeight(frame);
 
+	const barCompletionPercentage = barHeight / area.height;
+
+	const currentBarValue =
+		visibleDomain[0] +
+		(visibleDomain[1] - visibleDomain[0]) * barCompletionPercentage;
+
+	const shiftDownValueLabelBy = area.height - barHeight;
+
 	return (
 		<g>
 			<rect
@@ -349,21 +265,37 @@ const AnimatedSvgBar = ({
 				rx={3}
 				ry={3}
 			/>
-
-			<text
-				opacity={opacity}
-				x={area.width / 2}
-				y={area.height - barHeight - 20}
-				text-anchor="middle"
-				dominant-baseline="middle"
-				dy={'0.06em'}
-				fill={'yellow'}
-				fontSize={30}
-				fontFamily={'Arial'}
-				fontWeight={500}
-			>
-				{valueFormatter(value)}
-			</text>
+			<g transform={`translate(0,${shiftDownValueLabelBy})`}>
+				<foreignObject
+					width={valueLabelArea.width}
+					height={valueLabelArea.height}
+					y={0 - area.y1 - valueLabelArea.y1}
+					x={0}
+				>
+					<div
+						style={{
+							width: valueLabelArea.width,
+							height: valueLabelArea.height,
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<div
+							style={{
+								color: 'white',
+								fontSize: valueLabelArea.height,
+								fontWeight: 500,
+								fontFamily: 'Arial',
+							}}
+						>
+							<FadeInAndOutText>
+								{valueFormatter(currentBarValue)}
+							</FadeInAndOutText>
+						</div>
+					</div>
+				</foreignObject>
+			</g>
 		</g>
 	);
 };

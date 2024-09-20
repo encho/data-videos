@@ -56,7 +56,7 @@ const createPathFromPoints = (points: Point[]): string => {
 	return path;
 };
 
-const SPACE_BETWEEN_BARS = 120;
+const SPACE_BETWEEN_BARS = 100;
 
 const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
 const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = 4;
@@ -102,9 +102,9 @@ export const NewTwoChangeBars: React.FC<
 	const LABEL_MARGIN_TOP = 15;
 	const LABEL_TEXT_COLOR = theme.typography.textColor;
 
-	const VALUE_TEXT_SIZE = 30;
+	const VALUE_TEXT_SIZE = 34;
 	const VALUE_MARGIN_TOP = 30;
-	const VALUE_MARGIN_BOTTOM = 15;
+	const VALUE_MARGIN_BOTTOM = 12;
 
 	const BARS_VALUES_VISIBLE_DOMAIN = [
 		minDomainValue || 0,

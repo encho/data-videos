@@ -28,7 +28,7 @@ export const newTwoChangeBarsSchema = twoChangeBarsComponentProps.merge(
 	})
 );
 
-const CHART_AREA_WIDTH = 500;
+const CHART_AREA_WIDTH = 450;
 const CHART_AREA_HEIGHT = 600;
 
 export const NewTwoChangeBars: React.FC<
