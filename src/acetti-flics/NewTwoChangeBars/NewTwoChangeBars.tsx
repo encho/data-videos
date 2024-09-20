@@ -2,6 +2,7 @@ import {
 	useVideoConfig,
 	useCurrentFrame,
 	spring,
+	Sequence,
 	// useVideoConfig
 } from 'remotion';
 import {measureText} from '@remotion/layout-utils';
@@ -16,6 +17,7 @@ import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinib
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {AnimatedBarWithValueLabel} from './AnimatedBarWithValueLabel';
+import {ChangeBar} from './ChangeBar';
 
 export const newTwoChangeBarsSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -115,7 +117,7 @@ export const NewTwoChangeBars: React.FC<
 	// const {width, height} = useVideoConfig();
 
 	const frame = useCurrentFrame();
-	const {fps} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 
 	const DURATION_IN_SECONDS_BARS = 1;
 	const DISPLAY_DELAY_IN_SECONDS = 0.3;
@@ -282,6 +284,10 @@ export const NewTwoChangeBars: React.FC<
 	// trimming indicators...
 	// TODO: only show if minDomainValue is bigger than 0
 
+	const leftBarScale = getCurrentLeftBarHeight;
+	const rightBarScale = getCurrentRightBarHeight;
+	// const leftBarValue = LEFT_BAR_VALUE;
+
 	return (
 		<div
 			style={{
@@ -294,6 +300,46 @@ export const NewTwoChangeBars: React.FC<
 				areas={chartLayout.areas}
 			/> */}
 			{/* percentage change arrow and display */}
+			<Sequence
+				from={90 * 1}
+				durationInFrames={durationInFrames - 90 * 1}
+				layout="none"
+			>
+				<ChangeBar
+					areas={{
+						valueLabel: chartLayout.areas.firstBarValueText,
+						bar: chartLayout.areas.firstBar,
+						label: chartLayout.areas.firstBarLabelText,
+					}}
+					label={leftBarLabel}
+					value={leftBarValue}
+					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
+					barScale={leftBarScale}
+					valueFormatter={valueFormatter}
+					isTrimmed={Boolean(minDomainValue)}
+				/>
+			</Sequence>
+
+			<Sequence
+				from={90 * 3}
+				durationInFrames={durationInFrames - 90 * 3}
+				layout="none"
+			>
+				<ChangeBar
+					areas={{
+						valueLabel: chartLayout.areas.secondBarValueText,
+						bar: chartLayout.areas.secondBar,
+						label: chartLayout.areas.secondBarLabelText,
+					}}
+					label={rightBarLabel}
+					value={rightBarValue}
+					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
+					barScale={rightBarScale}
+					valueFormatter={valueFormatter}
+					isTrimmed={Boolean(minDomainValue)}
+				/>
+			</Sequence>
+
 			<div
 				style={{
 					position: 'absolute',
@@ -301,7 +347,7 @@ export const NewTwoChangeBars: React.FC<
 					left: chartLayout.areas.percChangeDisplay.x1,
 				}}
 			>
-				<svg
+				{/* <svg
 					style={{
 						width: chartLayout.areas.percChangeDisplay.width,
 						height: chartLayout.areas.percChangeDisplay.height,
@@ -359,13 +405,12 @@ export const NewTwoChangeBars: React.FC<
 						fontFamily={DISPLAY_FONT_FAMILY}
 						fontWeight={DISPLAY_FONT_WEIGHT}
 					>
-						{/* +23,5% */}
 						{displayPercentageChangeText}
 					</text>
-				</svg>
+				</svg> */}
 			</div>
 
-			<div
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: chartLayout.areas.firstBar.y1,
@@ -386,8 +431,8 @@ export const NewTwoChangeBars: React.FC<
 					displayTrimmerAnimationPerc={percentageAnimation}
 					backgroundColor={theme.global.backgroundColor}
 				/>
-			</div>
-			<div
+			</div> */}
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: chartLayout.areas.firstBarLabelText.y1,
@@ -414,8 +459,8 @@ export const NewTwoChangeBars: React.FC<
 						{leftBarLabel}
 					</div>
 				</div>
-			</div>
-			<div
+			</div> */}
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: chartLayout.areas.secondBar.y1,
@@ -436,9 +481,9 @@ export const NewTwoChangeBars: React.FC<
 					displayTrimmerAnimationPerc={percentageAnimation}
 					backgroundColor={theme.global.backgroundColor}
 				/>
-			</div>
+			</div> */}
 
-			<div
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: chartLayout.areas.secondBarLabelText.y1,
@@ -464,7 +509,7 @@ export const NewTwoChangeBars: React.FC<
 						{rightBarLabel}
 					</div>
 				</div>
-			</div>
+			</div> */}
 		</div>
 	);
 };

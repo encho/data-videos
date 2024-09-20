@@ -69,16 +69,20 @@ function AreaRect({
 	);
 }
 
-export function HtmlArea({area}: TAreaProps) {
+export function HtmlArea({area, children}: TAreaProps) {
 	return (
 		<div
-			className="absolute bg-blue-700 bg-opacity-30"
 			style={{
+				position: 'absolute',
+				// backgroundColor: 'red',
+				// opacity: 0.3,
 				width: area.width,
 				height: area.height,
 				top: area.y1,
 				left: area.x1,
 			}}
-		></div>
+		>
+			{children}
+		</div>
 	);
 }
