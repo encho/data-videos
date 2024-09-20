@@ -317,6 +317,7 @@ export const NewTwoChangeBars: React.FC<
 					barScale={leftBarScale}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
+					backgroundColor={theme.global.backgroundColor}
 				/>
 			</Sequence>
 
@@ -337,6 +338,7 @@ export const NewTwoChangeBars: React.FC<
 					barScale={rightBarScale}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
+					backgroundColor={theme.global.backgroundColor}
 				/>
 			</Sequence>
 

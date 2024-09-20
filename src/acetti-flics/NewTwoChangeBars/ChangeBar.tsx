@@ -1,4 +1,4 @@
-// import {line, curveLinearClosed} from 'd3-shape';
+import {line, curveLinearClosed} from 'd3-shape';
 import {
 	Sequence,
 	useCurrentFrame,
@@ -49,6 +49,7 @@ export const ChangeBar: React.FC<{
 	barScale: ScaleLinear<number, number>;
 	valueFormatter: (x: number) => string;
 	isTrimmed: boolean;
+	backgroundColor: string;
 }> = ({
 	// from,
 	// durationInFrames,
@@ -59,6 +60,7 @@ export const ChangeBar: React.FC<{
 	barScale,
 	valueFormatter,
 	isTrimmed,
+	backgroundColor,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -122,6 +124,8 @@ export const ChangeBar: React.FC<{
 							valueFormatter={valueFormatter}
 							enterDurationInFrames={ANIMATION_SPECS.bar.enterDurationInFrames}
 							exitDurationInFrames={ANIMATION_SPECS.bar.exitDurationInFrames}
+							isTrimmed={isTrimmed}
+							backgroundColor={backgroundColor}
 						/>
 						<g></g>
 					</Area>
@@ -161,6 +165,8 @@ const AnimatedSvgBar = ({
 	valueLabelArea,
 	enterDurationInFrames,
 	exitDurationInFrames,
+	isTrimmed,
+	backgroundColor,
 }: {
 	value: number;
 	visibleDomain: [number, number];
@@ -168,8 +174,11 @@ const AnimatedSvgBar = ({
 	// barScale: ScaleLinear<number, number>;
 	area: TGridLayoutArea;
 	valueLabelArea: TGridLayoutArea;
+	//TODO enter and exits should be fixtures
 	enterDurationInFrames: number;
 	exitDurationInFrames: number;
+	isTrimmed: boolean;
+	backgroundColor: string;
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -188,7 +197,7 @@ const AnimatedSvgBar = ({
 		const barOpacity = interpolate(
 			frame,
 			[durationInFrames - exitDurationInFrames, durationInFrames],
-			[1, 0],
+			[1, 0.85],
 			{
 				easing: Easing.cubic,
 				extrapolateLeft: 'clamp',
@@ -253,8 +262,45 @@ const AnimatedSvgBar = ({
 
 	const shiftDownValueLabelBy = area.height - barHeight;
 
+	const trimmerSteigungInPixels = 40;
+	const trimmerLeftAnsatz = Math.min(0 + 60, barHeight - 80);
+	const trimmerLeftCentroidY = area.height - trimmerLeftAnsatz;
+	const trimmerRightCentroidY = trimmerLeftCentroidY - trimmerSteigungInPixels;
+
+	const trimmerHeight = 10;
+
+	const trimmerPoints = [
+		{x: 0 - 5, y: trimmerLeftCentroidY + trimmerHeight / 2},
+		{x: 0 - 5, y: trimmerLeftCentroidY - trimmerHeight / 2},
+		{x: area.width + 5, y: trimmerRightCentroidY - trimmerHeight / 2},
+		{x: area.width + 5, y: trimmerRightCentroidY + trimmerHeight / 2},
+	];
+
+	// Create a line generator with closed path
+	const lineGenerator = line<{x: number; y: number}>()
+		.x((d) => d.x)
+		.y((d) => d.y)
+		.curve(curveLinearClosed); // This ensures the path will close
+
+	// Generate the path data
+	const pathData = lineGenerator(trimmerPoints) || '';
+
+	const pathColor = backgroundColor;
+
 	return (
 		<g>
+			<mask id="barAreaMask">
+				<rect
+					y={0}
+					x={-5}
+					height={area.height}
+					width={area.width + 10}
+					rx={3}
+					ry={3}
+					fill="white"
+				/>
+			</mask>
+
 			<rect
 				opacity={opacity}
 				y={area.height - barHeight}
@@ -265,6 +311,22 @@ const AnimatedSvgBar = ({
 				rx={3}
 				ry={3}
 			/>
+
+			{isTrimmed ? (
+				<g mask="url(#barAreaMask)">
+					{/* trimmer */}
+					{/* <g transform={`translate(${0}, ${pathShift})`}> */}
+					<g transform={`translate(${0}, ${0})`}>
+						<path
+							d={pathData}
+							fill={pathColor}
+							// stroke={pathColor}
+							// strokeWidth={5}
+						/>
+					</g>
+				</g>
+			) : null}
+
 			<g transform={`translate(0,${shiftDownValueLabelBy})`}>
 				<foreignObject
 					width={valueLabelArea.width}
