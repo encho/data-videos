@@ -44,6 +44,11 @@ import {
 	simpleKPICompositionSchema,
 } from './compositions/SimpleStats/SimpleKPI';
 
+import {
+	NewTwoChangeBars,
+	newTwoChangeBarsSchema,
+} from './compositions/TwoChangeBars/NewTwoChangeBars';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -163,6 +168,30 @@ export const RemotionRoot: React.FC = () => {
 			</Folder>
 
 			<Folder name="ChangeBars">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="NewTwoChangeBars"
+					component={NewTwoChangeBars}
+					durationInFrames={90 * 5}
+					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+					fps={90}
+					{...squareVideo}
+					schema={newTwoChangeBarsSchema}
+					defaultProps={{
+						themeEnum: 'NERDY' as const,
+						title: 'Global Car Sales',
+						subTitle: '2023 vs. 2024 (in USD)',
+						leftBarValue: 980,
+						rightBarValue: 1000,
+						leftBarLabel: '2023',
+						rightBarLabel: '2024',
+						valueFormatString: '$ 0,0.',
+						percentageFormatString: '+0.00%',
+						minDomainValue: 900,
+					}}
+				/>
+
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
