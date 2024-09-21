@@ -3,8 +3,11 @@ import {
 	useCurrentFrame,
 	spring,
 	Sequence,
+	Easing,
+	interpolate,
 	// useVideoConfig
 } from 'remotion';
+import {evolvePath} from '@remotion/paths';
 import {measureText} from '@remotion/layout-utils';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {z} from 'zod';
@@ -208,6 +211,35 @@ export const NewTwoChangeBars: React.FC<
 	});
 	const percentageAnimation = spr;
 
+	const pathAnimationDelay = 90 * 5.5;
+	const pathLineAnimationDuration = 90 * 1;
+	const pathTriangleAnimationDuration = 90 * 3;
+	const pathSpring = spring({
+		fps,
+		frame,
+		config: {damping: 50, stiffness: 500},
+		durationInFrames: pathLineAnimationDuration,
+		delay: pathAnimationDelay,
+	});
+
+	const triangleOpacitySpring = spring({
+		fps,
+		frame,
+		config: {damping: 300},
+		durationInFrames: pathTriangleAnimationDuration,
+		delay: pathAnimationDelay + pathLineAnimationDuration,
+	});
+
+	const globalPathExitOpacity = interpolate(
+		frame,
+		[durationInFrames - 90 * 2.25, durationInFrames - 90 * 1.75],
+		[1, 0],
+		{
+			easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 	const labelOpacitySpring = spring({
 		fps,
 		frame,
@@ -357,6 +389,8 @@ export const NewTwoChangeBars: React.FC<
 		5
 	);
 
+	const pathEvolution = evolvePath(pathSpring, pathData);
+
 	const pathStrokeWidth = PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH;
 
 	return (
@@ -384,11 +418,14 @@ export const NewTwoChangeBars: React.FC<
 						width: chartLayout.areas.percChangeDisplay.width,
 						height: chartLayout.areas.percChangeDisplay.height,
 						overflow: 'visible',
-						opacity: percentageAnimationDisplayArrow,
+						opacity: globalPathExitOpacity,
+						// opacity: percentageAnimationDisplayArrow,
 					}}
 				>
 					<path
 						d={pathData}
+						strokeDasharray={pathEvolution.strokeDasharray}
+						strokeDashoffset={pathEvolution.strokeDashoffset}
 						stroke={pathColor}
 						fill="none"
 						strokeWidth={pathStrokeWidth}
@@ -398,6 +435,7 @@ export const NewTwoChangeBars: React.FC<
 						transform={`translate(${
 							-24 / 2 + secondBarCenterX
 						},${rightBarPathEndY})`}
+						opacity={triangleOpacitySpring}
 					>
 						<Triangle
 							length={24}
@@ -427,6 +465,7 @@ export const NewTwoChangeBars: React.FC<
 					/> */}
 
 					<text
+						opacity={triangleOpacitySpring}
 						x={displayCenterPoint.x}
 						y={displayCenterPoint.y}
 						text-anchor="middle"
