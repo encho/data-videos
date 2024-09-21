@@ -182,13 +182,14 @@ export const RemotionRoot: React.FC = () => {
 						themeEnum: 'NERDY' as const,
 						title: 'Global Car Sales',
 						subTitle: '2023 vs. 2024 (in USD)',
-						leftBarValue: 980,
+						leftBarValue: 840,
 						rightBarValue: 1000,
 						leftBarLabel: '2023',
 						rightBarLabel: '2024',
 						valueFormatString: '$ 0,0.',
 						percentageFormatString: '+0.00%',
-						minDomainValue: 900,
+						minDomainValue: 700,
+						maxDomainValue: 1000,
 					}}
 				/>
 

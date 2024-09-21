@@ -56,6 +56,71 @@ const createPathFromPoints = (points: Point[]): string => {
 	return path;
 };
 
+function createPathWithTwoRoundedCorners(
+	p1: Point,
+	p2: Point,
+	p3: Point,
+	p4: Point,
+	cornerRadius: number
+): string {
+	// Helper function to calculate tangent points for rounding
+	function getTangentPoints(
+		p1: Point,
+		p2: Point,
+		p3: Point,
+		radius: number
+	): {t1x: number; t1y: number; t2x: number; t2y: number} {
+		const d1 = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+		const d2 = Math.hypot(p3.x - p2.x, p3.y - p2.y);
+
+		const maxRadius = Math.min(d1, d2) / 2;
+		const r = Math.min(radius, maxRadius);
+
+		const t1x = p2.x - (r / d1) * (p2.x - p1.x);
+		const t1y = p2.y - (r / d1) * (p2.y - p1.y);
+		const t2x = p2.x + (r / d2) * (p3.x - p2.x);
+		const t2y = p2.y + (r / d2) * (p3.y - p2.y);
+
+		return {t1x, t1y, t2x, t2y};
+	}
+
+	// Calculate tangent points for the corner at p2
+	const p2Tangents = getTangentPoints(p1, p2, p3, cornerRadius);
+
+	// Calculate tangent points for the corner at p3
+	const p3Tangents = getTangentPoints(p2, p3, p4, cornerRadius);
+
+	// Build the SVG path string
+	return `
+    M ${p1.x} ${p1.y} 
+    L ${p2Tangents.t1x} ${p2Tangents.t1y} 
+    Q ${p2.x} ${p2.y} ${p2Tangents.t2x} ${p2Tangents.t2y}
+    L ${p3Tangents.t1x} ${p3Tangents.t1y} 
+    Q ${p3.x} ${p3.y} ${p3Tangents.t2x} ${p3Tangents.t2y}
+    L ${p4.x} ${p4.y}
+  `;
+}
+
+// function createPathWithRoundedCorner(
+// 	p1: Point,
+// 	p2: Point,
+// 	p3: Point,
+// 	cornerRadius: number
+// ) {
+// 	const d1 = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+// 	const d2 = Math.hypot(p3.x - p2.x, p3.y - p2.y);
+
+// 	const maxRadius = Math.min(d1, d2) / 2;
+// 	const radius = Math.min(cornerRadius, maxRadius);
+
+// 	const t1x = p2.x - (radius / d1) * (p2.x - p1.x);
+// 	const t1y = p2.y - (radius / d1) * (p2.y - p1.y);
+// 	const t2x = p2.x + (radius / d2) * (p3.x - p2.x);
+// 	const t2y = p2.y + (radius / d2) * (p3.y - p2.y);
+
+// 	return `M ${p1.x} ${p1.y} L ${t1x} ${t1y} Q ${p2.x} ${p2.y} ${t2x} ${t2y} L ${p3.x} ${p3.y}`;
+// }
+
 const SPACE_BETWEEN_BARS = 100;
 
 const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
@@ -217,20 +282,25 @@ export const NewTwoChangeBars: React.FC<
 		(chartLayout.areas.secondBar.x1 + chartLayout.areas.secondBar.x2) / 2;
 
 	const leftBarPathEndY =
-		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.percChangeDisplay.height +
 		chartLayout.areas.firstBar.height -
 		finalLeftBarHeight;
 
 	const rightBarPathEndY =
-		PERC_CHANGE_DISPLAY_AREA_HEIGHT +
+		chartLayout.areas.percChangeDisplay.height +
 		chartLayout.areas.firstBar.height -
 		finalRightBarHeight -
-		24;
+		24; // for arrow...
+
+	const H = 20;
+	const topPathYLevel = Math.min(leftBarPathEndY, rightBarPathEndY) - H;
 
 	const pathPoints: Point[] = [
 		{x: firstBarCenterX, y: leftBarPathEndY},
-		{x: firstBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
-		{x: secondBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		// {x: firstBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		// {x: secondBarCenterX, y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2},
+		{x: firstBarCenterX, y: topPathYLevel},
+		{x: secondBarCenterX, y: topPathYLevel},
 		{
 			x: secondBarCenterX,
 			y: rightBarPathEndY,
@@ -242,9 +312,11 @@ export const NewTwoChangeBars: React.FC<
 			chartLayout.areas.percChangeDisplay.x2) /
 		2;
 
+	const PERC_VALUE_TEXT_MARGIN_BOTTOM = 15;
+
 	const displayCenterPoint = {
 		x: displayCenterX,
-		y: PERC_CHANGE_DISPLAY_AREA_HEIGHT / 2,
+		y: topPathYLevel - PERC_VALUE_TEXT_MARGIN_BOTTOM,
 	};
 
 	const percChange = RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1;
@@ -256,19 +328,18 @@ export const NewTwoChangeBars: React.FC<
 	const DISPLAY_FONT_FAMILY = 'Arial';
 	const DISPLAY_FONT_WEIGHT = 600;
 
-	const displayTextWidth = measureText({
-		text: displayPercentageChangeText,
-		fontSize: DISPLAY_FONT_SIZE,
-		fontFamily: DISPLAY_FONT_FAMILY,
-		fontWeight: DISPLAY_FONT_WEIGHT,
-	});
+	// const displayTextWidth = measureText({
+	// 	text: displayPercentageChangeText,
+	// 	fontSize: DISPLAY_FONT_SIZE,
+	// 	fontFamily: DISPLAY_FONT_FAMILY,
+	// 	fontWeight: DISPLAY_FONT_WEIGHT,
+	// });
 
-	const DISPLAY_RECT_BG_COLOR = theme.global.backgroundColor;
-	// const displayRectWidth = 130;
-	const displayRectWidth = displayTextWidth.width + 30;
-	const displayRectHeight = displayTextWidth.height + 10;
-	const displayRectPoint_x = displayCenterPoint.x - displayRectWidth / 2;
-	const displayRectPoint_y = displayCenterPoint.y - displayRectHeight / 2;
+	// const DISPLAY_RECT_BG_COLOR = theme.global.backgroundColor;
+	// const displayRectWidth = displayTextWidth.width + 30;
+	// const displayRectHeight = displayTextWidth.height + 10;
+	// const displayRectPoint_x = displayCenterPoint.x - displayRectWidth / 2;
+	// const displayRectPoint_y = displayCenterPoint.y - displayRectHeight / 2;
 
 	const pathColor =
 		RIGHT_BAR_VALUE > LEFT_BAR_VALUE
@@ -277,16 +348,16 @@ export const NewTwoChangeBars: React.FC<
 			? PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN
 			: PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL;
 
-	const pathData = createPathFromPoints(pathPoints);
+	// const pathData = createPathFromPoints(pathPoints);
+	const pathData = createPathWithTwoRoundedCorners(
+		pathPoints[0],
+		pathPoints[1],
+		pathPoints[2],
+		pathPoints[3],
+		5
+	);
 
 	const pathStrokeWidth = PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH;
-
-	// trimming indicators...
-	// TODO: only show if minDomainValue is bigger than 0
-
-	const leftBarScale = getCurrentLeftBarHeight;
-	const rightBarScale = getCurrentRightBarHeight;
-	// const leftBarValue = LEFT_BAR_VALUE;
 
 	return (
 		<div
@@ -294,11 +365,84 @@ export const NewTwoChangeBars: React.FC<
 				position: 'relative',
 			}}
 		>
-			<DisplayGridLayout
+			{/* <DisplayGridLayout
 				width={CHART_AREA_WIDTH}
 				height={CHART_AREA_HEIGHT}
 				areas={chartLayout.areas}
-			/>
+			/> */}
+			{/* Perc Change Display */}
+			<div
+				style={{
+					position: 'absolute',
+					top: chartLayout.areas.percChangeDisplay.y1,
+					left: chartLayout.areas.percChangeDisplay.x1,
+					// display: 'none',
+				}}
+			>
+				<svg
+					style={{
+						width: chartLayout.areas.percChangeDisplay.width,
+						height: chartLayout.areas.percChangeDisplay.height,
+						overflow: 'visible',
+						opacity: percentageAnimationDisplayArrow,
+					}}
+				>
+					<path
+						d={pathData}
+						stroke={pathColor}
+						fill="none"
+						strokeWidth={pathStrokeWidth}
+					/>
+
+					<g
+						transform={`translate(${
+							-24 / 2 + secondBarCenterX
+						},${rightBarPathEndY})`}
+					>
+						<Triangle
+							length={24}
+							fill={pathColor}
+							direction="down"
+							cornerRadius={6}
+						/>
+					</g>
+
+					{/* <circle
+						cx={displayCenterPoint.x}
+						cy={displayCenterPoint.y}
+						r={10}
+						fill="orange"
+					/> */}
+
+					{/* <rect
+						x={displayRectPoint_x}
+						y={displayRectPoint_y}
+						width={displayRectWidth}
+						height={displayRectHeight}
+						fill={DISPLAY_RECT_BG_COLOR}
+						stroke={pathColor}
+						strokeWidth={pathStrokeWidth}
+						rx={3}
+						ry={3}
+					/> */}
+
+					<text
+						x={displayCenterPoint.x}
+						y={displayCenterPoint.y}
+						text-anchor="middle"
+						dominantBaseline="auto"
+						dy={'0.06em'}
+						fill={pathColor}
+						fontSize={DISPLAY_FONT_SIZE}
+						fontFamily={DISPLAY_FONT_FAMILY}
+						fontWeight={DISPLAY_FONT_WEIGHT}
+					>
+						{/* +23,5% */}
+						{displayPercentageChangeText}
+					</text>
+				</svg>
+			</div>
+
 			{/* percentage change arrow and display */}
 			<Sequence
 				name="ChangeBar_Left"
@@ -315,10 +459,10 @@ export const NewTwoChangeBars: React.FC<
 					label={leftBarLabel}
 					value={leftBarValue}
 					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
-					barScale={leftBarScale}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
 					backgroundColor={theme.global.backgroundColor}
+					barColor={theme.typography.logoColor}
 				/>
 			</Sequence>
 
@@ -337,10 +481,10 @@ export const NewTwoChangeBars: React.FC<
 					label={rightBarLabel}
 					value={rightBarValue}
 					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
-					barScale={rightBarScale}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
 					backgroundColor={theme.global.backgroundColor}
+					barColor={theme.typography.logoColor}
 				/>
 			</Sequence>
 

@@ -46,10 +46,10 @@ export const ChangeBar: React.FC<{
 	value: number;
 	label: string;
 	visibleDomain: [number, number];
-	barScale: ScaleLinear<number, number>;
 	valueFormatter: (x: number) => string;
 	isTrimmed: boolean;
 	backgroundColor: string;
+	barColor: string;
 }> = ({
 	// from,
 	// durationInFrames,
@@ -57,10 +57,10 @@ export const ChangeBar: React.FC<{
 	value,
 	visibleDomain,
 	label,
-	barScale,
 	valueFormatter,
 	isTrimmed,
 	backgroundColor,
+	barColor,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -99,9 +99,11 @@ export const ChangeBar: React.FC<{
 				position: 'absolute',
 				top: areas.valueLabel.y1,
 				left: areas.valueLabel.x1,
-				// opacity: 0.5,
 			}}
 		>
+			{/* PercChange Display */}
+
+			{/* Bar with ValueLabel */}
 			<svg
 				style={{
 					width: areas.valueLabel.x2 - areas.valueLabel.x1,
@@ -126,11 +128,13 @@ export const ChangeBar: React.FC<{
 							exitDurationInFrames={ANIMATION_SPECS.bar.exitDurationInFrames}
 							isTrimmed={isTrimmed}
 							backgroundColor={backgroundColor}
+							barColor={barColor}
 						/>
 						<g></g>
 					</Area>
 				</Sequence>
 			</svg>
+			{/* Label */}
 			<Sequence
 				name="LabelDiv"
 				layout="none"
@@ -167,6 +171,7 @@ const AnimatedSvgBar = ({
 	exitDurationInFrames,
 	isTrimmed,
 	backgroundColor,
+	barColor,
 }: {
 	value: number;
 	visibleDomain: [number, number];
@@ -179,6 +184,7 @@ const AnimatedSvgBar = ({
 	exitDurationInFrames: number;
 	isTrimmed: boolean;
 	backgroundColor: string;
+	barColor: string;
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -307,7 +313,7 @@ const AnimatedSvgBar = ({
 				x={0}
 				height={barHeight}
 				width={area.width}
-				fill={'cyan'}
+				fill={barColor}
 				rx={3}
 				ry={3}
 			/>
