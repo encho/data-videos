@@ -294,13 +294,14 @@ export const NewTwoChangeBars: React.FC<
 				position: 'relative',
 			}}
 		>
-			{/* <DisplayGridLayout
+			<DisplayGridLayout
 				width={CHART_AREA_WIDTH}
 				height={CHART_AREA_HEIGHT}
 				areas={chartLayout.areas}
-			/> */}
+			/>
 			{/* percentage change arrow and display */}
 			<Sequence
+				name="ChangeBar_Left"
 				from={90 * 1}
 				durationInFrames={durationInFrames - 90 * 1}
 				layout="none"
@@ -322,6 +323,7 @@ export const NewTwoChangeBars: React.FC<
 			</Sequence>
 
 			<Sequence
+				name="ChangeBar_Right"
 				from={90 * 3}
 				durationInFrames={durationInFrames - 90 * 3}
 				layout="none"

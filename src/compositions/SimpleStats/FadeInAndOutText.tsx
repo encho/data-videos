@@ -29,7 +29,11 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 	return (
 		<>
 			{/* enter animation */}
-			<Sequence durationInFrames={enterSequenceDurationInFrames} layout="none">
+			<Sequence
+				name="FadeInAndOutText_FadeInCharacters"
+				durationInFrames={enterSequenceDurationInFrames}
+				layout="none"
+			>
 				{characters.map((char, index) => (
 					<FadeInCharacter delay={index * 5} fadeInDurationInFrames={30}>
 						{char}
@@ -38,6 +42,7 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 			</Sequence>
 			{/* display */}
 			<Sequence
+				name="FadeInAndOutText_UpdateCharacters"
 				layout="none"
 				from={enterSequenceDurationInFrames}
 				durationInFrames={displaySequenceDurationInFrames}
@@ -48,6 +53,7 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 			</Sequence>
 			{/* exit animation */}
 			<Sequence
+				name="FadeInAndOutText_FadeOutCharacters"
 				layout="none"
 				from={enterSequenceDurationInFrames + displaySequenceDurationInFrames}
 				durationInFrames={exitSequenceDurationInFrames}
