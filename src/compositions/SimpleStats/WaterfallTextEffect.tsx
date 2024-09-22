@@ -15,7 +15,30 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 
 	const characters = children.split('');
 
-	const enterSequenceDurationInFrames = 120;
+	// FLY IN INFORMATION
+	// *****************************************************
+	const FLY_IN_CHARACTER_DURATION = Math.floor(90 * 0.4);
+	const FLY_IN_LAST_CHARACTER_DELAY = Math.floor(90 * 0.5);
+
+	const FLY_IN_TOTAL_DURATION =
+		FLY_IN_LAST_CHARACTER_DELAY + FLY_IN_CHARACTER_DURATION;
+
+	const getFlyInCharacterDelay = (index: number) => {
+		const delay = interpolate(
+			index,
+			[0, characters.length - 1],
+			[0, FLY_IN_LAST_CHARACTER_DELAY],
+			{
+				easing: Easing.ease,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return Math.floor(delay);
+	};
+
+	const enterSequenceDurationInFrames = FLY_IN_TOTAL_DURATION;
 	let exitSequenceDurationInFrames = 200;
 	let displaySequenceDurationInFrames =
 		durationInFrames -
@@ -32,30 +55,39 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 		<>
 			{/* enter animation */}
 			<Sequence
-				name="FadeInAndOutText_FadeInCharacters"
+				name="WaterfallTextEffect_EnterCharacters"
 				durationInFrames={enterSequenceDurationInFrames}
 				layout="none"
 			>
 				{characters.map((char, index) => (
-					<FadeInCharacter delay={index * 5} fadeInDurationInFrames={30}>
+					<FlyDownCharacter
+						delay={getFlyInCharacterDelay(index)}
+						fadeInDurationInFrames={FLY_IN_CHARACTER_DURATION}
+					>
 						{char}
-					</FadeInCharacter>
+					</FlyDownCharacter>
 				))}
 			</Sequence>
 			{/* display */}
 			<Sequence
-				name="FadeInAndOutText_UpdateCharacters"
+				name="WaterfallTextEffect_UpdateCharacters"
 				layout="none"
 				from={enterSequenceDurationInFrames}
 				durationInFrames={displaySequenceDurationInFrames}
 			>
 				{characters.map((char) => (
-					<span>{char}</span>
+					<span
+						style={{
+							display: 'inline-block',
+						}}
+					>
+						{char}
+					</span>
 				))}
 			</Sequence>
 			{/* exit animation */}
 			<Sequence
-				name="FadeInAndOutText_FadeOutCharacters"
+				name="WaterfallTextEffect_ExitCharacters"
 				layout="none"
 				from={enterSequenceDurationInFrames + displaySequenceDurationInFrames}
 				durationInFrames={exitSequenceDurationInFrames}
@@ -70,18 +102,16 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 	);
 };
 
-const FadeInCharacter: React.FC<{
+const FlyDownCharacter: React.FC<{
 	children: string;
-	fadeInDurationInFrames?: number;
+	fadeInDurationInFrames: number;
 	delay: number;
-}> = ({children, delay, fadeInDurationInFrames = 90}) => {
+}> = ({children, delay, fadeInDurationInFrames}) => {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
 
 	const opacity = interpolate(
 		frame,
-		// [delay, delay + fadeInDurationInFrames],
-		[delay, durationInFrames],
+		[delay, delay + fadeInDurationInFrames],
 		[0, 1],
 		{
 			easing: Easing.cubic,
@@ -90,7 +120,28 @@ const FadeInCharacter: React.FC<{
 		}
 	);
 
-	return <span style={{opacity}}>{children}</span>;
+	const translateY = interpolate(
+		frame,
+		[delay, delay + fadeInDurationInFrames],
+		[-400, 0],
+		{
+			easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	return (
+		<span
+			style={{
+				opacity,
+				transform: `translateY(${translateY}px)`,
+				display: 'inline-block',
+			}}
+		>
+			{children}
+		</span>
+	);
 };
 
 const FadeOutCharacter: React.FC<{
@@ -114,7 +165,17 @@ const FadeOutCharacter: React.FC<{
 		}
 	);
 
-	return <span style={{opacity}}>{children}</span>;
+	return (
+		<span
+			style={{
+				opacity,
+
+				display: 'inline-block',
+			}}
+		>
+			{children}
+		</span>
+	);
 };
 
 const getTitleStyles = (theme: ThemeType) => {
