@@ -3,18 +3,18 @@ import {
 	useCurrentFrame,
 	spring,
 	Sequence,
-	Easing,
 	interpolate,
+	// Easing,
 	// useVideoConfig
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {evolvePath} from '@remotion/paths';
 import {Triangle} from '@remotion/shapes';
+
+import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 import {TGridLayoutArea} from '../../acetti-layout';
 
 type ArrowTypeSequenceType = {
-	// from: number;
-	// durationInFrames: number;
 	areas: {
 		percChangeDisplay: TGridLayoutArea;
 		firstBar: TGridLayoutArea;
@@ -25,16 +25,24 @@ type ArrowTypeSequenceType = {
 	leftBarValue: number;
 	strokeWidth: number;
 	color: string;
+	percentageChangeText: string;
+	fontSize: number;
+	fontFamily: string;
+	fontWeight: number;
 };
 
 // rename to AnimatedArrowPath or so
-export const ArrowPathSequence: React.FC<ArrowTypeSequenceType> = ({
+export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 	areas,
 	visibleDomain,
 	rightBarValue,
 	leftBarValue,
 	color,
 	strokeWidth,
+	percentageChangeText,
+	fontSize,
+	fontFamily,
+	fontWeight,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -130,6 +138,33 @@ export const ArrowPathSequence: React.FC<ArrowTypeSequenceType> = ({
 				width: areas.percChangeDisplay.width,
 			}}
 		>
+			<Sequence>
+				<div
+					style={{
+						position: 'absolute',
+						top: topPathYLevel,
+						marginTop: -fontSize - 10, // the utilized fontsize below with some margin
+						width: '100%',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
+					<div
+						style={{
+							marginTop: `${-0.3}em`, // TODO utilize capsize metrics for given font
+							marginBottom: `${-0.32}em`, // TODO utilize capsize metrics for given font
+							fontSize,
+							color: color,
+							fontWeight,
+							fontFamily,
+						}}
+					>
+						<FadeInAndOutText>{percentageChangeText}</FadeInAndOutText>
+					</div>
+				</div>
+			</Sequence>
+
 			<svg
 				style={{
 					width: areas.percChangeDisplay.width,

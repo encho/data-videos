@@ -179,7 +179,7 @@ export const RemotionRoot: React.FC = () => {
 					{...squareVideo}
 					schema={newTwoChangeBarsSchema}
 					defaultProps={{
-						themeEnum: 'NERDY' as const,
+						themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						title: 'Global Car Sales',
 						subTitle: '2023 vs. 2024 (in USD)',
 						leftBarValue: 1000,
