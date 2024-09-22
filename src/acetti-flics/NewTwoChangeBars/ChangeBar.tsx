@@ -9,6 +9,7 @@ import {
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
+import {WaterfallTextEffect} from '../../compositions/SimpleStats/WaterfallTextEffect';
 import {TGridLayoutArea, Area, HtmlArea} from '../../acetti-layout';
 
 // TODO implement and put into layout lib
@@ -158,7 +159,8 @@ export const ChangeBar: React.FC<{
 							alignItems: 'center',
 						}}
 					>
-						<FadeInAndOutText>{label}</FadeInAndOutText>
+						{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
+						<WaterfallTextEffect>{label}</WaterfallTextEffect>
 					</div>
 				</HtmlArea>
 			</Sequence>

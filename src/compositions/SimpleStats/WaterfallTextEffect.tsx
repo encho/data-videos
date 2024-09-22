@@ -6,8 +6,6 @@ import {
 	interpolate,
 } from 'remotion';
 
-import {ThemeType} from '../../acetti-themes/themeTypes';
-
 export const WaterfallTextEffect: React.FC<{children: string}> = ({
 	children,
 }) => {
@@ -17,8 +15,10 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 
 	// FLY IN INFORMATION
 	// *****************************************************
-	const FLY_IN_CHARACTER_DURATION = Math.floor(90 * 0.4);
-	const FLY_IN_LARGEST_CHARACTER_DELAY = Math.floor(90 * 0.5);
+	const FLY_IN_CHARACTER_DURATION = Math.floor(90 * 0.6);
+	const FLY_IN_AVG_DELAY_PER_CHARACTER = Math.floor(90 * 0.1);
+	const FLY_IN_LARGEST_CHARACTER_DELAY =
+		(characters.length - 1) * FLY_IN_AVG_DELAY_PER_CHARACTER;
 
 	const FLY_IN_TOTAL_DURATION =
 		FLY_IN_LARGEST_CHARACTER_DELAY + FLY_IN_CHARACTER_DURATION;
@@ -40,9 +40,10 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 
 	// FLY OUT INFORMATION
 	// *****************************************************
-
 	const FLY_OUT_CHARACTER_DURATION = Math.floor(90 * 0.4);
-	const FLY_OUT_LARGEST_CHARACTER_DELAY = Math.floor(90 * 0.5);
+	const FLY_OUT_AVG_DELAY_PER_CHARACTER = Math.floor(90 * 0.1);
+	const FLY_OUT_LARGEST_CHARACTER_DELAY =
+		(characters.length - 1) * FLY_OUT_AVG_DELAY_PER_CHARACTER;
 
 	const FLY_OUT_TOTAL_DURATION =
 		FLY_OUT_LARGEST_CHARACTER_DELAY + FLY_OUT_CHARACTER_DURATION;
@@ -87,7 +88,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 					<EnterCharacter
 						delay={getFlyInCharacterDelay(index)}
 						fadeInDurationInFrames={FLY_IN_CHARACTER_DURATION}
-						translateY={-400}
+						translateY={-300}
 					>
 						{char}
 					</EnterCharacter>
