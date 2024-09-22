@@ -1,9 +1,10 @@
 import {z} from 'zod';
-import numeral from 'numeral';
+// import numeral from 'numeral';
 import {Sequence} from 'remotion';
 
 import {FadeInAndOutText} from './FadeInAndOutText';
-import {ThemeType} from '../../acetti-themes/themeTypes';
+import {WaterfallTextEffect} from './WaterfallTextEffect';
+// import {ThemeType} from '../../acetti-themes/themeTypes';
 import {Position} from '../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -52,6 +53,15 @@ export const TextEffectsComposition: React.FC<
 							}}
 						>
 							<FadeInAndOutText>FadeInAndOutText</FadeInAndOutText>
+						</div>
+					</Sequence>
+					<Sequence layout="none">
+						<div
+							style={{
+								...textStyles,
+							}}
+						>
+							<WaterfallTextEffect>WaterfallTextEffect</WaterfallTextEffect>
 						</div>
 					</Sequence>
 				</div>
