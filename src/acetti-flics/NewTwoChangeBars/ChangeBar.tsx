@@ -50,6 +50,8 @@ export const ChangeBar: React.FC<{
 	isTrimmed: boolean;
 	backgroundColor: string;
 	barColor: string;
+	labelColor: string;
+	valueTextColor: string;
 }> = ({
 	// from,
 	// durationInFrames,
@@ -61,6 +63,8 @@ export const ChangeBar: React.FC<{
 	isTrimmed,
 	backgroundColor,
 	barColor,
+	labelColor,
+	valueTextColor,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -129,6 +133,7 @@ export const ChangeBar: React.FC<{
 							isTrimmed={isTrimmed}
 							backgroundColor={backgroundColor}
 							barColor={barColor}
+							valueTextColor={valueTextColor}
 						/>
 						<g></g>
 					</Area>
@@ -144,7 +149,7 @@ export const ChangeBar: React.FC<{
 				<HtmlArea area={labelArea}>
 					<div
 						style={{
-							color: 'white',
+							color: labelColor,
 							fontSize: labelArea.height,
 							fontWeight: 600,
 							fontFamily: 'Arial',
@@ -172,6 +177,7 @@ const AnimatedSvgBar = ({
 	isTrimmed,
 	backgroundColor,
 	barColor,
+	valueTextColor,
 }: {
 	value: number;
 	visibleDomain: [number, number];
@@ -185,6 +191,7 @@ const AnimatedSvgBar = ({
 	isTrimmed: boolean;
 	backgroundColor: string;
 	barColor: string;
+	valueTextColor: string;
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -320,15 +327,8 @@ const AnimatedSvgBar = ({
 
 			{isTrimmed ? (
 				<g mask="url(#barAreaMask)">
-					{/* trimmer */}
-					{/* <g transform={`translate(${0}, ${pathShift})`}> */}
 					<g transform={`translate(${0}, ${0})`}>
-						<path
-							d={pathData}
-							fill={pathColor}
-							// stroke={pathColor}
-							// strokeWidth={5}
-						/>
+						<path d={pathData} fill={pathColor} />
 					</g>
 				</g>
 			) : null}
@@ -351,7 +351,7 @@ const AnimatedSvgBar = ({
 					>
 						<div
 							style={{
-								color: 'white',
+								color: valueTextColor,
 								fontSize: valueLabelArea.height,
 								fontWeight: 500,
 								fontFamily: 'Arial',

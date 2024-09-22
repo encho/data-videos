@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {Sequence, useVideoConfig, useCurrentFrame} from 'remotion';
 
 // import {TwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/TwoChangeBars/TwoChangeBars';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
@@ -46,6 +47,9 @@ export const NewTwoChangeBars: React.FC<
 	minDomainValue,
 	maxDomainValue,
 }) => {
+	const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
 	// TODO integrate into colorpalette
 	const theme =
 		themeEnum === 'NERDY'
@@ -76,26 +80,28 @@ export const NewTwoChangeBars: React.FC<
 				/>
 			</Position>
 
-			<Position
-				position={{top: 300, left: (1080 - CHART_AREA_WIDTH) / 2}}
-				backgroundColor="red"
-			>
-				<TwoChangeBarsComponent
-					{...{
-						themeEnum,
-						CHART_AREA_HEIGHT,
-						CHART_AREA_WIDTH,
-						leftBarValue,
-						rightBarValue,
-						leftBarLabel,
-						rightBarLabel,
-						valueFormatString,
-						percentageFormatString,
-						minDomainValue,
-						maxDomainValue,
-					}}
-				/>
-			</Position>
+			<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
+				<Position
+					position={{top: 300, left: (1080 - CHART_AREA_WIDTH) / 2}}
+					backgroundColor="red"
+				>
+					<TwoChangeBarsComponent
+						{...{
+							themeEnum,
+							CHART_AREA_HEIGHT,
+							CHART_AREA_WIDTH,
+							leftBarValue,
+							rightBarValue,
+							leftBarLabel,
+							rightBarLabel,
+							valueFormatString,
+							percentageFormatString,
+							minDomainValue,
+							maxDomainValue,
+						}}
+					/>
+				</Position>
+			</Sequence>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>

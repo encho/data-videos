@@ -4,7 +4,7 @@ import {
 	spring,
 	Sequence,
 	interpolate,
-	// Easing,
+	Easing,
 	// useVideoConfig
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
@@ -73,6 +73,23 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 		[0, 1],
 		{
 			// easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
+
+	const EXIT_START_DURATION_FRAMES = 90 * 1;
+	const EXIT_DURATION_FRAMES = 90 * 0.75;
+
+	const pathExitOpacity = interpolate(
+		frame,
+		[
+			durationInFrames - EXIT_START_DURATION_FRAMES,
+			durationInFrames - EXIT_START_DURATION_FRAMES + EXIT_DURATION_FRAMES,
+		],
+		[1, 0],
+		{
+			easing: Easing.cubic,
 			extrapolateLeft: 'clamp',
 			extrapolateRight: 'clamp',
 		}
@@ -170,6 +187,7 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 					width: areas.percChangeDisplay.width,
 					height: areas.percChangeDisplay.height,
 					overflow: 'visible',
+					opacity: pathExitOpacity,
 				}}
 			>
 				<path

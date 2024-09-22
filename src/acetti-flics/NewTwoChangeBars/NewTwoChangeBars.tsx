@@ -67,15 +67,10 @@ export const NewTwoChangeBars: React.FC<
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
-	//
 	const LEFT_BAR_VALUE = leftBarValue;
 	const RIGHT_BAR_VALUE = rightBarValue;
-
-	const RIGHT_BAR_COLOR = theme.TwoChangeBars.barsColor;
-	const RIGHT_VALUE_COLOR = theme.typography.textColor;
-
-	const LEFT_BAR_COLOR = theme.TwoChangeBars.barsColor;
-	const LEFT_VALUE_COLOR = theme.typography.textColor;
+	const BAR_COLOR = theme.typography.textColor;
+	const BACKGROUND_COLOR = theme.global.backgroundColor;
 
 	const LABEL_TEXT_SIZE = 40;
 	const LABEL_MARGIN_TOP = 15;
@@ -87,7 +82,6 @@ export const NewTwoChangeBars: React.FC<
 
 	const BARS_VALUES_VISIBLE_DOMAIN = [
 		minDomainValue || 0,
-		// 0,
 		maxDomainValue || Math.max(leftBarValue, rightBarValue),
 	];
 
@@ -139,12 +133,10 @@ export const NewTwoChangeBars: React.FC<
 				height={CHART_AREA_HEIGHT}
 				areas={chartLayout.areas}
 			/> */}
-			{/* Perc Change Display */}
 			<Sequence
 				name="PercChange_Display"
-				// from={globalPercentageChangeAnimationDelay}
-				from={90 * 5}
-				durationInFrames={90 * 5}
+				from={90 * 5.75}
+				durationInFrames={durationInFrames - 90 * 5.73 - 90 * 1.5}
 				layout="none"
 			>
 				<AnimatedArrowPath
@@ -168,7 +160,7 @@ export const NewTwoChangeBars: React.FC<
 			<Sequence
 				name="ChangeBar_Left"
 				from={90 * 1}
-				durationInFrames={durationInFrames - 90 * 1}
+				// durationInFrames={durationInFrames - 90 * 1}
 				layout="none"
 			>
 				<ChangeBar
@@ -182,15 +174,17 @@ export const NewTwoChangeBars: React.FC<
 					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
-					backgroundColor={theme.global.backgroundColor}
-					barColor={theme.typography.logoColor}
+					backgroundColor={BACKGROUND_COLOR}
+					barColor={BAR_COLOR}
+					labelColor={LABEL_TEXT_COLOR}
+					valueTextColor={LABEL_TEXT_COLOR}
 				/>
 			</Sequence>
 
 			<Sequence
 				name="ChangeBar_Right"
 				from={90 * 3}
-				durationInFrames={durationInFrames - 90 * 3}
+				// durationInFrames={durationInFrames - 90 * 3}
 				layout="none"
 			>
 				<ChangeBar
@@ -204,18 +198,12 @@ export const NewTwoChangeBars: React.FC<
 					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
 					valueFormatter={valueFormatter}
 					isTrimmed={Boolean(minDomainValue)}
-					backgroundColor={theme.global.backgroundColor}
-					barColor={theme.typography.logoColor}
+					backgroundColor={BACKGROUND_COLOR}
+					barColor={BAR_COLOR}
+					labelColor={LABEL_TEXT_COLOR}
+					valueTextColor={LABEL_TEXT_COLOR}
 				/>
 			</Sequence>
-
-			<div
-				style={{
-					position: 'absolute',
-					top: chartLayout.areas.percChangeDisplay.y1,
-					left: chartLayout.areas.percChangeDisplay.x1,
-				}}
-			></div>
 		</div>
 	);
 };

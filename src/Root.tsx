@@ -173,13 +173,13 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="NewTwoChangeBars"
 					component={NewTwoChangeBars}
-					durationInFrames={90 * 12}
+					durationInFrames={90 * 15}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
 					{...squareVideo}
 					schema={newTwoChangeBarsSchema}
 					defaultProps={{
-						themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+						themeEnum: 'NERDY' as const,
 						title: 'Global Car Sales',
 						subTitle: '2023 vs. 2024 (in USD)',
 						leftBarValue: 1000,
