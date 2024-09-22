@@ -15,6 +15,7 @@ import numeral from 'numeral';
 
 import {useChartLayout} from '../../compositions/TwoChangeBars/useChartLayout';
 import {DisplayGridLayout} from '../../acetti-layout';
+import {ArrowPathSequence} from './ArrowPathSequence';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
@@ -254,18 +255,6 @@ export const NewTwoChangeBars: React.FC<
 		},
 	];
 
-	const displayCenterX =
-		(chartLayout.areas.percChangeDisplay.x1 +
-			chartLayout.areas.percChangeDisplay.x2) /
-		2;
-
-	const PERC_VALUE_TEXT_MARGIN_BOTTOM = 15;
-
-	const displayCenterPoint = {
-		x: displayCenterX,
-		y: topPathYLevel - PERC_VALUE_TEXT_MARGIN_BOTTOM,
-	};
-
 	const percChange = RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1;
 	const displayPercentageChangeText = numeral(percChange).format(
 		percentageFormatString
@@ -299,12 +288,31 @@ export const NewTwoChangeBars: React.FC<
 				position: 'relative',
 			}}
 		>
-			{/* <DisplayGridLayout
+			<DisplayGridLayout
 				width={CHART_AREA_WIDTH}
 				height={CHART_AREA_HEIGHT}
 				areas={chartLayout.areas}
-			/> */}
+			/>
 			{/* Perc Change Display */}
+			<Sequence
+				from={globalPercentageChangeAnimationDelay}
+				durationInFrames={90 * 3}
+				layout="none"
+			>
+				<ArrowPathSequence
+					areas={{
+						percChangeDisplay: chartLayout.areas.percChangeDisplay,
+						firstBar: chartLayout.areas.firstBar,
+						secondBar: chartLayout.areas.secondBar,
+					}}
+					visibleDomain={BARS_VALUES_VISIBLE_DOMAIN as [number, number]}
+					rightBarValue={RIGHT_BAR_VALUE}
+					leftBarValue={LEFT_BAR_VALUE}
+					color={pathColor}
+					strokeWidth={PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH}
+				/>
+			</Sequence>
+
 			<div
 				style={{
 					position: 'absolute',
@@ -312,10 +320,7 @@ export const NewTwoChangeBars: React.FC<
 					left: chartLayout.areas.percChangeDisplay.x1,
 				}}
 			>
-				<Sequence
-					from={globalPercentageChangeAnimationDelay}
-					// from={90 * 3}
-				>
+				<Sequence from={globalPercentageChangeAnimationDelay}>
 					<div
 						style={{
 							position: 'absolute',
@@ -346,7 +351,8 @@ export const NewTwoChangeBars: React.FC<
 						width: chartLayout.areas.percChangeDisplay.width,
 						height: chartLayout.areas.percChangeDisplay.height,
 						overflow: 'visible',
-						opacity: globalPathExitOpacity,
+						// opacity: globalPathExitOpacity,
+						opacity: 0,
 					}}
 				>
 					<path
@@ -371,21 +377,6 @@ export const NewTwoChangeBars: React.FC<
 							cornerRadius={6}
 						/>
 					</g>
-
-					{/* <text
-						opacity={triangleOpacitySpring}
-						x={displayCenterPoint.x}
-						y={displayCenterPoint.y}
-						text-anchor="middle"
-						dominantBaseline="auto"
-						dy={'0.06em'}
-						fill={pathColor}
-						fontSize={DISPLAY_FONT_SIZE}
-						fontFamily={DISPLAY_FONT_FAMILY}
-						fontWeight={DISPLAY_FONT_WEIGHT}
-					>
-						{displayPercentageChangeText}
-					</text> */}
 				</svg>
 			</div>
 
