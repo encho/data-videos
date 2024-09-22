@@ -19,6 +19,7 @@ import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinib
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {ChangeBar} from './ChangeBar';
+import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 export const newTwoChangeBarsSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -164,7 +165,18 @@ export const NewTwoChangeBars: React.FC<
 	// ********************
 	const pathAnimationDelay = 90 * 5.5;
 	const pathLineAnimationDuration = 90 * 1;
-	const pathTriangleAnimationDuration = 90 * 3;
+	const pathTriangleAnimationDuration = 90 * 0.3;
+
+	const globalTriangleAnimationDelay =
+		pathAnimationDelay + pathLineAnimationDuration;
+
+	const percentageChangeTextDelayAfterPathFullyEntered = 90 * 0;
+
+	const globalPercentageChangeAnimationDelay =
+		globalTriangleAnimationDelay +
+		pathTriangleAnimationDuration +
+		percentageChangeTextDelayAfterPathFullyEntered;
+
 	const pathSpring = spring({
 		fps,
 		frame,
@@ -173,13 +185,19 @@ export const NewTwoChangeBars: React.FC<
 		delay: pathAnimationDelay,
 	});
 
-	const triangleOpacitySpring = spring({
-		fps,
+	const triangleOpacitySpring = interpolate(
 		frame,
-		config: {damping: 300},
-		durationInFrames: pathTriangleAnimationDuration,
-		delay: pathAnimationDelay + pathLineAnimationDuration,
-	});
+		[
+			globalTriangleAnimationDelay,
+			globalTriangleAnimationDelay + pathTriangleAnimationDuration,
+		],
+		[0, 1],
+		{
+			// easing: Easing.cubic,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 
 	const globalPathExitOpacity = interpolate(
 		frame,
@@ -292,16 +310,43 @@ export const NewTwoChangeBars: React.FC<
 					position: 'absolute',
 					top: chartLayout.areas.percChangeDisplay.y1,
 					left: chartLayout.areas.percChangeDisplay.x1,
-					// display: 'none',
 				}}
 			>
+				<Sequence
+					from={globalPercentageChangeAnimationDelay}
+					// from={90 * 3}
+				>
+					<div
+						style={{
+							position: 'absolute',
+							top: topPathYLevel,
+							marginTop: -DISPLAY_FONT_SIZE - 10, // the utilized fontsize below with some margin
+							width: '100%',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+						}}
+					>
+						<div
+							style={{
+								marginTop: `${-0.3}em`, // TODO utilize capsize metrics for given font
+								marginBottom: `${-0.32}em`, // TODO utilize capsize metrics for given font
+								fontSize: DISPLAY_FONT_SIZE,
+								color: pathColor,
+								fontWeight: DISPLAY_FONT_WEIGHT,
+								fontFamily: DISPLAY_FONT_FAMILY,
+							}}
+						>
+							<FadeInAndOutText>{displayPercentageChangeText}</FadeInAndOutText>
+						</div>
+					</div>
+				</Sequence>
 				<svg
 					style={{
 						width: chartLayout.areas.percChangeDisplay.width,
 						height: chartLayout.areas.percChangeDisplay.height,
 						overflow: 'visible',
 						opacity: globalPathExitOpacity,
-						// opacity: percentageAnimationDisplayArrow,
 					}}
 				>
 					<path
@@ -327,7 +372,7 @@ export const NewTwoChangeBars: React.FC<
 						/>
 					</g>
 
-					<text
+					{/* <text
 						opacity={triangleOpacitySpring}
 						x={displayCenterPoint.x}
 						y={displayCenterPoint.y}
@@ -340,7 +385,7 @@ export const NewTwoChangeBars: React.FC<
 						fontWeight={DISPLAY_FONT_WEIGHT}
 					>
 						{displayPercentageChangeText}
-					</text>
+					</text> */}
 				</svg>
 			</div>
 
