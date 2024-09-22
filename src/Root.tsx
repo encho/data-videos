@@ -49,6 +49,11 @@ import {
 	newTwoChangeBarsSchema,
 } from './compositions/TwoChangeBars/NewTwoChangeBars';
 
+import {
+	TextEffectsComposition,
+	textEffectsCompositionSchema,
+} from './compositions/SimpleStats/TextEffects';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -163,6 +168,27 @@ export const RemotionRoot: React.FC = () => {
 						},
 						showLineChartLayout: false,
 						watermark: true,
+					}}
+				/>
+			</Folder>
+
+			<Folder name="TextEffects">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="TextEffects"
+					component={TextEffectsComposition}
+					durationInFrames={90 * 5}
+					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+					fps={90}
+					{...squareVideo}
+					schema={textEffectsCompositionSchema}
+					defaultProps={{
+						themeEnum: 'NERDY' as const,
+						kpiValue: 0.015,
+						kpiValueFormatString: '+0.00%',
+						kpiLabel: 'Net Profit ',
+						fontSize: 120,
 					}}
 				/>
 			</Folder>
