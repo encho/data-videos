@@ -39,8 +39,8 @@ export interface TGridAreasSpec {
 }
 
 export type TGridSize = {
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 };
 
 export type TGridLayoutSpec = {

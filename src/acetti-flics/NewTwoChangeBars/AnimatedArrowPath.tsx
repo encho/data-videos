@@ -5,7 +5,6 @@ import {
 	Sequence,
 	interpolate,
 	Easing,
-	// useVideoConfig
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {evolvePath} from '@remotion/paths';
@@ -29,6 +28,8 @@ type ArrowTypeSequenceType = {
 	fontSize: number;
 	fontFamily: string;
 	fontWeight: number;
+	arrowSize: number;
+	minVerticalPathLength: number;
 };
 
 // rename to AnimatedArrowPath or so
@@ -43,6 +44,8 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 	fontSize,
 	fontFamily,
 	fontWeight,
+	arrowSize,
+	minVerticalPathLength,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -78,7 +81,7 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 		}
 	);
 
-	const EXIT_START_DURATION_FRAMES = 90 * 1;
+	const EXIT_START_DURATION_FRAMES = 90 * 0.75;
 	const EXIT_DURATION_FRAMES = 90 * 0.75;
 
 	const pathExitOpacity = interpolate(
@@ -120,9 +123,9 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 		areas.percChangeDisplay.height +
 		areas.firstBar.height -
 		finalRightBarHeight -
-		24; // for arrow...
+		arrowSize;
 
-	const H = 20;
+	const H = minVerticalPathLength;
 	const topPathYLevel = Math.min(leftBarPathEndY, rightBarPathEndY) - H;
 
 	const pathPoints: Point[] = [
@@ -201,12 +204,12 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 
 				<g
 					transform={`translate(${
-						-24 / 2 + secondBarCenterX
+						-arrowSize / 2 + secondBarCenterX
 					},${rightBarPathEndY})`}
 					opacity={triangleOpacitySpring}
 				>
 					<Triangle
-						length={24}
+						length={arrowSize}
 						fill={color}
 						direction="down"
 						cornerRadius={6}

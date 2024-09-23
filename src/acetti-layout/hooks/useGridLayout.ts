@@ -5,8 +5,8 @@ import {createGridLayout} from '../gridLayout';
 import type {TGridLayoutSpec} from '../types2';
 
 type TUseGridLayout = {
-	width: number;
-	height: number;
+	width?: number;
+	height?: number;
 	gridLayoutSpec: TGridLayoutSpec;
 };
 

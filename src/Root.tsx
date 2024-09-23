@@ -29,10 +29,10 @@ import {
 } from './AcettiFlics/PerformanceCompare_01/PerformanceCompare_01';
 
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
-import {
-	twoChangeBarsSchema,
-	TwoChangeBars,
-} from './compositions/TwoChangeBars/TwoChangeBars';
+// import {
+// 	twoChangeBarsSchema,
+// 	TwoChangeBars,
+// } from './compositions/TwoChangeBars/TwoChangeBars';
 
 import {
 	twoChangeBarsWithImageSchema,
@@ -205,7 +205,7 @@ export const RemotionRoot: React.FC = () => {
 					{...squareVideo}
 					schema={newTwoChangeBarsSchema}
 					defaultProps={{
-						themeEnum: 'NERDY' as const,
+						themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						title: 'Global Car Sales',
 						subTitle: '2023 vs. 2024 (in USD)',
 						leftBarValue: 1000,
@@ -219,7 +219,7 @@ export const RemotionRoot: React.FC = () => {
 					}}
 				/>
 
-				<Composition
+				{/* <Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="TwoChangeBars"
@@ -241,14 +241,14 @@ export const RemotionRoot: React.FC = () => {
 						percentageFormatString: '+0.00%',
 						minDomainValue: 900,
 					}}
-				/>
+				/> */}
 
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="TwoChangeBarsWithImage"
 					component={TwoChangeBarsWithImage}
-					durationInFrames={90 * 5}
+					durationInFrames={90 * 15}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
 					// {...squareVideo}

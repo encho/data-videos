@@ -28,20 +28,14 @@ export const newTwoChangeBarsSchema = z.object({
 	rightBarLabel: z.string(),
 	valueFormatString: z.string(),
 	percentageFormatString: z.string(),
-	CHART_AREA_WIDTH: z.number(),
+	// CHART_AREA_WIDTH: z.number(),
 	CHART_AREA_HEIGHT: z.number(),
 	minDomainValue: z.number().optional(),
 	maxDomainValue: z.number().optional(),
+	baseFontSize: z.number().optional(),
 });
 
 // TODO factor out
-const SPACE_BETWEEN_BARS = 100;
-
-const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
-const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = 4;
-const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
-const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
-const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
 
 export const NewTwoChangeBars: React.FC<
 	z.infer<typeof newTwoChangeBarsSchema>
@@ -56,9 +50,10 @@ export const NewTwoChangeBars: React.FC<
 	valueFormatString,
 	percentageFormatString,
 	CHART_AREA_HEIGHT,
-	CHART_AREA_WIDTH,
+	// CHART_AREA_WIDTH,
 	minDomainValue,
 	maxDomainValue,
+	baseFontSize = 34,
 }) => {
 	const theme =
 		themeEnum === 'NERDY'
@@ -72,13 +67,31 @@ export const NewTwoChangeBars: React.FC<
 	const BAR_COLOR = theme.typography.textColor;
 	const BACKGROUND_COLOR = theme.global.backgroundColor;
 
-	const LABEL_TEXT_SIZE = 40;
-	const LABEL_MARGIN_TOP = 15;
+	const LABEL_TEXT_SIZE = baseFontSize * 1.25;
+	const LABEL_MARGIN_TOP = baseFontSize * 0.25;
 	const LABEL_TEXT_COLOR = theme.typography.textColor;
 
-	const VALUE_TEXT_SIZE = 34;
-	const VALUE_MARGIN_TOP = 30;
-	const VALUE_MARGIN_BOTTOM = 12;
+	const VALUE_TEXT_SIZE = baseFontSize;
+	const VALUE_MARGIN_TOP = baseFontSize * 0.5;
+	const VALUE_MARGIN_BOTTOM = baseFontSize * 0.25;
+
+	const BAR_WIDTH = baseFontSize * 4;
+	// const BAR_TRIMMER_HEIGHT = TODO
+
+	const SPACE_BETWEEN_BARS = baseFontSize * 2;
+
+	const DISPLAY_FONT_SIZE = baseFontSize * 1.25;
+	const DISPLAY_FONT_FAMILY = 'Arial';
+	const DISPLAY_FONT_WEIGHT = 600;
+
+	const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
+	const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = baseFontSize / 10;
+	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseFontSize * 1;
+	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseFontSize * 1;
+
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
 
 	const BARS_VALUES_VISIBLE_DOMAIN = [
 		minDomainValue || 0,
@@ -94,9 +107,8 @@ export const NewTwoChangeBars: React.FC<
 	} = useVideoConfig();
 
 	const chartLayout = useChartLayout({
-		width: CHART_AREA_WIDTH,
+		// width: CHART_AREA_WIDTH,
 		height: CHART_AREA_HEIGHT,
-		//
 		labelTextSize: LABEL_TEXT_SIZE,
 		labelMarginTop: LABEL_MARGIN_TOP,
 		valueTextSize: VALUE_TEXT_SIZE,
@@ -104,16 +116,13 @@ export const NewTwoChangeBars: React.FC<
 		valueMarginBottom: VALUE_MARGIN_BOTTOM,
 		percChangeDisplayAreaHeight: PERC_CHANGE_DISPLAY_AREA_HEIGHT,
 		spaceBetweenBars: SPACE_BETWEEN_BARS,
+		barWidth: BAR_WIDTH,
 	});
 
 	const percChange = RIGHT_BAR_VALUE / LEFT_BAR_VALUE - 1;
 	const displayPercentageChangeText = numeral(percChange).format(
 		percentageFormatString
 	);
-
-	const DISPLAY_FONT_SIZE = 40;
-	const DISPLAY_FONT_FAMILY = 'Arial';
-	const DISPLAY_FONT_WEIGHT = 600;
 
 	const pathColor =
 		RIGHT_BAR_VALUE > LEFT_BAR_VALUE
@@ -126,11 +135,13 @@ export const NewTwoChangeBars: React.FC<
 		<div
 			style={{
 				position: 'relative',
+				width: chartLayout.width,
+				height: chartLayout.height,
 			}}
 		>
 			{/* <DisplayGridLayout
-				width={CHART_AREA_WIDTH}
-				height={CHART_AREA_HEIGHT}
+				width={chartLayout.width}
+				height={chartLayout.height}
 				areas={chartLayout.areas}
 			/> */}
 			<Sequence
@@ -154,6 +165,8 @@ export const NewTwoChangeBars: React.FC<
 					fontSize={DISPLAY_FONT_SIZE}
 					fontFamily={DISPLAY_FONT_FAMILY}
 					fontWeight={DISPLAY_FONT_WEIGHT}
+					arrowSize={PERC_CHANGE_DISPLAY_ARROW_SIZE}
+					minVerticalPathLength={PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH}
 				/>
 			</Sequence>
 

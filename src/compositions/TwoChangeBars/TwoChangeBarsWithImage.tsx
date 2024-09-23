@@ -1,15 +1,25 @@
 import {z} from 'zod';
-import {useVideoConfig, Img, staticFile} from 'remotion';
+import {useVideoConfig, Img, staticFile, Sequence} from 'remotion';
 
-import {TwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/TwoChangeBars/TwoChangeBars';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../../acetti-ts-base/Position';
+import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
 
-import {twoChangeBarsComponentProps} from './TwoChangeBars';
+export const twoChangeBarsComponentProps = z.object({
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	leftBarValue: z.number(),
+	leftBarLabel: z.string(),
+	rightBarValue: z.number(),
+	rightBarLabel: z.string(),
+	valueFormatString: z.string(),
+	percentageFormatString: z.string(),
+	minDomainValue: z.number().optional(),
+	maxDomainValue: z.number().optional(),
+});
 
 export const twoChangeBarsWithImageSchema = twoChangeBarsComponentProps.merge(
 	z.object({
@@ -18,8 +28,8 @@ export const twoChangeBarsWithImageSchema = twoChangeBarsComponentProps.merge(
 	})
 );
 
-const CHART_AREA_WIDTH = 500;
-const CHART_AREA_HEIGHT = 600;
+// const CHART_AREA_WIDTH = 500;
+const CHART_AREA_HEIGHT = 500;
 
 export const TwoChangeBarsWithImage: React.FC<
 	z.infer<typeof twoChangeBarsWithImageSchema>
@@ -36,11 +46,7 @@ export const TwoChangeBarsWithImage: React.FC<
 	maxDomainValue,
 	minDomainValue,
 }) => {
-	const {
-		width,
-		height,
-		// fps, durationInFrames
-	} = useVideoConfig();
+	const {width, height, fps, durationInFrames} = useVideoConfig();
 
 	// TODO integrate into colorpalette
 	// const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
@@ -76,26 +82,38 @@ export const TwoChangeBarsWithImage: React.FC<
 					/>
 				</Position>
 
-				<Position
-					position={{top: 300, left: (leftPanelWidth - CHART_AREA_WIDTH) / 2}}
-					backgroundColor="red"
-				>
-					<TwoChangeBarsComponent
-						{...{
-							themeEnum,
-							CHART_AREA_HEIGHT,
-							CHART_AREA_WIDTH,
-							leftBarValue,
-							rightBarValue,
-							leftBarLabel,
-							rightBarLabel,
-							valueFormatString,
-							percentageFormatString,
-							maxDomainValue,
-							minDomainValue,
+				<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
+					<Position
+						position={{
+							top: 360,
 						}}
-					/>
-				</Position>
+					>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								width: width / 2,
+								position: 'relative',
+							}}
+						>
+							<TwoChangeBarsComponent
+								{...{
+									themeEnum,
+									CHART_AREA_HEIGHT,
+									leftBarValue,
+									rightBarValue,
+									leftBarLabel,
+									rightBarLabel,
+									valueFormatString,
+									percentageFormatString,
+									minDomainValue,
+									maxDomainValue,
+									baseFontSize: 34,
+								}}
+							/>
+						</div>
+					</Position>
+				</Sequence>
 			</div>
 			<div style={{width: rightPanelWidth, height}}>
 				<Img

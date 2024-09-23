@@ -82,24 +82,36 @@ export const NewTwoChangeBars: React.FC<
 
 			<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
 				<Position
-					position={{top: 300, left: (1080 - CHART_AREA_WIDTH) / 2}}
+					position={{
+						top: 300,
+					}}
 					backgroundColor="red"
 				>
-					<TwoChangeBarsComponent
-						{...{
-							themeEnum,
-							CHART_AREA_HEIGHT,
-							CHART_AREA_WIDTH,
-							leftBarValue,
-							rightBarValue,
-							leftBarLabel,
-							rightBarLabel,
-							valueFormatString,
-							percentageFormatString,
-							minDomainValue,
-							maxDomainValue,
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							width: 1080,
+							position: 'relative',
 						}}
-					/>
+					>
+						<TwoChangeBarsComponent
+							{...{
+								themeEnum,
+								CHART_AREA_HEIGHT,
+								CHART_AREA_WIDTH,
+								leftBarValue,
+								rightBarValue,
+								leftBarLabel,
+								rightBarLabel,
+								valueFormatString,
+								percentageFormatString,
+								minDomainValue,
+								maxDomainValue,
+								baseFontSize: 40,
+							}}
+						/>
+					</div>
 				</Position>
 			</Sequence>
 

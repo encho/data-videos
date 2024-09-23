@@ -68,11 +68,13 @@ type TCreateGridRail = {
 	spec: TGridRailSpec;
 	gap: number;
 	padding: number;
-	size: number;
+	size?: number;
 };
 
 export function createGridRail({spec, gap, padding, size}: TCreateGridRail) {
-	const freeSpace = size - getReservedSpace(spec, {padding, gap});
+	const passedOrDeterminedSize = size || getReservedSpace(spec, {padding, gap});
+	const freeSpace =
+		passedOrDeterminedSize - getReservedSpace(spec, {padding, gap});
 	const totalFractions = getTotalFractions(spec);
 	return getGridRail(spec, freeSpace, totalFractions, {padding, gap});
 }
