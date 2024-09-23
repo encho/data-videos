@@ -8,6 +8,9 @@ import {
 // import {interpolatePath} from '@remotion/paths';
 import {interpolate as flubberInterploate} from 'flubber';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
+
+import {generateRectPath} from './generateRectPath';
+import {generateCirclePath} from './generateCirclePath';
 // import {makeCircle}
 // import numeral from 'numeral';
 // import {Sequence} from 'remotion';
@@ -32,20 +35,19 @@ export const ScatterPlotToBarChart: React.FC<
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
 
-	const progress = interpolate(frame, [0, durationInFrames], [0, 1], {
+	const progress = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
 		easing: Easing.cubic,
 	});
 
-	// const {path, width, height, transformOrigin} = makeCircle({radius: 50});
+	const circlePath = generateCirclePath({r: 50, cx: 50, cy: 150});
 
-	const circlePath = generateCirclePath(50, 50, 50);
-
-	const {
-		path: rectPath,
-		// width, height, transformOrigin
-	} = makeRect({
+	const rectPath = generateRectPath({
+		x: 50,
+		y: 100,
 		width: 400,
-		height: 200,
+		height: 50,
+		rBottomRight: 20,
+		rTopRight: 20,
 	});
 
 	// scatterplot
@@ -95,8 +97,6 @@ export const ScatterPlotToBarChart: React.FC<
 
 			<svg style={{backgroundColor: 'cyan', width: 500, height: 300}}>
 				<path d={flubberInterpolatedPath} fill={'orange'} />
-				{/* <path opacity={0.3} d={rectPath} fill={'red'} />
-				<path opacity={0.3} d={path} fill={'blue'} />  */}
 			</svg>
 			<div style={{position: 'relative'}}>
 				<svg
@@ -113,18 +113,11 @@ export const ScatterPlotToBarChart: React.FC<
 				>
 					<g></g>
 					{data.map((it, i) => {
-						// const {
-						// 	path: circlePath,
-						// 	// width,
-						// 	// height,
-						// 	// transformOrigin,
-						// } = makeCircle({radius: 50});
-
-						const circlePath = generateCirclePath(
-							20,
-							xScale(it.age),
-							yScale(it.income)
-						);
+						const circlePath = generateCirclePath({
+							r: 20,
+							cx: xScale(it.age),
+							cy: yScale(it.income),
+						});
 						return (
 							<g>
 								<path d={circlePath} fill={'yellow'} />
@@ -143,31 +136,3 @@ export const ScatterPlotToBarChart: React.FC<
 		</div>
 	);
 };
-
-// Function to generate an SVG path for a circle
-function generateCirclePath(
-	radius: number,
-	xCenter: number,
-	yCenter: number
-): string {
-	// Start the path at the rightmost point of the circle
-	const startX = xCenter + radius;
-	const startY = yCenter;
-
-	// Construct the path using SVG arc commands
-	const path = `
-			M ${startX},${startY} 
-			A ${radius},${radius} 0 1,0 ${xCenter - radius},${yCenter} 
-			A ${radius},${radius} 0 1,0 ${startX},${startY}
-	`.trim();
-
-	return path;
-}
-
-// Example usage
-// const radius = 50;
-// const xCenter = 100;
-// const yCenter = 100;
-
-// const circlePath = generateCirclePath(radius, xCenter, yCenter);
-// console.log(circlePath);

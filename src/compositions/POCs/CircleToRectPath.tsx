@@ -26,7 +26,7 @@ export const CircleToRectPath: React.FC<
 		easing: Easing.cubic,
 	});
 
-	const circlePath = generateCirclePath(50, 150, 350);
+	const circlePath = generateCirclePath({r: 50, cx: 150, cy: 350});
 	const rectPath = generateRectPath({
 		x: 50,
 		y: 100,
