@@ -35,6 +35,11 @@ import {
 	circleToRectPathSchema,
 } from './compositions/POCs/CircleToRectPath';
 
+import {
+	ScatterPlotToBarChart,
+	scatterPlotToBarChartSchema,
+} from './compositions/POCs/ScatterPlotToBarChart';
+
 // import {
 // 	twoChangeBarsSchema,
 // 	TwoChangeBars,
@@ -76,13 +81,21 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-CircleToRectPath"
 					component={CircleToRectPath}
-					// durationInFrames={90 * 3.5}
-					// durationInFrames={90 * 30}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+					durationInFrames={90 * 3}
 					fps={90}
 					{...squareVideo}
 					schema={circleToRectPathSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-ScatterPlotToBarChart"
+					component={ScatterPlotToBarChart}
+					durationInFrames={90 * 5}
+					fps={90}
+					{...squareVideo}
+					schema={scatterPlotToBarChartSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>

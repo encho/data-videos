@@ -1,36 +1,43 @@
 import {z} from 'zod';
-// import numeral from 'numeral';
-// import {Sequence} from 'remotion';
+import {useCurrentFrame, useVideoConfig, interpolate, Easing} from 'remotion';
+import {interpolate as flubberInterploate} from 'flubber';
 
-// import {FadeInAndOutText} from './FadeInAndOutText';
-// import {WaterfallTextEffect} from './WaterfallTextEffect';
-// import {ThemeType} from '../../acetti-themes/themeTypes';
-// import {Position} from '../../acetti-ts-base/Position';
+import {generateCirclePath} from './generateCirclePath';
+import {generateRectPath} from './generateRectPath';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../acetti-themes/getThemeFromEnum';
 
-// import {
-// 	getKPIFontSize,
-// 	getLabelFontSize,
-// 	getLabelMarginTop,
-// 	getSpaceMedium,
-// } from '../../acetti-themes/typographySizes';
-
 export const circleToRectPathSchema = z.object({
 	themeEnum: zThemeEnum,
-	// kpiValue: z.number(),
-	// kpiValueFormatString: z.string(),
-	// kpiLabel: z.string(),
-	// baseFontSize: z.number(),
 });
 
 export const CircleToRectPath: React.FC<
 	z.infer<typeof circleToRectPathSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
+	const progress = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
+		easing: Easing.cubic,
+	});
+
+	const circlePath = generateCirclePath(50, 150, 350);
+	const rectPath = generateRectPath({
+		x: 50,
+		y: 100,
+		width: 400,
+		height: 50,
+		rBottomRight: 20,
+		rTopRight: 20,
+	});
+
+	const flubberInterpolator = flubberInterploate(circlePath, rectPath);
+	const flubberInterpolatedPath = flubberInterpolator(progress);
 
 	return (
 		<div
@@ -51,8 +58,40 @@ export const CircleToRectPath: React.FC<
 				Circle to Rect Path Animation POC
 			</div>
 
+			<div
+				style={{
+					color: theme.typography.title.color,
+					fontSize: 20,
+					marginBottom: 50,
+				}}
+			>
+				{circlePath}
+			</div>
+
+			<div
+				style={{
+					color: theme.typography.title.color,
+					fontSize: 20,
+					marginBottom: 50,
+				}}
+			>
+				{rectPath}
+			</div>
+
+			<div
+				style={{
+					color: theme.typography.title.color,
+					fontSize: 20,
+					marginBottom: 50,
+				}}
+			>
+				{progress}
+			</div>
+
 			<svg style={{backgroundColor: 'cyan', width: 500, height: 500}}>
-				<g />
+				<path opacity={0.3} d={rectPath} fill={'black'} />
+				<path opacity={0.3} d={circlePath} fill={'black'} />
+				<path d={flubberInterpolatedPath} fill={'orange'} />
 			</svg>
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
