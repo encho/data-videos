@@ -74,6 +74,10 @@ export const zodThemeType = z.object({
 	TwoChangeBars: z.object({
 		barsColor: zColor(),
 	}),
+	SimpleKPI: z.object({
+		kpiColor: zColor(),
+		labelColor: zColor(),
+	}),
 	timeseriesComponents: z.object({
 		percentageChangeArea: z.object({
 			lineColor: zColor(),

@@ -3,6 +3,7 @@ import numeral from 'numeral';
 import {Sequence} from 'remotion';
 
 import {FadeInAndOutText} from './FadeInAndOutText';
+import {WaterfallTextEffect} from './WaterfallTextEffect';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {Position} from '../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
@@ -86,14 +87,18 @@ export const SimpleKPI: React.FC<
 				fontSize,
 			}}
 		>
+			{/* <Sequence from={90 * 0.75} layout="none"> */}
 			<div
 				style={{
 					...getTitleStyles(theme),
 					fontSize,
 				}}
 			>
-				<FadeInAndOutText>{formattedKpiValue}</FadeInAndOutText>
+				<FadeInAndOutText innerDelay={Math.floor(90 * 0.75)}>
+					{formattedKpiValue}
+				</FadeInAndOutText>
 			</div>
+			{/* </Sequence> */}
 			<div
 				style={{
 					...getSubTitleStyles(theme),
@@ -101,7 +106,7 @@ export const SimpleKPI: React.FC<
 					marginTop: `-${0.5}em`,
 				}}
 			>
-				<FadeInAndOutText>{kpiLabel}</FadeInAndOutText>
+				<WaterfallTextEffect>{kpiLabel}</WaterfallTextEffect>
 			</div>
 		</div>
 	);
@@ -111,7 +116,7 @@ const getTitleStyles = (theme: ThemeType) => {
 	const titleStyles = {
 		fontWeight: 700,
 		fontFamily: theme.typography.title.fontFamily,
-		color: theme.typography.title.color,
+		color: theme.SimpleKPI.kpiColor,
 	};
 	return titleStyles;
 };
@@ -119,8 +124,8 @@ const getTitleStyles = (theme: ThemeType) => {
 const getSubTitleStyles = (theme: ThemeType) => {
 	const subTitleStyles = {
 		fontWeight: 500,
-		fontFamily: theme.typography.subTitle.fontFamily,
-		color: theme.typography.subTitle.color,
+		fontFamily: theme.typography.title.fontFamily,
+		color: theme.SimpleKPI.labelColor,
 	};
 	return subTitleStyles;
 };

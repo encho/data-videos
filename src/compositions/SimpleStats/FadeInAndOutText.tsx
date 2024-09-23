@@ -8,7 +8,11 @@ import {
 
 import {ThemeType} from '../../acetti-themes/themeTypes';
 
-export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
+// TODO introduce a delay prop, where we render with opacity=0, to respect the layout in KPI
+export const FadeInAndOutText: React.FC<{
+	children: string;
+	innerDelay?: number;
+}> = ({children, innerDelay = 0}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const characters = children.split('');
@@ -17,6 +21,7 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 	let exitSequenceDurationInFrames = 200;
 	let displaySequenceDurationInFrames =
 		durationInFrames -
+		innerDelay -
 		enterSequenceDurationInFrames -
 		exitSequenceDurationInFrames;
 
@@ -26,12 +31,35 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 		displaySequenceDurationInFrames = 1;
 	}
 
+	const entryDelay = innerDelay;
+	const displayDelay = entryDelay + enterSequenceDurationInFrames;
+	const exitDelay = displayDelay + displaySequenceDurationInFrames;
+
 	return (
 		<>
+			{innerDelay ? (
+				<Sequence
+					name="FadeInAndOutText_InnerDelay"
+					durationInFrames={innerDelay}
+					layout="none"
+				>
+					{characters.map((char) => (
+						<span
+							style={{
+								visibility: 'hidden',
+							}}
+						>
+							{char}
+						</span>
+					))}
+				</Sequence>
+			) : null}
+
 			{/* enter animation */}
 			<Sequence
 				name="FadeInAndOutText_FadeInCharacters"
 				durationInFrames={enterSequenceDurationInFrames}
+				from={entryDelay}
 				layout="none"
 			>
 				{characters.map((char, index) => (
@@ -44,7 +72,7 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 			<Sequence
 				name="FadeInAndOutText_UpdateCharacters"
 				layout="none"
-				from={enterSequenceDurationInFrames}
+				from={displayDelay}
 				durationInFrames={displaySequenceDurationInFrames}
 			>
 				{characters.map((char) => (
@@ -55,7 +83,7 @@ export const FadeInAndOutText: React.FC<{children: string}> = ({children}) => {
 			<Sequence
 				name="FadeInAndOutText_FadeOutCharacters"
 				layout="none"
-				from={enterSequenceDurationInFrames + displaySequenceDurationInFrames}
+				from={exitDelay}
 				durationInFrames={exitSequenceDurationInFrames}
 			>
 				{characters.map((char, index) => (

@@ -137,6 +137,10 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 	TwoChangeBars: {
 		barsColor: monoColor,
 	},
+	SimpleKPI: {
+		kpiColor: textColor,
+		labelColor: 'gray',
+	},
 	timeseriesComponents: {
 		percentageChangeArea: {
 			lineColor: monoColor,

@@ -131,6 +131,10 @@ export const nerdyTheme: ThemeType = {
 	TwoChangeBars: {
 		barsColor: textColor,
 	},
+	SimpleKPI: {
+		kpiColor: '#fff',
+		labelColor: '#888',
+	},
 	timeseriesComponents: {
 		percentageChangeArea: {
 			lineColor: '#f05122',
