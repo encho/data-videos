@@ -12,21 +12,30 @@ import {
 	zThemeEnum,
 } from '../../acetti-themes/getThemeFromEnum';
 
+import {
+	getKPIFontSize,
+	getLabelFontSize,
+	getLabelMarginTop,
+	getSpaceMedium,
+} from '../../acetti-themes/typographySizes';
+
 export const simpleKPICompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 	kpiValue: z.number(),
 	kpiValueFormatString: z.string(),
 	kpiLabel: z.string(),
-	fontSize: z.number(),
+	baseFontSize: z.number(),
 });
 
 export const SimpleKPIComposition: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
+> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	// TODO kpi section in theme!!!
 	// const kpiColor = theme.typography.textColor;
+
+	const spaceMedium = getSpaceMedium(baseFontSize);
 
 	return (
 		<div
@@ -38,7 +47,9 @@ export const SimpleKPIComposition: React.FC<
 			}}
 		>
 			<Position position={{top: 100, left: 100}}>
-				<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
+				<div
+					style={{display: 'flex', flexDirection: 'column', gap: spaceMedium}}
+				>
 					<Sequence layout="none">
 						<SimpleKPI
 							{...{
@@ -46,7 +57,7 @@ export const SimpleKPIComposition: React.FC<
 								kpiValue,
 								kpiValueFormatString,
 								kpiLabel,
-								fontSize,
+								baseFontSize,
 							}}
 						/>
 					</Sequence>
@@ -58,7 +69,7 @@ export const SimpleKPIComposition: React.FC<
 								kpiValue: 2000,
 								kpiValueFormatString: '$ 0.00',
 								kpiLabel: 'Investments',
-								fontSize,
+								baseFontSize,
 							}}
 						/>
 					</Sequence>
@@ -71,42 +82,51 @@ export const SimpleKPIComposition: React.FC<
 
 export const SimpleKPI: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
+> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
 
-	// TODO kpi section in theme!!!
-	// const kpiColor = theme.typography.textColor;
+	const kpiFontSize = getKPIFontSize(baseFontSize);
+	const labelFontSize = getLabelFontSize(baseFontSize);
+	const labelMarginTop = getLabelMarginTop(baseFontSize);
 
 	return (
 		<div
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
-				fontSize,
 			}}
 		>
-			{/* <Sequence from={90 * 0.75} layout="none"> */}
-			<div
-				style={{
-					...getTitleStyles(theme),
-					fontSize,
-				}}
-			>
-				<FadeInAndOutText innerDelay={Math.floor(90 * 0.75)}>
-					{formattedKpiValue}
-				</FadeInAndOutText>
+			<div style={{}}>
+				<div
+					style={{
+						...getTitleStyles(theme),
+						fontSize: kpiFontSize,
+						marginTop: `-${0.32}em`, // TODO this is capsize adjustment
+						marginBottom: `-${0.33}em`, // TODO this is capsize adjustment
+					}}
+				>
+					<FadeInAndOutText innerDelay={Math.floor(90 * 0.75)}>
+						{formattedKpiValue}
+					</FadeInAndOutText>
+				</div>
 			</div>
-			{/* </Sequence> */}
 			<div
 				style={{
-					...getSubTitleStyles(theme),
-					fontSize: `${0.62}em`,
-					marginTop: `-${0.5}em`,
+					marginTop: labelMarginTop,
 				}}
 			>
-				<WaterfallTextEffect>{kpiLabel}</WaterfallTextEffect>
+				<div
+					style={{
+						marginTop: `-${0.32}em`, // TODO this is capsize adjustment
+						marginBottom: `-${0.33}em`, // TODO this is capsize adjustment
+						...getSubTitleStyles(theme),
+						fontSize: labelFontSize,
+					}}
+				>
+					<WaterfallTextEffect>{kpiLabel}</WaterfallTextEffect>
+				</div>
 			</div>
 		</div>
 	);

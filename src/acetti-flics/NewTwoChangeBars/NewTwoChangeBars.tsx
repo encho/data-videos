@@ -17,6 +17,11 @@ import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinib
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {ChangeBar} from './ChangeBar';
+
+import {
+	getLabelFontSize,
+	getLabelMarginTop,
+} from '../../acetti-themes/typographySizes';
 // import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 export const newTwoChangeBarsSchema = z.object({
@@ -36,6 +41,7 @@ export const newTwoChangeBarsSchema = z.object({
 });
 
 // TODO factor out
+// TYPOGRAPHY SIZES (put globally!)
 
 export const NewTwoChangeBars: React.FC<
 	z.infer<typeof newTwoChangeBarsSchema>
@@ -67,8 +73,9 @@ export const NewTwoChangeBars: React.FC<
 	const BAR_COLOR = theme.typography.textColor;
 	const BACKGROUND_COLOR = theme.global.backgroundColor;
 
-	const LABEL_TEXT_SIZE = baseFontSize * 1.25;
+	const LABEL_TEXT_SIZE = getLabelFontSize(baseFontSize);
 	const LABEL_MARGIN_TOP = baseFontSize * 0.25;
+	// const LABEL_MARGIN_TOP = getLabelMarginTop(baseFontSize);
 	const LABEL_TEXT_COLOR = theme.typography.textColor;
 
 	const VALUE_TEXT_SIZE = baseFontSize;
