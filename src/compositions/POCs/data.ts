@@ -1,5 +1,6 @@
 // Define the DataItem type
 export type DataItem = {
+	id: string;
 	name: string;
 	age: number;
 	profession: 'Business' | 'IT' | 'Upper_Management' | 'Consultant';
@@ -11,6 +12,7 @@ export type DataItem = {
 // Define the array of DataItem
 export const data: Array<DataItem> = [
 	{
+		id: '001',
 		name: 'Alice',
 		age: 30,
 		profession: 'IT',
@@ -19,6 +21,7 @@ export const data: Array<DataItem> = [
 		tenureInMonths: 24,
 	},
 	{
+		id: '002',
 		name: 'Bob',
 		age: 45,
 		profession: 'Business',
@@ -27,6 +30,7 @@ export const data: Array<DataItem> = [
 		tenureInMonths: 120,
 	},
 	{
+		id: '003',
 		name: 'Carol',
 		age: 39,
 		profession: 'Upper_Management',
@@ -35,6 +39,7 @@ export const data: Array<DataItem> = [
 		tenureInMonths: 96,
 	},
 	{
+		id: '004',
 		name: 'Dave',
 		age: 28,
 		profession: 'Consultant',
@@ -43,6 +48,7 @@ export const data: Array<DataItem> = [
 		tenureInMonths: 36,
 	},
 	{
+		id: '005',
 		name: 'Eve',
 		age: 50,
 		profession: 'Business',

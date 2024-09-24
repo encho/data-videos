@@ -62,7 +62,7 @@ export const SimpleKPIComposition: React.FC<
 						/>
 					</Sequence>
 
-					<Sequence layout="none" from={90}>
+					<Sequence layout="none" from={90 * 2}>
 						<SimpleKPI
 							{...{
 								themeEnum,
