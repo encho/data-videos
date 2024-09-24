@@ -4,11 +4,11 @@ import {interpolate as flubberInterploate} from 'flubber';
 
 import {generateCirclePath} from './generateCirclePath';
 import {generateRectPath} from './generateRectPath';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../acetti-themes/getThemeFromEnum';
+} from '../../../acetti-themes/getThemeFromEnum';
 
 export const circleToRectPathSchema = z.object({
 	themeEnum: zThemeEnum,

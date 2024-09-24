@@ -1,21 +1,24 @@
 import {z} from 'zod';
-import {useCurrentFrame, useVideoConfig, interpolate, Easing} from 'remotion';
-import {interpolate as flubberInterploate} from 'flubber';
 import {
-	// ScaleLinear,
-	scaleLinear,
-} from 'd3-scale';
+	useCurrentFrame,
+	useVideoConfig,
+	interpolate,
+	Easing,
+	Sequence,
+} from 'remotion';
+import {interpolate as flubberInterploate} from 'flubber';
+import {scaleLinear} from 'd3-scale';
 
-import {generateRectPath} from './generateRectPath';
-import {generateCirclePath} from './generateCirclePath';
+import {generateRectPath} from '../CircleToRectPath/generateRectPath';
+import {generateCirclePath} from '../CircleToRectPath/generateCirclePath';
 
 import {getDomain} from './analytics';
 import {data, DataItem} from './data';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../acetti-themes/getThemeFromEnum';
+} from '../../../acetti-themes/getThemeFromEnum';
 
 type VizTypeBarChart<DataItemType> = {
 	type: 'BarChart';
@@ -147,6 +150,29 @@ function generatePlotData<DataItemType extends {id: string}>({
 	throw new Error('Error in generatePlotData: Unkonwn spec.type');
 }
 
+function generateDataPath(
+	chartDataItem: BarChartPathSpec | ScatterPlotPathSpec
+): string {
+	if (chartDataItem.type === 'circle') {
+		return generateCirclePath({
+			r: chartDataItem.r,
+			cx: chartDataItem.cx,
+			cy: chartDataItem.cy,
+		});
+	}
+
+	if (chartDataItem.type === 'bar') {
+		return generateRectPath({
+			x: chartDataItem.x,
+			y: chartDataItem.y,
+			width: chartDataItem.width,
+			height: chartDataItem.height,
+		});
+	}
+
+	throw new Error('generateDataPath: could not return anything!!!!');
+}
+
 export const scatterPlotToBarChartSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -162,12 +188,16 @@ export const ScatterPlotToBarChart: React.FC<
 		yMeasure: 'income',
 	};
 
-	// const scatterPlotVizData = generateScatterplotData<DataItem>({
-	// 	spec: scatterPlotVizSpec,
-	// 	data,
-	// 	xRange: [0, 200],
-	// 	yRange: [0, 200],
-	// });
+	const scatterPlotVizSpec2: VizTypeScatterplot<DataItem> = {
+		type: 'ScatterPlot',
+		xMeasure: 'income',
+		yMeasure: 'age',
+	};
+
+	const barChartVizSpec: VizTypeBarChart<DataItem> = {
+		type: 'BarChart',
+		measure: 'income',
+	};
 
 	return (
 		<div
@@ -198,29 +228,41 @@ export const ScatterPlotToBarChart: React.FC<
 				{JSON.stringify(data[0], undefined, 0)}
 			</div>
 
-			{/* <div
-				style={{
-					color: theme.typography.title.color,
-					fontSize: 20,
-					marginBottom: 50,
-				}}
-			>
-				{JSON.stringify(scatterPlotVizData.data[0], undefined, 0)}
-			</div> */}
-
 			<div>
 				<div
 					style={{
-						// position: 'relative',
 						marginTop: 60,
 						marginLeft: 30,
 					}}
 				>
-					<AnalyticsChartTransition
-						data={data}
-						startChartSpec={scatterPlotVizSpec}
-						endChartSpec={scatterPlotVizSpec}
-					/>
+					<Sequence from={0} durationInFrames={90 * 2} layout="none">
+						<AnalyticsChartTransition
+							data={data}
+							startChartSpec={scatterPlotVizSpec}
+							endChartSpec={scatterPlotVizSpec2}
+						/>
+					</Sequence>
+					<Sequence from={90 * 2} durationInFrames={90 * 2} layout="none">
+						<AnalyticsChartTransition
+							data={data}
+							startChartSpec={scatterPlotVizSpec2}
+							endChartSpec={scatterPlotVizSpec}
+						/>
+					</Sequence>
+					<Sequence from={90 * 4} durationInFrames={90 * 2} layout="none">
+						<AnalyticsChartTransition
+							data={data}
+							startChartSpec={scatterPlotVizSpec}
+							endChartSpec={barChartVizSpec}
+						/>
+					</Sequence>
+					<Sequence from={90 * 6} durationInFrames={90 * 10} layout="none">
+						<AnalyticsChartTransition
+							data={data}
+							startChartSpec={barChartVizSpec}
+							endChartSpec={scatterPlotVizSpec}
+						/>
+					</Sequence>
 				</div>
 			</div>
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
@@ -250,13 +292,6 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 	const chartWidth = 300;
 	const chartHeight = 300;
 
-	// const startChartData = generateScatterplotData<TDataItem>({
-	// 	spec: startChartSpec,
-	// 	data,
-	// 	plotAreaHeight: chartHeight,
-	// 	plotAreaWidth: chartWidth,
-	// });
-
 	const startChartData = generatePlotData({
 		spec: startChartSpec,
 		data,
@@ -267,38 +302,14 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 	const endChartData = generatePlotData({
 		spec: endChartSpec,
 		data,
-		plotAreaHeight: chartHeight / 2,
-		plotAreaWidth: chartWidth / 2,
+		plotAreaHeight: chartHeight,
+		plotAreaWidth: chartWidth,
 	});
 
 	// QUICK-FIX: as the ids are all the same we have ONLY UPDATES ==> CHANGE ASAP
 	const updateDataPathPairs = startChartData.data.map((_it, i) => {
 		const startItem = startChartData.data[i];
 		const endItem = endChartData.data[i];
-
-		// TODO factor out
-		const generateDataPath = (
-			chartDataItem: BarChartPathSpec | ScatterPlotPathSpec
-		): string => {
-			if (chartDataItem.type === 'circle') {
-				return generateCirclePath({
-					r: chartDataItem.r,
-					cx: chartDataItem.cx,
-					cy: chartDataItem.cy,
-				});
-			}
-
-			if (chartDataItem.type === 'bar') {
-				return generateRectPath({
-					x: chartDataItem.x,
-					y: chartDataItem.y,
-					width: chartDataItem.width,
-					height: chartDataItem.height,
-				});
-			}
-
-			throw new Error('generateDataPath: could not return anything!!!!');
-		};
 
 		const startDataPath = generateDataPath(startItem);
 		const endDataPath = generateDataPath(endItem);
@@ -330,7 +341,6 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 					<g>
 						<path d={startDataPath} fill={'red'} opacity={0.3} />
 						<path d={endDataPath} fill={'green'} opacity={0.3} />
-
 						<path d={flubberInterpolatedPath} fill={'white'} />
 					</g>
 				);

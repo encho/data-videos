@@ -33,12 +33,12 @@ import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
 import {
 	CircleToRectPath,
 	circleToRectPathSchema,
-} from './compositions/POCs/CircleToRectPath';
+} from './compositions/POCs/CircleToRectPath/CircleToRectPath';
 
 import {
 	ScatterPlotToBarChart,
 	scatterPlotToBarChartSchema,
-} from './compositions/POCs/ScatterPlotToBarChart';
+} from './compositions/POCs/ScatterPlotToBarChart/ScatterPlotToBarChart';
 
 // import {
 // 	twoChangeBarsSchema,
@@ -92,7 +92,7 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-ScatterPlotToBarChart"
 					component={ScatterPlotToBarChart}
-					durationInFrames={90 * 5}
+					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
 					schema={scatterPlotToBarChartSchema}
