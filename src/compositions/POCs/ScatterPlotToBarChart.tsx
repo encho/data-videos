@@ -17,35 +17,92 @@ import {
 	zThemeEnum,
 } from '../../acetti-themes/getThemeFromEnum';
 
+type VizTypeBarChart<DataItemType> = {
+	type: 'BarChart';
+	measure: keyof DataItemType;
+};
+
+type BarChartPathSpec = {
+	id: string;
+	type: 'bar';
+	y: number;
+	x: number;
+	width: number;
+	height: number;
+};
+
+type BarChartPlotData = {
+	data: BarChartPathSpec[];
+};
+
+function generateBarChartData<DataItemType extends {id: string}>({
+	spec,
+	data,
+	plotAreaWidth,
+	plotAreaHeight,
+}: {
+	spec: VizTypeBarChart<DataItemType>;
+	data: Array<DataItemType>;
+	plotAreaWidth: number;
+	plotAreaHeight: number;
+}): BarChartPlotData {
+	// TODO filter out potential NaN's from the dataset (also fro scatterplot)
+	const domain = getDomain<DataItemType>(data, spec.measure);
+
+	const barWidthScale = scaleLinear().domain(domain).range([0, plotAreaWidth]);
+
+	const vizData = data.map((it, i) => {
+		const barWidth = barWidthScale(it[spec.measure] as number);
+		const y = i * 30;
+		const barHeight = 20;
+		return {
+			id: it.id,
+			type: 'bar' as const,
+			x: 0,
+			y,
+			width: barWidth,
+			height: barHeight,
+		};
+	});
+
+	return {data: vizData};
+}
+
 type VizTypeScatterplot<DataItemType> = {
 	type: 'ScatterPlot';
 	xMeasure: keyof DataItemType;
 	yMeasure: keyof DataItemType;
 };
 
-type TChartSpec<TDataItem> = VizTypeScatterplot<TDataItem>;
+type TChartSpec<TDataItem> =
+	| VizTypeScatterplot<TDataItem>
+	| VizTypeBarChart<TDataItem>;
+
+type ScatterPlotPathSpec = {
+	id: string;
+	type: 'circle';
+	cx: number;
+	cy: number;
+	r: number;
+};
 
 type ScatterPlotChartData = {
-	data: Array<{
-		id: string;
-		type: 'circle';
-		cx: number;
-		cy: number;
-		r: number;
-	}>;
+	data: ScatterPlotPathSpec[];
 };
 
 function generateScatterplotData<DataItemType extends {id: string}>({
 	spec,
 	data,
-	xRange,
-	yRange,
+	plotAreaWidth,
+	plotAreaHeight,
 }: {
 	spec: VizTypeScatterplot<DataItemType>;
 	data: Array<DataItemType>;
-	xRange: [number, number];
-	yRange: [number, number];
+	plotAreaWidth: number;
+	plotAreaHeight: number;
 }): ScatterPlotChartData {
+	const xRange = [0, plotAreaWidth];
+	const yRange = [0, plotAreaHeight];
 	const xDomain = getDomain<DataItemType>(data, spec.xMeasure);
 	const yDomain = getDomain<DataItemType>(data, spec.yMeasure);
 
@@ -68,6 +125,28 @@ function generateScatterplotData<DataItemType extends {id: string}>({
 	return {data: vizData};
 }
 
+function generatePlotData<DataItemType extends {id: string}>({
+	spec,
+	data,
+	plotAreaWidth,
+	plotAreaHeight,
+}: {
+	spec: TChartSpec<DataItemType>;
+	data: DataItemType[];
+	plotAreaWidth: number;
+	plotAreaHeight: number;
+}): ScatterPlotChartData | BarChartPlotData {
+	if (spec.type === 'ScatterPlot') {
+		return generateScatterplotData({spec, data, plotAreaWidth, plotAreaHeight});
+	}
+
+	if (spec.type === 'BarChart') {
+		return generateBarChartData({spec, data, plotAreaWidth, plotAreaHeight});
+	}
+
+	throw new Error('Error in generatePlotData: Unkonwn spec.type');
+}
+
 export const scatterPlotToBarChartSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -83,12 +162,12 @@ export const ScatterPlotToBarChart: React.FC<
 		yMeasure: 'income',
 	};
 
-	const scatterPlotVizData = generateScatterplotData<DataItem>({
-		spec: scatterPlotVizSpec,
-		data,
-		xRange: [0, 200],
-		yRange: [0, 200],
-	});
+	// const scatterPlotVizData = generateScatterplotData<DataItem>({
+	// 	spec: scatterPlotVizSpec,
+	// 	data,
+	// 	xRange: [0, 200],
+	// 	yRange: [0, 200],
+	// });
 
 	return (
 		<div
@@ -119,7 +198,7 @@ export const ScatterPlotToBarChart: React.FC<
 				{JSON.stringify(data[0], undefined, 0)}
 			</div>
 
-			<div
+			{/* <div
 				style={{
 					color: theme.typography.title.color,
 					fontSize: 20,
@@ -127,7 +206,7 @@ export const ScatterPlotToBarChart: React.FC<
 				}}
 			>
 				{JSON.stringify(scatterPlotVizData.data[0], undefined, 0)}
-			</div>
+			</div> */}
 
 			<div>
 				<div
@@ -171,22 +250,25 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 	const chartWidth = 300;
 	const chartHeight = 300;
 
-	// TODO: more generic, as this is only for scatterplots... e.g.:
-	// const startVizData = generateChartData({chartSpec, data, ...})
-	const startChartData = generateScatterplotData<TDataItem>({
+	// const startChartData = generateScatterplotData<TDataItem>({
+	// 	spec: startChartSpec,
+	// 	data,
+	// 	plotAreaHeight: chartHeight,
+	// 	plotAreaWidth: chartWidth,
+	// });
+
+	const startChartData = generatePlotData({
 		spec: startChartSpec,
 		data,
-		xRange: [0, chartWidth], // TODO from some chart layout...
-		yRange: [0, chartHeight], // TODO from some chart layout...
+		plotAreaHeight: chartHeight,
+		plotAreaWidth: chartWidth,
 	});
 
-	// TODO: more generic, as this is only for scatterplots... e.g.:
-	// const startVizData = generateChartData({chartSpec, data, ...})
-	const endChartData = generateScatterplotData<TDataItem>({
+	const endChartData = generatePlotData({
 		spec: endChartSpec,
 		data,
-		xRange: [0, chartWidth / 2], // TODO from some chart layout...
-		yRange: [0, chartHeight / 2], // TODO from some chart layout...
+		plotAreaHeight: chartHeight / 2,
+		plotAreaWidth: chartWidth / 2,
 	});
 
 	// QUICK-FIX: as the ids are all the same we have ONLY UPDATES ==> CHANGE ASAP
@@ -194,21 +276,32 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 		const startItem = startChartData.data[i];
 		const endItem = endChartData.data[i];
 
-		// TODO more generic like
-		// const dataPath = generateDataPath(it)
-		const startDataPath = generateCirclePath({
-			r: startItem.r,
-			cx: startItem.cx,
-			cy: startItem.cy,
-		});
+		// TODO factor out
+		const generateDataPath = (
+			chartDataItem: BarChartPathSpec | ScatterPlotPathSpec
+		): string => {
+			if (chartDataItem.type === 'circle') {
+				return generateCirclePath({
+					r: chartDataItem.r,
+					cx: chartDataItem.cx,
+					cy: chartDataItem.cy,
+				});
+			}
 
-		// TODO more generic like
-		// const dataPath = generateDataPath(it)
-		const endDataPath = generateCirclePath({
-			r: endItem.r,
-			cx: endItem.cx,
-			cy: endItem.cy,
-		});
+			if (chartDataItem.type === 'bar') {
+				return generateRectPath({
+					x: chartDataItem.x,
+					y: chartDataItem.y,
+					width: chartDataItem.width,
+					height: chartDataItem.height,
+				});
+			}
+
+			throw new Error('generateDataPath: could not return anything!!!!');
+		};
+
+		const startDataPath = generateDataPath(startItem);
+		const endDataPath = generateDataPath(endItem);
 
 		return {
 			startDataPath,
