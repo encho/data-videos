@@ -218,16 +218,6 @@ export const BarChartGrouping: React.FC<
 				BarChartGrouping
 			</div>
 
-			<div
-				style={{
-					color: theme.typography.title.color,
-					fontSize: 20,
-					marginBottom: 50,
-				}}
-			>
-				{JSON.stringify(data[0], undefined, 0)}
-			</div>
-
 			<div>
 				<div
 					style={{
