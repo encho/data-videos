@@ -66,9 +66,9 @@ import {
 } from './compositions/SimpleStats/TextEffects';
 
 import {
-	BarChartGrouping,
-	barChartGroupingSchema,
-} from './compositions/POCs/BarChartGrouping/BarChartGrouping';
+	StandardBarChart,
+	standardBarChartSchema,
+} from './compositions/POCs/StandardBarChart/StandardBarChart';
 
 import './tailwind.css';
 
@@ -106,12 +106,12 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-BarChartGrouping"
-					component={BarChartGrouping}
+					id="pocs-StandardBarChart"
+					component={StandardBarChart}
 					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
-					schema={barChartGroupingSchema}
+					schema={standardBarChartSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>

@@ -49,18 +49,54 @@ function getCellSize(
 		: (cell.value / totalFractions) * freeSpace;
 }
 
+// function getGridRail(
+// 	spec: TGridRailSpec,
+// 	freeSpace: number,
+// 	totalFractions: number,
+// 	{gap, padding}: {gap: number; padding: number}
+// ): TGridRail {
+// 	return spec.reduce<TGridRail>((memo, current, index) => {
+// 		const lastCell = memo[index - 1];
+// 		const start = lastCell ? lastCell.end + gap : padding;
+// 		const cellSize = getCellSize(current, freeSpace, totalFractions);
+// 		const end = start + cellSize;
+// 		return [...memo, {...current, position: index, start, end}];
+// 	}, []);
+// }
+
 function getGridRail(
 	spec: TGridRailSpec,
 	freeSpace: number,
 	totalFractions: number,
 	{gap, padding}: {gap: number; padding: number}
 ): TGridRail {
+	const namesObject: {[key: string]: number} = {};
+
+	spec.forEach((item) => {
+		if (!namesObject[item.name]) {
+			namesObject[item.name] = 0;
+		}
+	});
+
 	return spec.reduce<TGridRail>((memo, current, index) => {
 		const lastCell = memo[index - 1];
 		const start = lastCell ? lastCell.end + gap : padding;
 		const cellSize = getCellSize(current, freeSpace, totalFractions);
 		const end = start + cellSize;
-		return [...memo, {...current, position: index, start, end}];
+		const positionOfType = namesObject[current.name];
+
+		namesObject[current.name] = namesObject[current.name] + 1;
+
+		return [
+			...memo,
+			{
+				...current,
+				position: index,
+				start,
+				end,
+				positionOfType,
+			},
+		];
 	}, []);
 }
 

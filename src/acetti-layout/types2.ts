@@ -56,6 +56,7 @@ export type TGridRailElement = TGridRailElementSpec & {
 	start: number;
 	end: number;
 	position: number;
+	positionOfType: number;
 };
 
 export type TGridRail = Array<TGridRailElement>;
