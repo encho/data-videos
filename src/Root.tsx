@@ -66,9 +66,14 @@ import {
 } from './compositions/SimpleStats/TextEffects';
 
 import {
-	MatrixLayout,
-	matrixLayoutSchema,
-} from './compositions/POCs/StandardBarChart/StandardBarChart';
+	MatrixLayoutPOC,
+	matrixLayoutPOCSchema,
+} from './compositions/POCs/MatrixLayoutPOC/MatrixLayoutPOC';
+
+import {
+	SilkscreenFontPOC,
+	silkscreenFontPOCSchema,
+} from './compositions/POCs/SilkscreenFontPOC/SilkscreenFontPOC';
 
 import './tailwind.css';
 
@@ -107,11 +112,22 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-MatrixLayout"
-					component={MatrixLayout}
+					component={MatrixLayoutPOC}
 					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
-					schema={matrixLayoutSchema}
+					schema={matrixLayoutPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-SilkscreenFont"
+					component={SilkscreenFontPOC}
+					durationInFrames={90 * 10}
+					fps={90}
+					{...squareVideo}
+					schema={silkscreenFontPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>

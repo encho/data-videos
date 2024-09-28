@@ -12,16 +12,16 @@ import {
 	getMatrixLayoutCellArea,
 } from '../../../acetti-layout/hooks/useMatrixLayout';
 
-export const matrixLayoutSchema = z.object({
+export const matrixLayoutPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
 const LAYOUT_WIDTH = 800;
 const LAYOUT_HEIGHT = 600;
 
-export const MatrixLayout: React.FC<z.infer<typeof matrixLayoutSchema>> = ({
-	themeEnum,
-}) => {
+export const MatrixLayoutPOC: React.FC<
+	z.infer<typeof matrixLayoutPOCSchema>
+> = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const nrRows = 5;
