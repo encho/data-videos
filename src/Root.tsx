@@ -66,8 +66,8 @@ import {
 } from './compositions/SimpleStats/TextEffects';
 
 import {
-	StandardBarChart,
-	standardBarChartSchema,
+	MatrixLayout,
+	matrixLayoutSchema,
 } from './compositions/POCs/StandardBarChart/StandardBarChart';
 
 import './tailwind.css';
@@ -106,12 +106,12 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-StandardBarChart"
-					component={StandardBarChart}
+					id="pocs-MatrixLayout"
+					component={MatrixLayout}
 					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
-					schema={standardBarChartSchema}
+					schema={matrixLayoutSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>

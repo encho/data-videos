@@ -5,31 +5,35 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
+import {DisplayGridRails, Area} from '../../../acetti-layout';
+
 import {
-	DisplayGridLayout,
-	DisplayGridRails,
-	Area,
-} from '../../../acetti-layout';
+	useMatrixLayout,
+	getMatrixLayoutCellArea,
+} from '../../../acetti-layout/hooks/useMatrixLayout';
 
-import {useChartLayout, getMatrixLayoutCellArea} from './useChartLayout';
-
-export const standardBarChartSchema = z.object({
+export const matrixLayoutSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
 const LAYOUT_WIDTH = 800;
 const LAYOUT_HEIGHT = 600;
 
-export const StandardBarChart: React.FC<
-	z.infer<typeof standardBarChartSchema>
-> = ({themeEnum}) => {
+export const MatrixLayout: React.FC<z.infer<typeof matrixLayoutSchema>> = ({
+	themeEnum,
+}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const chartLayout = useChartLayout({
+	const nrRows = 5;
+	const nrColumns = 5;
+
+	const matrixLayout = useMatrixLayout({
 		width: LAYOUT_WIDTH,
 		height: LAYOUT_HEIGHT,
-		nrColumns: 5,
-		nrRows: 4,
+		nrColumns,
+		nrRows,
+		rowSpacePixels: 20,
+		columnSpacePixels: 20,
 	});
 
 	return (
@@ -41,95 +45,85 @@ export const StandardBarChart: React.FC<
 				height: '100%',
 			}}
 		>
-			<div
-				style={{
-					color: theme.typography.title.color,
-					fontSize: 50,
-					marginBottom: 50,
-				}}
-			>
-				Standard BarChart (or new Layout MAtrix accessors...)
-			</div>
-
-			{/* <DisplayGridLayout
-				width={chartLayout.width}
-				height={chartLayout.height}
-				areas={chartLayout.areas}
-			/> */}
-
 			<div style={{position: 'relative'}}>
-				{/* TODO to better also with dots, rails as e.g. axes more high quality... envisioning typography tutorial videos */}
-				<DisplayGridRails {...chartLayout} />
-				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<svg
+				<div style={{display: 'flex', justifyContent: 'center'}}>
+					<div
 						style={{
-							width: chartLayout.width,
-							height: chartLayout.height,
-							// backgroundColor: 'rgba(255,0,0,0.2)',
+							color: theme.typography.title.color,
+							fontSize: 50,
+							marginTop: 50,
 						}}
 					>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 0, 0)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 1, 0)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 2, 0)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 3, 0)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						{/* // */}
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 0, 1)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 1, 1)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 2, 1)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-						<Area
-							area={getMatrixLayoutCellArea(chartLayout, 'cell', 3, 1)}
-							fill="rgba(200,100,0,0.6)"
-						>
-							<g></g>
-						</Area>
-					</svg>
+						useMatrixLayout Example
+					</div>
+				</div>
+
+				<div style={{display: 'flex', justifyContent: 'center'}}>
+					<div
+						style={{
+							color: theme.typography.subTitle.color,
+							fontSize: 30,
+							marginBottom: 50,
+						}}
+					>
+						TODO: add animations and better area displays
+					</div>
+				</div>
+
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					<div
+						style={{
+							position: 'relative',
+							width: matrixLayout.width,
+							height: matrixLayout.height,
+						}}
+					>
+						<div style={{position: 'absolute', top: 0, left: 0}}>
+							<DisplayGridRails {...matrixLayout} />
+						</div>
+						<div style={{position: 'absolute', top: 0, left: 0}}>
+							<div style={{position: 'relative'}}>
+								<div>
+									<svg
+										style={{
+											width: matrixLayout.width,
+											height: matrixLayout.height,
+										}}
+									>
+										<Area
+											area={getMatrixLayoutCellArea({
+												layout: matrixLayout,
+												cellName: 'cell',
+												row: 0,
+												column: 0,
+											})}
+											fill="rgba(200,100,0,0.6)"
+										>
+											<g></g>
+										</Area>
+										<Area
+											area={getMatrixLayoutCellArea({
+												layout: matrixLayout,
+												cellName: 'cell',
+												row: 1,
+												column: 0,
+											})}
+											fill="rgba(200,100,0,0.6)"
+										>
+											<g></g>
+										</Area>
+									</svg>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-
-			{/* <svg
-				style={{
-					width: LAYOUT_WIDTH,
-					height: LAYOUT_HEIGHT,
-					backgroundColor: '#444',
-				}}
-			>
-				<g></g>
-			</svg> */}
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>

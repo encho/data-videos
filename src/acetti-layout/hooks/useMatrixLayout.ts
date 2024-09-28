@@ -1,29 +1,28 @@
-import {
-	TGridLayoutArea,
-	TGridRailSpec,
-	useGridLayout,
-	TGridLayout,
-} from '../../../acetti-layout';
+import {TGridLayoutArea, TGridRailSpec, useGridLayout, TGridLayout} from '..';
 
-// TODO pass padding sizes and space sizes in pixels?!
-const makeChartGridLayoutSpec = ({
+const makeMatrixLayoutGridLayoutSpec = ({
 	nrColumns,
 	nrRows,
+	rowPaddingPixels = 0,
+	columnPaddingPixels = 0,
+	rowSpacePixels = 0,
+	columnSpacePixels = 0,
 }: {
 	nrColumns: number;
 	nrRows: number;
+	rowPaddingPixels?: number;
+	columnPaddingPixels?: number;
+	rowSpacePixels?: number;
+	columnSpacePixels?: number;
 }) => {
 	const chartRowsRailSpec: TGridRailSpec = [];
 	const chartColsRailSpec: TGridRailSpec = [];
-
-	const rowSpaceSizeInPixels = 20;
-	const colSpaceSizeInPixels = 20;
 
 	for (let i = 0; i < nrRows; i++) {
 		if (i === 0) {
 			chartRowsRailSpec.push({
 				type: 'pixel',
-				value: 20,
+				value: rowPaddingPixels,
 				name: 'padding',
 			});
 		}
@@ -35,14 +34,14 @@ const makeChartGridLayoutSpec = ({
 		if (i < nrRows - 1) {
 			chartRowsRailSpec.push({
 				type: 'pixel',
-				value: rowSpaceSizeInPixels,
+				value: rowSpacePixels,
 				name: 'space',
 			});
 		}
 		if (i === nrRows - 1) {
 			chartRowsRailSpec.push({
 				type: 'pixel',
-				value: 20,
+				value: rowPaddingPixels,
 				name: 'padding',
 			});
 		}
@@ -52,7 +51,7 @@ const makeChartGridLayoutSpec = ({
 		if (i === 0) {
 			chartColsRailSpec.push({
 				type: 'pixel',
-				value: 20,
+				value: columnPaddingPixels,
 				name: 'padding',
 			});
 		}
@@ -64,14 +63,14 @@ const makeChartGridLayoutSpec = ({
 		if (i < nrColumns - 1) {
 			chartColsRailSpec.push({
 				type: 'pixel',
-				value: colSpaceSizeInPixels,
+				value: columnSpacePixels,
 				name: 'space',
 			});
 		}
 		if (i === nrColumns - 1) {
 			chartColsRailSpec.push({
 				type: 'pixel',
-				value: 20,
+				value: columnPaddingPixels,
 				name: 'padding',
 			});
 		}
@@ -88,48 +87,57 @@ const makeChartGridLayoutSpec = ({
 	return chartGridLayoutSpec;
 };
 
-// TODO put into layout library, and rename to e.g useMatrixLayout
-export function useChartLayout({
+export function useMatrixLayout({
 	width,
 	height,
 	nrColumns,
 	nrRows,
+	rowPaddingPixels = 0,
+	columnPaddingPixels = 0,
+	rowSpacePixels = 0,
+	columnSpacePixels = 0,
 }: {
 	width: number;
 	height: number;
 	nrColumns: number;
 	nrRows: number;
+	rowPaddingPixels?: number;
+	columnPaddingPixels?: number;
+	rowSpacePixels?: number;
+	columnSpacePixels?: number;
 }) {
 	const chartLayout = useGridLayout({
 		width,
 		height,
-		gridLayoutSpec: makeChartGridLayoutSpec({
+		gridLayoutSpec: makeMatrixLayoutGridLayoutSpec({
 			nrColumns,
 			nrRows,
+			rowPaddingPixels,
+			columnPaddingPixels,
+			rowSpacePixels,
+			columnSpacePixels,
 		}),
 	});
 	return chartLayout;
 }
 
-// TODO put into layout library, and rename to e.g getMatrixLayoutCell
-export function getMatrixLayoutCellArea(
-	layout: TGridLayout,
-	cellName: string, // TODO evtl. just use "cell" as default
-	row: number,
-	column: number
-): TGridLayoutArea {
+export function getMatrixLayoutCellArea({
+	layout,
+	cellName = 'cell',
+	row,
+	column,
+}: {
+	layout: TGridLayout;
+	cellName?: string;
+	row: number;
+	column: number;
+}): TGridLayoutArea {
 	const rowGridCell = layout.rows.find((cell) => {
 		return cell.name === cellName && cell.positionOfType === row;
 	});
 	const colGridCell = layout.columns.find((cell) => {
 		return cell.name === cellName && cell.positionOfType === column;
-		// cell.name === cellName;
 	});
-	console.log({cellName, row, column});
-	console.log(layout.columns);
-	console.log(layout.rows);
-	// console.log()
-	console.log({rowGridCell, colGridCell});
 
 	if (rowGridCell === undefined || colGridCell === undefined) {
 		throw new Error(

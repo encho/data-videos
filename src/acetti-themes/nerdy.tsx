@@ -29,7 +29,7 @@ export const nerdyTheme: ThemeType = {
 		},
 		subTitle: {
 			fontFamily: 'Inter-Medium',
-			color: '#ffffff',
+			color: '#888',
 		},
 		titleColor: '#ffffff',
 		subTitleColor: '#888',
