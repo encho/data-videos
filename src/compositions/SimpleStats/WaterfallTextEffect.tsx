@@ -122,7 +122,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 				{characters.map((char, index) => (
 					<ExitCharacter
 						delay={getFlyOutCharacterDelay(index)}
-						fadeInDurationInFrames={FLY_OUT_CHARACTER_DURATION}
+						fadeOutDurationInFrames={FLY_OUT_CHARACTER_DURATION}
 						translateY={200}
 					>
 						{char}
@@ -178,15 +178,15 @@ const EnterCharacter: React.FC<{
 
 const ExitCharacter: React.FC<{
 	children: string;
-	fadeInDurationInFrames: number;
+	fadeOutDurationInFrames: number;
 	delay: number;
 	translateY: number;
-}> = ({children, delay, fadeInDurationInFrames, translateY}) => {
+}> = ({children, delay, fadeOutDurationInFrames, translateY}) => {
 	const frame = useCurrentFrame();
 
 	const opacity = interpolate(
 		frame,
-		[delay, delay + fadeInDurationInFrames],
+		[delay, delay + fadeOutDurationInFrames - 1],
 		[1, 0],
 		{
 			easing: Easing.cubic,
@@ -197,7 +197,7 @@ const ExitCharacter: React.FC<{
 
 	const currentTranslateY = interpolate(
 		frame,
-		[delay, delay + fadeInDurationInFrames],
+		[delay, delay + fadeOutDurationInFrames],
 		[0, 200],
 		{
 			easing: Easing.cubic,

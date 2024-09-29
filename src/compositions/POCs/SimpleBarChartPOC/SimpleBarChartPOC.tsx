@@ -268,12 +268,12 @@ export const HorizontalBar: React.FC<{
 	});
 
 	// TODO as props
-	const barEntryDelayInFrames = 90 * 0.6;
-	const barEnterDurationInFrames = 90 * 0.6;
-	const barExitDurationInFrames = 90 * 1;
+	const barEntryDelayInFrames = fps * 0.6;
+	const barEnterDurationInFrames = fps * 0.6;
+	const barExitDurationInFrames = fps * 1;
 
 	const valueLabelDelayInFrames =
-		barEntryDelayInFrames + barEnterDurationInFrames - Math.floor(90 * 0.7);
+		barEntryDelayInFrames + barEnterDurationInFrames - Math.floor(fps * 0.7);
 
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
@@ -284,7 +284,7 @@ export const HorizontalBar: React.FC<{
 	// actually evtentually do in own factored out component with Sequence based delay?
 	const interpolatedEntryBarWidth = (currentFrame: number) =>
 		interpolate(
-			frame,
+			currentFrame,
 			[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
 			[0, fullBarWidth],
 			{
@@ -296,8 +296,8 @@ export const HorizontalBar: React.FC<{
 
 	const interpolatedExitBarWidth = (currentFrame: number) =>
 		interpolate(
-			frame,
-			[durationInFrames - barExitDurationInFrames, durationInFrames],
+			currentFrame,
+			[durationInFrames - barExitDurationInFrames, durationInFrames - 1],
 			[fullBarWidth, 0],
 			{
 				easing: Easing.cubic,
@@ -334,16 +334,13 @@ export const HorizontalBar: React.FC<{
 					</div>
 				</div>
 			</HtmlArea>
-			<HtmlArea
-				area={horizontalBarLayout.areas.bar}
-				// fill="blue"
-			>
+			<HtmlArea area={horizontalBarLayout.areas.bar}>
 				<svg
 					width={horizontalBarLayout.areas.bar.width}
 					height={horizontalBarLayout.areas.bar.height}
-					// style={{backgroundColor: '#555'}}
 				>
 					<rect
+						// TODO add opacity eventually
 						// opacity={opacity}
 						y={0}
 						x={0}
@@ -355,15 +352,8 @@ export const HorizontalBar: React.FC<{
 					/>
 				</svg>
 			</HtmlArea>
-			<Sequence
-				// from={90 * 0.5}
-				// from={barEntryDelayInFrames + barEnterDurationInFrames}
-				from={valueLabelDelayInFrames}
-			>
-				<HtmlArea
-					area={horizontalBarLayout.areas.valueLabel}
-					// fill="red"
-				>
+			<Sequence from={valueLabelDelayInFrames}>
+				<HtmlArea area={horizontalBarLayout.areas.valueLabel}>
 					<div
 						style={{
 							display: 'flex',
