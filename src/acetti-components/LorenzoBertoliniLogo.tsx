@@ -54,7 +54,7 @@ const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 				right: 40,
 			}}
 		>
-			<div style={{color}} className="text-3xl">
+			<div style={{color, fontSize: 40}}>
 				<span className="font-thin">lorenzo</span>
 				<span className="font-medium">bertolini</span>
 			</div>

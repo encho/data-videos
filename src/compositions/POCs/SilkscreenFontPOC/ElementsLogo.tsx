@@ -1,22 +1,6 @@
-import {z} from 'zod';
+import {AbsoluteFill} from 'remotion';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
-import {
-	getThemeFromEnum,
-	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area} from '../../../acetti-layout';
-
-import {
-	useMatrixLayout,
-	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
-import {ElementsLogo} from './ElementsLogo';
 import {SilkscreenLetter} from './SilkscreenLetter';
-
-export const silkscreenFontPOCSchema = z.object({
-	themeEnum: zThemeEnum,
-});
 
 const E_LETTER = {
 	letter: 'E',
@@ -269,67 +253,172 @@ const G_LETTER = {
 	],
 };
 
-export const SilkscreenFontPOC: React.FC<
-	z.infer<typeof silkscreenFontPOCSchema>
-> = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
+	// const cell_size = 16;
+	const space = 2 * cell_size;
+	const small_cell_size = cell_size / 1.6;
 
-	// const LETTER = E_LETTER;
-	// const LETTER = L_LETTER;
-	// const LETTER = M_LETTER;
-	// const LETTER = N_LETTER;
-	// const LETTER = T_LETTER;
-	// const LETTER = S_LETTER;
-	// const LETTER = O_LETTER;
-	// const LETTER = F_LETTER;
-	// const LETTER = D_LETTER;
-	// const LETTER = A_LETTER;
-	// const LETTER = R_LETTER;
-	// const LETTER = Y_LETTER;
-	// const LETTER = I_LETTER;
-	const LETTER = G_LETTER;
+	const first_line_height = 5 * cell_size;
+	const second_line_height = 5 * small_cell_size;
+
+	// TODO pass total logo height as prop
+	const logo_height = first_line_height + space + second_line_height;
 
 	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 80,
-							marginTop: 140,
-							fontWeight: 700,
-						}}
-					>
-						Silkscreen Font
+		<AbsoluteFill>
+			<div style={{position: 'absolute', right: 40, top: 40}}>
+				<div
+					style={{
+						display: 'flex',
+						gap: 2 * cell_size,
+						flexDirection: 'column',
+					}}
+				>
+					<div style={{display: 'flex', gap: 4 * cell_size}}>
+						<div style={{display: 'flex', gap: 2 * cell_size}}>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...E_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...L_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...E_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...M_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...E_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...N_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...T_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...S_LETTER}
+								showGrid={false}
+							/>
+						</div>
+						<div style={{display: 'flex', gap: 2 * cell_size}}>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...O_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={cell_size}
+								{...F_LETTER}
+								showGrid={false}
+							/>
+						</div>
+					</div>
+
+					<div style={{display: 'flex', gap: 4 * small_cell_size}}>
+						<div style={{display: 'flex', gap: 2 * small_cell_size}}>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...D_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...A_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...T_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...A_LETTER}
+								showGrid={false}
+							/>
+						</div>
+						<div style={{display: 'flex', gap: 2 * small_cell_size}}>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...S_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...T_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...O_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...R_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...Y_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...T_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...E_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...L_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...L_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...I_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...N_LETTER}
+								showGrid={false}
+							/>
+							<SilkscreenLetter
+								cellSize={small_cell_size}
+								{...G_LETTER}
+								showGrid={false}
+							/>
+						</div>
 					</div>
 				</div>
-
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.subTitle.color,
-							fontSize: 80,
-							marginBottom: 50,
-						}}
-					>
-						{LETTER.letter}
-					</div>
-				</div>
-
-				<SilkscreenLetter cellSize={60} {...LETTER} />
 			</div>
-
-			<ElementsLogo cell_size={5} />
-
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
-		</div>
+		</AbsoluteFill>
 	);
 };
