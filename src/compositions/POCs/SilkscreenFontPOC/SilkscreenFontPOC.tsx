@@ -327,7 +327,7 @@ export const SilkscreenFontPOC: React.FC<
 				<SilkscreenLetter cellSize={60} {...LETTER} />
 			</div>
 
-			<ElementsLogo cell_size={5} />
+			<ElementsLogo cell_size={5.5} />
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>

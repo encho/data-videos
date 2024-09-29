@@ -23,6 +23,7 @@ export const SilkscreenLetter: React.FC<{
 	nrRows: number;
 	cellSize: number;
 	showGrid?: boolean;
+	color?: string;
 }> = ({
 	// letter,  TODO introduce ?
 	letterCells,
@@ -30,6 +31,7 @@ export const SilkscreenLetter: React.FC<{
 	nrRows,
 	cellSize,
 	showGrid = true,
+	color = 'rgba(200,100,0,0.8)',
 }) => {
 	const letterWidth = nrColumns * cellSize;
 	const letterHeight = nrRows * cellSize;
@@ -78,7 +80,7 @@ export const SilkscreenLetter: React.FC<{
 												row: letterCell.row,
 												column: letterCell.column,
 											})}
-											fill="rgba(200,100,0,0.8)"
+											fill={color}
 										>
 											<g></g>
 										</Area>

@@ -264,6 +264,8 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 	// TODO pass total logo height as prop
 	const logo_height = first_line_height + space + second_line_height;
 
+	const FONT_COLOR = '#707070';
+
 	return (
 		<AbsoluteFill>
 			<div style={{position: 'absolute', right: 40, top: 40}}>
@@ -280,41 +282,49 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								cellSize={cell_size}
 								{...E_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...L_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...E_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...M_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...E_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...N_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...T_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...S_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 						</div>
 						<div style={{display: 'flex', gap: 2 * cell_size}}>
@@ -322,11 +332,13 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								cellSize={cell_size}
 								{...O_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...F_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 						</div>
 					</div>
@@ -337,21 +349,25 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								cellSize={small_cell_size}
 								{...D_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...A_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...A_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 						</div>
 						<div style={{display: 'flex', gap: 2 * small_cell_size}}>
@@ -359,61 +375,73 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								cellSize={small_cell_size}
 								{...S_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...O_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...R_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...Y_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...E_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...L_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...L_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...I_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...N_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...G_LETTER}
 								showGrid={false}
+								color={FONT_COLOR}
 							/>
 						</div>
 					</div>
