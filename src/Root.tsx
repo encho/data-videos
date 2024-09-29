@@ -75,6 +75,11 @@ import {
 	silkscreenFontPOCSchema,
 } from './compositions/POCs/SilkscreenFontPOC/SilkscreenFontPOC';
 
+import {
+	SimpleBarChartPOC,
+	simpleBarChartPOCSchema,
+} from './compositions/POCs/SimpleBarChartPOC/SimpleBarChartPOC';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -128,6 +133,17 @@ export const RemotionRoot: React.FC = () => {
 					fps={90}
 					{...squareVideo}
 					schema={silkscreenFontPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-SimpleBarChart"
+					component={SimpleBarChartPOC}
+					durationInFrames={90 * 10}
+					fps={90}
+					{...squareVideo}
+					schema={simpleBarChartPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>
