@@ -244,6 +244,8 @@ const AnimatedSvgBar = ({
 		return barHeight;
 	};
 
+	// TODO the frame is actually closured in// no need to have funciton here
+	// f is never read
 	const interpolateExitBarHeight = (f: number) => {
 		const barHeight = interpolate(
 			frame,

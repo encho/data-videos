@@ -1,6 +1,12 @@
 import {z} from 'zod';
 import {measureText} from '@remotion/layout-utils';
-import {Sequence} from 'remotion';
+import {
+	Sequence,
+	useCurrentFrame,
+	useVideoConfig,
+	interpolate,
+	Easing,
+} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
@@ -21,17 +27,43 @@ export const simpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
+function formatPercentage(value: number): string {
+	return (
+		(value * 100).toLocaleString(undefined, {
+			minimumFractionDigits: 1,
+			maximumFractionDigits: 1,
+		}) + '%'
+	);
+}
+// Example usage:
+// console.log(formatPercentage(0.12)); // Output: "12.0%"
+
+const wahlergebnis2024: {parteiName: string; prozent: number; farbe: string}[] =
+	[
+		{parteiName: 'SPD', prozent: 30.9 / 100, farbe: '#E3000F'}, // SPD Red
+		{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0'}, // AfD Blue
+		{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
+		// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
+		{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff'}, // CDU Black
+		{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D'}, // Grüne Green
+		{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075'}, // Die Linke Magenta
+		{parteiName: 'BVB/Freie Wähler', prozent: 2.6 / 100, farbe: '#FFD700'}, // BVB Yellow
+		{parteiName: 'FDP', prozent: 0.8 / 100, farbe: '#FFED00'}, // FDP Yellow
+		{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080'}, // Others Gray
+	];
+
 export const SimpleBarChartPOC: React.FC<
 	z.infer<typeof simpleBarChartPOCSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const barChartData = [
-		{label: 'CDU', value: 32.4, barColor: '#444444', valueLabel: '32.40%'},
-		{label: 'AFD', value: 30.1, barColor: '#0044aa', valueLabel: '30.10%'},
-		{label: 'SPD', value: 10.1, barColor: '#ff0000', valueLabel: '10.10%'},
-		{label: 'Gruene', value: 5.5, barColor: '#22dd77', valueLabel: '5.50%'},
-	];
+	const barChartData = wahlergebnis2024.map((it) => ({
+		label: it.parteiName,
+		value: it.prozent,
+		// barColor: it.farbe,
+		barColor: '#fff',
+		valueLabel: formatPercentage(it.prozent),
+	}));
 
 	return (
 		<div
@@ -55,7 +87,7 @@ export const SimpleBarChartPOC: React.FC<
 					</div>
 				</div>
 
-				<div style={{display: 'flex', justifyContent: 'center'}}>
+				{/* <div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
 						style={{
 							color: theme.typography.title.color,
@@ -65,7 +97,7 @@ export const SimpleBarChartPOC: React.FC<
 					>
 						{JSON.stringify(barChartData, undefined, 2)}
 					</div>
-				</div>
+				</div> */}
 			</div>
 			<div
 				style={{
@@ -75,7 +107,13 @@ export const SimpleBarChartPOC: React.FC<
 					marginTop: 100,
 				}}
 			>
-				<SimpleBarChartHtml data={barChartData} width={800} height={300} />
+				<SimpleBarChartHtml
+					data={barChartData}
+					width={800}
+					// height={300}
+					// TODO
+					baseFontSize={36}
+				/>
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
@@ -91,14 +129,20 @@ export const SimpleBarChartHtml: React.FC<{
 		valueLabel: string;
 	}[];
 	width: number;
-	height: number;
-}> = ({data, width, height}) => {
+	baseFontSize: number;
+}> = ({data, width, baseFontSize}) => {
 	const nrColumns = 1;
 	const nrRows = data.length;
 
+	const BAR_LABEL_FONT_SIZE = baseFontSize;
+	const BAR_HEIGHT = baseFontSize * 1.5;
+	const BAR_SPACE = baseFontSize * 0.5;
+
+	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * BAR_SPACE;
+
 	const matrixLayout = useMatrixLayout({
 		width,
-		height,
+		height: barChartHeight,
 		nrColumns,
 		nrRows,
 		rowSpacePixels: 20,
@@ -110,7 +154,7 @@ export const SimpleBarChartHtml: React.FC<{
 	const labelTextProps = {
 		fontFamily: 'Arial',
 		fontWeight: 500,
-		fontSize: 36,
+		fontSize: BAR_LABEL_FONT_SIZE,
 		// letterSpacing: 1,
 	};
 
@@ -158,7 +202,7 @@ export const SimpleBarChartHtml: React.FC<{
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<div style={{position: 'relative'}}>
 						{data.map((it, i) => {
-							const BAR_DELAY = Math.floor(90 * 0.8);
+							const BAR_DELAY = Math.floor(90 * 1.25);
 							const barArea = getMatrixLayoutCellArea({
 								layout: matrixLayout,
 								row: i,
@@ -178,8 +222,7 @@ export const SimpleBarChartHtml: React.FC<{
 											valueLabelTextProps={valueLabelTextProps}
 											valueDomain={valueDomain}
 											value={it.value}
-											// domain
-											// ...
+											barColor={it.barColor || 'magenta'}
 										/>
 									</HtmlArea>
 								</Sequence>
@@ -213,6 +256,7 @@ export const HorizontalBar: React.FC<{
 	};
 	value: number;
 	valueDomain: [number, number];
+	barColor: string;
 }> = ({
 	width,
 	height,
@@ -224,7 +268,11 @@ export const HorizontalBar: React.FC<{
 	labelTextProps,
 	valueDomain,
 	value,
+	barColor,
 }) => {
+	const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
 	const horizontalBarLayout = useHorizontalBarLayout({
 		width,
 		height,
@@ -233,9 +281,46 @@ export const HorizontalBar: React.FC<{
 		spaceWidth: 20,
 	});
 
+	// TODO as props
+	const barEntryDelayInFrames = 90 * 0.45;
+	const barEnterDurationInFrames = 90 * 0.8;
+	const barExitDurationInFrames = 90 * 1;
+
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
 		.range([0, horizontalBarLayout.areas.bar.width]);
+
+	const fullBarWidth = barWidthScale(value);
+
+	// actually evtentually do in own factored out component with Sequence based delay?
+	const interpolatedEntryBarWidth = (currentFrame: number) =>
+		interpolate(
+			frame,
+			[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
+			[0, fullBarWidth],
+			{
+				easing: Easing.cubic,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+	const interpolatedExitBarWidth = (currentFrame: number) =>
+		interpolate(
+			frame,
+			[durationInFrames - barExitDurationInFrames, durationInFrames],
+			[fullBarWidth, 0],
+			{
+				easing: Easing.cubic,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+	const interpolatedBarWidth =
+		frame < durationInFrames - barExitDurationInFrames
+			? interpolatedEntryBarWidth(frame)
+			: interpolatedExitBarWidth(frame);
 
 	return (
 		<div
@@ -257,10 +342,30 @@ export const HorizontalBar: React.FC<{
 					</div>
 				</div>
 			</HtmlArea>
-			<HtmlArea area={horizontalBarLayout.areas.bar} fill="blue">
-				{/* <div>bar</div> */}
-				<div>{JSON.stringify(valueDomain)}</div>
-				<div>{JSON.stringify(barWidthScale(value))}</div>
+			<HtmlArea
+				area={horizontalBarLayout.areas.bar}
+				// fill="blue"
+			>
+				<svg
+					width={horizontalBarLayout.areas.bar.width}
+					height={horizontalBarLayout.areas.bar.height}
+					// style={{backgroundColor: '#555'}}
+				>
+					<g></g>
+
+					<rect
+						// opacity={opacity}
+						y={0}
+						x={0}
+						height={horizontalBarLayout.areas.bar.height}
+						width={interpolatedBarWidth}
+						fill={barColor}
+						rx={3}
+						ry={3}
+					/>
+				</svg>
+				{/* <div>{JSON.stringify(valueDomain)}</div>
+				<div>{JSON.stringify(barWidthScale(value))}</div> */}
 			</HtmlArea>
 			<HtmlArea area={horizontalBarLayout.areas.valueLabel} fill="red">
 				<div
