@@ -80,6 +80,11 @@ import {
 	simpleBarChartPOCSchema,
 } from './compositions/POCs/SimpleBarChartPOC/SimpleBarChartPOC';
 
+import {
+	SparklinePOC,
+	sparklinePOCSchema,
+} from './compositions/POCs/SparklinePOC/SparklinePOC';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -144,6 +149,17 @@ export const RemotionRoot: React.FC = () => {
 					fps={90}
 					{...squareVideo}
 					schema={simpleBarChartPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-Sparkline"
+					component={SparklinePOC}
+					durationInFrames={90 * 5}
+					fps={90}
+					{...squareVideo}
+					schema={sparklinePOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 			</Folder>
