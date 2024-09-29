@@ -16,12 +16,13 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area, HtmlArea} from '../../../acetti-layout';
+import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../../acetti-layout/hooks/useMatrixLayout';
+import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 export const simpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -60,8 +61,8 @@ export const SimpleBarChartPOC: React.FC<
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
-		// barColor: it.farbe,
-		barColor: '#fff',
+		barColor: it.farbe,
+		// barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
@@ -79,25 +80,15 @@ export const SimpleBarChartPOC: React.FC<
 					<div
 						style={{
 							color: theme.typography.title.color,
-							fontSize: 50,
+							fontSize: 60,
 							marginTop: 50,
+							fontFamily: 'Arial',
+							fontWeight: 700,
 						}}
 					>
-						SimpleBarChartPOC
+						<FadeInAndOutText>SimpleBarChartPOC</FadeInAndOutText>
 					</div>
 				</div>
-
-				{/* <div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 30,
-							marginTop: 50,
-						}}
-					>
-						{JSON.stringify(barChartData, undefined, 2)}
-					</div>
-				</div> */}
 			</div>
 			<div
 				style={{
@@ -107,13 +98,7 @@ export const SimpleBarChartPOC: React.FC<
 					marginTop: 100,
 				}}
 			>
-				<SimpleBarChartHtml
-					data={barChartData}
-					width={800}
-					// height={300}
-					// TODO
-					baseFontSize={36}
-				/>
+				<SimpleBarChartHtml data={barChartData} width={800} baseFontSize={36} />
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
@@ -135,6 +120,7 @@ export const SimpleBarChartHtml: React.FC<{
 	const nrRows = data.length;
 
 	const BAR_LABEL_FONT_SIZE = baseFontSize;
+	const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
 	const BAR_HEIGHT = baseFontSize * 1.5;
 	const BAR_SPACE = baseFontSize * 0.5;
 
@@ -168,7 +154,7 @@ export const SimpleBarChartHtml: React.FC<{
 	const valueLabelTextProps = {
 		fontFamily: 'Arial',
 		fontWeight: 700,
-		fontSize: 24,
+		fontSize: BAR_VALUE_LABEL_FONT_SIZE,
 		// letterSpacing: 1,
 	};
 
@@ -202,7 +188,7 @@ export const SimpleBarChartHtml: React.FC<{
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<div style={{position: 'relative'}}>
 						{data.map((it, i) => {
-							const BAR_DELAY = Math.floor(90 * 1.25);
+							const BAR_DELAY = Math.floor(90 * 1.4);
 							const barArea = getMatrixLayoutCellArea({
 								layout: matrixLayout,
 								row: i,
@@ -282,9 +268,12 @@ export const HorizontalBar: React.FC<{
 	});
 
 	// TODO as props
-	const barEntryDelayInFrames = 90 * 0.45;
-	const barEnterDurationInFrames = 90 * 0.8;
+	const barEntryDelayInFrames = 90 * 0.6;
+	const barEnterDurationInFrames = 90 * 0.6;
 	const barExitDurationInFrames = 90 * 1;
+
+	const valueLabelDelayInFrames =
+		barEntryDelayInFrames + barEnterDurationInFrames - Math.floor(90 * 0.7);
 
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
@@ -322,6 +311,9 @@ export const HorizontalBar: React.FC<{
 			? interpolatedEntryBarWidth(frame)
 			: interpolatedExitBarWidth(frame);
 
+	const valueLabelMarginLeft =
+		-1 * (horizontalBarLayout.areas.bar.width - interpolatedBarWidth);
+
 	return (
 		<div
 			style={{
@@ -351,8 +343,6 @@ export const HorizontalBar: React.FC<{
 					height={horizontalBarLayout.areas.bar.height}
 					// style={{backgroundColor: '#555'}}
 				>
-					<g></g>
-
 					<rect
 						// opacity={opacity}
 						y={0}
@@ -364,21 +354,31 @@ export const HorizontalBar: React.FC<{
 						ry={3}
 					/>
 				</svg>
-				{/* <div>{JSON.stringify(valueDomain)}</div>
-				<div>{JSON.stringify(barWidthScale(value))}</div> */}
 			</HtmlArea>
-			<HtmlArea area={horizontalBarLayout.areas.valueLabel} fill="red">
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-start',
-						alignItems: 'center',
-						height: '100%',
-					}}
+			<Sequence
+				// from={90 * 0.5}
+				// from={barEntryDelayInFrames + barEnterDurationInFrames}
+				from={valueLabelDelayInFrames}
+			>
+				<HtmlArea
+					area={horizontalBarLayout.areas.valueLabel}
+					// fill="red"
 				>
-					<div style={{...valueLabelTextProps}}>{valueLabel}</div>
-				</div>
-			</HtmlArea>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'flex-start',
+							alignItems: 'center',
+							height: '100%',
+							marginLeft: valueLabelMarginLeft,
+						}}
+					>
+						<div style={{...valueLabelTextProps, color: '#fff'}}>
+							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
+						</div>
+					</div>
+				</HtmlArea>
+			</Sequence>
 		</div>
 	);
 };
