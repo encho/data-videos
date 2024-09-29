@@ -1,28 +1,13 @@
 import {z} from 'zod';
-import {measureText} from '@remotion/layout-utils';
-import {
-	Sequence,
-	useCurrentFrame,
-	useVideoConfig,
-	interpolate,
-	Easing,
-} from 'remotion';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {Sequence} from 'remotion';
 
-import {useHorizontalBarLayout} from './useHorizontalBarLayout';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
-import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
-
-import {
-	useMatrixLayout,
-	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
+import {SimpleBarChart} from './SimpleBarChart';
 
 export const simpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -61,8 +46,8 @@ export const SimpleBarChartPOC: React.FC<
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
-		barColor: it.farbe,
-		// barColor: '#fff',
+		// barColor: it.farbe,
+		barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
@@ -93,282 +78,32 @@ export const SimpleBarChartPOC: React.FC<
 			<div
 				style={{
 					display: 'flex',
-					flexDirection: 'column',
+					flexDirection: 'row',
 					gap: 50,
-					marginTop: 100,
+					marginTop: 60,
 				}}
 			>
-				<SimpleBarChartHtml data={barChartData} width={800} baseFontSize={36} />
+				{/* TODO at this level we pass theme colors directly already or Theme object? */}
+				{/* tendency: Theme Object at this level of abstraction */}
+				<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
+				<Sequence from={90 * 4} layout="none">
+					<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
+				</Sequence>
+			</div>
+
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: 50,
+					marginTop: 60,
+				}}
+			>
+				{/* TODO at this level we pass theme colors directly already? */}
+				<SimpleBarChart data={barChartData} width={800} baseFontSize={26} />
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
-		</div>
-	);
-};
-
-export const SimpleBarChartHtml: React.FC<{
-	data: {
-		label: string;
-		value: number;
-		barColor?: string;
-		valueLabel: string;
-	}[];
-	width: number;
-	baseFontSize: number;
-}> = ({data, width, baseFontSize}) => {
-	const nrColumns = 1;
-	const nrRows = data.length;
-
-	const BAR_LABEL_FONT_SIZE = baseFontSize;
-	const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
-	const BAR_HEIGHT = baseFontSize * 1.5;
-	const BAR_SPACE = baseFontSize * 0.5;
-
-	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * BAR_SPACE;
-
-	const matrixLayout = useMatrixLayout({
-		width,
-		height: barChartHeight,
-		nrColumns,
-		nrRows,
-		rowSpacePixels: 20,
-	});
-
-	// labelWidth for each dataitem
-	// determine labelWidth from all labelWidth's
-
-	const labelTextProps = {
-		fontFamily: 'Arial',
-		fontWeight: 500,
-		fontSize: BAR_LABEL_FONT_SIZE,
-		// letterSpacing: 1,
-	};
-
-	const labelWidths = data.map(
-		(it) => measureText({...labelTextProps, text: it.label}).width
-	);
-	const labelWidth = Math.max(...labelWidths) * 1.05; // safety width bump
-
-	// valueLabelWidth for each dataitem
-	// determine valueLabelWidth from all valueLabelWidth's
-	const valueLabelTextProps = {
-		fontFamily: 'Arial',
-		fontWeight: 700,
-		fontSize: BAR_VALUE_LABEL_FONT_SIZE,
-		// letterSpacing: 1,
-	};
-
-	const valueLabelWidths = data.map(
-		(it) => measureText({...valueLabelTextProps, text: it.valueLabel}).width
-	);
-	const valueLabelWidth = Math.max(...valueLabelWidths);
-
-	const values = data.map((it) => it.value);
-	const valueDomain = [0, Math.max(...values)] as [number, number];
-
-	return (
-		<div
-			style={{
-				display: 'flex',
-				justifyContent: 'center',
-			}}
-		>
-			<div
-				style={{
-					position: 'relative',
-					width: matrixLayout.width,
-					height: matrixLayout.height,
-				}}
-			>
-				{false ? (
-					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
-					</div>
-				) : null}
-				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<div style={{position: 'relative'}}>
-						{data.map((it, i) => {
-							const BAR_DELAY = Math.floor(90 * 1.4);
-							const barArea = getMatrixLayoutCellArea({
-								layout: matrixLayout,
-								row: i,
-								column: 0,
-							});
-							return (
-								<Sequence from={i * BAR_DELAY}>
-									<HtmlArea area={barArea}>
-										<HorizontalBar
-											width={barArea.width}
-											height={barArea.height}
-											labelWidth={labelWidth}
-											valueLabelWidth={valueLabelWidth}
-											label={it.label}
-											valueLabel={it.valueLabel}
-											labelTextProps={labelTextProps}
-											valueLabelTextProps={valueLabelTextProps}
-											valueDomain={valueDomain}
-											value={it.value}
-											barColor={it.barColor || 'magenta'}
-										/>
-									</HtmlArea>
-								</Sequence>
-							);
-						})}
-					</div>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-const LABEL_TEXT_COLOR = '#fff';
-
-export const HorizontalBar: React.FC<{
-	width: number;
-	height: number;
-	labelWidth: number;
-	valueLabelWidth: number;
-	label: string;
-	valueLabel: string;
-	valueLabelTextProps: {
-		fontFamily: string;
-		fontWeight: number;
-		fontSize: number;
-	};
-	labelTextProps: {
-		fontFamily: string;
-		fontWeight: number;
-		fontSize: number;
-	};
-	value: number;
-	valueDomain: [number, number];
-	barColor: string;
-}> = ({
-	width,
-	height,
-	labelWidth,
-	valueLabelWidth,
-	label,
-	valueLabel,
-	valueLabelTextProps,
-	labelTextProps,
-	valueDomain,
-	value,
-	barColor,
-}) => {
-	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
-
-	const horizontalBarLayout = useHorizontalBarLayout({
-		width,
-		height,
-		valueLabelWidth,
-		labelWidth,
-		spaceWidth: 20,
-	});
-
-	// TODO as props
-	const barEntryDelayInFrames = fps * 0.6;
-	const barEnterDurationInFrames = fps * 0.6;
-	const barExitDurationInFrames = fps * 1;
-
-	const valueLabelDelayInFrames =
-		barEntryDelayInFrames + barEnterDurationInFrames - Math.floor(fps * 0.7);
-
-	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(valueDomain)
-		.range([0, horizontalBarLayout.areas.bar.width]);
-
-	const fullBarWidth = barWidthScale(value);
-
-	// actually evtentually do in own factored out component with Sequence based delay?
-	const interpolatedEntryBarWidth = (currentFrame: number) =>
-		interpolate(
-			currentFrame,
-			[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
-			[0, fullBarWidth],
-			{
-				easing: Easing.cubic,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-	const interpolatedExitBarWidth = (currentFrame: number) =>
-		interpolate(
-			currentFrame,
-			[durationInFrames - barExitDurationInFrames, durationInFrames - 1],
-			[fullBarWidth, 0],
-			{
-				easing: Easing.cubic,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-	const interpolatedBarWidth =
-		frame < durationInFrames - barExitDurationInFrames
-			? interpolatedEntryBarWidth(frame)
-			: interpolatedExitBarWidth(frame);
-
-	const valueLabelMarginLeft =
-		-1 * (horizontalBarLayout.areas.bar.width - interpolatedBarWidth);
-
-	return (
-		<div
-			style={{
-				position: 'relative',
-			}}
-		>
-			<HtmlArea area={horizontalBarLayout.areas.label}>
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						height: '100%',
-					}}
-				>
-					<div style={{...labelTextProps, color: LABEL_TEXT_COLOR}}>
-						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</div>
-				</div>
-			</HtmlArea>
-			<HtmlArea area={horizontalBarLayout.areas.bar}>
-				<svg
-					width={horizontalBarLayout.areas.bar.width}
-					height={horizontalBarLayout.areas.bar.height}
-				>
-					<rect
-						// TODO add opacity eventually
-						// opacity={opacity}
-						y={0}
-						x={0}
-						height={horizontalBarLayout.areas.bar.height}
-						width={interpolatedBarWidth}
-						fill={barColor}
-						rx={3}
-						ry={3}
-					/>
-				</svg>
-			</HtmlArea>
-			<Sequence from={valueLabelDelayInFrames}>
-				<HtmlArea area={horizontalBarLayout.areas.valueLabel}>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'flex-start',
-							alignItems: 'center',
-							height: '100%',
-							marginLeft: valueLabelMarginLeft,
-						}}
-					>
-						<div style={{...valueLabelTextProps, color: '#fff'}}>
-							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</div>
-					</div>
-				</HtmlArea>
-			</Sequence>
 		</div>
 	);
 };
