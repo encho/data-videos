@@ -46,8 +46,8 @@ export const SimpleBarChartPOC: React.FC<
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
-		// barColor: it.farbe,
-		barColor: '#fff',
+		barColor: it.farbe,
+		// barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 

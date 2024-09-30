@@ -42,8 +42,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const BAR_HEIGHT = baseFontSize * 1.5;
 	const BAR_SPACE = baseFontSize * 0.5;
 
-	const LABEL_COLOR = '#f05122';
-	const VALUE_LABEL_COLOR = '#ffff00';
+	// const LABEL_COLOR = '#f05122';
+	// const VALUE_LABEL_COLOR = '#ffff00';
+
+	const LABEL_COLOR = '#fff';
+	const VALUE_LABEL_COLOR = '#fff';
 
 	const labelTextProps = {
 		fontFamily: 'Arial',
