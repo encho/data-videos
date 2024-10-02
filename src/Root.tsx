@@ -40,6 +40,11 @@ import {
 	scatterPlotToBarChartSchema,
 } from './compositions/POCs/ScatterPlotToBarChart/ScatterPlotToBarChart';
 
+import {
+	CapsizeTrimmingPOC,
+	capsizeTrimmingPOCSchema,
+} from './compositions/POCs/CapsizeTrimmingPOC/CapsizeTrimmingPOC';
+
 // import {
 // 	twoChangeBarsSchema,
 // 	TwoChangeBars,
@@ -138,6 +143,17 @@ export const RemotionRoot: React.FC = () => {
 					fps={90}
 					{...squareVideo}
 					schema={silkscreenFontPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-CapsizeTrimming"
+					component={CapsizeTrimmingPOC}
+					durationInFrames={90 * 10}
+					fps={90}
+					{...squareVideo}
+					schema={capsizeTrimmingPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 				<Composition
