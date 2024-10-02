@@ -117,13 +117,7 @@ export const BuildingAnimatedLine: React.FC<{
 			<defs>
 				{isFadingOut ? (
 					<clipPath id="plotAreaClipPath2">
-						<rect
-							x={area.width - x}
-							y={0}
-							width={x}
-							height={area.height}
-							// fill="black"
-						/>
+						<rect x={area.width - x} y={0} width={x} height={area.height} />
 					</clipPath>
 				) : (
 					<clipPath id="plotAreaClipPath2">
