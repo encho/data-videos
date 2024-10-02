@@ -17,22 +17,20 @@ export default function Svg({
 	children,
 	style = {},
 	stroke = 'magenta',
-	fill = 'rgba(255,0,0,0.2)',
+	fill = 'rgba(255,0,255,0.2)',
 }: TSvgProps) {
-	// const debugStyle = {border: `3px solid ${stroke}`};
-	// const debugStyle = {border: `10px solid ${stroke}`};
-	const debugStyle = {border: `0px solid ${stroke}`};
+	const debugStyle = {border: `1px solid ${stroke}`};
 
 	return (
 		<svg
 			width={width}
 			height={height}
 			style={{
+				...debugStyle,
 				display: 'block',
 				overflow: 'visible',
 				backgroundColor: fill,
 				// vectorEffect: 'non-scaling-stroke',
-				...debugStyle,
 				...style,
 			}}
 		>

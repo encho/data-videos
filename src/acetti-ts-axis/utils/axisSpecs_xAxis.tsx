@@ -429,3 +429,46 @@ function getDayNumber(date: Date): string {
 // Example usage:
 // const date = new Date();
 // console.log(getDayNumber(date)); // Output will be something like "07" if the current day is the 7th
+
+// TODO rename to getJustFirstAndLastYearsAxisSpec
+export function getJustFirstAndLastAxisSpec(
+	periodsScale: TPeriodsScale
+): TXAxisSpec {
+	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
+
+	const ticks = [];
+
+	ticks.push({
+		id: 'start-0.5-tick',
+		periodFloatIndex: visibleDomainIndices[0] + 0.5,
+	});
+
+	ticks.push({
+		id: 'last-0.5-tick',
+		periodFloatIndex: visibleDomainIndices[1] - 0.5,
+	});
+
+	const labels = [];
+
+	const startDate = periodsScale.getDateFromIndex(visibleDomainIndices[0]);
+	const startYearNumberString = `${getYear(startDate)}`;
+
+	const endDate = periodsScale.getDateFromIndex(visibleDomainIndices[1] - 1);
+	const endYearNumberString = `${getYear(endDate)}`;
+
+	labels.push({
+		id: 'start-0.5-label',
+		textAnchor: 'middle' as const,
+		label: startYearNumberString,
+		periodFloatIndex: visibleDomainIndices[0] + 0.5,
+	});
+
+	labels.push({
+		id: 'last-0.5-label',
+		textAnchor: 'middle' as const,
+		label: endYearNumberString,
+		periodFloatIndex: visibleDomainIndices[1] - 0.5,
+	});
+
+	return {ticks, labels, secondaryLabels: []};
+}

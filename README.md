@@ -1,5 +1,13 @@
 # Data Flics with Remotion
 
+## Great Resources to get inspiration
+
+How The Economist designs charts for Instagram
+https://medium.economist.com/charting-new-territory-7f5afb293270
+
+Economist Data Team @twitter:
+https://x.com/ECONdailycharts
+
 ## Commands
 
 **Install Dependencies**

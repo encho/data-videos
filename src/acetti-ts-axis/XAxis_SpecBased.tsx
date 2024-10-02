@@ -11,7 +11,8 @@ export const XAxis_SpecBased: React.FC<{
 	axisSpec: TXAxisSpec;
 	theme: TTheme_XAxis;
 	periodsScale: TPeriodsScale;
-}> = ({area, theme, axisSpec, periodsScale}) => {
+	clip?: boolean;
+}> = ({area, theme, axisSpec, periodsScale, clip = true}) => {
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
@@ -34,7 +35,10 @@ export const XAxis_SpecBased: React.FC<{
 				const value = periodsScale.mapFloatIndexToRange(xTick.periodFloatIndex);
 
 				return (
-					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+					<g
+						clipPath={clip ? 'url(#xAxisAreaClipPath)' : undefined}
+						transform="translate(0,0)"
+					>
 						<line
 							x1={value}
 							x2={value}
@@ -54,15 +58,20 @@ export const XAxis_SpecBased: React.FC<{
 				);
 
 				return (
-					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+					<g
+						clipPath={clip ? 'url(#xAxisAreaClipPath)' : undefined}
+						transform="translate(0,0)"
+					>
 						<text
-							textAnchor="left"
+							// textAnchor="left"
+							textAnchor={xLabel.textAnchor || 'middle'}
 							alignmentBaseline="baseline"
 							fill={theme.color}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							x={value}
-							y={TICK_TEXT_FONT_SIZE}
+							// y={TICK_TEXT_FONT_SIZE}
+							y={TICK_LINE_SIZE + TICK_TEXT_FONT_SIZE}
 						>
 							{xLabel.label}
 						</text>

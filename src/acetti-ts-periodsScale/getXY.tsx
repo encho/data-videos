@@ -30,7 +30,7 @@ const getX = ({periodsScale, domainIndex}: TGetX_Kwargs) => {
 };
 
 // TODO rename to periodsScale.scale(domainIndex, yScale, timeSeries) or so
-const getXY = ({
+export const getXY = ({
 	periodsScale,
 	yScale,
 	timeSeries,
