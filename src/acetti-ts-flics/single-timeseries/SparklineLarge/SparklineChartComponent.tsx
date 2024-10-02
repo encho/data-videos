@@ -1,11 +1,14 @@
 import {ScaleLinear} from 'd3-scale';
-import {Sequence} from 'remotion';
+import {Sequence, useVideoConfig} from 'remotion';
 
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
-import {BuildingAnimatedLine} from '../../../acetti-ts-components/BuildingAnimatedLine';
+import {
+	AnimatedSparklineStartDot,
+	BuildingAnimatedLine,
+} from '../../../acetti-ts-components/BuildingAnimatedLine';
 import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
@@ -53,7 +56,23 @@ export const SparklineChartComponent: React.FC<{
 	rightValueLabel,
 	rightValueLabelTextProps,
 }) => {
+	const {fps, durationInFrames} = useVideoConfig();
+
 	const axisSpec = getJustFirstAndLastAxisSpec(currentPeriodsScale);
+
+	const XAXIS_FADE_IN_DURATION = Math.floor(fps * 1.5);
+	const DISPLAY_LEFT_VALUE_DELAY =
+		XAXIS_FADE_IN_DURATION + Math.floor(fps * 0.1);
+
+	const LEFT_VALUE_DOT_DURATION =
+		durationInFrames - DISPLAY_LEFT_VALUE_DELAY - Math.floor(fps * 1);
+
+	const SPARKLINE_DELAY = DISPLAY_LEFT_VALUE_DELAY + Math.floor(fps * 1.2);
+	const SPARKLINE_FADE_IN_DURATION = Math.floor(fps * 1.0);
+	const SPARKLINE_FADE_OUT_DURATION = Math.floor(fps * 1.0);
+
+	const DISPLAY_RIGHT_VALUE_DELAY =
+		SPARKLINE_DELAY + SPARKLINE_FADE_IN_DURATION - Math.floor(fps * 0.5);
 
 	return (
 		<>
@@ -68,16 +87,15 @@ export const SparklineChartComponent: React.FC<{
 						area={layoutAreas.xAxis}
 						axisSpec={axisSpec}
 						clip={false}
-						fadeInDurationInFrames={Math.floor(90 * 1.5)}
+						fadeInDurationInFrames={XAXIS_FADE_IN_DURATION}
 						tickLabelColor={theme.typography.textColor}
-						// lineColor={theme.typography.textColor}
 						lineColor={theme.typography.subTitle.color}
 					/>
 				</Position>
 			</Sequence>
 
 			{/* sparkline */}
-			<Sequence from={90 * 1.6}>
+			<Sequence from={SPARKLINE_DELAY}>
 				<Position
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 				>
@@ -87,12 +105,38 @@ export const SparklineChartComponent: React.FC<{
 						yScale={yScale}
 						area={layoutAreas.plot}
 						timeSeries={timeSeries}
+						fadeInDurationInFrames={SPARKLINE_FADE_IN_DURATION}
+						fadeOutDurationInFrames={SPARKLINE_FADE_OUT_DURATION}
+					/>
+				</Position>
+			</Sequence>
+
+			{/* start dot */}
+			<Sequence
+				name="leftDot"
+				from={DISPLAY_LEFT_VALUE_DELAY}
+				durationInFrames={LEFT_VALUE_DOT_DURATION}
+			>
+				<Position
+					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
+				>
+					<AnimatedSparklineStartDot
+						dotColor={theme.typography.textColor}
+						periodsScale={currentPeriodsScale}
+						yScale={yScale}
+						area={layoutAreas.plot}
+						timeSeries={timeSeries}
+						fadeOutDurationInFrames={SPARKLINE_FADE_OUT_DURATION}
 					/>
 				</Position>
 			</Sequence>
 
 			{/* leftValueLabel */}
-			<Sequence from={90 * 0}>
+			<Sequence
+				name="leftValueLabel"
+				from={DISPLAY_LEFT_VALUE_DELAY}
+				durationInFrames={LEFT_VALUE_DOT_DURATION}
+			>
 				<Position
 					position={{
 						left: layoutAreas.leftValueLabel.x1,
@@ -114,7 +158,6 @@ export const SparklineChartComponent: React.FC<{
 									leftValueLabelTextProps.fontSize / 2,
 								width: '100%',
 								height: '100%',
-								// backgroundColor: 'red',
 								display: 'flex',
 								justifyContent: 'flex-end',
 							}}
@@ -136,7 +179,7 @@ export const SparklineChartComponent: React.FC<{
 			</Sequence>
 
 			{/* rightValueLabel */}
-			<Sequence from={90 * 1.6}>
+			<Sequence from={DISPLAY_RIGHT_VALUE_DELAY}>
 				<Position
 					position={{
 						left: layoutAreas.rightValueLabel.x1,
@@ -158,7 +201,6 @@ export const SparklineChartComponent: React.FC<{
 									rightValueLabelTextProps.fontSize / 2,
 								width: '100%',
 								height: '100%',
-								// backgroundColor: 'red',
 								display: 'flex',
 								justifyContent: 'flex-start',
 							}}
@@ -172,7 +214,7 @@ export const SparklineChartComponent: React.FC<{
 									marginTop: '-0.35em', // TODO use capsize trimming
 								}}
 							>
-								<FadeInAndOutText>{leftValueLabel}</FadeInAndOutText>
+								<FadeInAndOutText>{rightValueLabel}</FadeInAndOutText>
 							</div>
 						</div>
 					</div>

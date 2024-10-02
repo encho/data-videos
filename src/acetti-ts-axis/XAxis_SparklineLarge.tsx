@@ -225,8 +225,8 @@ export const SvgLine: React.FC<{
 				x1={x1}
 				// x1={xStartPosition}
 				x2={x2}
-				y1={labelTextProps.fontSize / 1.75}
-				y2={labelTextProps.fontSize / 1.75}
+				y1={labelTextProps.fontSize / 1.35}
+				y2={labelTextProps.fontSize / 1.35}
 				stroke={color}
 				strokeWidth="2"
 			/>

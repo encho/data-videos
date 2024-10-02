@@ -39,7 +39,7 @@ export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const CHART_WIDTH = 900;
-	const CHART_HEIGHT = 300;
+	const CHART_HEIGHT = 280;
 
 	return (
 		<div

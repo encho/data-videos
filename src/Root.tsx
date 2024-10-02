@@ -156,7 +156,8 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-Sparkline"
 					component={SparklinePOC}
-					durationInFrames={90 * 8}
+					// durationInFrames={90 * 8}
+					durationInFrames={90 * 20}
 					fps={90}
 					{...squareVideo}
 					schema={sparklinePOCSchema}
