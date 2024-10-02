@@ -44,7 +44,8 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 					height={height}
 				/>
 			</div>
-			<Sequence from={90 * 1}>
+			{/* <Sequence from={90 * 1}> */}
+			<Sequence from={90 * 0}>
 				<LineChartAnimationContainer
 					timeSeries={data}
 					viewSpecs={[

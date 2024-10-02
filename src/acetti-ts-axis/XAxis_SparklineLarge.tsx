@@ -62,6 +62,8 @@ export const XAxis_SparklineLarge: React.FC<{
 	const KF_XLINE_FADE_IN_DURATION =
 		fadeInDurationInFrames - TOTAL_LABEL_DURATIONS;
 
+	const KF_XLINE_FADE_OUT_DURATION = Math.floor(fps * 0.5);
+
 	const KF_START_DATE_ENTER_START = Math.floor(fps * 0);
 	const KF_XLINE_ENTER_START = LABEL_FADE_IN_DURATION + Math.floor(fps * 0.1);
 	const KF_END_DATE_ENTER_START =
@@ -75,13 +77,13 @@ export const XAxis_SparklineLarge: React.FC<{
 	invariant(firstLabelSpec);
 	invariant(secondLabelSpec);
 
-	const firstLabelXPosition = periodsScale.mapFloatIndexToRange(
-		firstLabelSpec.periodFloatIndex
-	);
+	// const firstLabelXPosition = periodsScale.mapFloatIndexToRange(
+	// 	firstLabelSpec.periodFloatIndex
+	// );
 
-	const secondLabelXPosition = periodsScale.mapFloatIndexToRange(
-		secondLabelSpec.periodFloatIndex
-	);
+	// const secondLabelXPosition = periodsScale.mapFloatIndexToRange(
+	// 	secondLabelSpec.periodFloatIndex
+	// );
 
 	const firstLabelTextWidth = measureText({
 		...labelTextProps,
@@ -99,12 +101,10 @@ export const XAxis_SparklineLarge: React.FC<{
 				name="first-Date"
 				layout="none"
 				from={KF_START_DATE_ENTER_START}
-				durationInFrames={durationInFrames - Math.floor(fps * 0.5)}
+				durationInFrames={durationInFrames - Math.floor(fps * 0.3)}
 			>
 				<HtmlLabel
 					labelSpec={firstLabelSpec}
-					xPosition={firstLabelXPosition}
-					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
 					color={tickLabelColor}
 					style={{left: 0}}
 				/>
@@ -118,8 +118,6 @@ export const XAxis_SparklineLarge: React.FC<{
 			>
 				<HtmlLabel
 					labelSpec={secondLabelSpec}
-					xPosition={secondLabelXPosition}
-					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
 					color={tickLabelColor}
 					style={{right: 0}}
 				/>
@@ -143,6 +141,7 @@ export const XAxis_SparklineLarge: React.FC<{
 						xStartPosition={firstLabelTextWidth.width + 15}
 						xEndPosition={area.width - secondLabelTextWidth.width - 15}
 						fadeInDurationInFrames={KF_XLINE_FADE_IN_DURATION}
+						fadeOutDurationInFrames={KF_XLINE_FADE_OUT_DURATION}
 						color={lineColor}
 					/>
 				</Sequence>
@@ -153,11 +152,9 @@ export const XAxis_SparklineLarge: React.FC<{
 
 export const HtmlLabel: React.FC<{
 	labelSpec: TAxisLabelSpec;
-	xPosition: number;
-	fadeInDurationInFrames: number;
 	color: string;
 	style: {left: number} | {right: number};
-}> = ({labelSpec, xPosition, fadeInDurationInFrames, color, style}) => {
+}> = ({labelSpec, color, style}) => {
 	return (
 		<div
 			style={{
@@ -178,9 +175,28 @@ export const SvgLine: React.FC<{
 	xStartPosition: number;
 	xEndPosition: number;
 	fadeInDurationInFrames: number;
+	fadeOutDurationInFrames: number;
 	color: string;
-}> = ({xStartPosition, xEndPosition, fadeInDurationInFrames, color}) => {
+}> = ({
+	xStartPosition,
+	xEndPosition,
+	fadeInDurationInFrames,
+	fadeOutDurationInFrames,
+	color,
+}) => {
 	const frame = useCurrentFrame();
+	const {durationInFrames} = useVideoConfig();
+
+	const x1 = interpolate(
+		frame,
+		[0, durationInFrames - fadeOutDurationInFrames, durationInFrames - 1],
+		[xStartPosition, xStartPosition, xEndPosition],
+		{
+			easing: Easing.ease,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 
 	const x2 = interpolate(
 		frame,
@@ -206,7 +222,8 @@ export const SvgLine: React.FC<{
 		>
 			<line
 				opacity={opacity}
-				x1={xStartPosition}
+				x1={x1}
+				// x1={xStartPosition}
 				x2={x2}
 				y1={labelTextProps.fontSize / 1.75}
 				y2={labelTextProps.fontSize / 1.75}
