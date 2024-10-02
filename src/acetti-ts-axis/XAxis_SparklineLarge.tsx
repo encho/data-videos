@@ -12,7 +12,7 @@ import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {TXAxisSpec, TAxisLabelSpec} from './utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
-// import {first} from 'lodash';
+import {WaterfallTextEffect} from '../compositions/SimpleStats/WaterfallTextEffect';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
@@ -48,7 +48,6 @@ export const XAxis_SparklineLarge: React.FC<{
 	lineColor,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
-	const frame = useCurrentFrame();
 
 	// KEY-FRAMES from props?
 	// ************************************************************************
@@ -65,12 +64,9 @@ export const XAxis_SparklineLarge: React.FC<{
 
 	const KF_START_DATE_ENTER_START = Math.floor(fps * 0);
 	const KF_XLINE_ENTER_START = LABEL_FADE_IN_DURATION + Math.floor(fps * 0.1);
-	// const KF_XLINE_FADE_IN_DURATION = Math.floor(fps * 0.8);
 	const KF_END_DATE_ENTER_START =
 		KF_XLINE_ENTER_START + KF_XLINE_FADE_IN_DURATION;
 
-	// const X_AXIS_FULLY_ENTERED = KF_END_DATE_ENTER_START + LABEL_FADE_IN_DURATION;
-	// const SPARKLINE_ENTER_START = X_AXIS_FULLY_ENTERED + Math.floor(fps * 0.3);
 	// ************************************************************************
 
 	const firstLabelSpec = axisSpec.labels[0];
@@ -98,82 +94,83 @@ export const XAxis_SparklineLarge: React.FC<{
 	});
 
 	return (
-		<svg
-			width={area.width}
-			height={area.height}
-			style={{
-				overflow: 'visible',
-			}}
-		>
-			<defs>
-				<clipPath id="xAxisAreaClipPath">
-					<rect x={0} y={0} width={area.width} height={area.height} />
-				</clipPath>
-			</defs>
-
-			<Sequence name="end-Date" layout="none" from={KF_START_DATE_ENTER_START}>
-				<SvgLabel
+		<div style={{position: 'relative'}}>
+			<Sequence
+				name="first-Date"
+				layout="none"
+				from={KF_START_DATE_ENTER_START}
+				durationInFrames={durationInFrames - Math.floor(fps * 0.5)}
+			>
+				<HtmlLabel
 					labelSpec={firstLabelSpec}
 					xPosition={firstLabelXPosition}
 					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
 					color={tickLabelColor}
+					style={{left: 0}}
 				/>
 			</Sequence>
 
-			<Sequence name="start-Date" layout="none" from={KF_END_DATE_ENTER_START}>
-				<SvgLabel
+			<Sequence
+				name="last-Date"
+				layout="none"
+				from={KF_END_DATE_ENTER_START}
+				durationInFrames={durationInFrames}
+			>
+				<HtmlLabel
 					labelSpec={secondLabelSpec}
 					xPosition={secondLabelXPosition}
 					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
 					color={tickLabelColor}
+					style={{right: 0}}
 				/>
 			</Sequence>
 
-			<Sequence name="x-axis-line" layout="none" from={KF_XLINE_ENTER_START}>
-				<SvgLine
-					xStartPosition={firstLabelTextWidth.width + 15}
-					xEndPosition={area.width - secondLabelTextWidth.width - 15}
-					fadeInDurationInFrames={KF_XLINE_FADE_IN_DURATION}
-					color={lineColor}
-				/>
-			</Sequence>
-		</svg>
+			<svg
+				width={area.width}
+				height={area.height}
+				style={{
+					overflow: 'visible',
+				}}
+			>
+				<defs>
+					<clipPath id="xAxisAreaClipPath">
+						<rect x={0} y={0} width={area.width} height={area.height} />
+					</clipPath>
+				</defs>
+
+				<Sequence name="x-axis-line" layout="none" from={KF_XLINE_ENTER_START}>
+					<SvgLine
+						xStartPosition={firstLabelTextWidth.width + 15}
+						xEndPosition={area.width - secondLabelTextWidth.width - 15}
+						fadeInDurationInFrames={KF_XLINE_FADE_IN_DURATION}
+						color={lineColor}
+					/>
+				</Sequence>
+			</svg>
+		</div>
 	);
 };
 
-export const SvgLabel: React.FC<{
+export const HtmlLabel: React.FC<{
 	labelSpec: TAxisLabelSpec;
 	xPosition: number;
 	fadeInDurationInFrames: number;
 	color: string;
-}> = ({labelSpec, xPosition, fadeInDurationInFrames, color}) => {
-	const frame = useCurrentFrame();
-
-	const opacity = interpolate(frame, [0, fadeInDurationInFrames], [0, 1], {
-		easing: Easing.ease,
-	});
-
+	style: {left: number} | {right: number};
+}> = ({labelSpec, xPosition, fadeInDurationInFrames, color, style}) => {
 	return (
-		<g
-			// clipPath={clip ? 'url(#xAxisAreaClipPath)' : undefined}
-			transform="translate(0,0)"
-			opacity={opacity}
+		<div
+			style={{
+				position: 'absolute',
+				...style,
+				color,
+				fontSize: labelTextProps.fontSize,
+				fontWeight: labelTextProps.fontWeight,
+				fontFamily: labelTextProps.fontFamily,
+			}}
 		>
-			<text
-				textAnchor={labelSpec.textAnchor || 'middle'}
-				alignmentBaseline="baseline"
-				// fill={theme.color}
-				fill={color}
-				fontSize={labelTextProps.fontSize}
-				fontFamily={labelTextProps.fontFamily}
-				fontWeight={labelTextProps.fontWeight}
-				x={xPosition}
-				// y={TICK_LINE_SIZE + labelTextProps.fontSize}
-				y={labelTextProps.fontSize}
-			>
-				{labelSpec.label}
-			</text>
-		</g>
+			<WaterfallTextEffect>{labelSpec.label}</WaterfallTextEffect>
+		</div>
 	);
 };
 
@@ -210,7 +207,6 @@ export const SvgLine: React.FC<{
 			<line
 				opacity={opacity}
 				x1={xStartPosition}
-				// x2={xEndPosition}
 				x2={x2}
 				y1={labelTextProps.fontSize / 1.75}
 				y2={labelTextProps.fontSize / 1.75}

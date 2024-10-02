@@ -66,30 +66,23 @@ export const BuildingAnimatedLine: React.FC<{
 			<g clipPath="url(#plotAreaClipPath2)">
 				<path d={d} stroke={lineColor} strokeWidth={4} fill="none" />
 				{/* dots */}
-
-				{/* {displayDots */}
-				{true
+			</g>
+			<g>
+				{displayDots
 					? timeSeries.map((timeSeriesItem) => {
 							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 							const cx = band.centroid;
 							const cy = yScale(timeSeriesItem.value);
 							return (
 								<g>
-									<circle
-										cx={cx}
-										cy={cy}
-										r={6}
-										fill={lineColor}
-										opacity={0.6}
-									/>
-									{/* <circle cx={cx} cy={cy} r={3} fill="darkorange" /> */}
+									<circle cx={cx} cy={cy} r={6} fill={lineColor} opacity={1} />
 								</g>
 							);
 					  })
 					: null}
 			</g>
 
-			{x && y ? <circle cx={x} cy={y} r={10} fill={lineColor} /> : null}
+			{x && y ? <circle cx={x} cy={y} r={11} fill={lineColor} /> : null}
 		</svg>
 	);
 };
