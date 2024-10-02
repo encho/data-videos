@@ -67,7 +67,8 @@ export const BuildingAnimatedLine: React.FC<{
 				<path d={d} stroke={lineColor} strokeWidth={4} fill="none" />
 				{/* dots */}
 
-				{displayDots
+				{/* {displayDots */}
+				{true
 					? timeSeries.map((timeSeriesItem) => {
 							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 							const cx = band.centroid;
@@ -78,8 +79,8 @@ export const BuildingAnimatedLine: React.FC<{
 										cx={cx}
 										cy={cy}
 										r={6}
-										fill="darkorange"
-										opacity={0.3}
+										fill={lineColor}
+										opacity={0.6}
 									/>
 									{/* <circle cx={cx} cy={cy} r={3} fill="darkorange" /> */}
 								</g>
@@ -88,7 +89,7 @@ export const BuildingAnimatedLine: React.FC<{
 					: null}
 			</g>
 
-			{x && y ? <circle cx={x} cy={y} r={8} fill="cyan" /> : null}
+			{x && y ? <circle cx={x} cy={y} r={10} fill={lineColor} /> : null}
 		</svg>
 	);
 };

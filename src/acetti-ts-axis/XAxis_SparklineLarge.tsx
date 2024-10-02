@@ -17,14 +17,14 @@ import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 type TTheme_XAxis = ThemeType['xAxis'];
 
 // SIZES, from theme or props rather
-const TICK_LINE_SIZE = 24;
+// const TICK_LINE_SIZE = 24;
 // const TICK_TEXT_FONT_SIZE = 24;
 // const TICK_TEXT_FONT_WEIGHT = 500;
 
 const labelTextProps = {
 	fontFamily: 'Arial',
 	fontWeight: 700,
-	fontSize: 24,
+	fontSize: 30,
 	// letterSpacing: 1,
 };
 
@@ -35,6 +35,8 @@ export const XAxis_SparklineLarge: React.FC<{
 	periodsScale: TPeriodsScale;
 	clip?: boolean;
 	fadeInDurationInFrames: number;
+	tickLabelColor: string;
+	lineColor: string;
 }> = ({
 	area,
 	theme,
@@ -42,6 +44,8 @@ export const XAxis_SparklineLarge: React.FC<{
 	periodsScale,
 	clip = true,
 	fadeInDurationInFrames,
+	tickLabelColor,
+	lineColor,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -112,6 +116,7 @@ export const XAxis_SparklineLarge: React.FC<{
 					labelSpec={firstLabelSpec}
 					xPosition={firstLabelXPosition}
 					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
+					color={tickLabelColor}
 				/>
 			</Sequence>
 
@@ -120,6 +125,7 @@ export const XAxis_SparklineLarge: React.FC<{
 					labelSpec={secondLabelSpec}
 					xPosition={secondLabelXPosition}
 					fadeInDurationInFrames={LABEL_FADE_IN_DURATION}
+					color={tickLabelColor}
 				/>
 			</Sequence>
 
@@ -128,6 +134,7 @@ export const XAxis_SparklineLarge: React.FC<{
 					xStartPosition={firstLabelTextWidth.width + 15}
 					xEndPosition={area.width - secondLabelTextWidth.width - 15}
 					fadeInDurationInFrames={KF_XLINE_FADE_IN_DURATION}
+					color={lineColor}
 				/>
 			</Sequence>
 		</svg>
@@ -138,8 +145,8 @@ export const SvgLabel: React.FC<{
 	labelSpec: TAxisLabelSpec;
 	xPosition: number;
 	fadeInDurationInFrames: number;
-}> = ({labelSpec, xPosition, fadeInDurationInFrames}) => {
-	// const {durationInFrames, fps} = useVideoConfig();
+	color: string;
+}> = ({labelSpec, xPosition, fadeInDurationInFrames, color}) => {
 	const frame = useCurrentFrame();
 
 	const opacity = interpolate(frame, [0, fadeInDurationInFrames], [0, 1], {
@@ -156,7 +163,7 @@ export const SvgLabel: React.FC<{
 				textAnchor={labelSpec.textAnchor || 'middle'}
 				alignmentBaseline="baseline"
 				// fill={theme.color}
-				fill={'cyan'}
+				fill={color}
 				fontSize={labelTextProps.fontSize}
 				fontFamily={labelTextProps.fontFamily}
 				fontWeight={labelTextProps.fontWeight}
@@ -174,7 +181,8 @@ export const SvgLine: React.FC<{
 	xStartPosition: number;
 	xEndPosition: number;
 	fadeInDurationInFrames: number;
-}> = ({xStartPosition, xEndPosition, fadeInDurationInFrames}) => {
+	color: string;
+}> = ({xStartPosition, xEndPosition, fadeInDurationInFrames, color}) => {
 	const frame = useCurrentFrame();
 
 	const x2 = interpolate(
@@ -206,7 +214,7 @@ export const SvgLine: React.FC<{
 				x2={x2}
 				y1={labelTextProps.fontSize / 1.75}
 				y2={labelTextProps.fontSize / 1.75}
-				stroke="cyan"
+				stroke={color}
 				strokeWidth="2"
 			/>
 		</g>
