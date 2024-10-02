@@ -1,9 +1,10 @@
 import {z} from 'zod';
 import {Sequence, Easing, useVideoConfig} from 'remotion';
+import {measureText} from '@remotion/layout-utils';
 
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
 import {LineChartAnimationContainer} from '../../../acetti-ts-base/LineChartAnimationContainer';
-import {useChartLayout} from '../../../compositions/POCs/SparklinePOC/useChartLayout';
+import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
@@ -29,9 +30,38 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
+	const leftValueLabelTextProps = {
+		fontFamily: 'Arial',
+		fontWeight: 500,
+		fontSize: 30,
+		// letterSpacing: 1,
+	};
+
+	const rightValueLabelTextProps = {
+		fontFamily: 'Arial',
+		fontWeight: 500,
+		fontSize: 36,
+		// letterSpacing: 1,
+	};
+
+	const firstValueLabel = '$1000.00';
+	const lastValueLabel = '$1023.33';
+
+	const leftValueLabelWidth = measureText({
+		...leftValueLabelTextProps,
+		text: firstValueLabel,
+	}).width;
+
+	const rightValueLabelWidth = measureText({
+		...rightValueLabelTextProps,
+		text: lastValueLabel,
+	}).width;
+
 	const chartLayout = useChartLayout({
 		width,
 		height,
+		leftValueLabelWidth,
+		rightValueLabelWidth,
 	});
 
 	return (
@@ -75,6 +105,8 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 									plot: chartLayout.areas.plot,
 									xAxis: chartLayout.areas.xAxis,
 									yAxis: chartLayout.areas.yAxis,
+									leftValueLabel: chartLayout.areas.leftValueLabel,
+									rightValueLabel: chartLayout.areas.rightValueLabel,
 								}}
 								yDomainType={Y_DOMAIN_TYPE}
 								theme={theme}
@@ -84,6 +116,10 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 								toPeriodScale={currentSliceInfo.periodsScaleTo}
 								//
 								currentSliceInfo={currentSliceInfo}
+								leftValueLabel={firstValueLabel}
+								leftValueLabelTextProps={leftValueLabelTextProps}
+								rightValueLabel={lastValueLabel}
+								rightValueLabelTextProps={rightValueLabelTextProps}
 							/>
 						);
 					}}

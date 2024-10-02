@@ -9,7 +9,8 @@ import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 import {SparklineLarge} from '../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
 
 const timeSeries = [
-	{value: 149, date: new Date('2010-12-31')},
+	// {value: 50, date: new Date('2010-12-31')},
+	{value: 150, date: new Date('2010-12-31')},
 	{value: 57, date: new Date('2011-12-31')},
 	{value: 58, date: new Date('2012-12-31')},
 	{value: 65, date: new Date('2013-12-31')},
@@ -37,8 +38,8 @@ export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
 }) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const CHART_WIDTH = 600;
-	const CHART_HEIGHT = 200;
+	const CHART_WIDTH = 900;
+	const CHART_HEIGHT = 300;
 
 	return (
 		<div
