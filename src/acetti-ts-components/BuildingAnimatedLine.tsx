@@ -1,6 +1,8 @@
 import {ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
+import {useCurrentFrame, interpolate, Easing, useVideoConfig} from 'remotion';
 
+import {getXY} from '../acetti-ts-periodsScale/getXY';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -12,7 +14,6 @@ export const BuildingAnimatedLine: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	displayDots?: boolean;
-	visibleAreaWidth?: number; // TODO make optional and rename component to AnimatedLine
 }> = ({
 	lineColor,
 	area,
@@ -20,8 +21,29 @@ export const BuildingAnimatedLine: React.FC<{
 	periodsScale,
 	yScale,
 	displayDots = false,
-	visibleAreaWidth,
 }) => {
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
+
+	const entryDurationInFrames = fps * 1;
+
+	const percAnimation = interpolate(frame, [0, entryDurationInFrames], [0, 1], {
+		easing: Easing.ease,
+	});
+
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const currentRightVisibleDomainIndex =
+		percAnimation * visibleDomainIndices[1];
+
+	const {x, y} = getXY({
+		periodsScale,
+		yScale: yScale,
+		timeSeries,
+		domainIndex: currentRightVisibleDomainIndex,
+	});
+
+	const visibleAreaWidth = x;
+
 	const linePath = line<{date: Date; value: number}>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
@@ -65,6 +87,8 @@ export const BuildingAnimatedLine: React.FC<{
 					  })
 					: null}
 			</g>
+
+			{x && y ? <circle cx={x} cy={y} r={8} fill="cyan" /> : null}
 		</svg>
 	);
 };

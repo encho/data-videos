@@ -16,6 +16,8 @@ type TLabelSpec = {
 	marginLeft?: number;
 };
 
+export type TAxisLabelSpec = TLabelSpec;
+
 export type TXAxisSpec = {
 	// scale: TODO BandScale here?
 	ticks: TTickSpec[];
@@ -436,17 +438,17 @@ export function getJustFirstAndLastAxisSpec(
 ): TXAxisSpec {
 	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
 
-	const ticks = [];
+	// const ticks = [];
 
-	ticks.push({
-		id: 'start-0.5-tick',
-		periodFloatIndex: visibleDomainIndices[0] + 0.5,
-	});
+	// ticks.push({
+	// 	id: 'start-0.5-tick',
+	// 	periodFloatIndex: visibleDomainIndices[0] + 0.5,
+	// });
 
-	ticks.push({
-		id: 'last-0.5-tick',
-		periodFloatIndex: visibleDomainIndices[1] - 0.5,
-	});
+	// ticks.push({
+	// 	id: 'last-0.5-tick',
+	// 	periodFloatIndex: visibleDomainIndices[1] - 0.5,
+	// });
 
 	const labels = [];
 
@@ -458,17 +460,18 @@ export function getJustFirstAndLastAxisSpec(
 
 	labels.push({
 		id: 'start-0.5-label',
-		textAnchor: 'middle' as const,
+		// textAnchor: 'middle' as const,
+		textAnchor: 'start' as const,
 		label: startYearNumberString,
 		periodFloatIndex: visibleDomainIndices[0] + 0.5,
 	});
 
 	labels.push({
 		id: 'last-0.5-label',
-		textAnchor: 'middle' as const,
+		textAnchor: 'end' as const,
 		label: endYearNumberString,
 		periodFloatIndex: visibleDomainIndices[1] - 0.5,
 	});
 
-	return {ticks, labels, secondaryLabels: []};
+	return {ticks: [], labels, secondaryLabels: []};
 }

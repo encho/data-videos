@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {Sequence, Easing} from 'remotion';
+import {Sequence, Easing, useVideoConfig} from 'remotion';
 
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
 import {LineChartAnimationContainer} from '../../../acetti-ts-base/LineChartAnimationContainer';
@@ -27,6 +27,8 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	height,
 	theme,
 }) => {
+	const {durationInFrames} = useVideoConfig();
+
 	const chartLayout = useChartLayout({
 		width,
 		height,
@@ -36,8 +38,6 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 		<div style={{position: 'relative', width}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					// stroke={'yellow'}
-					// fill=""
 					hide={true}
 					areas={chartLayout.areas}
 					width={width}
@@ -45,10 +45,6 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 				/>
 			</div>
 			<Sequence from={90 * 1}>
-				{/* TODO this code has to be included in SparklineChart code */}
-				{/* s.t.: */}
-				{/* here: */}
-				{/* <SparklineChart ... /> */}
 				<LineChartAnimationContainer
 					timeSeries={data}
 					viewSpecs={[
@@ -63,19 +59,14 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 					]}
 					transitionSpecs={[
 						{
-							durationInFrames: 90 * 4, // here is full duration now
+							durationInFrames,
 							easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 							numberOfSlices: 20,
 							transitionType: 'DEFAULT',
 						},
 					]}
 				>
-					{({
-						periodsScale,
-						yScale,
-						currentSliceInfo,
-						// currentTransitionInfo,
-					}) => {
+					{({periodsScale, yScale, currentSliceInfo}) => {
 						return (
 							<SparklineChartComponent
 								timeSeries={data}
