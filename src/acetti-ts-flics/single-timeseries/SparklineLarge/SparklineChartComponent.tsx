@@ -1,20 +1,20 @@
 import {ScaleLinear} from 'd3-scale';
 import {useVideoConfig, useCurrentFrame, interpolate} from 'remotion';
 
-import {Position} from '../acetti-ts-base/Position';
-import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
-import {BuildingAnimatedLine} from './BuildingAnimatedLine';
-import {getXY} from '../acetti-ts-periodsScale/getXY';
-import {getJustFirstAndLastAxisSpec} from '../acetti-ts-axis/utils/axisSpecs_xAxis';
-import {XAxis_SpecBased} from '../acetti-ts-axis/XAxis_SpecBased';
-import {ThemeType} from '../acetti-themes/themeTypes';
-import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
+import {Position} from '../../../acetti-ts-base/Position';
+import {TGridLayoutArea} from '../../../acetti-layout';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
+import {BuildingAnimatedLine} from '../../../acetti-ts-components/BuildingAnimatedLine';
+import {getXY} from '../../../acetti-ts-periodsScale/getXY';
+import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {XAxis_SpecBased} from '../../../acetti-ts-axis/XAxis_SpecBased';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
-export const SparklineChart: React.FC<{
+export const SparklineChartComponent: React.FC<{
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
