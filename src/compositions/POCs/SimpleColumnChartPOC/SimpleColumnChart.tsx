@@ -11,6 +11,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
 import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
+import {useVerticalColumnLayout} from './useVerticalColumnLayout';
 
 import {
 	useMatrixLayout,
@@ -38,13 +39,15 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const nrColumns = data.length;
 	const nrRows = 1;
 
-	const BAR_LABEL_FONT_SIZE = baseFontSize;
-	const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
+	// const BAR_LABEL_FONT_SIZE = baseFontSize;
+	// const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
 	// const BAR_HEIGHT = baseFontSize * 1.5;
 	// const BAR_SPACE = baseFontSize * 0.5;
 
-	const COLUMN_SPACE = baseFontSize * 0.5;
-	const COLUMN_WIDTH = baseFontSize * 1.5;
+	const COLUMN_LABEL_FONT_SIZE = baseFontSize;
+	const COLUMN_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
+	const COLUMN_SPACE = baseFontSize * 1;
+	const COLUMN_WIDTH = baseFontSize * 3;
 
 	// const LABEL_COLOR = '#f05122';
 	// const VALUE_LABEL_COLOR = '#ffff00';
@@ -54,15 +57,16 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 
 	const labelTextProps = {
 		fontFamily: 'Arial',
-		fontWeight: 500,
-		fontSize: BAR_LABEL_FONT_SIZE,
+		// fontWeight: 500,
+		fontWeight: 700,
+		fontSize: COLUMN_LABEL_FONT_SIZE,
 		// letterSpacing: 1,
 	};
 
 	const valueLabelTextProps = {
 		fontFamily: 'Arial',
 		fontWeight: 700,
-		fontSize: BAR_VALUE_LABEL_FONT_SIZE,
+		fontSize: COLUMN_VALUE_LABEL_FONT_SIZE,
 		// letterSpacing: 1,
 	};
 
@@ -120,15 +124,26 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 					<div style={{position: 'relative'}}>
 						{data.map((it, i) => {
 							const BAR_DELAY = Math.floor(90 * 1.4);
-							const barArea = getMatrixLayoutCellArea({
+							const columnArea = getMatrixLayoutCellArea({
 								layout: matrixLayout,
 								row: 0,
 								column: i,
 							});
 							return (
 								<Sequence from={i * BAR_DELAY}>
-									<HtmlArea area={barArea}>
-										<div style={{color: 'white', fontSize: 30}}>C</div>
+									<HtmlArea area={columnArea}>
+										{/* <div style={{color: 'white', fontSize: 30}}>C</div> */}
+										<VerticalColumn
+											width={columnArea.width}
+											height={columnArea.height}
+											label={it.label}
+											labelTextProps={labelTextProps}
+											labelColor={LABEL_COLOR}
+											valueLabel={it.valueLabel}
+											valueLabelColor={VALUE_LABEL_COLOR}
+											valueLabelTextProps={valueLabelTextProps}
+										/>
+
 										{/* <HorizontalBar
 											width={barArea.width}
 											height={barArea.height}
@@ -144,6 +159,8 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 											labelColor={LABEL_COLOR}
 											valueLabelColor={VALUE_LABEL_COLOR}
 										/> */}
+
+										{/* <VerticalColumn */}
 									</HtmlArea>
 								</Sequence>
 							);
@@ -151,6 +168,198 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 					</div>
 				</div>
 			</div>
+		</div>
+	);
+};
+
+export const VerticalColumn: React.FC<{
+	width: number;
+	height: number;
+	// labelWidth: number;
+	// valueLabelWidth: number;
+	label: string;
+	valueLabel: string;
+	valueLabelTextProps: {
+		fontFamily: string;
+		fontWeight: number;
+		fontSize: number;
+	};
+	labelTextProps: {
+		fontFamily: string;
+		fontWeight: number;
+		fontSize: number;
+	};
+	// value: number;
+	// valueDomain: [number, number];
+	// barColor: string;
+	labelColor: string;
+	valueLabelColor: string;
+}> = ({
+	width,
+	height,
+	// labelWidth,
+	// valueLabelWidth,
+	label,
+	valueLabel,
+	valueLabelTextProps,
+	labelTextProps,
+	// valueDomain,
+	// value,
+	// barColor,
+	labelColor,
+	valueLabelColor,
+}) => {
+	// const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
+	const verticalColumnLayout = useVerticalColumnLayout({
+		width,
+		height,
+		valueLabelHeight: 50,
+		labelHeight: 50,
+		spaceHeight: 20, // TODO as prop
+	});
+
+	// // TODO as props
+	const columnEntryDelayInFrames = fps * 0.6;
+	const columnEnterDurationInFrames = fps * 0.6;
+	// const barExitDurationInFrames = fps * 1;
+
+	const valueLabelDelayInFrames =
+		columnEntryDelayInFrames +
+		columnEnterDurationInFrames -
+		Math.floor(fps * 0.7);
+
+	// const barWidthScale: ScaleLinear<number, number> = scaleLinear()
+	// 	.domain(valueDomain)
+	// 	.range([0, horizontalBarLayout.areas.bar.width]);
+
+	// const fullBarWidth = barWidthScale(value);
+
+	// // actually evtentually do in own factored out component with Sequence based delay?
+	// const interpolatedEntryBarWidth = (currentFrame: number) =>
+	// 	interpolate(
+	// 		currentFrame,
+	// 		[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
+	// 		[0, fullBarWidth],
+	// 		{
+	// 			easing: Easing.cubic,
+	// 			extrapolateLeft: 'clamp',
+	// 			extrapolateRight: 'clamp',
+	// 		}
+	// 	);
+
+	// const interpolatedExitBarWidth = (currentFrame: number) =>
+	// 	interpolate(
+	// 		currentFrame,
+	// 		[durationInFrames - barExitDurationInFrames, durationInFrames - 1],
+	// 		[fullBarWidth, 0],
+	// 		{
+	// 			easing: Easing.cubic,
+	// 			extrapolateLeft: 'clamp',
+	// 			extrapolateRight: 'clamp',
+	// 		}
+	// 	);
+
+	// const interpolatedBarWidth =
+	// 	frame < durationInFrames - barExitDurationInFrames
+	// 		? interpolatedEntryBarWidth(frame)
+	// 		: interpolatedExitBarWidth(frame);
+
+	// const valueLabelMarginLeft =
+	// 	-1 * (horizontalBarLayout.areas.bar.width - interpolatedBarWidth);
+
+	return (
+		<div
+			style={{
+				position: 'relative',
+			}}
+		>
+			{true ? (
+				<div style={{position: 'absolute', top: 0, left: 0}}>
+					<DisplayGridRails {...verticalColumnLayout} />
+				</div>
+			) : null}
+
+			<HtmlArea area={verticalColumnLayout.areas.label}>
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						height: '100%',
+					}}
+				>
+					<div style={{...labelTextProps, color: labelColor}}>
+						<WaterfallTextEffect>{label}</WaterfallTextEffect>
+					</div>
+				</div>
+			</HtmlArea>
+
+			<HtmlArea area={verticalColumnLayout.areas.bar}>
+				<svg
+					width={verticalColumnLayout.areas.bar.width}
+					height={verticalColumnLayout.areas.bar.height}
+				>
+					{/* <rect
+						y={0}
+						x={0}
+						height={horizontalBarLayout.areas.bar.height}
+						width={interpolatedBarWidth}
+						fill={barColor}
+						rx={3}
+						ry={3}
+					/> */}
+					<rect
+						y={0}
+						x={0}
+						width={verticalColumnLayout.areas.bar.width}
+						height={100}
+						// TODO
+						// height={interpolatedBarHeight}
+						// fill={barColor}
+						fill={'yellow'}
+						rx={3}
+						ry={3}
+					/>
+				</svg>
+			</HtmlArea>
+
+			{/* <HtmlArea area={horizontalBarLayout.areas.bar}>
+				<svg
+					width={horizontalBarLayout.areas.bar.width}
+					height={horizontalBarLayout.areas.bar.height}
+				>
+					<rect
+						y={0}
+						x={0}
+						height={horizontalBarLayout.areas.bar.height}
+						width={interpolatedBarWidth}
+						fill={barColor}
+						rx={3}
+						ry={3}
+					/>
+				</svg>
+			</HtmlArea> */}
+
+			<Sequence from={valueLabelDelayInFrames}>
+				<HtmlArea area={verticalColumnLayout.areas.valueLabel}>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							height: '100%',
+							// TODO with marginTop though
+							// marginLeft: valueLabelMarginLeft,
+						}}
+					>
+						<div style={{...valueLabelTextProps, color: valueLabelColor}}>
+							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
+						</div>
+					</div>
+				</HtmlArea>
+			</Sequence>
 		</div>
 	);
 };
