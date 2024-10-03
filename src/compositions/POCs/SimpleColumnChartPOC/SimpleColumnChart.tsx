@@ -23,7 +23,7 @@ type TSimpleColumnChartProps = {
 	data: {
 		label: string;
 		value: number;
-		barColor?: string;
+		columnColor?: string;
 		valueLabel: string;
 	}[];
 	// width: number;
@@ -142,6 +142,8 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 											valueLabel={it.valueLabel}
 											valueLabelColor={VALUE_LABEL_COLOR}
 											valueLabelTextProps={valueLabelTextProps}
+											value={it.value}
+											columnColor={it.columnColor || 'magenta'}
 										/>
 
 										{/* <HorizontalBar
@@ -189,9 +191,9 @@ export const VerticalColumn: React.FC<{
 		fontWeight: number;
 		fontSize: number;
 	};
-	// value: number;
+	value: number;
 	// valueDomain: [number, number];
-	// barColor: string;
+	columnColor: string;
 	labelColor: string;
 	valueLabelColor: string;
 }> = ({
@@ -204,12 +206,12 @@ export const VerticalColumn: React.FC<{
 	valueLabelTextProps,
 	labelTextProps,
 	// valueDomain,
-	// value,
-	// barColor,
+	value,
+	columnColor,
 	labelColor,
 	valueLabelColor,
 }) => {
-	// const frame = useCurrentFrame();
+	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
 
 	const verticalColumnLayout = useVerticalColumnLayout({
@@ -223,51 +225,57 @@ export const VerticalColumn: React.FC<{
 	// // TODO as props
 	const columnEntryDelayInFrames = fps * 0.6;
 	const columnEnterDurationInFrames = fps * 0.6;
-	// const barExitDurationInFrames = fps * 1;
+	const columnExitDurationInFrames = fps * 1;
 
 	const valueLabelDelayInFrames =
 		columnEntryDelayInFrames +
 		columnEnterDurationInFrames -
 		Math.floor(fps * 0.7);
 
+	const columnHeightScale: ScaleLinear<number, number> = scaleLinear()
+		// .domain(valueDomain)
+		.domain([0, 120])
+		.range([0, verticalColumnLayout.areas.bar.height]);
+
 	// const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 	// 	.domain(valueDomain)
 	// 	.range([0, horizontalBarLayout.areas.bar.width]);
 
-	// const fullBarWidth = barWidthScale(value);
+	const fullColumnHeight = columnHeightScale(value);
 
 	// // actually evtentually do in own factored out component with Sequence based delay?
-	// const interpolatedEntryBarWidth = (currentFrame: number) =>
-	// 	interpolate(
-	// 		currentFrame,
-	// 		[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
-	// 		[0, fullBarWidth],
-	// 		{
-	// 			easing: Easing.cubic,
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
+	const interpolatedEntryColumnHeight = (currentFrame: number) =>
+		interpolate(
+			currentFrame,
+			// TODO rename to column...
+			[
+				columnEntryDelayInFrames,
+				columnEntryDelayInFrames + columnEnterDurationInFrames,
+			],
+			[0, fullColumnHeight],
+			{
+				easing: Easing.cubic,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
-	// const interpolatedExitBarWidth = (currentFrame: number) =>
-	// 	interpolate(
-	// 		currentFrame,
-	// 		[durationInFrames - barExitDurationInFrames, durationInFrames - 1],
-	// 		[fullBarWidth, 0],
-	// 		{
-	// 			easing: Easing.cubic,
-	// 			extrapolateLeft: 'clamp',
-	// 			extrapolateRight: 'clamp',
-	// 		}
-	// 	);
+	const interpolatedExitColumnHeight = (currentFrame: number) =>
+		interpolate(
+			currentFrame,
+			[durationInFrames - columnExitDurationInFrames, durationInFrames - 1],
+			[fullColumnHeight, 0],
+			{
+				easing: Easing.cubic,
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
-	// const interpolatedBarWidth =
-	// 	frame < durationInFrames - barExitDurationInFrames
-	// 		? interpolatedEntryBarWidth(frame)
-	// 		: interpolatedExitBarWidth(frame);
-
-	// const valueLabelMarginLeft =
-	// 	-1 * (horizontalBarLayout.areas.bar.width - interpolatedBarWidth);
+	const interpolatedColumnHeight =
+		frame < durationInFrames - columnExitDurationInFrames
+			? interpolatedEntryColumnHeight(frame)
+			: interpolatedExitColumnHeight(frame);
 
 	return (
 		<div
@@ -301,24 +309,12 @@ export const VerticalColumn: React.FC<{
 					width={verticalColumnLayout.areas.bar.width}
 					height={verticalColumnLayout.areas.bar.height}
 				>
-					{/* <rect
-						y={0}
-						x={0}
-						height={horizontalBarLayout.areas.bar.height}
-						width={interpolatedBarWidth}
-						fill={barColor}
-						rx={3}
-						ry={3}
-					/> */}
 					<rect
-						y={0}
+						y={verticalColumnLayout.areas.bar.height - interpolatedColumnHeight}
 						x={0}
 						width={verticalColumnLayout.areas.bar.width}
-						height={100}
-						// TODO
-						// height={interpolatedBarHeight}
-						// fill={barColor}
-						fill={'yellow'}
+						height={interpolatedColumnHeight}
+						fill={columnColor}
 						rx={3}
 						ry={3}
 					/>

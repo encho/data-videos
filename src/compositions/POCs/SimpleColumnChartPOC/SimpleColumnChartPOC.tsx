@@ -46,7 +46,7 @@ export const SimpleColumnChartPOC: React.FC<
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,
 		value: it.value,
-		barColor: '#fff',
+		columnColor: '#fff',
 		valueLabel: `$${it.value}`,
 	}));
 
