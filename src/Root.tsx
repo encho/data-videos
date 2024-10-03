@@ -45,6 +45,11 @@ import {
 	capsizeTrimmingPOCSchema,
 } from './compositions/POCs/CapsizeTrimmingPOC/CapsizeTrimmingPOC';
 
+import {
+	SimpleColumnChartPOC,
+	simpleColumnChartPOCSchema,
+} from './compositions/POCs/SimpleColumnChartPOC/SimpleColumnChartPOC';
+
 // import {
 // 	twoChangeBarsSchema,
 // 	TwoChangeBars,
@@ -165,6 +170,17 @@ export const RemotionRoot: React.FC = () => {
 					fps={90}
 					{...squareVideo}
 					schema={simpleBarChartPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-SimpleColumnChart"
+					component={SimpleColumnChartPOC}
+					durationInFrames={90 * 20}
+					fps={90}
+					{...squareVideo}
+					schema={simpleColumnChartPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 				<Composition
