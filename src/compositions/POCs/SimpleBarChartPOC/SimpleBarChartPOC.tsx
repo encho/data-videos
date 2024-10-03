@@ -101,6 +101,7 @@ export const SimpleBarChartPOC: React.FC<
 			>
 				{/* TODO at this level we pass theme colors directly already? */}
 				<SimpleBarChart data={barChartData} width={800} baseFontSize={26} />
+				{/* <SimpleBarChart data={barChartData} width={1000} baseFontSize={50} /> */}
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />

@@ -18,7 +18,7 @@ import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinib
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
-import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
+// import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
 import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
@@ -106,7 +106,13 @@ export const HighlightPeriods_01_Example: React.FC<
 				</Position>
 				<AbsoluteFill>
 					<Position position={{left: 50, top: 280}}>
-						<ObliquePlatte
+						<HighlightPeriods_01
+							width={platteWidth}
+							height={platteHeight}
+							timeSeries={timeSeries}
+							theme={theme}
+						/>
+						{/* <ObliquePlatte
 							width={platteWidth}
 							height={platteHeight}
 							theme={theme.platte}
@@ -117,7 +123,7 @@ export const HighlightPeriods_01_Example: React.FC<
 								timeSeries={timeSeries}
 								theme={theme}
 							/>
-						</ObliquePlatte>
+						</ObliquePlatte> */}
 					</Position>
 				</AbsoluteFill>
 				<LorenzoBertoliniLogo color={theme.typography.logoColor} />

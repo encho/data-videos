@@ -2,6 +2,9 @@
 
 ## Great Resources to get inspiration
 
+Hackreels Code Animation Saas with Remotion
+https://www.hackreels.com/
+
 How The Economist designs charts for Instagram
 https://medium.economist.com/charting-new-territory-7f5afb293270
 

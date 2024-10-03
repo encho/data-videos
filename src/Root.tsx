@@ -173,7 +173,8 @@ export const RemotionRoot: React.FC = () => {
 					id="pocs-Sparkline"
 					component={SparklinePOC}
 					// durationInFrames={90 * 8}
-					durationInFrames={90 * 20}
+					// durationInFrames={90 * 20}
+					durationInFrames={90 * 9}
 					fps={90}
 					{...squareVideo}
 					schema={sparklinePOCSchema}
