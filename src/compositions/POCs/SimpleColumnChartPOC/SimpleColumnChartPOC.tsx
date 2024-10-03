@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {Sequence} from 'remotion';
+// import {Sequence} from 'remotion';
 
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -7,48 +7,47 @@ import {
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
-import {SimpleBarChart} from './SimpleBarChart';
+import {SimpleColumnChart} from './SimpleColumnChart';
 
 export const simpleColumnChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-function formatPercentage(value: number): string {
-	return (
-		(value * 100).toLocaleString(undefined, {
-			minimumFractionDigits: 1,
-			maximumFractionDigits: 1,
-		}) + '%'
-	);
-}
+// function formatPercentage(value: number): string {
+// 	return (
+// 		(value * 100).toLocaleString(undefined, {
+// 			minimumFractionDigits: 1,
+// 			maximumFractionDigits: 1,
+// 		}) + '%'
+// 	);
+// }
 // Example usage:
 // console.log(formatPercentage(0.12)); // Output: "12.0%"
 
-const wahlergebnis2024: {parteiName: string; prozent: number; farbe: string}[] =
-	[
-		{parteiName: 'SPD', prozent: 30.9 / 100, farbe: '#E3000F'}, // SPD Red
-		{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0'}, // AfD Blue
-		{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
-		// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
-		{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff'}, // CDU Black
-		{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D'}, // Grüne Green
-		{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075'}, // Die Linke Magenta
-		{parteiName: 'BVB/Freie Wähler', prozent: 2.6 / 100, farbe: '#FFD700'}, // BVB Yellow
-		{parteiName: 'FDP', prozent: 0.8 / 100, farbe: '#FFED00'}, // FDP Yellow
-		{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080'}, // Others Gray
-	];
+const timeSeries = [
+	{value: 150, date: new Date('2010-12-31')},
+	{value: 57, date: new Date('2011-12-31')},
+	{value: 58, date: new Date('2012-12-31')},
+	{value: 65, date: new Date('2013-12-31')},
+	{value: 77, date: new Date('2014-12-31')},
+	{value: 94, date: new Date('2015-12-31')},
+	{value: 91, date: new Date('2016-12-31')},
+	{value: 65, date: new Date('2017-12-31')},
+	{value: 114, date: new Date('2018-12-31')},
+	{value: 60, date: new Date('2019-12-31')},
+	{value: 64, date: new Date('2020-12-31')},
+];
 
 export const SimpleColumnChartPOC: React.FC<
 	z.infer<typeof simpleColumnChartPOCSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const barChartData = wahlergebnis2024.map((it) => ({
-		label: it.parteiName,
-		value: it.prozent,
-		barColor: it.farbe,
-		// barColor: '#fff',
-		valueLabel: formatPercentage(it.prozent),
+	const columnChartData = timeSeries.map((it) => ({
+		label: `${it.date.getFullYear()}`,
+		value: it.value,
+		barColor: '#fff',
+		valueLabel: `$${it.value}`,
 	}));
 
 	return (
@@ -75,21 +74,6 @@ export const SimpleColumnChartPOC: React.FC<
 					</div>
 				</div>
 			</div>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					gap: 50,
-					marginTop: 60,
-				}}
-			>
-				{/* TODO at this level we pass theme colors directly already or Theme object? */}
-				{/* tendency: Theme Object at this level of abstraction */}
-				<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
-				<Sequence from={90 * 4} layout="none">
-					<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
-				</Sequence>
-			</div>
 
 			<div
 				style={{
@@ -99,9 +83,12 @@ export const SimpleColumnChartPOC: React.FC<
 					marginTop: 60,
 				}}
 			>
-				{/* TODO at this level we pass theme colors directly already? */}
-				<SimpleBarChart data={barChartData} width={800} baseFontSize={26} />
-				{/* <SimpleBarChart data={barChartData} width={1000} baseFontSize={50} /> */}
+				<SimpleColumnChart
+					data={columnChartData}
+					// width={800}
+					height={800}
+					baseFontSize={26}
+				/>
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />

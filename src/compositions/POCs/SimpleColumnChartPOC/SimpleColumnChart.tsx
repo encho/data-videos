@@ -18,29 +18,33 @@ import {
 } from '../../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
-type TSimpleBarChartProps = {
+type TSimpleColumnChartProps = {
 	data: {
 		label: string;
 		value: number;
 		barColor?: string;
 		valueLabel: string;
 	}[];
-	width: number;
+	// width: number;
+	height: number; // TODO for column!
 	baseFontSize: number;
 };
 
-export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
+export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	data,
-	width,
+	height,
 	baseFontSize,
 }) => {
-	const nrColumns = 1;
-	const nrRows = data.length;
+	const nrColumns = data.length;
+	const nrRows = 1;
 
 	const BAR_LABEL_FONT_SIZE = baseFontSize;
 	const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
-	const BAR_HEIGHT = baseFontSize * 1.5;
-	const BAR_SPACE = baseFontSize * 0.5;
+	// const BAR_HEIGHT = baseFontSize * 1.5;
+	// const BAR_SPACE = baseFontSize * 0.5;
+
+	const COLUMN_SPACE = baseFontSize * 0.5;
+	const COLUMN_WIDTH = baseFontSize * 1.5;
 
 	// const LABEL_COLOR = '#f05122';
 	// const VALUE_LABEL_COLOR = '#ffff00';
@@ -63,14 +67,15 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	};
 
 	// =========================================
-	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * BAR_SPACE;
+	const columnChartWidth =
+		nrColumns * COLUMN_WIDTH + (nrColumns - 1) * COLUMN_SPACE;
 
 	const matrixLayout = useMatrixLayout({
-		width,
-		height: barChartHeight,
+		width: columnChartWidth,
+		height,
 		nrColumns,
 		nrRows,
-		rowSpacePixels: BAR_SPACE,
+		columnSpacePixels: COLUMN_SPACE,
 	});
 
 	// determine labelWidth from all labelWidth's
@@ -106,7 +111,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					height: matrixLayout.height,
 				}}
 			>
-				{false ? (
+				{true ? (
 					<div style={{position: 'absolute', top: 0, left: 0}}>
 						<DisplayGridRails {...matrixLayout} />
 					</div>
@@ -117,13 +122,14 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 							const BAR_DELAY = Math.floor(90 * 1.4);
 							const barArea = getMatrixLayoutCellArea({
 								layout: matrixLayout,
-								row: i,
-								column: 0,
+								row: 0,
+								column: i,
 							});
 							return (
 								<Sequence from={i * BAR_DELAY}>
 									<HtmlArea area={barArea}>
-										<HorizontalBar
+										<div style={{color: 'white', fontSize: 30}}>C</div>
+										{/* <HorizontalBar
 											width={barArea.width}
 											height={barArea.height}
 											labelWidth={labelWidth}
@@ -137,7 +143,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 											barColor={it.barColor || 'magenta'}
 											labelColor={LABEL_COLOR}
 											valueLabelColor={VALUE_LABEL_COLOR}
-										/>
+										/> */}
 									</HtmlArea>
 								</Sequence>
 							);
