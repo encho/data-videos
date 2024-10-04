@@ -115,7 +115,7 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 					height: matrixLayout.height,
 				}}
 			>
-				{true ? (
+				{false ? (
 					<div style={{position: 'absolute', top: 0, left: 0}}>
 						<DisplayGridRails {...matrixLayout} />
 					</div>
@@ -132,7 +132,6 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 							return (
 								<Sequence from={i * BAR_DELAY}>
 									<HtmlArea area={columnArea}>
-										{/* <div style={{color: 'white', fontSize: 30}}>C</div> */}
 										<VerticalColumn
 											width={columnArea.width}
 											height={columnArea.height}
@@ -144,25 +143,12 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 											valueLabelTextProps={valueLabelTextProps}
 											value={it.value}
 											columnColor={it.columnColor || 'magenta'}
+											// TODO with height:
+											// labelWidth={labelWidth}
+											// valueLabelWidth={valueLabelWidth}
+											// TODO
+											// valueDomain={valueDomain}
 										/>
-
-										{/* <HorizontalBar
-											width={barArea.width}
-											height={barArea.height}
-											labelWidth={labelWidth}
-											valueLabelWidth={valueLabelWidth}
-											label={it.label}
-											valueLabel={it.valueLabel}
-											labelTextProps={labelTextProps}
-											valueLabelTextProps={valueLabelTextProps}
-											valueDomain={valueDomain}
-											value={it.value}
-											barColor={it.barColor || 'magenta'}
-											labelColor={LABEL_COLOR}
-											valueLabelColor={VALUE_LABEL_COLOR}
-										/> */}
-
-										{/* <VerticalColumn */}
 									</HtmlArea>
 								</Sequence>
 							);
@@ -199,13 +185,13 @@ export const VerticalColumn: React.FC<{
 }> = ({
 	width,
 	height,
-	// labelWidth,
-	// valueLabelWidth,
+	// labelWidth, // TODO labelHeight
+	// valueLabelWidth, // TODO valueLabelHeight
 	label,
 	valueLabel,
 	valueLabelTextProps,
 	labelTextProps,
-	// valueDomain,
+	// valueDomain, // TODO
 	value,
 	columnColor,
 	labelColor,
@@ -234,12 +220,9 @@ export const VerticalColumn: React.FC<{
 
 	const columnHeightScale: ScaleLinear<number, number> = scaleLinear()
 		// .domain(valueDomain)
+		// TODO use automated domain
 		.domain([0, 120])
 		.range([0, verticalColumnLayout.areas.bar.height]);
-
-	// const barWidthScale: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(valueDomain)
-	// 	.range([0, horizontalBarLayout.areas.bar.width]);
 
 	const fullColumnHeight = columnHeightScale(value);
 
