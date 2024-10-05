@@ -75,17 +75,12 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 						style={{
 							color: theme.typography.title.color,
 							fontSize: 60,
-							marginTop: 50,
+							marginTop: 70,
 							fontFamily: 'Arial',
 							fontWeight: 700,
 						}}
 					>
-						<FadeInAndOutText>
-							{/* Multiple Simple Column Chart POC */}
-							{/* Multiple Simple Column Chart */}
-							{/* Multiple Simple Column Ch. */}
-							Multi. Smpl. Column Ch.
-						</FadeInAndOutText>
+						<FadeInAndOutText>Multiple Column Chart</FadeInAndOutText>
 					</div>
 				</div>
 			</div>
@@ -106,14 +101,13 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 						gap: 40,
 					}}
 				>
-					<Sequence layout="none" from={90 * 1}>
-						<SimpleColumnChart
-							data={columnChartData}
-							height={260}
-							baseFontSize={20}
-							valueDomain={[0, 2000] as [number, number]}
-						/>
-					</Sequence>
+					<SimpleColumnChart
+						data={columnChartData}
+						height={260}
+						baseFontSize={20}
+						valueDomain={[0, 2000] as [number, number]}
+						delayInFrames={90 * 1}
+					/>
 					<CapSizeTextNew
 						fontFamily={labelTextProps.fontFamily}
 						fontWeight={labelTextProps.fontWeight}
@@ -132,23 +126,26 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 						gap: 40,
 					}}
 				>
-					<Sequence layout="none" from={90 * 1}>
+					<Sequence layout="none" from={90 * 10}>
 						<SimpleColumnChart
 							data={columnChartData2}
 							height={260}
 							baseFontSize={20}
 							valueDomain={[0, 2000] as [number, number]}
+							delayInFrames={90 * 1}
+							// TODO
+							// delay or from
 						/>
+						<CapSizeTextNew
+							fontFamily={labelTextProps.fontFamily}
+							fontWeight={labelTextProps.fontWeight}
+							color={labelTextProps.color}
+							capHeight={labelTextProps.capHeight}
+							lineGap={0}
+						>
+							<WaterfallTextEffect>Berlin</WaterfallTextEffect>
+						</CapSizeTextNew>
 					</Sequence>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={0}
-					>
-						<WaterfallTextEffect>Berlin</WaterfallTextEffect>
-					</CapSizeTextNew>
 				</div>
 			</div>
 

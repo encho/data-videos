@@ -27,6 +27,7 @@ type TSimpleColumnChartProps = {
 	height: number;
 	baseFontSize: number;
 	valueDomain?: [number, number];
+	delayInFrames?: number;
 };
 
 export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
@@ -34,7 +35,11 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	height,
 	baseFontSize,
 	valueDomain,
+	delayInFrames = 0,
 }) => {
+	const frame = useCurrentFrame();
+	const {fps} = useVideoConfig();
+
 	const nrColumns = data.length;
 	const nrRows = 1;
 
@@ -75,58 +80,68 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const computedValueDomain =
 		valueDomain || ([0, Math.max(...values)] as [number, number]);
 
-	return (
+	return frame < delayInFrames ? (
 		<div
 			style={{
-				display: 'flex',
-				justifyContent: 'center',
+				position: 'relative',
+				width: matrixLayout.width,
+				height: matrixLayout.height,
 			}}
-		>
+		/>
+	) : (
+		<Sequence from={delayInFrames} layout="none">
 			<div
 				style={{
-					position: 'relative',
-					width: matrixLayout.width,
-					height: matrixLayout.height,
+					display: 'flex',
+					justifyContent: 'center',
 				}}
 			>
-				{false ? (
+				<div
+					style={{
+						position: 'relative',
+						width: matrixLayout.width,
+						height: matrixLayout.height,
+					}}
+				>
+					{false ? (
+						<div style={{position: 'absolute', top: 0, left: 0}}>
+							<DisplayGridRails {...matrixLayout} />
+						</div>
+					) : null}
 					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
-					</div>
-				) : null}
-				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<div style={{position: 'relative'}}>
-						{data.map((it, i) => {
-							const BAR_DELAY = Math.floor(90 * 1.4);
-							const columnArea = getMatrixLayoutCellArea({
-								layout: matrixLayout,
-								row: 0,
-								column: i,
-							});
-							return (
-								<Sequence from={i * BAR_DELAY}>
-									<HtmlArea area={columnArea}>
-										<VerticalColumn
-											width={columnArea.width}
-											height={columnArea.height}
-											label={it.label}
-											labelTextProps={labelTextProps}
-											valueLabel={it.valueLabel}
-											valueLabelTextProps={valueLabelTextProps}
-											value={it.value}
-											columnColor={it.columnColor || 'magenta'}
-											labelHeight={labelTextProps.capHeight}
-											valueLabelHeight={valueLabelTextProps.capHeight}
-											valueDomain={computedValueDomain}
-										/>
-									</HtmlArea>
-								</Sequence>
-							);
-						})}
+						<div style={{position: 'relative'}}>
+							{data.map((it, i) => {
+								const BAR_DELAY = Math.floor(90 * 1.4);
+								const columnArea = getMatrixLayoutCellArea({
+									layout: matrixLayout,
+									row: 0,
+									column: i,
+								});
+								return (
+									<Sequence from={i * BAR_DELAY}>
+										<HtmlArea area={columnArea}>
+											<VerticalColumn
+												width={columnArea.width}
+												height={columnArea.height}
+												label={it.label}
+												labelTextProps={labelTextProps}
+												valueLabel={it.valueLabel}
+												valueLabelTextProps={valueLabelTextProps}
+												value={it.value}
+												columnColor={it.columnColor || 'magenta'}
+												labelHeight={labelTextProps.capHeight}
+												valueLabelHeight={valueLabelTextProps.capHeight}
+												valueDomain={computedValueDomain}
+											/>
+										</HtmlArea>
+									</Sequence>
+								);
+							})}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</Sequence>
 	);
 };
 
