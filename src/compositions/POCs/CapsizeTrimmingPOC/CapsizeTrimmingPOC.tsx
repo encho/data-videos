@@ -12,7 +12,7 @@ import {
 } from '../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
 import {CapSizeTextNew} from './CapSizeTextNew';
-import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
+// import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // INTERESTING RESOURCES
 // *****************************************************************
