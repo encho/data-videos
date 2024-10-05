@@ -74,8 +74,8 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 					<div
 						style={{
 							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 70,
+							fontSize: 70,
+							marginTop: 80,
 							fontFamily: 'Arial',
 							fontWeight: 700,
 						}}
@@ -89,8 +89,8 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					gap: 90,
-					marginTop: 50,
+					gap: 100,
+					marginTop: 80,
 				}}
 			>
 				<div
@@ -103,7 +103,7 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 				>
 					<SimpleColumnChart
 						data={columnChartData}
-						height={260}
+						height={300}
 						baseFontSize={20}
 						valueDomain={[0, 2000] as [number, number]}
 						delayInFrames={90 * 1}
@@ -129,7 +129,7 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 					<Sequence layout="none" from={90 * 10}>
 						<SimpleColumnChart
 							data={columnChartData2}
-							height={260}
+							height={300}
 							baseFontSize={20}
 							valueDomain={[0, 2000] as [number, number]}
 							delayInFrames={90 * 1}

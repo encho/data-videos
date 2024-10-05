@@ -107,6 +107,11 @@ const squareVideo = {
 	height: 1080,
 };
 
+const linkedInTallVideo = {
+	width: 1080,
+	height: 1350,
+};
+
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
@@ -195,7 +200,8 @@ export const RemotionRoot: React.FC = () => {
 					component={MultipleSimpleColumnChartPOC}
 					durationInFrames={90 * 24}
 					fps={90}
-					{...squareVideo}
+					// {...squareVideo}
+					{...linkedInTallVideo}
 					schema={multipleSimpleColumnChartPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
