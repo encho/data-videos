@@ -26,12 +26,14 @@ type TSimpleColumnChartProps = {
 	}[];
 	height: number;
 	baseFontSize: number;
+	valueDomain?: [number, number];
 };
 
 export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	data,
 	height,
 	baseFontSize,
+	valueDomain,
 }) => {
 	const nrColumns = data.length;
 	const nrRows = 1;
@@ -70,7 +72,8 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	// determine domain
 	// ------------------------------------------
 	const values = data.map((it) => it.value);
-	const valueDomain = [0, Math.max(...values)] as [number, number];
+	const computedValueDomain =
+		valueDomain || ([0, Math.max(...values)] as [number, number]);
 
 	return (
 		<div
@@ -114,7 +117,7 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 											columnColor={it.columnColor || 'magenta'}
 											labelHeight={labelTextProps.capHeight}
 											valueLabelHeight={valueLabelTextProps.capHeight}
-											valueDomain={valueDomain}
+											valueDomain={computedValueDomain}
 										/>
 									</HtmlArea>
 								</Sequence>

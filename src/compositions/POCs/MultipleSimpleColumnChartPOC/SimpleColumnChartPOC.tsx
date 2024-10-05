@@ -1,5 +1,7 @@
 import {z} from 'zod';
+import {Sequence, useVideoConfig} from 'remotion';
 
+import {CapSizeTextNew} from '../CapsizeTrimmingPOC/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -8,6 +10,7 @@ import {
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 import {SimpleColumnChart} from '../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
+import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
 
 export const multipleSimpleColumnChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -29,14 +32,6 @@ const timeSeries2 = [
 	{value: 1200, date: new Date('2022-12-31')},
 ];
 
-// const timeSeries = [
-// 	{value: 91, date: new Date('2016-12-31')},
-// 	{value: 65, date: new Date('2017-12-31')},
-// 	{value: 114, date: new Date('2018-12-31')},
-// 	{value: 60, date: new Date('2019-12-31')},
-// 	{value: 64, date: new Date('2020-12-31')},
-// ];
-
 export const MultipleSimpleColumnChartPOC: React.FC<
 	z.infer<typeof multipleSimpleColumnChartPOCSchema>
 > = ({themeEnum}) => {
@@ -57,6 +52,13 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 		columnColor: '#fff',
 		valueLabel: `$${it.value}`,
 	}));
+
+	const labelTextProps = {
+		fontFamily: 'Inter' as const,
+		fontWeight: 600,
+		capHeight: 28,
+		color: 'white', // TODO from theme
+	};
 
 	return (
 		<div
@@ -83,7 +85,6 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 							{/* Multiple Simple Column Chart */}
 							{/* Multiple Simple Column Ch. */}
 							Multi. Smpl. Column Ch.
-							{/* POC */}
 						</FadeInAndOutText>
 					</div>
 				</div>
@@ -93,20 +94,62 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
-					gap: 70,
-					marginTop: 120,
+					gap: 90,
+					marginTop: 50,
 				}}
 			>
-				<SimpleColumnChart
-					data={columnChartData}
-					height={260}
-					baseFontSize={20}
-				/>
-				<SimpleColumnChart
-					data={columnChartData2}
-					height={260}
-					baseFontSize={20}
-				/>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						flexDirection: 'column',
+						gap: 40,
+					}}
+				>
+					<Sequence layout="none" from={90 * 1}>
+						<SimpleColumnChart
+							data={columnChartData}
+							height={260}
+							baseFontSize={20}
+							valueDomain={[0, 2000] as [number, number]}
+						/>
+					</Sequence>
+					<CapSizeTextNew
+						fontFamily={labelTextProps.fontFamily}
+						fontWeight={labelTextProps.fontWeight}
+						color={labelTextProps.color}
+						capHeight={labelTextProps.capHeight}
+						lineGap={0}
+					>
+						<WaterfallTextEffect>Stuttgart</WaterfallTextEffect>
+					</CapSizeTextNew>
+				</div>
+				<div
+					style={{
+						display: 'flex',
+						alignItems: 'center',
+						flexDirection: 'column',
+						gap: 40,
+					}}
+				>
+					<Sequence layout="none" from={90 * 1}>
+						<SimpleColumnChart
+							data={columnChartData2}
+							height={260}
+							baseFontSize={20}
+							valueDomain={[0, 2000] as [number, number]}
+						/>
+					</Sequence>
+					<CapSizeTextNew
+						fontFamily={labelTextProps.fontFamily}
+						fontWeight={labelTextProps.fontWeight}
+						color={labelTextProps.color}
+						capHeight={labelTextProps.capHeight}
+						lineGap={0}
+					>
+						<WaterfallTextEffect>Berlin</WaterfallTextEffect>
+					</CapSizeTextNew>
+				</div>
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
