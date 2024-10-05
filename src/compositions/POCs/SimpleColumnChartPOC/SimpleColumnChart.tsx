@@ -6,39 +6,16 @@ import {
 	Easing,
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import {createStyleObject} from '@capsizecss/core';
 
 import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
-
+import {CapSizeTextNew} from '../CapsizeTrimmingPOC/CapSizeTextNew';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
-import {ReactNode} from 'react';
-
-const INTER_CAPSIZE_MEASURES = {
-	familyName: 'Inter',
-	fullName: 'Inter Regular',
-	postscriptName: 'Inter-Regular',
-	capHeight: 1490,
-	ascent: 1984,
-	descent: -494,
-	lineGap: 0,
-	unitsPerEm: 2048,
-	xHeight: 1118,
-	xWidthAvg: 978,
-	subsets: {
-		latin: {
-			xWidthAvg: 978,
-		},
-		thai: {
-			xWidthAvg: 1344,
-		},
-	},
-};
 
 type TSimpleColumnChartProps = {
 	data: {
@@ -47,8 +24,7 @@ type TSimpleColumnChartProps = {
 		columnColor?: string;
 		valueLabel: string;
 	}[];
-	// width: number;
-	height: number; // TODO for column!
+	height: number;
 	baseFontSize: number;
 };
 
@@ -66,15 +42,15 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const COLUMN_WIDTH = baseFontSize * 4;
 
 	const labelTextProps = {
-		fontFamily: 'Arial',
-		fontWeight: 700,
+		fontFamily: 'Inter' as const,
+		fontWeight: 600,
 		capHeight: COLUMN_LABEL_FONT_SIZE,
 		color: 'white', // TODO from theme
 	};
 
 	const valueLabelTextProps = {
-		fontFamily: 'Arial',
-		fontWeight: 500,
+		fontFamily: 'Inter' as const,
+		fontWeight: 400,
 		capHeight: COLUMN_VALUE_LABEL_FONT_SIZE,
 		color: 'white', // TODO from theme
 	};
@@ -159,13 +135,13 @@ export const VerticalColumn: React.FC<{
 	label: string;
 	valueLabel: string;
 	valueLabelTextProps: {
-		fontFamily: string;
+		fontFamily: 'Inter';
 		fontWeight: number;
 		capHeight: number;
 		color: string;
 	};
 	labelTextProps: {
-		fontFamily: string;
+		fontFamily: 'Inter';
 		fontWeight: number;
 		capHeight: number;
 		color: string;
@@ -247,20 +223,6 @@ export const VerticalColumn: React.FC<{
 			? interpolatedEntryColumnHeight(frame)
 			: interpolatedExitColumnHeight(frame);
 
-	// FONT
-	// ****************************************************
-	const capSizeLabelStyles = createStyleObject({
-		capHeight: labelTextProps.capHeight,
-		lineGap: 0,
-		fontMetrics: INTER_CAPSIZE_MEASURES,
-	});
-
-	const capSizeValueLabelStyles = createStyleObject({
-		capHeight: valueLabelTextProps.capHeight,
-		lineGap: 0,
-		fontMetrics: INTER_CAPSIZE_MEASURES,
-	});
-
 	return (
 		<div
 			style={{
@@ -282,14 +244,15 @@ export const VerticalColumn: React.FC<{
 						height: '100%',
 					}}
 				>
-					<CapSizeText
-						capSizeStyles={capSizeLabelStyles}
+					<CapSizeTextNew
 						fontFamily={labelTextProps.fontFamily}
 						fontWeight={labelTextProps.fontWeight}
 						color={labelTextProps.color}
+						capHeight={labelTextProps.capHeight}
+						lineGap={0}
 					>
 						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</CapSizeText>
+					</CapSizeTextNew>
 				</div>
 			</HtmlArea>
 
@@ -323,51 +286,18 @@ export const VerticalColumn: React.FC<{
 								interpolatedColumnHeight,
 						}}
 					>
-						<CapSizeText
-							capSizeStyles={capSizeValueLabelStyles}
+						<CapSizeTextNew
 							fontFamily={valueLabelTextProps.fontFamily}
 							fontWeight={valueLabelTextProps.fontWeight}
 							color={valueLabelTextProps.color}
+							capHeight={valueLabelTextProps.capHeight}
+							lineGap={0}
 						>
 							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</CapSizeText>
+						</CapSizeTextNew>
 					</div>
 				</HtmlArea>
 			</Sequence>
-		</div>
-	);
-};
-
-const CapSizeText: React.FC<{
-	children: ReactNode;
-	capSizeStyles: {
-		fontSize: number | string;
-		lineHeight: number | string;
-		'::before': {marginBottom: number | string};
-		'::after': {marginTop: number | string};
-	};
-	fontFamily: string;
-	fontWeight: number;
-	color: string;
-}> = ({children, capSizeStyles, fontFamily, fontWeight, color}) => {
-	return (
-		<div
-			style={{
-				marginBottom: capSizeStyles['::before'].marginBottom,
-				marginTop: capSizeStyles['::after'].marginTop,
-			}}
-		>
-			<div
-				style={{
-					color,
-					fontWeight,
-					fontFamily,
-					fontSize: capSizeStyles.fontSize,
-					lineHeight: capSizeStyles.lineHeight,
-				}}
-			>
-				{children}
-			</div>
 		</div>
 	);
 };

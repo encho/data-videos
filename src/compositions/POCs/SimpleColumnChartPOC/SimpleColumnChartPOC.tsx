@@ -1,5 +1,4 @@
 import {z} from 'zod';
-// import {Sequence} from 'remotion';
 
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -8,21 +7,11 @@ import {
 } from '../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 import {SimpleColumnChart} from './SimpleColumnChart';
+import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
 
 export const simpleColumnChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 });
-
-// function formatPercentage(value: number): string {
-// 	return (
-// 		(value * 100).toLocaleString(undefined, {
-// 			minimumFractionDigits: 1,
-// 			maximumFractionDigits: 1,
-// 		}) + '%'
-// 	);
-// }
-// Example usage:
-// console.log(formatPercentage(0.12)); // Output: "12.0%"
 
 const timeSeries = [
 	{value: 1135, date: new Date('2018-12-31')},
@@ -44,6 +33,8 @@ export const SimpleColumnChartPOC: React.FC<
 	z.infer<typeof simpleColumnChartPOCSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	useFontFamiliesLoader(['Inter-Regular']);
 
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,

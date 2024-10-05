@@ -1,13 +1,105 @@
 import {z} from 'zod';
 import {createStyleObject} from '@capsizecss/core';
 import styled, {css} from 'styled-components';
+import {ReactNode} from 'react';
+import invariant from 'tiny-invariant';
 
+import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
+import {CapSizeTextNew} from './CapSizeTextNew';
+
+// const CapSizeTextNew: React.FC<{
+// 	children: ReactNode;
+// 	capHeight: number;
+// 	lineGap: number;
+// 	fontFamily: 'Inter';
+// 	fontWeight: number;
+// 	color: string;
+// }> = ({children, fontFamily, fontWeight, color, capHeight, lineGap}) => {
+// 	const fontMetrics = fontFamily === 'Inter' ? INTER_CAPSIZE_MEASURES : null;
+// 	invariant(fontMetrics);
+
+// 	const capSizeStyles = createStyleObject({
+// 		capHeight,
+// 		lineGap,
+// 		fontMetrics,
+// 	});
+
+// 	// Generate a unique class name to avoid conflicts
+// 	const className = `${fontFamily}-${capHeight}-${lineGap}-${fontWeight}`;
+
+// 	// Create the CSS styles as a string
+// 	const style = `
+// 	 .${className} {
+// 		 font-size: ${capSizeStyles.fontSize};
+// 		 line-height: ${capSizeStyles.lineHeight};
+// 		 font-family: ${fontFamily};
+// 		 font-weight: ${fontWeight};
+// 		 color: ${color};
+// 	 }
+// 	 .${className}::before {
+// 		 content: '';
+// 		 display: block;
+// 		 margin-bottom: ${capSizeStyles['::before'].marginBottom};
+// 	 }
+// 	 .${className}::after {
+// 		 content: '';
+// 		 display: block;
+// 		 margin-top: ${capSizeStyles['::after'].marginTop};
+// 	 }
+//  `;
+
+// 	return (
+// 		<>
+// 			<style>{style}</style>
+// 			<div className={className}>{children}</div>
+// 		</>
+// 	);
+// };
+
+// const CapSizeText: React.FC<{
+// 	children: ReactNode;
+// 	capHeight: number;
+// 	lineGap: number;
+// 	fontFamily: 'Inter';
+// 	fontWeight: number;
+// 	color: string;
+// }> = ({children, fontFamily, fontWeight, color, capHeight, lineGap}) => {
+// 	const fontMetrics = fontFamily === 'Inter' ? INTER_CAPSIZE_MEASURES : null;
+// 	invariant(fontMetrics);
+
+// 	const capSizeStyles = createStyleObject({
+// 		capHeight,
+// 		lineGap,
+// 		fontMetrics,
+// 	});
+
+// 	return (
+// 		<div
+// 			style={{
+// 				marginBottom: capSizeStyles['::before'].marginBottom,
+// 				marginTop: capSizeStyles['::after'].marginTop,
+// 			}}
+// 		>
+// 			<div
+// 				style={{
+// 					color,
+// 					// fontWeight,
+// 					fontFamily,
+// 					fontSize: capSizeStyles.fontSize,
+// 					lineHeight: capSizeStyles.lineHeight,
+// 				}}
+// 			>
+// 				{children}
+// 			</div>
+// 		</div>
+// 	);
+// };
 
 const INTER_CAPSIZE_MEASURES = {
 	familyName: 'Inter',
@@ -49,6 +141,8 @@ export const capsizeTrimmingPOCSchema = z.object({
 export const CapsizeTrimmingPOC: React.FC<
 	z.infer<typeof capsizeTrimmingPOCSchema>
 > = ({themeEnum}) => {
+	useFontFamiliesLoader(['Inter-Regular']);
+
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const BASELINE_HEIGHT = 18;
@@ -230,6 +324,16 @@ export const CapsizeTrimmingPOC: React.FC<
 									flexDirection: 'column',
 								}}
 							>
+								{/* <TrimmedText>
+									The quick brown fox jumps over the lazy dog. As dawn breaks,
+									the sun shines with a soft, golden glow. In the distance,
+									birds chirp harmoniously, their melodies echoing through the
+									crisp air. The breeze carries the scent of fresh pine,
+									intertwining with the sweet aroma of blooming flowers. Slowly,
+									the town wakes up, the sound of footsteps and chatter filling
+									the streets.
+								</TrimmedText> */}
+
 								<TrimmedText>
 									The quick brown fox jumps over the lazy dog. As dawn breaks,
 									the sun shines with a soft, golden glow. In the distance,
@@ -239,6 +343,23 @@ export const CapsizeTrimmingPOC: React.FC<
 									the town wakes up, the sound of footsteps and chatter filling
 									the streets.
 								</TrimmedText>
+
+								<CapSizeTextNew
+									fontFamily="Inter"
+									fontWeight={700}
+									capHeight={BASELINE_HEIGHT}
+									lineGap={BASELINE_HEIGHT}
+									color="yellow"
+								>
+									The quick brown fox jumps over the lazy dog. As dawn breaks,
+									the sun shines with a soft, golden glow. In the distance,
+									birds chirp harmoniously, their melodies echoing through the
+									crisp air. The breeze carries the scent of fresh pine,
+									intertwining with the sweet aroma of blooming flowers. Slowly,
+									the town wakes up, the sound of footsteps and chatter filling
+									the streets.
+								</CapSizeTextNew>
+
 								{/* <TrimmedText>{JSON.stringify(stylesForStyledComponents)}</TrimmedText> */}
 							</div>
 						</div>
