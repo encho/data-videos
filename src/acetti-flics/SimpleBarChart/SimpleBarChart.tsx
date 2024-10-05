@@ -9,14 +9,14 @@ import {
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
-import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
-import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
+import {WaterfallTextEffect} from '../../compositions/SimpleStats/WaterfallTextEffect';
+import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
-import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
+} from '../../acetti-layout/hooks/useMatrixLayout';
+import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 type TSimpleBarChartProps = {
 	data: {

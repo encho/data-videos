@@ -7,7 +7,7 @@ import {
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
-import {SimpleBarChart} from './SimpleBarChart';
+import {SimpleBarChart} from '../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const simpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
