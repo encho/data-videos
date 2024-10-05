@@ -1,4 +1,3 @@
-import {measureText} from '@remotion/layout-utils';
 import {
 	Sequence,
 	useCurrentFrame,
@@ -7,8 +6,8 @@ import {
 	Easing,
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {createStyleObject} from '@capsizecss/core';
 
-import {useHorizontalBarLayout} from './useHorizontalBarLayout';
 import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
@@ -18,6 +17,28 @@ import {
 	getMatrixLayoutCellArea,
 } from '../../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
+import {ReactNode} from 'react';
+
+const INTER_CAPSIZE_MEASURES = {
+	familyName: 'Inter',
+	fullName: 'Inter Regular',
+	postscriptName: 'Inter-Regular',
+	capHeight: 1490,
+	ascent: 1984,
+	descent: -494,
+	lineGap: 0,
+	unitsPerEm: 2048,
+	xHeight: 1118,
+	xWidthAvg: 978,
+	subsets: {
+		latin: {
+			xWidthAvg: 978,
+		},
+		thai: {
+			xWidthAvg: 1344,
+		},
+	},
+};
 
 type TSimpleColumnChartProps = {
 	data: {
@@ -39,35 +60,23 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const nrColumns = data.length;
 	const nrRows = 1;
 
-	// const BAR_LABEL_FONT_SIZE = baseFontSize;
-	// const BAR_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
-	// const BAR_HEIGHT = baseFontSize * 1.5;
-	// const BAR_SPACE = baseFontSize * 0.5;
-
 	const COLUMN_LABEL_FONT_SIZE = baseFontSize;
-	const COLUMN_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.75;
+	const COLUMN_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.85;
 	const COLUMN_SPACE = baseFontSize * 1;
-	const COLUMN_WIDTH = baseFontSize * 3;
-
-	// const LABEL_COLOR = '#f05122';
-	// const VALUE_LABEL_COLOR = '#ffff00';
-
-	const LABEL_COLOR = '#fff';
-	const VALUE_LABEL_COLOR = '#fff';
+	const COLUMN_WIDTH = baseFontSize * 4;
 
 	const labelTextProps = {
 		fontFamily: 'Arial',
-		// fontWeight: 500,
 		fontWeight: 700,
-		fontSize: COLUMN_LABEL_FONT_SIZE,
-		// letterSpacing: 1,
+		capHeight: COLUMN_LABEL_FONT_SIZE,
+		color: 'white', // TODO from theme
 	};
 
 	const valueLabelTextProps = {
 		fontFamily: 'Arial',
-		fontWeight: 700,
-		fontSize: COLUMN_VALUE_LABEL_FONT_SIZE,
-		// letterSpacing: 1,
+		fontWeight: 500,
+		capHeight: COLUMN_VALUE_LABEL_FONT_SIZE,
+		color: 'white', // TODO from theme
 	};
 
 	// =========================================
@@ -81,20 +90,6 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 		nrRows,
 		columnSpacePixels: COLUMN_SPACE,
 	});
-
-	// determine labelWidth from all labelWidth's
-	// ------------------------------------------
-	const labelWidths = data.map(
-		(it) => measureText({...labelTextProps, text: it.label}).width
-	);
-	const labelWidth = Math.max(...labelWidths) * 1.05; // safety width bump
-
-	// determine valueLabelWidth from all valueLabelWidth's
-	// ------------------------------------------
-	const valueLabelWidths = data.map(
-		(it) => measureText({...valueLabelTextProps, text: it.valueLabel}).width
-	);
-	const valueLabelWidth = Math.max(...valueLabelWidths);
 
 	// determine domain
 	// ------------------------------------------
@@ -137,17 +132,13 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 											height={columnArea.height}
 											label={it.label}
 											labelTextProps={labelTextProps}
-											labelColor={LABEL_COLOR}
 											valueLabel={it.valueLabel}
-											valueLabelColor={VALUE_LABEL_COLOR}
 											valueLabelTextProps={valueLabelTextProps}
 											value={it.value}
 											columnColor={it.columnColor || 'magenta'}
-											// TODO with height:
-											// labelWidth={labelWidth}
-											// valueLabelWidth={valueLabelWidth}
-											// TODO
-											// valueDomain={valueDomain}
+											labelHeight={labelTextProps.capHeight}
+											valueLabelHeight={valueLabelTextProps.capHeight}
+											valueDomain={valueDomain}
 										/>
 									</HtmlArea>
 								</Sequence>
@@ -163,39 +154,37 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 export const VerticalColumn: React.FC<{
 	width: number;
 	height: number;
-	// labelWidth: number;
-	// valueLabelWidth: number;
+	labelHeight: number;
+	valueLabelHeight: number;
 	label: string;
 	valueLabel: string;
 	valueLabelTextProps: {
 		fontFamily: string;
 		fontWeight: number;
-		fontSize: number;
+		capHeight: number;
+		color: string;
 	};
 	labelTextProps: {
 		fontFamily: string;
 		fontWeight: number;
-		fontSize: number;
+		capHeight: number;
+		color: string;
 	};
 	value: number;
-	// valueDomain: [number, number];
+	valueDomain: [number, number];
 	columnColor: string;
-	labelColor: string;
-	valueLabelColor: string;
 }> = ({
 	width,
 	height,
-	// labelWidth, // TODO labelHeight
-	// valueLabelWidth, // TODO valueLabelHeight
+	labelHeight,
+	valueLabelHeight,
 	label,
 	valueLabel,
 	valueLabelTextProps,
 	labelTextProps,
-	// valueDomain, // TODO
+	valueDomain,
 	value,
 	columnColor,
-	labelColor,
-	valueLabelColor,
 }) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
@@ -203,8 +192,8 @@ export const VerticalColumn: React.FC<{
 	const verticalColumnLayout = useVerticalColumnLayout({
 		width,
 		height,
-		valueLabelHeight: 50,
-		labelHeight: 50,
+		valueLabelHeight: valueLabelHeight,
+		labelHeight: labelHeight,
 		spaceHeight: 20, // TODO as prop
 	});
 
@@ -219,9 +208,7 @@ export const VerticalColumn: React.FC<{
 		Math.floor(fps * 0.7);
 
 	const columnHeightScale: ScaleLinear<number, number> = scaleLinear()
-		// .domain(valueDomain)
-		// TODO use automated domain
-		.domain([0, 120])
+		.domain(valueDomain)
 		.range([0, verticalColumnLayout.areas.bar.height]);
 
 	const fullColumnHeight = columnHeightScale(value);
@@ -260,13 +247,27 @@ export const VerticalColumn: React.FC<{
 			? interpolatedEntryColumnHeight(frame)
 			: interpolatedExitColumnHeight(frame);
 
+	// FONT
+	// ****************************************************
+	const capSizeLabelStyles = createStyleObject({
+		capHeight: labelTextProps.capHeight,
+		lineGap: 0,
+		fontMetrics: INTER_CAPSIZE_MEASURES,
+	});
+
+	const capSizeValueLabelStyles = createStyleObject({
+		capHeight: valueLabelTextProps.capHeight,
+		lineGap: 0,
+		fontMetrics: INTER_CAPSIZE_MEASURES,
+	});
+
 	return (
 		<div
 			style={{
 				position: 'relative',
 			}}
 		>
-			{true ? (
+			{false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<DisplayGridRails {...verticalColumnLayout} />
 				</div>
@@ -281,9 +282,14 @@ export const VerticalColumn: React.FC<{
 						height: '100%',
 					}}
 				>
-					<div style={{...labelTextProps, color: labelColor}}>
+					<CapSizeText
+						capSizeStyles={capSizeLabelStyles}
+						fontFamily={labelTextProps.fontFamily}
+						fontWeight={labelTextProps.fontWeight}
+						color={labelTextProps.color}
+					>
 						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</div>
+					</CapSizeText>
 				</div>
 			</HtmlArea>
 
@@ -304,23 +310,6 @@ export const VerticalColumn: React.FC<{
 				</svg>
 			</HtmlArea>
 
-			{/* <HtmlArea area={horizontalBarLayout.areas.bar}>
-				<svg
-					width={horizontalBarLayout.areas.bar.width}
-					height={horizontalBarLayout.areas.bar.height}
-				>
-					<rect
-						y={0}
-						x={0}
-						height={horizontalBarLayout.areas.bar.height}
-						width={interpolatedBarWidth}
-						fill={barColor}
-						rx={3}
-						ry={3}
-					/>
-				</svg>
-			</HtmlArea> */}
-
 			<Sequence from={valueLabelDelayInFrames}>
 				<HtmlArea area={verticalColumnLayout.areas.valueLabel}>
 					<div
@@ -329,13 +318,19 @@ export const VerticalColumn: React.FC<{
 							justifyContent: 'center',
 							alignItems: 'center',
 							height: '100%',
-							// TODO with marginTop though
-							// marginLeft: valueLabelMarginLeft,
+							marginTop:
+								verticalColumnLayout.areas.bar.height -
+								interpolatedColumnHeight,
 						}}
 					>
-						<div style={{...valueLabelTextProps, color: valueLabelColor}}>
+						<CapSizeText
+							capSizeStyles={capSizeValueLabelStyles}
+							fontFamily={valueLabelTextProps.fontFamily}
+							fontWeight={valueLabelTextProps.fontWeight}
+							color={valueLabelTextProps.color}
+						>
 							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</div>
+						</CapSizeText>
 					</div>
 				</HtmlArea>
 			</Sequence>
@@ -343,156 +338,36 @@ export const VerticalColumn: React.FC<{
 	);
 };
 
-export const HorizontalBar: React.FC<{
-	width: number;
-	height: number;
-	labelWidth: number;
-	valueLabelWidth: number;
-	label: string;
-	valueLabel: string;
-	valueLabelTextProps: {
-		fontFamily: string;
-		fontWeight: number;
-		fontSize: number;
+const CapSizeText: React.FC<{
+	children: ReactNode;
+	capSizeStyles: {
+		fontSize: number | string;
+		lineHeight: number | string;
+		'::before': {marginBottom: number | string};
+		'::after': {marginTop: number | string};
 	};
-	labelTextProps: {
-		fontFamily: string;
-		fontWeight: number;
-		fontSize: number;
-	};
-	value: number;
-	valueDomain: [number, number];
-	barColor: string;
-	labelColor: string;
-	valueLabelColor: string;
-}> = ({
-	width,
-	height,
-	labelWidth,
-	valueLabelWidth,
-	label,
-	valueLabel,
-	valueLabelTextProps,
-	labelTextProps,
-	valueDomain,
-	value,
-	barColor,
-	labelColor,
-	valueLabelColor,
-}) => {
-	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
-
-	const horizontalBarLayout = useHorizontalBarLayout({
-		width,
-		height,
-		valueLabelWidth,
-		labelWidth,
-		spaceWidth: 20, // TODO as prop
-	});
-
-	// TODO as props
-	const barEntryDelayInFrames = fps * 0.6;
-	const barEnterDurationInFrames = fps * 0.6;
-	const barExitDurationInFrames = fps * 1;
-
-	const valueLabelDelayInFrames =
-		barEntryDelayInFrames + barEnterDurationInFrames - Math.floor(fps * 0.7);
-
-	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(valueDomain)
-		.range([0, horizontalBarLayout.areas.bar.width]);
-
-	const fullBarWidth = barWidthScale(value);
-
-	// actually evtentually do in own factored out component with Sequence based delay?
-	const interpolatedEntryBarWidth = (currentFrame: number) =>
-		interpolate(
-			currentFrame,
-			[barEntryDelayInFrames, barEntryDelayInFrames + barEnterDurationInFrames],
-			[0, fullBarWidth],
-			{
-				easing: Easing.cubic,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-	const interpolatedExitBarWidth = (currentFrame: number) =>
-		interpolate(
-			currentFrame,
-			[durationInFrames - barExitDurationInFrames, durationInFrames - 1],
-			[fullBarWidth, 0],
-			{
-				easing: Easing.cubic,
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
-		);
-
-	const interpolatedBarWidth =
-		frame < durationInFrames - barExitDurationInFrames
-			? interpolatedEntryBarWidth(frame)
-			: interpolatedExitBarWidth(frame);
-
-	const valueLabelMarginLeft =
-		-1 * (horizontalBarLayout.areas.bar.width - interpolatedBarWidth);
-
+	fontFamily: string;
+	fontWeight: number;
+	color: string;
+}> = ({children, capSizeStyles, fontFamily, fontWeight, color}) => {
 	return (
 		<div
 			style={{
-				position: 'relative',
+				marginBottom: capSizeStyles['::before'].marginBottom,
+				marginTop: capSizeStyles['::after'].marginTop,
 			}}
 		>
-			<HtmlArea area={horizontalBarLayout.areas.label}>
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'flex-end',
-						alignItems: 'center',
-						height: '100%',
-					}}
-				>
-					<div style={{...labelTextProps, color: labelColor}}>
-						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</div>
-				</div>
-			</HtmlArea>
-			<HtmlArea area={horizontalBarLayout.areas.bar}>
-				<svg
-					width={horizontalBarLayout.areas.bar.width}
-					height={horizontalBarLayout.areas.bar.height}
-				>
-					<rect
-						// TODO add opacity eventually
-						// opacity={opacity}
-						y={0}
-						x={0}
-						height={horizontalBarLayout.areas.bar.height}
-						width={interpolatedBarWidth}
-						fill={barColor}
-						rx={3}
-						ry={3}
-					/>
-				</svg>
-			</HtmlArea>
-			<Sequence from={valueLabelDelayInFrames}>
-				<HtmlArea area={horizontalBarLayout.areas.valueLabel}>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'flex-start',
-							alignItems: 'center',
-							height: '100%',
-							marginLeft: valueLabelMarginLeft,
-						}}
-					>
-						<div style={{...valueLabelTextProps, color: valueLabelColor}}>
-							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</div>
-					</div>
-				</HtmlArea>
-			</Sequence>
+			<div
+				style={{
+					color,
+					fontWeight,
+					fontFamily,
+					fontSize: capSizeStyles.fontSize,
+					lineHeight: capSizeStyles.lineHeight,
+				}}
+			>
+				{children}
+			</div>
 		</div>
 	);
 };

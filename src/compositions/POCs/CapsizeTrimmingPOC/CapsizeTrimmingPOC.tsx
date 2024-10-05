@@ -61,7 +61,6 @@ export const CapsizeTrimmingPOC: React.FC<
 
 	const styles = createStyleObject({
 		capHeight: BASELINE_HEIGHT,
-		// fontSize: BASELINE_HEIGHT,
 		lineGap: LINEGAP,
 		fontMetrics: INTER_CAPSIZE_MEASURES,
 	});

@@ -177,7 +177,7 @@ export const RemotionRoot: React.FC = () => {
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-SimpleColumnChart"
 					component={SimpleColumnChartPOC}
-					durationInFrames={90 * 20}
+					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
 					schema={simpleColumnChartPOCSchema}

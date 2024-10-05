@@ -25,18 +25,20 @@ export const simpleColumnChartPOCSchema = z.object({
 // console.log(formatPercentage(0.12)); // Output: "12.0%"
 
 const timeSeries = [
-	// {value: 150, date: new Date('2010-12-31')},
-	// {value: 57, date: new Date('2011-12-31')},
-	// {value: 58, date: new Date('2012-12-31')},
-	// {value: 65, date: new Date('2013-12-31')},
-	// {value: 77, date: new Date('2014-12-31')},
-	// {value: 94, date: new Date('2015-12-31')},
-	{value: 91, date: new Date('2016-12-31')},
-	{value: 65, date: new Date('2017-12-31')},
-	{value: 114, date: new Date('2018-12-31')},
-	{value: 60, date: new Date('2019-12-31')},
-	{value: 64, date: new Date('2020-12-31')},
+	{value: 1135, date: new Date('2018-12-31')},
+	{value: 1160, date: new Date('2019-12-31')},
+	{value: 1185, date: new Date('2020-12-31')},
+	{value: 1210, date: new Date('2021-12-31')},
+	{value: 1250, date: new Date('2022-12-31')},
 ];
+
+// const timeSeries = [
+// 	{value: 91, date: new Date('2016-12-31')},
+// 	{value: 65, date: new Date('2017-12-31')},
+// 	{value: 114, date: new Date('2018-12-31')},
+// 	{value: 60, date: new Date('2019-12-31')},
+// 	{value: 64, date: new Date('2020-12-31')},
+// ];
 
 export const SimpleColumnChartPOC: React.FC<
 	z.infer<typeof simpleColumnChartPOCSchema>
@@ -85,10 +87,8 @@ export const SimpleColumnChartPOC: React.FC<
 			>
 				<SimpleColumnChart
 					data={columnChartData}
-					// width={800}
 					height={600}
-					// baseFontSize={20}
-					baseFontSize={36}
+					baseFontSize={30}
 				/>
 			</div>
 
