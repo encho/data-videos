@@ -7,15 +7,15 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {WaterfallTextEffect} from '../../SimpleStats/WaterfallTextEffect';
-import {DisplayGridRails, HtmlArea} from '../../../acetti-layout';
+import {WaterfallTextEffect} from '../../compositions/SimpleStats/WaterfallTextEffect';
+import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
-import {CapSizeTextNew} from '../CapsizeTrimmingPOC/CapSizeTextNew';
+import {CapSizeTextNew} from '../../compositions/POCs/CapsizeTrimmingPOC/CapSizeTextNew';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
-import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
+} from '../../acetti-layout/hooks/useMatrixLayout';
+import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 type TSimpleColumnChartProps = {
 	data: {

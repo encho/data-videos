@@ -6,7 +6,7 @@ import {
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
-import {SimpleColumnChart} from './SimpleColumnChart';
+import {SimpleColumnChart} from '../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
 
 export const simpleColumnChartPOCSchema = z.object({

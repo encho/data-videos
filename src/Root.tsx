@@ -186,6 +186,17 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-MultipleSimpleColumnChart"
+					component={SimpleColumnChartPOC}
+					durationInFrames={90 * 10}
+					fps={90}
+					{...squareVideo}
+					schema={simpleColumnChartPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-Sparkline"
 					component={SparklinePOC}
 					// durationInFrames={90 * 8}
