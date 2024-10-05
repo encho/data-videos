@@ -95,6 +95,11 @@ import {
 	sparklinePOCSchema,
 } from './compositions/POCs/SparklinePOC/SparklinePOC';
 
+import {
+	MultipleSimpleColumnChartPOC,
+	multipleSimpleColumnChartPOCSchema,
+} from './compositions/POCs/MultipleSimpleColumnChartPOC/SimpleColumnChartPOC';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -187,11 +192,11 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-MultipleSimpleColumnChart"
-					component={SimpleColumnChartPOC}
-					durationInFrames={90 * 10}
+					component={MultipleSimpleColumnChartPOC}
+					durationInFrames={90 * 15}
 					fps={90}
 					{...squareVideo}
-					schema={simpleColumnChartPOCSchema}
+					schema={multipleSimpleColumnChartPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 				<Composition
