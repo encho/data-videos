@@ -1,17 +1,57 @@
 import {createStyleObject} from '@capsizecss/core';
 import {ReactNode} from 'react';
 import invariant from 'tiny-invariant';
+import {measureText as remotionMeasureText} from '@remotion/layout-utils';
+
+export const measureText = ({
+	fontFamily,
+	fontWeight,
+	capHeight,
+	lineGap,
+	text,
+}: {
+	fontFamily: 'Inter' | 'Inter-Regular';
+	fontWeight: number;
+	capHeight: number;
+	lineGap: number;
+	text: string;
+}) => {
+	const fontMetrics = getFontMetrics(fontFamily);
+
+	const capSizeStyles = createStyleObject({
+		capHeight,
+		lineGap,
+		fontMetrics,
+	});
+
+	return remotionMeasureText({
+		fontFamily,
+		fontWeight,
+		fontSize: capSizeStyles.fontSize,
+		text,
+	});
+};
+
+export const getFontMetrics = (fontFamily: 'Inter' | 'Inter-Regular') => {
+	const fontMetrics =
+		fontFamily === 'Inter'
+			? INTER_CAPSIZE_MEASURES
+			: fontFamily === 'Inter-Regular'
+			? INTER_CAPSIZE_MEASURES
+			: null;
+	invariant(fontMetrics);
+	return fontMetrics;
+};
 
 export const CapSizeTextNew: React.FC<{
 	children: ReactNode;
 	capHeight: number;
 	lineGap: number;
-	fontFamily: 'Inter';
+	fontFamily: 'Inter' | 'Inter-Regular';
 	fontWeight: number;
 	color: string;
 }> = ({children, fontFamily, fontWeight, color, capHeight, lineGap}) => {
-	const fontMetrics = fontFamily === 'Inter' ? INTER_CAPSIZE_MEASURES : null;
-	invariant(fontMetrics);
+	const fontMetrics = getFontMetrics(fontFamily);
 
 	const capSizeStyles = createStyleObject({
 		capHeight,

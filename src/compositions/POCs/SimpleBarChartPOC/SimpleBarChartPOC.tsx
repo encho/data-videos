@@ -75,33 +75,21 @@ export const SimpleBarChartPOC: React.FC<
 					</div>
 				</div>
 			</div>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row',
-					gap: 50,
-					marginTop: 60,
-				}}
-			>
-				{/* TODO at this level we pass theme colors directly already or Theme object? */}
-				{/* tendency: Theme Object at this level of abstraction */}
-				<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
-				<Sequence from={90 * 4} layout="none">
-					<SimpleBarChart data={barChartData} width={400} baseFontSize={18} />
-				</Sequence>
-			</div>
 
 			<div
 				style={{
 					display: 'flex',
 					flexDirection: 'column',
 					gap: 50,
-					marginTop: 60,
+					marginTop: 120,
 				}}
 			>
-				{/* TODO at this level we pass theme colors directly already? */}
-				<SimpleBarChart data={barChartData} width={800} baseFontSize={26} />
-				{/* <SimpleBarChart data={barChartData} width={1000} baseFontSize={50} /> */}
+				<SimpleBarChart
+					data={barChartData}
+					width={800}
+					baseFontSize={30}
+					theme={theme}
+				/>
 			</div>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />

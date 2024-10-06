@@ -98,7 +98,12 @@ import {
 import {
 	MultipleSimpleColumnChartPOC,
 	multipleSimpleColumnChartPOCSchema,
-} from './compositions/POCs/MultipleSimpleColumnChartPOC/SimpleColumnChartPOC';
+} from './compositions/POCs/MultipleSimpleColumnChartPOC/MultipleSimpleColumnChartPOC';
+
+import {
+	MultipleSimpleBarChartPOC,
+	multipleSimpleBarChartPOCSchema,
+} from './compositions/POCs/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
 
 import './tailwind.css';
 
@@ -186,11 +191,12 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-MultipleSimpleBarChart"
-					component={SimpleBarChartPOC}
+					component={MultipleSimpleBarChartPOC}
 					durationInFrames={90 * 20}
 					fps={90}
-					{...squareVideo}
-					schema={simpleBarChartPOCSchema}
+					// {...squareVideo}
+					{...linkedInTallVideo}
+					schema={multipleSimpleBarChartPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 				<Composition

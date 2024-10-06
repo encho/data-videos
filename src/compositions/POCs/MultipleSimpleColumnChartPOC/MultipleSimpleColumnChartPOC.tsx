@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {Sequence, useVideoConfig} from 'remotion';
+import {Sequence} from 'remotion';
 
 import {CapSizeTextNew} from '../CapsizeTrimmingPOC/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
