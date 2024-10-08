@@ -13,6 +13,7 @@ export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 					// color: 'magenta',
 					fontSize: 70,
 					marginTop: 60,
+					marginBottom: 60,
 					fontFamily: 'Inter',
 					fontWeight: 700,
 				}}

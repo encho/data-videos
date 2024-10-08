@@ -28,7 +28,7 @@ export const ModularScalePOC: React.FC<
 
 	const paddingInBaselines = 2;
 	const gutterInBaselines = 1;
-	const cellHeightInBaselines = 16;
+	const cellHeightInBaselines = 14;
 
 	const poster_height =
 		(2 * paddingInBaselines +
@@ -36,7 +36,8 @@ export const ModularScalePOC: React.FC<
 			4 * cellHeightInBaselines) *
 		baseline;
 
-	const poster_width = poster_height * 0.62;
+	// const poster_width = poster_height * 0.62;
+	const poster_width = poster_height * 0.66;
 
 	const matrixLayout = useMatrixLayout({
 		width: poster_width,
@@ -60,7 +61,7 @@ export const ModularScalePOC: React.FC<
 		>
 			<SlideTitle theme={theme}>The Modular Scale</SlideTitle>
 			<Sequence layout="none" from={fps * 1}>
-				<div style={{display: 'flex', justifyContent: 'center', marginTop: 60}}>
+				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
 						style={{
 							width: poster_width,

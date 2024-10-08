@@ -125,12 +125,39 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-TypographicBaselineGrid"
+						component={CapsizeTrimmingPOC} // TODO rename
+						durationInFrames={90 * 10}
+						fps={90}
+						{...squareVideo}
+						schema={capsizeTrimmingPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
 						id="pocs-ModularScale"
 						component={ModularScalePOC}
 						durationInFrames={90 * 12}
 						fps={90}
 						{...linkedInTallVideo}
 						schema={modularScalePOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					{/* this is actually lower lever information about how our grid-layout system works */}
+					{/* keep, but it's lower level section */}
+					{/* ********************************************************************************** */}
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-MatrixLayout"
+						component={MatrixLayoutPOC}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...squareVideo}
+						schema={matrixLayoutPOCSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
@@ -159,34 +186,12 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-MatrixLayout"
-					component={MatrixLayoutPOC}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...squareVideo}
-					schema={matrixLayoutPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
 					id="pocs-SilkscreenFont"
 					component={SilkscreenFontPOC}
 					durationInFrames={90 * 10}
 					fps={90}
 					{...squareVideo}
 					schema={silkscreenFontPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-CapsizeTrimming"
-					component={CapsizeTrimmingPOC}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...squareVideo}
-					schema={capsizeTrimmingPOCSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
 				<Composition
