@@ -1,6 +1,12 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
-const LorenzoBertoliniLogo = ({color}: {color: string}) => {
+const LorenzoBertoliniLogo = ({
+	color,
+	fontSize = 40,
+}: {
+	color: string;
+	fontSize?: number;
+}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
@@ -24,7 +30,7 @@ const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 				right: 40,
 			}}
 		>
-			<div style={{color, fontSize: 40}}>
+			<div style={{color, fontSize}}>
 				<span className="font-thin">lorenzo</span>
 				<span className="font-medium">bertolini</span>
 			</div>

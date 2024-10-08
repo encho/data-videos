@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {useVideoConfig, useCurrentFrame, interpolate} from 'remotion';
+import {useVideoConfig, Sequence} from 'remotion';
 
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -10,15 +10,19 @@ import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 import {BaselineGrid} from '../CapsizeTrimmingPOC/BaselineGrid';
 import {useMatrixLayout} from '../../../acetti-layout/hooks/useMatrixLayout';
 import {DisplayGridRails} from '../../../acetti-layout';
+import {SlideTitle} from './SlideTitle';
+// TODO factor out and deprecate it's second copy:
+// import {ElementsLogo} from '../CapsizeTrimmingPOC/ElementsLogo';
 
-export const swissPosterPOCSchema = z.object({
+export const modularScalePOCSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const SwissPosterPOC: React.FC<z.infer<typeof swissPosterPOCSchema>> = ({
-	themeEnum,
-}) => {
+export const ModularScalePOC: React.FC<
+	z.infer<typeof modularScalePOCSchema>
+> = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+	const {fps} = useVideoConfig();
 
 	const baseline = 14; // TODO funciton of width
 
@@ -54,42 +58,31 @@ export const SwissPosterPOC: React.FC<z.infer<typeof swissPosterPOCSchema>> = ({
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
+			<SlideTitle theme={theme}>The Modular Scale</SlideTitle>
+			<Sequence layout="none" from={fps * 1}>
+				<div style={{display: 'flex', justifyContent: 'center', marginTop: 60}}>
 					<div
 						style={{
-							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 50,
-							fontFamily: 'Arial',
-							fontWeight: 700,
+							width: poster_width,
+							height: poster_height,
+							position: 'relative',
 						}}
 					>
-						<FadeInAndOutText>Swiss Poster POC</FadeInAndOutText>
+						<BaselineGrid
+							width={poster_width}
+							height={poster_height}
+							baseline={baseline}
+							stroke={'#777'}
+							strokeWidth={3}
+							fill="transparent"
+						/>
+						<DisplayGridRails {...matrixLayout} stroke={'orange'} />
 					</div>
 				</div>
-			</div>
-			<div style={{display: 'flex', justifyContent: 'center', marginTop: 60}}>
-				<div
-					style={{
-						width: poster_width,
-						height: poster_height,
-						position: 'relative',
-					}}
-				>
-					<BaselineGrid
-						width={poster_width}
-						height={poster_height}
-						baseline={baseline}
-						stroke={'#777'}
-						strokeWidth={3}
-						fill="transparent"
-					/>
-					<DisplayGridRails {...matrixLayout} stroke={'orange'} />
-				</div>
-			</div>
+			</Sequence>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			{/* <ElementsLogo cell_size={4} /> */}
+			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
 		</div>
 	);
 };

@@ -101,9 +101,9 @@ import {
 } from './compositions/POCs/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
 
 import {
-	SwissPosterPOC,
-	swissPosterPOCSchema,
-} from './compositions/POCs/SwissPosterPOC/SwissPosterPOC';
+	ModularScalePOC,
+	modularScalePOCSchema,
+} from './compositions/POCs/ModularScale/ModularScalePOC';
 
 import './tailwind.css';
 
@@ -121,17 +121,19 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="POCs">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-SwissPoster"
-					component={SwissPosterPOC}
-					durationInFrames={90 * 12}
-					fps={90}
-					{...linkedInTallVideo}
-					schema={swissPosterPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
+				<Folder name="Typographic-Layouts">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-ModularScale"
+						component={ModularScalePOC}
+						durationInFrames={90 * 12}
+						fps={90}
+						{...linkedInTallVideo}
+						schema={modularScalePOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
