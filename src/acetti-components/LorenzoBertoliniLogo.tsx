@@ -1,41 +1,11 @@
-import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-
-// const LORENZO_BLACK = '#222';
-// const LORENZO_WHITE = '#FFF';
-
-// const COLORS = {
-// 	background: '#1c2541',
-// 	text: '#CAD8DE',
-// 	placements: {
-// 		champions: '#76E7CD',
-// 		uefa: '#9B7EDE',
-// 		uefaConference: '#C45BAA',
-// 	},
-// };
-
-// const FLIC_COLORS = {
-// 	background: LORENZO_BLACK,
-// 	progressColor: 'transparent',
-// 	title: LORENZO_WHITE,
-// 	bar: {
-// 		// background: LORENZO_BLACK,
-// 		background: LORENZO_WHITE,
-// 		text: LORENZO_BLACK,
-// 		placements: {
-// 			champions: '#76E7CD',
-// 			uefa: '#9B7EDE',
-// 			uefaConference: '#C45BAA',
-// 		},
-// 	},
-// };
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
 const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 	const frame = useCurrentFrame();
-	// const {durationInFrames} = useVideoConfig();
+	const {fps} = useVideoConfig();
 
-	const entryDurationInFrames = 30;
+	const entryDurationInFrames = fps * 1;
 
-	// const percentageProgress = frame / durationInFrames;
 	const percentageProgress = frame / entryDurationInFrames;
 
 	const barProgress = interpolate(percentageProgress, [0, 0.5], [0, 1], {

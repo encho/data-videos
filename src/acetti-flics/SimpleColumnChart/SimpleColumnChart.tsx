@@ -38,7 +38,7 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	delayInFrames = 0,
 }) => {
 	const frame = useCurrentFrame();
-	const {fps} = useVideoConfig();
+	// const {fps} = useVideoConfig();
 
 	const nrColumns = data.length;
 	const nrRows = 1;

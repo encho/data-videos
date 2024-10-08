@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {Sequence} from 'remotion';
 
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {

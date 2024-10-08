@@ -6,7 +6,17 @@ export const BaselineGrid: React.FC<{
 	width: number;
 	height: number;
 	baseline: number;
-}> = ({width, height, baseline}) => {
+	fill?: string;
+	stroke?: string;
+	strokeWidth?: number;
+}> = ({
+	width,
+	height,
+	baseline,
+	stroke = 'magenta',
+	strokeWidth = 2,
+	fill = 'transparent',
+}) => {
 	const {fps} = useVideoConfig();
 
 	return (
@@ -15,7 +25,7 @@ export const BaselineGrid: React.FC<{
 				width={width}
 				height={height}
 				style={{
-					backgroundColor: 'rgba(255,100,0,0.3)',
+					backgroundColor: fill,
 				}}
 			>
 				{range(baseline, height, baseline).map((yPosition, i) => {
@@ -27,8 +37,8 @@ export const BaselineGrid: React.FC<{
 								x2={width}
 								y1={yPosition}
 								y2={yPosition}
-								stroke={'rgb(255,100,0)'}
-								strokeWidth={2}
+								stroke={stroke}
+								strokeWidth={strokeWidth}
 							/>
 						</Sequence>
 					);

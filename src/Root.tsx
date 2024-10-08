@@ -50,11 +50,6 @@ import {
 	simpleColumnChartPOCSchema,
 } from './compositions/POCs/SimpleColumnChartPOC/SimpleColumnChartPOC';
 
-// import {
-// 	twoChangeBarsSchema,
-// 	TwoChangeBars,
-// } from './compositions/TwoChangeBars/TwoChangeBars';
-
 import {
 	twoChangeBarsWithImageSchema,
 	TwoChangeBarsWithImage,
@@ -105,6 +100,11 @@ import {
 	multipleSimpleBarChartPOCSchema,
 } from './compositions/POCs/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
 
+import {
+	SwissPosterPOC,
+	swissPosterPOCSchema,
+} from './compositions/POCs/SwissPosterPOC/SwissPosterPOC';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -121,6 +121,17 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="POCs">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-SwissPoster"
+					component={SwissPosterPOC}
+					durationInFrames={90 * 12}
+					fps={90}
+					{...linkedInTallVideo}
+					schema={swissPosterPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4

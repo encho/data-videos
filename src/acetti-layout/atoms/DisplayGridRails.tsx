@@ -1,19 +1,9 @@
-// import {toPairs} from 'lodash';
-import {
-	// TGridLayoutArea,
-	TGridLayout,
-} from '../types2';
-// import Area from './Area';
+import {TGridLayout} from '../types2';
 import Svg from './Svg';
-// import Title from './Title';
 
 type TDisplayGridRailsProps = TGridLayout & {
-	// width: number;
-	// height: number;
-	// areas: {[k: string]: TGridLayoutArea};
-	// hide?: boolean;
-	// fill?: string;
-	// stroke?: string;
+	stroke?: string;
+	strokeWidth?: number;
 };
 
 export default function DisplayGridRails({
@@ -21,16 +11,13 @@ export default function DisplayGridRails({
 	height,
 	rows,
 	columns,
-	areas,
+	// areas,
+	stroke = 'red',
+	strokeWidth = 3,
 }: TDisplayGridRailsProps) {
-	const strokeColor = 'magenta';
-	const fillColor = 'rgba(255,0,0,0.2)';
-
-	console.log({rows, columns});
-
 	return (
 		<div style={{position: 'relative'}}>
-			<Svg width={width} height={height} stroke={strokeColor} fill={fillColor}>
+			<Svg width={width} height={height} stroke={stroke} fill="transparent">
 				{rows.map((row) => {
 					return (
 						<rect
@@ -38,8 +25,9 @@ export default function DisplayGridRails({
 							y={row.start}
 							height={row.end - row.start}
 							width={width}
-							stroke={'orange'}
-							fill={'rgba(100,50,0,0.2)'}
+							stroke={stroke}
+							strokeWidth={strokeWidth}
+							fill={'transparent'}
 						/>
 					);
 				})}
@@ -50,8 +38,9 @@ export default function DisplayGridRails({
 							y={0}
 							height={height}
 							width={column.end - column.start}
-							stroke={'orange'}
-							fill={'rgba(100,50,0,0.2)'}
+							stroke={stroke}
+							strokeWidth={strokeWidth}
+							fill={'transparent'}
 						/>
 					);
 				})}
