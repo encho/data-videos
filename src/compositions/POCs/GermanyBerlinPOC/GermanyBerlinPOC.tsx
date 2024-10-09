@@ -1,8 +1,9 @@
 import {z} from 'zod';
 import {useState, useEffect} from 'react';
-import {useVideoConfig, Sequence, staticFile} from 'remotion';
+import {useVideoConfig, Sequence, staticFile, useCurrentFrame} from 'remotion';
 import {geoMercator, geoPath} from 'd3-geo';
 import {GeoJSON, FeatureCollection, Geometry} from 'geojson';
+import {evolvePath} from '@remotion/paths';
 
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
@@ -68,7 +69,10 @@ export const GermanyBerlin: React.FC<{
 	theme: ThemeType;
 	geoData: FeatureCollection<Geometry>;
 }> = ({theme, geoData}) => {
-	const {fps} = useVideoConfig();
+	const frame = useCurrentFrame();
+	const {fps, durationInFrames} = useVideoConfig();
+
+	const percAnimation = frame / (durationInFrames - 1);
 
 	const width = 800;
 	const height = 800;
@@ -90,6 +94,8 @@ export const GermanyBerlin: React.FC<{
 	const pathGenerator = geoPath().projection(projection);
 
 	const path = pathGenerator(geoData.features[0]);
+
+	const pathEvolution = path ? evolvePath(percAnimation, path) : null;
 
 	return (
 		<div
@@ -116,7 +122,13 @@ export const GermanyBerlin: React.FC<{
 						}}
 					>
 						{path ? (
-							<path d={path} stroke="orange" fill="#303030" strokeWidth={4} />
+							<path
+								d={path}
+								{...pathEvolution}
+								stroke="orange"
+								fill="#303030"
+								strokeWidth={4}
+							/>
 						) : null}
 					</svg>
 				</div>
