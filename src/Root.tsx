@@ -126,17 +126,27 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="POCs">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-GermanyBerlin"
-					component={GermanyBerlinPOC}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...linkedInTallVideo}
-					schema={germanyBerlinPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
+				<Folder name="TextEffects">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="TextEffects"
+						component={TextEffectsComposition}
+						durationInFrames={90 * 5}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...squareVideo}
+						schema={textEffectsCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+							kpiValue: 0.015,
+							kpiValueFormatString: '+0.00%',
+							kpiLabel: 'Net Profit ',
+							fontSize: 120,
+						}}
+					/>
+				</Folder>
+
 				<Folder name="Typographic-Layouts">
 					<Composition
 						// You can take the "id" to render a video:
@@ -176,99 +186,199 @@ export const RemotionRoot: React.FC = () => {
 						schema={matrixLayoutPOCSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-SilkscreenFont"
+						component={SilkscreenFontPOC}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...squareVideo}
+						schema={silkscreenFontPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
 				</Folder>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-CircleToRectPath"
-					component={CircleToRectPath}
-					durationInFrames={90 * 3}
-					fps={90}
-					{...squareVideo}
-					schema={circleToRectPathSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-ScatterPlotToBarChart"
-					component={ScatterPlotToBarChart}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...squareVideo}
-					schema={scatterPlotToBarChartSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-SilkscreenFont"
-					component={SilkscreenFontPOC}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...squareVideo}
-					schema={silkscreenFontPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-SimpleBarChart"
-					component={SimpleBarChartPOC}
-					durationInFrames={90 * 20}
-					fps={90}
-					{...squareVideo}
-					schema={simpleBarChartPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-MultipleSimpleBarChart"
-					component={MultipleSimpleBarChartPOC}
-					durationInFrames={90 * 20}
-					fps={90}
-					// {...squareVideo}
-					{...linkedInTallVideo}
-					schema={multipleSimpleBarChartPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-SimpleColumnChart"
-					component={SimpleColumnChartPOC}
-					durationInFrames={90 * 10}
-					fps={90}
-					{...squareVideo}
-					schema={simpleColumnChartPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-MultipleSimpleColumnChart"
-					component={MultipleSimpleColumnChartPOC}
-					durationInFrames={90 * 24}
-					fps={90}
-					// {...squareVideo}
-					{...linkedInTallVideo}
-					schema={multipleSimpleColumnChartPOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="pocs-Sparkline"
-					component={SparklinePOC}
-					// durationInFrames={90 * 8}
-					// durationInFrames={90 * 20}
-					durationInFrames={90 * 9}
-					fps={90}
-					{...squareVideo}
-					schema={sparklinePOCSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
-				/>
+
+				<Folder name="SimpleStats">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SimpleKPI"
+						component={SimpleKPIComposition}
+						durationInFrames={90 * 5}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...squareVideo}
+						schema={simpleKPICompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+							kpiValue: 0.015,
+							kpiValueFormatString: '+0.00%',
+							kpiLabel: 'Net  Profits',
+							baseFontSize: 60,
+						}}
+					/>
+				</Folder>
+
+				<Folder name="BarCharts">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-SimpleBarChart"
+						component={SimpleBarChartPOC}
+						durationInFrames={90 * 20}
+						fps={90}
+						{...squareVideo}
+						schema={simpleBarChartPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-MultipleSimpleBarChart"
+						component={MultipleSimpleBarChartPOC}
+						durationInFrames={90 * 20}
+						fps={90}
+						// {...squareVideo}
+						{...linkedInTallVideo}
+						schema={multipleSimpleBarChartPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
+
+				<Folder name="ColumnCharts">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-SimpleColumnChart"
+						component={SimpleColumnChartPOC}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...squareVideo}
+						schema={simpleColumnChartPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-MultipleSimpleColumnChart"
+						component={MultipleSimpleColumnChartPOC}
+						durationInFrames={90 * 24}
+						fps={90}
+						// {...squareVideo}
+						{...linkedInTallVideo}
+						schema={multipleSimpleColumnChartPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Folder name="ChangeBars">
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="NewTwoChangeBars"
+							component={NewTwoChangeBars}
+							durationInFrames={90 * 15}
+							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+							fps={90}
+							{...squareVideo}
+							schema={newTwoChangeBarsSchema}
+							defaultProps={{
+								themeEnum: 'NERDY' as const,
+								title: 'Global Car Sales',
+								subTitle: '2023 vs. 2024 (in USD)',
+								leftBarValue: 1000,
+								rightBarValue: 870,
+								leftBarLabel: '2023',
+								rightBarLabel: '2024',
+								valueFormatString: '$ 0,0.',
+								percentageFormatString: '+0.00%',
+								minDomainValue: 700,
+								maxDomainValue: 1000,
+							}}
+						/>
+
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="TwoChangeBarsWithImage"
+							component={TwoChangeBarsWithImage}
+							durationInFrames={90 * 15}
+							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+							fps={90}
+							// {...squareVideo}
+							// width={(1080 * 3) / 2}
+							// height={1080}
+							width={Math.floor(1080 * 1.62)}
+							height={1080}
+							schema={twoChangeBarsWithImageSchema}
+							defaultProps={{
+								themeEnum: 'NERDY' as const,
+								title: 'Global Car Sales',
+								subTitle: '2023 vs. 2024 (in USD)',
+								leftBarValue: 845,
+								rightBarValue: 1000,
+								leftBarLabel: '2023',
+								rightBarLabel: '2024',
+								valueFormatString: '$ 0,0.',
+								percentageFormatString: '+0.00%',
+								minDomainValue: 600,
+							}}
+						/>
+					</Folder>
+				</Folder>
+
+				<Folder name="Sparklines">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-Sparkline"
+						component={SparklinePOC}
+						durationInFrames={90 * 9}
+						fps={90}
+						{...squareVideo}
+						schema={sparklinePOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
+				<Folder name="GeoJSON">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-GermanyBerlin"
+						component={GermanyBerlinPOC}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...linkedInTallVideo}
+						schema={germanyBerlinPOCSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
+
+				<Folder name="Path-Animation-Experiments">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-CircleToRectPath"
+						component={CircleToRectPath}
+						durationInFrames={90 * 3}
+						fps={90}
+						{...squareVideo}
+						schema={circleToRectPathSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="pocs-ScatterPlotToBarChart"
+						component={ScatterPlotToBarChart}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...squareVideo}
+						schema={scatterPlotToBarChartSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
 			</Folder>
 			<Folder name="Timeseries">
 				<Composition
@@ -374,127 +484,6 @@ export const RemotionRoot: React.FC = () => {
 						},
 						showLineChartLayout: false,
 						watermark: true,
-					}}
-				/>
-			</Folder>
-
-			<Folder name="TextEffects">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="TextEffects"
-					component={TextEffectsComposition}
-					durationInFrames={90 * 5}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...squareVideo}
-					schema={textEffectsCompositionSchema}
-					defaultProps={{
-						themeEnum: 'NERDY' as const,
-						kpiValue: 0.015,
-						kpiValueFormatString: '+0.00%',
-						kpiLabel: 'Net Profit ',
-						fontSize: 120,
-					}}
-				/>
-			</Folder>
-
-			<Folder name="ChangeBars">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="NewTwoChangeBars"
-					component={NewTwoChangeBars}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...squareVideo}
-					schema={newTwoChangeBarsSchema}
-					defaultProps={{
-						themeEnum: 'NERDY' as const,
-						title: 'Global Car Sales',
-						subTitle: '2023 vs. 2024 (in USD)',
-						leftBarValue: 1000,
-						rightBarValue: 870,
-						leftBarLabel: '2023',
-						rightBarLabel: '2024',
-						valueFormatString: '$ 0,0.',
-						percentageFormatString: '+0.00%',
-						minDomainValue: 700,
-						maxDomainValue: 1000,
-					}}
-				/>
-
-				{/* <Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="TwoChangeBars"
-					component={TwoChangeBars}
-					durationInFrames={90 * 5}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...squareVideo}
-					schema={twoChangeBarsSchema}
-					defaultProps={{
-						themeEnum: 'NERDY' as const,
-						title: 'Global Car Sales',
-						subTitle: '2023 vs. 2024 (in USD)',
-						leftBarValue: 980,
-						rightBarValue: 1000,
-						leftBarLabel: '2023',
-						rightBarLabel: '2024',
-						valueFormatString: '$ 0,0.',
-						percentageFormatString: '+0.00%',
-						minDomainValue: 900,
-					}}
-				/> */}
-
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="TwoChangeBarsWithImage"
-					component={TwoChangeBarsWithImage}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					// {...squareVideo}
-					// width={(1080 * 3) / 2}
-					// height={1080}
-					width={Math.floor(1080 * 1.62)}
-					height={1080}
-					schema={twoChangeBarsWithImageSchema}
-					defaultProps={{
-						themeEnum: 'NERDY' as const,
-						title: 'Global Car Sales',
-						subTitle: '2023 vs. 2024 (in USD)',
-						leftBarValue: 845,
-						rightBarValue: 1000,
-						leftBarLabel: '2023',
-						rightBarLabel: '2024',
-						valueFormatString: '$ 0,0.',
-						percentageFormatString: '+0.00%',
-						minDomainValue: 600,
-					}}
-				/>
-			</Folder>
-
-			<Folder name="SimpleStats">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="SimpleKPI"
-					component={SimpleKPIComposition}
-					durationInFrames={90 * 5}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...squareVideo}
-					schema={simpleKPICompositionSchema}
-					defaultProps={{
-						themeEnum: 'NERDY' as const,
-						kpiValue: 0.015,
-						kpiValueFormatString: '+0.00%',
-						kpiLabel: 'Net  Profits',
-						baseFontSize: 60,
 					}}
 				/>
 			</Folder>
