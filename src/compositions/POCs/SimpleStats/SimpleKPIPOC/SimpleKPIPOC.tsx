@@ -2,24 +2,24 @@ import {z} from 'zod';
 import numeral from 'numeral';
 import {Sequence} from 'remotion';
 
-import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
-import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {ThemeType} from '../../acetti-themes/themeTypes';
-import {Position} from '../../acetti-ts-base/Position';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {Position} from '../../../../acetti-ts-base/Position';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../acetti-themes/getThemeFromEnum';
+} from '../../../../acetti-themes/getThemeFromEnum';
 
 import {
 	getKPIFontSize,
 	getLabelFontSize,
 	getLabelMarginTop,
 	getSpaceMedium,
-} from '../../acetti-themes/typographySizes';
+} from '../../../../acetti-themes/typographySizes';
 
-export const simpleKPICompositionSchema = z.object({
+export const simpleKPIPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 	kpiValue: z.number(),
 	kpiValueFormatString: z.string(),
@@ -27,9 +27,13 @@ export const simpleKPICompositionSchema = z.object({
 	baseFontSize: z.number(),
 });
 
-export const SimpleKPIComposition: React.FC<
-	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
+export const SimpleKPIPOC: React.FC<z.infer<typeof simpleKPIPOCSchema>> = ({
+	themeEnum,
+	kpiValue,
+	kpiValueFormatString,
+	kpiLabel,
+	baseFontSize,
+}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	// TODO kpi section in theme!!!
@@ -80,9 +84,13 @@ export const SimpleKPIComposition: React.FC<
 	);
 };
 
-export const SimpleKPI: React.FC<
-	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
+export const SimpleKPI: React.FC<z.infer<typeof simpleKPIPOCSchema>> = ({
+	themeEnum,
+	kpiValue,
+	kpiValueFormatString,
+	kpiLabel,
+	baseFontSize,
+}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);

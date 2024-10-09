@@ -41,9 +41,9 @@ import {
 } from './compositions/POCs/ScatterPlotToBarChart/ScatterPlotToBarChart';
 
 import {
-	CapsizeTrimmingPOC,
-	capsizeTrimmingPOCSchema,
-} from './compositions/POCs/CapsizeTrimmingPOC/CapsizeTrimmingPOC';
+	BaselineGridComposition,
+	baselineGridCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/BaselineGrid/BaselineGridComposition';
 
 import {
 	SimpleColumnChartPOC,
@@ -56,9 +56,9 @@ import {
 } from './compositions/TwoChangeBars/TwoChangeBarsWithImage';
 
 import {
-	SimpleKPIComposition,
-	simpleKPICompositionSchema,
-} from './compositions/SimpleStats/SimpleKPI';
+	SimpleKPIPOC,
+	simpleKPIPOCSchema,
+} from './compositions/POCs/SimpleStats/SimpleKPIPOC/SimpleKPIPOC';
 
 import {
 	NewTwoChangeBars,
@@ -66,9 +66,9 @@ import {
 } from './compositions/TwoChangeBars/NewTwoChangeBars';
 
 import {
-	TextEffectsComposition,
-	textEffectsCompositionSchema,
-} from './compositions/SimpleStats/TextEffects';
+	TextEffectsPOC,
+	textEffectsPOCSchema,
+} from './compositions/POCs/TextEffectsPOC/TextEffectsPOC';
 
 import {
 	MatrixLayoutPOC,
@@ -131,12 +131,12 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="TextEffects"
-						component={TextEffectsComposition}
+						component={TextEffectsPOC}
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
 						{...squareVideo}
-						schema={textEffectsCompositionSchema}
+						schema={textEffectsPOCSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 							kpiValue: 0.015,
@@ -147,16 +147,16 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="Typographic-Layouts">
+				<Folder name="02-TypographicLayouts">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-TypographicBaselineGrid"
-						component={CapsizeTrimmingPOC} // TODO rename
+						id="BaselineGrid"
+						component={BaselineGridComposition} // TODO rename
 						durationInFrames={90 * 10}
 						fps={90}
 						{...squareVideo}
-						schema={capsizeTrimmingPOCSchema}
+						schema={baselineGridCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
@@ -205,12 +205,12 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleKPI"
-						component={SimpleKPIComposition}
+						component={SimpleKPIPOC}
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
 						{...squareVideo}
-						schema={simpleKPICompositionSchema}
+						schema={simpleKPIPOCSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 							kpiValue: 0.015,

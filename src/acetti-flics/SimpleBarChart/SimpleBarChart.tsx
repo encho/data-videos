@@ -1,5 +1,5 @@
 // import {measureText} from '@remotion/layout-utils';
-import {measureText} from '../../compositions/POCs/CapsizeTrimmingPOC/CapSizeTextNew';
+import {measureText} from '../../compositions/POCs/02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
 import {
 	Sequence,
 	useCurrentFrame,
@@ -9,7 +9,7 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {CapSizeTextNew} from '../../compositions/POCs/CapsizeTrimmingPOC/CapSizeTextNew';
+import {CapSizeTextNew} from '../../compositions/POCs/02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';

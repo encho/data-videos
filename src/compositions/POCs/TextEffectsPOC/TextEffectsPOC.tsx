@@ -1,18 +1,16 @@
 import {z} from 'zod';
-// import numeral from 'numeral';
 import {Sequence} from 'remotion';
 
-import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
-import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
-// import {ThemeType} from '../../acetti-themes/themeTypes';
-import {Position} from '../../acetti-ts-base/Position';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
+import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {WaterfallTextEffect} from '../../../acetti-typography/TextEffects/WaterfallTextEffect';
+import {Position} from '../../../acetti-ts-base/Position';
+import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../acetti-themes/getThemeFromEnum';
+} from '../../../acetti-themes/getThemeFromEnum';
 
-export const textEffectsCompositionSchema = z.object({
+export const textEffectsPOCSchema = z.object({
 	themeEnum: zThemeEnum,
 	kpiValue: z.number(),
 	kpiValueFormatString: z.string(),
@@ -20,9 +18,13 @@ export const textEffectsCompositionSchema = z.object({
 	fontSize: z.number(),
 });
 
-export const TextEffectsComposition: React.FC<
-	z.infer<typeof textEffectsCompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
+export const TextEffectsPOC: React.FC<z.infer<typeof textEffectsPOCSchema>> = ({
+	themeEnum,
+	kpiValue,
+	kpiValueFormatString,
+	kpiLabel,
+	fontSize,
+}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	// TODO kpi section in theme!!!

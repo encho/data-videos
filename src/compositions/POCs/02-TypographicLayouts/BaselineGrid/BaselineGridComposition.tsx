@@ -4,12 +4,12 @@ import {Sequence, useVideoConfig} from 'remotion';
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
 import {BaselineGrid} from './BaselineGrid';
-import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
+} from '../../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
 import {CapSizeTextNew} from './CapSizeTextNew';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
@@ -26,12 +26,12 @@ import {CapSizeTextNew} from './CapSizeTextNew';
 //   }
 // `;
 
-export const capsizeTrimmingPOCSchema = z.object({
+export const baselineGridCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const CapsizeTrimmingPOC: React.FC<
-	z.infer<typeof capsizeTrimmingPOCSchema>
+export const BaselineGridComposition: React.FC<
+	z.infer<typeof baselineGridCompositionSchema>
 > = ({themeEnum}) => {
 	useFontFamiliesLoader(['Inter-Regular']);
 	const theme = getThemeFromEnum(themeEnum as any);
@@ -64,7 +64,7 @@ export const CapsizeTrimmingPOC: React.FC<
 								fontWeight: 700,
 							}}
 						>
-							Typographic Baseline Grid
+							Baseline Grid
 						</div>
 					</div>
 				</div>

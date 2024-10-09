@@ -6,7 +6,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {BaselineGrid} from '../CapsizeTrimmingPOC/BaselineGrid';
+import {BaselineGrid} from '../02-TypographicLayouts/BaselineGrid/BaselineGrid';
 import {useMatrixLayout} from '../../../acetti-layout/hooks/useMatrixLayout';
 import {DisplayGridRails} from '../../../acetti-layout';
 import {SlideTitle} from './SlideTitle';

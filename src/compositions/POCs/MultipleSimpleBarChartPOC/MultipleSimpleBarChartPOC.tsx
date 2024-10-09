@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
-import {measureText} from '../CapsizeTrimmingPOC/CapSizeTextNew';
+import {measureText} from '../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -10,7 +10,7 @@ import {
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleBarChart} from '../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
-import {CapSizeTextNew} from '../CapsizeTrimmingPOC/CapSizeTextNew';
+import {CapSizeTextNew} from '../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {
 	getTextProps_label,
