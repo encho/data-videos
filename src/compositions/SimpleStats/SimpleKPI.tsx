@@ -2,8 +2,8 @@ import {z} from 'zod';
 import numeral from 'numeral';
 import {Sequence} from 'remotion';
 
-import {FadeInAndOutText} from './FadeInAndOutText';
-import {WaterfallTextEffect} from './WaterfallTextEffect';
+import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
+import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {Position} from '../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';

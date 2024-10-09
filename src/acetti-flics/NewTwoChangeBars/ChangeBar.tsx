@@ -8,8 +8,8 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
-import {WaterfallTextEffect} from '../../compositions/SimpleStats/WaterfallTextEffect';
+import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
+import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {TGridLayoutArea, Area, HtmlArea} from '../../acetti-layout';
 
 // TODO implement and put into layout lib

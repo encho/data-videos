@@ -10,7 +10,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {evolvePath} from '@remotion/paths';
 import {Triangle} from '@remotion/shapes';
 
-import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
+import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {TGridLayoutArea} from '../../acetti-layout';
 
 type ArrowTypeSequenceType = {

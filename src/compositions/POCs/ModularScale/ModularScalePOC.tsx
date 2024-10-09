@@ -6,7 +6,6 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 import {BaselineGrid} from '../CapsizeTrimmingPOC/BaselineGrid';
 import {useMatrixLayout} from '../../../acetti-layout/hooks/useMatrixLayout';
 import {DisplayGridRails} from '../../../acetti-layout';

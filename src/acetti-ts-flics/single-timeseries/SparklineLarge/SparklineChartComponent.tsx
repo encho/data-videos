@@ -13,7 +13,7 @@ import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpe
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
-import {FadeInAndOutText} from '../../../compositions/SimpleStats/FadeInAndOutText';
+import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 

@@ -12,7 +12,7 @@ import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {TXAxisSpec, TAxisLabelSpec} from './utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
-import {WaterfallTextEffect} from '../compositions/SimpleStats/WaterfallTextEffect';
+import {WaterfallTextEffect} from '../acetti-typography/TextEffects/WaterfallTextEffect';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 

@@ -11,14 +11,14 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {CapSizeTextNew} from '../../compositions/POCs/CapsizeTrimmingPOC/CapSizeTextNew';
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
-import {WaterfallTextEffect} from '../../compositions/SimpleStats/WaterfallTextEffect';
+import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../acetti-layout/hooks/useMatrixLayout';
-import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
+import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 
 type TSimpleBarChartProps = {
