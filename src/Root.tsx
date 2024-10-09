@@ -105,6 +105,11 @@ import {
 	modularScalePOCSchema,
 } from './compositions/POCs/ModularScale/ModularScalePOC';
 
+import {
+	GermanyBerlinPOC,
+	germanyBerlinPOCSchema,
+} from './compositions/POCs/GermanyBerlinPOC/GermanyBerlinPOC';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -121,6 +126,17 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="POCs">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="pocs-GermanyBerlin"
+					component={GermanyBerlinPOC}
+					durationInFrames={90 * 10}
+					fps={90}
+					{...linkedInTallVideo}
+					schema={germanyBerlinPOCSchema}
+					defaultProps={{themeEnum: 'NERDY' as const}}
+				/>
 				<Folder name="Typographic-Layouts">
 					<Composition
 						// You can take the "id" to render a video:

@@ -11,6 +11,10 @@ https://medium.economist.com/charting-new-territory-7f5afb293270
 Economist Data Team @twitter:
 https://x.com/ECONdailycharts
 
+## GeoJSON Data source
+
+https://github.com/isellsoap/deutschlandGeoJSON
+
 ## Commands
 
 **Install Dependencies**
