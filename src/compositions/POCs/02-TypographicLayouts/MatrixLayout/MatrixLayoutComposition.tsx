@@ -1,26 +1,26 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area} from '../../../acetti-layout';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {DisplayGridRails, Area} from '../../../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
+} from '../../../../acetti-layout/hooks/useMatrixLayout';
 
-export const matrixLayoutPOCSchema = z.object({
+export const matrixLayoutCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
 const LAYOUT_WIDTH = 800;
 const LAYOUT_HEIGHT = 600;
 
-export const MatrixLayoutPOC: React.FC<
-	z.infer<typeof matrixLayoutPOCSchema>
+export const MatrixLayoutComposition: React.FC<
+	z.infer<typeof matrixLayoutCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 

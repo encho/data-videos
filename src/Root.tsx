@@ -71,14 +71,14 @@ import {
 } from './compositions/POCs/TextEffectsPOC/TextEffectsPOC';
 
 import {
-	MatrixLayoutPOC,
-	matrixLayoutPOCSchema,
-} from './compositions/POCs/MatrixLayoutPOC/MatrixLayoutPOC';
+	MatrixLayoutComposition,
+	matrixLayoutCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/MatrixLayout/MatrixLayoutComposition';
 
 import {
-	SilkscreenFontPOC,
-	silkscreenFontPOCSchema,
-} from './compositions/POCs/SilkscreenFontPOC/SilkscreenFontPOC';
+	SilkscreenFontComposition,
+	silkscreenFontCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/SilkscreenFont/SilkscreenFontComposition';
 
 import {
 	SimpleBarChartPOC,
@@ -178,24 +178,24 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-MatrixLayout"
-						component={MatrixLayoutPOC}
+						id="MatrixLayout"
+						component={MatrixLayoutComposition}
 						durationInFrames={90 * 10}
 						fps={90}
 						{...squareVideo}
-						schema={matrixLayoutPOCSchema}
+						schema={matrixLayoutCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-SilkscreenFont"
-						component={SilkscreenFontPOC}
+						id="SilkscreenFont"
+						component={SilkscreenFontComposition}
 						durationInFrames={90 * 10}
 						fps={90}
 						{...squareVideo}
-						schema={silkscreenFontPOCSchema}
+						schema={silkscreenFontCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

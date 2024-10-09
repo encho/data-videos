@@ -1,20 +1,14 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area} from '../../../acetti-layout';
-
-import {
-	useMatrixLayout,
-	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
+} from '../../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
 import {SilkscreenLetter} from './SilkscreenLetter';
 
-export const silkscreenFontPOCSchema = z.object({
+export const silkscreenFontCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
@@ -269,8 +263,8 @@ const G_LETTER = {
 	],
 };
 
-export const SilkscreenFontPOC: React.FC<
-	z.infer<typeof silkscreenFontPOCSchema>
+export const SilkscreenFontComposition: React.FC<
+	z.infer<typeof silkscreenFontCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 

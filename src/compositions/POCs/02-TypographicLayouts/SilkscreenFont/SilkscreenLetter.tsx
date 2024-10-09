@@ -4,13 +4,13 @@ import {z} from 'zod';
 import {
 	// getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area} from '../../../acetti-layout';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {DisplayGridRails, Area} from '../../../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
-} from '../../../acetti-layout/hooks/useMatrixLayout';
+} from '../../../../acetti-layout/hooks/useMatrixLayout';
 
 export const silkscreenFontPOCSchema = z.object({
 	themeEnum: zThemeEnum,
