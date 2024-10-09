@@ -11,6 +11,7 @@ import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
+import {SlideTitle} from '../SlideTitle';
 
 export const matrixLayoutCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -45,87 +46,63 @@ export const MatrixLayoutComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 50,
-							marginTop: 50,
-						}}
-					>
-						useMatrixLayout Example
-					</div>
-				</div>
+			<SlideTitle theme={theme}>The Matrix Layout</SlideTitle>
 
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.subTitle.color,
-							fontSize: 30,
-							marginBottom: 50,
-						}}
-					>
-						TODO: add animations and better area displays
-					</div>
-				</div>
-
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'center',
+				}}
+			>
 				<div
 					style={{
-						display: 'flex',
-						justifyContent: 'center',
+						position: 'relative',
+						width: matrixLayout.width,
+						height: matrixLayout.height,
 					}}
 				>
-					<div
-						style={{
-							position: 'relative',
-							width: matrixLayout.width,
-							height: matrixLayout.height,
-						}}
-					>
-						<div style={{position: 'absolute', top: 0, left: 0}}>
-							<DisplayGridRails {...matrixLayout} />
-						</div>
-						<div style={{position: 'absolute', top: 0, left: 0}}>
-							<div style={{position: 'relative'}}>
-								<div>
-									<svg
-										style={{
-											width: matrixLayout.width,
-											height: matrixLayout.height,
-										}}
+					<div style={{position: 'absolute', top: 0, left: 0}}>
+						<DisplayGridRails {...matrixLayout} />
+					</div>
+					<div style={{position: 'absolute', top: 0, left: 0}}>
+						<div style={{position: 'relative'}}>
+							<div>
+								<svg
+									style={{
+										width: matrixLayout.width,
+										height: matrixLayout.height,
+									}}
+								>
+									<Area
+										area={getMatrixLayoutCellArea({
+											layout: matrixLayout,
+											cellName: 'cell',
+											row: 0,
+											column: 0,
+										})}
+										fill="rgba(200,100,0,0.6)"
 									>
-										<Area
-											area={getMatrixLayoutCellArea({
-												layout: matrixLayout,
-												cellName: 'cell',
-												row: 0,
-												column: 0,
-											})}
-											fill="rgba(200,100,0,0.6)"
-										>
-											<g></g>
-										</Area>
-										<Area
-											area={getMatrixLayoutCellArea({
-												layout: matrixLayout,
-												cellName: 'cell',
-												row: 1,
-												column: 0,
-											})}
-											fill="rgba(200,100,0,0.6)"
-										>
-											<g></g>
-										</Area>
-									</svg>
-								</div>
+										<g></g>
+									</Area>
+									<Area
+										area={getMatrixLayoutCellArea({
+											layout: matrixLayout,
+											cellName: 'cell',
+											row: 1,
+											column: 0,
+										})}
+										fill="rgba(200,100,0,0.6)"
+									>
+										<g></g>
+									</Area>
+								</svg>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
 		</div>
 	);
 };

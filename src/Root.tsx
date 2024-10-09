@@ -155,7 +155,8 @@ export const RemotionRoot: React.FC = () => {
 						component={BaselineGridComposition} // TODO rename
 						durationInFrames={90 * 10}
 						fps={90}
-						{...squareVideo}
+						// {...squareVideo}
+						{...linkedInTallVideo}
 						schema={baselineGridCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -182,7 +183,8 @@ export const RemotionRoot: React.FC = () => {
 						component={MatrixLayoutComposition}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...squareVideo}
+						// {...squareVideo}
+						{...linkedInTallVideo}
 						schema={matrixLayoutCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -194,7 +196,8 @@ export const RemotionRoot: React.FC = () => {
 						component={SilkscreenFontComposition}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...squareVideo}
+						// {...squareVideo}
+						{...linkedInTallVideo}
 						schema={silkscreenFontCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>

@@ -7,6 +7,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
 import {SilkscreenLetter} from './SilkscreenLetter';
+import {SlideTitle} from '../SlideTitle';
 
 export const silkscreenFontCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -292,20 +293,9 @@ export const SilkscreenFontComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 80,
-							marginTop: 140,
-							fontWeight: 700,
-						}}
-					>
-						Silkscreen Font
-					</div>
-				</div>
+			<SlideTitle theme={theme}>Silkscreen Font Logo</SlideTitle>
 
+			<div style={{position: 'relative'}}>
 				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
 						style={{
@@ -323,7 +313,7 @@ export const SilkscreenFontComposition: React.FC<
 
 			<ElementsLogo cell_size={5.5} />
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
 		</div>
 	);
 };

@@ -12,6 +12,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
 import {CapSizeTextNew} from './CapSizeTextNew';
+import {SlideTitle} from '../SlideTitle';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // INTERESTING RESOURCES
@@ -54,20 +55,7 @@ export const BaselineGridComposition: React.FC<
 					height: '100%',
 				}}
 			>
-				<div style={{position: 'relative'}}>
-					<div style={{display: 'flex', justifyContent: 'center'}}>
-						<div
-							style={{
-								color: theme.typography.title.color,
-								fontSize: 60,
-								marginTop: 100,
-								fontWeight: 700,
-							}}
-						>
-							Baseline Grid
-						</div>
-					</div>
-				</div>
+				<SlideTitle theme={theme}>The Baseline Grid</SlideTitle>
 				<div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
 					<div style={{display: 'flex', gap: 40}}>
 						<div
@@ -116,8 +104,11 @@ export const BaselineGridComposition: React.FC<
 					</div>
 				</div>
 
-				<ElementsLogo cell_size={4} />
-				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+				{/* <ElementsLogo cell_size={4} /> */}
+				<LorenzoBertoliniLogo
+					color={theme.typography.textColor}
+					fontSize={34}
+				/>
 			</div>
 		</>
 	);

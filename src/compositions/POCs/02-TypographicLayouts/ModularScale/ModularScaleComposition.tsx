@@ -9,7 +9,7 @@ import {
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {useMatrixLayout} from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {DisplayGridRails} from '../../../../acetti-layout';
-import {SlideTitle} from './SlideTitle';
+import {SlideTitle} from '../SlideTitle';
 // TODO factor out and deprecate it's second copy:
 // import {ElementsLogo} from '../CapsizeTrimmingPOC/ElementsLogo';
 
