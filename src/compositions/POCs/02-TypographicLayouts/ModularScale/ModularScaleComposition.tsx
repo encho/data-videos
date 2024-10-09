@@ -1,24 +1,24 @@
 import {z} from 'zod';
 import {useVideoConfig, Sequence} from 'remotion';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {BaselineGrid} from '../02-TypographicLayouts/BaselineGrid/BaselineGrid';
-import {useMatrixLayout} from '../../../acetti-layout/hooks/useMatrixLayout';
-import {DisplayGridRails} from '../../../acetti-layout';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
+import {useMatrixLayout} from '../../../../acetti-layout/hooks/useMatrixLayout';
+import {DisplayGridRails} from '../../../../acetti-layout';
 import {SlideTitle} from './SlideTitle';
 // TODO factor out and deprecate it's second copy:
 // import {ElementsLogo} from '../CapsizeTrimmingPOC/ElementsLogo';
 
-export const modularScalePOCSchema = z.object({
+export const modularScaleCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const ModularScalePOC: React.FC<
-	z.infer<typeof modularScalePOCSchema>
+export const ModularScaleComposition: React.FC<
+	z.infer<typeof modularScaleCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 	const {fps} = useVideoConfig();

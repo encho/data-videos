@@ -1,5 +1,5 @@
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
 export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 	children,

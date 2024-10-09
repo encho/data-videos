@@ -101,9 +101,9 @@ import {
 } from './compositions/POCs/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
 
 import {
-	ModularScalePOC,
-	modularScalePOCSchema,
-} from './compositions/POCs/ModularScale/ModularScalePOC';
+	ModularScaleComposition,
+	modularScaleCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/ModularScale/ModularScaleComposition';
 
 import {
 	GermanyBerlinPOC,
@@ -163,12 +163,12 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-ModularScale"
-						component={ModularScalePOC}
+						id="ModularScale"
+						component={ModularScaleComposition}
 						durationInFrames={90 * 12}
 						fps={90}
 						{...linkedInTallVideo}
-						schema={modularScalePOCSchema}
+						schema={modularScaleCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
