@@ -98,7 +98,7 @@ import {
 import {
 	MultipleSimpleBarChartPOC,
 	multipleSimpleBarChartPOCSchema,
-} from './compositions/POCs/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
+} from './compositions/POCs/04-BarCharts/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
 
 import {
 	ModularScaleComposition,
@@ -239,14 +239,14 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-MultipleSimpleBarChart"
+						id="MultipleSimpleBarChart"
 						component={MultipleSimpleBarChartPOC}
 						durationInFrames={90 * 20}
 						fps={90}
 						// {...squareVideo}
 						{...linkedInTallVideo}
 						schema={multipleSimpleBarChartPOCSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
 					/>
 				</Folder>
 

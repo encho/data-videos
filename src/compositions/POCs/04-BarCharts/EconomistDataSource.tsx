@@ -1,5 +1,5 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
 
 export const EconomistDataSource = ({
 	children,

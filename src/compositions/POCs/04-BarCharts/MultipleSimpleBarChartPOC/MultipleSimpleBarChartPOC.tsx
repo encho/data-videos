@@ -1,21 +1,22 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
-import {measureText} from '../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import {EconomistDataSource} from '../EconomistDataSource';
+import {measureText} from '../../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {SimpleBarChart} from '../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
-import {CapSizeTextNew} from '../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
-import {WaterfallTextEffect} from '../../../acetti-typography/TextEffects/WaterfallTextEffect';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {CapSizeTextNew} from '../../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {
 	getTextProps_label,
 	getTextProps_valueLabel,
-} from '../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const multipleSimpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -106,6 +107,8 @@ export const MultipleSimpleBarChartPOC: React.FC<
 	const allValues = [...barChartData, ...barChartData2].map((it) => it.value);
 	const sharedValueDomain = [0, Math.max(...allValues)] as [number, number];
 
+	const barChartWidth = 800;
+
 	return (
 		<div
 			style={{
@@ -159,7 +162,7 @@ export const MultipleSimpleBarChartPOC: React.FC<
 					<SimpleBarChart
 						theme={theme}
 						data={barChartData}
-						width={600}
+						width={barChartWidth}
 						baseFontSize={baseFontSize}
 						labelWidth={labelWidth}
 						valueLabelWidth={valueLabelWidth}
@@ -190,7 +193,7 @@ export const MultipleSimpleBarChartPOC: React.FC<
 						<SimpleBarChart
 							theme={theme}
 							data={barChartData2}
-							width={600}
+							width={barChartWidth}
 							baseFontSize={baseFontSize}
 							labelWidth={labelWidth}
 							valueLabelWidth={valueLabelWidth}
@@ -200,6 +203,10 @@ export const MultipleSimpleBarChartPOC: React.FC<
 					</Sequence>
 				</div>
 			</div>
+
+			<EconomistDataSource theme={theme}>
+				AirVisual World Air Quality Report 2018
+			</EconomistDataSource>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
