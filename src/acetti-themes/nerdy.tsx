@@ -128,6 +128,15 @@ export const nerdyTheme: ThemeType = {
 		backgroundColor: platteBackground,
 		borderColor: platteBorder,
 	},
+	TypographicLayouts: {
+		baselineGrid: {
+			lineColor: '#4a4a4a',
+		},
+		gridLayout: {
+			lineColor: '#f05122',
+			activeAreaFill: chroma('#f05122').alpha(0.45).css(),
+		},
+	},
 	TwoChangeBars: {
 		barsColor: textColor,
 	},

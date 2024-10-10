@@ -71,6 +71,8 @@ export const BaselineGridComposition: React.FC<
 								width={PAPER_WIDTH}
 								height={PAPER_HEIGHT}
 								baseline={BASELINE_HEIGHT}
+								{...theme.TypographicLayouts.baselineGrid}
+								strokeWidth={3}
 							/>
 
 							<Sequence from={fps * 2}>

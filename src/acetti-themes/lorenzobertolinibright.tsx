@@ -134,6 +134,15 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		// borderColor: '#ff0000',
 		// backgroundColor: '#ffff00',
 	},
+	TypographicLayouts: {
+		baselineGrid: {
+			lineColor: '#aaa',
+		},
+		gridLayout: {
+			lineColor: '#f05122',
+			activeAreaFill: chroma('#f05122').alpha(0.35).css(),
+		},
+	},
 	TwoChangeBars: {
 		barsColor: monoColor,
 	},

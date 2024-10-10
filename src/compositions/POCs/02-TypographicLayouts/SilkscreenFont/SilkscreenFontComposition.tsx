@@ -308,7 +308,7 @@ export const SilkscreenFontComposition: React.FC<
 					</div>
 				</div>
 
-				<SilkscreenLetter cellSize={60} {...LETTER} />
+				<SilkscreenLetter cellSize={60} {...LETTER} theme={theme} />
 			</div>
 
 			<ElementsLogo cell_size={5.5} />

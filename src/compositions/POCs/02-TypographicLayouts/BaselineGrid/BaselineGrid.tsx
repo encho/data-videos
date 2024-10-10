@@ -2,20 +2,25 @@ import {range} from 'lodash';
 import {Sequence} from 'remotion';
 import {useVideoConfig, useCurrentFrame, interpolate, Easing} from 'remotion';
 
-export const BaselineGrid: React.FC<{
-	width: number;
-	height: number;
-	baseline: number;
-	fill?: string;
-	stroke?: string;
-	strokeWidth?: number;
-}> = ({
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+
+export const BaselineGrid: React.FC<
+	ThemeType['TypographicLayouts']['baselineGrid'] & {
+		width: number;
+		height: number;
+		baseline: number;
+		fill?: string;
+		// stroke?: string;
+		strokeWidth?: number;
+	}
+> = ({
 	width,
 	height,
 	baseline,
-	stroke = 'magenta',
-	strokeWidth = 2,
-	fill = 'transparent',
+	lineColor,
+	// stroke = 'magenta',
+	strokeWidth = 2, // TODO include default value in Theme styles...
+	fill = 'transparent', // TODO include default vvalue in Theme styles
 }) => {
 	const {fps} = useVideoConfig();
 
@@ -37,7 +42,7 @@ export const BaselineGrid: React.FC<{
 								x2={width}
 								y1={yPosition}
 								y2={yPosition}
-								stroke={stroke}
+								stroke={lineColor}
 								strokeWidth={strokeWidth}
 							/>
 						</Sequence>

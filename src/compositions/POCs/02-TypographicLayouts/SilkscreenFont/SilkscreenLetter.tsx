@@ -11,6 +11,7 @@ import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
 export const silkscreenFontPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -24,6 +25,7 @@ export const SilkscreenLetter: React.FC<{
 	cellSize: number;
 	showGrid?: boolean;
 	color?: string;
+	theme: ThemeType;
 }> = ({
 	// letter,  TODO introduce ?
 	letterCells,
@@ -31,7 +33,8 @@ export const SilkscreenLetter: React.FC<{
 	nrRows,
 	cellSize,
 	showGrid = true,
-	color = 'rgba(200,100,0,0.8)',
+	color,
+	theme,
 }) => {
 	const letterWidth = nrColumns * cellSize;
 	const letterHeight = nrRows * cellSize;
@@ -59,7 +62,10 @@ export const SilkscreenLetter: React.FC<{
 			>
 				{showGrid ? (
 					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
+						<DisplayGridRails
+							{...matrixLayout}
+							stroke={theme.TypographicLayouts.gridLayout.lineColor}
+						/>
 					</div>
 				) : null}
 				<div style={{position: 'absolute', top: 0, left: 0}}>
@@ -80,7 +86,10 @@ export const SilkscreenLetter: React.FC<{
 												row: letterCell.row,
 												column: letterCell.column,
 											})}
-											fill={color}
+											fill={
+												color ||
+												theme.TypographicLayouts.gridLayout.activeAreaFill
+											}
 										>
 											<g></g>
 										</Area>

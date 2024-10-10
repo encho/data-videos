@@ -78,6 +78,15 @@ export const zodThemeType = z.object({
 		kpiColor: zColor(),
 		labelColor: zColor(),
 	}),
+	TypographicLayouts: z.object({
+		baselineGrid: z.object({
+			lineColor: zColor(),
+		}),
+		gridLayout: z.object({
+			lineColor: zColor(),
+			activeAreaFill: zColor(),
+		}),
+	}),
 	timeseriesComponents: z.object({
 		percentageChangeArea: z.object({
 			lineColor: zColor(),

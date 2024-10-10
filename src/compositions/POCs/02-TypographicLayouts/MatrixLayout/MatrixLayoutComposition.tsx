@@ -62,7 +62,10 @@ export const MatrixLayoutComposition: React.FC<
 					}}
 				>
 					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
+						<DisplayGridRails
+							{...matrixLayout}
+							stroke={theme.TypographicLayouts.gridLayout.lineColor}
+						/>
 					</div>
 					<div style={{position: 'absolute', top: 0, left: 0}}>
 						<div style={{position: 'relative'}}>
@@ -80,7 +83,8 @@ export const MatrixLayoutComposition: React.FC<
 											row: 0,
 											column: 0,
 										})}
-										fill="rgba(200,100,0,0.6)"
+										fill={theme.TypographicLayouts.gridLayout.activeAreaFill}
+										// fill="rgba(200,100,0,0.6)"
 									>
 										<g></g>
 									</Area>
@@ -91,7 +95,7 @@ export const MatrixLayoutComposition: React.FC<
 											row: 1,
 											column: 0,
 										})}
-										fill="rgba(200,100,0,0.6)"
+										fill={theme.TypographicLayouts.gridLayout.activeAreaFill}
 									>
 										<g></g>
 									</Area>

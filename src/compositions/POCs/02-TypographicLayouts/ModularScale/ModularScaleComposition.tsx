@@ -72,11 +72,13 @@ export const ModularScaleComposition: React.FC<
 							width={poster_width}
 							height={poster_height}
 							baseline={baseline}
-							stroke={'#777'}
+							{...theme.TypographicLayouts.baselineGrid}
 							strokeWidth={3}
-							fill="transparent"
 						/>
-						<DisplayGridRails {...matrixLayout} stroke={'orange'} />
+						<DisplayGridRails
+							{...matrixLayout}
+							stroke={theme.TypographicLayouts.gridLayout.lineColor}
+						/>
 					</div>
 				</div>
 			</Sequence>
