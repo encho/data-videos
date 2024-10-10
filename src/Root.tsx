@@ -81,9 +81,9 @@ import {
 } from './compositions/POCs/02-TypographicLayouts/SilkscreenFont/SilkscreenFontComposition';
 
 import {
-	SimpleBarChartPOC,
-	simpleBarChartPOCSchema,
-} from './compositions/POCs/04-BarCharts/SimpleBarChartPOC/SimpleBarChartPOC';
+	SimpleBarChartComposition,
+	simpleBarChartCompositionSchema,
+} from './compositions/POCs/04-BarCharts/SimpleBarChart/SimpleBarChartComposition';
 
 import {
 	SparklinePOC,
@@ -96,9 +96,9 @@ import {
 } from './compositions/POCs/MultipleSimpleColumnChartPOC/MultipleSimpleColumnChartPOC';
 
 import {
-	MultipleSimpleBarChartPOC,
-	multipleSimpleBarChartPOCSchema,
-} from './compositions/POCs/04-BarCharts/MultipleSimpleBarChartPOC/MultipleSimpleBarChartPOC';
+	MultipleSimpleBarChartComposition,
+	multipleSimpleBarChartCompositionSchema,
+} from './compositions/POCs/04-BarCharts/MultipleSimpleBarChart/MultipleSimpleBarChartComposition';
 
 import {
 	ModularScaleComposition,
@@ -229,24 +229,24 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChart"
-						component={SimpleBarChartPOC}
+						component={SimpleBarChartComposition}
 						durationInFrames={90 * 20}
 						fps={90}
 						{...squareVideo}
-						schema={simpleBarChartPOCSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						schema={simpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="MultipleSimpleBarChart"
-						component={MultipleSimpleBarChartPOC}
+						component={MultipleSimpleBarChartComposition}
 						durationInFrames={90 * 20}
 						fps={90}
 						// {...squareVideo}
 						{...linkedInTallVideo}
-						schema={multipleSimpleBarChartPOCSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						schema={multipleSimpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 

@@ -18,7 +18,7 @@ import {
 	getTextProps_valueLabel,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
-export const multipleSimpleBarChartPOCSchema = z.object({
+export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
@@ -59,8 +59,8 @@ const wahlergebnis2024_2: {
 	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#fff'}, // CDU Black
 ];
 
-export const MultipleSimpleBarChartPOC: React.FC<
-	z.infer<typeof multipleSimpleBarChartPOCSchema>
+export const MultipleSimpleBarChartComposition: React.FC<
+	z.infer<typeof multipleSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 

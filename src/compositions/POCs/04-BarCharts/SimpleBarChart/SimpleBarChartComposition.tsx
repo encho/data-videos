@@ -9,7 +9,7 @@ import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeIn
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {EconomistDataSource} from '../EconomistDataSource';
 
-export const simpleBarChartPOCSchema = z.object({
+export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
@@ -38,8 +38,8 @@ const wahlergebnis2024: {parteiName: string; prozent: number; farbe: string}[] =
 		{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080'}, // Others Gray
 	];
 
-export const SimpleBarChartPOC: React.FC<
-	z.infer<typeof simpleBarChartPOCSchema>
+export const SimpleBarChartComposition: React.FC<
+	z.infer<typeof simpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
