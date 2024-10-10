@@ -66,9 +66,14 @@ import {
 } from './compositions/TwoChangeBars/NewTwoChangeBars';
 
 import {
-	TextEffectsPOC,
-	textEffectsPOCSchema,
-} from './compositions/POCs/TextEffectsPOC/TextEffectsPOC';
+	TextAnimationsComposition,
+	textAnimationsCompositionSchema,
+} from './compositions/POCs/01-TextEffects/TextAnimations/TextAnimationsComposition';
+
+import {
+	TextMaskComposition,
+	textMaskCompositionSchema,
+} from './compositions/POCs/01-TextEffects/TextMask/TextMaskComposition';
 
 import {
 	MatrixLayoutComposition,
@@ -126,23 +131,37 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="POCs">
-				<Folder name="TextEffects">
+				<Folder name="01-TextEffects">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="TextEffects"
-						component={TextEffectsPOC}
+						id="TextAnimations"
+						component={TextAnimationsComposition}
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
 						{...squareVideo}
-						schema={textEffectsPOCSchema}
+						schema={textAnimationsCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 							kpiValue: 0.015,
 							kpiValueFormatString: '+0.00%',
 							kpiLabel: 'Net Profit ',
 							fontSize: 120,
+						}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="TextMask"
+						component={TextMaskComposition}
+						durationInFrames={90 * 5}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...linkedInTallVideo}
+						schema={textMaskCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
 						}}
 					/>
 				</Folder>
@@ -203,7 +222,7 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="SimpleStats">
+				<Folder name="03-SimpleStats">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -250,7 +269,7 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="ColumnCharts">
+				<Folder name="05-ColumnCharts">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -331,7 +350,7 @@ export const RemotionRoot: React.FC = () => {
 					</Folder>
 				</Folder>
 
-				<Folder name="Sparklines">
+				<Folder name="06-Sparklines">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -344,7 +363,7 @@ export const RemotionRoot: React.FC = () => {
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
-				<Folder name="GeoJSON">
+				<Folder name="07-GeoJSON">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4

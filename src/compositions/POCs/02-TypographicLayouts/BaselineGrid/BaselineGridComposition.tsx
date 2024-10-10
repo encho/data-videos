@@ -10,7 +10,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {ElementsLogo} from './ElementsLogo';
+// import {ElementsLogo} from './ElementsLogo';
 import {CapSizeTextNew} from './CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
