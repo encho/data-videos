@@ -71,6 +71,9 @@ export const zodThemeType = z.object({
 		backgroundColor: zColor(),
 		borderColor: zColor(),
 	}),
+	EconomistDataSource: z.object({
+		textColor: zColor(),
+	}),
 	TwoChangeBars: z.object({
 		barsColor: zColor(),
 	}),

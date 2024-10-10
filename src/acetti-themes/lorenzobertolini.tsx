@@ -144,6 +144,9 @@ export const lorenzobertoliniTheme: ThemeType = {
 			activeAreaFill: chroma('#f05122').alpha(0.35).css(),
 		},
 	},
+	EconomistDataSource: {
+		textColor: '#777',
+	},
 	TwoChangeBars: {
 		barsColor: textColor,
 	},

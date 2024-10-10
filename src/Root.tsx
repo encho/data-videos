@@ -83,7 +83,7 @@ import {
 import {
 	SimpleBarChartPOC,
 	simpleBarChartPOCSchema,
-} from './compositions/POCs/SimpleBarChartPOC/SimpleBarChartPOC';
+} from './compositions/POCs/04-BarCharts/SimpleBarChartPOC/SimpleBarChartPOC';
 
 import {
 	SparklinePOC,
@@ -224,17 +224,17 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="BarCharts">
+				<Folder name="04-BarCharts">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-SimpleBarChart"
+						id="SimpleBarChart"
 						component={SimpleBarChartPOC}
 						durationInFrames={90 * 20}
 						fps={90}
 						{...squareVideo}
 						schema={simpleBarChartPOCSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:

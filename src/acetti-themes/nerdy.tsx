@@ -137,6 +137,9 @@ export const nerdyTheme: ThemeType = {
 			activeAreaFill: chroma('#f05122').alpha(0.45).css(),
 		},
 	},
+	EconomistDataSource: {
+		textColor: '#555555',
+	},
 	TwoChangeBars: {
 		barsColor: textColor,
 	},

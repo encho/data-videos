@@ -31,8 +31,18 @@ const LorenzoBertoliniLogo = ({
 			}}
 		>
 			<div style={{color, fontSize}}>
-				<span className="font-thin">lorenzo</span>
-				<span className="font-medium">bertolini</span>
+				<span
+					// className="font-thin
+					style={{fontFamily: 'Inter-Regular'}}
+				>
+					lorenzo
+				</span>
+				<span
+					style={{fontFamily: 'Inter-Bold'}}
+					// className="font-medium"
+				>
+					bertolini
+				</span>
 			</div>
 		</div>
 	);

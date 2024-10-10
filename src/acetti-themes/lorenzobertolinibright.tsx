@@ -143,6 +143,9 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 			activeAreaFill: chroma('#f05122').alpha(0.35).css(),
 		},
 	},
+	EconomistDataSource: {
+		textColor: '#909090',
+	},
 	TwoChangeBars: {
 		barsColor: monoColor,
 	},

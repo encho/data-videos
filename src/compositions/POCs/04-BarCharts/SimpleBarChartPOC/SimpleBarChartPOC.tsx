@@ -1,12 +1,13 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {SimpleBarChart} from '../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {EconomistDataSource} from './EconomistDataSource';
 
 export const simpleBarChartPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -70,7 +71,7 @@ export const SimpleBarChartPOC: React.FC<
 							fontWeight: 700,
 						}}
 					>
-						<FadeInAndOutText>SimpleBarChartPOC</FadeInAndOutText>
+						<FadeInAndOutText>Simple Bar Chart</FadeInAndOutText>
 					</div>
 				</div>
 			</div>
@@ -91,7 +92,10 @@ export const SimpleBarChartPOC: React.FC<
 				/>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<EconomistDataSource theme={theme}>
+				AirVisual World Air Quality Report 2018
+			</EconomistDataSource>
+			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={28} />
 		</div>
 	);
 };
