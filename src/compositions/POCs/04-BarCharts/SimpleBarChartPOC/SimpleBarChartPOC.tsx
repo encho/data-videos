@@ -95,7 +95,12 @@ export const SimpleBarChartPOC: React.FC<
 			<EconomistDataSource theme={theme}>
 				AirVisual World Air Quality Report 2018
 			</EconomistDataSource>
-			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={28} />
+			<LorenzoBertoliniLogo
+				// TODO pass theme
+				// theme={theme}
+				color={theme.typography.textColor}
+				// fontSize={28}
+			/>
 		</div>
 	);
 };

@@ -313,7 +313,7 @@ export const SilkscreenFontComposition: React.FC<
 
 			<ElementsLogo cell_size={5.5} />
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
 };

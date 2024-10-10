@@ -1,14 +1,10 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 
-const LorenzoBertoliniLogo = ({
-	color,
-	fontSize = 40,
-}: {
-	color: string;
-	fontSize?: number;
-}) => {
+const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
+
+	const fontSize = 28; // TODO from theme or pageContext or typographyContext or so
 
 	const entryDurationInFrames = fps * 1;
 
@@ -26,23 +22,13 @@ const LorenzoBertoliniLogo = ({
 			className="absolute"
 			style={{
 				opacity: zero_to_1,
-				bottom: 40,
-				right: 40,
+				bottom: 40, // todo from pageContext
+				right: 40, // todo from pageContext
 			}}
 		>
 			<div style={{color, fontSize}}>
-				<span
-					// className="font-thin
-					style={{fontFamily: 'Inter-Regular'}}
-				>
-					lorenzo
-				</span>
-				<span
-					style={{fontFamily: 'Inter-Bold'}}
-					// className="font-medium"
-				>
-					bertolini
-				</span>
+				<span style={{fontFamily: 'Inter-Regular'}}>lorenzo</span>
+				<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
 			</div>
 		</div>
 	);

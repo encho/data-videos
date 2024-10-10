@@ -134,7 +134,7 @@ export const GermanyBerlin: React.FC<{
 				</div>
 			</Sequence>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
 };

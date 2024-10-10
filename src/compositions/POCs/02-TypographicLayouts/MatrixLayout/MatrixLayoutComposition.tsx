@@ -106,7 +106,7 @@ export const MatrixLayoutComposition: React.FC<
 				</div>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} fontSize={34} />
+			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
 };
