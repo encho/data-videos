@@ -8,6 +8,8 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
+	staticFile,
+	Video,
 	// staticFile,
 	// Sequence,
 } from 'remotion';
@@ -190,11 +192,8 @@ export const StartingFiveSlideComposition: React.FC<
 						</defs>
 					</svg>
 
-					<video
-						playsInline
-						autoPlay
-						muted
-						loop
+					<Video
+						src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/TextMask.mp4"
 						style={{
 							position: 'absolute',
 							width: '100%',
@@ -202,12 +201,7 @@ export const StartingFiveSlideComposition: React.FC<
 							objectFit: 'cover',
 							WebkitMaskImage: 'url(#mySvgMask)',
 						}}
-					>
-						<source
-							src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/TextMask.mp4"
-							type="video/mp4"
-						/>
-					</video>
+					/>
 
 					{/* this would also work with an image instead of a video, like so: */}
 					{/* <div
