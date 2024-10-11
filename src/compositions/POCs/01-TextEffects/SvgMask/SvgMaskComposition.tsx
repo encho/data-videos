@@ -3,7 +3,6 @@ import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import invariant from 'tiny-invariant';
 import * as paper from 'paper';
-import SVGPathCommander from 'svg-path-commander';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
