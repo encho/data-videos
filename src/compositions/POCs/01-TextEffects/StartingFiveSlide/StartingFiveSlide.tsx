@@ -17,7 +17,7 @@ import {
 import {range} from 'lodash';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-// import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -52,10 +52,6 @@ export const StartingFiveSlideComposition: React.FC<
 	// 	`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
 	// );
 
-	const opacity = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
-		easing: Easing.ease,
-	});
-
 	const maxZoomScale = 20;
 	// const maxZoomScale = 1;
 
@@ -65,6 +61,17 @@ export const StartingFiveSlideComposition: React.FC<
 		durationInFrames - zoomInDurationInFrames - zoomOutDurationInFrames;
 
 	const zoomOutFromFrame = zoomInDurationInFrames + shiftDurationInFrames;
+
+	const revealVideoOpacity = interpolate(
+		frame,
+		[zoomOutFromFrame, durationInFrames - 1],
+		[0, 1],
+		{
+			easing: Easing.ease,
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+		}
+	);
 
 	const scale = interpolate(
 		frame,
@@ -84,7 +91,9 @@ export const StartingFiveSlideComposition: React.FC<
 	const fontSize = 55;
 	// const lineHeight = 40;
 	const lineHeight = 65;
-	const word = 'Lorenzo Bertolini';
+
+	// const word = 'Lorenzo Bertolini';
+	const word = 'JUST DO IT.';
 	const numberOfWordRows = 15;
 
 	// const seed = 12345; // Your seed value
@@ -128,7 +137,7 @@ export const StartingFiveSlideComposition: React.FC<
 									})`}
 								>
 									<rect
-										// fill="rgba(255,255,255,0.1)"
+										fill={`rgba(255,255,255,${revealVideoOpacity})`}
 										x="0"
 										y="0"
 										width={videoWidth}
@@ -203,7 +212,7 @@ export const StartingFiveSlideComposition: React.FC<
 				</div>
 			</div>
 
-			{/* <LorenzoBertoliniLogo color={theme.typography.textColor} /> */}
+			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
 };
@@ -260,7 +269,7 @@ export const WordRow: React.FC<{
 		}
 	);
 
-	const numberOfWords = 3;
+	const numberOfWords = 5;
 	return (
 		<g transform={`translate(${translateX},${0})`}>
 			<text
