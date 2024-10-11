@@ -1,16 +1,19 @@
-import {number, z} from 'zod';
-import React, {useState, useEffect} from 'react';
+import {
+	// number,
+	z,
+} from 'zod';
+import React from 'react';
 import {
 	interpolate,
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
-	staticFile,
-	Sequence,
+	// staticFile,
+	// Sequence,
 } from 'remotion';
-import invariant from 'tiny-invariant';
-import * as paper from 'paper';
-import opentype from 'opentype.js';
+// import invariant from 'tiny-invariant';
+// import * as paper from 'paper';
+// import opentype from 'opentype.js';
 import {range} from 'lodash';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
@@ -53,10 +56,24 @@ export const StartingFiveSlideComposition: React.FC<
 		easing: Easing.ease,
 	});
 
-	const zoomInDurationInFrames = 90 * 2;
-	const scale = interpolate(frame, [0, zoomInDurationInFrames - 1], [4, 1], {
-		easing: Easing.ease,
-	});
+	const maxZoomScale = 20;
+	// const maxZoomScale = 1;
+
+	const zoomInDurationInFrames = 90 * 1;
+	const zoomOutDurationInFrames = 90 * 1;
+	const shiftDurationInFrames =
+		durationInFrames - zoomInDurationInFrames - zoomOutDurationInFrames;
+
+	const zoomOutFromFrame = zoomInDurationInFrames + shiftDurationInFrames;
+
+	const scale = interpolate(
+		frame,
+		[0, zoomInDurationInFrames - 1, zoomOutFromFrame, durationInFrames - 1],
+		[maxZoomScale, 1, 1, maxZoomScale],
+		{
+			easing: Easing.ease,
+		}
+	);
 
 	const videoWidth = width;
 	const videoHeight = width;
@@ -64,11 +81,11 @@ export const StartingFiveSlideComposition: React.FC<
 	// const fontFamily = 'SourceSerifPro-Light';
 	// const fontFamily = 'Inter-Regular';
 	const fontFamily = 'Inter-Bold';
-	const fontSize = 35;
+	const fontSize = 55;
 	// const lineHeight = 40;
-	const lineHeight = 60;
+	const lineHeight = 65;
 	const word = 'Lorenzo Bertolini';
-	const numberOfWordRows = 5;
+	const numberOfWordRows = 15;
 
 	// const seed = 12345; // Your seed value
 	const seed = 999; // Your seed value
@@ -84,6 +101,8 @@ export const StartingFiveSlideComposition: React.FC<
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
+				// width: '80%',
+				// height: '80%',
 			}}
 		>
 			{/* <SlideTitle theme={theme}>Starting Five Slide</SlideTitle> */}
@@ -121,10 +140,15 @@ export const StartingFiveSlideComposition: React.FC<
 
 										const cy = videoHeight / 2 - (centerIndex - i) * lineHeight;
 
+										const shiftDirection =
+											i % 2 === 0 ? ('right' as const) : ('left' as const);
+
 										return (
 											<WordRow
+												shiftDirection={shiftDirection}
 												dx={2}
 												zoomInDurationInFrames={zoomInDurationInFrames}
+												shiftDurationInFrames={shiftDurationInFrames}
 												generateRandomCharacterEntryDuration={
 													getRandomCharacterEntryDuration
 												}
@@ -152,6 +176,7 @@ export const StartingFiveSlideComposition: React.FC<
 						muted
 						loop
 						style={{
+							position: 'absolute',
 							width: '100%',
 							// height: '100%',
 							objectFit: 'cover',
@@ -167,12 +192,7 @@ export const StartingFiveSlideComposition: React.FC<
 					{/* this would also work with an image instead of a video, like so: */}
 					{/* <div
 						style={{
-							height: '100%',
-							width: '100%',
 							objectFit: 'cover',
-							backgroundColor: 'red',
-							WebkitMaskImage: 'url(#mySvgMask)',
-							border: '3px solid red',
 						}}
 					>
 						<img
@@ -189,6 +209,7 @@ export const StartingFiveSlideComposition: React.FC<
 };
 
 export const WordRow: React.FC<{
+	shiftDirection: 'right' | 'left';
 	children: string;
 	dx: number;
 	centerX: number;
@@ -198,6 +219,7 @@ export const WordRow: React.FC<{
 	fontSize: number;
 	isCenterRow: boolean;
 	zoomInDurationInFrames: number;
+	shiftDurationInFrames: number;
 	// randomCharacterAppear: boolean;
 	generateRandomCharacterEntryDuration: () => number;
 }> = ({
@@ -210,41 +232,69 @@ export const WordRow: React.FC<{
 	fill,
 	isCenterRow,
 	zoomInDurationInFrames,
+	shiftDurationInFrames,
+	shiftDirection,
 	// randomCharacterAppear,
 	generateRandomCharacterEntryDuration,
 }) => {
+	const frame = useCurrentFrame();
+
+	// const shiftingDurationInFrames = 90 * 2;
+	const startShiftFrame = isCenterRow ? zoomInDurationInFrames : 0;
+	const endShiftFrame = zoomInDurationInFrames + shiftDurationInFrames;
+	const numberShiftFrames = endShiftFrame - startShiftFrame;
+	const shiftPixelPerFrame = 1;
+	const totalShiftPixel = numberShiftFrames * shiftPixelPerFrame;
+
+	const shiftPixelRange =
+		shiftDirection === 'right' ? [0, totalShiftPixel] : [0, -totalShiftPixel];
+
+	const translateX = interpolate(
+		frame,
+		[startShiftFrame, endShiftFrame],
+		shiftPixelRange,
+		{
+			extrapolateLeft: 'clamp',
+			extrapolateRight: 'clamp',
+			easing: Easing.ease,
+		}
+	);
+
 	const numberOfWords = 3;
 	return (
-		<text
-			x={centerX}
-			y={centerY}
-			fontFamily={fontFamily}
-			fontSize={fontSize}
-			// fill={`rgba(255,255,255,${1 - opacity})`}
-			fill={fill}
-			textAnchor="middle"
-			alignmentBaseline="middle"
-		>
-			{range(numberOfWords).map((it, i) => {
-				const isCenterWord = i === (numberOfWords - 1) / 2;
-				return (
-					<>
-						{/* en-space */}
-						{i !== 0 ? '\u2002' : undefined}
-						<TSpanWord
-							randomCharacterAppear={!isCenterWord || !isCenterRow}
-							randomCharacterAppearAfterFrames={zoomInDurationInFrames}
-							dx={2}
-							generateRandomCharacterEntryDuration={
-								generateRandomCharacterEntryDuration
-							}
-						>
-							{children}
-						</TSpanWord>
-					</>
-				);
-			})}
-		</text>
+		<g transform={`translate(${translateX},${0})`}>
+			<text
+				x={centerX}
+				y={centerY}
+				fontFamily={fontFamily}
+				fontSize={fontSize}
+				// fill={`rgba(255,255,255,${1 - opacity})`}
+				fill={fill}
+				textAnchor="middle"
+				// alignmentBaseline="center"
+				dominantBaseline={'middle'}
+			>
+				{range(numberOfWords).map((it, i) => {
+					const isCenterWord = i === (numberOfWords - 1) / 2;
+					return (
+						<>
+							{/* en-space */}
+							{i !== 0 ? '\u2002' : undefined}
+							<TSpanWord
+								randomCharacterAppear={!isCenterWord || !isCenterRow}
+								randomCharacterAppearAfterFrames={zoomInDurationInFrames}
+								dx={2}
+								generateRandomCharacterEntryDuration={
+									generateRandomCharacterEntryDuration
+								}
+							>
+								{children}
+							</TSpanWord>
+						</>
+					);
+				})}
+			</text>
+		</g>
 	);
 };
 
