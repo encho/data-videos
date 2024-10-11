@@ -115,6 +115,11 @@ import {
 	germanyBerlinPOCSchema,
 } from './compositions/POCs/GermanyBerlinPOC/GermanyBerlinPOC';
 
+import {
+	SvgMaskComposition,
+	svgMaskCompositionSchema,
+} from './compositions/POCs/01-TextEffects/SvgMask/SvgMaskComposition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -158,8 +163,21 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...linkedInTallVideo}
+						// {...linkedInTallVideo}
+						{...squareVideo}
 						schema={textMaskCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SvgMask"
+						component={SvgMaskComposition}
+						durationInFrames={90 * 5}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...linkedInTallVideo}
+						schema={svgMaskCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 						}}
