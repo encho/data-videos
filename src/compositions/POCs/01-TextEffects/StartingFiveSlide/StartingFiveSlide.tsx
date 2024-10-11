@@ -102,6 +102,11 @@ export const StartingFiveSlideComposition: React.FC<
 	const getRandomCharacterEntryDuration = () =>
 		seededRandom.randomBetween(1, 90 * 3);
 
+	const seed2 = 888; // Your seed value
+	const seededRandom2 = new SeededRandom(seed2);
+	const getRandomRowDisplacement = () =>
+		seededRandom2.randomBetween(0, 300) - 300 / 2;
+
 	return (
 		<div
 			style={{
@@ -146,11 +151,17 @@ export const StartingFiveSlideComposition: React.FC<
 
 									{range(numberOfWordRows).map((it, i) => {
 										const centerIndex = (numberOfWordRows - 1) / 2;
+										const isCenterRow = i === centerIndex;
 
+										const cx = videoWidth / 2;
 										const cy = videoHeight / 2 - (centerIndex - i) * lineHeight;
 
 										const shiftDirection =
 											i % 2 === 0 ? ('right' as const) : ('left' as const);
+
+										const randomRowDisplacement = isCenterRow
+											? 0
+											: getRandomRowDisplacement();
 
 										return (
 											<WordRow
@@ -161,7 +172,7 @@ export const StartingFiveSlideComposition: React.FC<
 												generateRandomCharacterEntryDuration={
 													getRandomCharacterEntryDuration
 												}
-												centerX={videoWidth / 2}
+												centerX={cx + randomRowDisplacement}
 												// centerY={lineHeight * (i + 1)}
 												centerY={cy}
 												isCenterRow={i === centerIndex}
@@ -252,7 +263,9 @@ export const WordRow: React.FC<{
 	const startShiftFrame = isCenterRow ? zoomInDurationInFrames : 0;
 	const endShiftFrame = zoomInDurationInFrames + shiftDurationInFrames;
 	const numberShiftFrames = endShiftFrame - startShiftFrame;
-	const shiftPixelPerFrame = 1;
+
+	const shiftPixelPerFrame = 0.2; // TODO as prop
+
 	const totalShiftPixel = numberShiftFrames * shiftPixelPerFrame;
 
 	const shiftPixelRange =
