@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import {number, z} from 'zod';
 import React, {useState, useEffect} from 'react';
 import {
 	interpolate,
@@ -6,6 +6,7 @@ import {
 	useVideoConfig,
 	Easing,
 	staticFile,
+	Sequence,
 } from 'remotion';
 import invariant from 'tiny-invariant';
 import * as paper from 'paper';
@@ -13,12 +14,12 @@ import opentype from 'opentype.js';
 import {range} from 'lodash';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+// import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
+// import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
 export const startingFiveSlideCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -36,7 +37,7 @@ export const StartingFiveSlideComposition: React.FC<
 		'SourceSerifPro-Light',
 	]);
 
-	const [svgPath, setSvgPath] = useState<string | null>(null);
+	// const [svgPath, setSvgPath] = useState<string | null>(null);
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
@@ -44,11 +45,16 @@ export const StartingFiveSlideComposition: React.FC<
 	const frame = useCurrentFrame();
 
 	// const fontFilePath = staticFile(`/fonts/Inter/Inter-Bold.ttf`);
-	const fontFilePath = staticFile(
-		`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
-	);
+	// const fontFilePath = staticFile(
+	// 	`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
+	// );
 
 	const opacity = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
+		easing: Easing.ease,
+	});
+
+	const zoomInDurationInFrames = 90 * 2;
+	const scale = interpolate(frame, [0, zoomInDurationInFrames - 1], [4, 1], {
 		easing: Easing.ease,
 	});
 
@@ -58,71 +64,17 @@ export const StartingFiveSlideComposition: React.FC<
 	// const fontFamily = 'SourceSerifPro-Light';
 	// const fontFamily = 'Inter-Regular';
 	const fontFamily = 'Inter-Bold';
+	const fontSize = 35;
+	// const lineHeight = 40;
+	const lineHeight = 60;
+	const word = 'Lorenzo Bertolini';
+	const numberOfWordRows = 5;
 
-	useEffect(() => {
-		const loadFontAndConvertText = async () => {
-			try {
-				// const fontUrl = '/fonts/custom-font.ttf'; // Path to your font in public folder
-				const fontUrl = fontFilePath;
-				const text = 'H';
-				const fontSize = videoHeight / 5;
-				const x = 300;
-				const y = 600;
-
-				const generatedPath = await textToPath(fontUrl, text, fontSize, x, y);
-
-				// Regular expression to match the value inside the d attribute
-				const dMatch = generatedPath.match(/d="([^"]+)"/);
-
-				// Extract the path data
-				if (dMatch && dMatch[1]) {
-					const pathData = dMatch[1];
-					console.log(pathData); // Outputs the path data
-					setSvgPath(pathData);
-				} else {
-					console.log('No path data found');
-				}
-			} catch (error) {
-				console.error('Error generating SVG path:', error);
-			}
-		};
-
-		loadFontAndConvertText(); // Call the async function within useEffect
-	}, []); // Empty dependency array so it runs once when the component mounts
-
-	const bigRadius = interpolate(
-		frame,
-		[0, durationInFrames],
-		[0, videoWidth / 3],
-		{
-			easing: Easing.ease,
-		}
-	);
-
-	paper.setup([videoWidth, videoHeight]);
-
-	let paperCircle = new paper.Path.Circle(
-		[videoWidth / 2, videoHeight / 2],
-		bigRadius
-	);
-
-	let paperCircle2 = new paper.Path.Circle(
-		[videoWidth / 2, videoHeight / 3],
-		videoWidth / 7
-	);
-
-	let textPath = new paper.Path(svgPath || '');
-
-	// exclude, subtract, unite, intersect, divide
-	// const result = paperCircle2.exclude(paperCircle);
-	const resultA = paperCircle2.unite(paperCircle);
-	const result = resultA.exclude(textPath);
-
-	const svgPathElement = result.exportSVG();
-	invariant(typeof svgPathElement !== 'string');
-
-	const resultingPath = svgPathElement.getAttribute('d');
-	invariant(resultingPath);
+	// const seed = 12345; // Your seed value
+	const seed = 999; // Your seed value
+	const seededRandom = new SeededRandom(seed);
+	const getRandomCharacterEntryDuration = () =>
+		seededRandom.randomBetween(1, 90 * 3);
 
 	return (
 		<div
@@ -149,49 +101,47 @@ export const StartingFiveSlideComposition: React.FC<
 					>
 						<defs>
 							<mask id="mySvgMask">
-								<rect
-									fill="rgba(255,255,255,0.1)"
-									x="0"
-									y="0"
-									width={videoWidth}
-									height={videoHeight}
-								></rect>
-								<path
-									d={resultingPath}
-									fill={`rgba(255,255,255,${1 - opacity})`}
-								/>
-
-								<text
-									x={videoWidth / 2}
-									y={videoHeight * 0.997}
-									// fontFamily={'Inter-Bold'}
-									fontFamily={fontFamily}
-									fontSize={videoHeight / 20}
-									fontWeight={700}
-									fill={`rgba(255,255,255,${1 - opacity})`}
-									textAnchor="middle"
-									alignmentBaseline="baseline"
+								<g
+									transform={`translate(${videoWidth / 2},${
+										videoHeight / 2
+									}) scale(${scale}) translate(${-videoWidth / 2},${
+										-videoHeight / 2
+									})`}
 								>
-									<tspan>L</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${1 - opacity})`}>
-										o
-									</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${1 - opacity / 2})`}>
-										r
-									</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${opacity / 2})`}>
-										e
-									</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${1})`}>
-										n
-									</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${opacity})`}>
-										z
-									</tspan>
-									<tspan dx={3} fill={`rgba(255,255,255,${0.2})`}>
-										o
-									</tspan>
-								</text>
+									<rect
+										// fill="rgba(255,255,255,0.1)"
+										x="0"
+										y="0"
+										width={videoWidth}
+										height={videoHeight}
+									></rect>
+
+									{range(numberOfWordRows).map((it, i) => {
+										const centerIndex = (numberOfWordRows - 1) / 2;
+
+										const cy = videoHeight / 2 - (centerIndex - i) * lineHeight;
+
+										return (
+											<WordRow
+												dx={2}
+												zoomInDurationInFrames={zoomInDurationInFrames}
+												generateRandomCharacterEntryDuration={
+													getRandomCharacterEntryDuration
+												}
+												centerX={videoWidth / 2}
+												// centerY={lineHeight * (i + 1)}
+												centerY={cy}
+												isCenterRow={i === centerIndex}
+												fontSize={fontSize}
+												fontFamily={fontFamily}
+												// fill={`rgba(255,255,255,${1 - opacity})`}
+												fill={`rgba(255,255,255,${1})`}
+											>
+												{word}
+											</WordRow>
+										);
+									})}
+								</g>
 							</mask>
 						</defs>
 					</svg>
@@ -216,20 +166,20 @@ export const StartingFiveSlideComposition: React.FC<
 
 					{/* this would also work with an image instead of a video, like so: */}
 					{/* <div
-					style={{
-						height: '100%',
-						width: '100%',
-						objectFit: 'cover',
-						backgroundColor: 'red',
-						WebkitMaskImage: 'url(#maskkk)',
-						border: '3px solid red',
-					}}
-				>
-					<img
-						src="https://cdn.pixabay.com/photo/2024/06/03/21/40/square-8807357_1280.jpg"
-						alt="Balloons"
-					/>
-				</div> */}
+						style={{
+							height: '100%',
+							width: '100%',
+							objectFit: 'cover',
+							backgroundColor: 'red',
+							WebkitMaskImage: 'url(#mySvgMask)',
+							border: '3px solid red',
+						}}
+					>
+						<img
+							src="https://cdn.pixabay.com/photo/2024/06/03/21/40/square-8807357_1280.jpg"
+							alt="Balloons"
+						/>
+					</div> */}
 				</div>
 			</div>
 
@@ -238,21 +188,167 @@ export const StartingFiveSlideComposition: React.FC<
 	);
 };
 
-// Function to convert text to an SVG path
-async function textToPath(
-	fontUrl: string,
-	text: string,
-	fontSize: number,
-	x: number,
-	y: number
-): Promise<string> {
-	// Load the font
-	const font = await opentype.load(fontUrl);
+export const WordRow: React.FC<{
+	children: string;
+	dx: number;
+	centerX: number;
+	centerY: number;
+	fontFamily: string;
+	fill: string;
+	fontSize: number;
+	isCenterRow: boolean;
+	zoomInDurationInFrames: number;
+	// randomCharacterAppear: boolean;
+	generateRandomCharacterEntryDuration: () => number;
+}> = ({
+	children,
+	dx,
+	centerX,
+	centerY,
+	fontFamily,
+	fontSize,
+	fill,
+	isCenterRow,
+	zoomInDurationInFrames,
+	// randomCharacterAppear,
+	generateRandomCharacterEntryDuration,
+}) => {
+	const numberOfWords = 3;
+	return (
+		<text
+			x={centerX}
+			y={centerY}
+			fontFamily={fontFamily}
+			fontSize={fontSize}
+			// fill={`rgba(255,255,255,${1 - opacity})`}
+			fill={fill}
+			textAnchor="middle"
+			alignmentBaseline="middle"
+		>
+			{range(numberOfWords).map((it, i) => {
+				const isCenterWord = i === (numberOfWords - 1) / 2;
+				return (
+					<>
+						{/* en-space */}
+						{i !== 0 ? '\u2002' : undefined}
+						<TSpanWord
+							randomCharacterAppear={!isCenterWord || !isCenterRow}
+							randomCharacterAppearAfterFrames={zoomInDurationInFrames}
+							dx={2}
+							generateRandomCharacterEntryDuration={
+								generateRandomCharacterEntryDuration
+							}
+						>
+							{children}
+						</TSpanWord>
+					</>
+				);
+			})}
+		</text>
+	);
+};
 
-	// Generate the path from the text
-	const path = font.getPath(text, x, y, fontSize);
+export const TSpanWord: React.FC<{
+	children: string;
+	dx: number;
+	randomCharacterAppear: boolean;
+	randomCharacterAppearAfterFrames: number;
+	generateRandomCharacterEntryDuration: () => number;
+}> = ({
+	children,
+	dx,
+	randomCharacterAppear,
+	randomCharacterAppearAfterFrames,
+	generateRandomCharacterEntryDuration,
+}) => {
+	const characters = children.split('');
 
-	// Convert the path to SVG path string
-	// return path.toSVG();
-	return path.toSVG(2);
+	return (
+		<>
+			{characters.map((char, i) => {
+				return (
+					<TSpanCharacter
+						dx={i === 0 ? 0 : dx}
+						randomCharacterAppear={randomCharacterAppear}
+						randomCharacterAppearAfterFrames={randomCharacterAppearAfterFrames}
+						generateRandomCharacterEntryDuration={
+							generateRandomCharacterEntryDuration
+						}
+					>
+						{char}
+					</TSpanCharacter>
+				);
+			})}
+		</>
+	);
+};
+
+export const TSpanCharacter: React.FC<{
+	children: string;
+	dx: number;
+	generateRandomCharacterEntryDuration: () => number;
+	randomCharacterAppear: boolean;
+	randomCharacterAppearAfterFrames: number;
+}> = ({
+	children,
+	dx,
+	randomCharacterAppear,
+	randomCharacterAppearAfterFrames,
+	generateRandomCharacterEntryDuration,
+}) => {
+	const frame = useCurrentFrame();
+
+	const entryDurationInFrames = randomCharacterAppear
+		? generateRandomCharacterEntryDuration()
+		: 1;
+
+	const opacity = randomCharacterAppear
+		? interpolate(
+				frame,
+				[
+					randomCharacterAppearAfterFrames,
+					randomCharacterAppearAfterFrames + entryDurationInFrames,
+				],
+				[0, 1],
+				{
+					extrapolateLeft: 'clamp',
+					extrapolateRight: 'clamp',
+					easing: Easing.ease,
+				}
+		  )
+		: 1;
+
+	return (
+		<tspan dx={dx} opacity={opacity}>
+			{children}
+		</tspan>
+	);
+};
+
+class SeededRandom {
+	private seed: number;
+
+	constructor(seed: number) {
+		this.seed = seed;
+	}
+
+	// Linear Congruential Generator (LCG)
+	private random(): number {
+		const a = 1664525;
+		const c = 1013904223;
+		const m = Math.pow(2, 32);
+		this.seed = (a * this.seed + c) % m;
+		return this.seed / m;
+	}
+
+	// Generate a random number between min and max (inclusive)
+	public randomBetween(min: number, max: number): number {
+		return Math.floor(this.random() * (max - min + 1)) + min;
+	}
 }
+// // Example usage:
+// const seed = 12345; // Your seed value
+// const seededRandom = new SeededRandom(seed);
+
+// const randomNumber = seededRandom.randomBetween(0, 90);
+// console.log(randomNumber);
