@@ -46,34 +46,10 @@ export const SvgMaskComposition: React.FC<
 		}
 	);
 
-	// const bigCirclePath = generateCirclePath({
-	// 	r: videoWidth / 5,
-	// 	cx: videoWidth / 2,
-	// 	cy: videoWidth / 2,
-	// });
-
-	// const smallCirclePath = generateCirclePath({
-	// 	r: videoWidth / 7,
-	// 	cx: videoWidth / 2,
-	// 	cy: videoWidth / 3,
-	// });
-
 	paper.setup([videoWidth, videoHeight]);
-
-	var text = new paper.PointText({
-		point: [videoWidth / 2, videoHeight * 0.8], // Position of the text
-		content: 'Hello, SVG!', // The text content
-		// fillColor: 'black',     // Text color
-		fontFamily: 'Inter-Bold', // Font family
-		fontSize: videoHeight * 0.2, // Font size
-	});
-
-	// Convert the text to a path
-	// var textPath = text.toPath();
 
 	let paperCircle = new paper.Path.Circle(
 		[videoWidth / 2, videoHeight / 2],
-		// videoWidth / 5
 		bigRadius
 	);
 
@@ -82,17 +58,6 @@ export const SvgMaskComposition: React.FC<
 		videoWidth / 7
 	);
 
-	// const myRectAttr = {
-	// 	type: 'rect',
-	// 	x: 25,
-	// 	y: 25,
-	// 	width: 50,
-	// 	height: 50,
-	// 	rx: 5
-	// };
-
-	// const myRectPath = SVGPathCommander.shapeToPath(myRectAttr);
-
 	// exclude, subtract, unite, intersect, divide
 	// const result = paperCircle2.exclude(paperCircle);
 	const result = paperCircle2.unite(paperCircle);
@@ -100,8 +65,8 @@ export const SvgMaskComposition: React.FC<
 	const svgPathElement = result.exportSVG();
 	invariant(typeof svgPathElement !== 'string');
 
-	const ddd = svgPathElement.getAttribute('d');
-	invariant(ddd);
+	const resultingPath = svgPathElement.getAttribute('d');
+	invariant(resultingPath);
 
 	return (
 		<div
@@ -120,53 +85,25 @@ export const SvgMaskComposition: React.FC<
 					style={{width: videoWidth, height: videoHeight, position: 'relative'}}
 				>
 					<svg
-						// width="0"
-						// height="0"
-						// width="100%"
-						// height="100%"
-						// viewBox="0 0 400 300"
 						style={{
 							position: 'absolute',
-							// visibility: 'hidden'
 							overflow: 'visible',
 							opacity: 0,
 						}}
 					>
 						<defs>
-							<mask id="maskkk">
+							<mask id="mySvgMask">
 								<rect
 									fill="rgba(255,255,255,0.0)"
-									// fill={`rgba(255,255,255,${opacity})`}
-									// fill="black"
 									x="0"
 									y="0"
 									width={videoWidth}
 									height={videoHeight}
 								></rect>
-								<path d={ddd} fill={`rgba(255,255,255,${1 - opacity})`} />
-								{/* <path
-									d={bigCirclePath}
+								<path
+									d={resultingPath}
 									fill={`rgba(255,255,255,${1 - opacity})`}
-								/> */}
-								{/* <path
-									d={smallCirclePath}
-									fill={`rgba(255,255,255,${1 - opacity})`}
-								/> */}
-								{/* <circle
-									// fill="#FFFFFF"
-									fill={`rgba(255,255,255,${1 - opacity})`}
-									cx={videoWidth / 2}
-									cy={videoHeight / 2}
-									r={videoWidth / 5}
-								/> */}
-								{/* <circle
-									// fill="#FFFFFF"
-									fill={`rgba(255,255,255,${1 - opacity})`}
-									cx={videoWidth / 2}
-									cy={videoHeight / 4}
-									r={videoWidth / 6}
-								/> */}
-
+								/>
 								<text
 									x={videoWidth / 2}
 									y={videoHeight * 0.997}
@@ -189,17 +126,13 @@ export const SvgMaskComposition: React.FC<
 						muted
 						loop
 						style={{
-							// height: '100%',
 							width: '100%',
-							// height: '50%',
-							// width: '50%',
+							// height: '100%',
 							objectFit: 'cover',
-							WebkitMaskImage: 'url(#maskkk)',
+							WebkitMaskImage: 'url(#mySvgMask)',
 						}}
-						// className="w-full object-cover rounded-sm bg-gray-100 md:hiddenxxxx"
 					>
 						<source
-							// src="https://lorenzobertolini.s3.eu-central-1.amazonaws.com/nba/HeadlessShortTrailer-x1.mp4"
 							src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/TextMask.mp4"
 							type="video/mp4"
 						/>
