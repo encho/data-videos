@@ -157,7 +157,6 @@ export const SvgMaskComposition: React.FC<
 				</div>
 			</div>
 
-			{/* <Position position={{top: 100, left: 100}}></Position> */}
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
