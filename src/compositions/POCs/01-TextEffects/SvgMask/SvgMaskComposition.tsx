@@ -39,7 +39,7 @@ export const SvgMaskComposition: React.FC<
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
 	// const fontFilePath = staticFile(`/fonts/Inter/Inter-Bold.ttf`);
