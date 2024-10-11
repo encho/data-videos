@@ -8,14 +8,8 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 	Easing,
-	staticFile,
 	Video,
-	// staticFile,
-	// Sequence,
 } from 'remotion';
-// import invariant from 'tiny-invariant';
-// import * as paper from 'paper';
-// import opentype from 'opentype.js';
 import {range} from 'lodash';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
@@ -24,7 +18,6 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-// import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
 export const startingFiveSlideCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -36,37 +29,28 @@ export const startingFiveSlideCompositionSchema = z.object({
 export const StartingFiveSlideComposition: React.FC<
 	z.infer<typeof startingFiveSlideCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader([
-		'Inter-Regular',
-		'Inter-Bold',
-		'SourceSerifPro-Light',
-	]);
-
-	// const [svgPath, setSvgPath] = useState<string | null>(null);
+	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const {durationInFrames, width} = useVideoConfig();
+	const {width} = useVideoConfig();
 	const frame = useCurrentFrame();
-
-	// const fontFilePath = staticFile(`/fonts/Inter/Inter-Bold.ttf`);
-	// const fontFilePath = staticFile(
-	// 	`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
-	// );
 
 	const maxZoomScale = 20;
 	// const maxZoomScale = 1;
 
 	const zoomInDurationInFrames = 90 * 1;
 	const zoomOutDurationInFrames = 90 * 1;
-	const shiftDurationInFrames =
-		durationInFrames - zoomInDurationInFrames - zoomOutDurationInFrames;
+	const shiftDurationInFrames = 90 * 3;
+	// const shiftDurationInFrames =
+	// 	durationInFrames - zoomInDurationInFrames - zoomOutDurationInFrames;
 
 	const zoomOutFromFrame = zoomInDurationInFrames + shiftDurationInFrames;
+	const zoomOutEndFrame = zoomOutFromFrame + zoomOutDurationInFrames - 1;
 
 	const revealVideoOpacity = interpolate(
 		frame,
-		[zoomOutFromFrame, durationInFrames - 1],
+		[zoomOutFromFrame, zoomOutEndFrame],
 		[0, 1],
 		{
 			easing: Easing.ease,
@@ -77,7 +61,7 @@ export const StartingFiveSlideComposition: React.FC<
 
 	const scale = interpolate(
 		frame,
-		[0, zoomInDurationInFrames - 1, zoomOutFromFrame, durationInFrames - 1],
+		[0, zoomInDurationInFrames - 1, zoomOutFromFrame, zoomOutEndFrame],
 		[maxZoomScale, 1, 1, maxZoomScale],
 		{
 			easing: Easing.ease,
@@ -87,18 +71,13 @@ export const StartingFiveSlideComposition: React.FC<
 	const videoWidth = width;
 	const videoHeight = width;
 
-	// const fontFamily = 'SourceSerifPro-Light';
-	// const fontFamily = 'Inter-Regular';
 	const fontFamily = 'Inter-Bold';
 	const fontSize = 55;
-	// const lineHeight = 40;
 	const lineHeight = 65;
 
-	// const word = 'Lorenzo Bertolini';
-	const word = 'JUST DO IT.';
+	const word = 'JUNGLE FEVER.';
 	const numberOfWordRows = 17;
 
-	// const seed = 12345; // Your seed value
 	const seed = 999; // Your seed value
 	const seededRandom = new SeededRandom(seed);
 	const getRandomCharacterEntryDuration = () =>
@@ -112,17 +91,12 @@ export const StartingFiveSlideComposition: React.FC<
 	return (
 		<div
 			style={{
-				// backgroundColor: theme.global.backgroundColor,
-				backgroundColor: '#F60051',
+				backgroundColor: theme.global.backgroundColor,
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
-				// width: '80%',
-				// height: '80%',
 			}}
 		>
-			{/* <SlideTitle theme={theme}>Starting Five Slide</SlideTitle> */}
-
 			{/* here, we set the size in pixels (width, height) */}
 			<div style={{display: 'flex', justifyContent: 'center'}}>
 				<div
@@ -175,12 +149,10 @@ export const StartingFiveSlideComposition: React.FC<
 													getRandomCharacterEntryDuration
 												}
 												centerX={cx + randomRowDisplacement}
-												// centerY={lineHeight * (i + 1)}
 												centerY={cy}
 												isCenterRow={i === centerIndex}
 												fontSize={fontSize}
 												fontFamily={fontFamily}
-												// fill={`rgba(255,255,255,${1 - opacity})`}
 												fill={`rgba(255,255,255,${1})`}
 											>
 												{word}
@@ -193,14 +165,15 @@ export const StartingFiveSlideComposition: React.FC<
 					</svg>
 
 					<Video
-						src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/TextMask.mp4"
+						src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
 						style={{
 							position: 'absolute',
-							width: '100%',
-							// height: '100%',
+							// width: '100%',
+							height: '100%',
 							objectFit: 'cover',
 							WebkitMaskImage: 'url(#mySvgMask)',
 						}}
+						playbackRate={0.5}
 					/>
 
 					{/* this would also work with an image instead of a video, like so: */}
@@ -234,7 +207,6 @@ export const WordRow: React.FC<{
 	isCenterRow: boolean;
 	zoomInDurationInFrames: number;
 	shiftDurationInFrames: number;
-	// randomCharacterAppear: boolean;
 	generateRandomCharacterEntryDuration: () => number;
 }> = ({
 	children,
@@ -248,12 +220,10 @@ export const WordRow: React.FC<{
 	zoomInDurationInFrames,
 	shiftDurationInFrames,
 	shiftDirection,
-	// randomCharacterAppear,
 	generateRandomCharacterEntryDuration,
 }) => {
 	const frame = useCurrentFrame();
 
-	// const shiftingDurationInFrames = 90 * 2;
 	const startShiftFrame = isCenterRow ? zoomInDurationInFrames : 0;
 	const endShiftFrame = zoomInDurationInFrames + shiftDurationInFrames;
 	const numberShiftFrames = endShiftFrame - startShiftFrame;

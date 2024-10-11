@@ -192,7 +192,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="StartingFiveSlide"
 						component={StartingFiveSlideComposition}
-						durationInFrames={90 * 5}
+						durationInFrames={90 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
 						{...squareVideo}
