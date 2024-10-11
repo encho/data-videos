@@ -1,8 +1,15 @@
 import {z} from 'zod';
-import React from 'react';
-import {interpolate, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import React, {useState, useEffect} from 'react';
+import {
+	interpolate,
+	useCurrentFrame,
+	useVideoConfig,
+	Easing,
+	staticFile,
+} from 'remotion';
 import invariant from 'tiny-invariant';
 import * as paper from 'paper';
+import opentype from 'opentype.js';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
@@ -22,12 +29,23 @@ export const svgMaskCompositionSchema = z.object({
 export const SvgMaskComposition: React.FC<
 	z.infer<typeof svgMaskCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
+	useFontFamiliesLoader([
+		'Inter-Regular',
+		'Inter-Bold',
+		'SourceSerifPro-Light',
+	]);
+
+	const [svgPath, setSvgPath] = useState<string | null>(null);
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
+
+	// const fontFilePath = staticFile(`/fonts/Inter/Inter-Bold.ttf`);
+	const fontFilePath = staticFile(
+		`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
+	);
 
 	const opacity = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
 		easing: Easing.ease,
@@ -35,6 +53,37 @@ export const SvgMaskComposition: React.FC<
 
 	const videoWidth = 800;
 	const videoHeight = 800;
+
+	useEffect(() => {
+		const loadFontAndConvertText = async () => {
+			try {
+				// const fontUrl = '/fonts/custom-font.ttf'; // Path to your font in public folder
+				const fontUrl = fontFilePath;
+				const text = 'H';
+				const fontSize = videoHeight / 5;
+				const x = 300;
+				const y = 600;
+
+				const generatedPath = await textToPath(fontUrl, text, fontSize, x, y);
+
+				// Regular expression to match the value inside the d attribute
+				const dMatch = generatedPath.match(/d="([^"]+)"/);
+
+				// Extract the path data
+				if (dMatch && dMatch[1]) {
+					const pathData = dMatch[1];
+					console.log(pathData); // Outputs the path data
+					setSvgPath(pathData);
+				} else {
+					console.log('No path data found');
+				}
+			} catch (error) {
+				console.error('Error generating SVG path:', error);
+			}
+		};
+
+		loadFontAndConvertText(); // Call the async function within useEffect
+	}, []); // Empty dependency array so it runs once when the component mounts
 
 	const bigRadius = interpolate(
 		frame,
@@ -57,9 +106,12 @@ export const SvgMaskComposition: React.FC<
 		videoWidth / 7
 	);
 
+	let textPath = new paper.Path(svgPath || '');
+
 	// exclude, subtract, unite, intersect, divide
 	// const result = paperCircle2.exclude(paperCircle);
-	const result = paperCircle2.unite(paperCircle);
+	const resultA = paperCircle2.unite(paperCircle);
+	const result = resultA.exclude(textPath);
 
 	const svgPathElement = result.exportSVG();
 	invariant(typeof svgPathElement !== 'string');
@@ -103,6 +155,16 @@ export const SvgMaskComposition: React.FC<
 									d={resultingPath}
 									fill={`rgba(255,255,255,${1 - opacity})`}
 								/>
+
+								{/* {svgPath && (
+									<path
+										d={svgPath}
+										fill={`rgba(255,255,255,${1 - opacity})`}
+										// fill="none"
+										// stroke="black"
+									/>
+								)} */}
+
 								<text
 									x={videoWidth / 2}
 									y={videoHeight * 0.997}
@@ -160,3 +222,22 @@ export const SvgMaskComposition: React.FC<
 		</div>
 	);
 };
+
+// Function to convert text to an SVG path
+async function textToPath(
+	fontUrl: string,
+	text: string,
+	fontSize: number,
+	x: number,
+	y: number
+): Promise<string> {
+	// Load the font
+	const font = await opentype.load(fontUrl);
+
+	// Generate the path from the text
+	const path = font.getPath(text, x, y, fontSize);
+
+	// Convert the path to SVG path string
+	// return path.toSVG();
+	return path.toSVG(2);
+}
