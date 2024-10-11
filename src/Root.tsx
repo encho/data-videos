@@ -120,6 +120,11 @@ import {
 	svgMaskCompositionSchema,
 } from './compositions/POCs/01-TextEffects/SvgMask/SvgMaskComposition';
 
+import {
+	StartingFiveSlideComposition,
+	startingFiveSlideCompositionSchema,
+} from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlide';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -178,6 +183,20 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...linkedInTallVideo}
 						schema={svgMaskCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+						}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="StartingFiveSlide"
+						component={StartingFiveSlideComposition}
+						durationInFrames={90 * 5}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...squareVideo}
+						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 						}}
