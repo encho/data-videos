@@ -162,29 +162,3 @@ export const SvgMaskComposition: React.FC<
 		</div>
 	);
 };
-
-function getDAttribute(path: any) {
-	let d = '';
-	for (let i = 0; i < path.segments.length; i++) {
-		let segment = path.segments[i];
-		let point = segment.point;
-		let handleIn = segment.handleIn;
-		let handleOut = segment.handleOut;
-
-		if (i === 0) {
-			d += `M${point.x},${point.y} `;
-		} else {
-			if (!handleIn.isZero()) {
-				d += `C${point.x + handleIn.x},${point.y + handleIn.y} `;
-			}
-			if (!handleOut.isZero()) {
-				d += `C${point.x + handleOut.x},${point.y + handleOut.y} `;
-			}
-			d += `${point.x},${point.y} `;
-		}
-	}
-	if (path.closed) {
-		d += 'Z';
-	}
-	return d.trim();
-}
