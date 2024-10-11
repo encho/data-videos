@@ -94,7 +94,7 @@ export const StartingFiveSlideComposition: React.FC<
 
 	// const word = 'Lorenzo Bertolini';
 	const word = 'JUST DO IT.';
-	const numberOfWordRows = 15;
+	const numberOfWordRows = 17;
 
 	// const seed = 12345; // Your seed value
 	const seed = 999; // Your seed value
