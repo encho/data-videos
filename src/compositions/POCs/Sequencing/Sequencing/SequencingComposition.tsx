@@ -54,6 +54,8 @@ export const SequencingComposition: React.FC<
 		],
 	});
 
+	const liveSeqMachine = buildLiveSeqMachine(seqMachine, frame);
+
 	return (
 		<div
 			style={{
@@ -71,9 +73,8 @@ export const SequencingComposition: React.FC<
 			{/* here, we set the size in pixels (width, height) */}
 			<div style={{display: 'flex', justifyContent: 'center'}}>
 				<SeqMachineViz
-					seqMachine={seqMachine}
+					liveSeqMachine={liveSeqMachine}
 					width={800}
-					frame={frame}
 					baseFontSize={20}
 				/>
 			</div>
@@ -84,17 +85,17 @@ export const SequencingComposition: React.FC<
 };
 
 export const SeqMachineViz: React.FC<{
-	seqMachine: TSeqMachine;
-	frame: number;
+	liveSeqMachine: TLiveSeqMachine;
+	// frame: number;
 	width: number;
 	baseFontSize: number;
-}> = ({seqMachine, frame, width, baseFontSize}) => {
-	const {durationInFrames, fps, seqs} = seqMachine;
+}> = ({liveSeqMachine, width, baseFontSize}) => {
+	const {durationInFrames, fps, liveSeqs, frame} = liveSeqMachine;
 
 	const HEIGHT_PER_SEQ = 100;
 	const X_AXIS_HEIGHT = 100;
 
-	const height = seqs.length * HEIGHT_PER_SEQ + X_AXIS_HEIGHT;
+	const height = liveSeqs.length * HEIGHT_PER_SEQ + X_AXIS_HEIGHT;
 
 	const frameToPixel = scaleLinear()
 		.domain([0, durationInFrames - 1]) // Domain: [0, durationInFrames - 1]
@@ -111,7 +112,17 @@ export const SeqMachineViz: React.FC<{
 				}}
 			>
 				{/* TODO evtl. use layout engine */}
-				{seqs.map((seq, i) => {
+				{liveSeqs.map((seq, i) => {
+					// TODO has to be used by TLiveSeq creation function..., s.t. it can be used also by interpolators, not just ui component!
+					const isActive = frame >= seq.startFrame && frame <= seq.endFrame;
+					const relativeFrame = frame - seq.startFrame;
+					const currentPercentage = interpolate(
+						frame,
+						[seq.startFrame, seq.endFrame],
+						[0, 1],
+						{extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+					);
+
 					return (
 						<g>
 							<rect
@@ -128,21 +139,22 @@ export const SeqMachineViz: React.FC<{
 								height={HEIGHT_PER_SEQ}
 								width={frameToPixel(seq.durationInFrames)}
 								stroke="rgba(255,255,0,1)"
-								fill="rgba(255,255,0,0.2)"
+								fill={isActive ? 'rgba(255,255,0,0.4)' : 'rgba(255,255,0,0.1)'}
 							/>
 							<text
 								fill={'orange'}
 								fontSize={baseFontSize}
 								y={i * HEIGHT_PER_SEQ + baseFontSize}
 							>
-								{seq.id}
+								{seq.id} {relativeFrame}/{seq.durationInFrames} (
+								{formatToPercentage(currentPercentage)})
 							</text>
 						</g>
 					);
 				})}
 
 				{/* The x axis */}
-				<g transform={`translate(${0}, ${seqs.length * HEIGHT_PER_SEQ})`}>
+				<g transform={`translate(${0}, ${liveSeqs.length * HEIGHT_PER_SEQ})`}>
 					<rect
 						x={0}
 						y={0}
@@ -168,6 +180,11 @@ export const SeqMachineViz: React.FC<{
 		</div>
 	);
 };
+
+function formatToPercentage(value: number): string {
+	// Convert the number to percentage and format to 2 decimal places
+	return (value * 100).toFixed(2) + '%';
+}
 
 // ************************************************************************
 // Key Frame Spec
@@ -275,4 +292,57 @@ function generateTSeqArray(
 
 		return acc;
 	}, []);
+}
+
+// a seq that has additional information, about the current 'state'
+type TLiveSeq = {
+	// TSeq...
+	// *****************************
+	id: string;
+	startFrame: number;
+	endFrame: number;
+	durationInFrames: number;
+	seqSpec: TSeqSpec;
+	// startSecond: number;
+	// endSecond: number;
+	// durationInSeconds: number;
+	// ... and live status data:
+	// *****************************
+	relativeFrame: number;
+	// relativeSecond: number;
+	animationPercentage: number; //[0,1] , how about undefined when out of range???
+	isActive: boolean; // startFrame <= frame <= endFrame
+};
+
+function seqToLiveSeq(seq: TSeq, frame: number): TLiveSeq {
+	// TODO has to be used by TLiveSeq creation function..., s.t. it can be used also by interpolators, not just ui component!
+	const isActive = frame >= seq.startFrame && frame <= seq.endFrame;
+	const relativeFrame = frame - seq.startFrame;
+	const animationPercentage = interpolate(
+		frame,
+		[seq.startFrame, seq.endFrame],
+		[0, 1],
+		{extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}
+	);
+
+	return {...seq, isActive, relativeFrame, animationPercentage};
+}
+
+type TLiveSeqMachine = {
+	durationInFrames: number;
+	fps: number;
+	frame: number;
+	liveSeqs: TLiveSeq[];
+};
+
+function buildLiveSeqMachine(
+	seqMachine: TSeqMachine,
+	frame: number
+): TLiveSeqMachine {
+	return {
+		frame,
+		fps: seqMachine.fps,
+		durationInFrames: seqMachine.durationInFrames,
+		liveSeqs: seqMachine.seqs.map((seq) => seqToLiveSeq(seq, frame)),
+	};
 }
