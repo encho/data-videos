@@ -125,6 +125,11 @@ import {
 	startingFiveSlideCompositionSchema,
 } from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlide';
 
+import {
+	SequencingComposition,
+	sequencingCompositionSchema,
+} from './compositions/POCs/Sequencing/Sequencing/SequencingComposition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -414,6 +419,19 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
+				<Folder name="Sequencing">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="Sequencing"
+						component={SequencingComposition}
+						durationInFrames={90 * 10}
+						fps={90}
+						{...linkedInTallVideo}
+						schema={sequencingCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
 				<Folder name="Path-Animation-Experiments">
 					<Composition
 						// You can take the "id" to render a video:
