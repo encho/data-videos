@@ -33,12 +33,35 @@ export const SequencingComposition: React.FC<
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
+	// TODO evtl. types like for specifying keyframes?
+	// [string, "FRAME", number]
+	// [string, "R_FRAME", string, number]
+	// [string, "SECONDS", number]
+	// [string, "R_SECONDS", string, number]
+
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
-		{type: 'GLOBAL_FRAME', value: 100, id: 'TITLE_ENTER_START'},
-		{type: 'GLOBAL_FRAME', value: 200, id: 'TITLE_ENTER_END'},
-		{type: 'GLOBAL_FRAME', value: 650, id: 'TITLE_EXIT_START'},
-		{type: 'GLOBAL_FRAME', value: 700, id: 'TITLE_EXIT_END'},
+		{type: 'GLOBAL_FRAME', value: 40, id: 'TITLE_ENTER_START'}, ///TOTO rename GLOBAL_FRAME to FRAME_FROM_START
+		{
+			type: 'RELATIVE_FRAME',
+			value: 90,
+			id: 'TITLE_ENTER_END',
+			relativeId: 'TITLE_ENTER_START',
+		},
+		{type: 'GLOBAL_FRAME', value: 600, id: 'TITLE_EXIT_START'},
+		{
+			type: 'RELATIVE_FRAME',
+			value: 90,
+			id: 'TITLE_EXIT_END',
+			relativeId: 'TITLE_EXIT_START',
+			// TODO use getSign (chatgpt) with +0, 0, -1 to determine, wether we anchor globally to the beginning or end of the sequence
+		}, // TODO e.g.: {type: "FRAME", value: -0} // i.e. last available frame // TODO change name from "GLOBAL_FRAME" to jsut "FRAME"
 	]);
+
+	const hello = -0;
+
+	const sign = Math.sign(hello);
+
+	console.log({hello, sign});
 
 	const width = 600;
 	const height = 600;
@@ -274,6 +297,28 @@ export const KeyFramesGroupViz: React.FC<{
 };
 
 // ************************************************************************
+// Key Frame Spec TODO integrate this more readable solution!!!!!!
+// ************************************************************************
+
+// TODO evtl. types like for specifying keyframes?
+// [string, "FRAME", number]
+// [string, "R_FRAME", string, number]
+// [string, "SECONDS", number]
+// [string, "R_SECONDS", string, number]
+type ID = string;
+type FRAME_NR = number;
+type FRAME_AMOUNT = number;
+type RELATIVE_FRAME_ID = string;
+
+type TKeyFrameSpec_FRAME = ['FRAME', ID, FRAME_NR];
+type TKeyFrameSpec_R_FRAME = ['R_FRAME', ID, RELATIVE_FRAME_ID, FRAME_AMOUNT];
+
+type TKeyFrameSpec = TKeyFrameSpec_FRAME | TKeyFrameSpec_R_FRAME;
+
+const test1: TKeyFrameSpec = ['FRAME', '001', 100];
+console.log(test1);
+
+// ************************************************************************
 // Key Frame Spec
 // ************************************************************************
 type TSeqKeyFrameSpec_GLOBAL_SECOND = {
@@ -287,9 +332,17 @@ type TSeqKeyFrameSpec_GLOBAL_FRAME = {
 	id: string;
 };
 
+type TSeqKeyFrameSpec_RELATIVE_FRAME = {
+	type: 'RELATIVE_FRAME';
+	value: number;
+	id: string;
+	relativeId: string;
+};
+
 type TSeqKeyFrameSpec =
 	| TSeqKeyFrameSpec_GLOBAL_SECOND
-	| TSeqKeyFrameSpec_GLOBAL_FRAME;
+	| TSeqKeyFrameSpec_GLOBAL_FRAME
+	| TSeqKeyFrameSpec_RELATIVE_FRAME;
 
 // ************************************************************************
 // KeyFrames
@@ -320,6 +373,16 @@ function buildKeyFramesGroup(
 			keyFrame = Math.floor(keyFrameSpec.value * fps); // Convert seconds to frames
 		} else if (keyFrameSpec.type === 'GLOBAL_FRAME') {
 			keyFrame = keyFrameSpec.value;
+		} else if (keyFrameSpec.type === 'RELATIVE_FRAME') {
+			const relativeKeyFrameObject = acc.find(
+				(currentKeyFrame) => currentKeyFrame.id === keyFrameSpec.relativeId
+			);
+			if (!relativeKeyFrameObject) {
+				throw new Error(
+					`Unknown relative keyframe id ${keyFrameSpec.relativeId}`
+				);
+			}
+			keyFrame = relativeKeyFrameObject.frame + keyFrameSpec.value;
 		} else {
 			throw new Error(`Unknown keyFrame type`);
 		}
