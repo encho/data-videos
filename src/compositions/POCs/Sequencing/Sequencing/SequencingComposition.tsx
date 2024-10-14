@@ -204,23 +204,25 @@ function formatToPercentage(value: number): string {
 }
 
 export const KeyFramesGroupViz: React.FC<{
-	// liveSeqMachine: TLiveSeqMachine;
 	keyFramesGroup: TKeyFramesGroup;
 	frame: number;
 	width: number;
 	baseFontSize: number;
 }> = ({keyFramesGroup, width, baseFontSize, frame}) => {
-	const {durationInFrames, fps, keyFrames} = keyFramesGroup;
+	const {
+		durationInFrames,
+		// fps,
+		keyFrames,
+	} = keyFramesGroup;
 
 	const HEIGHT_PER_FRAME = baseFontSize * 1.5;
 	const X_AXIS_HEIGHT = 50;
 
 	const height = keyFrames.length * HEIGHT_PER_FRAME + X_AXIS_HEIGHT;
-	// const height = X_AXIS_HEIGHT;
 
 	const frameToPixel = scaleLinear()
-		.domain([0, durationInFrames - 1]) // Domain: [0, durationInFrames - 1]
-		.range([0, width]); // Range: [0, width]
+		.domain([0, durationInFrames - 1])
+		.range([0, width]);
 
 	const ticks = frameToPixel.ticks();
 
@@ -232,7 +234,6 @@ export const KeyFramesGroupViz: React.FC<{
 				style={{
 					overflow: 'visible',
 					display: 'inline-block',
-					// backgroundColor: '#444',
 				}}
 			>
 				{/* TODO evtl. use layout engine */}
@@ -315,10 +316,8 @@ export const KeyFramesGroupViz: React.FC<{
 								<text
 									fill={'#999'}
 									fontSize={baseFontSize}
-									// y={HEIGHT_PER_FRAME / 2}
 									y={20 + 5}
 									x={frameToPixel(tick)}
-									// x={frameToPixel(keyFrame.frame) + 15}
 									textAnchor="middle"
 									dominantBaseline="hanging"
 									fontFamily="Inter-Regular"
@@ -338,7 +337,9 @@ export const KeyFramesGroupViz: React.FC<{
 						x2={frameToPixel(frame)}
 						y1={0}
 						y2={height}
-						stroke={'#ddd'}
+						// stroke={'#aaa'}
+						stroke={'#f05122'}
+						opacity={0.5}
 						strokeWidth={2}
 					/>
 				</g>
