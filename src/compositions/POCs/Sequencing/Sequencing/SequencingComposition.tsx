@@ -2,6 +2,7 @@ import {z} from 'zod';
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {scaleLinear} from 'd3-scale';
+import invariant from 'tiny-invariant';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
@@ -33,14 +34,39 @@ export const SequencingComposition: React.FC<
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
-		{type: 'GLOBAL_FRAME', value: 0, id: 'TITLE_ENTER_START'},
-		{type: 'GLOBAL_FRAME', value: 90, id: 'TITLE_ENTER_END'},
+		{type: 'GLOBAL_FRAME', value: 100, id: 'TITLE_ENTER_START'},
+		{type: 'GLOBAL_FRAME', value: 200, id: 'TITLE_ENTER_END'},
 		{type: 'GLOBAL_FRAME', value: 400, id: 'TITLE_EXIT_START'},
 		{type: 'GLOBAL_FRAME', value: 899, id: 'TITLE_EXIT_END'},
 	]);
 
 	const width = 600;
 	const height = 600;
+
+	const interpolateTitleOpacity = getInterpolator(
+		keyFramesGroup,
+		[
+			'TITLE_ENTER_START',
+			'TITLE_ENTER_END',
+			'TITLE_EXIT_START',
+			'TITLE_EXIT_END',
+		],
+		[0, 1, 1, 0]
+	);
+
+	const interpolateZoom = getInterpolator(
+		keyFramesGroup,
+		[
+			'TITLE_ENTER_START',
+			'TITLE_ENTER_END',
+			'TITLE_EXIT_START',
+			'TITLE_EXIT_END',
+		],
+		[10, 1, 1, 20]
+	);
+
+	const titleOpacity = interpolateTitleOpacity(frame);
+	const zoom = interpolateZoom(frame);
 
 	return (
 		<div
@@ -69,10 +95,17 @@ export const SequencingComposition: React.FC<
 						width,
 						height,
 						backgroundColor: '#222',
+						overflow: 'hidden',
 					}}
 				>
 					<div
-						style={{color: '#f05122', fontFamily: 'Inter-Bold', fontSize: 80}}
+						style={{
+							transform: `scale(${zoom})`,
+							color: '#f05122',
+							fontFamily: 'Inter-Bold',
+							fontSize: 80,
+							opacity: titleOpacity,
+						}}
 					>
 						Let's start!
 					</div>
@@ -303,3 +336,39 @@ function buildKeyFramesGroup(
 
 	return {durationInFrames, fps, keyFrames};
 }
+
+function getKeyFrame(
+	keyFramesGroup: TKeyFramesGroup,
+	keyFrameId: string
+): TKeyFrame {
+	const foundKeyFrame = keyFramesGroup.keyFrames.find(
+		(it) => it.id === keyFrameId
+	);
+	if (!foundKeyFrame) {
+		throw Error(`Could not find keyFrame with id: ${keyFrameId}`);
+	}
+
+	return foundKeyFrame;
+}
+
+// function getInterpolator<T>(
+function getInterpolator(
+	keyFramesGroup: TKeyFramesGroup,
+	keyFrameIds: string[],
+	values: number[]
+): (frame: number) => number {
+	invariant(keyFrameIds.length === values.length);
+
+	const keyFrames = keyFrameIds.map((id) => getKeyFrame(keyFramesGroup, id));
+	const frames = keyFrames.map((it) => it.frame);
+
+	const interpolator = (currentFrame: number) => {
+		// TODO add extrapolate... and address varying easings
+		return interpolate(currentFrame, frames, values);
+	};
+
+	return interpolator;
+}
+
+// e.g.
+// const interpolator = getInterpolator(keyFramesGroup, ["START_TITLE", "END_TITLE", "START_EXIT", "END_EXIT"], [0,1,1,0])
