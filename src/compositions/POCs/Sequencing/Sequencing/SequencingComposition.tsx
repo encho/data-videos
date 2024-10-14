@@ -58,9 +58,10 @@ export const SequencingComposition: React.FC<
 	const liveSeqMachine = buildLiveSeqMachine(seqMachine, frame);
 
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
-		{type: 'GLOBAL_FRAME', value: 0, id: '001'},
-		{type: 'GLOBAL_FRAME', value: 90, id: '002'},
-		{type: 'GLOBAL_FRAME', value: 400, id: '003'},
+		{type: 'GLOBAL_FRAME', value: 0, id: 'TITLE_ENTER_START'},
+		{type: 'GLOBAL_FRAME', value: 90, id: 'TITLE_ENTER_END'},
+		{type: 'GLOBAL_FRAME', value: 400, id: 'TITLE_EXIT_START'},
+		{type: 'GLOBAL_FRAME', value: 899, id: 'TITLE_EXIT_END'},
 	]);
 
 	return (
@@ -211,15 +212,17 @@ export const KeyFramesGroupViz: React.FC<{
 }> = ({keyFramesGroup, width, baseFontSize, frame}) => {
 	const {durationInFrames, fps, keyFrames} = keyFramesGroup;
 
-	// const HEIGHT_PER_SEQ = 50;
+	const HEIGHT_PER_FRAME = baseFontSize * 1.5;
 	const X_AXIS_HEIGHT = 50;
 
-	// const height = liveSeqs.length * HEIGHT_PER_SEQ + X_AXIS_HEIGHT;
-	const height = X_AXIS_HEIGHT;
+	const height = keyFrames.length * HEIGHT_PER_FRAME + X_AXIS_HEIGHT;
+	// const height = X_AXIS_HEIGHT;
 
 	const frameToPixel = scaleLinear()
 		.domain([0, durationInFrames - 1]) // Domain: [0, durationInFrames - 1]
 		.range([0, width]); // Range: [0, width]
+
+	const ticks = frameToPixel.ticks();
 
 	return (
 		<div style={{width, height, position: 'relative'}}>
@@ -229,35 +232,104 @@ export const KeyFramesGroupViz: React.FC<{
 				style={{
 					overflow: 'visible',
 					display: 'inline-block',
-					backgroundColor: '#444',
+					// backgroundColor: '#444',
 				}}
 			>
 				{/* TODO evtl. use layout engine */}
 				{keyFrames.map((keyFrame, i) => {
 					return (
-						<g>
+						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
+							<rect
+								x={0}
+								y={0}
+								height={HEIGHT_PER_FRAME}
+								width={width}
+								stroke="rgba(255,255,255,0.2)"
+								fill="rgba(255,255,255,0.1)"
+							/>
+
 							<circle
 								cx={frameToPixel(keyFrame.frame)}
-								cy={10}
-								fill={'yellow'}
-								r={5}
+								cy={HEIGHT_PER_FRAME / 2}
+								fill={'#777'}
+								r={HEIGHT_PER_FRAME * 0.25}
 							/>
+
+							<circle
+								cx={frameToPixel(keyFrame.frame)}
+								cy={HEIGHT_PER_FRAME / 2}
+								fill={'#ddd'}
+								r={HEIGHT_PER_FRAME * 0.125}
+							/>
+
+							<text
+								fill={'#bbb'}
+								fontSize={baseFontSize}
+								y={HEIGHT_PER_FRAME / 2}
+								x={frameToPixel(keyFrame.frame) + 15}
+								dominantBaseline="middle"
+								fontFamily="Inter-Regular"
+								dy=".1em"
+							>
+								{keyFrame.id}
+							</text>
 						</g>
 					);
 				})}
 
 				{/* The x axis */}
-				{/* <g transform={`translate(${0}, ${liveSeqs.length * HEIGHT_PER_SEQ})`}> */}
-				{/* <g transform={`translate(${0}, ${50})`}>
-					<rect
+				<g
+					transform={`translate(${0}, ${
+						keyFrames.length * HEIGHT_PER_FRAME + 10
+					})`}
+				>
+					{/* <rect
 						x={0}
 						y={0}
 						height={X_AXIS_HEIGHT}
 						width={width}
 						stroke="rgba(255,0,0,1)"
 						fill="rgba(255,0,0,0.2)"
+					/> */}
+
+					<line
+						x1={frameToPixel(0)}
+						x2={frameToPixel(durationInFrames - 1)}
+						y1={0}
+						y2={0}
+						stroke={'#999'}
+						strokeWidth={2}
 					/>
-				</g> */}
+					{ticks.map((tick, i) => {
+						return (
+							<g>
+								<line
+									x1={frameToPixel(tick)}
+									x2={frameToPixel(tick)}
+									y1={0}
+									y2={20}
+									stroke={'#999'}
+									strokeWidth={2}
+								/>
+
+								<text
+									fill={'#999'}
+									fontSize={baseFontSize}
+									// y={HEIGHT_PER_FRAME / 2}
+									y={20 + 5}
+									x={frameToPixel(tick)}
+									// x={frameToPixel(keyFrame.frame) + 15}
+									textAnchor="middle"
+									dominantBaseline="hanging"
+									fontFamily="Inter-Regular"
+									dy=".1em"
+								>
+									{tick}
+								</text>
+							</g>
+						);
+					})}
+				</g>
 
 				{/* the line for current position */}
 				<g>
