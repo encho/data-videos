@@ -36,8 +36,8 @@ export const SequencingComposition: React.FC<
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'GLOBAL_FRAME', value: 100, id: 'TITLE_ENTER_START'},
 		{type: 'GLOBAL_FRAME', value: 200, id: 'TITLE_ENTER_END'},
-		{type: 'GLOBAL_FRAME', value: 400, id: 'TITLE_EXIT_START'},
-		{type: 'GLOBAL_FRAME', value: 899, id: 'TITLE_EXIT_END'},
+		{type: 'GLOBAL_FRAME', value: 650, id: 'TITLE_EXIT_START'},
+		{type: 'GLOBAL_FRAME', value: 700, id: 'TITLE_EXIT_END'},
 	]);
 
 	const width = 600;
