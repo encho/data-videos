@@ -60,7 +60,7 @@ export const SequencingComposition: React.FC<
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'GLOBAL_FRAME', value: 0, id: '001'},
 		{type: 'GLOBAL_FRAME', value: 90, id: '002'},
-		{type: 'GLOBAL_FRAME', value: 400, id: '002'},
+		{type: 'GLOBAL_FRAME', value: 400, id: '003'},
 	]);
 
 	return (
@@ -83,6 +83,15 @@ export const SequencingComposition: React.FC<
 					liveSeqMachine={liveSeqMachine}
 					width={800}
 					baseFontSize={20}
+				/>
+			</div>
+
+			<div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}>
+				<KeyFramesGroupViz
+					keyFramesGroup={keyFramesGroup}
+					width={800}
+					baseFontSize={20}
+					frame={frame}
 				/>
 			</div>
 
@@ -193,6 +202,79 @@ function formatToPercentage(value: number): string {
 	return (value * 100).toFixed(2) + '%';
 }
 
+export const KeyFramesGroupViz: React.FC<{
+	// liveSeqMachine: TLiveSeqMachine;
+	keyFramesGroup: TKeyFramesGroup;
+	frame: number;
+	width: number;
+	baseFontSize: number;
+}> = ({keyFramesGroup, width, baseFontSize, frame}) => {
+	const {durationInFrames, fps, keyFrames} = keyFramesGroup;
+
+	// const HEIGHT_PER_SEQ = 50;
+	const X_AXIS_HEIGHT = 50;
+
+	// const height = liveSeqs.length * HEIGHT_PER_SEQ + X_AXIS_HEIGHT;
+	const height = X_AXIS_HEIGHT;
+
+	const frameToPixel = scaleLinear()
+		.domain([0, durationInFrames - 1]) // Domain: [0, durationInFrames - 1]
+		.range([0, width]); // Range: [0, width]
+
+	return (
+		<div style={{width, height, position: 'relative'}}>
+			<svg
+				width={width}
+				height={height}
+				style={{
+					overflow: 'visible',
+					display: 'inline-block',
+					backgroundColor: '#444',
+				}}
+			>
+				{/* TODO evtl. use layout engine */}
+				{keyFrames.map((keyFrame, i) => {
+					return (
+						<g>
+							<circle
+								cx={frameToPixel(keyFrame.frame)}
+								cy={10}
+								fill={'yellow'}
+								r={5}
+							/>
+						</g>
+					);
+				})}
+
+				{/* The x axis */}
+				{/* <g transform={`translate(${0}, ${liveSeqs.length * HEIGHT_PER_SEQ})`}> */}
+				{/* <g transform={`translate(${0}, ${50})`}>
+					<rect
+						x={0}
+						y={0}
+						height={X_AXIS_HEIGHT}
+						width={width}
+						stroke="rgba(255,0,0,1)"
+						fill="rgba(255,0,0,0.2)"
+					/>
+				</g> */}
+
+				{/* the line for current position */}
+				<g>
+					<line
+						x1={frameToPixel(frame)}
+						x2={frameToPixel(frame)}
+						y1={0}
+						y2={height}
+						stroke={'#ddd'}
+						strokeWidth={2}
+					/>
+				</g>
+			</svg>
+		</div>
+	);
+};
+
 // ************************************************************************
 // Key Frame Spec
 // ************************************************************************
@@ -232,8 +314,9 @@ function buildKeyFramesGroup(
 	fps: number,
 	keyFrameSpecs: TSeqKeyFrameSpec[]
 ): TKeyFramesGroup {
+	// TODO check id uniqueness, if not unique raise error!
+
 	const keyFrames = keyFrameSpecs.reduce<TKeyFrame[]>((acc, keyFrameSpec) => {
-		// Determine the start frame based on the keyFrame type
 		let keyFrame: number;
 		if (keyFrameSpec.type === 'GLOBAL_SECOND') {
 			keyFrame = Math.floor(keyFrameSpec.value * fps); // Convert seconds to frames
