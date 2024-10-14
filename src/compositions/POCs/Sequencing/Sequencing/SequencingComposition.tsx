@@ -10,6 +10,7 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
+import {LoDashExplicitNumberArrayWrapper} from 'lodash';
 
 export const sequencingCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -38,23 +39,29 @@ export const SequencingComposition: React.FC<
 		seqs: [
 			{
 				id: 'TITLE_ENTER',
-				keyFrame: {type: 'GLOBAL_FRAME', value: 0},
+				keyFrame: {type: 'GLOBAL_FRAME', value: 0, id: 'hehehe'},
 				duration: {type: 'FRAMES', value: 180},
 			},
 			{
 				id: 'TITLE_EXIT',
-				keyFrame: {type: 'GLOBAL_FRAME', value: 800},
+				keyFrame: {type: 'GLOBAL_FRAME', value: 800, id: 'hohoho'},
 				duration: {type: 'FRAMES', value: 100},
 			},
 			{
 				id: 'ZOOM_ENTER',
-				keyFrame: {type: 'GLOBAL_SECOND', value: 1},
+				keyFrame: {type: 'GLOBAL_SECOND', value: 1, id: 'heheheheheeheh'},
 				duration: {type: 'SECONDS', value: 8},
 			},
 		],
 	});
 
 	const liveSeqMachine = buildLiveSeqMachine(seqMachine, frame);
+
+	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
+		{type: 'GLOBAL_FRAME', value: 0, id: '001'},
+		{type: 'GLOBAL_FRAME', value: 90, id: '002'},
+		{type: 'GLOBAL_FRAME', value: 400, id: '002'},
+	]);
 
 	return (
 		<div
@@ -92,8 +99,8 @@ export const SeqMachineViz: React.FC<{
 }> = ({liveSeqMachine, width, baseFontSize}) => {
 	const {durationInFrames, fps, liveSeqs, frame} = liveSeqMachine;
 
-	const HEIGHT_PER_SEQ = 100;
-	const X_AXIS_HEIGHT = 100;
+	const HEIGHT_PER_SEQ = 50;
+	const X_AXIS_HEIGHT = 50;
 
 	const height = liveSeqs.length * HEIGHT_PER_SEQ + X_AXIS_HEIGHT;
 
@@ -189,12 +196,65 @@ function formatToPercentage(value: number): string {
 // ************************************************************************
 // Key Frame Spec
 // ************************************************************************
-type TSeqKeyFrameSpec_GLOBAL_SECOND = {type: 'GLOBAL_SECOND'; value: number};
-type TSeqKeyFrameSpec_GLOBAL_FRAME = {type: 'GLOBAL_FRAME'; value: number};
+type TSeqKeyFrameSpec_GLOBAL_SECOND = {
+	type: 'GLOBAL_SECOND';
+	value: number;
+	id: string;
+};
+type TSeqKeyFrameSpec_GLOBAL_FRAME = {
+	type: 'GLOBAL_FRAME';
+	value: number;
+	id: string;
+};
 
 type TSeqKeyFrameSpec =
 	| TSeqKeyFrameSpec_GLOBAL_SECOND
 	| TSeqKeyFrameSpec_GLOBAL_FRAME;
+
+// ************************************************************************
+// KeyFrames
+// ************************************************************************
+
+type TKeyFrame = {
+	id: string;
+	frame: number;
+	spec: TSeqKeyFrameSpec; // TODO rename to TKeyFrameSpec
+};
+
+type TKeyFramesGroup = {
+	durationInFrames: number;
+	fps: number;
+	keyFrames: TKeyFrame[];
+};
+
+function buildKeyFramesGroup(
+	durationInFrames: number,
+	fps: number,
+	keyFrameSpecs: TSeqKeyFrameSpec[]
+): TKeyFramesGroup {
+	const keyFrames = keyFrameSpecs.reduce<TKeyFrame[]>((acc, keyFrameSpec) => {
+		// Determine the start frame based on the keyFrame type
+		let keyFrame: number;
+		if (keyFrameSpec.type === 'GLOBAL_SECOND') {
+			keyFrame = Math.floor(keyFrameSpec.value * fps); // Convert seconds to frames
+		} else if (keyFrameSpec.type === 'GLOBAL_FRAME') {
+			keyFrame = keyFrameSpec.value;
+		} else {
+			throw new Error(`Unknown keyFrame type`);
+		}
+
+		// Add the new TSeq to the accumulator
+		acc.push({
+			id: keyFrameSpec.id,
+			frame: keyFrame,
+			spec: keyFrameSpec,
+		});
+
+		return acc;
+	}, []);
+
+	return {durationInFrames, fps, keyFrames};
+}
 
 // ************************************************************************
 //  Seq Duration Spec
