@@ -35,21 +35,21 @@ export const SequencingComposition: React.FC<
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
-		{type: 'FRAME', value: 40, id: 'TITLE_ENTER_START'},
+		{type: 'SECOND', value: 1, id: 'TITLE_ENTER_START'},
 		{
-			type: 'R_FRAME',
-			value: 90,
+			type: 'R_SECOND',
+			value: 1,
 			id: 'TITLE_ENTER_END',
 			relativeId: 'TITLE_ENTER_START',
 		},
 		{
-			type: 'FRAME',
-			value: -90,
+			type: 'SECOND',
+			value: -0,
 			id: 'TITLE_EXIT_END',
 		},
 		{
-			type: 'R_FRAME',
-			value: -90,
+			type: 'R_SECOND',
+			value: -1,
 			id: 'TITLE_EXIT_START',
 			relativeId: 'TITLE_EXIT_END',
 		},
@@ -128,9 +128,9 @@ export const SequencingComposition: React.FC<
 			</div>
 
 			<div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}>
-				<KeyFramesGroupViz
+				<KeyFramesInspector
 					keyFramesGroup={keyFramesGroup}
-					width={800}
+					width={600}
 					baseFontSize={20}
 					frame={frame}
 				/>
@@ -141,7 +141,7 @@ export const SequencingComposition: React.FC<
 	);
 };
 
-export const KeyFramesGroupViz: React.FC<{
+export const KeyFramesInspector: React.FC<{
 	keyFramesGroup: TKeyFramesGroup;
 	frame: number;
 	width: number;
@@ -191,6 +191,9 @@ export const KeyFramesGroupViz: React.FC<{
 					const smallCircleFill =
 						keyFrame.frame === frame ? rgbaColor2 : 'rgba(255,255,255,1)';
 
+					const bigCircleRadius = keyFrame.frame === frame ? 0.35 : 0.25;
+					const smallCircleRadius = keyFrame.frame === frame ? 0.2 : 0.125;
+
 					return (
 						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
 							<rect
@@ -204,7 +207,7 @@ export const KeyFramesGroupViz: React.FC<{
 							<circle
 								cx={frameToPixel(keyFrame.frame)}
 								cy={HEIGHT_PER_FRAME / 2}
-								r={HEIGHT_PER_FRAME * 0.25}
+								r={HEIGHT_PER_FRAME * bigCircleRadius}
 								fill={bigCircleFill}
 							/>
 
@@ -212,7 +215,7 @@ export const KeyFramesGroupViz: React.FC<{
 								cx={frameToPixel(keyFrame.frame)}
 								cy={HEIGHT_PER_FRAME / 2}
 								fill={smallCircleFill}
-								r={HEIGHT_PER_FRAME * 0.125}
+								r={HEIGHT_PER_FRAME * smallCircleRadius}
 							/>
 
 							<text
@@ -390,7 +393,7 @@ export const KeyFramesGroupViz: React.FC<{
 						// stroke={'#aaa'}
 						stroke={'#f05122'}
 						opacity={0.5}
-						strokeWidth={2}
+						strokeWidth={3}
 					/>
 				</g>
 			</svg>
@@ -409,52 +412,38 @@ function formatNumberToSeconds(value: number): string {
 // console.log(formatted); // Output: "3.7s"
 
 // ************************************************************************
-// Key Frame Spec TODO integrate this more readable solution!!!!!!
-// ************************************************************************
-
-// TODO evtl. types like for specifying keyframes?
-// [string, "FRAME", number]
-// [string, "R_FRAME", string, number]
-// [string, "SECONDS", number]
-// [string, "R_SECONDS", string, number]
-// type ID = string;
-// type FRAME_NR = number;
-// type FRAME_AMOUNT = number;
-// type RELATIVE_FRAME_ID = string;
-
-// type TKeyFrameSpec_FRAME = ['FRAME', ID, FRAME_NR];
-// type TKeyFrameSpec_R_FRAME = ['R_FRAME', ID, RELATIVE_FRAME_ID, FRAME_AMOUNT];
-
-// type TKeyFrameSpec = TKeyFrameSpec_FRAME | TKeyFrameSpec_R_FRAME;
-
-// const test1: TKeyFrameSpec = ['FRAME', '001', 100];
-// console.log(test1);
-
-// ************************************************************************
 // Key Frame Spec
 // ************************************************************************
-type TSeqKeyFrameSpec_GLOBAL_SECOND = {
-	type: 'GLOBAL_SECOND';
+type TKeyFrameSpec_SECOND = {
+	type: 'SECOND';
 	value: number;
 	id: string;
 };
-type TSeqKeyFrameSpec_GLOBAL_FRAME = {
+type TKeyFrameSpec_FRAME = {
 	type: 'FRAME';
 	value: number;
 	id: string;
 };
 
-type TSeqKeyFrameSpec_RELATIVE_FRAME = {
+type TKeyFrameSpec_R_SECOND = {
+	type: 'R_SECOND';
+	value: number;
+	id: string;
+	relativeId: string;
+};
+
+type TKeyFrameSpec_R_FRAME = {
 	type: 'R_FRAME';
 	value: number;
 	id: string;
 	relativeId: string;
 };
 
-type TSeqKeyFrameSpec =
-	| TSeqKeyFrameSpec_GLOBAL_SECOND
-	| TSeqKeyFrameSpec_GLOBAL_FRAME
-	| TSeqKeyFrameSpec_RELATIVE_FRAME;
+type TKeyFrameSpec =
+	| TKeyFrameSpec_SECOND
+	| TKeyFrameSpec_R_SECOND
+	| TKeyFrameSpec_FRAME
+	| TKeyFrameSpec_R_FRAME;
 
 // ************************************************************************
 // KeyFrames
@@ -463,7 +452,7 @@ type TSeqKeyFrameSpec =
 type TKeyFrame = {
 	id: string;
 	frame: number;
-	spec: TSeqKeyFrameSpec; // TODO rename to TKeyFrameSpec
+	spec: TKeyFrameSpec;
 };
 
 type TKeyFramesGroup = {
@@ -490,14 +479,18 @@ function getSign(value: number): number {
 function buildKeyFramesGroup(
 	durationInFrames: number,
 	fps: number,
-	keyFrameSpecs: TSeqKeyFrameSpec[]
+	keyFrameSpecs: TKeyFrameSpec[]
 ): TKeyFramesGroup {
 	// TODO check id uniqueness, if not unique raise error!
 
 	const keyFrames = keyFrameSpecs.reduce<TKeyFrame[]>((acc, keyFrameSpec) => {
 		let keyFrame: number;
-		if (keyFrameSpec.type === 'GLOBAL_SECOND') {
-			keyFrame = Math.floor(keyFrameSpec.value * fps); // Convert seconds to frames
+		if (keyFrameSpec.type === 'SECOND') {
+			if (getSign(keyFrameSpec.value) === 1) {
+				keyFrame = Math.floor(keyFrameSpec.value * (fps - 1)); // Convert seconds to frames
+			} else {
+				keyFrame = durationInFrames - 1 + keyFrameSpec.value * fps;
+			}
 		} else if (keyFrameSpec.type === 'FRAME') {
 			if (getSign(keyFrameSpec.value) === 1) {
 				keyFrame = keyFrameSpec.value;
@@ -515,6 +508,16 @@ function buildKeyFramesGroup(
 				);
 			}
 			keyFrame = relativeKeyFrameObject.frame + keyFrameSpec.value;
+		} else if (keyFrameSpec.type === 'R_SECOND') {
+			const relativeKeyFrameObject = acc.find(
+				(currentKeyFrame) => currentKeyFrame.id === keyFrameSpec.relativeId
+			);
+			if (!relativeKeyFrameObject) {
+				throw new Error(
+					`Unknown relative keyframe id ${keyFrameSpec.relativeId}`
+				);
+			}
+			keyFrame = relativeKeyFrameObject.frame + keyFrameSpec.value * fps;
 		} else {
 			throw new Error(`Unknown keyFrame type`);
 		}
