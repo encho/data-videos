@@ -45,22 +45,29 @@ export const SequencingComposition: React.FC<
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'SECOND', value: 1, id: 'TITLE_ENTER_START'},
 		{
-			type: 'R_SECOND',
-			value: 1,
+			type: 'R_FRAME',
+			value: 120,
 			id: 'TITLE_ENTER_END',
 			relativeId: 'TITLE_ENTER_START',
 		},
 		{
-			type: 'SECOND',
-			value: -0,
+			// type: 'SECOND',
+			type: 'FRAME',
+			value: -90,
 			id: 'TITLE_EXIT_END',
 		},
 		{
 			type: 'R_SECOND',
-			value: -1,
+			value: -4,
 			id: 'TITLE_EXIT_START',
 			relativeId: 'TITLE_EXIT_END',
 		},
+		// {
+		// 	type: 'SECOND',
+		// 	value: -2,
+		// 	id: 'TITLE_EXIT_START',
+		// 	// relativeId: 'TITLE_EXIT_END',
+		// },
 	]);
 
 	const width = 600;
@@ -318,11 +325,16 @@ export const KeyFramesInspector: React.FC<{
 							x2={frameToPixel(frame)}
 							y1={0}
 							y2={height + 100}
-							// stroke={'#aaa'}
 							stroke={'#f05122'}
-							// opacity={0.5}
 							strokeWidth={2}
 						/>
+						<circle
+							cx={frameToPixel(frame)}
+							cy={height + 100}
+							fill={'#f05122'}
+							r={4}
+						/>
+						<circle cx={frameToPixel(frame)} cy={0} fill={'#f05122'} r={4} />
 					</g>
 
 					{/* The x axis current frame flag */}
@@ -399,8 +411,46 @@ export const KeyFramesInspector: React.FC<{
 					const bigCircleRadius = keyFrame.frame === frame ? 0.35 : 0.25;
 					const smallCircleRadius = keyFrame.frame === frame ? 0.2 : 0.125;
 
+					const specType = keyFrame.spec.type;
+					const sign = getSign(keyFrame.spec.value);
+
+					console.log({specType, sign});
+
 					// TODO variable
-					const anchorFrame = 0;
+					let anchorFrame;
+					if (
+						keyFrame.spec.type === 'FRAME' &&
+						getSign(keyFrame.spec.value) === 1
+					) {
+						anchorFrame = 0;
+					} else if (
+						keyFrame.spec.type === 'FRAME' &&
+						getSign(keyFrame.spec.value) === -1
+					) {
+						anchorFrame = durationInFrames - 1;
+					} else if (
+						keyFrame.spec.type === 'SECOND' &&
+						getSign(keyFrame.spec.value) === 1
+					) {
+						anchorFrame = 0;
+						// TODO negatyive second
+						// TODO relative frame and second
+					} else if (
+						keyFrame.spec.type === 'SECOND' &&
+						getSign(keyFrame.spec.value) === -1
+					) {
+						anchorFrame = durationInFrames - 1;
+					} else if (
+						keyFrame.spec.type === 'R_FRAME' ||
+						keyFrame.spec.type === 'R_SECOND'
+					) {
+						anchorFrame = getKeyFrame(
+							keyFramesGroup,
+							keyFrame.spec.relativeId
+						).frame;
+					} else {
+						throw Error('error determining anchorFrame!');
+					}
 
 					return (
 						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
@@ -427,9 +477,10 @@ export const KeyFramesInspector: React.FC<{
 								<line
 									x1={frameToPixel(anchorFrame)}
 									x2={frameToPixel(anchorFrame)}
-									// x2={frameToPixel(keyFrame.frame)}
 									y1={20}
 									y2={HEIGHT_PER_FRAME - 20}
+									// y1={0}
+									// y2={HEIGHT_PER_FRAME}
 									stroke={'cyan'}
 									opacity={0.75}
 									strokeWidth={1}
