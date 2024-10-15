@@ -126,9 +126,9 @@ import {
 } from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlide';
 
 import {
-	SequencingComposition,
-	sequencingCompositionSchema,
-} from './compositions/POCs/Sequencing/Sequencing/SequencingComposition';
+	KeyframesComposition,
+	keyframesCompositionSchema,
+} from './compositions/POCs/Keyframes/Keyframes/KeyframesComposition';
 
 import './tailwind.css';
 
@@ -419,16 +419,16 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="Sequencing">
+				<Folder name="Keyframes">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="Sequencing"
-						component={SequencingComposition}
+						id="Keyframes"
+						component={KeyframesComposition}
 						durationInFrames={90 * 10}
 						fps={90}
 						{...linkedInTallVideo}
-						schema={sequencingCompositionSchema}
+						schema={keyframesCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

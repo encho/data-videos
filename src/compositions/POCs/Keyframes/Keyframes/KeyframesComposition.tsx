@@ -22,15 +22,15 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
-export const sequencingCompositionSchema = z.object({
+export const keyframesCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
 // TODO test TestPath feature for example in this lib (try paper.js first)
 // https://svgjs.dev/docs/3.1/shape-elements/
 
-export const SequencingComposition: React.FC<
-	z.infer<typeof sequencingCompositionSchema>
+export const KeyframesComposition: React.FC<
+	z.infer<typeof keyframesCompositionSchema>
 > = ({themeEnum}) => {
 	useFontFamiliesLoader([
 		'Inter-Regular',
