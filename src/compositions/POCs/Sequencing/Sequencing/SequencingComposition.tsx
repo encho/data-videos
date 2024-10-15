@@ -1,10 +1,18 @@
 import {z} from 'zod';
 import React from 'react';
-import {interpolate, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import {
+	interpolate,
+	useCurrentFrame,
+	useVideoConfig,
+	Easing,
+	AbsoluteFill,
+} from 'remotion';
 import {scaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import chroma from 'chroma-js';
 
+import {Position} from '../../../../acetti-ts-base/Position';
+import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -136,6 +144,23 @@ export const SequencingComposition: React.FC<
 				/>
 			</div>
 
+			{/* <AbsoluteFill>
+				<Position position={{left: 150, top: 900}}>
+					<ObliquePlatte width={800} height={400} theme={theme.platte}>
+						<div
+							style={{display: 'flex', justifyContent: 'center', marginTop: 40}}
+						>
+							<KeyFramesInspector
+								keyFramesGroup={keyFramesGroup}
+								width={600}
+								baseFontSize={20}
+								frame={frame}
+							/>
+						</div>
+					</ObliquePlatte>
+				</Position>
+			</AbsoluteFill> */}
+
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
 	);
@@ -181,58 +206,6 @@ export const KeyFramesInspector: React.FC<{
 					display: 'inline-block',
 				}}
 			>
-				{/* TODO evtl. use layout engine */}
-				{keyFrames.map((keyFrame, i) => {
-					const rgbaColor1 = chroma('#f05122').brighten(0.5).alpha(0.3).css();
-					const rgbaColor2 = chroma('#f05122').brighten(0.5).alpha(1).css();
-
-					const bigCircleFill =
-						keyFrame.frame === frame ? rgbaColor1 : 'rgba(255,255,255,0.25)';
-					const smallCircleFill =
-						keyFrame.frame === frame ? rgbaColor2 : 'rgba(255,255,255,1)';
-
-					const bigCircleRadius = keyFrame.frame === frame ? 0.35 : 0.25;
-					const smallCircleRadius = keyFrame.frame === frame ? 0.2 : 0.125;
-
-					return (
-						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
-							<rect
-								x={0}
-								y={0}
-								height={HEIGHT_PER_FRAME}
-								width={width}
-								stroke="rgba(255,255,255,0.2)"
-							/>
-
-							<circle
-								cx={frameToPixel(keyFrame.frame)}
-								cy={HEIGHT_PER_FRAME / 2}
-								r={HEIGHT_PER_FRAME * bigCircleRadius}
-								fill={bigCircleFill}
-							/>
-
-							<circle
-								cx={frameToPixel(keyFrame.frame)}
-								cy={HEIGHT_PER_FRAME / 2}
-								fill={smallCircleFill}
-								r={HEIGHT_PER_FRAME * smallCircleRadius}
-							/>
-
-							<text
-								fill={'#bbb'}
-								fontSize={baseFontSize}
-								y={HEIGHT_PER_FRAME / 2}
-								x={frameToPixel(keyFrame.frame) + 15}
-								dominantBaseline="middle"
-								fontFamily="Inter-Regular"
-								dy=".1em"
-							>
-								{keyFrame.id}
-							</text>
-						</g>
-					);
-				})}
-
 				{/* The x axis */}
 				<g
 					transform={`translate(${0}, ${
@@ -283,29 +256,6 @@ export const KeyFramesInspector: React.FC<{
 							</g>
 						);
 					})}
-
-					<rect
-						x={secondToPixel(frame / fps) - 35}
-						y={20}
-						height={baseFontSize + 10}
-						width={35 * 2}
-						fill="#f05122"
-						rx={3}
-						ry={3}
-					/>
-					<text
-						fill={'#000'}
-						fontSize={baseFontSize}
-						// y={height + 5}
-						y={20 + 5}
-						x={frameToPixel(frame)}
-						textAnchor="middle"
-						dominantBaseline="hanging"
-						fontFamily="Inter-Bold"
-						dy=".1em"
-					>
-						{frame}
-					</text>
 				</g>
 
 				{/* The seconds axis */}
@@ -358,44 +308,136 @@ export const KeyFramesInspector: React.FC<{
 							</g>
 						);
 					})}
-
-					<rect
-						x={secondToPixel(frame / fps) - 35}
-						y={20}
-						height={baseFontSize + 10}
-						width={35 * 2}
-						fill="#f05122"
-						rx={3}
-						ry={3}
-					/>
-
-					<text
-						fill={'#000'}
-						fontSize={baseFontSize}
-						y={20 + 5}
-						x={secondToPixel(frame / fps)}
-						textAnchor="middle"
-						dominantBaseline="hanging"
-						fontFamily="Inter-Bold"
-						dy=".1em"
-					>
-						{formatNumberToSeconds(frame / fps)}
-					</text>
 				</g>
 
-				{/* the line for current position */}
 				<g>
-					<line
-						x1={frameToPixel(frame)}
-						x2={frameToPixel(frame)}
-						y1={0}
-						y2={height + 100}
-						// stroke={'#aaa'}
-						stroke={'#f05122'}
-						opacity={0.5}
-						strokeWidth={3}
-					/>
+					{/* the line for current position */}
+					<g>
+						<line
+							x1={frameToPixel(frame)}
+							x2={frameToPixel(frame)}
+							y1={0}
+							y2={height + 100}
+							// stroke={'#aaa'}
+							stroke={'#f05122'}
+							// opacity={0.5}
+							strokeWidth={2}
+						/>
+					</g>
+
+					{/* The x axis current frame flag */}
+					<g
+						transform={`translate(${0}, ${
+							keyFrames.length * HEIGHT_PER_FRAME + 10
+						})`}
+					>
+						<rect
+							x={secondToPixel(frame / fps) - 35}
+							y={20}
+							height={baseFontSize + 10}
+							width={35 * 2}
+							fill="#f05122"
+							rx={3}
+							ry={3}
+						/>
+						<text
+							fill={'#000'}
+							fontSize={baseFontSize}
+							// y={height + 5}
+							y={20 + 5}
+							x={frameToPixel(frame)}
+							textAnchor="middle"
+							dominantBaseline="hanging"
+							fontFamily="Inter-Bold"
+							dy=".1em"
+						>
+							{frame}
+						</text>
+					</g>
+
+					{/* The seconds axis current frame flag*/}
+					<g
+						transform={`translate(${0}, ${
+							keyFrames.length * HEIGHT_PER_FRAME + 10 + 80
+						})`}
+					>
+						<rect
+							x={secondToPixel(frame / fps) - 35}
+							y={20}
+							height={baseFontSize + 10}
+							width={35 * 2}
+							fill="#f05122"
+							rx={3}
+							ry={3}
+						/>
+
+						<text
+							fill={'#000'}
+							fontSize={baseFontSize}
+							y={20 + 5}
+							x={secondToPixel(frame / fps)}
+							textAnchor="middle"
+							dominantBaseline="hanging"
+							fontFamily="Inter-Bold"
+							dy=".1em"
+						>
+							{formatNumberToSeconds(frame / fps)}
+						</text>
+					</g>
 				</g>
+
+				{/* TODO evtl. use layout engine */}
+				{keyFrames.map((keyFrame, i) => {
+					const rgbaColor1 = chroma('#f05122').brighten(0.5).alpha(0.3).css();
+					const rgbaColor2 = chroma('#f05122').brighten(0.5).alpha(1).css();
+
+					const bigCircleFill =
+						keyFrame.frame === frame ? rgbaColor1 : 'rgba(255,255,255,0.25)';
+					const smallCircleFill =
+						keyFrame.frame === frame ? rgbaColor2 : 'rgba(255,255,255,1)';
+
+					const bigCircleRadius = keyFrame.frame === frame ? 0.35 : 0.25;
+					const smallCircleRadius = keyFrame.frame === frame ? 0.2 : 0.125;
+
+					return (
+						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
+							<rect
+								x={0}
+								y={0}
+								height={HEIGHT_PER_FRAME}
+								width={width}
+								stroke="rgba(255,255,255,0.2)"
+								fill="transparent"
+							/>
+
+							<circle
+								cx={frameToPixel(keyFrame.frame)}
+								cy={HEIGHT_PER_FRAME / 2}
+								r={HEIGHT_PER_FRAME * bigCircleRadius}
+								fill={bigCircleFill}
+							/>
+
+							<circle
+								cx={frameToPixel(keyFrame.frame)}
+								cy={HEIGHT_PER_FRAME / 2}
+								fill={smallCircleFill}
+								r={HEIGHT_PER_FRAME * smallCircleRadius}
+							/>
+
+							<text
+								fill={'#bbb'}
+								fontSize={baseFontSize}
+								y={HEIGHT_PER_FRAME / 2}
+								x={frameToPixel(keyFrame.frame) + 15}
+								dominantBaseline="middle"
+								fontFamily="Inter-Regular"
+								dy=".1em"
+							>
+								{keyFrame.id}
+							</text>
+						</g>
+					);
+				})}
 			</svg>
 		</div>
 	);
