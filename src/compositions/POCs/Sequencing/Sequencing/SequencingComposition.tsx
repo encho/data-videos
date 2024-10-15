@@ -103,7 +103,7 @@ export const SequencingComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<SlideTitle theme={theme}>Key-Framing</SlideTitle>
+			<SlideTitle theme={theme}>Keyframe-Transitions</SlideTitle>
 
 			{/* <div>
 				<div style={{fontSize: 30, color: 'white'}}>
@@ -116,8 +116,8 @@ export const SequencingComposition: React.FC<
 				style={{
 					display: 'flex',
 					justifyContent: 'center',
-					marginTop: 40,
-					marginBottom: 60,
+					marginTop: 0,
+					marginBottom: 70,
 				}}
 			>
 				<div
@@ -140,7 +140,7 @@ export const SequencingComposition: React.FC<
 							opacity: titleOpacity,
 						}}
 					>
-						Let's start!
+						Halloween
 					</div>
 				</div>
 			</div>
@@ -148,8 +148,8 @@ export const SequencingComposition: React.FC<
 			<div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}>
 				<KeyFramesInspector
 					keyFramesGroup={keyFramesGroup}
-					width={800}
-					baseFontSize={20}
+					width={700}
+					baseFontSize={18}
 					frame={frame}
 				/>
 			</div>
@@ -163,7 +163,7 @@ export const SequencingComposition: React.FC<
 							<KeyFramesInspector
 								keyFramesGroup={keyFramesGroup}
 								width={500}
-								baseFontSize={20}
+								baseFontSize={16}
 								frame={frame}
 							/>
 						</div>
@@ -729,10 +729,8 @@ function getActiveTransitionIndex(
 
 	return 0; // Default case, though this should never be reached
 }
-
 // // Example usage:
 // const keyframes = [0, 100, 200, 500];
-
 // // Test cases
 // console.log(getActiveTransitionIndex(keyframes, 220));  // Output: 2
 // console.log(getActiveTransitionIndex(keyframes, 100));  // Output: 1
