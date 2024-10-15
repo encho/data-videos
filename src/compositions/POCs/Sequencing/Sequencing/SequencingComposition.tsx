@@ -399,6 +399,9 @@ export const KeyFramesInspector: React.FC<{
 					const bigCircleRadius = keyFrame.frame === frame ? 0.35 : 0.25;
 					const smallCircleRadius = keyFrame.frame === frame ? 0.2 : 0.125;
 
+					// TODO variable
+					const anchorFrame = 0;
+
 					return (
 						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
 							<rect
@@ -409,6 +412,29 @@ export const KeyFramesInspector: React.FC<{
 								stroke="rgba(255,255,255,0.2)"
 								fill="transparent"
 							/>
+
+							{/* display frame anchor point */}
+							<g>
+								<line
+									x1={frameToPixel(anchorFrame)}
+									x2={frameToPixel(keyFrame.frame)}
+									y1={HEIGHT_PER_FRAME / 2}
+									y2={HEIGHT_PER_FRAME / 2}
+									stroke={'cyan'}
+									opacity={0.75}
+									strokeWidth={1}
+								/>
+								<line
+									x1={frameToPixel(anchorFrame)}
+									x2={frameToPixel(anchorFrame)}
+									// x2={frameToPixel(keyFrame.frame)}
+									y1={20}
+									y2={HEIGHT_PER_FRAME - 20}
+									stroke={'cyan'}
+									opacity={0.75}
+									strokeWidth={1}
+								/>
+							</g>
 
 							<circle
 								cx={frameToPixel(keyFrame.frame)}
