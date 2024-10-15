@@ -145,7 +145,7 @@ export const SequencingComposition: React.FC<
 			<div style={{display: 'flex', justifyContent: 'center', marginTop: 40}}>
 				<KeyFramesInspector
 					keyFramesGroup={keyFramesGroup}
-					width={600}
+					width={800}
 					baseFontSize={20}
 					frame={frame}
 				/>
@@ -159,7 +159,7 @@ export const SequencingComposition: React.FC<
 						>
 							<KeyFramesInspector
 								keyFramesGroup={keyFramesGroup}
-								width={600}
+								width={500}
 								baseFontSize={20}
 								frame={frame}
 							/>
