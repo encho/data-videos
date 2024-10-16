@@ -4,7 +4,7 @@ const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
-	const fontSize = 36; // TODO from theme or pageContext or typographyContext or so
+	const fontSize = 32; // TODO from theme or pageContext or typographyContext or so
 
 	const entryDurationInFrames = fps * 1;
 

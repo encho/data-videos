@@ -90,7 +90,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 						fadeInDurationInFrames={FLY_IN_CHARACTER_DURATION}
 						translateY={-300}
 					>
-						{char}
+						{char === ' ' ? '\u2002' : char}
 					</EnterCharacter>
 				))}
 			</Sequence>
@@ -107,7 +107,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 							display: 'inline-block',
 						}}
 					>
-						{char}
+						{char === ' ' ? '\u2002' : char}
 					</span>
 				))}
 			</Sequence>
@@ -125,7 +125,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 						fadeOutDurationInFrames={FLY_OUT_CHARACTER_DURATION}
 						translateY={200}
 					>
-						{char}
+						{children}
 					</ExitCharacter>
 				))}
 			</Sequence>

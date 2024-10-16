@@ -11,7 +11,7 @@ export const EconomistDataSource = ({
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
-	const fontSize = 36; // TODO should come from theme or global page context or so
+	const fontSize = 32; // TODO should come from theme or global page context or so
 	const color = theme.EconomistDataSource.textColor;
 
 	const entryDurationInFrames = fps * 1;

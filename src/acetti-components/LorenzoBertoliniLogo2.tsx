@@ -6,7 +6,7 @@ export const LorenzoBertoliniLogo2 = ({theme}: {theme: ThemeType}) => {
 	const {fps} = useVideoConfig();
 
 	const color = theme.typography.logoColor;
-	const fontSize = 36; // TODO from theme or pageContext or typographyContext or so
+	const fontSize = 32; // TODO from theme or pageContext or typographyContext or so
 
 	const entryDurationInFrames = fps * 1;
 
