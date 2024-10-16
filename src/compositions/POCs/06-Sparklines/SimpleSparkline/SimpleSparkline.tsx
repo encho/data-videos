@@ -12,7 +12,6 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {SparklineLargeKeyframes} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLargeKeyframes';
@@ -70,7 +69,8 @@ export const SimpleSparklineComposition: React.FC<
 		>
 			<SlideTitle theme={theme}>The Sparkline</SlideTitle>
 
-			<Sequence from={fps * 1.5} layout="none">
+			{/* <Sequence from={fps * 1.5} layout="none"> */}
+			<Sequence from={fps * 4.5} layout="none">
 				<div>
 					<div
 						style={{
@@ -81,6 +81,7 @@ export const SimpleSparklineComposition: React.FC<
 						}}
 					>
 						<SparklineLarge
+							id="001"
 							data={timeSeries}
 							width={CHART_WIDTH}
 							height={CHART_HEIGHT}

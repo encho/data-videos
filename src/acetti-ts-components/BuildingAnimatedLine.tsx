@@ -9,6 +9,7 @@ import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTi
 import {isNumber} from 'lodash';
 
 export const BuildingAnimatedLine: React.FC<{
+	id: string; // id serves to uniquely define the mask
 	lineColor: string;
 	area: TGridLayoutArea;
 	timeSeries: TimeSeries;
@@ -18,6 +19,7 @@ export const BuildingAnimatedLine: React.FC<{
 	fadeInDurationInFrames: number;
 	fadeOutDurationInFrames: number;
 }> = ({
+	id,
 	lineColor,
 	area,
 	timeSeries,
@@ -28,7 +30,10 @@ export const BuildingAnimatedLine: React.FC<{
 	fadeOutDurationInFrames,
 }) => {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {
+		// fps,
+		durationInFrames,
+	} = useVideoConfig();
 
 	// const percAnimation = interpolate(
 	// 	frame,
@@ -107,6 +112,8 @@ export const BuildingAnimatedLine: React.FC<{
 
 	const d = linePath(timeSeries) || '';
 
+	const maskId = `plotAreaClipPath-${id}`;
+
 	return (
 		<svg
 			overflow="visible"
@@ -116,17 +123,17 @@ export const BuildingAnimatedLine: React.FC<{
 		>
 			<defs>
 				{isFadingOut ? (
-					<clipPath id="plotAreaClipPath2">
+					<clipPath id={maskId}>
 						<rect x={area.width - x} y={0} width={x} height={area.height} />
 					</clipPath>
 				) : (
-					<clipPath id="plotAreaClipPath2">
+					<clipPath id={maskId}>
 						<rect x={0} y={0} width={x} height={area.height} />
 					</clipPath>
 				)}
 			</defs>
 
-			<g clipPath="url(#plotAreaClipPath2)">
+			<g clipPath={`url(#${maskId})`}>
 				<path d={d} stroke={lineColor} strokeWidth={4} fill="none" />
 				{/* dots */}
 			</g>

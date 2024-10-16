@@ -23,6 +23,7 @@ import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/
 import {getLargeSparklineKeyFrames} from './getKeyframes';
 
 export const SparklineChartComponent: React.FC<{
+	id: string; // id serves to uniquely define the mask
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
@@ -51,6 +52,7 @@ export const SparklineChartComponent: React.FC<{
 	};
 	lineColor?: string;
 }> = ({
+	id,
 	layoutAreas,
 	timeSeries,
 	theme,
@@ -127,6 +129,7 @@ export const SparklineChartComponent: React.FC<{
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 				>
 					<BuildingAnimatedLine
+						id={id}
 						lineColor={lineColor || theme.typography.textColor}
 						periodsScale={currentPeriodsScale}
 						yScale={yScale}

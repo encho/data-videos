@@ -26,6 +26,7 @@ export const sparklinePOCSchema = z.object({
 });
 
 type TSparklineChartWrapperProps = {
+	id: string; // The id serves to uniquely define the svg mask
 	data: {value: number; date: Date}[];
 	width: number;
 	height: number;
@@ -36,6 +37,7 @@ type TSparklineChartWrapperProps = {
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
+	id,
 	data,
 	width,
 	height,
@@ -120,6 +122,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 					{({periodsScale, yScale, currentSliceInfo}) => {
 						return (
 							<SparklineChartComponent
+								id={id}
 								timeSeries={data}
 								layoutAreas={{
 									plot: chartLayout.areas.plot,

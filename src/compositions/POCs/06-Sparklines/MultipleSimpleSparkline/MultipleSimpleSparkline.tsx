@@ -152,6 +152,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				<HtmlArea area={area_1}>
 					<Sequence from={fps * 1.5} layout="none">
 						<SparklineLarge
+							id={'001'}
 							data={timeSeries}
 							width={area_1.width}
 							height={area_1.height}
@@ -165,6 +166,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				<HtmlArea area={area_2}>
 					<Sequence from={Math.floor(fps * 4.5)} layout="none">
 						<SparklineLarge
+							id={'002'}
 							data={timeSeriesComparison}
 							width={area_2.width}
 							height={area_2.height}
@@ -178,6 +180,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				<HtmlArea area={area_3}>
 					<Sequence from={Math.floor(fps * 4.5)} layout="none">
 						<SparklineLarge
+							id={'003'}
 							data={timeSeriesComparison}
 							width={area_3.width}
 							height={area_3.height}
@@ -191,6 +194,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				<HtmlArea area={area_4}>
 					<Sequence from={Math.floor(fps * 4.5)} layout="none">
 						<SparklineLarge
+							id={'004'}
 							data={timeSeries}
 							width={area_4.width}
 							height={area_4.height}
