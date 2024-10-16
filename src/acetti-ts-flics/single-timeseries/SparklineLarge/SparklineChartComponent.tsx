@@ -16,16 +16,11 @@ import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 
 import {
-	buildKeyFramesGroup,
 	getKeyFrame,
 	TKeyFramesGroup,
 } from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
-import {
-	KeyFramesInspector,
-	KeyFramesSequence,
-} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
-
-type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
+import {getLargeSparklineKeyFrames} from './getKeyframes';
 
 export const SparklineChartComponent: React.FC<{
 	timeSeries: TimeSeries;
@@ -36,7 +31,6 @@ export const SparklineChartComponent: React.FC<{
 		leftValueLabel: TGridLayoutArea;
 		rightValueLabel: TGridLayoutArea;
 	};
-	yDomainType: TYDomainType;
 	theme: ThemeType;
 	yScale: ScaleLinear<number, number>;
 	periodScale: TPeriodsScale;
@@ -71,71 +65,7 @@ export const SparklineChartComponent: React.FC<{
 
 	const axisSpec = getJustFirstAndLastAxisSpec(currentPeriodsScale);
 
-	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
-		{type: 'SECOND', value: 0, id: 'X_AXIS_ENTER_START'},
-		{
-			type: 'R_SECOND',
-			value: 1.3,
-			id: 'X_AXIS_ENTER_END',
-			relativeId: 'X_AXIS_ENTER_START',
-		},
-		{
-			type: 'FRAME',
-			value: -0,
-			id: 'X_AXIS_END',
-		},
-		{
-			type: 'R_SECOND',
-			value: 0.5,
-			id: 'LEFT_VALUE_ENTER',
-			relativeId: 'X_AXIS_ENTER_END',
-		},
-		{
-			type: 'SECOND',
-			value: -1,
-			id: 'LEFT_VALUE_EXIT_END',
-		},
-		{
-			type: 'R_SECOND',
-			value: -1,
-			id: 'LEFT_VALUE_EXIT_START',
-			relativeId: 'LEFT_VALUE_EXIT_END',
-		},
-		{
-			type: 'R_SECOND',
-			value: 0.5,
-			id: 'SPARKLINE_ENTER',
-			relativeId: 'LEFT_VALUE_ENTER',
-		},
-		{
-			type: 'R_SECOND',
-			value: 0.5,
-			id: 'SPARKLINE_ENTER_END',
-			relativeId: 'SPARKLINE_ENTER',
-		},
-		{
-			type: 'FRAME',
-			value: -0,
-			id: 'SPARKLINE_END',
-		},
-		{
-			type: 'R_SECOND',
-			value: -0.3,
-			id: 'SPARKLINE_EXIT_START',
-			relativeId: 'LEFT_VALUE_EXIT_END',
-		},
-		{
-			type: 'FRAME',
-			value: -0,
-			id: 'RIGHT_VALUE_END',
-		},
-		{
-			type: 'R_SECOND',
-			value: -0.5,
-			id: 'RIGHT_VALUE_START',
-			relativeId: 'SPARKLINE_ENTER_END',
-		},
-	]);
+	const keyframes = getLargeSparklineKeyFrames({durationInFrames, fps});
 
 	const XAXIS_FADE_IN_DURATION = getExclusiveDuration(
 		keyframes,
@@ -324,7 +254,7 @@ export const SparklineChartComponent: React.FC<{
 
 			{/* <Position position={{left: , top: 380}}> */}
 			{/* TODO change prop name to just keyframes */}
-			<div
+			{/* <div
 				style={{
 					marginTop: 380,
 					display: 'flex',
@@ -338,7 +268,7 @@ export const SparklineChartComponent: React.FC<{
 					baseFontSize={18}
 					frame={frame}
 				/>
-			</div>
+			</div> */}
 			{/* </Position> */}
 		</>
 	);

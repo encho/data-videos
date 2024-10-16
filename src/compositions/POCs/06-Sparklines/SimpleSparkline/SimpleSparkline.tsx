@@ -7,14 +7,15 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {SparklineLarge} from '../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
-import {SlideTitle} from '../02-TypographicLayouts/SlideTitle';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
+import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
+import {SparklineLargeKeyframes} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLargeKeyframes';
 
 const timeSeries = [
 	// {value: 50, date: new Date('2010-12-31')},
@@ -37,13 +38,13 @@ const timeSeries = [
 	{value: 88, date: new Date('2026-12-31')},
 ];
 
-export const sparklinePOCSchema = z.object({
+export const simpleSparklineCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
-	themeEnum,
-}) => {
+export const SimpleSparklineComposition: React.FC<
+	z.infer<typeof simpleSparklineCompositionSchema>
+> = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -70,20 +71,32 @@ export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
 			<SlideTitle theme={theme}>The Sparkline</SlideTitle>
 
 			<Sequence from={fps * 1.5} layout="none">
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						marginTop: 0,
-						opacity,
-					}}
-				>
-					<SparklineLarge
-						data={timeSeries}
-						width={CHART_WIDTH}
-						height={CHART_HEIGHT}
-						theme={theme}
-					/>
+				<div>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							marginTop: 0,
+							opacity,
+						}}
+					>
+						<SparklineLarge
+							data={timeSeries}
+							width={CHART_WIDTH}
+							height={CHART_HEIGHT}
+							theme={theme}
+						/>
+					</div>
+
+					<div
+						style={{display: 'flex', justifyContent: 'center', marginTop: 350}}
+					>
+						<SparklineLargeKeyframes
+							width={720}
+							theme={theme}
+							baseFontSize={15}
+						/>
+					</div>
 				</div>
 			</Sequence>
 

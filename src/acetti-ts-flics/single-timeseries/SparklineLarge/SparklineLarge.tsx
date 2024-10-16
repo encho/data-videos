@@ -1,14 +1,15 @@
 import {z} from 'zod';
-import {Sequence, Easing, useVideoConfig} from 'remotion';
+import {useCurrentFrame, Sequence, Easing, useVideoConfig} from 'remotion';
 import {measureText} from '@remotion/layout-utils';
 
+import {KeyFramesInspector} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
 import {LineChartAnimationContainer} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {first} from 'lodash';
+import {getLargeSparklineKeyFrames} from './getKeyframes';
 
 const Y_DOMAIN_TYPE = 'FULL';
 
@@ -29,6 +30,7 @@ type TSparklineChartWrapperProps = {
 	width: number;
 	height: number;
 	theme: ThemeType;
+	domain?: [number, number];
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
@@ -36,18 +38,20 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	width,
 	height,
 	theme,
+	domain,
+	// TODO pass text props // Inter-Bold e.g.
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const leftValueLabelTextProps = {
-		fontFamily: 'Arial',
+		fontFamily: 'Arial', // TODO use from text props
 		fontWeight: 500,
 		fontSize: 30,
 		// letterSpacing: 1,
 	};
 
 	const rightValueLabelTextProps = {
-		fontFamily: 'Arial',
+		fontFamily: 'Arial', // TODO use from text props
 		fontWeight: 500,
 		fontSize: 36,
 		// letterSpacing: 1,
@@ -86,9 +90,9 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 					height={height}
 				/>
 			</div>
-			{/* <Sequence from={90 * 1}> */}
-			<Sequence from={90 * 0} name="LineChartAnimationContainer">
+			<Sequence name="LineChartAnimationContainer">
 				<LineChartAnimationContainer
+					yDomain={domain}
 					timeSeries={data}
 					viewSpecs={[
 						{
@@ -120,7 +124,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 									leftValueLabel: chartLayout.areas.leftValueLabel,
 									rightValueLabel: chartLayout.areas.rightValueLabel,
 								}}
-								yDomainType={Y_DOMAIN_TYPE}
+								// yDomainType={Y_DOMAIN_TYPE}
 								theme={theme}
 								yScale={yScale}
 								periodScale={periodsScale}

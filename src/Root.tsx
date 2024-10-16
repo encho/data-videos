@@ -91,9 +91,14 @@ import {
 } from './compositions/POCs/04-BarCharts/SimpleBarChart/SimpleBarChartComposition';
 
 import {
-	SparklinePOC,
-	sparklinePOCSchema,
-} from './compositions/POCs/SparklinePOC/SparklinePOC';
+	SimpleSparklineComposition,
+	simpleSparklineCompositionSchema,
+} from './compositions/POCs/06-Sparklines/SimpleSparkline/SimpleSparkline';
+
+import {
+	MultipleSimpleSparklineComposition,
+	multipleSimpleSparklineCompositionSchema,
+} from './compositions/POCs/06-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparkline';
 
 import {
 	MultipleSimpleColumnChartPOC,
@@ -141,6 +146,8 @@ const linkedInTallVideo = {
 	width: 1080,
 	height: 1350,
 };
+
+const widescreen_16x9_video = {width: 1920, height: 1080};
 
 export const RemotionRoot: React.FC = () => {
 	return (
@@ -397,11 +404,23 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleSparkline"
-						component={SparklinePOC}
+						component={SimpleSparklineComposition}
 						durationInFrames={90 * 9}
 						fps={90}
 						{...linkedInTallVideo}
-						schema={sparklinePOCSchema}
+						schema={simpleSparklineCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="MultipleSimpleSparkline"
+						component={MultipleSimpleSparklineComposition}
+						durationInFrames={90 * 9}
+						fps={90}
+						{...widescreen_16x9_video}
+						// {...linkedInTallVideo}
+						schema={multipleSimpleSparklineCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

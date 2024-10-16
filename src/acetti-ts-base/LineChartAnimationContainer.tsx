@@ -9,7 +9,7 @@ import {
 	periodsScale,
 	TPeriodsScale,
 } from '../acetti-ts-periodsScale/periodsScale';
-import {getYDomain} from '../acetti-ts-utils/timeSeries/timeSeries';
+// import {getYDomain} from '../acetti-ts-utils/timeSeries/timeSeries';
 // import {TYAxis} from './components/axisSpecs_yAxis';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
@@ -67,7 +67,14 @@ export const LineChartAnimationContainer: React.FC<{
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-}> = ({timeSeries, viewSpecs, transitionSpecs, children}) => {
+	yDomain?: [number, number];
+}> = ({
+	timeSeries,
+	viewSpecs,
+	transitionSpecs,
+	children,
+	yDomain: yDomainProp,
+}) => {
 	// ensure the length of the passed props are as expected
 	invariant(
 		transitionSpecs.length === viewSpecs.length - 1,
@@ -271,13 +278,12 @@ export const LineChartAnimationContainer: React.FC<{
 
 	if (currentTransitionType === 'DEFAULT') {
 		// TODO yDomainType is not addressed here!
-		const yDomain = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-			timeSeries,
-			[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
-				number,
-				number
-			]
-		);
+		const yDomain =
+			yDomainProp ||
+			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(timeSeries, [
+				animatedVisibleDomainIndexStart,
+				animatedVisibleDomainIndexEnd,
+			] as [number, number]);
 
 		yScale = scaleLinear()
 			.domain(yDomain)
