@@ -1,5 +1,6 @@
 import {TGridLayout} from '../types2';
 import Svg from './Svg';
+// import { ThemeType } from '../../acetti-themes/themeTypes';
 
 type TDisplayGridRailsProps = TGridLayout & {
 	stroke?: string;

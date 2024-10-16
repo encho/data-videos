@@ -7,6 +7,8 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
+import {HtmlArea} from '../../../../acetti-layout';
+import {DisplayGridRails} from '../../../../acetti-layout';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -15,6 +17,10 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
+import {
+	getMatrixLayoutCellArea,
+	useMatrixLayout,
+} from '../../../../acetti-layout/hooks/useMatrixLayout';
 
 const timeSeries = [
 	{value: 150, date: new Date('2010-12-31')},
@@ -64,18 +70,45 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	z.infer<typeof multipleSimpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
-	const {fps, durationInFrames} = useVideoConfig();
-	const frame = useCurrentFrame();
+	const {
+		fps,
+		// durationInFrames,
+		width,
+	} = useVideoConfig();
+	// const frame = useCurrentFrame();
 
-	const opacity = interpolate(
-		frame,
-		[0, fps * 2.0, durationInFrames - fps * 0.3, durationInFrames - 1],
-		[0, 1, 1, 0],
-		{extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.ease}
-	);
+	// const opacity = interpolate(
+	// 	frame,
+	// 	[0, fps * 2.0, durationInFrames - fps * 0.3, durationInFrames - 1],
+	// 	[0, 1, 1, 0],
+	// 	{extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.ease}
+	// );
 
-	const CHART_WIDTH = 700;
-	const CHART_HEIGHT = 280;
+	const matrixLayout = useMatrixLayout({
+		width: width - 4, // to better show grid rails!
+		// width, TODO enable when we are not showing gridlayout any more
+		height: 500,
+		nrColumns: 2,
+		nrRows: 1,
+		rowSpacePixels: 20,
+		columnSpacePixels: 100,
+		rowPaddingPixels: 20,
+		columnPaddingPixels: 100,
+	});
+
+	const area_1 = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		cellName: 'cell',
+		row: 0,
+		column: 0,
+	});
+
+	const area_2 = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		cellName: 'cell',
+		row: 0,
+		column: 1,
+	});
 
 	return (
 		<div
@@ -88,51 +121,47 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		>
 			<SlideTitle theme={theme}>Sparkline Multiples</SlideTitle>
 
-			<Sequence from={fps * 1.5} layout="none">
-				<div>
-					<div
-					// style={{
-					// 	display: 'flex',
-					// 	justifyContent: 'center',
-					// 	marginTop: 0,
-					// 	opacity,
-					// }}
-					>
+			<div style={{position: 'relative'}}>
+				<DisplayGridRails
+					{...matrixLayout}
+					stroke={theme.TypographicLayouts.gridLayout.lineColor}
+				/>
+				<HtmlArea area={area_1}>
+					<Sequence from={fps * 1.5} layout="none">
 						<SparklineLarge
 							data={timeSeries}
-							width={CHART_WIDTH}
-							height={CHART_HEIGHT}
+							width={area_1.width}
+							height={area_1.height}
 							theme={theme}
 							domain={[40, 200]}
 							lineColor="magenta"
-							// TODO
-							// baseFontSize={15}
-							// TODO optional title, to be aligned with the chart body
-							// title="Italy"
+							showLayout={false}
 						/>
-					</div>
-					<div
-					// style={{
-					// 	display: 'flex',
-					// 	justifyContent: 'center',
-					// 	opacity,
-					// }}
-					>
+					</Sequence>
+				</HtmlArea>
+				<HtmlArea area={area_2}>
+					<Sequence from={Math.floor(fps * 4.5)} layout="none">
 						<SparklineLarge
 							data={timeSeriesComparison}
-							width={CHART_WIDTH}
-							height={CHART_HEIGHT}
+							width={area_2.width}
+							height={area_2.height}
 							theme={theme}
 							domain={[40, 200]}
-							lineColor="cyan"
-							// TODO
-							// baseFontSize={15}
-							// TODO optional title, to be aligned with the chart body
-							// title="Germany"
+							lineColor="magenta"
+							showLayout={true}
 						/>
-					</div>
-				</div>
-			</Sequence>
+					</Sequence>
+				</HtmlArea>
+			</div>
+			{/* <div
+					style={{
+						position: 'relative',
+						width: matrixLayout.width,
+						height: matrixLayout.height,
+					}}
+				>
+					<div style={{position: 'absolute', top: 0, left: 0}}>
+					</div> */}
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
