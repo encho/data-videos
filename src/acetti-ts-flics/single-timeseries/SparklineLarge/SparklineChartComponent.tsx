@@ -149,7 +149,7 @@ export const SparklineChartComponent: React.FC<{
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 				>
 					<AnimatedSparklineStartDot
-						dotColor={theme.typography.textColor}
+						dotColor={lineColor || theme.typography.textColor}
 						periodsScale={currentPeriodsScale}
 						yScale={yScale}
 						area={layoutAreas.plot}
