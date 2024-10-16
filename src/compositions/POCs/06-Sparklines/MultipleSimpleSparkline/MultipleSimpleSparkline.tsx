@@ -87,9 +87,10 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	const matrixLayout = useMatrixLayout({
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
-		height: 500,
+		// height: 500,
+		height: 700,
 		nrColumns: 2,
-		nrRows: 1,
+		nrRows: 2,
 		rowSpacePixels: 20,
 		columnSpacePixels: 100,
 		rowPaddingPixels: 20,
@@ -110,6 +111,27 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		column: 1,
 	});
 
+	const area_3 = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		cellName: 'cell',
+		row: 1,
+		column: 0,
+	});
+
+	const area_4 = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		cellName: 'cell',
+		row: 1,
+		column: 1,
+	});
+
+	const neonColors = {
+		neonGreen: '#39FF14',
+		neonPink: '#FF6EC7',
+		neonBlue: '#0D98BA',
+		neonOrange: '#FF5F1F',
+	};
+
 	return (
 		<div
 			style={{
@@ -124,7 +146,8 @@ export const MultipleSimpleSparklineComposition: React.FC<
 			<div style={{position: 'relative'}}>
 				<DisplayGridRails
 					{...matrixLayout}
-					stroke={theme.TypographicLayouts.gridLayout.lineColor}
+					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
+					stroke={'#404040'}
 				/>
 				<HtmlArea area={area_1}>
 					<Sequence from={fps * 1.5} layout="none">
@@ -134,7 +157,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							height={area_1.height}
 							theme={theme}
 							domain={[40, 200]}
-							lineColor="magenta"
+							lineColor={neonColors.neonGreen}
 							showLayout={false}
 						/>
 					</Sequence>
@@ -147,8 +170,34 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							height={area_2.height}
 							theme={theme}
 							domain={[40, 200]}
-							lineColor="magenta"
-							showLayout={true}
+							lineColor={neonColors.neonBlue}
+							// showLayout={true}
+						/>
+					</Sequence>
+				</HtmlArea>
+				<HtmlArea area={area_3}>
+					<Sequence from={Math.floor(fps * 4.5)} layout="none">
+						<SparklineLarge
+							data={timeSeriesComparison}
+							width={area_3.width}
+							height={area_3.height}
+							theme={theme}
+							domain={[40, 200]}
+							lineColor={neonColors.neonOrange}
+							// showLayout={true}
+						/>
+					</Sequence>
+				</HtmlArea>
+				<HtmlArea area={area_4}>
+					<Sequence from={Math.floor(fps * 4.5)} layout="none">
+						<SparklineLarge
+							data={timeSeries}
+							width={area_4.width}
+							height={area_4.height}
+							theme={theme}
+							domain={[40, 200]}
+							lineColor={neonColors.neonPink}
+							// showLayout={true}
 						/>
 					</Sequence>
 				</HtmlArea>
