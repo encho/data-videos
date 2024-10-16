@@ -7,6 +7,7 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
+import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -25,14 +26,14 @@ const timeSeries = [
 	{value: 91, date: new Date('2016-12-31')},
 	{value: 65, date: new Date('2017-12-31')},
 	{value: 114, date: new Date('2018-12-31')},
-	{value: 60, date: new Date('2019-12-31')},
-	{value: 64, date: new Date('2020-12-31')},
-	{value: 118, date: new Date('2021-12-31')},
-	{value: 94, date: new Date('2022-12-31')},
-	{value: 127, date: new Date('2023-12-31')},
-	{value: 68, date: new Date('2024-12-31')},
-	{value: 40, date: new Date('2025-12-31')},
-	{value: 88, date: new Date('2026-12-31')},
+	// {value: 60, date: new Date('2019-12-31')},
+	// {value: 64, date: new Date('2020-12-31')},
+	// {value: 118, date: new Date('2021-12-31')},
+	// {value: 94, date: new Date('2022-12-31')},
+	// {value: 127, date: new Date('2023-12-31')},
+	// {value: 68, date: new Date('2024-12-31')},
+	// {value: 40, date: new Date('2025-12-31')},
+	// {value: 88, date: new Date('2026-12-31')},
 ];
 
 const timeSeriesComparison = [
@@ -45,14 +46,14 @@ const timeSeriesComparison = [
 	{value: 190, date: new Date('2016-12-31')},
 	{value: 70, date: new Date('2017-12-31')},
 	{value: 150, date: new Date('2018-12-31')},
-	{value: 85, date: new Date('2019-12-31')},
-	{value: 200, date: new Date('2020-12-31')},
-	{value: 65, date: new Date('2021-12-31')},
-	{value: 170, date: new Date('2022-12-31')},
-	{value: 60, date: new Date('2023-12-31')},
-	{value: 140, date: new Date('2024-12-31')},
-	{value: 100, date: new Date('2025-12-31')},
-	{value: 180, date: new Date('2026-12-31')},
+	// {value: 85, date: new Date('2019-12-31')},
+	// {value: 200, date: new Date('2020-12-31')},
+	// {value: 65, date: new Date('2021-12-31')},
+	// {value: 170, date: new Date('2022-12-31')},
+	// {value: 60, date: new Date('2023-12-31')},
+	// {value: 140, date: new Date('2024-12-31')},
+	// {value: 100, date: new Date('2025-12-31')},
+	// {value: 180, date: new Date('2026-12-31')},
 ];
 
 export const multipleSimpleSparklineCompositionSchema = z.object({
@@ -88,21 +89,14 @@ export const MultipleSimpleSparklineComposition: React.FC<
 			<SlideTitle theme={theme}>Sparkline Multiples</SlideTitle>
 
 			<Sequence from={fps * 1.5} layout="none">
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'center',
-						gap: 200,
-						marginTop: 150,
-					}}
-				>
+				<div>
 					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							marginTop: 0,
-							opacity,
-						}}
+					// style={{
+					// 	display: 'flex',
+					// 	justifyContent: 'center',
+					// 	marginTop: 0,
+					// 	opacity,
+					// }}
 					>
 						<SparklineLarge
 							data={timeSeries}
@@ -110,14 +104,19 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							height={CHART_HEIGHT}
 							theme={theme}
 							domain={[40, 200]}
+							lineColor="magenta"
+							// TODO
+							// baseFontSize={15}
+							// TODO optional title, to be aligned with the chart body
+							// title="Italy"
 						/>
 					</div>
 					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							opacity,
-						}}
+					// style={{
+					// 	display: 'flex',
+					// 	justifyContent: 'center',
+					// 	opacity,
+					// }}
 					>
 						<SparklineLarge
 							data={timeSeriesComparison}
@@ -125,8 +124,13 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							height={CHART_HEIGHT}
 							theme={theme}
 							domain={[40, 200]}
+							lineColor="cyan"
+							// TODO
+							// baseFontSize={15}
+							// TODO optional title, to be aligned with the chart body
+							// title="Germany"
 						/>
-					</div>{' '}
+					</div>
 				</div>
 			</Sequence>
 

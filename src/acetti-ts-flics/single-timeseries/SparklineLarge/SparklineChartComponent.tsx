@@ -49,6 +49,7 @@ export const SparklineChartComponent: React.FC<{
 		fontFamily: string;
 		fontWeight: number;
 	};
+	lineColor?: string;
 }> = ({
 	layoutAreas,
 	timeSeries,
@@ -59,6 +60,7 @@ export const SparklineChartComponent: React.FC<{
 	leftValueLabelTextProps,
 	rightValueLabel,
 	rightValueLabelTextProps,
+	lineColor,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -125,7 +127,7 @@ export const SparklineChartComponent: React.FC<{
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 				>
 					<BuildingAnimatedLine
-						lineColor={theme.typography.textColor}
+						lineColor={lineColor || theme.typography.textColor}
 						periodsScale={currentPeriodsScale}
 						yScale={yScale}
 						area={layoutAreas.plot}

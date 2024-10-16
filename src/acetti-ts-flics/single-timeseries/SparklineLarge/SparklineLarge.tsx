@@ -31,6 +31,7 @@ type TSparklineChartWrapperProps = {
 	height: number;
 	theme: ThemeType;
 	domain?: [number, number];
+	lineColor?: string;
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
@@ -39,6 +40,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	height,
 	theme,
 	domain,
+	lineColor,
 	// TODO pass text props // Inter-Bold e.g.
 }) => {
 	const {durationInFrames} = useVideoConfig();
@@ -84,7 +86,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 		<div style={{position: 'relative', width}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					hide={true}
+					// hide={true}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -124,13 +126,12 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 									leftValueLabel: chartLayout.areas.leftValueLabel,
 									rightValueLabel: chartLayout.areas.rightValueLabel,
 								}}
-								// yDomainType={Y_DOMAIN_TYPE}
 								theme={theme}
+								lineColor={lineColor}
 								yScale={yScale}
 								periodScale={periodsScale}
 								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
 								toPeriodScale={currentSliceInfo.periodsScaleTo}
-								//
 								currentSliceInfo={currentSliceInfo}
 								leftValueLabel={firstValueLabel}
 								leftValueLabelTextProps={leftValueLabelTextProps}
