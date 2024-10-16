@@ -8,8 +8,17 @@ import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {first} from 'lodash';
 
 const Y_DOMAIN_TYPE = 'FULL';
+
+function formatCurrency(value: number): string {
+	// Use toFixed(2) to format the number to two decimal places
+	return `$${value.toFixed(2)}`;
+}
+// Example usage
+// const formattedValue = formatCurrency(1023.3333);
+// console.log(formattedValue); // Output: "$1023.33"
 
 export const sparklinePOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -44,8 +53,11 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 		// letterSpacing: 1,
 	};
 
-	const firstValueLabel = '$1000.00';
-	const lastValueLabel = '$1023.33';
+	const firstDataValue = data[0].value;
+	const lastDataValue = data[data.length - 1].value;
+	// TODO from data
+	const firstValueLabel = formatCurrency(firstDataValue);
+	const lastValueLabel = formatCurrency(lastDataValue);
 
 	const leftValueLabelWidth = measureText({
 		...leftValueLabelTextProps,
@@ -75,7 +87,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 				/>
 			</div>
 			{/* <Sequence from={90 * 1}> */}
-			<Sequence from={90 * 0}>
+			<Sequence from={90 * 0} name="LineChartAnimationContainer">
 				<LineChartAnimationContainer
 					timeSeries={data}
 					viewSpecs={[

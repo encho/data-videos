@@ -1,5 +1,5 @@
 import {ScaleLinear} from 'd3-scale';
-import {Sequence, useVideoConfig} from 'remotion';
+import {Sequence, useVideoConfig, useCurrentFrame} from 'remotion';
 
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
@@ -14,6 +14,16 @@ import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
+
+import {
+	buildKeyFramesGroup,
+	getKeyFrame,
+	TKeyFramesGroup,
+} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
+import {
+	KeyFramesInspector,
+	KeyFramesSequence,
+} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -57,27 +67,108 @@ export const SparklineChartComponent: React.FC<{
 	rightValueLabelTextProps,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
 
 	const axisSpec = getJustFirstAndLastAxisSpec(currentPeriodsScale);
 
-	const XAXIS_FADE_IN_DURATION = Math.floor(fps * 1.5);
-	const DISPLAY_LEFT_VALUE_DELAY =
-		XAXIS_FADE_IN_DURATION + Math.floor(fps * 0.1);
+	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
+		{type: 'SECOND', value: 0, id: 'X_AXIS_ENTER_START'},
+		{
+			type: 'R_SECOND',
+			value: 1.3,
+			id: 'X_AXIS_ENTER_END',
+			relativeId: 'X_AXIS_ENTER_START',
+		},
+		{
+			type: 'FRAME',
+			value: -0,
+			id: 'X_AXIS_END',
+		},
+		{
+			type: 'R_SECOND',
+			value: 0.5,
+			id: 'LEFT_VALUE_ENTER',
+			relativeId: 'X_AXIS_ENTER_END',
+		},
+		{
+			type: 'SECOND',
+			value: -1,
+			id: 'LEFT_VALUE_EXIT_END',
+		},
+		{
+			type: 'R_SECOND',
+			value: -1,
+			id: 'LEFT_VALUE_EXIT_START',
+			relativeId: 'LEFT_VALUE_EXIT_END',
+		},
+		{
+			type: 'R_SECOND',
+			value: 0.5,
+			id: 'SPARKLINE_ENTER',
+			relativeId: 'LEFT_VALUE_ENTER',
+		},
+		{
+			type: 'R_SECOND',
+			value: 0.5,
+			id: 'SPARKLINE_ENTER_END',
+			relativeId: 'SPARKLINE_ENTER',
+		},
+		{
+			type: 'FRAME',
+			value: -0,
+			id: 'SPARKLINE_END',
+		},
+		{
+			type: 'R_SECOND',
+			value: -0.3,
+			id: 'SPARKLINE_EXIT_START',
+			relativeId: 'LEFT_VALUE_EXIT_END',
+		},
+		{
+			type: 'FRAME',
+			value: -0,
+			id: 'RIGHT_VALUE_END',
+		},
+		{
+			type: 'R_SECOND',
+			value: -0.5,
+			id: 'RIGHT_VALUE_START',
+			relativeId: 'SPARKLINE_ENTER_END',
+		},
+	]);
 
-	const LEFT_VALUE_DOT_DURATION =
-		durationInFrames - DISPLAY_LEFT_VALUE_DELAY - Math.floor(fps * 1);
+	const XAXIS_FADE_IN_DURATION = getExclusiveDuration(
+		keyframes,
+		'X_AXIS_ENTER_START',
+		'X_AXIS_ENTER_END'
+	);
 
-	const SPARKLINE_DELAY = DISPLAY_LEFT_VALUE_DELAY + Math.floor(fps * 1.2);
-	const SPARKLINE_FADE_IN_DURATION = Math.floor(fps * 1.0);
-	const SPARKLINE_FADE_OUT_DURATION = Math.floor(fps * 1.0);
+	const LEFT_VALUE_EXIT_DURATION = getExclusiveDuration(
+		keyframes,
+		'LEFT_VALUE_EXIT_START',
+		'LEFT_VALUE_EXIT_END'
+	);
 
-	const DISPLAY_RIGHT_VALUE_DELAY =
-		SPARKLINE_DELAY + SPARKLINE_FADE_IN_DURATION - Math.floor(fps * 0.5);
+	const SPARKLINE_FADE_IN_DURATION = getExclusiveDuration(
+		keyframes,
+		'SPARKLINE_ENTER',
+		'SPARKLINE_ENTER_END'
+	);
+
+	const SPARKLINE_FADE_OUT_DURATION = getExclusiveDuration(
+		keyframes,
+		'SPARKLINE_EXIT_START',
+		'SPARKLINE_END'
+	);
 
 	return (
 		<>
-			{/* xAxis */}
-			<Sequence from={90 * 0}>
+			<KeyFramesSequence
+				name="XAXIS"
+				from="X_AXIS_ENTER_START"
+				to="X_AXIS_END"
+				keyframes={keyframes}
+			>
 				<Position
 					position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 				>
@@ -92,10 +183,14 @@ export const SparklineChartComponent: React.FC<{
 						lineColor={theme.typography.subTitle.color}
 					/>
 				</Position>
-			</Sequence>
+			</KeyFramesSequence>
 
-			{/* sparkline */}
-			<Sequence from={SPARKLINE_DELAY}>
+			<KeyFramesSequence
+				name="SPARKLINE__ANIMATED_LINE"
+				from="SPARKLINE_ENTER"
+				to="SPARKLINE_END"
+				keyframes={keyframes}
+			>
 				<Position
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 				>
@@ -109,13 +204,14 @@ export const SparklineChartComponent: React.FC<{
 						fadeOutDurationInFrames={SPARKLINE_FADE_OUT_DURATION}
 					/>
 				</Position>
-			</Sequence>
+			</KeyFramesSequence>
 
 			{/* start dot */}
-			<Sequence
-				name="leftDot"
-				from={DISPLAY_LEFT_VALUE_DELAY}
-				durationInFrames={LEFT_VALUE_DOT_DURATION}
+			<KeyFramesSequence
+				name="LEFT_VALUE__DOT"
+				from="LEFT_VALUE_ENTER"
+				to="LEFT_VALUE_EXIT_END"
+				keyframes={keyframes}
 			>
 				<Position
 					position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
@@ -126,16 +222,17 @@ export const SparklineChartComponent: React.FC<{
 						yScale={yScale}
 						area={layoutAreas.plot}
 						timeSeries={timeSeries}
-						fadeOutDurationInFrames={SPARKLINE_FADE_OUT_DURATION}
+						entryDurationInFrames={fps}
+						fadeOutDurationInFrames={LEFT_VALUE_EXIT_DURATION}
 					/>
 				</Position>
-			</Sequence>
+			</KeyFramesSequence>
 
-			{/* leftValueLabel */}
-			<Sequence
-				name="leftValueLabel"
-				from={DISPLAY_LEFT_VALUE_DELAY}
-				durationInFrames={LEFT_VALUE_DOT_DURATION}
+			<KeyFramesSequence
+				name="LEFT_VALUE__LABEL"
+				from="LEFT_VALUE_ENTER"
+				to="LEFT_VALUE_EXIT_END"
+				keyframes={keyframes}
 			>
 				<Position
 					position={{
@@ -176,10 +273,14 @@ export const SparklineChartComponent: React.FC<{
 						</div>
 					</div>
 				</Position>
-			</Sequence>
+			</KeyFramesSequence>
 
-			{/* rightValueLabel */}
-			<Sequence from={DISPLAY_RIGHT_VALUE_DELAY}>
+			<KeyFramesSequence
+				name="RIGHT_VALUE__LABEL"
+				from="RIGHT_VALUE_START"
+				to="RIGHT_VALUE_END"
+				keyframes={keyframes}
+			>
 				<Position
 					position={{
 						left: layoutAreas.rightValueLabel.x1,
@@ -219,7 +320,40 @@ export const SparklineChartComponent: React.FC<{
 						</div>
 					</div>
 				</Position>
-			</Sequence>
+			</KeyFramesSequence>
+
+			{/* <Position position={{left: , top: 380}}> */}
+			{/* TODO change prop name to just keyframes */}
+			<div
+				style={{
+					marginTop: 380,
+					display: 'flex',
+					justifyContent: 'center',
+					width: 1080,
+				}}
+			>
+				<KeyFramesInspector
+					keyFramesGroup={keyframes}
+					width={700}
+					baseFontSize={18}
+					frame={frame}
+				/>
+			</div>
+			{/* </Position> */}
 		</>
 	);
+};
+
+const getExclusiveDuration = (
+	keyframes: TKeyFramesGroup,
+	startKeyFrameId: string,
+	endKeyFrameId: string
+) => {
+	// TODO api: keyframesGroup.getKeyFrame("XXXXXXXXXX")
+	const keyFrameStart = getKeyFrame(keyframes, startKeyFrameId);
+	const keyFrameEnd = getKeyFrame(keyframes, endKeyFrameId);
+
+	const inclusiveDuration = keyFrameEnd.frame - keyFrameStart.frame;
+
+	return inclusiveDuration;
 };

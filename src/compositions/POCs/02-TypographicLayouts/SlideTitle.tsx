@@ -10,10 +10,9 @@ export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 			<div
 				style={{
 					color: theme.typography.title.color,
-					// color: 'magenta',
 					fontSize: 70,
 					marginTop: 60,
-					marginBottom: 60,
+					marginBottom: 100,
 					fontFamily: 'Inter',
 					fontWeight: 700,
 				}}

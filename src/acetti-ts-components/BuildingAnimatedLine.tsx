@@ -164,6 +164,7 @@ export const AnimatedSparklineStartDot: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 	fadeOutDurationInFrames: number;
+	entryDurationInFrames: number;
 }> = ({
 	dotColor,
 	area,
@@ -171,9 +172,10 @@ export const AnimatedSparklineStartDot: React.FC<{
 	periodsScale,
 	yScale,
 	fadeOutDurationInFrames,
+	entryDurationInFrames,
 }) => {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	// const fadeOutOpacity = interpolate(
 	// 	frame,
@@ -182,21 +184,21 @@ export const AnimatedSparklineStartDot: React.FC<{
 	// 	{extrapolateLeft: 'clamp', easing: Easing.ease}
 	// );
 
-	// TODO as prop?
-	const entryDurationInFrames = fps * 1;
+	const fullRadius = 12;
 
 	const radius =
 		frame < durationInFrames - fadeOutDurationInFrames
-			? interpolate(frame, [0, entryDurationInFrames], [0, 12], {
+			? interpolate(frame, [0, entryDurationInFrames], [0, fullRadius], {
 					easing: Easing.bounce,
 					extrapolateRight: 'clamp',
 			  })
 			: interpolate(
 					frame,
 					[fadeOutDurationInFrames, durationInFrames - 1],
-					[12, 0],
+					[fullRadius, 0],
 					{
-						easing: Easing.elastic(1),
+						// easing: Easing.bounce,
+						easing: Easing.ease,
 						extrapolateRight: 'clamp',
 					}
 			  );

@@ -1,8 +1,34 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {scaleLinear} from 'd3-scale';
 import chroma from 'chroma-js';
+import {Sequence} from 'remotion';
 
 import {TKeyFramesGroup, getSign, getKeyFrame} from './keyframes';
+
+export const KeyFramesSequence: React.FC<{
+	keyframes: TKeyFramesGroup;
+	from: string;
+	to: string;
+	name: string;
+	children: ReactNode;
+}> = ({keyframes, from, to, name, children}) => {
+	const keyFrameFrom = getKeyFrame(keyframes, from).frame; // e.g.
+	const keyFrameTo = getKeyFrame(keyframes, to).frame;
+
+	// inclusive duration!!!
+	const durationInFrames = keyFrameTo - keyFrameFrom + 1;
+
+	return (
+		<Sequence
+			from={keyFrameFrom}
+			durationInFrames={durationInFrames}
+			layout="none"
+			name={name}
+		>
+			{children}
+		</Sequence>
+	);
+};
 
 export const KeyFramesInspector: React.FC<{
 	keyFramesGroup: TKeyFramesGroup;
@@ -31,8 +57,8 @@ export const KeyFramesInspector: React.FC<{
 
 	return (
 		<div style={{width, height, position: 'relative'}}>
-			<div style={{marginBottom: 10}}>
-				<div style={{fontSize: 26, color: '#555', fontFamily: 'Inter-Bold'}}>
+			<div style={{marginBottom: 18}}>
+				<div style={{fontSize: 26, color: '#fff', fontFamily: 'Inter-Regular'}}>
 					Key-Frames Inspector
 				</div>
 			</div>
@@ -325,7 +351,7 @@ export const KeyFramesInspector: React.FC<{
 							/>
 
 							<text
-								fill={'#bbb'}
+								fill={'#666'}
 								fontSize={baseFontSize}
 								y={HEIGHT_PER_FRAME / 2}
 								x={frameToPixel(keyFrame.frame) + 15}

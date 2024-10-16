@@ -396,11 +396,11 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-Sparkline"
+						id="SimpleSparkline"
 						component={SparklinePOC}
 						durationInFrames={90 * 9}
 						fps={90}
-						{...squareVideo}
+						{...linkedInTallVideo}
 						schema={sparklinePOCSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -597,7 +597,7 @@ export const RemotionRoot: React.FC = () => {
 					fps={30}
 					{...squareVideo}
 					schema={bundesligaTop10BarChartSchema}
-					defaultProps={{dateString: '4. März 2024', year: 2023, apiData: null}}
+					defaultProps={{dateString: '4. März 2024', year: 2024, apiData: null}}
 					calculateMetadata={async ({props}) => {
 						const apiUrl = `https://api.openligadb.de/getbltable/bl1/${props.year}`;
 						const data = await fetch(apiUrl);

@@ -1,4 +1,11 @@
 import {z} from 'zod';
+import {
+	Sequence,
+	useVideoConfig,
+	Easing,
+	interpolate,
+	useCurrentFrame,
+} from 'remotion';
 
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
@@ -7,6 +14,7 @@ import {
 } from '../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SparklineLarge} from '../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
+import {SlideTitle} from '../02-TypographicLayouts/SlideTitle';
 
 const timeSeries = [
 	// {value: 50, date: new Date('2010-12-31')},
@@ -37,6 +45,15 @@ export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
 	themeEnum,
 }) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+	const {fps, durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const opacity = interpolate(
+		frame,
+		[0, fps * 2.0, durationInFrames - fps * 0.3, durationInFrames - 1],
+		[0, 1, 1, 0],
+		{extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.ease}
+	);
 
 	const CHART_WIDTH = 900;
 	const CHART_HEIGHT = 280;
@@ -50,30 +67,25 @@ export const SparklinePOC: React.FC<z.infer<typeof sparklinePOCSchema>> = ({
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 50,
-							fontFamily: 'Arial',
-							fontWeight: 700,
-						}}
-					>
-						<FadeInAndOutText>SparklinePOC</FadeInAndOutText>
-					</div>
-				</div>
-			</div>
+			<SlideTitle theme={theme}>The Sparkline</SlideTitle>
 
-			<div style={{display: 'flex', justifyContent: 'center', marginTop: 200}}>
-				<SparklineLarge
-					data={timeSeries}
-					width={CHART_WIDTH}
-					height={CHART_HEIGHT}
-					theme={theme}
-				/>
-			</div>
+			<Sequence from={fps * 1.5} layout="none">
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						marginTop: 0,
+						opacity,
+					}}
+				>
+					<SparklineLarge
+						data={timeSeries}
+						width={CHART_WIDTH}
+						height={CHART_HEIGHT}
+						theme={theme}
+					/>
+				</div>
+			</Sequence>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>

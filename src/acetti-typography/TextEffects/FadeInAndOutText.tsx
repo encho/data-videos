@@ -12,17 +12,17 @@ import {ThemeType} from '../../acetti-themes/themeTypes';
 export const FadeInAndOutText: React.FC<{
 	children: string;
 	innerDelay?: number;
-}> = ({children, innerDelay = 0}) => {
+	enterDurationInFrames?: number;
+}> = ({children, innerDelay = 0, enterDurationInFrames = 120}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const characters = children.split('');
 
-	const enterSequenceDurationInFrames = 120;
 	let exitSequenceDurationInFrames = 200;
 	let displaySequenceDurationInFrames =
 		durationInFrames -
 		innerDelay -
-		enterSequenceDurationInFrames -
+		enterDurationInFrames -
 		exitSequenceDurationInFrames;
 
 	if (displaySequenceDurationInFrames < 0) {
@@ -32,7 +32,7 @@ export const FadeInAndOutText: React.FC<{
 	}
 
 	const entryDelay = innerDelay;
-	const displayDelay = entryDelay + enterSequenceDurationInFrames;
+	const displayDelay = entryDelay + enterDurationInFrames;
 	const exitDelay = displayDelay + displaySequenceDurationInFrames;
 
 	return (
@@ -58,7 +58,7 @@ export const FadeInAndOutText: React.FC<{
 			{/* enter animation */}
 			<Sequence
 				name="FadeInAndOutText_FadeInCharacters"
-				durationInFrames={enterSequenceDurationInFrames}
+				durationInFrames={enterDurationInFrames}
 				from={entryDelay}
 				layout="none"
 			>
