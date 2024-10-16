@@ -17,7 +17,8 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {data} from './data';
+// import {data} from './data';
+import {data} from './inflationData';
 
 export const multipleSimpleSparklineCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
