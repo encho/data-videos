@@ -1,25 +1,14 @@
 import {z} from 'zod';
-import {useCurrentFrame, Sequence, Easing, useVideoConfig} from 'remotion';
+import {Sequence, Easing, useVideoConfig} from 'remotion';
 import {measureText} from '@remotion/layout-utils';
+import numeral from 'numeral';
 
-import {KeyFramesInspector} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
 import {LineChartAnimationContainer} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {getLargeSparklineKeyFrames} from './getKeyframes';
-
-const Y_DOMAIN_TYPE = 'FULL';
-
-function formatCurrency(value: number): string {
-	// Use toFixed(2) to format the number to two decimal places
-	return `$${value.toFixed(2)}`;
-}
-// Example usage
-// const formattedValue = formatCurrency(1023.3333);
-// console.log(formattedValue); // Output: "$1023.33"
 
 export const sparklinePOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -34,6 +23,7 @@ type TSparklineChartWrapperProps = {
 	domain?: [number, number];
 	lineColor?: string;
 	showLayout?: boolean;
+	formatString?: string;
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
@@ -45,19 +35,20 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	domain,
 	lineColor,
 	showLayout = false,
+	formatString = '$ 0.0',
 	// TODO pass text props // Inter-Bold e.g.
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const leftValueLabelTextProps = {
-		fontFamily: 'Arial', // TODO use from text props
+		fontFamily: 'Inter-Regular', // TODO use from text props
 		fontWeight: 500,
 		fontSize: 30,
 		// letterSpacing: 1,
 	};
 
 	const rightValueLabelTextProps = {
-		fontFamily: 'Arial', // TODO use from text props
+		fontFamily: 'Inter-Regular', // TODO use from text props
 		fontWeight: 500,
 		fontSize: 36,
 		// letterSpacing: 1,
@@ -65,9 +56,9 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 
 	const firstDataValue = data[0].value;
 	const lastDataValue = data[data.length - 1].value;
-	// TODO from data
-	const firstValueLabel = formatCurrency(firstDataValue);
-	const lastValueLabel = formatCurrency(lastDataValue);
+
+	const firstValueLabel = numeral(firstDataValue).format(formatString);
+	const lastValueLabel = numeral(lastDataValue).format(formatString);
 
 	const leftValueLabelWidth = measureText({
 		...leftValueLabelTextProps,
@@ -82,8 +73,9 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	const chartLayout = useChartLayout({
 		width,
 		height,
-		leftValueLabelWidth,
-		rightValueLabelWidth,
+		// QUICK-FIX: Currently we need to adjust the widths, as small errors may arise
+		leftValueLabelWidth: leftValueLabelWidth * 1.02,
+		rightValueLabelWidth: rightValueLabelWidth * 1.02,
 	});
 
 	return (

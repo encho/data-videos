@@ -1,9 +1,11 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {ThemeType} from '../acetti-themes/themeTypes';
 
-const LorenzoBertoliniLogo = ({color}: {color: string}) => {
+export const LorenzoBertoliniLogo2 = ({theme}: {theme: ThemeType}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
+	const color = theme.typography.logoColor;
 	const fontSize = 36; // TODO from theme or pageContext or typographyContext or so
 
 	const entryDurationInFrames = fps * 1;
@@ -33,8 +35,6 @@ const LorenzoBertoliniLogo = ({color}: {color: string}) => {
 		</div>
 	);
 };
-
-export default LorenzoBertoliniLogo;
 
 // https://easings.net/
 function easeInOutExpo(x: number): number {

@@ -20,6 +20,7 @@ import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/
 import {getLargeSparklineKeyFrames} from './getKeyframes';
 
 export const SparklineChartComponent: React.FC<{
+	// formatString: string;
 	id: string; // id serves to uniquely define the mask
 	timeSeries: TimeSeries;
 	layoutAreas: {
@@ -49,6 +50,7 @@ export const SparklineChartComponent: React.FC<{
 	};
 	lineColor?: string;
 }> = ({
+	// formatString,
 	id,
 	layoutAreas,
 	timeSeries,

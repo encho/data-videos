@@ -1,7 +1,11 @@
 // Slide Title and Data Source
 const slideTitle: string =
 	// 'Comparative Inflation Rates Across Countries (2022-2023)';
-	'Comparative Inflation';
+	// 'Comparative Inflation';
+	'United States Leads in Reducing Inflation Rates';
+
+const slideSubtitle: string =
+	'Comparative Inflation Rates Across Countries (2022-2023)';
 
 const dataSource: string =
 	'Data sourced from official statistics bureaus of each country.';
@@ -105,31 +109,47 @@ const sparklines: {title: string; timeseries: Timeseries}[] = [
 	{
 		// title: 'United States Inflation Rate',
 		title: 'United States',
-		timeseries: usInflationTimeseries,
+		timeseries: usInflationTimeseries.map((it) => ({
+			...it,
+			value: it.value / 100,
+		})),
 	},
 	{
 		title: 'United Kingdom',
-		timeseries: ukInflationTimeseries,
+		timeseries: ukInflationTimeseries.map((it) => ({
+			...it,
+			value: it.value / 100,
+		})),
 	},
 	{
 		title: 'Germany',
-		timeseries: germanyInflationTimeseries,
+		timeseries: germanyInflationTimeseries.map((it) => ({
+			...it,
+			value: it.value / 100,
+		})),
 	},
 	{
 		title: 'Japan',
-		timeseries: japanInflationTimeseries,
+		timeseries: japanInflationTimeseries.map((it) => ({
+			...it,
+			value: it.value / 100,
+		})),
 	},
 ];
 
 type TSparklineProps = {
 	title: string;
+	subtitle: string;
 	dataSource: string;
 	sparklines: {title: string; timeseries: Timeseries}[];
+	formatString: string;
 };
 
 // Component Props
 export const data: TSparklineProps = {
 	title: slideTitle,
+	subtitle: slideSubtitle,
 	dataSource: dataSource,
 	sparklines: sparklines,
+	formatString: '$ 0.00',
 };

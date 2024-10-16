@@ -22,14 +22,17 @@ The component also gets a slide title, which is a `string`.
 
 The component will display the source of the displayed data, thus we need a `string` for that.
 
+The formatString prop will be used to format the last data value in the chart. The formatString is expected to be compatible with the library numeral.js
+
 The props of the React component have this shape:
 
 ```
 type TSparklineProps = {
-  title: string;
-  dataSource: string;
-  sparklines: {title: string; timeseries: Timeseries}
-}
+	title: string;
+	dataSource: string;
+	sparklines: {title: string; timeseries: Timeseries}[];
+	formatString: string;
+};
 ```
 
 again, it is important that we have four items in the sparklines field.

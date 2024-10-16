@@ -29,12 +29,12 @@ export const nerdyTheme: ThemeType = {
 		},
 		subTitle: {
 			fontFamily: 'Inter-Medium',
-			color: '#888',
+			color: '#666',
 		},
-		titleColor: '#ffffff',
+		titleColor: '#666', // TODO deprecate
 		subTitleColor: '#888',
 		textColor: '#ffffff',
-		logoColor: '#ffffff',
+		logoColor: '#666',
 	},
 	yAxis: {
 		fontSize: 16,
@@ -138,7 +138,7 @@ export const nerdyTheme: ThemeType = {
 		},
 	},
 	EconomistDataSource: {
-		textColor: '#555555',
+		textColor: '#666',
 	},
 	TwoChangeBars: {
 		barsColor: textColor,
