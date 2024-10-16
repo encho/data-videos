@@ -1,5 +1,5 @@
 import {ScaleLinear} from 'd3-scale';
-import {Sequence, useVideoConfig, useCurrentFrame} from 'remotion';
+import {useVideoConfig} from 'remotion';
 
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
@@ -15,10 +15,7 @@ import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnima
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 
-import {
-	getKeyFrame,
-	TKeyFramesGroup,
-} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
+import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
 
@@ -65,31 +62,30 @@ export const SparklineChartComponent: React.FC<{
 	lineColor,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
-	const frame = useCurrentFrame();
 
 	const axisSpec = getJustFirstAndLastAxisSpec(currentPeriodsScale);
 
 	const keyframes = getLargeSparklineKeyFrames({durationInFrames, fps});
 
-	const XAXIS_FADE_IN_DURATION = getExclusiveDuration(
+	const XAXIS_FADE_IN_DURATION = getExclusiveSequenceDuration(
 		keyframes,
 		'X_AXIS_ENTER_START',
 		'X_AXIS_ENTER_END'
 	);
 
-	const LEFT_VALUE_EXIT_DURATION = getExclusiveDuration(
+	const LEFT_VALUE_EXIT_DURATION = getExclusiveSequenceDuration(
 		keyframes,
 		'LEFT_VALUE_EXIT_START',
 		'LEFT_VALUE_EXIT_END'
 	);
 
-	const SPARKLINE_FADE_IN_DURATION = getExclusiveDuration(
+	const SPARKLINE_FADE_IN_DURATION = getExclusiveSequenceDuration(
 		keyframes,
 		'SPARKLINE_ENTER',
 		'SPARKLINE_ENTER_END'
 	);
 
-	const SPARKLINE_FADE_OUT_DURATION = getExclusiveDuration(
+	const SPARKLINE_FADE_OUT_DURATION = getExclusiveSequenceDuration(
 		keyframes,
 		'SPARKLINE_EXIT_START',
 		'SPARKLINE_END'
@@ -256,39 +252,6 @@ export const SparklineChartComponent: React.FC<{
 					</div>
 				</Position>
 			</KeyFramesSequence>
-
-			{/* <Position position={{left: , top: 380}}> */}
-			{/* TODO change prop name to just keyframes */}
-			{/* <div
-				style={{
-					marginTop: 380,
-					display: 'flex',
-					justifyContent: 'center',
-					width: 1080,
-				}}
-			>
-				<KeyFramesInspector
-					keyFramesGroup={keyframes}
-					width={700}
-					baseFontSize={18}
-					frame={frame}
-				/>
-			</div> */}
-			{/* </Position> */}
 		</>
 	);
-};
-
-const getExclusiveDuration = (
-	keyframes: TKeyFramesGroup,
-	startKeyFrameId: string,
-	endKeyFrameId: string
-) => {
-	// TODO api: keyframesGroup.getKeyFrame("XXXXXXXXXX")
-	const keyFrameStart = getKeyFrame(keyframes, startKeyFrameId);
-	const keyFrameEnd = getKeyFrame(keyframes, endKeyFrameId);
-
-	const inclusiveDuration = keyFrameEnd.frame - keyFrameStart.frame;
-
-	return inclusiveDuration;
 };

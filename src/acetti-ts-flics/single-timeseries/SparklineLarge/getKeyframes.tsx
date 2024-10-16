@@ -22,7 +22,7 @@ export function getLargeSparklineKeyFrames({
 		},
 		{
 			type: 'R_SECOND',
-			value: 0.5,
+			value: 0,
 			id: 'LEFT_VALUE_ENTER',
 			relativeId: 'X_AXIS_ENTER_END',
 		},

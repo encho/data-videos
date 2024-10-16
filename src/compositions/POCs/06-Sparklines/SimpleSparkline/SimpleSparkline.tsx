@@ -69,8 +69,8 @@ export const SimpleSparklineComposition: React.FC<
 		>
 			<SlideTitle theme={theme}>The Sparkline</SlideTitle>
 
-			{/* <Sequence from={fps * 1.5} layout="none"> */}
-			<Sequence from={fps * 4.5} layout="none">
+			<Sequence from={fps * 1.5} layout="none">
+				{/* <Sequence from={fps * 4.5} layout="none"> */}
 				<div>
 					<div
 						style={{

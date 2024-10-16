@@ -212,3 +212,17 @@ function getActiveTransitionIndex(
 // console.log(getActiveTransitionIndex(keyframes, 100));  // Output: 1
 // console.log(getActiveTransitionIndex(keyframes, 50));   // Output: 0 (smaller than first keyframe)
 // console.log(getActiveTransitionIndex(keyframes, 600));  // Output: 2 (larger than last keyframe)
+
+export const getExclusiveSequenceDuration = (
+	keyframes: TKeyFramesGroup,
+	startKeyFrameId: string,
+	endKeyFrameId: string
+) => {
+	// TODO api: keyframesGroup.getKeyFrame("XXXXXXXXXX")
+	const keyFrameStart = getKeyFrame(keyframes, startKeyFrameId);
+	const keyFrameEnd = getKeyFrame(keyframes, endKeyFrameId);
+
+	const inclusiveDuration = keyFrameEnd.frame - keyFrameStart.frame;
+
+	return inclusiveDuration;
+};
