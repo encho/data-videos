@@ -192,7 +192,7 @@ export const SparklineChartComponent: React.FC<{
 						>
 							<div
 								style={{
-									color: theme.typography.textColor,
+									color: lineColor || theme.typography.textColor,
 									fontSize: leftValueLabelTextProps.fontSize,
 									fontFamily: leftValueLabelTextProps.fontFamily,
 									fontWeight: leftValueLabelTextProps.fontWeight,
@@ -239,7 +239,7 @@ export const SparklineChartComponent: React.FC<{
 						>
 							<div
 								style={{
-									color: theme.typography.textColor,
+									color: lineColor || theme.typography.textColor,
 									fontSize: rightValueLabelTextProps.fontSize,
 									fontFamily: rightValueLabelTextProps.fontFamily,
 									fontWeight: rightValueLabelTextProps.fontWeight,

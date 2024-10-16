@@ -1,12 +1,7 @@
 import {z} from 'zod';
-import {
-	Sequence,
-	useVideoConfig,
-	Easing,
-	interpolate,
-	useCurrentFrame,
-} from 'remotion';
+import {Sequence, useVideoConfig} from 'remotion';
 
+import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
@@ -32,14 +27,6 @@ const timeSeries = [
 	{value: 91, date: new Date('2016-12-31')},
 	{value: 65, date: new Date('2017-12-31')},
 	{value: 114, date: new Date('2018-12-31')},
-	// {value: 60, date: new Date('2019-12-31')},
-	// {value: 64, date: new Date('2020-12-31')},
-	// {value: 118, date: new Date('2021-12-31')},
-	// {value: 94, date: new Date('2022-12-31')},
-	// {value: 127, date: new Date('2023-12-31')},
-	// {value: 68, date: new Date('2024-12-31')},
-	// {value: 40, date: new Date('2025-12-31')},
-	// {value: 88, date: new Date('2026-12-31')},
 ];
 
 const timeSeriesComparison = [
@@ -52,14 +39,54 @@ const timeSeriesComparison = [
 	{value: 190, date: new Date('2016-12-31')},
 	{value: 70, date: new Date('2017-12-31')},
 	{value: 150, date: new Date('2018-12-31')},
-	// {value: 85, date: new Date('2019-12-31')},
-	// {value: 200, date: new Date('2020-12-31')},
-	// {value: 65, date: new Date('2021-12-31')},
-	// {value: 170, date: new Date('2022-12-31')},
-	// {value: 60, date: new Date('2023-12-31')},
-	// {value: 140, date: new Date('2024-12-31')},
-	// {value: 100, date: new Date('2025-12-31')},
-	// {value: 180, date: new Date('2026-12-31')},
+];
+
+const timeSeriesComparisonVariant = [
+	{value: 170, date: new Date('2010-12-31')},
+	{value: 105, date: new Date('2011-12-31')},
+	{value: 150, date: new Date('2012-12-31')},
+	{value: 120, date: new Date('2013-12-31')},
+	{value: 165, date: new Date('2014-12-31')},
+	{value: 55, date: new Date('2015-12-31')},
+	{value: 180, date: new Date('2016-12-31')},
+	{value: 80, date: new Date('2017-12-31')},
+	{value: 140, date: new Date('2018-12-31')},
+];
+
+// const timeSeriesComparisonAnotherVariant = [
+// 	{value: 160, date: new Date('2010-12-31')},
+// 	{value: 115, date: new Date('2011-12-31')},
+// 	{value: 140, date: new Date('2012-12-31')},
+// 	{value: 135, date: new Date('2013-12-31')},
+// 	{value: 155, date: new Date('2014-12-31')},
+// 	{value: 50, date: new Date('2015-12-31')},
+// 	{value: 175, date: new Date('2016-12-31')},
+// 	{value: 85, date: new Date('2017-12-31')},
+// 	{value: 130, date: new Date('2018-12-31')},
+// ];
+
+const timeSeriesComparisonDistinct1 = [
+	{value: 50, date: new Date('2010-12-31')}, // Starting low
+	{value: 140, date: new Date('2011-12-31')}, // Sharp rise
+	{value: 80, date: new Date('2012-12-31')}, // Dip
+	{value: 180, date: new Date('2013-12-31')}, // Sharp rise
+	{value: 100, date: new Date('2014-12-31')}, // Moderate drop
+	{value: 160, date: new Date('2015-12-31')}, // Another rise
+	{value: 60, date: new Date('2016-12-31')}, // Sharp drop
+	{value: 180, date: new Date('2017-12-31')}, // Sharp rise again
+	{value: 120, date: new Date('2018-12-31')}, // Leveling out
+];
+
+const timeSeriesComparisonDistinct2 = [
+	{value: 190, date: new Date('2010-12-31')}, // Starting high
+	{value: 70, date: new Date('2011-12-31')}, // Sharp drop
+	{value: 110, date: new Date('2012-12-31')}, // Gradual recovery
+	{value: 50, date: new Date('2013-12-31')}, // Drop again
+	{value: 150, date: new Date('2014-12-31')}, // Sharp rise
+	{value: 130, date: new Date('2015-12-31')}, // Moderate drop
+	{value: 175, date: new Date('2016-12-31')}, // Rise again
+	{value: 95, date: new Date('2017-12-31')}, // Drop
+	{value: 180, date: new Date('2018-12-31')}, // Recovery with a peak
 ];
 
 export const multipleSimpleSparklineCompositionSchema = z.object({
@@ -70,31 +97,18 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	z.infer<typeof multipleSimpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
-	const {
-		fps,
-		// durationInFrames,
-		width,
-	} = useVideoConfig();
-	// const frame = useCurrentFrame();
-
-	// const opacity = interpolate(
-	// 	frame,
-	// 	[0, fps * 2.0, durationInFrames - fps * 0.3, durationInFrames - 1],
-	// 	[0, 1, 1, 0],
-	// 	{extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.ease}
-	// );
+	const {fps, width} = useVideoConfig();
 
 	const matrixLayout = useMatrixLayout({
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
-		// height: 500,
-		height: 650,
+		height: 630,
 		nrColumns: 2,
 		nrRows: 2,
-		rowSpacePixels: 100,
-		columnSpacePixels: 100,
+		rowSpacePixels: 130,
+		columnSpacePixels: 200,
 		rowPaddingPixels: 0,
-		columnPaddingPixels: 100,
+		columnPaddingPixels: 220,
 	});
 
 	const area_1 = getMatrixLayoutCellArea({
@@ -132,6 +146,15 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		neonOrange: '#FF5F1F',
 	};
 
+	const sparklineTitleProps = {
+		height: 50,
+		fontSize: 40,
+		marginBottom: 65,
+		color: 'white',
+		width: '100%',
+		fontFamily: 'Inter-Bold',
+	};
+
 	return (
 		<div
 			style={{
@@ -141,7 +164,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<SlideTitle theme={theme}>Sparkline Multiples</SlideTitle>
+			<SlideTitle theme={theme}>Wohnungskosten pro &#13217;</SlideTitle>
 
 			<div style={{position: 'relative'}}>
 				<DisplayGridRails
@@ -152,70 +175,101 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				/>
 				<HtmlArea area={area_1}>
 					<Sequence from={fps * 1} layout="none">
-						<SparklineLarge
-							id={'001'}
-							data={timeSeries}
-							width={area_1.width}
-							height={area_1.height}
-							theme={theme}
-							domain={[40, 200]}
-							lineColor={neonColors.neonGreen}
-							showLayout={false}
-						/>
+						<div style={sparklineTitleProps}>
+							<WaterfallTextEffect>Hamburg</WaterfallTextEffect>
+						</div>
+						<Sequence from={Math.floor(90 * 0.75)} layout="none">
+							<SparklineLarge
+								id={'001'}
+								data={timeSeries}
+								width={area_1.width}
+								height={
+									area_1.height -
+									sparklineTitleProps.fontSize -
+									sparklineTitleProps.marginBottom
+								}
+								theme={theme}
+								domain={[40, 200]}
+								lineColor={neonColors.neonGreen}
+								showLayout={false}
+							/>
+						</Sequence>
 					</Sequence>
 				</HtmlArea>
 				<HtmlArea area={area_2}>
 					<Sequence from={Math.floor(fps * 4.5)} layout="none">
-						<SparklineLarge
-							id={'002'}
-							data={timeSeriesComparison}
-							width={area_2.width}
-							height={area_2.height}
-							theme={theme}
-							domain={[40, 200]}
-							lineColor={neonColors.neonBlue}
-							// showLayout={true}
-						/>
+						<div style={sparklineTitleProps}>
+							<WaterfallTextEffect>Berlin</WaterfallTextEffect>
+						</div>
+						<Sequence from={Math.floor(90 * 0.75)} layout="none">
+							<SparklineLarge
+								id={'002'}
+								data={timeSeriesComparison}
+								width={area_2.width}
+								height={
+									area_2.height -
+									sparklineTitleProps.fontSize -
+									sparklineTitleProps.marginBottom
+								}
+								theme={theme}
+								domain={[40, 200]}
+								lineColor={neonColors.neonBlue}
+								// showLayout={true}
+							/>
+						</Sequence>
 					</Sequence>
 				</HtmlArea>
 				<HtmlArea area={area_3}>
 					<Sequence from={Math.floor(fps * 8)} layout="none">
-						<SparklineLarge
-							id={'003'}
-							data={timeSeriesComparison}
-							width={area_3.width}
-							height={area_3.height}
-							theme={theme}
-							domain={[40, 200]}
-							lineColor={neonColors.neonOrange}
-							// showLayout={true}
-						/>
+						<div style={sparklineTitleProps}>
+							<WaterfallTextEffect>München</WaterfallTextEffect>
+						</div>
+						<Sequence from={Math.floor(90 * 0.75)} layout="none">
+							<SparklineLarge
+								id={'003'}
+								data={timeSeriesComparisonDistinct1}
+								width={area_3.width}
+								height={
+									area_3.height -
+									sparklineTitleProps.fontSize -
+									sparklineTitleProps.marginBottom
+								}
+								theme={theme}
+								domain={[40, 200]}
+								lineColor={neonColors.neonOrange}
+								// showLayout={true}
+							/>
+						</Sequence>
 					</Sequence>
 				</HtmlArea>
 				<HtmlArea area={area_4}>
 					<Sequence from={Math.floor(fps * 11.5)} layout="none">
-						<SparklineLarge
-							id={'004'}
-							data={timeSeries}
-							width={area_4.width}
-							height={area_4.height}
-							theme={theme}
-							domain={[40, 200]}
-							lineColor={neonColors.neonPink}
-							// showLayout={true}
-						/>
+						<div style={sparklineTitleProps}>
+							<WaterfallTextEffect>Stuttgart</WaterfallTextEffect>
+						</div>
+						<Sequence from={Math.floor(90 * 0.75)} layout="none">
+							<SparklineLarge
+								id={'004'}
+								data={timeSeriesComparisonDistinct2}
+								width={area_4.width}
+								height={
+									area_4.height -
+									sparklineTitleProps.fontSize -
+									sparklineTitleProps.marginBottom
+								}
+								theme={theme}
+								domain={[40, 200]}
+								lineColor={neonColors.neonPink}
+								// showLayout={true}
+							/>
+						</Sequence>
 					</Sequence>
 				</HtmlArea>
 			</div>
-			{/* <div
-					style={{
-						position: 'relative',
-						width: matrixLayout.width,
-						height: matrixLayout.height,
-					}}
-				>
-					<div style={{position: 'absolute', top: 0, left: 0}}>
-					</div> */}
+
+			<EconomistDataSource theme={theme}>
+				AirVisual World Air Quality Report 2018
+			</EconomistDataSource>
 
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>
