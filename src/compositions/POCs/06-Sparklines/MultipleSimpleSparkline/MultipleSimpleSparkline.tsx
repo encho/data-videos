@@ -88,12 +88,12 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
 		// height: 500,
-		height: 700,
+		height: 650,
 		nrColumns: 2,
 		nrRows: 2,
-		rowSpacePixels: 20,
+		rowSpacePixels: 100,
 		columnSpacePixels: 100,
-		rowPaddingPixels: 20,
+		rowPaddingPixels: 0,
 		columnPaddingPixels: 100,
 	});
 
@@ -147,10 +147,11 @@ export const MultipleSimpleSparklineComposition: React.FC<
 				<DisplayGridRails
 					{...matrixLayout}
 					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
-					stroke={'#404040'}
+					// stroke={'#292929'}
+					stroke={'transparent'}
 				/>
 				<HtmlArea area={area_1}>
-					<Sequence from={fps * 1.5} layout="none">
+					<Sequence from={fps * 1} layout="none">
 						<SparklineLarge
 							id={'001'}
 							data={timeSeries}
@@ -178,7 +179,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					</Sequence>
 				</HtmlArea>
 				<HtmlArea area={area_3}>
-					<Sequence from={Math.floor(fps * 4.5)} layout="none">
+					<Sequence from={Math.floor(fps * 8)} layout="none">
 						<SparklineLarge
 							id={'003'}
 							data={timeSeriesComparison}
@@ -192,7 +193,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					</Sequence>
 				</HtmlArea>
 				<HtmlArea area={area_4}>
-					<Sequence from={Math.floor(fps * 4.5)} layout="none">
+					<Sequence from={Math.floor(fps * 11.5)} layout="none">
 						<SparklineLarge
 							id={'004'}
 							data={timeSeries}
