@@ -10,7 +10,7 @@ export const measureText = ({
 	lineGap,
 	text,
 }: {
-	fontFamily: 'Inter' | 'Inter-Regular';
+	fontFamily: 'Inter' | 'Inter-Regular' | 'Inter-Bold';
 	fontWeight: number;
 	capHeight: number;
 	lineGap: number;
@@ -32,11 +32,15 @@ export const measureText = ({
 	});
 };
 
-export const getFontMetrics = (fontFamily: 'Inter' | 'Inter-Regular') => {
+export const getFontMetrics = (
+	fontFamily: 'Inter' | 'Inter-Regular' | 'Inter-Bold'
+) => {
 	const fontMetrics =
 		fontFamily === 'Inter'
 			? INTER_CAPSIZE_MEASURES
 			: fontFamily === 'Inter-Regular'
+			? INTER_CAPSIZE_MEASURES
+			: fontFamily === 'Inter-Bold'
 			? INTER_CAPSIZE_MEASURES
 			: null;
 	invariant(fontMetrics);
@@ -47,10 +51,19 @@ export const CapSizeTextNew: React.FC<{
 	children: ReactNode;
 	capHeight: number;
 	lineGap: number;
-	fontFamily: 'Inter' | 'Inter-Regular';
-	fontWeight: number;
+	fontFamily: 'Inter' | 'Inter-Regular' | 'Inter-Bold';
+	fontWeight?: number | string;
+	marginBottom?: number;
 	color: string;
-}> = ({children, fontFamily, fontWeight, color, capHeight, lineGap}) => {
+}> = ({
+	children,
+	fontFamily,
+	fontWeight = 'normal',
+	marginBottom = 0,
+	color,
+	capHeight,
+	lineGap,
+}) => {
 	const fontMetrics = getFontMetrics(fontFamily);
 
 	const capSizeStyles = createStyleObject({
@@ -70,6 +83,7 @@ export const CapSizeTextNew: React.FC<{
 		 font-family: ${fontFamily};
 		 font-weight: ${fontWeight};
 		 color: ${color};
+		 margin-bottom: ${marginBottom}px;
 	 }
 	 .${className}::before {
 		 content: '';

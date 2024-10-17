@@ -10,7 +10,7 @@ export const BaselineGrid: React.FC<
 		height: number;
 		baseline: number;
 		fill?: string;
-		// stroke?: string;
+		stroke?: string;
 		strokeWidth?: number;
 	}
 > = ({
@@ -18,6 +18,7 @@ export const BaselineGrid: React.FC<
 	height,
 	baseline,
 	lineColor,
+	// stroke: lineColor,
 	// stroke = 'magenta',
 	strokeWidth = 2, // TODO include default value in Theme styles...
 	fill = 'transparent', // TODO include default vvalue in Theme styles
