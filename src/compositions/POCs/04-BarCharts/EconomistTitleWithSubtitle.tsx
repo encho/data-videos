@@ -1,6 +1,4 @@
-// import {Sequence, useVideoConfig} from 'remotion';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {
 	Easing,
 	Sequence,
@@ -8,14 +6,7 @@ import {
 	useCurrentFrame,
 	useVideoConfig,
 } from 'remotion';
-// import {ReactNode} from 'react';
-// import {SlideIn} from '../SlideIn';
 import {SlideIn} from '../../../SlideIn';
-// import {FontFamiliesUnionType} from '../../../acetti-typography/fontSpecs';
-// import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
-// import {Performance_01} from '../../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
-// import {FontFamiliesUnionType} from '../acetti-typography/fontSpecs';
-// import {useFontFamiliesLoader} from '../acetti-typography/useFontFamiliesLoader';
 
 export const EconomistTitleWithSubtitle: React.FC<{
 	title: string;
@@ -30,7 +21,7 @@ export const EconomistTitleWithSubtitle: React.FC<{
 
 	// TODO from theme
 	const titleStyle = {
-		fontSize: 70,
+		fontSize: 60,
 		marginBottom: 0,
 		color: theme.typography.title.color,
 		fontFamily: 'Inter-Bold',

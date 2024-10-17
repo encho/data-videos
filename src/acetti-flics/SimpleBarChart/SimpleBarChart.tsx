@@ -30,7 +30,7 @@ type TSimpleBarChartProps = {
 		valueLabel: string;
 	}[];
 	width: number;
-	baseFontSize: number;
+	baseline: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
 	valueDomain?: [number, number];
@@ -41,7 +41,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	theme,
 	data,
 	width,
-	baseFontSize,
+	baseline,
 	showLayout = false,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
@@ -50,11 +50,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const nrColumns = 1;
 	const nrRows = data.length;
 
-	const BAR_HEIGHT = baseFontSize * 1.5;
-	const BAR_SPACE = baseFontSize * 0.5;
+	const BAR_HEIGHT = baseline * 1.5;
+	const BAR_SPACE = baseline * 0.5;
 
-	const labelTextProps = getTextProps_label({baseFontSize, theme});
-	const valueLabelTextProps = getTextProps_valueLabel({baseFontSize, theme});
+	const labelTextProps = getTextProps_label({baseline, theme});
+	const valueLabelTextProps = getTextProps_valueLabel({baseline, theme});
 
 	// =========================================
 	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * BAR_SPACE;
@@ -91,53 +91,46 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	return (
 		<div
 			style={{
-				display: 'flex',
-				justifyContent: 'center',
+				position: 'relative',
+				width: matrixLayout.width,
+				height: matrixLayout.height,
 			}}
 		>
-			<div
-				style={{
-					position: 'relative',
-					width: matrixLayout.width,
-					height: matrixLayout.height,
-				}}
-			>
-				{showLayout ? (
-					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
-					</div>
-				) : null}
+			{showLayout ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<div style={{position: 'relative'}}>
-						{data.map((it, i) => {
-							const BAR_DELAY = Math.floor(90 * 1.4);
-							const barArea = getMatrixLayoutCellArea({
-								layout: matrixLayout,
-								row: i,
-								column: 0,
-							});
-							return (
-								<Sequence from={i * BAR_DELAY}>
-									<HtmlArea area={barArea}>
-										<HorizontalBar
-											width={barArea.width}
-											height={barArea.height}
-											labelWidth={labelWidth}
-											valueLabelWidth={valueLabelWidth}
-											label={it.label}
-											valueLabel={it.valueLabel}
-											labelTextProps={labelTextProps}
-											valueLabelTextProps={valueLabelTextProps}
-											valueDomain={valueDomain}
-											value={it.value}
-											barColor={it.barColor || 'magenta'}
-											showLayout={showLayout}
-										/>
-									</HtmlArea>
-								</Sequence>
-							);
-						})}
-					</div>
+					<DisplayGridRails {...matrixLayout} />
+				</div>
+			) : null}
+			<div style={{position: 'absolute', top: 0, left: 0}}>
+				<div style={{position: 'relative'}}>
+					{data.map((it, i) => {
+						const BAR_DELAY = Math.floor(90 * 1.4);
+						const barArea = getMatrixLayoutCellArea({
+							layout: matrixLayout,
+							row: i,
+							column: 0,
+						});
+						return (
+							<Sequence from={i * BAR_DELAY}>
+								<HtmlArea area={barArea}>
+									<HorizontalBar
+										width={barArea.width}
+										height={barArea.height}
+										labelWidth={labelWidth}
+										valueLabelWidth={valueLabelWidth}
+										label={it.label}
+										valueLabel={it.valueLabel}
+										labelTextProps={labelTextProps}
+										valueLabelTextProps={valueLabelTextProps}
+										valueDomain={valueDomain}
+										value={it.value}
+										barColor={it.barColor || 'magenta'}
+										showLayout={showLayout}
+									/>
+								</HtmlArea>
+							</Sequence>
+						);
+					})}
 				</div>
 			</div>
 		</div>
@@ -319,13 +312,13 @@ export const HorizontalBar: React.FC<{
 
 // TODO receive also theme for colors and fonts
 export const getTextProps_label = ({
-	baseFontSize,
+	baseline,
 	theme,
 }: {
-	baseFontSize: number;
+	baseline: number;
 	theme: ThemeType;
 }) => {
-	const capHeight = baseFontSize * 0.75;
+	const capHeight = baseline * 0.75;
 
 	const labelTextProps = {
 		fontFamily: 'Inter-Regular' as const,
@@ -340,13 +333,13 @@ export const getTextProps_label = ({
 
 // TODO receive also theme for colors and fonts
 export const getTextProps_valueLabel = ({
-	baseFontSize,
+	baseline,
 	theme,
 }: {
-	baseFontSize: number;
+	baseline: number;
 	theme: ThemeType;
 }) => {
-	const capHeight = baseFontSize * 0.6;
+	const capHeight = baseline * 0.6;
 
 	const valueLabelTextProps = {
 		fontFamily: 'Inter-Regular' as const,

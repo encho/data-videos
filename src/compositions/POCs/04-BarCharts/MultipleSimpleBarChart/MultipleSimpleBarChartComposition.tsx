@@ -66,7 +66,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 
 	useFontFamiliesLoader(['Inter-Regular']);
 
-	const baseFontSize = 24;
+	const baseline = 24;
 
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
@@ -91,8 +91,8 @@ export const MultipleSimpleBarChartComposition: React.FC<
 		color: theme.typography.textColor,
 	};
 
-	const textProps_label = getTextProps_label({baseFontSize, theme});
-	const textProps_valueLabel = getTextProps_valueLabel({baseFontSize, theme});
+	const textProps_label = getTextProps_label({baseline, theme});
+	const textProps_valueLabel = getTextProps_valueLabel({baseline, theme});
 
 	const labelWidths = [...barChartData, ...barChartData2].map(
 		(it) => measureText({...textProps_label, text: it.label}).width
@@ -163,7 +163,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 						theme={theme}
 						data={barChartData}
 						width={barChartWidth}
-						baseFontSize={baseFontSize}
+						baseline={baseline}
 						labelWidth={labelWidth}
 						valueLabelWidth={valueLabelWidth}
 						valueDomain={sharedValueDomain}
@@ -194,7 +194,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 							theme={theme}
 							data={barChartData2}
 							width={barChartWidth}
-							baseFontSize={baseFontSize}
+							baseline={baseline}
 							labelWidth={labelWidth}
 							valueLabelWidth={valueLabelWidth}
 							valueDomain={sharedValueDomain}

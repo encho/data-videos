@@ -344,7 +344,7 @@ export const RemotionRoot: React.FC = () => {
 							kpiValue: 0.015,
 							kpiValueFormatString: '+0.00%',
 							kpiLabel: 'Net Profits',
-							baseFontSize: 60,
+							baseline: 50,
 						}}
 					/>
 				</Folder>

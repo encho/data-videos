@@ -26,12 +26,12 @@ export const simpleKPICompositionSchema = z.object({
 	kpiValue: z.number(),
 	kpiValueFormatString: z.string(),
 	kpiLabel: z.string(),
-	baseFontSize: z.number(), // TODO rename to baseline
+	baseline: z.number(), // TODO rename to baseline
 });
 
 export const SimpleKPIComposition: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
+> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseline}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	// load fonts
@@ -59,7 +59,7 @@ export const SimpleKPIComposition: React.FC<
 					style={{
 						display: 'flex',
 						flexDirection: 'column',
-						gap: baseFontSize * 2,
+						gap: baseline * 2,
 						marginLeft: 40,
 						marginTop: 80,
 					}}
@@ -71,7 +71,7 @@ export const SimpleKPIComposition: React.FC<
 								kpiValue,
 								kpiValueFormatString,
 								kpiLabel,
-								baseFontSize,
+								baseline,
 							}}
 						/>
 					</Sequence>
@@ -83,7 +83,7 @@ export const SimpleKPIComposition: React.FC<
 								kpiValue: 2000,
 								kpiValueFormatString: '$ 0.00',
 								kpiLabel: 'Investments',
-								baseFontSize,
+								baseline,
 							}}
 						/>
 					</Sequence>
@@ -96,7 +96,7 @@ export const SimpleKPIComposition: React.FC<
 
 export const SimpleKPI: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseFontSize}) => {
+> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseline}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
@@ -110,7 +110,7 @@ export const SimpleKPI: React.FC<
 		>
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.datavizLabel}
-				baseline={baseFontSize}
+				baseline={baseline}
 				color="white"
 				marginBottom={0.5}
 			>
@@ -120,7 +120,7 @@ export const SimpleKPI: React.FC<
 			</TypographyStyle>
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.datavizValueLabel}
-				baseline={baseFontSize}
+				baseline={baseline}
 				color="white"
 			>
 				<WaterfallTextEffect>{kpiLabel}</WaterfallTextEffect>

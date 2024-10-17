@@ -1,13 +1,13 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {EconomistDataSource} from '../EconomistDataSource';
+import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -60,34 +60,22 @@ export const SimpleBarChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 50,
-							fontFamily: 'Arial',
-							fontWeight: 700,
-						}}
-					>
-						<FadeInAndOutText>Simple Bar Chart</FadeInAndOutText>
-					</div>
-				</div>
-			</div>
+			<EconomistTitleWithSubtitle
+				title={'AfD: Vormarsch in Brandenburg'}
+				subtitle={'Wahlergebnisse Brandenburg 2024'}
+				theme={theme}
+			/>
 
 			<div
 				style={{
 					display: 'flex',
-					flexDirection: 'column',
-					gap: 50,
-					marginTop: 120,
+					justifyContent: 'center',
 				}}
 			>
 				<SimpleBarChart
 					data={barChartData}
 					width={800}
-					baseFontSize={30}
+					baseline={30}
 					theme={theme}
 				/>
 			</div>
@@ -95,12 +83,8 @@ export const SimpleBarChartComposition: React.FC<
 			<EconomistDataSource theme={theme}>
 				AirVisual World Air Quality Report 2018
 			</EconomistDataSource>
-			<LorenzoBertoliniLogo
-				// TODO pass theme
-				// theme={theme}
-				color={theme.typography.textColor}
-				// fontSize={28}
-			/>
+
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };
