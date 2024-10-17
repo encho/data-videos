@@ -128,7 +128,7 @@ import {
 import {
 	StartingFiveSlideComposition,
 	startingFiveSlideCompositionSchema,
-} from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlide';
+} from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlideComposition';
 
 import {
 	KeyframesComposition,
@@ -193,7 +193,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...linkedInTallVideo}
 						{...squareVideo}
 						schema={textMaskCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:

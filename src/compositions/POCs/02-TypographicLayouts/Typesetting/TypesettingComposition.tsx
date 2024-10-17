@@ -26,17 +26,13 @@ export const typesettingCompositionSchema = z.object({
 export const TypesettingComposition: React.FC<
 	z.infer<typeof typesettingCompositionSchema>
 > = ({themeEnum}) => {
-	// useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	// load fonts
 	// ********************************************************
 	useFontFamiliesLoader(theme);
 
-	const {
-		width,
-		// fps
-	} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	const matrixLayout = useMatrixLayout({
 		width, // TODO better show grid rails!

@@ -11,7 +11,7 @@ import invariant from 'tiny-invariant';
 import * as paper from 'paper';
 import opentype from 'opentype.js';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -29,20 +29,17 @@ export const svgMaskCompositionSchema = z.object({
 export const SvgMaskComposition: React.FC<
 	z.infer<typeof svgMaskCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader([
-		'Inter-Regular',
-		'Inter-Bold',
-		'SourceSerifPro-Light',
-	]);
-
 	const [svgPath, setSvgPath] = useState<string | null>(null);
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
+
 	const {durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	// const fontFilePath = staticFile(`/fonts/Inter/Inter-Bold.ttf`);
 	const fontFilePath = staticFile(
 		`/fonts/SourceSerifPro/SourceSerifPro-Light.ttf`
 	);

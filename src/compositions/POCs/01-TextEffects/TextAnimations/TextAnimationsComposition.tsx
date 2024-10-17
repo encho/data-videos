@@ -1,6 +1,8 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {Position} from '../../../../acetti-ts-base/Position';
@@ -23,15 +25,9 @@ export const TextAnimationsComposition: React.FC<
 > = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	// TODO kpi section in theme!!!
-	// const kpiColor = theme.typography.textColor;
-
-	const textStyles = {
-		fontSize: 80,
-		fontWeight: 700,
-		fontFamily: theme.typography.title.fontFamily,
-		color: theme.typography.title.color,
-	};
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
 
 	return (
 		<div
@@ -45,22 +41,24 @@ export const TextAnimationsComposition: React.FC<
 			<Position position={{top: 100, left: 100}}>
 				<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
 					<Sequence layout="none">
-						<div
-							style={{
-								...textStyles,
-							}}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h2}
+							baseline={24}
+							color="white"
+							marginBottom={2}
 						>
-							<FadeInAndOutText>FadeInAndOutText</FadeInAndOutText>
-						</div>
+							<FadeInAndOutText>Fade In And Out Text</FadeInAndOutText>
+						</TypographyStyle>
 					</Sequence>
 					<Sequence layout="none">
-						<div
-							style={{
-								...textStyles,
-							}}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h2}
+							baseline={24}
+							color="white"
+							marginBottom={2}
 						>
-							<WaterfallTextEffect>WaterfallTextEffect</WaterfallTextEffect>
-						</div>
+							<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>
+						</TypographyStyle>
 					</Sequence>
 				</div>
 			</Position>

@@ -6,7 +6,6 @@ import {ReactNode} from 'react';
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
-// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -20,7 +19,6 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
-// import {textStyles} from './textStyles'; TODO deprecate
 import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import {TAvailableFontFamily} from '../../../../acetti-typography/new/fontMetricsLibrary';
 // import {getUniqueThemeFontFamilies} from '../../../../acetti-themes/getUniqueThemeFontFamilies';
@@ -75,8 +73,6 @@ export const TextStylesComposition: React.FC<
 
 	// load fonts
 	// ********************************************************
-	// const themeFontFamilies = getUniqueThemeFontFamilies(theme);
-	// useFontFamiliesLoader(themeFontFamilies);
 	useFontFamiliesLoader(theme);
 
 	const {width} = useVideoConfig();
