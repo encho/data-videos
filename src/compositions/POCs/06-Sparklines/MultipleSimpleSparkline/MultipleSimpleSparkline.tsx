@@ -160,7 +160,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 									domain={commonDomain}
 									lineColor={neonColors.neonGreen}
 									formatString="0.00 %"
-									showLayout={false}
+									// showLayout={true}
 								/>
 							</Sequence>
 						</Sequence>

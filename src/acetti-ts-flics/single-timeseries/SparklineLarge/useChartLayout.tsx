@@ -17,7 +17,7 @@ export function useChartLayout({
 }) {
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},
-		{type: 'pixel', value: 40, name: 'space'},
+		{type: 'pixel', value: 10, name: 'space'},
 		{type: 'pixel', value: 55, name: 'xAxis'},
 	];
 

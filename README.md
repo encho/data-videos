@@ -16,6 +16,10 @@ https://x.com/ECONdailycharts
 Data source for file `4_niedrig.geo.json`:
 https://github.com/isellsoap/deutschlandGeoJSON
 
+## Inflation Data
+
+https://www.worldbank.org/en/research/brief/inflation-database
+
 ## Commands
 
 **Install Dependencies**

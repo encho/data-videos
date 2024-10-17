@@ -125,7 +125,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 						fadeOutDurationInFrames={FLY_OUT_CHARACTER_DURATION}
 						translateY={200}
 					>
-						{children}
+						{char === ' ' ? '\u2002' : char}
 					</ExitCharacter>
 				))}
 			</Sequence>
