@@ -56,9 +56,9 @@ import {
 } from './compositions/TwoChangeBars/TwoChangeBarsWithImage';
 
 import {
-	SimpleKPIPOC,
-	simpleKPIPOCSchema,
-} from './compositions/POCs/SimpleStats/SimpleKPIPOC/SimpleKPIPOC';
+	SimpleKPIComposition,
+	simpleKPICompositionSchema,
+} from './compositions/POCs/SimpleStats/SimpleKPI/SimpleKPIComposition';
 
 import {
 	NewTwoChangeBars,
@@ -157,7 +157,26 @@ const linkedInTallVideo = {
 	height: 1350,
 };
 
-const widescreen_16x9_video = {width: 1920, height: 1080};
+const widescreen_16x9_video = {
+	width: 1920,
+	height: 1080,
+};
+
+// TODO use this
+// const videoSize = {
+// 	square: {
+// 		width: 1080,
+// 		height: 1080,
+// 	},
+// 	linkedInTall: {
+// 		width: 1080,
+// 		height: 1350,
+// 	},
+// 	widescreen_16x9: {
+// 		width: 1920,
+// 		height: 1080,
+// 	},
+// };
 
 export const RemotionRoot: React.FC = () => {
 	return (
@@ -314,17 +333,17 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleKPI"
-						component={SimpleKPIPOC}
-						durationInFrames={90 * 5}
+						component={SimpleKPIComposition}
+						durationInFrames={90 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
 						{...squareVideo}
-						schema={simpleKPIPOCSchema}
+						schema={simpleKPICompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 							kpiValue: 0.015,
 							kpiValueFormatString: '+0.00%',
-							kpiLabel: 'Net  Profits',
+							kpiLabel: 'Net Profits',
 							baseFontSize: 60,
 						}}
 					/>

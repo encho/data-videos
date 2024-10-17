@@ -21,8 +21,6 @@ import {
 import {HtmlArea} from '../../../../acetti-layout';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import {TAvailableFontFamily} from '../../../../acetti-typography/new/fontMetricsLibrary';
-// import {getUniqueThemeFontFamilies} from '../../../../acetti-themes/getUniqueThemeFontFamilies';
-// import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // TODO funciton of theme, and should get color though or id to color in theme
 // TODO put into acetti-typograpy/new
