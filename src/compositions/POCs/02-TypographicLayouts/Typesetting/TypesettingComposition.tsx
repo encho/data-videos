@@ -33,7 +33,10 @@ export const TypesettingComposition: React.FC<
 	// ********************************************************
 	useFontFamiliesLoader(theme);
 
-	const {width, fps} = useVideoConfig();
+	const {
+		width,
+		// fps
+	} = useVideoConfig();
 
 	const matrixLayout = useMatrixLayout({
 		width, // TODO better show grid rails!

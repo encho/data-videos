@@ -11,7 +11,6 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 // import {ElementsLogo} from './ElementsLogo';
-import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
@@ -40,7 +39,9 @@ export const BaselineGridComposition: React.FC<
 	// ********************************************************
 	useFontFamiliesLoader(theme);
 
-	const BASELINE_HEIGHT = 28;
+	const {fps} = useVideoConfig();
+
+	const BASELINE_HEIGHT = 30;
 	const NR_LINES = 30;
 	const PAPER_WIDTH = 800;
 	const PAPER_HEIGHT = NR_LINES * BASELINE_HEIGHT;
@@ -56,8 +57,13 @@ export const BaselineGridComposition: React.FC<
 				}}
 			>
 				<SlideTitle theme={theme}>The Baseline Grid</SlideTitle>
-				<div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
-					<div style={{display: 'flex', gap: 40}}>
+				<Sequence from={fps * 0.8} layout="none">
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+						}}
+					>
 						<div
 							style={{
 								width: PAPER_WIDTH,
@@ -75,9 +81,8 @@ export const BaselineGridComposition: React.FC<
 							/>
 						</div>
 					</div>
-				</div>
+				</Sequence>
 
-				{/* <ElementsLogo cell_size={4} /> */}
 				<LorenzoBertoliniLogo color={theme.typography.textColor} />
 			</div>
 		</>
