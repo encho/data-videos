@@ -4,11 +4,11 @@ import {continueRender, delayRender, staticFile} from 'remotion';
 
 import type {TFontSpec} from './fontSpecsLibrary';
 import {TAvailableFontFamily} from './fontMetricsLibrary';
-import {fontSpecsLibrary} from './fontSpecsLibrary';
+import {getFontSpec} from './fontSpecsLibrary';
 
-function uniqueStrings(inputArray: string[]): string[] {
+function uniqueThings<Thing>(inputArray: Thing[]): Thing[] {
 	// Create a Set to store unique strings
-	const uniqueSet = new Set<string>();
+	const uniqueSet = new Set<Thing>();
 
 	// Add the strings from the input array to the Set
 	inputArray.forEach((str) => uniqueSet.add(str));
@@ -23,10 +23,8 @@ function uniqueStrings(inputArray: string[]): string[] {
 export const useFontFamiliesLoader = (fontFamilies: TAvailableFontFamily[]) => {
 	// load fonts
 	const fontSpecs = useMemo(() => {
-		const uniqueFontFamilies = uniqueStrings(fontFamilies);
-		// @ts-ignore
-		const specs = uniqueFontFamilies.map((it) => fontSpecsLibrary[it]);
-		return specs;
+		const uniqueFontFamilies = uniqueThings<TAvailableFontFamily>(fontFamilies);
+		return uniqueFontFamilies.map((fontFamily) => getFontSpec(fontFamily));
 	}, fontFamilies);
 	useFontsLoader(fontSpecs);
 

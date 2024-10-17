@@ -22,6 +22,7 @@ import {
 import {HtmlArea} from '../../../../acetti-layout';
 import {textStyles} from './textStyles';
 import {useFontFamiliesLoader} from '../BaselineGrid/useFontFamiliesLoader';
+import {TAvailableFontFamily} from '../BaselineGrid/fontMetricsLibrary';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // TODO funciton of theme, and should get color though or id to color in theme
@@ -37,7 +38,7 @@ function TypographyStyle({
 	marginBottom?: number;
 	color: string;
 	typographyStyle: {
-		fontFamily: 'Inter' | 'Inter-Regular' | 'Inter-Bold';
+		fontFamily: TAvailableFontFamily;
 		capHeightInBaselines: number;
 		lineGapInBaselines: number;
 	};
@@ -65,11 +66,11 @@ export const textStylesCompositionSchema = z.object({
 export const TextStylesComposition: React.FC<
 	z.infer<typeof textStylesCompositionSchema>
 > = ({themeEnum}) => {
-	// useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
 	useFontFamiliesLoader([
 		'Inter-Regular',
 		'Inter-Bold',
-		// 'SourceSerifPro-Light',
+		'Inter-28pt-Thin',
+		'Inter-28pt-Black',
 	]);
 
 	const theme = getThemeFromEnum(themeEnum as any);
@@ -159,8 +160,25 @@ export const TextStylesComposition: React.FC<
 										typographyStyle={textStyles.body}
 										baseline={baselineLeft}
 										color="white"
+										marginBottom={2}
 									>
 										This is body
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.dataviz.label}
+										baseline={baselineLeft}
+										color="white"
+										marginBottom={2}
+									>
+										Dataviz Label
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.dataviz.valueLabel}
+										baseline={baselineLeft}
+										color="white"
+										marginBottom={2}
+									>
+										Dataviz value label
 									</TypographyStyle>
 								</div>
 							</div>
@@ -207,8 +225,25 @@ export const TextStylesComposition: React.FC<
 										typographyStyle={textStyles.body}
 										baseline={baselineRight}
 										color="white"
+										marginBottom={2}
 									>
 										This is body
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.dataviz.label}
+										baseline={baselineRight}
+										color="white"
+										marginBottom={2}
+									>
+										Dataviz Label
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.dataviz.valueLabel}
+										baseline={baselineRight}
+										color="white"
+										marginBottom={2}
+									>
+										Dataviz value label
 									</TypographyStyle>
 								</div>
 							</div>

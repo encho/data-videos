@@ -1,9 +1,11 @@
 import invariant from 'tiny-invariant';
 
-export type TAvailableFontFamily = 'Inter' | 'Inter-Regular' | 'Inter-Bold';
-// TODO add these!
-// | 'Inter-28pt-Thin'
-// | 'Inter-28pt-Black';
+export type TAvailableFontFamily =
+	| 'Inter'
+	| 'Inter-Regular'
+	| 'Inter-Bold'
+	| 'Inter-28pt-Thin'
+	| 'Inter-28pt-Black';
 
 export type TFontMetrics = {
 	familyName: string;
@@ -91,21 +93,15 @@ const Inter_28pt_Thin = {
 	},
 };
 
-export const fontMetricsLibrary: TFontMetricsMap = {
-	Inter: INTER_CAPSIZE_MEASURES,
-	'Inter-Regular': INTER_CAPSIZE_MEASURES,
-	'Inter-Bold': INTER_CAPSIZE_MEASURES,
-	// 'Inter-28pt-Thin': Inter_28pt_Thin,
-	// 'Inter-28pt-Black': Inter_28pt_Black,
-};
-
 export const getFontMetrics = (
 	fontFamily: TAvailableFontFamily
 ): TFontMetrics => {
-	const fontMetricsMapping = {
+	const fontMetricsMapping: TFontMetricsMap = {
 		Inter: INTER_CAPSIZE_MEASURES,
 		'Inter-Regular': INTER_CAPSIZE_MEASURES,
 		'Inter-Bold': INTER_CAPSIZE_MEASURES,
+		'Inter-28pt-Thin': Inter_28pt_Thin,
+		'Inter-28pt-Black': Inter_28pt_Black,
 	};
 
 	const fontMetrics = fontMetricsMapping[fontFamily];
