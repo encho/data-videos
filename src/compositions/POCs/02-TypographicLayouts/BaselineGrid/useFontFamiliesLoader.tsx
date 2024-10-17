@@ -52,5 +52,6 @@ async function loadFont(fontSpec: TFontSpec) {
 
 	await fontFace.load();
 	document.fonts.add(fontFace);
+
 	continueRender(handle);
 }

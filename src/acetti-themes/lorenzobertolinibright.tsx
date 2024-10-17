@@ -39,6 +39,33 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		subTitleColor: '#888888',
 		textColor: '#222222',
 		logoColor: '#222222',
+		textStyles: {
+			h1: {
+				fontFamily: 'Inter-28pt-Thin' as const,
+				capHeightInBaselines: 3,
+				lineGapInBaselines: 1,
+			},
+			h2: {
+				fontFamily: 'Inter-28pt-Thin' as const,
+				capHeightInBaselines: 2,
+				lineGapInBaselines: 1,
+			},
+			body: {
+				fontFamily: 'Inter-28pt-Thin' as const,
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizLabel: {
+				fontFamily: 'Inter-28pt-Thin' as const,
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizValueLabel: {
+				fontFamily: 'Inter-28pt-Thin' as const,
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+		},
 	},
 	yAxis: {
 		fontSize: 15,

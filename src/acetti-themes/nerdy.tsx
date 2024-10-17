@@ -35,7 +35,35 @@ export const nerdyTheme: ThemeType = {
 		subTitleColor: '#888',
 		textColor: '#ffffff',
 		logoColor: '#666',
+		textStyles: {
+			h1: {
+				fontFamily: 'Inter-28pt-Black',
+				capHeightInBaselines: 3,
+				lineGapInBaselines: 1,
+			},
+			h2: {
+				fontFamily: 'Inter-28pt-Black',
+				capHeightInBaselines: 2,
+				lineGapInBaselines: 1,
+			},
+			body: {
+				fontFamily: 'Inter-28pt-Black',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizLabel: {
+				fontFamily: 'Inter-28pt-Black',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizValueLabel: {
+				fontFamily: 'Inter-28pt-Black',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+		},
 	},
+
 	yAxis: {
 		fontSize: 16,
 		strokeWidth: 3,

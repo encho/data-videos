@@ -1,11 +1,17 @@
 import invariant from 'tiny-invariant';
+import {z} from 'zod';
 
-export type TAvailableFontFamily =
-	| 'Inter'
-	| 'Inter-Regular'
-	| 'Inter-Bold'
-	| 'Inter-28pt-Thin'
-	| 'Inter-28pt-Black';
+const ALL_AVAILABLE_FONT_FAMILIES = [
+	'Inter',
+	'Inter-Regular',
+	'Inter-Bold',
+	'Inter-28pt-Thin',
+	'Inter-28pt-Black',
+] as const;
+
+export const zAvailableFontFamiliesEnum = z.enum(ALL_AVAILABLE_FONT_FAMILIES);
+
+export type TAvailableFontFamily = z.infer<typeof zAvailableFontFamiliesEnum>;
 
 export type TFontMetrics = {
 	familyName: string;

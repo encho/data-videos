@@ -23,6 +23,7 @@ import {HtmlArea} from '../../../../acetti-layout';
 import {textStyles} from './textStyles';
 import {useFontFamiliesLoader} from '../BaselineGrid/useFontFamiliesLoader';
 import {TAvailableFontFamily} from '../BaselineGrid/fontMetricsLibrary';
+import {getUniqueThemeFontFamilies} from '../../../../acetti-themes/getUniqueThemeFontFamilies';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // TODO funciton of theme, and should get color though or id to color in theme
@@ -66,14 +67,18 @@ export const textStylesCompositionSchema = z.object({
 export const TextStylesComposition: React.FC<
 	z.infer<typeof textStylesCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader([
-		'Inter-Regular',
-		'Inter-Bold',
-		'Inter-28pt-Thin',
-		'Inter-28pt-Black',
-	]);
-
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	const themeFontFamilies = getUniqueThemeFontFamilies(theme);
+
+	useFontFamiliesLoader(themeFontFamilies);
+
+	// useFontFamiliesLoader([
+	// 	'Inter-Regular',
+	// 	'Inter-Bold',
+	// 	'Inter-28pt-Thin',
+	// 	'Inter-28pt-Black',
+	// ]);
 
 	const {width, fps} = useVideoConfig();
 
@@ -141,7 +146,7 @@ export const TextStylesComposition: React.FC<
 								>
 									{/* // TODO false to not use style marginBottom or override with number ot control baseline multiples!! */}
 									<TypographyStyle
-										typographyStyle={textStyles.h1}
+										typographyStyle={theme.typography.textStyles.h1}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
@@ -149,7 +154,7 @@ export const TextStylesComposition: React.FC<
 										This is h1
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.h2}
+										typographyStyle={theme.typography.textStyles.h2}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
@@ -157,7 +162,7 @@ export const TextStylesComposition: React.FC<
 										This is h2
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.body}
+										typographyStyle={theme.typography.textStyles.body}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
@@ -165,7 +170,7 @@ export const TextStylesComposition: React.FC<
 										This is body
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.dataviz.label}
+										typographyStyle={theme.typography.textStyles.datavizLabel}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
@@ -173,7 +178,9 @@ export const TextStylesComposition: React.FC<
 										Dataviz Label
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.dataviz.valueLabel}
+										typographyStyle={
+											theme.typography.textStyles.datavizValueLabel
+										}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
@@ -206,7 +213,7 @@ export const TextStylesComposition: React.FC<
 								>
 									{/* // TODO false to not use style marginBottom or override with number ot control baseline multiples!! */}
 									<TypographyStyle
-										typographyStyle={textStyles.h1}
+										typographyStyle={theme.typography.textStyles.h1}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}
@@ -214,7 +221,7 @@ export const TextStylesComposition: React.FC<
 										This is h1
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.h2}
+										typographyStyle={theme.typography.textStyles.h2}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}
@@ -222,7 +229,7 @@ export const TextStylesComposition: React.FC<
 										This is h2
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.body}
+										typographyStyle={theme.typography.textStyles.body}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}
@@ -230,7 +237,7 @@ export const TextStylesComposition: React.FC<
 										This is body
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.dataviz.label}
+										typographyStyle={theme.typography.textStyles.datavizLabel}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}
@@ -238,7 +245,9 @@ export const TextStylesComposition: React.FC<
 										Dataviz Label
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={textStyles.dataviz.valueLabel}
+										typographyStyle={
+											theme.typography.textStyles.datavizValueLabel
+										}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}

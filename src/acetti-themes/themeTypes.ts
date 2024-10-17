@@ -1,5 +1,12 @@
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
+import {zAvailableFontFamiliesEnum} from '../compositions/POCs/02-TypographicLayouts/BaselineGrid/fontMetricsLibrary';
+
+const zTextStyle = z.object({
+	fontFamily: zAvailableFontFamiliesEnum,
+	capHeightInBaselines: z.number(),
+	lineGapInBaselines: z.number(),
+});
 
 export const zodThemeType = z.object({
 	global: z.object({
@@ -18,6 +25,13 @@ export const zodThemeType = z.object({
 		subTitleColor: zColor(),
 		textColor: zColor(),
 		logoColor: zColor(),
+		textStyles: z.object({
+			h1: zTextStyle,
+			h2: zTextStyle,
+			body: zTextStyle,
+			datavizLabel: zTextStyle,
+			datavizValueLabel: zTextStyle,
+		}),
 	}),
 	yAxis: z.object({
 		fontSize: z.number(),

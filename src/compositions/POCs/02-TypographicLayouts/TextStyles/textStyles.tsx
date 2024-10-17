@@ -14,16 +14,14 @@ export const textStyles = {
 		capHeightInBaselines: 1,
 		lineGapInBaselines: 1,
 	},
-	dataviz: {
-		label: {
-			fontFamily: 'Inter-Regular' as const,
-			capHeightInBaselines: 1,
-			lineGapInBaselines: 1,
-		},
-		valueLabel: {
-			fontFamily: 'Inter-28pt-Thin' as const,
-			capHeightInBaselines: 1,
-			lineGapInBaselines: 1,
-		},
+	datavizLabel: {
+		fontFamily: 'Inter-Regular' as const,
+		capHeightInBaselines: 1,
+		lineGapInBaselines: 1,
+	},
+	datavizValueLabel: {
+		fontFamily: 'Inter-28pt-Thin' as const,
+		capHeightInBaselines: 1,
+		lineGapInBaselines: 1,
 	},
 };

@@ -39,6 +39,35 @@ export const lorenzobertoliniTheme: ThemeType = {
 		subTitleColor: '#fff',
 		textColor: '#fff',
 		logoColor: '#fff',
+		textStyles: {
+			h1: {
+				// fontFamily: 'Inter-28pt-Thin' as const,
+				// fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 3,
+				lineGapInBaselines: 1,
+			},
+			h2: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 2,
+				lineGapInBaselines: 1,
+			},
+			body: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizLabel: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+			datavizValueLabel: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+			},
+		},
 	},
 	yAxis: {
 		fontSize: 15,
