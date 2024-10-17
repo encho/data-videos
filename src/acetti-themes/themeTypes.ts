@@ -8,6 +8,8 @@ const zTextStyle = z.object({
 	lineGapInBaselines: z.number(),
 });
 
+export type ThemeTextStyle = z.infer<typeof zTextStyle>;
+
 export const zodThemeType = z.object({
 	global: z.object({
 		backgroundColor: zColor(),

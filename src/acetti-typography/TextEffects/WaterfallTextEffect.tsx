@@ -6,6 +6,8 @@ import {
 	interpolate,
 } from 'remotion';
 
+const REGULAR_WHITESPACE_CODE = '\u0020';
+
 export const WaterfallTextEffect: React.FC<{children: string}> = ({
 	children,
 }) => {
@@ -90,7 +92,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 						fadeInDurationInFrames={FLY_IN_CHARACTER_DURATION}
 						translateY={-300}
 					>
-						{char === ' ' ? '\u2002' : char}
+						{char === ' ' ? REGULAR_WHITESPACE_CODE : char}
 					</EnterCharacter>
 				))}
 			</Sequence>
@@ -107,7 +109,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 							display: 'inline-block',
 						}}
 					>
-						{char === ' ' ? '\u2002' : char}
+						{char === ' ' ? REGULAR_WHITESPACE_CODE : char}
 					</span>
 				))}
 			</Sequence>
@@ -125,7 +127,7 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 						fadeOutDurationInFrames={FLY_OUT_CHARACTER_DURATION}
 						translateY={200}
 					>
-						{char === ' ' ? '\u2002' : char}
+						{char === ' ' ? REGULAR_WHITESPACE_CODE : char}
 					</ExitCharacter>
 				))}
 			</Sequence>

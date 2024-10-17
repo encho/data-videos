@@ -8,6 +8,7 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {EconomistDataSource} from '../EconomistDataSource';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
 export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -43,6 +44,13 @@ export const SimpleBarChartComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
+	const CHART_WIDTH = 900;
+	const BASELINE = 26;
+
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
+
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
@@ -74,8 +82,8 @@ export const SimpleBarChartComposition: React.FC<
 			>
 				<SimpleBarChart
 					data={barChartData}
-					width={800}
-					baseline={30}
+					width={CHART_WIDTH}
+					baseline={BASELINE}
 					theme={theme}
 				/>
 			</div>

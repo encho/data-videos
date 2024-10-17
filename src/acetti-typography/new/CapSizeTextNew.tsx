@@ -2,6 +2,30 @@ import {createStyleObject} from '@capsizecss/core';
 import {ReactNode} from 'react';
 import {measureText as remotionMeasureText} from '@remotion/layout-utils';
 import {TAvailableFontFamily, getFontMetrics} from './fontMetricsLibrary';
+import {ThemeType} from '../../acetti-themes/themeTypes';
+
+export function getTextDimensions({
+	theme,
+	baseline,
+	key,
+	text,
+}: {
+	theme: ThemeType;
+	baseline: number;
+	key: keyof ThemeType['typography']['textStyles'];
+	text: string;
+}) {
+	const textStyle = theme.typography.textStyles[key];
+	const textStyleProps = {
+		fontFamily: textStyle.fontFamily,
+		capHeight: textStyle.capHeightInBaselines * baseline,
+		lineGap: textStyle.lineGapInBaselines * baseline,
+	};
+
+	const measures = measureText({...textStyleProps, text});
+
+	return measures;
+}
 
 export const measureText = ({
 	fontFamily,
@@ -11,7 +35,7 @@ export const measureText = ({
 	text,
 }: {
 	fontFamily: TAvailableFontFamily;
-	fontWeight: number;
+	fontWeight?: number;
 	capHeight: number;
 	lineGap: number;
 	text: string;

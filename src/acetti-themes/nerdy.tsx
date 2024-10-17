@@ -57,8 +57,8 @@ export const nerdyTheme: ThemeType = {
 				lineGapInBaselines: 1,
 			},
 			datavizValueLabel: {
-				fontFamily: 'Inter-28pt-Thin',
-				capHeightInBaselines: 1,
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 0.8,
 				lineGapInBaselines: 1,
 			},
 		},

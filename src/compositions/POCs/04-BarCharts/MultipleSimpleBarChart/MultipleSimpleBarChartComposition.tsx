@@ -2,7 +2,6 @@ import {z} from 'zod';
 import {Sequence} from 'remotion';
 
 import {EconomistDataSource} from '../EconomistDataSource';
-import {measureText} from '../../../../acetti-typography/new/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -13,10 +12,7 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {
-	getTextProps_label,
-	getTextProps_valueLabel,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {getTextDimensions} from '../../../../acetti-typography/new/CapSizeTextNew';
 
 export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -38,7 +34,6 @@ const wahlergebnis2024: {parteiName: string; prozent: number; farbe: string}[] =
 		{parteiName: 'SPD', prozent: 30.9 / 100, farbe: '#E3000F'}, // SPD Red
 		{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0'}, // AfD Blue
 		{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
-		// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
 		{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff'}, // CDU Black
 		{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D'}, // Grüne Green
 		{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075'}, // Die Linke Magenta
@@ -66,7 +61,8 @@ export const MultipleSimpleBarChartComposition: React.FC<
 
 	useFontFamiliesLoader(['Inter-Regular']);
 
-	const baseline = 24;
+	const barChartWidth = 800;
+	const baseline = 22;
 
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
@@ -91,23 +87,28 @@ export const MultipleSimpleBarChartComposition: React.FC<
 		color: theme.typography.textColor,
 	};
 
-	const textProps_label = getTextProps_label({baseline, theme});
-	const textProps_valueLabel = getTextProps_valueLabel({baseline, theme});
-
 	const labelWidths = [...barChartData, ...barChartData2].map(
-		(it) => measureText({...textProps_label, text: it.label}).width
+		(it) =>
+			getTextDimensions({key: 'datavizLabel', theme, baseline, text: it.label})
+				.width
 	);
+
 	const labelWidth = Math.max(...labelWidths);
 
 	const valueLabelWidths = [...barChartData, ...barChartData2].map(
-		(it) => measureText({...textProps_valueLabel, text: it.valueLabel}).width
+		(it) =>
+			getTextDimensions({
+				key: 'datavizValueLabel',
+				theme,
+				baseline,
+				text: it.valueLabel,
+			}).width
 	);
+
 	const valueLabelWidth = Math.max(...valueLabelWidths);
 
 	const allValues = [...barChartData, ...barChartData2].map((it) => it.value);
 	const sharedValueDomain = [0, Math.max(...allValues)] as [number, number];
-
-	const barChartWidth = 800;
 
 	return (
 		<div

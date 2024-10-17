@@ -1,5 +1,4 @@
-// import {measureText} from '@remotion/layout-utils';
-import {measureText} from '../../acetti-typography/new/CapSizeTextNew';
+import {getTextDimensions} from '../../acetti-typography/new/CapSizeTextNew';
 import {
 	Sequence,
 	useCurrentFrame,
@@ -9,17 +8,16 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
-import {CapSizeTextNew} from '../../acetti-typography/new/CapSizeTextNew';
 import {useHorizontalBarLayout} from './useHorizontalBarLayout';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
-
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {ThemeType} from '../../acetti-themes/themeTypes';
+import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 
 type TSimpleBarChartProps = {
 	theme: ThemeType;
@@ -50,11 +48,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const nrColumns = 1;
 	const nrRows = data.length;
 
-	const BAR_HEIGHT = baseline * 1.5;
+	const BAR_HEIGHT = baseline * 2;
 	const BAR_SPACE = baseline * 0.5;
-
-	const labelTextProps = getTextProps_label({baseline, theme});
-	const valueLabelTextProps = getTextProps_valueLabel({baseline, theme});
 
 	// =========================================
 	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * BAR_SPACE;
@@ -67,20 +62,31 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		rowSpacePixels: BAR_SPACE,
 	});
 
+	// TODO use labelTextStyleProps after we use that text style!!!
 	// determine labelWidth from all labelWidth's
 	// ------------------------------------------
 	const labelWidths = data.map(
-		(it) => measureText({...labelTextProps, text: it.label}).width
+		(it) =>
+			getTextDimensions({key: 'datavizLabel', theme, baseline, text: it.label})
+				.width
 	);
-	const labelWidth = labelWidthProp || Math.max(...labelWidths) * 1.05; // safety width bump
 
+	const labelWidth = labelWidthProp || Math.max(...labelWidths);
+
+	// TODO use valueLabelTextStyleProps after we use that text style!!!
 	// determine valueLabelWidth from all valueLabelWidth's
 	// ------------------------------------------
 	const valueLabelWidths = data.map(
-		(it) => measureText({...valueLabelTextProps, text: it.valueLabel}).width
+		(it) =>
+			getTextDimensions({
+				key: 'datavizValueLabel',
+				theme,
+				baseline,
+				text: it.valueLabel,
+			}).width
 	);
-	const valueLabelWidth =
-		valueLabelWidthProp || Math.max(...valueLabelWidths) * 1.2;
+
+	const valueLabelWidth = valueLabelWidthProp || Math.max(...valueLabelWidths);
 
 	// determine domain
 	// ------------------------------------------
@@ -97,8 +103,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 			}}
 		>
 			{showLayout ? (
+				// {true ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<DisplayGridRails {...matrixLayout} />
+					<DisplayGridRails {...matrixLayout} stroke="#555" />
 				</div>
 			) : null}
 			<div style={{position: 'absolute', top: 0, left: 0}}>
@@ -114,14 +121,14 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 							<Sequence from={i * BAR_DELAY}>
 								<HtmlArea area={barArea}>
 									<HorizontalBar
+										theme={theme}
+										baseline={baseline}
 										width={barArea.width}
 										height={barArea.height}
 										labelWidth={labelWidth}
 										valueLabelWidth={valueLabelWidth}
 										label={it.label}
 										valueLabel={it.valueLabel}
-										labelTextProps={labelTextProps}
-										valueLabelTextProps={valueLabelTextProps}
 										valueDomain={valueDomain}
 										value={it.value}
 										barColor={it.barColor || 'magenta'}
@@ -138,39 +145,27 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 };
 
 export const HorizontalBar: React.FC<{
+	theme: ThemeType;
+	baseline: number;
 	width: number;
 	height: number;
 	labelWidth: number;
 	valueLabelWidth: number;
 	label: string;
 	valueLabel: string;
-	labelTextProps: {
-		fontFamily: 'Inter' | 'Inter-Regular';
-		fontWeight: number;
-		capHeight: number;
-		lineGap: number;
-		color: string;
-	};
-	valueLabelTextProps: {
-		fontFamily: 'Inter' | 'Inter-Regular';
-		fontWeight: number;
-		capHeight: number;
-		lineGap: number;
-		color: string;
-	};
 	value: number;
 	valueDomain: [number, number];
 	barColor: string;
 	showLayout?: boolean;
 }> = ({
+	theme,
+	baseline,
 	width,
 	height,
 	labelWidth,
 	valueLabelWidth,
 	label,
 	valueLabel,
-	valueLabelTextProps,
-	labelTextProps,
 	valueDomain,
 	value,
 	barColor,
@@ -254,15 +249,13 @@ export const HorizontalBar: React.FC<{
 						height: '100%',
 					}}
 				>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={labelTextProps.lineGap}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.datavizLabel}
+						baseline={baseline}
+						color="white"
 					>
 						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</CapSizeTextNew>
+					</TypographyStyle>
 				</div>
 			</HtmlArea>
 			<HtmlArea area={horizontalBarLayout.areas.bar}>
@@ -294,60 +287,16 @@ export const HorizontalBar: React.FC<{
 							marginLeft: valueLabelMarginLeft,
 						}}
 					>
-						<CapSizeTextNew
-							fontFamily={valueLabelTextProps.fontFamily}
-							fontWeight={valueLabelTextProps.fontWeight}
-							color={valueLabelTextProps.color}
-							capHeight={valueLabelTextProps.capHeight}
-							lineGap={valueLabelTextProps.lineGap}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizValueLabel}
+							baseline={baseline}
+							color="white"
 						>
 							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</CapSizeTextNew>
+						</TypographyStyle>
 					</div>
 				</HtmlArea>
 			</Sequence>
 		</div>
 	);
-};
-
-// TODO receive also theme for colors and fonts
-export const getTextProps_label = ({
-	baseline,
-	theme,
-}: {
-	baseline: number;
-	theme: ThemeType;
-}) => {
-	const capHeight = baseline * 0.75;
-
-	const labelTextProps = {
-		fontFamily: 'Inter-Regular' as const,
-		fontWeight: 600,
-		capHeight,
-		lineGap: 0,
-		color: theme.typography.textColor,
-	};
-
-	return labelTextProps;
-};
-
-// TODO receive also theme for colors and fonts
-export const getTextProps_valueLabel = ({
-	baseline,
-	theme,
-}: {
-	baseline: number;
-	theme: ThemeType;
-}) => {
-	const capHeight = baseline * 0.6;
-
-	const valueLabelTextProps = {
-		fontFamily: 'Inter-Regular' as const,
-		fontWeight: 400,
-		capHeight,
-		lineGap: 0,
-		color: theme.typography.textColor,
-	};
-
-	return valueLabelTextProps;
 };
