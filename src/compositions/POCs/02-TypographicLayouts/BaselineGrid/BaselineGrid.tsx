@@ -32,9 +32,10 @@ export const BaselineGrid: React.FC<
 				height={height}
 				style={{
 					backgroundColor: fill,
+					overflow: 'visible',
 				}}
 			>
-				{range(baseline, height, baseline).map((yPosition, i) => {
+				{range(0, height + baseline, baseline).map((yPosition, i) => {
 					const lineDelay = Math.floor(fps * 0.05 * i);
 					return (
 						<Sequence layout="none" name={`baselinegrid-${i}`} from={lineDelay}>
