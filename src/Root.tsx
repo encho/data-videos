@@ -140,6 +140,11 @@ import {
 	typesettingCompositionSchema,
 } from './compositions/POCs/02-TypographicLayouts/Typesetting/TypesettingComposition';
 
+import {
+	TextStylesComposition,
+	textStylesCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -232,6 +237,20 @@ export const RemotionRoot: React.FC = () => {
 						{...linkedInTallVideo}
 						// {...widescreen_16x9_video}
 						schema={typesettingCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="TextStyles"
+						component={TextStylesComposition} // TODO rename
+						durationInFrames={90 * 10}
+						fps={90}
+						// {...squareVideo}
+						// {...linkedInTallVideo}
+						{...widescreen_16x9_video}
+						schema={textStylesCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
