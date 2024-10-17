@@ -6,14 +6,12 @@ import {ReactNode} from 'react';
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-// import {ElementsLogo} from './ElementsLogo';
-// import {CapSizeTextNew} from './CapSizeTextNew';
 import {CapSizeTextNew} from '../BaselineGrid/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 import {DisplayGridRails} from '../../../../acetti-layout';
@@ -22,6 +20,8 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
+import {textStyles} from './textStyles';
+import {useFontFamiliesLoader} from '../BaselineGrid/useFontFamiliesLoader';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // TODO funciton of theme, and should get color though or id to color in theme
@@ -65,7 +65,13 @@ export const textStylesCompositionSchema = z.object({
 export const TextStylesComposition: React.FC<
 	z.infer<typeof textStylesCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
+	// useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
+	useFontFamiliesLoader([
+		'Inter-Regular',
+		'Inter-Bold',
+		// 'SourceSerifPro-Light',
+	]);
+
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const {width, fps} = useVideoConfig();
@@ -97,25 +103,7 @@ export const TextStylesComposition: React.FC<
 
 	// ***********************************************************
 	const baselineLeft = area_1.height / 20;
-	const baselineRight = area_1.height / 30;
-
-	const typographyStyles = {
-		h1: {
-			fontFamily: 'Inter-Bold' as const,
-			capHeightInBaselines: 3,
-			lineGapInBaselines: 1,
-		},
-		h2: {
-			fontFamily: 'Inter-Bold' as const,
-			capHeightInBaselines: 2,
-			lineGapInBaselines: 1,
-		},
-		body: {
-			fontFamily: 'Inter-Regular' as const,
-			capHeightInBaselines: 1,
-			lineGapInBaselines: 1,
-		},
-	};
+	const baselineRight = baselineLeft * 0.5;
 
 	return (
 		<>
@@ -152,25 +140,27 @@ export const TextStylesComposition: React.FC<
 								>
 									{/* // TODO false to not use style marginBottom or override with number ot control baseline multiples!! */}
 									<TypographyStyle
-										typographyStyle={typographyStyles.body}
+										typographyStyle={textStyles.h1}
 										baseline={baselineLeft}
 										color="white"
 										marginBottom={2}
 									>
-										Typesetting is the technical process of arranging text on a
-										page to achieve optimal legibility and readability.
+										This is h1
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={typographyStyles.body}
+										typographyStyle={textStyles.h2}
+										baseline={baselineLeft}
+										color="white"
+										marginBottom={2}
+									>
+										This is h2
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.body}
 										baseline={baselineLeft}
 										color="white"
 									>
-										This involves finding an equilibrium between the key
-										typographic elements{' '}
-										<span style={{textDecoration: 'underline'}}>
-											font size, line height (leading), and line length
-											(measure).
-										</span>
+										This is body
 									</TypographyStyle>
 								</div>
 							</div>
@@ -198,25 +188,27 @@ export const TextStylesComposition: React.FC<
 								>
 									{/* // TODO false to not use style marginBottom or override with number ot control baseline multiples!! */}
 									<TypographyStyle
-										typographyStyle={typographyStyles.body}
+										typographyStyle={textStyles.h1}
 										baseline={baselineRight}
 										color="white"
 										marginBottom={2}
 									>
-										Typesetting is the technical process of arranging text on a
-										page to achieve optimal legibility and readability.
+										This is h1
 									</TypographyStyle>
 									<TypographyStyle
-										typographyStyle={typographyStyles.body}
+										typographyStyle={textStyles.h2}
+										baseline={baselineRight}
+										color="white"
+										marginBottom={2}
+									>
+										This is h2
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={textStyles.body}
 										baseline={baselineRight}
 										color="white"
 									>
-										This involves finding an equilibrium between the key
-										typographic elements{' '}
-										<span style={{textDecoration: 'underline'}}>
-											font size, line height (leading), and line length
-											(measure).
-										</span>
+										This is body
 									</TypographyStyle>
 								</div>
 							</div>
