@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {Sequence} from 'remotion';
 
 import {EconomistDataSource} from '../EconomistDataSource';
-import {measureText} from '../../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import {measureText} from '../../../../acetti-typography/new/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -11,7 +11,7 @@ import {
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {CapSizeTextNew} from '../../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {
 	getTextProps_label,

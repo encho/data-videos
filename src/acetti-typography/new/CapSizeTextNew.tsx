@@ -39,12 +39,14 @@ export const CapSizeTextNew: React.FC<{
 	fontFamily: TAvailableFontFamily;
 	fontWeight?: number | string;
 	marginBottom?: number;
+	marginTop?: number;
 	color: string;
 }> = ({
 	children,
 	fontFamily,
 	fontWeight = 'normal',
 	marginBottom = 0,
+	marginTop = 0,
 	color,
 	capHeight,
 	lineGap,
@@ -69,6 +71,7 @@ export const CapSizeTextNew: React.FC<{
 		 font-weight: ${fontWeight};
 		 color: ${color};
 		 margin-bottom: ${marginBottom}px;
+		 margin-top: ${marginTop}px;
 	 }
 	 .${className}::before {
 		 content: '';

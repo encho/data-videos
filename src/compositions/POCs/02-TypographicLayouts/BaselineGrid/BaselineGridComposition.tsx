@@ -4,14 +4,14 @@ import {Sequence, useVideoConfig} from 'remotion';
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
 import {BaselineGrid} from './BaselineGrid';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 // import {ElementsLogo} from './ElementsLogo';
-import {CapSizeTextNew} from './CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
@@ -34,16 +34,16 @@ export const baselineGridCompositionSchema = z.object({
 export const BaselineGridComposition: React.FC<
 	z.infer<typeof baselineGridCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader(['Inter-Regular']);
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const {fps} = useVideoConfig();
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
 
-	const BASELINE_HEIGHT = 18;
-	const NR_LINES = 34;
+	const BASELINE_HEIGHT = 28;
+	const NR_LINES = 30;
 	const PAPER_WIDTH = 800;
 	const PAPER_HEIGHT = NR_LINES * BASELINE_HEIGHT;
-	const LINEGAP = BASELINE_HEIGHT * 1;
 
 	return (
 		<>
@@ -63,8 +63,6 @@ export const BaselineGridComposition: React.FC<
 								width: PAPER_WIDTH,
 								height: PAPER_HEIGHT,
 								position: 'relative',
-								// borderRadius: 5,
-								// overflow: 'hidden',
 							}}
 						>
 							<BaselineGrid
@@ -72,36 +70,9 @@ export const BaselineGridComposition: React.FC<
 								height={PAPER_HEIGHT}
 								baseline={BASELINE_HEIGHT}
 								{...theme.TypographicLayouts.baselineGrid}
+								lineColor="#999"
 								strokeWidth={3}
 							/>
-
-							<Sequence from={fps * 2}>
-								<div
-									style={{
-										display: 'flex',
-										gap: 2 * LINEGAP,
-										flexDirection: 'column',
-									}}
-								>
-									<CapSizeTextNew
-										fontFamily="Inter"
-										fontWeight={100}
-										capHeight={BASELINE_HEIGHT * 2}
-										lineGap={BASELINE_HEIGHT}
-										color="white"
-									>
-										{/* <FadeInAndOutText> */}
-										The quick brown fox jumps over the lazy dog. As dawn breaks,
-										the sun shines with a soft, golden glow. In the distance,
-										birds chirp harmoniously, their melodies echoing through the
-										crisp air. The breeze carries the scent of fresh pine,
-										intertwining with the sweet aroma of blooming flowers.
-										Slowly, the town wakes up, the sound of footsteps and
-										chatter filling the streets.
-										{/* </FadeInAndOutText> */}
-									</CapSizeTextNew>
-								</div>
-							</Sequence>
 						</div>
 					</div>
 				</div>

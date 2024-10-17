@@ -10,7 +10,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
-import {CapSizeTextNew} from '../../compositions/POCs/02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import {CapSizeTextNew} from '../../acetti-typography/new/CapSizeTextNew';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,

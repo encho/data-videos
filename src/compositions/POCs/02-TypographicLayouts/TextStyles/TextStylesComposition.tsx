@@ -12,7 +12,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {CapSizeTextNew} from '../BaselineGrid/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {
@@ -20,23 +20,26 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
-import {textStyles} from './textStyles';
-import {useFontFamiliesLoader} from '../BaselineGrid/useFontFamiliesLoader';
-import {TAvailableFontFamily} from '../BaselineGrid/fontMetricsLibrary';
-import {getUniqueThemeFontFamilies} from '../../../../acetti-themes/getUniqueThemeFontFamilies';
+// import {textStyles} from './textStyles'; TODO deprecate
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {TAvailableFontFamily} from '../../../../acetti-typography/new/fontMetricsLibrary';
+// import {getUniqueThemeFontFamilies} from '../../../../acetti-themes/getUniqueThemeFontFamilies';
 // import {FadeInAndOutText} from '../../SimpleStats/FadeInAndOutText';
 
 // TODO funciton of theme, and should get color though or id to color in theme
-function TypographyStyle({
+// TODO put into acetti-typograpy/new
+export function TypographyStyle({
 	children,
 	baseline,
 	color,
 	typographyStyle,
 	marginBottom = 0,
+	marginTop = 0,
 }: {
 	children: ReactNode;
 	baseline: number;
 	marginBottom?: number;
+	marginTop?: number;
 	color: string;
 	typographyStyle: {
 		fontFamily: TAvailableFontFamily;
@@ -54,6 +57,7 @@ function TypographyStyle({
 			lineGap={lineGapInBaselines * baseline}
 			color={color}
 			marginBottom={marginBottom * baseline}
+			marginTop={marginTop * baseline}
 		>
 			{children}
 		</CapSizeTextNew>
@@ -69,18 +73,13 @@ export const TextStylesComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const themeFontFamilies = getUniqueThemeFontFamilies(theme);
+	// load fonts
+	// ********************************************************
+	// const themeFontFamilies = getUniqueThemeFontFamilies(theme);
+	// useFontFamiliesLoader(themeFontFamilies);
+	useFontFamiliesLoader(theme);
 
-	useFontFamiliesLoader(themeFontFamilies);
-
-	// useFontFamiliesLoader([
-	// 	'Inter-Regular',
-	// 	'Inter-Bold',
-	// 	'Inter-28pt-Thin',
-	// 	'Inter-28pt-Black',
-	// ]);
-
-	const {width, fps} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	const matrixLayout = useMatrixLayout({
 		width, // TODO better show grid rails!

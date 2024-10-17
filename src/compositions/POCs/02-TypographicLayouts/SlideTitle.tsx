@@ -1,24 +1,26 @@
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {TypographyStyle} from './TextStyles/TextStylesComposition';
 
 export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 	children,
 	theme,
 }) => {
+	// TODO implement!!!
+	// const baseline = useBaseline();
+	const baseline = 20;
+
 	return (
 		<div style={{display: 'flex', justifyContent: 'center'}}>
-			<div
-				style={{
-					color: theme.typography.title.color,
-					fontSize: 70,
-					marginTop: 60,
-					marginBottom: 100,
-					fontFamily: 'Inter',
-					fontWeight: 700,
-				}}
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.h1}
+				baseline={baseline}
+				color={theme.typography.title.color}
+				marginBottom={4}
+				marginTop={5}
 			>
 				<FadeInAndOutText>{children}</FadeInAndOutText>
-			</div>
+			</TypographyStyle>
 		</div>
 	);
 };

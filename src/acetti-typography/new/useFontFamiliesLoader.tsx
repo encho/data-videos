@@ -2,6 +2,8 @@ import {useMemo} from 'react';
 import {useEffect} from 'react';
 import {continueRender, delayRender, staticFile} from 'remotion';
 
+import {getUniqueThemeFontFamilies} from '../../acetti-themes/getUniqueThemeFontFamilies';
+import {ThemeType} from '../../acetti-themes/themeTypes';
 import type {TFontSpec} from './fontSpecsLibrary';
 import {TAvailableFontFamily} from './fontMetricsLibrary';
 import {getFontSpec} from './fontSpecsLibrary';
@@ -20,7 +22,8 @@ function uniqueThings<Thing>(inputArray: Thing[]): Thing[] {
 }
 
 // TODO create typography global context, s.t. typography info can be accessed from anywhere
-export const useFontFamiliesLoader = (fontFamilies: TAvailableFontFamily[]) => {
+export const useFontFamiliesLoader = (theme: ThemeType) => {
+	const fontFamilies = getUniqueThemeFontFamilies(theme);
 	// load fonts
 	const fontSpecs = useMemo(() => {
 		const uniqueFontFamilies = uniqueThings<TAvailableFontFamily>(fontFamilies);

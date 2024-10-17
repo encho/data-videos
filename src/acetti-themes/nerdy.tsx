@@ -42,22 +42,22 @@ export const nerdyTheme: ThemeType = {
 				lineGapInBaselines: 1,
 			},
 			h2: {
-				fontFamily: 'Inter-28pt-Black',
+				fontFamily: 'Inter-Bold',
 				capHeightInBaselines: 2,
 				lineGapInBaselines: 1,
 			},
 			body: {
-				fontFamily: 'Inter-28pt-Black',
+				fontFamily: 'Inter-28pt-Thin',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
 			},
 			datavizLabel: {
-				fontFamily: 'Inter-28pt-Black',
+				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
 			},
 			datavizValueLabel: {
-				fontFamily: 'Inter-28pt-Black',
+				fontFamily: 'Inter-28pt-Thin',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
 			},

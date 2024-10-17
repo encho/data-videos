@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
-import {CapSizeTextNew} from '../02-TypographicLayouts/BaselineGrid/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../acetti-typography/new/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
