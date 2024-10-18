@@ -16,8 +16,10 @@ import {
 	getMatrixLayoutCellArea,
 } from '../../acetti-layout/hooks/useMatrixLayout';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
+import {ThemeType} from '../../acetti-themes/themeTypes';
 
 type TSimpleColumnChartProps = {
+	theme: ThemeType;
 	data: {
 		label: string;
 		value: number;
@@ -36,6 +38,7 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	baseline,
 	valueDomain,
 	delayInFrames = 0,
+	theme,
 }) => {
 	const frame = useCurrentFrame();
 	// const {fps} = useVideoConfig();

@@ -68,6 +68,7 @@ export const SimpleColumnChartComposition: React.FC<
 					data={columnChartData}
 					height={600}
 					baseline={baseline}
+					theme={theme}
 				/>
 			</div>
 

@@ -100,6 +100,7 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 					}}
 				>
 					<SimpleColumnChart
+						theme={theme}
 						data={columnChartData}
 						height={300}
 						baseline={baseline}
@@ -126,6 +127,7 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 				>
 					<Sequence layout="none" from={90 * 10}>
 						<SimpleColumnChart
+							theme={theme}
 							data={columnChartData2}
 							height={300}
 							baseline={baseline}
