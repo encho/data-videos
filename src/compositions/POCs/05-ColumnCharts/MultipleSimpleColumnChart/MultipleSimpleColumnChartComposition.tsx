@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
-import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -10,7 +10,7 @@ import {
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const multipleSimpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

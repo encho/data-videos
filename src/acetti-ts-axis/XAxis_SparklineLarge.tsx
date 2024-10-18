@@ -15,7 +15,7 @@ import {TypographyStyle} from '../compositions/POCs/02-TypographicLayouts/TextSt
 import {
 	getTextDimensions,
 	getTextStyleCapHeight,
-} from '../acetti-typography/new/CapSizeTextNew';
+} from '../acetti-typography/CapSizeTextNew';
 
 export const XAxis_SparklineLarge: React.FC<{
 	baseline: number;

@@ -7,7 +7,7 @@ import {useChartLayout} from '../../compositions/POCs/05-ColumnCharts/TwoChangeB
 import {AnimatedArrowPath} from './AnimatedArrowPath';
 import {ChangeBar} from './ChangeBar';
 import {DisplayGridLayout} from '../../acetti-layout';
-import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
+import {getTextStyleCapHeight} from '../../acetti-typography/CapSizeTextNew';
 
 export const newTwoChangeBarsSchema = z.object({
 	theme: zodThemeType,

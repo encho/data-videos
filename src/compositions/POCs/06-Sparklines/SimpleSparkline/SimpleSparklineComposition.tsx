@@ -7,7 +7,7 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
 	getThemeFromEnum,
 	zThemeEnum,

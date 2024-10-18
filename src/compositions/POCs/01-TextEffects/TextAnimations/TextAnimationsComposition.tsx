@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {Sequence} from 'remotion';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {Position} from '../../../../acetti-ts-base/Position';

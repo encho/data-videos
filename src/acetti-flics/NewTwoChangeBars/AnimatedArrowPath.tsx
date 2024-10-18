@@ -10,7 +10,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {evolvePath} from '@remotion/paths';
 import {Triangle} from '@remotion/shapes';
 
-import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
+import {getTextStyleCapHeight} from '../../acetti-typography/CapSizeTextNew';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {TGridLayoutArea} from '../../acetti-layout';

@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
-import {zAvailableFontFamiliesEnum} from '../acetti-typography/new/fontMetricsLibrary';
+import {zAvailableFontFamiliesEnum} from '../acetti-typography/fontMetricsLibrary';
 
 const zTextStyle = z.object({
 	fontFamily: zAvailableFontFamiliesEnum,

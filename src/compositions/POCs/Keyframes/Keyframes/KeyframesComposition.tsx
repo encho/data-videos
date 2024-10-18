@@ -5,7 +5,7 @@ import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {KeyFramesInspector} from './KeyframesInspector';
 // import {Position} from '../../../../acetti-ts-base/Position';
 // import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,

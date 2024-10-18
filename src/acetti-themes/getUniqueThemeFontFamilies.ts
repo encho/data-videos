@@ -1,4 +1,4 @@
-import {TAvailableFontFamily} from '../acetti-typography/new/fontMetricsLibrary';
+import {TAvailableFontFamily} from '../acetti-typography/fontMetricsLibrary';
 import {ThemeType} from './themeTypes';
 
 export function getUniqueThemeFontFamilies(theme: ThemeType) {

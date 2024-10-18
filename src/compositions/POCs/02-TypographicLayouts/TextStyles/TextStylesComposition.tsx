@@ -11,7 +11,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {
@@ -19,8 +19,8 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
-import {TAvailableFontFamily} from '../../../../acetti-typography/new/fontMetricsLibrary';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {TAvailableFontFamily} from '../../../../acetti-typography/fontMetricsLibrary';
 
 // TODO funciton of theme, and should get color though or id to color in theme
 // TODO put into acetti-typograpy/new

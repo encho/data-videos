@@ -9,10 +9,10 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {getTextDimensions} from '../../../../acetti-typography/new/CapSizeTextNew';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

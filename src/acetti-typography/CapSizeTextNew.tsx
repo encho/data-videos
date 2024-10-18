@@ -2,7 +2,7 @@ import {createStyleObject} from '@capsizecss/core';
 import {ReactNode} from 'react';
 import {measureText as remotionMeasureText} from '@remotion/layout-utils';
 import {TAvailableFontFamily, getFontMetrics} from './fontMetricsLibrary';
-import {ThemeType} from '../../acetti-themes/themeTypes';
+import {ThemeType} from '../acetti-themes/themeTypes';
 
 export function getTextStyleCapHeight({
 	theme,

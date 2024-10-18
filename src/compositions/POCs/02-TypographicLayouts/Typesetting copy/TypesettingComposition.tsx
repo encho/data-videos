@@ -14,7 +14,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 // import {ElementsLogo} from './ElementsLogo';
 // import {CapSizeTextNew} from './CapSizeTextNew';
-import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
+import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {SlideTitle} from '../SlideTitle';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {

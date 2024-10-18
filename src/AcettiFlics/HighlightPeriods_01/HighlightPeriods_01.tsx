@@ -22,7 +22,7 @@ import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
 // import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
-import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,

@@ -18,7 +18,7 @@ import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAnd
 import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
-import {getTextStyleCapHeight} from '../../../acetti-typography/new/CapSizeTextNew';
+import {getTextStyleCapHeight} from '../../../acetti-typography/CapSizeTextNew';
 
 export const SparklineChartComponent: React.FC<{
 	baseline: number;

@@ -1,4 +1,4 @@
-import {getTextDimensions} from '../../acetti-typography/new/CapSizeTextNew';
+import {getTextDimensions} from '../../acetti-typography/CapSizeTextNew';
 import {
 	Sequence,
 	useCurrentFrame,

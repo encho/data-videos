@@ -10,7 +10,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
 export const simpleKPICompositionSchema = z.object({

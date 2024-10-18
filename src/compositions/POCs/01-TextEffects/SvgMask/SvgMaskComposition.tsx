@@ -11,7 +11,7 @@ import invariant from 'tiny-invariant';
 import * as paper from 'paper';
 import opentype from 'opentype.js';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,

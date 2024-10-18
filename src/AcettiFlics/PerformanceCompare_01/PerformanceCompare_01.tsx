@@ -16,7 +16,7 @@ import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
-import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 import {PerformanceCompare_01} from '../../acetti-ts-flics/single-timeseries/PerformanceCompare_01/PerformanceCompare_01';
 
 import {

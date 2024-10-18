@@ -8,7 +8,7 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {EconomistDataSource} from '../EconomistDataSource';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

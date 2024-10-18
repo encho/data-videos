@@ -2,8 +2,8 @@ import {useMemo} from 'react';
 import {useEffect} from 'react';
 import {continueRender, delayRender, staticFile} from 'remotion';
 
-import {getUniqueThemeFontFamilies} from '../../acetti-themes/getUniqueThemeFontFamilies';
-import {ThemeType} from '../../acetti-themes/themeTypes';
+import {getUniqueThemeFontFamilies} from '../acetti-themes/getUniqueThemeFontFamilies';
+import {ThemeType} from '../acetti-themes/themeTypes';
 import type {TFontSpec} from './fontSpecsLibrary';
 import {TAvailableFontFamily} from './fontMetricsLibrary';
 import {getFontSpec} from './fontSpecsLibrary';

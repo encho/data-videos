@@ -9,7 +9,7 @@ import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/Simp
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
 import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const simpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

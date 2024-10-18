@@ -7,7 +7,7 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../../acetti-ts-base/Position';
 import {

@@ -9,7 +9,7 @@ import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {getTextDimensions} from '../../../acetti-typography/new/CapSizeTextNew';
+import {getTextDimensions} from '../../../acetti-typography/CapSizeTextNew';
 
 export const sparklinePOCSchema = z.object({
 	themeEnum: zThemeEnum,
