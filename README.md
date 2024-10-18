@@ -20,6 +20,10 @@ https://github.com/isellsoap/deutschlandGeoJSON
 
 https://www.worldbank.org/en/research/brief/inflation-database
 
+## Poster Grids Swiss Layout:
+
+https://www.youtube.com/watch?v=BQEVqWiD304&ab_channel=GarethDavidStudio
+
 ## Commands
 
 **Install Dependencies**
