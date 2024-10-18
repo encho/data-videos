@@ -93,7 +93,7 @@ import {
 import {
 	SimpleSparklineComposition,
 	simpleSparklineCompositionSchema,
-} from './compositions/POCs/06-Sparklines/SimpleSparkline/SimpleSparkline';
+} from './compositions/POCs/06-Sparklines/SimpleSparkline/SimpleSparklineComposition';
 
 import {
 	MultipleSimpleSparklineComposition,

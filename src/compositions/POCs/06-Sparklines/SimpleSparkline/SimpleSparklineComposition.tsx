@@ -17,7 +17,6 @@ import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {SparklineLargeKeyframes} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLargeKeyframes';
 
 const timeSeries = [
-	// {value: 50, date: new Date('2010-12-31')},
 	{value: 150, date: new Date('2010-12-31')},
 	{value: 57, date: new Date('2011-12-31')},
 	{value: 58, date: new Date('2012-12-31')},
