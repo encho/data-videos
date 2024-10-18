@@ -10,10 +10,15 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 import {evolvePath} from '@remotion/paths';
 import {Triangle} from '@remotion/shapes';
 
+import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
+import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {TGridLayoutArea} from '../../acetti-layout';
+import {ThemeType} from '../../acetti-themes/themeTypes';
 
 type ArrowTypeSequenceType = {
+	theme: ThemeType;
+	baseline: number;
 	areas: {
 		percChangeDisplay: TGridLayoutArea;
 		firstBar: TGridLayoutArea;
@@ -25,15 +30,14 @@ type ArrowTypeSequenceType = {
 	strokeWidth: number;
 	color: string;
 	percentageChangeText: string;
-	fontSize: number;
-	fontFamily: string;
-	fontWeight: number;
 	arrowSize: number;
 	minVerticalPathLength: number;
 };
 
 // rename to AnimatedArrowPath or so
 export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
+	theme,
+	baseline,
 	areas,
 	visibleDomain,
 	rightBarValue,
@@ -41,9 +45,6 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 	color,
 	strokeWidth,
 	percentageChangeText,
-	fontSize,
-	fontFamily,
-	fontWeight,
 	arrowSize,
 	minVerticalPathLength,
 }) => {
@@ -149,6 +150,12 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 	const pathEvolution = evolvePath(pathSpring, pathData);
 	const pathStrokeWidth = strokeWidth;
 
+	const valueLabelHeight = getTextStyleCapHeight({
+		baseline,
+		theme,
+		key: 'datavizValueLabel',
+	});
+
 	return (
 		<div
 			style={{
@@ -163,25 +170,21 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 					style={{
 						position: 'absolute',
 						top: topPathYLevel,
-						marginTop: -fontSize - 10, // the utilized fontsize below with some margin
+						// TODO the distance from theme ideally (not baseline * 0.5)
+						marginTop: -valueLabelHeight - baseline * 0.5,
 						width: '100%',
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
 					}}
 				>
-					<div
-						style={{
-							marginTop: `${-0.3}em`, // TODO utilize capsize metrics for given font
-							marginBottom: `${-0.32}em`, // TODO utilize capsize metrics for given font
-							fontSize,
-							color: color,
-							fontWeight,
-							fontFamily,
-						}}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.datavizValueLabel}
+						baseline={baseline}
+						color={color}
 					>
 						<FadeInAndOutText>{percentageChangeText}</FadeInAndOutText>
-					</div>
+					</TypographyStyle>
 				</div>
 			</Sequence>
 

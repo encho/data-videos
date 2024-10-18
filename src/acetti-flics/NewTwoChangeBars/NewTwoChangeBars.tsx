@@ -12,46 +12,36 @@ import numeral from 'numeral';
 
 import {zodThemeType} from '../../acetti-themes/themeTypes';
 import {useChartLayout} from '../../compositions/POCs/05-ColumnCharts/TwoChangeBars/useChartLayout';
-// import {DisplayGridLayout} from '../../acetti-layout';
 import {AnimatedArrowPath} from './AnimatedArrowPath';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {ChangeBar} from './ChangeBar';
+import {DisplayGridLayout} from '../../acetti-layout';
+import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
 
-// TODO deprecate!!
-import {
-	getLabelFontSize,
-	// getLabelMarginTop,
-} from '../../acetti-themes/typographySizes';
+// TODO deprecate!! ***************************************
+// import {
+// 	getLabelFontSize,
+// 	// getLabelMarginTop,
+// } from '../../acetti-themes/typographySizes';
 // import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 export const newTwoChangeBarsSchema = z.object({
-	// themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	theme: zodThemeType,
-	//
 	leftBarValue: z.number(),
 	leftBarLabel: z.string(),
 	rightBarValue: z.number(),
 	rightBarLabel: z.string(),
 	valueFormatString: z.string(),
 	percentageFormatString: z.string(),
-	// CHART_AREA_WIDTH: z.number(),
 	CHART_AREA_HEIGHT: z.number(),
 	minDomainValue: z.number().optional(),
 	maxDomainValue: z.number().optional(),
 	baseline: z.number().optional(),
 });
 
-// TODO factor out
-// TYPOGRAPHY SIZES (put globally!)
-
 export const NewTwoChangeBars: React.FC<
 	z.infer<typeof newTwoChangeBarsSchema>
 > = ({
 	theme,
-	// TODO pass values directly, s.t. no theme object is necessary here
-	// theme object has to be handled by flics upstream
 	leftBarValue,
 	rightBarValue,
 	leftBarLabel,
@@ -59,7 +49,6 @@ export const NewTwoChangeBars: React.FC<
 	valueFormatString,
 	percentageFormatString,
 	CHART_AREA_HEIGHT,
-	// CHART_AREA_WIDTH,
 	minDomainValue,
 	maxDomainValue,
 	baseline = 34,
@@ -69,32 +58,35 @@ export const NewTwoChangeBars: React.FC<
 	const BAR_COLOR = theme.typography.textColor;
 	const BACKGROUND_COLOR = theme.global.backgroundColor;
 
-	const LABEL_TEXT_SIZE = getLabelFontSize(baseline);
-	const LABEL_MARGIN_TOP = baseline * 0.25;
-	// const LABEL_MARGIN_TOP = getLabelMarginTop(baseline);
+	const labelHeight = getTextStyleCapHeight({
+		baseline,
+		theme,
+		key: 'datavizLabel',
+	});
+
+	const valueLabelHeight = getTextStyleCapHeight({
+		baseline,
+		theme,
+		key: 'datavizValueLabel',
+	});
+
+	const LABEL_MARGIN_TOP = baseline * 0.5; // TODO from theme, as in ColumnChart!!!!
 	const LABEL_TEXT_COLOR = theme.typography.textColor;
 
-	const VALUE_TEXT_SIZE = baseline;
-	const VALUE_MARGIN_TOP = baseline * 0.5;
-	const VALUE_MARGIN_BOTTOM = baseline * 0.25;
+	const VALUE_MARGIN_TOP = baseline * 0.75; // TODO from theme!!!
+	const VALUE_MARGIN_BOTTOM = baseline * 0.5; // TODO from ibcs Theme!!!!
 
-	const BAR_WIDTH = baseline * 4;
-	// const BAR_TRIMMER_HEIGHT = TODO
+	const BAR_WIDTH = baseline * 4; // TODO from theme
 
-	const SPACE_BETWEEN_BARS = baseline * 2;
+	const SPACE_BETWEEN_BARS = baseline * 2; // TODO from theme!!!!
 
-	const DISPLAY_FONT_SIZE = baseline * 1.25;
-	const DISPLAY_FONT_FAMILY = 'Arial';
-	const DISPLAY_FONT_WEIGHT = 600;
-
-	const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
+	const PERC_CHANGE_DISPLAY_AREA_HEIGHT = baseline * 2.25; // TODO from theme
 	const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = baseline / 10;
 	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseline * 1;
 	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseline * 1;
-
-	const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
-	const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
-	const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray';
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen'; // TODO from theme
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red'; // TODO from theme
+	const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray'; // TODO from theme
 
 	const BARS_VALUES_VISIBLE_DOMAIN = [
 		minDomainValue || 0,
@@ -103,18 +95,13 @@ export const NewTwoChangeBars: React.FC<
 
 	const valueFormatter = (x: number) => numeral(x).format(valueFormatString);
 
-	// const frame = useCurrentFrame();
-	const {
-		// fps,
-		durationInFrames,
-	} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const chartLayout = useChartLayout({
-		// width: CHART_AREA_WIDTH,
 		height: CHART_AREA_HEIGHT,
-		labelTextSize: LABEL_TEXT_SIZE,
+		labelTextSize: labelHeight, // TODO rename to labelCapHeight or so labelHeight
 		labelMarginTop: LABEL_MARGIN_TOP,
-		valueTextSize: VALUE_TEXT_SIZE,
+		valueTextSize: valueLabelHeight,
 		valueMarginTop: VALUE_MARGIN_TOP,
 		valueMarginBottom: VALUE_MARGIN_BOTTOM,
 		percChangeDisplayAreaHeight: PERC_CHANGE_DISPLAY_AREA_HEIGHT,
@@ -142,18 +129,21 @@ export const NewTwoChangeBars: React.FC<
 				height: chartLayout.height,
 			}}
 		>
-			{/* <DisplayGridLayout
+			<DisplayGridLayout
 				width={chartLayout.width}
 				height={chartLayout.height}
 				areas={chartLayout.areas}
-			/> */}
+				hide={true}
+			/>
 			<Sequence
 				name="PercChange_Display"
-				from={90 * 5.75}
-				durationInFrames={durationInFrames - 90 * 5.73 - 90 * 1.5}
+				from={Math.floor(fps * 5.75)}
+				durationInFrames={Math.floor(durationInFrames - fps * 5.73 - fps * 1.5)}
 				layout="none"
 			>
 				<AnimatedArrowPath
+					theme={theme}
+					baseline={baseline}
 					areas={{
 						percChangeDisplay: chartLayout.areas.percChangeDisplay,
 						firstBar: chartLayout.areas.firstBar,
@@ -165,21 +155,15 @@ export const NewTwoChangeBars: React.FC<
 					color={pathColor}
 					strokeWidth={PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH}
 					percentageChangeText={displayPercentageChangeText}
-					fontSize={DISPLAY_FONT_SIZE}
-					fontFamily={DISPLAY_FONT_FAMILY}
-					fontWeight={DISPLAY_FONT_WEIGHT}
 					arrowSize={PERC_CHANGE_DISPLAY_ARROW_SIZE}
 					minVerticalPathLength={PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH}
 				/>
 			</Sequence>
 
-			<Sequence
-				name="ChangeBar_Left"
-				from={90 * 1}
-				// durationInFrames={durationInFrames - 90 * 1}
-				layout="none"
-			>
+			<Sequence name="ChangeBar_Left" from={fps * 1} layout="none">
 				<ChangeBar
+					theme={theme}
+					baseline={baseline}
 					areas={{
 						valueLabel: chartLayout.areas.firstBarValueText,
 						bar: chartLayout.areas.firstBar,
@@ -197,13 +181,10 @@ export const NewTwoChangeBars: React.FC<
 				/>
 			</Sequence>
 
-			<Sequence
-				name="ChangeBar_Right"
-				from={90 * 3}
-				// durationInFrames={durationInFrames - 90 * 3}
-				layout="none"
-			>
+			<Sequence name="ChangeBar_Right" from={Math.floor(fps * 3)} layout="none">
 				<ChangeBar
+					theme={theme}
+					baseline={baseline}
 					areas={{
 						valueLabel: chartLayout.areas.secondBarValueText,
 						bar: chartLayout.areas.secondBar,

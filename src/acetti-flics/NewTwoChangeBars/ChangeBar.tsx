@@ -8,9 +8,11 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {TGridLayoutArea, Area, HtmlArea} from '../../acetti-layout';
+import {ThemeType} from '../../acetti-themes/themeTypes';
 
 // TODO implement and put into layout lib
 // const getSpannedArea
@@ -37,13 +39,13 @@ const getRelativeArea = (
 // TODO actually this is a single Bar animation! that spans the whole area!!
 // TODO rename to SingleBarAnimation
 export const ChangeBar: React.FC<{
-	// from: number;
-	// durationInFrames: number;
 	areas: {
 		bar: TGridLayoutArea;
 		valueLabel: TGridLayoutArea;
 		label: TGridLayoutArea;
 	};
+	theme: ThemeType;
+	baseline: number;
 	value: number;
 	label: string;
 	visibleDomain: [number, number];
@@ -54,8 +56,8 @@ export const ChangeBar: React.FC<{
 	labelColor: string;
 	valueTextColor: string;
 }> = ({
-	// from,
-	// durationInFrames,
+	theme,
+	baseline,
 	areas,
 	value,
 	visibleDomain,
@@ -67,8 +69,7 @@ export const ChangeBar: React.FC<{
 	labelColor,
 	valueTextColor,
 }) => {
-	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const ANIMATION_SPECS = {
 		bar: {
@@ -124,6 +125,8 @@ export const ChangeBar: React.FC<{
 				>
 					<Area area={barArea}>
 						<AnimatedSvgBar
+							theme={theme}
+							baseline={baseline}
 							value={value}
 							visibleDomain={visibleDomain}
 							area={barArea}
@@ -150,17 +153,18 @@ export const ChangeBar: React.FC<{
 				<HtmlArea area={labelArea}>
 					<div
 						style={{
-							color: labelColor,
-							fontSize: labelArea.height,
-							fontWeight: 600,
-							fontFamily: 'Arial',
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
 						}}
 					>
-						{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
-						<WaterfallTextEffect>{label}</WaterfallTextEffect>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizLabel}
+							baseline={baseline}
+							color="white"
+						>
+							<WaterfallTextEffect>{label}</WaterfallTextEffect>
+						</TypographyStyle>
 					</div>
 				</HtmlArea>
 			</Sequence>
@@ -180,11 +184,14 @@ const AnimatedSvgBar = ({
 	backgroundColor,
 	barColor,
 	valueTextColor,
+	theme,
+	baseline,
 }: {
+	theme: ThemeType;
+	baseline: number;
 	value: number;
 	visibleDomain: [number, number];
 	valueFormatter: (x: number) => string;
-	// barScale: ScaleLinear<number, number>;
 	area: TGridLayoutArea;
 	valueLabelArea: TGridLayoutArea;
 	//TODO enter and exits should be fixtures
@@ -196,7 +203,7 @@ const AnimatedSvgBar = ({
 	valueTextColor: string;
 }) => {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const interpolateEnterOpacity = (f: number) => {
 		const barOpacity = interpolate(frame, [0, enterDurationInFrames], [0, 1], {
@@ -343,6 +350,7 @@ const AnimatedSvgBar = ({
 					height={valueLabelArea.height}
 					y={0 - area.y1 - valueLabelArea.y1}
 					x={0}
+					overflow="visible"
 				>
 					<div
 						style={{
@@ -351,20 +359,19 @@ const AnimatedSvgBar = ({
 							display: 'flex',
 							justifyContent: 'center',
 							alignItems: 'center',
+							overflow: 'visible',
+							whiteSpace: 'nowrap',
 						}}
 					>
-						<div
-							style={{
-								color: valueTextColor,
-								fontSize: valueLabelArea.height,
-								fontWeight: 500,
-								fontFamily: 'Arial',
-							}}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizValueLabel}
+							baseline={baseline}
+							color="white"
 						>
 							<FadeInAndOutText>
 								{valueFormatter(currentBarValue)}
 							</FadeInAndOutText>
-						</div>
+						</TypographyStyle>
 					</div>
 				</foreignObject>
 			</g>

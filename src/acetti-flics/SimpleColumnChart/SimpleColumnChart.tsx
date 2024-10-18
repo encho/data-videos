@@ -11,10 +11,7 @@ import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/Tex
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
-import {
-	CapSizeTextNew,
-	getTextStyleCapHeight,
-} from '../../acetti-typography/new/CapSizeTextNew';
+import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,

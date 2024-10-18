@@ -27,7 +27,6 @@ export const twoChangeBarsCompositionSchema = twoChangeBarsComponentProps.merge(
 	})
 );
 
-const CHART_AREA_WIDTH = 450;
 const CHART_AREA_HEIGHT = 600;
 
 export const TwoChangeBarsComposition: React.FC<
@@ -85,7 +84,6 @@ export const TwoChangeBarsComposition: React.FC<
 							{...{
 								theme,
 								CHART_AREA_HEIGHT,
-								CHART_AREA_WIDTH,
 								leftBarValue,
 								rightBarValue,
 								leftBarLabel,

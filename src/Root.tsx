@@ -283,7 +283,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...squareVideo}
 						{...linkedInTallVideo}
 						schema={baselineGridCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
 					/>
 
 					<Composition
