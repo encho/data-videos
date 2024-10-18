@@ -1,13 +1,12 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, staticFile, Sequence} from 'remotion';
 
-import {lorenzobertoliniTheme} from '../../../../acetti-themes/lorenzobertolini';
-import {lorenzobertolinibrightTheme} from '../../../../acetti-themes/lorenzobertolinibright';
-import {nerdyTheme} from '../../../../acetti-themes/nerdy';
-import {TitleSlide} from './TitleSlide';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {getThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {Position} from '../../../../acetti-ts-base/Position';
 import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
+import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const twoChangeBarsComponentProps = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -47,18 +46,11 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 	maxDomainValue,
 	minDomainValue,
 }) => {
-	const {width, height, fps, durationInFrames} = useVideoConfig();
+	const {width, height, durationInFrames} = useVideoConfig();
 
-	// TODO integrate into colorpalette
-	// const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
+	const theme = getThemeFromEnum(themeEnum as any);
 
-	const paddingHorizontal = 60;
+	const baseline = 34;
 
 	const leftPanelWidth = width / 2;
 	const rightPanelWidth = width / 2;
@@ -72,16 +64,11 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 					height,
 				}}
 			>
-				<Position position={{top: paddingHorizontal, left: paddingHorizontal}}>
-					<TitleSlide
-						titleColor={theme.typography.titleColor}
-						subTitleColor={theme.typography.subTitleColor}
-						title={title}
-						subTitle={subTitle}
-						titleFontSize={70}
-						subTitleFontSize={40}
-					/>
-				</Position>
+				<EconomistTitleWithSubtitle
+					title={title}
+					subtitle={subTitle}
+					theme={theme}
+				/>
 
 				<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
 					<Position
@@ -99,7 +86,7 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 						>
 							<TwoChangeBarsComponent
 								{...{
-									themeEnum,
+									theme,
 									CHART_AREA_HEIGHT,
 									leftBarValue,
 									rightBarValue,
@@ -109,7 +96,7 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 									percentageFormatString,
 									minDomainValue,
 									maxDomainValue,
-									baseFontSize: 34,
+									baseline,
 								}}
 							/>
 						</div>
@@ -125,7 +112,11 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 					crossOrigin="anonymous"
 				/>
 
-				<LorenzoBertoliniLogo color={theme.typography.logoColor} />
+				<EconomistDataSource theme={theme}>
+					AirVisual World Air Quality Report 2018
+				</EconomistDataSource>
+
+				<LorenzoBertoliniLogo2 theme={theme} />
 			</div>
 		</div>
 	);

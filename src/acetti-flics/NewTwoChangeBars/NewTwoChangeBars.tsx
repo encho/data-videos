@@ -10,22 +10,25 @@ import {
 import {z} from 'zod';
 import numeral from 'numeral';
 
+import {zodThemeType} from '../../acetti-themes/themeTypes';
 import {useChartLayout} from '../../compositions/POCs/05-ColumnCharts/TwoChangeBars/useChartLayout';
-import {DisplayGridLayout} from '../../acetti-layout';
+// import {DisplayGridLayout} from '../../acetti-layout';
 import {AnimatedArrowPath} from './AnimatedArrowPath';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
 import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
 import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {ChangeBar} from './ChangeBar';
 
+// TODO deprecate!!
 import {
 	getLabelFontSize,
-	getLabelMarginTop,
+	// getLabelMarginTop,
 } from '../../acetti-themes/typographySizes';
 // import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 export const newTwoChangeBarsSchema = z.object({
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	// themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	theme: zodThemeType,
 	//
 	leftBarValue: z.number(),
 	leftBarLabel: z.string(),
@@ -37,7 +40,7 @@ export const newTwoChangeBarsSchema = z.object({
 	CHART_AREA_HEIGHT: z.number(),
 	minDomainValue: z.number().optional(),
 	maxDomainValue: z.number().optional(),
-	baseFontSize: z.number().optional(),
+	baseline: z.number().optional(),
 });
 
 // TODO factor out
@@ -46,7 +49,7 @@ export const newTwoChangeBarsSchema = z.object({
 export const NewTwoChangeBars: React.FC<
 	z.infer<typeof newTwoChangeBarsSchema>
 > = ({
-	themeEnum,
+	theme,
 	// TODO pass values directly, s.t. no theme object is necessary here
 	// theme object has to be handled by flics upstream
 	leftBarValue,
@@ -59,42 +62,35 @@ export const NewTwoChangeBars: React.FC<
 	// CHART_AREA_WIDTH,
 	minDomainValue,
 	maxDomainValue,
-	baseFontSize = 34,
+	baseline = 34,
 }) => {
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
-
 	const LEFT_BAR_VALUE = leftBarValue;
 	const RIGHT_BAR_VALUE = rightBarValue;
 	const BAR_COLOR = theme.typography.textColor;
 	const BACKGROUND_COLOR = theme.global.backgroundColor;
 
-	const LABEL_TEXT_SIZE = getLabelFontSize(baseFontSize);
-	const LABEL_MARGIN_TOP = baseFontSize * 0.25;
-	// const LABEL_MARGIN_TOP = getLabelMarginTop(baseFontSize);
+	const LABEL_TEXT_SIZE = getLabelFontSize(baseline);
+	const LABEL_MARGIN_TOP = baseline * 0.25;
+	// const LABEL_MARGIN_TOP = getLabelMarginTop(baseline);
 	const LABEL_TEXT_COLOR = theme.typography.textColor;
 
-	const VALUE_TEXT_SIZE = baseFontSize;
-	const VALUE_MARGIN_TOP = baseFontSize * 0.5;
-	const VALUE_MARGIN_BOTTOM = baseFontSize * 0.25;
+	const VALUE_TEXT_SIZE = baseline;
+	const VALUE_MARGIN_TOP = baseline * 0.5;
+	const VALUE_MARGIN_BOTTOM = baseline * 0.25;
 
-	const BAR_WIDTH = baseFontSize * 4;
+	const BAR_WIDTH = baseline * 4;
 	// const BAR_TRIMMER_HEIGHT = TODO
 
-	const SPACE_BETWEEN_BARS = baseFontSize * 2;
+	const SPACE_BETWEEN_BARS = baseline * 2;
 
-	const DISPLAY_FONT_SIZE = baseFontSize * 1.25;
+	const DISPLAY_FONT_SIZE = baseline * 1.25;
 	const DISPLAY_FONT_FAMILY = 'Arial';
 	const DISPLAY_FONT_WEIGHT = 600;
 
 	const PERC_CHANGE_DISPLAY_AREA_HEIGHT = 80;
-	const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = baseFontSize / 10;
-	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseFontSize * 1;
-	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseFontSize * 1;
+	const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = baseline / 10;
+	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseline * 1;
+	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseline * 1;
 
 	const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen';
 	const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red';
