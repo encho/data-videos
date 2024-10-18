@@ -9,23 +9,31 @@ export function useChartLayout({
 	height,
 	leftValueLabelWidth,
 	rightValueLabelWidth,
+	baseline,
 }: {
+	baseline: number;
 	width: number;
 	height: number;
 	leftValueLabelWidth: number;
 	rightValueLabelWidth: number;
 }) {
+	// TODO define in ibcs theme
+	// *************************************
+	const SPACE_ABOVE_XAXIS = baseline * 1;
+	const SPACE_FOR_XAXIS = baseline * 1.5;
+	const VERTICAL_SPACE = baseline * 1;
+
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},
-		{type: 'pixel', value: 10, name: 'space'},
-		{type: 'pixel', value: 55, name: 'xAxis'},
+		{type: 'pixel', value: SPACE_ABOVE_XAXIS, name: 'space'},
+		{type: 'pixel', value: SPACE_FOR_XAXIS, name: 'xAxis'},
 	];
 
 	const chartColsRailSpec: TGridRailSpec = [
 		{type: 'pixel', value: leftValueLabelWidth, name: 'leftValueLabel'},
-		{type: 'pixel', value: 30, name: 'space'},
+		{type: 'pixel', value: VERTICAL_SPACE, name: 'space'},
 		{type: 'fr', value: 1, name: 'plot'},
-		{type: 'pixel', value: 30, name: 'space'},
+		{type: 'pixel', value: VERTICAL_SPACE, name: 'space'},
 		{type: 'pixel', value: rightValueLabelWidth, name: 'rightValueLabel'},
 	];
 

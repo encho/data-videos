@@ -100,11 +100,10 @@ export const SparklineChartComponent: React.FC<{
 					position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 				>
 					<XAxis_SparklineLarge
-						periodsScale={currentPeriodsScale}
-						theme={theme.xAxis}
+						baseline={baseline}
+						theme={theme}
 						area={layoutAreas.xAxis}
 						axisSpec={axisSpec}
-						clip={false}
 						fadeInDurationInFrames={XAXIS_FADE_IN_DURATION}
 						tickLabelColor={theme.typography.subTitle.color}
 						lineColor={theme.typography.subTitle.color}
@@ -186,7 +185,7 @@ export const SparklineChartComponent: React.FC<{
 							}}
 						>
 							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.datavizLabel}
+								typographyStyle={theme.typography.textStyles.datavizValueLabel}
 								baseline={baseline}
 								color="white"
 							>
@@ -229,7 +228,7 @@ export const SparklineChartComponent: React.FC<{
 							}}
 						>
 							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.datavizLabel}
+								typographyStyle={theme.typography.textStyles.datavizValueLabel}
 								baseline={baseline}
 								color="white"
 							>

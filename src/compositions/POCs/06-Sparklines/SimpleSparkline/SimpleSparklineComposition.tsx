@@ -53,7 +53,7 @@ export const SimpleSparklineComposition: React.FC<
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	const baseline = 20;
+	const baseline = 30;
 
 	const opacity = interpolate(
 		frame,

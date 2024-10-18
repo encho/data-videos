@@ -6,43 +6,30 @@ import {
 	Easing,
 } from 'remotion';
 import invariant from 'tiny-invariant';
-import {measureText} from '@remotion/layout-utils';
 
 import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
-import {TXAxisSpec, TAxisLabelSpec} from './utils/axisSpecs_xAxis';
-import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
+import {TXAxisSpec} from './utils/axisSpecs_xAxis';
 import {WaterfallTextEffect} from '../acetti-typography/TextEffects/WaterfallTextEffect';
-
-type TTheme_XAxis = ThemeType['xAxis'];
-
-// SIZES, from theme or props rather
-// const TICK_LINE_SIZE = 24;
-// const TICK_TEXT_FONT_SIZE = 24;
-// const TICK_TEXT_FONT_WEIGHT = 500;
-
-const labelTextProps = {
-	fontFamily: 'Arial',
-	fontWeight: 700,
-	fontSize: 30,
-	// letterSpacing: 1,
-};
+import {TypographyStyle} from '../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {
+	getTextDimensions,
+	getTextStyleCapHeight,
+} from '../acetti-typography/new/CapSizeTextNew';
 
 export const XAxis_SparklineLarge: React.FC<{
+	baseline: number;
 	area: TGridLayoutArea;
 	axisSpec: TXAxisSpec;
-	theme: TTheme_XAxis;
-	periodsScale: TPeriodsScale;
-	clip?: boolean;
+	theme: ThemeType;
 	fadeInDurationInFrames: number;
 	tickLabelColor: string;
 	lineColor: string;
 }> = ({
+	baseline,
 	area,
 	theme,
 	axisSpec,
-	periodsScale,
-	clip = true,
 	fadeInDurationInFrames,
 	tickLabelColor,
 	lineColor,
@@ -77,21 +64,17 @@ export const XAxis_SparklineLarge: React.FC<{
 	invariant(firstLabelSpec);
 	invariant(secondLabelSpec);
 
-	// const firstLabelXPosition = periodsScale.mapFloatIndexToRange(
-	// 	firstLabelSpec.periodFloatIndex
-	// );
-
-	// const secondLabelXPosition = periodsScale.mapFloatIndexToRange(
-	// 	secondLabelSpec.periodFloatIndex
-	// );
-
-	const firstLabelTextWidth = measureText({
-		...labelTextProps,
+	const firstLabelTextWidth = getTextDimensions({
+		baseline,
+		theme,
+		key: 'datavizLabel',
 		text: firstLabelSpec.label,
 	});
 
-	const secondLabelTextWidth = measureText({
-		...labelTextProps,
+	const secondLabelTextWidth = getTextDimensions({
+		baseline,
+		theme,
+		key: 'datavizLabel',
 		text: secondLabelSpec.label,
 	});
 
@@ -103,11 +86,14 @@ export const XAxis_SparklineLarge: React.FC<{
 				from={KF_START_DATE_ENTER_START}
 				durationInFrames={durationInFrames - Math.floor(fps * 0.3)}
 			>
-				<HtmlLabel
-					labelSpec={firstLabelSpec}
+				<TypographyLabel
 					color={tickLabelColor}
+					theme={theme}
+					baseline={baseline}
 					style={{left: 0}}
-				/>
+				>
+					{firstLabelSpec.label}
+				</TypographyLabel>
 			</Sequence>
 
 			<Sequence
@@ -116,11 +102,14 @@ export const XAxis_SparklineLarge: React.FC<{
 				from={KF_END_DATE_ENTER_START}
 				durationInFrames={durationInFrames}
 			>
-				<HtmlLabel
-					labelSpec={secondLabelSpec}
+				<TypographyLabel
 					color={tickLabelColor}
+					theme={theme}
+					baseline={baseline}
 					style={{right: 0}}
-				/>
+				>
+					{secondLabelSpec.label}
+				</TypographyLabel>
 			</Sequence>
 
 			<svg
@@ -138,6 +127,8 @@ export const XAxis_SparklineLarge: React.FC<{
 
 				<Sequence name="x-axis-line" layout="none" from={KF_XLINE_ENTER_START}>
 					<SvgLine
+						theme={theme}
+						baseline={baseline}
 						xStartPosition={firstLabelTextWidth.width + 15}
 						xEndPosition={area.width - secondLabelTextWidth.width - 15}
 						fadeInDurationInFrames={KF_XLINE_FADE_IN_DURATION}
@@ -150,34 +141,43 @@ export const XAxis_SparklineLarge: React.FC<{
 	);
 };
 
-export const HtmlLabel: React.FC<{
-	labelSpec: TAxisLabelSpec;
+// TODO centralize in acetti-typography
+export const TypographyLabel: React.FC<{
+	children: string;
 	color: string;
 	style: {left: number} | {right: number};
-}> = ({labelSpec, color, style}) => {
+	theme: ThemeType;
+	baseline: number;
+}> = ({children, color, style, theme, baseline}) => {
 	return (
 		<div
 			style={{
 				position: 'absolute',
 				...style,
-				color,
-				fontSize: labelTextProps.fontSize,
-				fontWeight: labelTextProps.fontWeight,
-				fontFamily: labelTextProps.fontFamily,
 			}}
 		>
-			<WaterfallTextEffect>{labelSpec.label}</WaterfallTextEffect>
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.datavizLabel}
+				baseline={baseline}
+				color={color}
+			>
+				<WaterfallTextEffect>{children}</WaterfallTextEffect>
+			</TypographyStyle>
 		</div>
 	);
 };
 
 export const SvgLine: React.FC<{
+	theme: ThemeType;
+	baseline: number;
 	xStartPosition: number;
 	xEndPosition: number;
 	fadeInDurationInFrames: number;
 	fadeOutDurationInFrames: number;
 	color: string;
 }> = ({
+	theme,
+	baseline,
 	xStartPosition,
 	xEndPosition,
 	fadeInDurationInFrames,
@@ -186,6 +186,12 @@ export const SvgLine: React.FC<{
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
+
+	const labelTextCapHeight = getTextStyleCapHeight({
+		theme,
+		baseline,
+		key: 'datavizLabel',
+	});
 
 	const x1 = interpolate(
 		frame,
@@ -223,10 +229,9 @@ export const SvgLine: React.FC<{
 			<line
 				opacity={opacity}
 				x1={x1}
-				// x1={xStartPosition}
 				x2={x2}
-				y1={labelTextProps.fontSize / 1.35}
-				y2={labelTextProps.fontSize / 1.35}
+				y1={labelTextCapHeight / 2}
+				y2={labelTextCapHeight / 2}
 				stroke={color}
 				strokeWidth="2"
 			/>

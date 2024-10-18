@@ -64,6 +64,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	}).width;
 
 	const chartLayout = useChartLayout({
+		baseline,
 		width,
 		height,
 		// QUICK-FIX: Currently we need to adjust the widths, as small errors may arise
