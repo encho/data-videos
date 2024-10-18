@@ -36,7 +36,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 
 	const {fps, width} = useVideoConfig();
 
-	const baseline = 20;
+	const baseline = 26;
 
 	const props = data;
 

@@ -98,7 +98,7 @@ import {
 import {
 	MultipleSimpleSparklineComposition,
 	multipleSimpleSparklineCompositionSchema,
-} from './compositions/POCs/06-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparkline';
+} from './compositions/POCs/06-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparklineComposition';
 
 import {
 	MultipleSimpleColumnChartComposition,
