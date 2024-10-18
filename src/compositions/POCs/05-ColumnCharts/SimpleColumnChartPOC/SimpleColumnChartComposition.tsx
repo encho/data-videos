@@ -1,15 +1,15 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {SimpleColumnChart} from '../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
-export const simpleColumnChartPOCSchema = z.object({
+export const simpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
@@ -29,8 +29,8 @@ const timeSeries = [
 // 	{value: 64, date: new Date('2020-12-31')},
 // ];
 
-export const SimpleColumnChartPOC: React.FC<
-	z.infer<typeof simpleColumnChartPOCSchema>
+export const SimpleColumnChartComposition: React.FC<
+	z.infer<typeof simpleColumnChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
@@ -63,7 +63,7 @@ export const SimpleColumnChartPOC: React.FC<
 							fontWeight: 700,
 						}}
 					>
-						<FadeInAndOutText>SimpleColumnChartPOC</FadeInAndOutText>
+						<FadeInAndOutText>Simple Column Chart</FadeInAndOutText>
 					</div>
 				</div>
 			</div>

@@ -46,9 +46,9 @@ import {
 } from './compositions/POCs/02-TypographicLayouts/BaselineGrid/BaselineGridComposition';
 
 import {
-	SimpleColumnChartPOC,
-	simpleColumnChartPOCSchema,
-} from './compositions/POCs/SimpleColumnChartPOC/SimpleColumnChartPOC';
+	SimpleColumnChartComposition,
+	simpleColumnChartCompositionSchema,
+} from './compositions/POCs/05-ColumnCharts/SimpleColumnChartPOC/SimpleColumnChartComposition';
 
 import {
 	twoChangeBarsWithImageSchema,
@@ -379,12 +379,12 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="pocs-SimpleColumnChart"
-						component={SimpleColumnChartPOC}
+						id="SimpleColumnChart"
+						component={SimpleColumnChartComposition}
 						durationInFrames={90 * 10}
 						fps={90}
 						{...squareVideo}
-						schema={simpleColumnChartPOCSchema}
+						schema={simpleColumnChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition
