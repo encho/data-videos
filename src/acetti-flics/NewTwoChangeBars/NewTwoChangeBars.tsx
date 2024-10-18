@@ -1,12 +1,4 @@
-import {
-	useVideoConfig,
-	Sequence,
-	// useCurrentFrame,
-	// spring,
-	// Easing,
-	// interpolate,
-	// useVideoConfig
-} from 'remotion';
+import {useVideoConfig, Sequence} from 'remotion';
 import {z} from 'zod';
 import numeral from 'numeral';
 
@@ -16,13 +8,6 @@ import {AnimatedArrowPath} from './AnimatedArrowPath';
 import {ChangeBar} from './ChangeBar';
 import {DisplayGridLayout} from '../../acetti-layout';
 import {getTextStyleCapHeight} from '../../acetti-typography/new/CapSizeTextNew';
-
-// TODO deprecate!! ***************************************
-// import {
-// 	getLabelFontSize,
-// 	// getLabelMarginTop,
-// } from '../../acetti-themes/typographySizes';
-// import {FadeInAndOutText} from '../../compositions/SimpleStats/FadeInAndOutText';
 
 export const newTwoChangeBarsSchema = z.object({
 	theme: zodThemeType,

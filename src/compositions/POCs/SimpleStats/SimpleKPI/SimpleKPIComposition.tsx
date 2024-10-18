@@ -13,14 +13,6 @@ import {
 import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
-// TODO deprecate
-// import {
-// 	getKPIFontSize,
-// 	getLabelFontSize,
-// 	getLabelMarginTop,
-// 	getSpaceMedium,
-// } from '../../../../acetti-themes/typographySizes';
-
 export const simpleKPICompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 	kpiValue: z.number(),
