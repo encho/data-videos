@@ -10,7 +10,7 @@ import {
 import {z} from 'zod';
 import numeral from 'numeral';
 
-import {useChartLayout} from '../../compositions/TwoChangeBars/useChartLayout';
+import {useChartLayout} from '../../compositions/POCs/05-ColumnCharts/TwoChangeBars/useChartLayout';
 import {DisplayGridLayout} from '../../acetti-layout';
 import {AnimatedArrowPath} from './AnimatedArrowPath';
 import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';

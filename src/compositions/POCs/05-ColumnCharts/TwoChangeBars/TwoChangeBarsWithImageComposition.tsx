@@ -1,13 +1,13 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, staticFile, Sequence} from 'remotion';
 
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
+import {lorenzobertoliniTheme} from '../../../../acetti-themes/lorenzobertolini';
+import {lorenzobertolinibrightTheme} from '../../../../acetti-themes/lorenzobertolinibright';
+import {nerdyTheme} from '../../../../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
-import {Position} from '../../acetti-ts-base/Position';
-import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {Position} from '../../../../acetti-ts-base/Position';
+import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
 
 export const twoChangeBarsComponentProps = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -21,18 +21,19 @@ export const twoChangeBarsComponentProps = z.object({
 	maxDomainValue: z.number().optional(),
 });
 
-export const twoChangeBarsWithImageSchema = twoChangeBarsComponentProps.merge(
-	z.object({
-		title: z.string(),
-		subTitle: z.string(),
-	})
-);
+export const twoChangeBarsWithImageCompositionSchema =
+	twoChangeBarsComponentProps.merge(
+		z.object({
+			title: z.string(),
+			subTitle: z.string(),
+		})
+	);
 
 // const CHART_AREA_WIDTH = 500;
 const CHART_AREA_HEIGHT = 500;
 
-export const TwoChangeBarsWithImage: React.FC<
-	z.infer<typeof twoChangeBarsWithImageSchema>
+export const TwoChangeBarsWithImageComposition: React.FC<
+	z.infer<typeof twoChangeBarsWithImageCompositionSchema>
 > = ({
 	themeEnum,
 	title,

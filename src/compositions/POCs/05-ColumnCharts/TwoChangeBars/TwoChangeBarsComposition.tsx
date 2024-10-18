@@ -2,13 +2,13 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig, useCurrentFrame} from 'remotion';
 
 // import {TwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/TwoChangeBars/TwoChangeBars';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
+import {lorenzobertoliniTheme} from '../../../../acetti-themes/lorenzobertolini';
+import {nerdyTheme} from '../../../../acetti-themes/nerdy';
 import {TitleSlide} from './TitleSlide';
-import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {Position} from '../../acetti-ts-base/Position';
-import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {lorenzobertolinibrightTheme} from '../../../../acetti-themes/lorenzobertolinibright';
+import {Position} from '../../../../acetti-ts-base/Position';
+import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
 
 export const twoChangeBarsComponentProps = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -22,7 +22,7 @@ export const twoChangeBarsComponentProps = z.object({
 	maxDomainValue: z.number().optional(),
 });
 
-export const newTwoChangeBarsSchema = twoChangeBarsComponentProps.merge(
+export const twoChangeBarsCompositionSchema = twoChangeBarsComponentProps.merge(
 	z.object({
 		title: z.string(),
 		subTitle: z.string(),
@@ -32,8 +32,8 @@ export const newTwoChangeBarsSchema = twoChangeBarsComponentProps.merge(
 const CHART_AREA_WIDTH = 450;
 const CHART_AREA_HEIGHT = 600;
 
-export const NewTwoChangeBars: React.FC<
-	z.infer<typeof newTwoChangeBarsSchema>
+export const TwoChangeBarsComposition: React.FC<
+	z.infer<typeof twoChangeBarsCompositionSchema>
 > = ({
 	themeEnum,
 	title,

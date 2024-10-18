@@ -1,5 +1,5 @@
 import {Sequence} from 'remotion';
-import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 
 export const TitleSlide: React.FC<{
 	titleColor: string;

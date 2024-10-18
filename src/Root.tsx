@@ -51,9 +51,9 @@ import {
 } from './compositions/POCs/05-ColumnCharts/SimpleColumnChartPOC/SimpleColumnChartComposition';
 
 import {
-	twoChangeBarsWithImageSchema,
-	TwoChangeBarsWithImage,
-} from './compositions/TwoChangeBars/TwoChangeBarsWithImage';
+	twoChangeBarsWithImageCompositionSchema,
+	TwoChangeBarsWithImageComposition,
+} from './compositions/POCs/05-ColumnCharts/TwoChangeBars/TwoChangeBarsWithImageComposition';
 
 import {
 	SimpleKPIComposition,
@@ -61,9 +61,9 @@ import {
 } from './compositions/POCs/SimpleStats/SimpleKPI/SimpleKPIComposition';
 
 import {
-	NewTwoChangeBars,
-	newTwoChangeBarsSchema,
-} from './compositions/TwoChangeBars/NewTwoChangeBars';
+	TwoChangeBarsComposition,
+	twoChangeBarsCompositionSchema,
+} from './compositions/POCs/05-ColumnCharts/TwoChangeBars/TwoChangeBarsComposition';
 
 import {
 	TextAnimationsComposition,
@@ -404,13 +404,13 @@ export const RemotionRoot: React.FC = () => {
 						<Composition
 							// You can take the "id" to render a video:
 							// npx remotion render src/index.ts <id> out/video.mp4
-							id="NewTwoChangeBars"
-							component={NewTwoChangeBars}
+							id="ChangeBars"
+							component={TwoChangeBarsComposition}
 							durationInFrames={90 * 15}
 							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 							fps={90}
 							{...squareVideo}
-							schema={newTwoChangeBarsSchema}
+							schema={twoChangeBarsCompositionSchema}
 							defaultProps={{
 								themeEnum: 'NERDY' as const,
 								title: 'Global Car Sales',
@@ -430,7 +430,7 @@ export const RemotionRoot: React.FC = () => {
 							// You can take the "id" to render a video:
 							// npx remotion render src/index.ts <id> out/video.mp4
 							id="TwoChangeBarsWithImage"
-							component={TwoChangeBarsWithImage}
+							component={TwoChangeBarsWithImageComposition}
 							durationInFrames={90 * 15}
 							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 							fps={90}
@@ -439,7 +439,7 @@ export const RemotionRoot: React.FC = () => {
 							// height={1080}
 							width={Math.floor(1080 * 1.62)}
 							height={1080}
-							schema={twoChangeBarsWithImageSchema}
+							schema={twoChangeBarsWithImageCompositionSchema}
 							defaultProps={{
 								themeEnum: 'NERDY' as const,
 								title: 'Global Car Sales',

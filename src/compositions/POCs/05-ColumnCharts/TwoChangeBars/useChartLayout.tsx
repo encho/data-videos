@@ -2,7 +2,7 @@ import {
 	TGridLayoutAreaSpec,
 	TGridRailSpec,
 	useGridLayout,
-} from '../../acetti-layout';
+} from '../../../../acetti-layout';
 
 const makeChartGridLayoutSpec = ({
 	labelTextSize,
