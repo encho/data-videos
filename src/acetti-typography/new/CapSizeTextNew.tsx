@@ -4,6 +4,20 @@ import {measureText as remotionMeasureText} from '@remotion/layout-utils';
 import {TAvailableFontFamily, getFontMetrics} from './fontMetricsLibrary';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 
+export function getTextStyleCapHeight({
+	theme,
+	baseline,
+	key,
+}: {
+	theme: ThemeType;
+	baseline: number;
+	key: keyof ThemeType['typography']['textStyles'];
+}) {
+	const textStyle = theme.typography.textStyles[key];
+
+	return textStyle.capHeightInBaselines * baseline;
+}
+
 export function getTextDimensions({
 	theme,
 	baseline,

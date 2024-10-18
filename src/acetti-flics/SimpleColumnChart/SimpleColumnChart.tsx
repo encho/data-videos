@@ -7,10 +7,14 @@ import {
 } from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
-import {CapSizeTextNew} from '../../acetti-typography/new/CapSizeTextNew';
+import {
+	CapSizeTextNew,
+	getTextStyleCapHeight,
+} from '../../acetti-typography/new/CapSizeTextNew';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
@@ -41,31 +45,28 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	theme,
 }) => {
 	const frame = useCurrentFrame();
-	// const {fps} = useVideoConfig();
 
 	const nrColumns = data.length;
 	const nrRows = 1;
 
-	const COLUMN_LABEL_FONT_SIZE = baseline;
-	const COLUMN_VALUE_LABEL_FONT_SIZE = baseline * 0.85;
+	// TODO define IBCS-style chart sizes in terms of baseline on a theme level
 	const COLUMN_SPACE = baseline * 1;
 	const COLUMN_WIDTH = baseline * 4;
 
-	const labelTextProps = {
-		fontFamily: 'Inter' as const,
-		fontWeight: 600,
-		capHeight: COLUMN_LABEL_FONT_SIZE,
-		color: 'white', // TODO from theme
-	};
+	const labelHeight = getTextStyleCapHeight({
+		baseline,
+		theme,
+		key: 'datavizLabel',
+	});
 
-	const valueLabelTextProps = {
-		fontFamily: 'Inter' as const,
-		fontWeight: 400,
-		capHeight: COLUMN_VALUE_LABEL_FONT_SIZE,
-		color: 'white', // TODO from theme
-	};
+	const valueLabelHeight = getTextStyleCapHeight({
+		baseline,
+		theme,
+		key: 'datavizValueLabel',
+	});
 
 	// =========================================
+	// TODO factor this out, as we want to be able to access chart width also from other components
 	const columnChartWidth =
 		nrColumns * COLUMN_WIDTH + (nrColumns - 1) * COLUMN_SPACE;
 
@@ -124,16 +125,16 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 									<Sequence from={i * BAR_DELAY}>
 										<HtmlArea area={columnArea}>
 											<VerticalColumn
+												theme={theme}
+												baseline={baseline}
 												width={columnArea.width}
 												height={columnArea.height}
 												label={it.label}
-												labelTextProps={labelTextProps}
 												valueLabel={it.valueLabel}
-												valueLabelTextProps={valueLabelTextProps}
 												value={it.value}
 												columnColor={it.columnColor || 'magenta'}
-												labelHeight={labelTextProps.capHeight}
-												valueLabelHeight={valueLabelTextProps.capHeight}
+												labelHeight={labelHeight}
+												valueLabelHeight={valueLabelHeight}
 												valueDomain={computedValueDomain}
 											/>
 										</HtmlArea>
@@ -149,36 +150,26 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 };
 
 export const VerticalColumn: React.FC<{
+	theme: ThemeType;
+	baseline: number;
 	width: number;
 	height: number;
 	labelHeight: number;
 	valueLabelHeight: number;
 	label: string;
 	valueLabel: string;
-	valueLabelTextProps: {
-		fontFamily: 'Inter';
-		fontWeight: number;
-		capHeight: number;
-		color: string;
-	};
-	labelTextProps: {
-		fontFamily: 'Inter';
-		fontWeight: number;
-		capHeight: number;
-		color: string;
-	};
 	value: number;
 	valueDomain: [number, number];
 	columnColor: string;
 }> = ({
+	theme,
+	baseline,
 	width,
 	height,
 	labelHeight,
 	valueLabelHeight,
 	label,
 	valueLabel,
-	valueLabelTextProps,
-	labelTextProps,
 	valueDomain,
 	value,
 	columnColor,
@@ -252,7 +243,7 @@ export const VerticalColumn: React.FC<{
 		>
 			{false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<DisplayGridRails {...verticalColumnLayout} />
+					<DisplayGridRails {...verticalColumnLayout} stroke={'cyan'} />
 				</div>
 			) : null}
 
@@ -265,15 +256,13 @@ export const VerticalColumn: React.FC<{
 						height: '100%',
 					}}
 				>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={0}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.datavizLabel}
+						baseline={baseline}
+						color="white"
 					>
 						<WaterfallTextEffect>{label}</WaterfallTextEffect>
-					</CapSizeTextNew>
+					</TypographyStyle>
 				</div>
 			</HtmlArea>
 
@@ -307,15 +296,17 @@ export const VerticalColumn: React.FC<{
 								interpolatedColumnHeight,
 						}}
 					>
-						<CapSizeTextNew
-							fontFamily={valueLabelTextProps.fontFamily}
-							fontWeight={valueLabelTextProps.fontWeight}
-							color={valueLabelTextProps.color}
-							capHeight={valueLabelTextProps.capHeight}
-							lineGap={0}
+						{/* TODO  new api: (ideally theme and baseline via context!) */}
+						{/* <ValueLabel theme={theme} baseline={baseline}>
+							{valueLabel}
+						</ValueLabel> */}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizValueLabel}
+							baseline={baseline}
+							color="white"
 						>
 							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
-						</CapSizeTextNew>
+						</TypographyStyle>
 					</div>
 				</HtmlArea>
 			</Sequence>
