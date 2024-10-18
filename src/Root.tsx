@@ -9,11 +9,6 @@ import {
 } from './BundesligaTop10BarChart/BundesligaTop10BarChart';
 
 import {
-	SimpleLineChart,
-	simpleLineChartSchema,
-} from './SimpleLineChart/SimpleLineChart';
-
-import {
 	Performance_01_Example,
 	performance_01_example_schema,
 } from './AcettiFlics/Performance_01/Performance_01';
@@ -592,51 +587,6 @@ export const RemotionRoot: React.FC = () => {
 						timePeriod: 'YTD' as const,
 						nerdyFinanceEnv: 'PROD' as const,
 						themeEnum: 'NERDY' as const,
-					}}
-				/>
-
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="SimpleLineChart"
-					component={SimpleLineChart}
-					durationInFrames={240}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={30}
-					{...squareVideo}
-					schema={simpleLineChartSchema}
-					defaultProps={{
-						title: 'BTC-USD Performance 4234223',
-						subtitle: 'Prices in USD',
-						showZero: true,
-						fontFamilyTitle: 'SourceSerifPro-Light' as const,
-						fontFamilySubtitle: 'Inter-Regular' as const,
-						fontFamilyXTicklabels: 'Inter-Regular' as const,
-						fontFamilyYTicklabels: 'Inter-Regular' as const,
-						data: simpleTimeseriesData,
-						styling: {
-							titleFontSize: 75,
-							subTitleFontSize: 40,
-							backgroundColor: '#111c6f',
-							titleColor: '#6F5B3E',
-							gridLinesColor: '#0a439e',
-							yLabelsColor: '#0a439e',
-							xLabelsColor: '#0a439e',
-							lineColor: '#00c278',
-							yAxisAreaWidth: 132,
-							lineStrokeWidth: 10,
-							lineCircleRadius: 16,
-							yTickValuesFontSize: 40,
-							xTickValuesFontSize: 40,
-							xAxisAreaHeight: 60,
-							gridLinesStrokeWidth: 3,
-							yAxisAreaMarginLeft: 20,
-							xTickValuesLength: 15,
-							xTickValuesWidth: 2,
-							xTickValuesColor: '#736cd5',
-						},
-						showLineChartLayout: false,
-						watermark: true,
 					}}
 				/>
 			</Folder>

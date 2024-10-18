@@ -9,10 +9,10 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {getTextDimensions} from '../../../../acetti-typography/new/CapSizeTextNew';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
 export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -59,7 +59,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	useFontFamiliesLoader(['Inter-Regular']);
+	useFontFamiliesLoader(theme);
 
 	const barChartWidth = 800;
 	const baseline = 22;

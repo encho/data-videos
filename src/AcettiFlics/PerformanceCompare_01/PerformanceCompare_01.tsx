@@ -16,7 +16,7 @@ import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
-import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
 import {PerformanceCompare_01} from '../../acetti-ts-flics/single-timeseries/PerformanceCompare_01/PerformanceCompare_01';
 
 import {
@@ -54,8 +54,7 @@ export const PerformanceCompare_01_Example: React.FC<
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
-	// TODO generalize and factor out // bring into wrapper component?
-	useThemeFontsLoader(theme);
+	useFontFamiliesLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');

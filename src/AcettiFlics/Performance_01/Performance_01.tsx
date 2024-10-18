@@ -7,7 +7,7 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../../acetti-ts-base/Position';
 import {
@@ -52,8 +52,7 @@ export const Performance_01_Example: React.FC<
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
-	// TODO generalize and factor out // bring into wrapper component?
-	useThemeFontsLoader(theme);
+	useFontFamiliesLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');

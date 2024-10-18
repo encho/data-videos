@@ -1,14 +1,14 @@
 import {Sequence, useVideoConfig, Easing} from 'remotion';
 
 // import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
-import {HighlightPeriods3} from '../../../acetti-ts-components/HighlightPeriods3';
+// import {HighlightPeriods3} from '../../../acetti-ts-components/HighlightPeriods3';
 import {HighlightPeriodsMulti} from '../../../acetti-ts-components/HighlightPeriodsMulti';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {BasicLineChart} from '../../../acetti-ts-components/BasicLineChart';
+// import {BasicLineChart} from '../../../acetti-ts-components/BasicLineChart';
 import {
-	LineChartAnimationContainer,
+	// LineChartAnimationContainer,
 	TLineChartAnimationContext,
 } from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {MultiBasicLineChart} from './MultiBasicLineChart';

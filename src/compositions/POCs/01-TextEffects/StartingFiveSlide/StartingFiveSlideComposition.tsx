@@ -12,7 +12,7 @@ import {
 } from 'remotion';
 import {range} from 'lodash';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -29,9 +29,9 @@ export const startingFiveSlideCompositionSchema = z.object({
 export const StartingFiveSlideComposition: React.FC<
 	z.infer<typeof startingFiveSlideCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
-
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	useFontFamiliesLoader(theme);
 
 	const {width} = useVideoConfig();
 	const frame = useCurrentFrame();

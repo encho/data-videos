@@ -5,7 +5,7 @@ import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {KeyFramesInspector} from './KeyframesInspector';
 // import {Position} from '../../../../acetti-ts-base/Position';
 // import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
@@ -21,10 +21,11 @@ export const keyframesCompositionSchema = z.object({
 export const KeyframesComposition: React.FC<
 	z.infer<typeof keyframesCompositionSchema>
 > = ({themeEnum}) => {
-	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
 	const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	useFontFamiliesLoader(theme);
 
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'SECOND', value: 1, id: 'TITLE_ENTER_START'},

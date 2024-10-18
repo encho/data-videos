@@ -21,7 +21,8 @@ import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 // import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
-import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
+// import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
+import {useFontFamiliesLoader} from '../../acetti-typography/new/useFontFamiliesLoader';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -52,8 +53,7 @@ export const HighlightPeriods_01_Example: React.FC<
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
-	// TODO generalize and factor out // bring into wrapper component?
-	useThemeFontsLoader(theme);
+	useFontFamiliesLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
