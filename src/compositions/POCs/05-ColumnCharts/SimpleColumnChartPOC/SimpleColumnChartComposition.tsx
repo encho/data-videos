@@ -5,9 +5,13 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+// import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
 export const simpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -34,7 +38,9 @@ export const SimpleColumnChartComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	useFontFamiliesLoader(['Inter-Regular']);
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
 
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,
@@ -52,21 +58,11 @@ export const SimpleColumnChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 50,
-							fontFamily: 'Arial',
-							fontWeight: 700,
-						}}
-					>
-						<FadeInAndOutText>Simple Column Chart</FadeInAndOutText>
-					</div>
-				</div>
-			</div>
+			<EconomistTitleWithSubtitle
+				title={'Simple Column Chart'}
+				subtitle={'Display Categorical Data Horizontally'}
+				theme={theme}
+			/>
 
 			<div
 				style={{
@@ -83,7 +79,11 @@ export const SimpleColumnChartComposition: React.FC<
 				/>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<EconomistDataSource theme={theme}>
+				AirVisual World Air Quality Report 2018
+			</EconomistDataSource>
+
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };
