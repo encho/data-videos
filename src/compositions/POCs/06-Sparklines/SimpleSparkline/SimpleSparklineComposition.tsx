@@ -7,7 +7,7 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -15,6 +15,7 @@ import {
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {SparklineLargeKeyframes} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLargeKeyframes';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 const timeSeries = [
 	{value: 150, date: new Date('2010-12-31')},
@@ -44,8 +45,15 @@ export const SimpleSparklineComposition: React.FC<
 	z.infer<typeof simpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
+
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
+
+	const baseline = 20;
 
 	const opacity = interpolate(
 		frame,
@@ -85,6 +93,7 @@ export const SimpleSparklineComposition: React.FC<
 							width={CHART_WIDTH}
 							height={CHART_HEIGHT}
 							theme={theme}
+							baseline={baseline}
 						/>
 					</div>
 
@@ -100,7 +109,7 @@ export const SimpleSparklineComposition: React.FC<
 				</div>
 			</Sequence>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

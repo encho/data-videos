@@ -1,6 +1,7 @@
 import {ScaleLinear} from 'd3-scale';
 import {useVideoConfig} from 'remotion';
 
+import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -14,13 +15,13 @@ import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
 import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-
 import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
+import {getTextStyleCapHeight} from '../../../acetti-typography/new/CapSizeTextNew';
 
 export const SparklineChartComponent: React.FC<{
-	// formatString: string;
+	baseline: number;
 	id: string; // id serves to uniquely define the mask
 	timeSeries: TimeSeries;
 	layoutAreas: {
@@ -37,30 +38,18 @@ export const SparklineChartComponent: React.FC<{
 	toPeriodScale: TPeriodsScale;
 	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
 	leftValueLabel: string;
-	leftValueLabelTextProps: {
-		fontSize: number;
-		fontFamily: string;
-		fontWeight: number;
-	};
 	rightValueLabel: string;
-	rightValueLabelTextProps: {
-		fontSize: number;
-		fontFamily: string;
-		fontWeight: number;
-	};
 	lineColor?: string;
 }> = ({
-	// formatString,
 	id,
+	baseline,
 	layoutAreas,
 	timeSeries,
 	theme,
 	yScale,
 	periodScale: currentPeriodsScale,
 	leftValueLabel,
-	leftValueLabelTextProps,
 	rightValueLabel,
-	rightValueLabelTextProps,
 	lineColor,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
@@ -92,6 +81,12 @@ export const SparklineChartComponent: React.FC<{
 		'SPARKLINE_EXIT_START',
 		'SPARKLINE_END'
 	);
+
+	const valueLabelCapHeight = getTextStyleCapHeight({
+		theme,
+		baseline,
+		key: 'datavizValueLabel',
+	});
 
 	return (
 		<>
@@ -183,26 +178,20 @@ export const SparklineChartComponent: React.FC<{
 						<div
 							style={{
 								position: 'absolute',
-								top:
-									yScale(timeSeries[0].value) -
-									leftValueLabelTextProps.fontSize / 2,
+								top: yScale(timeSeries[0].value) - valueLabelCapHeight / 2,
 								width: '100%',
 								height: '100%',
 								display: 'flex',
 								justifyContent: 'flex-end',
 							}}
 						>
-							<div
-								style={{
-									color: lineColor || theme.typography.textColor,
-									fontSize: leftValueLabelTextProps.fontSize,
-									fontFamily: leftValueLabelTextProps.fontFamily,
-									fontWeight: leftValueLabelTextProps.fontWeight,
-									marginTop: '-0.35em', // TODO use capsize trimming
-								}}
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.datavizLabel}
+								baseline={baseline}
+								color="white"
 							>
 								<FadeInAndOutText>{leftValueLabel}</FadeInAndOutText>
-							</div>
+							</TypographyStyle>
 						</div>
 					</div>
 				</Position>
@@ -232,24 +221,20 @@ export const SparklineChartComponent: React.FC<{
 								position: 'absolute',
 								top:
 									yScale(timeSeries[timeSeries.length - 1].value) -
-									rightValueLabelTextProps.fontSize / 2,
+									valueLabelCapHeight / 2,
 								width: '100%',
 								height: '100%',
 								display: 'flex',
 								justifyContent: 'flex-start',
 							}}
 						>
-							<div
-								style={{
-									color: lineColor || theme.typography.textColor,
-									fontSize: rightValueLabelTextProps.fontSize,
-									fontFamily: rightValueLabelTextProps.fontFamily,
-									fontWeight: rightValueLabelTextProps.fontWeight,
-									marginTop: '-0.35em', // TODO use capsize trimming
-								}}
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.datavizLabel}
+								baseline={baseline}
+								color="white"
 							>
 								<FadeInAndOutText>{rightValueLabel}</FadeInAndOutText>
-							</div>
+							</TypographyStyle>
 						</div>
 					</div>
 				</Position>

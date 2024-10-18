@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import {Sequence, Easing, useVideoConfig} from 'remotion';
-import {measureText} from '@remotion/layout-utils';
+// import {measureText} from '@remotion/layout-utils';
 import numeral from 'numeral';
 
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
@@ -9,6 +9,7 @@ import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {getTextDimensions} from '../../../acetti-typography/new/CapSizeTextNew';
 
 export const sparklinePOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -16,10 +17,11 @@ export const sparklinePOCSchema = z.object({
 
 type TSparklineChartWrapperProps = {
 	id: string; // The id serves to uniquely define the svg mask
+	theme: ThemeType;
+	baseline: number;
 	data: {value: number; date: Date}[];
 	width: number;
 	height: number;
-	theme: ThemeType;
 	domain?: [number, number];
 	lineColor?: string;
 	showLayout?: boolean;
@@ -28,31 +30,17 @@ type TSparklineChartWrapperProps = {
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	id,
+	theme,
+	baseline,
 	data,
 	width,
 	height,
-	theme,
 	domain,
 	lineColor,
 	showLayout = false,
 	formatString = '$ 0.0',
-	// TODO pass text props // Inter-Bold e.g.
 }) => {
 	const {durationInFrames} = useVideoConfig();
-
-	const leftValueLabelTextProps = {
-		fontFamily: 'Inter-Regular', // TODO use from text props
-		fontWeight: 500,
-		fontSize: 30,
-		// letterSpacing: 1,
-	};
-
-	const rightValueLabelTextProps = {
-		fontFamily: 'Inter-Regular', // TODO use from text props
-		fontWeight: 500,
-		fontSize: 36,
-		// letterSpacing: 1,
-	};
 
 	const firstDataValue = data[0].value;
 	const lastDataValue = data[data.length - 1].value;
@@ -60,13 +48,18 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	const firstValueLabel = numeral(firstDataValue).format(formatString);
 	const lastValueLabel = numeral(lastDataValue).format(formatString);
 
-	const leftValueLabelWidth = measureText({
-		...leftValueLabelTextProps,
+	// TODO make a smaller value label in theme
+	const leftValueLabelWidth = getTextDimensions({
+		key: 'datavizValueLabel',
+		theme,
+		baseline,
 		text: firstValueLabel,
 	}).width;
 
-	const rightValueLabelWidth = measureText({
-		...rightValueLabelTextProps,
+	const rightValueLabelWidth = getTextDimensions({
+		key: 'datavizValueLabel',
+		theme,
+		baseline,
 		text: lastValueLabel,
 	}).width;
 
@@ -74,8 +67,8 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 		width,
 		height,
 		// QUICK-FIX: Currently we need to adjust the widths, as small errors may arise
-		leftValueLabelWidth: leftValueLabelWidth * 1.02,
-		rightValueLabelWidth: rightValueLabelWidth * 1.02,
+		leftValueLabelWidth: leftValueLabelWidth * 1.25,
+		rightValueLabelWidth: rightValueLabelWidth * 1.25,
 	});
 
 	return (
@@ -115,6 +108,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 						return (
 							<SparklineChartComponent
 								id={id}
+								baseline={baseline}
 								timeSeries={data}
 								layoutAreas={{
 									plot: chartLayout.areas.plot,
@@ -131,9 +125,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 								toPeriodScale={currentSliceInfo.periodsScaleTo}
 								currentSliceInfo={currentSliceInfo}
 								leftValueLabel={firstValueLabel}
-								leftValueLabelTextProps={leftValueLabelTextProps}
 								rightValueLabel={lastValueLabel}
-								rightValueLabelTextProps={rightValueLabelTextProps}
 							/>
 						);
 					}}

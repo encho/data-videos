@@ -7,13 +7,9 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
-import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
 export const multipleSimpleColumnChartCompositionSchema = z.object({

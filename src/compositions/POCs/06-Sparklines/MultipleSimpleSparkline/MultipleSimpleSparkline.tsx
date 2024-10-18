@@ -12,13 +12,12 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
-// import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
 import {data} from './inflationData';
 
@@ -29,11 +28,15 @@ export const multipleSimpleSparklineCompositionSchema = z.object({
 export const MultipleSimpleSparklineComposition: React.FC<
 	z.infer<typeof multipleSimpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
-	// TODO load fonts from theme
-	useFontFamiliesLoader(['Inter-Regular', 'Inter-Bold']);
-
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
+
 	const {fps, width} = useVideoConfig();
+
+	const baseline = 20;
 
 	const props = data;
 
@@ -85,9 +88,9 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	};
 
 	const sparklineTitleProps = {
-		height: 50,
-		fontSize: 38,
-		marginBottom: 65,
+		height: baseline * 2.5,
+		fontSize: baseline * 2,
+		marginBottom: baseline * 2,
 		color: 'white',
 		width: '100%',
 		fontFamily: 'Inter-Bold',
@@ -148,6 +151,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							</div>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
+									baseline={baseline}
 									id={'001'}
 									data={props.sparklines[0].timeseries}
 									width={area_1.width}
@@ -174,6 +178,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							</div>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
+									baseline={baseline}
 									id={'002'}
 									data={props.sparklines[1].timeseries}
 									width={area_2.width}
@@ -200,6 +205,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							</div>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
+									baseline={baseline}
 									id={'003'}
 									data={props.sparklines[2].timeseries}
 									width={area_3.width}
@@ -226,6 +232,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 							</div>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
+									baseline={baseline}
 									id={'004'}
 									data={props.sparklines[3].timeseries}
 									width={area_4.width}
