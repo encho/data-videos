@@ -1,6 +1,7 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -24,6 +25,8 @@ export const MatrixLayoutComposition: React.FC<
 	z.infer<typeof matrixLayoutCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	useFontFamiliesLoader(theme);
 
 	const nrRows = 5;
 	const nrColumns = 5;
@@ -106,7 +109,7 @@ export const MatrixLayoutComposition: React.FC<
 				</div>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

@@ -140,6 +140,11 @@ import {
 	textStylesCompositionSchema,
 } from './compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 
+import {
+	SwissPoster01Composition,
+	swissPoster01CompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/SwissPoster01/SwissPoster01Composition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -278,7 +283,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...squareVideo}
 						{...linkedInTallVideo}
 						schema={baselineGridCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
@@ -306,6 +311,19 @@ export const RemotionRoot: React.FC = () => {
 						// {...squareVideo}
 						{...linkedInTallVideo}
 						schema={matrixLayoutCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SwissPoster-01"
+						component={SwissPoster01Composition}
+						durationInFrames={90 * 10}
+						fps={90}
+						// {...squareVideo}
+						{...linkedInTallVideo}
+						schema={swissPoster01CompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 

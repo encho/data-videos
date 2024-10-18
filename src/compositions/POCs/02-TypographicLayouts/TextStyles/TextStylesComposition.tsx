@@ -6,7 +6,7 @@ import {ReactNode} from 'react';
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -253,7 +253,7 @@ export const TextStylesComposition: React.FC<
 					</HtmlArea>
 				</div>
 
-				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+				<LorenzoBertoliniLogo2 theme={theme} />
 			</div>
 		</>
 	);

@@ -1,8 +1,6 @@
 import {z} from 'zod';
 import {useVideoConfig, Sequence} from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -11,13 +9,15 @@ import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {useMatrixLayout} from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {SlideTitle} from '../SlideTitle';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
-export const modularScaleCompositionSchema = z.object({
+export const swissPoster01CompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const ModularScaleComposition: React.FC<
-	z.infer<typeof modularScaleCompositionSchema>
+export const SwissPoster01Composition: React.FC<
+	z.infer<typeof swissPoster01CompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 	const {fps} = useVideoConfig();
@@ -59,7 +59,7 @@ export const ModularScaleComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<SlideTitle theme={theme}>The Modular Scale</SlideTitle>
+			<SlideTitle theme={theme}>Swiss Poster 01</SlideTitle>
 			<Sequence layout="none" from={fps * 1}>
 				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div

@@ -3,6 +3,8 @@ import {Sequence, useVideoConfig} from 'remotion';
 
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
+
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
@@ -116,8 +118,7 @@ export const TypesettingComposition: React.FC<
 					</HtmlArea>
 				</div>
 
-				{/* <ElementsLogo cell_size={4} /> */}
-				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+				<LorenzoBertoliniLogo2 theme={theme} />
 			</div>
 		</>
 	);
