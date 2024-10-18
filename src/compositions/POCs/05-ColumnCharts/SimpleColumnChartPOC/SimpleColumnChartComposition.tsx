@@ -5,9 +5,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-// import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
 import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
@@ -25,14 +23,6 @@ const timeSeries = [
 	{value: 1250, date: new Date('2022-12-31')},
 ];
 
-// const timeSeries = [
-// 	{value: 91, date: new Date('2016-12-31')},
-// 	{value: 65, date: new Date('2017-12-31')},
-// 	{value: 114, date: new Date('2018-12-31')},
-// 	{value: 60, date: new Date('2019-12-31')},
-// 	{value: 64, date: new Date('2020-12-31')},
-// ];
-
 export const SimpleColumnChartComposition: React.FC<
 	z.infer<typeof simpleColumnChartCompositionSchema>
 > = ({themeEnum}) => {
@@ -49,7 +39,7 @@ export const SimpleColumnChartComposition: React.FC<
 		valueLabel: `$${it.value}`,
 	}));
 
-	const baseline = 20;
+	const baseline = 28;
 
 	return (
 		<div

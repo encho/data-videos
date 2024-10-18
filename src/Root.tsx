@@ -101,9 +101,9 @@ import {
 } from './compositions/POCs/06-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparkline';
 
 import {
-	MultipleSimpleColumnChartPOC,
-	multipleSimpleColumnChartPOCSchema,
-} from './compositions/POCs/MultipleSimpleColumnChartPOC/MultipleSimpleColumnChartPOC';
+	MultipleSimpleColumnChartComposition,
+	multipleSimpleColumnChartCompositionSchema,
+} from './compositions/POCs/05-ColumnCharts/MultipleSimpleColumnChart/MultipleSimpleColumnChartComposition';
 
 import {
 	MultipleSimpleBarChartComposition,
@@ -391,12 +391,12 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="pocs-MultipleSimpleColumnChart"
-						component={MultipleSimpleColumnChartPOC}
+						component={MultipleSimpleColumnChartComposition}
 						durationInFrames={90 * 24}
 						fps={90}
 						// {...squareVideo}
 						{...linkedInTallVideo}
-						schema={multipleSimpleColumnChartPOCSchema}
+						schema={multipleSimpleColumnChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 

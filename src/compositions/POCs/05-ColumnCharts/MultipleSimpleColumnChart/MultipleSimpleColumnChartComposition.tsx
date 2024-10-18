@@ -1,18 +1,22 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
-import {CapSizeTextNew} from '../../../acetti-typography/new/CapSizeTextNew';
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import {CapSizeTextNew} from '../../../../acetti-typography/new/CapSizeTextNew';
+import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
-import {SimpleColumnChart} from '../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
-import {WaterfallTextEffect} from '../../../acetti-typography/TextEffects/WaterfallTextEffect';
+} from '../../../../acetti-themes/getThemeFromEnum';
+import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
+// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
+import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
+import {useFontFamiliesLoader} from '../../../../acetti-typography/new/useFontFamiliesLoader';
 
-export const multipleSimpleColumnChartPOCSchema = z.object({
+export const multipleSimpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
@@ -32,14 +36,16 @@ const timeSeries2 = [
 	{value: 1200, date: new Date('2022-12-31')},
 ];
 
-export const MultipleSimpleColumnChartPOC: React.FC<
-	z.infer<typeof multipleSimpleColumnChartPOCSchema>
+export const MultipleSimpleColumnChartComposition: React.FC<
+	z.infer<typeof multipleSimpleColumnChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	useFontFamiliesLoader(['Inter-Regular']);
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
 
-	const baseline = 14;
+	const baseline = 20;
 
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,
@@ -71,21 +77,11 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 70,
-							marginTop: 80,
-							fontFamily: 'Arial',
-							fontWeight: 700,
-						}}
-					>
-						<FadeInAndOutText>Multiple Column Chart</FadeInAndOutText>
-					</div>
-				</div>
-			</div>
+			<EconomistTitleWithSubtitle
+				title={'Multiple Simple Column Chart'}
+				subtitle={'Display Multiple Categorical Data Horizontally'}
+				theme={theme}
+			/>
 
 			<div
 				style={{
