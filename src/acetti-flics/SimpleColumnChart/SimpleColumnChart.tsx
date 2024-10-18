@@ -25,7 +25,7 @@ type TSimpleColumnChartProps = {
 		valueLabel: string;
 	}[];
 	height: number;
-	baseFontSize: number;
+	baseline: number;
 	valueDomain?: [number, number];
 	delayInFrames?: number;
 };
@@ -33,7 +33,7 @@ type TSimpleColumnChartProps = {
 export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	data,
 	height,
-	baseFontSize,
+	baseline,
 	valueDomain,
 	delayInFrames = 0,
 }) => {
@@ -43,10 +43,10 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const nrColumns = data.length;
 	const nrRows = 1;
 
-	const COLUMN_LABEL_FONT_SIZE = baseFontSize;
-	const COLUMN_VALUE_LABEL_FONT_SIZE = baseFontSize * 0.85;
-	const COLUMN_SPACE = baseFontSize * 1;
-	const COLUMN_WIDTH = baseFontSize * 4;
+	const COLUMN_LABEL_FONT_SIZE = baseline;
+	const COLUMN_VALUE_LABEL_FONT_SIZE = baseline * 0.85;
+	const COLUMN_SPACE = baseline * 1;
+	const COLUMN_WIDTH = baseline * 4;
 
 	const labelTextProps = {
 		fontFamily: 'Inter' as const,

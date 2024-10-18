@@ -39,6 +39,8 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 
 	useFontFamiliesLoader(['Inter-Regular']);
 
+	const baseline = 14;
+
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,
 		value: it.value,
@@ -104,7 +106,7 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 					<SimpleColumnChart
 						data={columnChartData}
 						height={300}
-						baseFontSize={20}
+						baseline={baseline}
 						valueDomain={[0, 2000] as [number, number]}
 						delayInFrames={90 * 1}
 					/>
@@ -130,7 +132,7 @@ export const MultipleSimpleColumnChartPOC: React.FC<
 						<SimpleColumnChart
 							data={columnChartData2}
 							height={300}
-							baseFontSize={20}
+							baseline={baseline}
 							valueDomain={[0, 2000] as [number, number]}
 							delayInFrames={90 * 1}
 							// TODO

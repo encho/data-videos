@@ -49,6 +49,8 @@ export const SimpleColumnChartComposition: React.FC<
 		valueLabel: `$${it.value}`,
 	}));
 
+	const baseline = 20;
+
 	return (
 		<div
 			style={{
@@ -75,7 +77,7 @@ export const SimpleColumnChartComposition: React.FC<
 				<SimpleColumnChart
 					data={columnChartData}
 					height={600}
-					baseFontSize={30}
+					baseline={baseline}
 				/>
 			</div>
 
