@@ -9,19 +9,23 @@ export function useChartLayout({
 	height,
 	baseline,
 	titleWidthInPixel,
-	titleHeightInBaselines,
+	titleUpperSegmentInBaselines,
+	titleLowerSegmentInBaselines,
 	aboveTitleInBaselines,
 	belowTitleInBaselines,
 	horizontalMarginInBaselines,
+	videoLowerSegmentInBaselines,
 }: {
 	baseline: number;
 	width: number;
 	height: number;
 	titleWidthInPixel: number;
-	titleHeightInBaselines: number;
+	titleUpperSegmentInBaselines: number;
+	titleLowerSegmentInBaselines: number;
 	aboveTitleInBaselines: number;
 	belowTitleInBaselines: number;
 	horizontalMarginInBaselines: number;
+	videoLowerSegmentInBaselines: number;
 }) {
 	// TODO define in ibcs theme
 	// *************************************
@@ -30,14 +34,18 @@ export function useChartLayout({
 	const MARGIN_LEFT = baseline * horizontalMarginInBaselines;
 	const MARGIN_RIGHT = baseline * horizontalMarginInBaselines;
 
-	const TITLE_HEIGHT = titleHeightInBaselines * baseline;
+	const TITLE_UPPER_HEIGHT = titleUpperSegmentInBaselines * baseline;
+	const TITLE_LOWER_HEIGHT = titleLowerSegmentInBaselines * baseline;
 	const ABOVE_TITLE = aboveTitleInBaselines * baseline;
 	const BELOW_TITLE = belowTitleInBaselines * baseline;
+	const VIDEO_LOWER_SEGMENT = videoLowerSegmentInBaselines * baseline;
 
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'pixel', value: MARGIN_TOP, name: 'space'},
 		{type: 'pixel', value: ABOVE_TITLE, name: 'above-title'},
-		{type: 'pixel', value: TITLE_HEIGHT, name: 'title-row'},
+		{type: 'pixel', value: TITLE_UPPER_HEIGHT, name: 'title-upper-row'},
+		{type: 'pixel', value: TITLE_LOWER_HEIGHT, name: 'title-lower-row'},
+		{type: 'pixel', value: VIDEO_LOWER_SEGMENT, name: 'video-lower-row'},
 		// {type: 'pixel', value: BELOW_TITLE], name: 'below-title'},
 		{type: 'pixel', value: BELOW_TITLE, name: 'below-title'},
 		{type: 'pixel', value: MARGIN_BOTTOM, name: 'space'},
@@ -45,10 +53,12 @@ export function useChartLayout({
 
 	const chartColsRailSpec: TGridRailSpec = [
 		{type: 'pixel', value: MARGIN_LEFT, name: 'space'},
+		// {type: 'fr', value: 0.5, name: 'space'},
 		{type: 'fr', value: 1, name: 'left-col'},
 		{type: 'pixel', value: titleWidthInPixel, name: 'title-col'},
 		{type: 'fr', value: 1, name: 'right-col'},
 		{type: 'pixel', value: MARGIN_RIGHT, name: 'space'},
+		// {type: 'fr', value: 0.5, name: 'space'},
 	];
 
 	const chartGridLayoutSpec = {
@@ -59,10 +69,16 @@ export function useChartLayout({
 		columns: chartColsRailSpec,
 		areas: {
 			title: [
-				{name: 'title-row'},
+				{name: 'title-upper-row'},
 				{name: 'title-col'},
-				{name: 'title-row'},
+				{name: 'title-lower-row'},
 				{name: 'title-col'},
+			] as TGridLayoutAreaSpec,
+			video: [
+				{name: 'title-lower-row'},
+				{name: 'left-col'},
+				{name: 'video-lower-row'},
+				{name: 'right-col'},
 			] as TGridLayoutAreaSpec,
 		},
 	};

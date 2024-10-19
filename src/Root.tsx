@@ -319,8 +319,8 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SwissPoster-01"
 						component={SwissPoster01Composition}
-						durationInFrames={90 * 10}
-						fps={90}
+						durationInFrames={30 * 5}
+						fps={30}
 						// {...squareVideo}
 						{...linkedInTallVideo}
 						schema={swissPoster01CompositionSchema}

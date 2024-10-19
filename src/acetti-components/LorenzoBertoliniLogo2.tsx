@@ -1,11 +1,17 @@
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {ThemeType} from '../acetti-themes/themeTypes';
 
-export const LorenzoBertoliniLogo2 = ({theme}: {theme: ThemeType}) => {
+export const LorenzoBertoliniLogo2 = ({
+	theme,
+	color: colorProp,
+}: {
+	theme: ThemeType;
+	color?: string;
+}) => {
 	const frame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
-	const color = theme.typography.logoColor;
+	const color = colorProp || theme.typography.logoColor;
 	const fontSize = 32; // TODO from theme or pageContext or typographyContext or so
 
 	const entryDurationInFrames = fps * 1;
