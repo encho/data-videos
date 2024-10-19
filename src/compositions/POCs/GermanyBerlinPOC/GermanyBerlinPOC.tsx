@@ -5,13 +5,14 @@ import {geoMercator, geoPath} from 'd3-geo';
 import {GeoJSON, FeatureCollection, Geometry} from 'geojson';
 import {evolvePath} from '@remotion/paths';
 
+import {EconomistTitleWithSubtitle} from '../04-BarCharts/EconomistTitleWithSubtitle';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
+import {LorenzoBertoliniLogo2} from '../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {SlideTitle} from './SlideTitle';
+import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
 
 export const germanyBerlinPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -27,6 +28,10 @@ export const GermanyBerlinPOC: React.FC<
 > = ({themeEnum}) => {
 	// TODO load Inter fonts
 	const theme = getThemeFromEnum(themeEnum as any);
+
+	// load fonts
+	// ********************************************************
+	useFontFamiliesLoader(theme);
 
 	const [geoData, setGeoData] = useState<FeatureCollection<Geometry> | null>(
 		null
@@ -106,7 +111,11 @@ export const GermanyBerlin: React.FC<{
 				height: '100%',
 			}}
 		>
-			<SlideTitle theme={theme}>Germany Berlin Geo Map</SlideTitle>
+			<EconomistTitleWithSubtitle
+				title={'Hello title'}
+				subtitle={'Hello subtitle'}
+				theme={theme}
+			/>
 			<Sequence layout="none" from={fps * 1.5}>
 				<div
 					style={{
@@ -134,7 +143,7 @@ export const GermanyBerlin: React.FC<{
 				</div>
 			</Sequence>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

@@ -15,7 +15,6 @@ export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.h1}
 				baseline={baseline}
-				color={theme.typography.title.color}
 				marginBottom={4}
 				marginTop={5}
 			>

@@ -2,15 +2,16 @@ import {z} from 'zod';
 import {Sequence} from 'remotion';
 
 import {EconomistDataSource} from '../EconomistDataSource';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
+import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
@@ -62,7 +63,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 	useFontFamiliesLoader(theme);
 
 	const barChartWidth = 800;
-	const baseline = 22;
+	const baseline = 18;
 
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
@@ -119,21 +120,12 @@ export const MultipleSimpleBarChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<div style={{position: 'relative'}}>
-				<div style={{display: 'flex', justifyContent: 'center'}}>
-					<div
-						style={{
-							color: theme.typography.title.color,
-							fontSize: 60,
-							marginTop: 50,
-							fontFamily: 'Arial',
-							fontWeight: 700,
-						}}
-					>
-						<FadeInAndOutText>Multiple Bar Chart</FadeInAndOutText>
-					</div>
-				</div>
-			</div>
+			<EconomistTitleWithSubtitle
+				title={'AfD: Vormarsch in Brandenburg'}
+				subtitle={'Wahlergebnisse Brandenburg 2024'}
+				theme={theme}
+			/>
+
 			<div
 				style={{
 					display: 'flex',
@@ -147,18 +139,16 @@ export const MultipleSimpleBarChartComposition: React.FC<
 						display: 'flex',
 						alignItems: 'center',
 						flexDirection: 'column',
-						gap: 40,
 					}}
 				>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={0}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.body}
+						baseline={22}
+						marginBottom={2}
 					>
 						<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
-					</CapSizeTextNew>
+					</TypographyStyle>
+
 					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
 					<SimpleBarChart
 						theme={theme}
@@ -177,18 +167,15 @@ export const MultipleSimpleBarChartComposition: React.FC<
 						display: 'flex',
 						alignItems: 'center',
 						flexDirection: 'column',
-						gap: 40,
 					}}
 				>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={0}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.body}
+						baseline={22}
+						marginBottom={2}
 					>
 						<WaterfallTextEffect>Bayern Wahl</WaterfallTextEffect>
-					</CapSizeTextNew>
+					</TypographyStyle>
 					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
 					<Sequence from={90 * 4} layout="none">
 						<SimpleBarChart
@@ -209,7 +196,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 				AirVisual World Air Quality Report 2018
 			</EconomistDataSource>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

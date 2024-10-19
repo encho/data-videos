@@ -161,7 +161,6 @@ export const ChangeBar: React.FC<{
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.datavizLabel}
 							baseline={baseline}
-							color="white"
 						>
 							<WaterfallTextEffect>{label}</WaterfallTextEffect>
 						</TypographyStyle>
@@ -366,7 +365,6 @@ const AnimatedSvgBar = ({
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.datavizValueLabel}
 							baseline={baseline}
-							color="white"
 						>
 							<FadeInAndOutText>
 								{valueFormatter(currentBarValue)}

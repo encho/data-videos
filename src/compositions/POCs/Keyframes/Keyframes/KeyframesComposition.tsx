@@ -3,6 +3,7 @@ import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {KeyFramesInspector} from './KeyframesInspector';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 // import {Position} from '../../../../acetti-ts-base/Position';
 // import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
@@ -148,7 +149,7 @@ export const KeyframesComposition: React.FC<
 				</Position>
 			</AbsoluteFill> */}
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

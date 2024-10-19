@@ -39,27 +39,34 @@ export const nerdyTheme: ThemeType = {
 			h1: {
 				fontFamily: 'Inter-28pt-Black',
 				capHeightInBaselines: 3,
-				lineGapInBaselines: 1,
+				lineGapInBaselines: 1.5,
+				color: '#fff',
 			},
 			h2: {
-				fontFamily: 'Inter-Bold',
+				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 2,
-				lineGapInBaselines: 1,
+				lineGapInBaselines: 1.5,
+				color: '#777',
 			},
 			body: {
-				fontFamily: 'Inter-28pt-Thin',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-			},
-			datavizLabel: {
+				// fontFamily: 'Inter-28pt-Thin',
 				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
+				color: '#fff',
+			},
+			datavizLabel: {
+				// TODO load alos Inter-Medium
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+				color: '#fff',
 			},
 			datavizValueLabel: {
-				fontFamily: 'Inter-Bold',
+				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 0.8,
 				lineGapInBaselines: 1,
+				color: '#aaa',
 			},
 		},
 	},

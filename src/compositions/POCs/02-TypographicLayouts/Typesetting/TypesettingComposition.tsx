@@ -94,7 +94,6 @@ export const TypesettingComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}
 										baseline={baseline}
-										color="white"
 										marginBottom={3}
 									>
 										Typesetting is the technical process of arranging text on a
@@ -103,7 +102,6 @@ export const TypesettingComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}
 										baseline={baseline}
-										color="white"
 									>
 										This involves finding an equilibrium between the key
 										typographic elements{' '}

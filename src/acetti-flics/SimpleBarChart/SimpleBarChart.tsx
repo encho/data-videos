@@ -252,7 +252,6 @@ export const HorizontalBar: React.FC<{
 					<TypographyStyle
 						typographyStyle={theme.typography.textStyles.datavizLabel}
 						baseline={baseline}
-						color="white"
 					>
 						<WaterfallTextEffect>{label}</WaterfallTextEffect>
 					</TypographyStyle>
@@ -290,7 +289,6 @@ export const HorizontalBar: React.FC<{
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.datavizValueLabel}
 							baseline={baseline}
-							color="white"
 						>
 							<FadeInAndOutText>{valueLabel}</FadeInAndOutText>
 						</TypographyStyle>

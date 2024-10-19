@@ -5,7 +5,7 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -81,7 +81,7 @@ export const SimpleKPIComposition: React.FC<
 					</Sequence>
 				</div>
 			</Sequence>
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };
@@ -103,7 +103,6 @@ export const SimpleKPI: React.FC<
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.datavizLabel}
 				baseline={baseline}
-				color="white"
 				marginBottom={0.5}
 			>
 				<FadeInAndOutText innerDelay={Math.floor(90 * 0.75)}>
@@ -113,7 +112,6 @@ export const SimpleKPI: React.FC<
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.datavizValueLabel}
 				baseline={baseline}
-				color="white"
 			>
 				<WaterfallTextEffect>{kpiLabel}</WaterfallTextEffect>
 			</TypographyStyle>

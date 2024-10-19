@@ -1,8 +1,8 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -11,6 +11,7 @@ import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/Simp
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const multipleSimpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -103,15 +104,12 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 						valueDomain={[0, 2000] as [number, number]}
 						delayInFrames={90 * 1}
 					/>
-					<CapSizeTextNew
-						fontFamily={labelTextProps.fontFamily}
-						fontWeight={labelTextProps.fontWeight}
-						color={labelTextProps.color}
-						capHeight={labelTextProps.capHeight}
-						lineGap={0}
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.body}
+						baseline={baseline}
 					>
-						<WaterfallTextEffect>Stuttgart</WaterfallTextEffect>
-					</CapSizeTextNew>
+						<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
+					</TypographyStyle>
 				</div>
 				<div
 					style={{
@@ -132,20 +130,17 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 							// TODO
 							// delay or from
 						/>
-						<CapSizeTextNew
-							fontFamily={labelTextProps.fontFamily}
-							fontWeight={labelTextProps.fontWeight}
-							color={labelTextProps.color}
-							capHeight={labelTextProps.capHeight}
-							lineGap={0}
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.body}
+							baseline={baseline}
 						>
-							<WaterfallTextEffect>Berlin</WaterfallTextEffect>
-						</CapSizeTextNew>
+							<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
+						</TypographyStyle>
 					</Sequence>
 				</div>
 			</div>
 
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

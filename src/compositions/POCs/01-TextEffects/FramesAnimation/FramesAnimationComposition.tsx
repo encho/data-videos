@@ -2,8 +2,6 @@ import {z} from 'zod';
 import {interpolate, useCurrentFrame, Easing, AbsoluteFill} from 'remotion';
 import {JustLorenzoLogo} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-// import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-// import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,

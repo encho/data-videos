@@ -20,14 +20,14 @@ import {
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {TAvailableFontFamily} from '../../../../acetti-typography/fontMetricsLibrary';
+import {ThemeTextStyle} from '../../../../acetti-themes/themeTypes';
 
 // TODO funciton of theme, and should get color though or id to color in theme
 // TODO put into acetti-typograpy/new
 export function TypographyStyle({
 	children,
 	baseline,
-	color,
+	color: colorProp,
 	typographyStyle,
 	marginBottom = 0,
 	marginTop = 0,
@@ -36,14 +36,10 @@ export function TypographyStyle({
 	baseline: number;
 	marginBottom?: number;
 	marginTop?: number;
-	color: string;
-	typographyStyle: {
-		fontFamily: TAvailableFontFamily;
-		capHeightInBaselines: number;
-		lineGapInBaselines: number;
-	};
+	color?: string;
+	typographyStyle: ThemeTextStyle;
 }) {
-	const {fontFamily, capHeightInBaselines, lineGapInBaselines} =
+	const {fontFamily, capHeightInBaselines, lineGapInBaselines, color} =
 		typographyStyle;
 
 	return (
@@ -51,7 +47,7 @@ export function TypographyStyle({
 			fontFamily={fontFamily}
 			capHeight={capHeightInBaselines * baseline}
 			lineGap={lineGapInBaselines * baseline}
-			color={color}
+			color={colorProp || color}
 			marginBottom={marginBottom * baseline}
 			marginTop={marginTop * baseline}
 		>
@@ -141,7 +137,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.h1}
 										baseline={baselineLeft}
-										color="white"
 										marginBottom={2}
 									>
 										This is h1
@@ -149,7 +144,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.h2}
 										baseline={baselineLeft}
-										color="white"
 										marginBottom={2}
 									>
 										This is h2
@@ -157,7 +151,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}
 										baseline={baselineLeft}
-										color="white"
 										marginBottom={2}
 									>
 										This is body
@@ -165,7 +158,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.datavizLabel}
 										baseline={baselineLeft}
-										color="white"
 										marginBottom={2}
 									>
 										Dataviz Label
@@ -175,7 +167,6 @@ export const TextStylesComposition: React.FC<
 											theme.typography.textStyles.datavizValueLabel
 										}
 										baseline={baselineLeft}
-										color="white"
 										marginBottom={2}
 									>
 										Dataviz value label
@@ -208,7 +199,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.h1}
 										baseline={baselineRight}
-										color="white"
 										marginBottom={2}
 									>
 										This is h1
@@ -216,7 +206,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.h2}
 										baseline={baselineRight}
-										color="white"
 										marginBottom={2}
 									>
 										This is h2
@@ -224,7 +213,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}
 										baseline={baselineRight}
-										color="white"
 										marginBottom={2}
 									>
 										This is body
@@ -232,7 +220,6 @@ export const TextStylesComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.datavizLabel}
 										baseline={baselineRight}
-										color="white"
 										marginBottom={2}
 									>
 										Dataviz Label
@@ -242,7 +229,6 @@ export const TextStylesComposition: React.FC<
 											theme.typography.textStyles.datavizValueLabel
 										}
 										baseline={baselineRight}
-										color="white"
 										marginBottom={2}
 									>
 										Dataviz value label

@@ -2,6 +2,7 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
@@ -43,7 +44,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	const matrixLayout = useMatrixLayout({
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
-		height: 540,
+		height: 640,
 		nrColumns: 2,
 		nrRows: 2,
 		rowSpacePixels: 80,
@@ -87,6 +88,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		neonOrange: '#FF5F1F',
 	};
 
+	// TODO measure capHeight rather...
 	const sparklineTitleProps = {
 		height: baseline * 2.5,
 		fontSize: baseline * 2,
@@ -144,11 +146,16 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					/>
 					<HtmlArea area={area_1}>
 						<Sequence from={0} layout="none">
-							<div style={sparklineTitleProps}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.body}
+								baseline={baseline}
+								marginBottom={2}
+							>
 								<WaterfallTextEffect>
 									{props.sparklines[0].title}
 								</WaterfallTextEffect>
-							</div>
+							</TypographyStyle>
+
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
 									baseline={baseline}
@@ -171,11 +178,15 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					</HtmlArea>
 					<HtmlArea area={area_2}>
 						<Sequence from={Math.floor(fps * 3.5)} layout="none">
-							<div style={sparklineTitleProps}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.body}
+								baseline={baseline}
+								marginBottom={2}
+							>
 								<WaterfallTextEffect>
 									{props.sparklines[1].title}
 								</WaterfallTextEffect>
-							</div>
+							</TypographyStyle>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
 									baseline={baseline}
@@ -198,11 +209,15 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					</HtmlArea>
 					<HtmlArea area={area_3}>
 						<Sequence from={Math.floor(fps * 7)} layout="none">
-							<div style={sparklineTitleProps}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.body}
+								baseline={baseline}
+								marginBottom={2}
+							>
 								<WaterfallTextEffect>
 									{props.sparklines[2].title}
 								</WaterfallTextEffect>
-							</div>
+							</TypographyStyle>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
 									baseline={baseline}
@@ -225,11 +240,15 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					</HtmlArea>
 					<HtmlArea area={area_4}>
 						<Sequence from={Math.floor(fps * 10.5)} layout="none">
-							<div style={sparklineTitleProps}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.body}
+								baseline={baseline}
+								marginBottom={2}
+							>
 								<WaterfallTextEffect>
 									{props.sparklines[3].title}
 								</WaterfallTextEffect>
-							</div>
+							</TypographyStyle>
 							<Sequence from={Math.floor(90 * 0.0)} layout="none">
 								<SparklineLarge
 									baseline={baseline}

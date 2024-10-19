@@ -44,7 +44,6 @@ export const TextAnimationsComposition: React.FC<
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.h2}
 							baseline={24}
-							color="white"
 							marginBottom={2}
 						>
 							<FadeInAndOutText>Fade In And Out Text</FadeInAndOutText>
@@ -54,7 +53,6 @@ export const TextAnimationsComposition: React.FC<
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.h2}
 							baseline={24}
-							color="white"
 							marginBottom={2}
 						>
 							<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>

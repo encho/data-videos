@@ -187,7 +187,7 @@ export const SparklineChartComponent: React.FC<{
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.datavizValueLabel}
 								baseline={baseline}
-								color={lineColor || theme.typography.textColor}
+								color={lineColor}
 							>
 								<FadeInAndOutText>{leftValueLabel}</FadeInAndOutText>
 							</TypographyStyle>
@@ -230,7 +230,7 @@ export const SparklineChartComponent: React.FC<{
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.datavizValueLabel}
 								baseline={baseline}
-								color={lineColor || theme.typography.textColor}
+								color={lineColor}
 							>
 								<FadeInAndOutText>{rightValueLabel}</FadeInAndOutText>
 							</TypographyStyle>

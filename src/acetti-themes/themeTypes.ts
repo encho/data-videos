@@ -6,6 +6,7 @@ const zTextStyle = z.object({
 	fontFamily: zAvailableFontFamiliesEnum,
 	capHeightInBaselines: z.number(),
 	lineGapInBaselines: z.number(),
+	color: zColor(),
 });
 
 export type ThemeTextStyle = z.infer<typeof zTextStyle>;

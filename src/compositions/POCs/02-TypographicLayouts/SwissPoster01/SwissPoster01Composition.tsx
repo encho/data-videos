@@ -156,7 +156,6 @@ export const SwissPoster01Composition: React.FC<
 								<TypographyStyle
 									baseline={baseline}
 									typographyStyle={textStyle_posterTitle}
-									color={'white'}
 								>
 									<FadeInAndOutText>{posterTitleText}</FadeInAndOutText>
 								</TypographyStyle>
