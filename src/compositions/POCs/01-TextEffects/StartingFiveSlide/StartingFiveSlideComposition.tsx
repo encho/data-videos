@@ -79,12 +79,32 @@ export const StartingFiveSlideComposition: React.FC<
 	const videoWidth = width;
 	const videoHeight = width;
 
-	const fontFamily = 'Inter-Bold';
-	const fontSize = 55;
-	const lineHeight = 65;
+	// settings: JungleFever
+	// const fontFamily = 'Inter-Bold';
+	// const fontSize = 55;
+	// const lineHeight = 65;
+	// const word = 'JUNGLE FEVER.';
+	// const numberOfWordRows = 17;
+	// const videoSrc =
+	// 	'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4';
 
-	const word = 'JUNGLE FEVER.';
+	// settings: Gold
+	const fontFamily = 'Inter-28pt-Black';
+	const fontSize = 120;
+	const lineHeight = 110;
+	const word = 'GOLD.';
 	const numberOfWordRows = 17;
+	const videoSrc =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2580331760%2C+Shining+gold+bars+an%2C+gold-midjourneypng%2C+M+5.mp4';
+
+	//settings: S&P 500
+	// const fontFamily = 'Inter-28pt-Black';
+	// const fontSize = 120;
+	// const lineHeight = 110;
+	// const word = 'S&P 500.';
+	// const numberOfWordRows = 17;
+	// const videoSrc =
+	// 	'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+1076122830%2C+Stock+market+diagram%2C+lorenzobertolini_Des%2C+M+5.mp4';
 
 	const seed = 999; // Your seed value
 	const seededRandom = new SeededRandom(seed);
@@ -132,6 +152,8 @@ export const StartingFiveSlideComposition: React.FC<
 									>
 										<rect
 											fill={`rgba(255,255,255,${revealVideoOpacity})`}
+											// fill={`rgba(0,0,0,${1})`}
+											// fill={`rgba(255,255,255,${0})`}
 											x="0"
 											y="0"
 											width={videoWidth}
@@ -179,7 +201,8 @@ export const StartingFiveSlideComposition: React.FC<
 						</svg>
 
 						<Video
-							src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
+							src={videoSrc}
+							// src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
 							style={{
 								position: 'absolute',
 								// width: '100%',
@@ -204,7 +227,7 @@ export const StartingFiveSlideComposition: React.FC<
 					</div>
 				</div>
 			</Sequence>
-			<LorenzoBertoliniLogo2 theme={theme} color="white" />
+			{/* <LorenzoBertoliniLogo2 theme={theme} color="white" /> */}
 		</div>
 	);
 };
