@@ -7,6 +7,7 @@ import {
 	interpolate,
 	useCurrentFrame,
 	useVideoConfig,
+	Sequence,
 	Easing,
 	Video,
 } from 'remotion';
@@ -33,19 +34,21 @@ export const StartingFiveSlideComposition: React.FC<
 
 	useFontFamiliesLoader(theme);
 
-	const {width} = useVideoConfig();
+	const {width, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
 	const maxZoomScale = 20;
 	// const maxZoomScale = 1;
 
+	const zoomInDelayInFrames = Math.floor(fps * 1);
 	const zoomInDurationInFrames = 90 * 1;
 	const zoomOutDurationInFrames = 90 * 1;
 	const shiftDurationInFrames = 90 * 3;
 	// const shiftDurationInFrames =
 	// 	durationInFrames - zoomInDurationInFrames - zoomOutDurationInFrames;
 
-	const zoomOutFromFrame = zoomInDurationInFrames + shiftDurationInFrames;
+	const zoomOutFromFrame =
+		zoomInDelayInFrames + zoomInDurationInFrames + shiftDurationInFrames;
 	const zoomOutEndFrame = zoomOutFromFrame + zoomOutDurationInFrames - 1;
 
 	const revealVideoOpacity = interpolate(
@@ -61,7 +64,12 @@ export const StartingFiveSlideComposition: React.FC<
 
 	const scale = interpolate(
 		frame,
-		[0, zoomInDurationInFrames - 1, zoomOutFromFrame, zoomOutEndFrame],
+		[
+			zoomInDelayInFrames,
+			zoomInDelayInFrames + zoomInDurationInFrames - 1,
+			zoomOutFromFrame,
+			zoomOutEndFrame,
+		],
 		[maxZoomScale, 1, 1, maxZoomScale],
 		{
 			easing: Easing.ease,
@@ -97,87 +105,93 @@ export const StartingFiveSlideComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			{/* here, we set the size in pixels (width, height) */}
-			<div style={{display: 'flex', justifyContent: 'center'}}>
-				<div
-					style={{width: videoWidth, height: videoHeight, position: 'relative'}}
-				>
-					<svg
+			<Sequence from={zoomInDelayInFrames} layout="none">
+				{/* here, we set the size in pixels (width, height) */}
+				<div style={{display: 'flex', justifyContent: 'center'}}>
+					<div
 						style={{
-							position: 'absolute',
-							overflow: 'visible',
+							width: videoWidth,
+							height: videoHeight,
+							position: 'relative',
 						}}
 					>
-						<defs>
-							<mask id="mySvgMask">
-								<g
-									transform={`translate(${videoWidth / 2},${
-										videoHeight / 2
-									}) scale(${scale}) translate(${-videoWidth / 2},${
-										-videoHeight / 2
-									})`}
-								>
-									<rect
-										fill={`rgba(255,255,255,${revealVideoOpacity})`}
-										x="0"
-										y="0"
-										width={videoWidth}
-										height={videoHeight}
-									></rect>
+						<svg
+							style={{
+								position: 'absolute',
+								overflow: 'visible',
+							}}
+						>
+							<defs>
+								<mask id="mySvgMask">
+									<g
+										transform={`translate(${videoWidth / 2},${
+											videoHeight / 2
+										}) scale(${scale}) translate(${-videoWidth / 2},${
+											-videoHeight / 2
+										})`}
+									>
+										<rect
+											fill={`rgba(255,255,255,${revealVideoOpacity})`}
+											x="0"
+											y="0"
+											width={videoWidth}
+											height={videoHeight}
+										></rect>
 
-									{range(numberOfWordRows).map((it, i) => {
-										const centerIndex = (numberOfWordRows - 1) / 2;
-										const isCenterRow = i === centerIndex;
+										{range(numberOfWordRows).map((it, i) => {
+											const centerIndex = (numberOfWordRows - 1) / 2;
+											const isCenterRow = i === centerIndex;
 
-										const cx = videoWidth / 2;
-										const cy = videoHeight / 2 - (centerIndex - i) * lineHeight;
+											const cx = videoWidth / 2;
+											const cy =
+												videoHeight / 2 - (centerIndex - i) * lineHeight;
 
-										const shiftDirection =
-											i % 2 === 0 ? ('right' as const) : ('left' as const);
+											const shiftDirection =
+												i % 2 === 0 ? ('right' as const) : ('left' as const);
 
-										const randomRowDisplacement = isCenterRow
-											? 0
-											: getRandomRowDisplacement();
+											const randomRowDisplacement = isCenterRow
+												? 0
+												: getRandomRowDisplacement();
 
-										return (
-											<WordRow
-												shiftDirection={shiftDirection}
-												dx={2}
-												zoomInDurationInFrames={zoomInDurationInFrames}
-												shiftDurationInFrames={shiftDurationInFrames}
-												generateRandomCharacterEntryDuration={
-													getRandomCharacterEntryDuration
-												}
-												centerX={cx + randomRowDisplacement}
-												centerY={cy}
-												isCenterRow={i === centerIndex}
-												fontSize={fontSize}
-												fontFamily={fontFamily}
-												fill={`rgba(255,255,255,${1})`}
-											>
-												{word}
-											</WordRow>
-										);
-									})}
-								</g>
-							</mask>
-						</defs>
-					</svg>
+											return (
+												<WordRow
+													shiftDirection={shiftDirection}
+													dx={2}
+													zoomInDurationInFrames={zoomInDurationInFrames}
+													shiftDurationInFrames={shiftDurationInFrames}
+													generateRandomCharacterEntryDuration={
+														getRandomCharacterEntryDuration
+													}
+													centerX={cx + randomRowDisplacement}
+													centerY={cy}
+													isCenterRow={i === centerIndex}
+													fontSize={fontSize}
+													fontFamily={fontFamily}
+													fill={`rgba(255,255,255,${1})`}
+												>
+													{word}
+												</WordRow>
+											);
+										})}
+									</g>
+								</mask>
+							</defs>
+						</svg>
 
-					<Video
-						src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
-						style={{
-							position: 'absolute',
-							// width: '100%',
-							height: '100%',
-							objectFit: 'cover',
-							WebkitMaskImage: 'url(#mySvgMask)',
-						}}
-						playbackRate={0.5}
-					/>
+						<Video
+							src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
+							style={{
+								position: 'absolute',
+								// width: '100%',
+								height: '100%',
+								objectFit: 'cover',
+								WebkitMaskImage: 'url(#mySvgMask)',
+							}}
+							playbackRate={0.5}
+						/>
 
-					{/* this would also work with an image instead of a video, like so: */}
-					{/* <div
+						{/* this would also work with an image instead of a video, like so: */}
+						{/* <div
 						style={{
 							objectFit: 'cover',
 						}}
@@ -187,9 +201,9 @@ export const StartingFiveSlideComposition: React.FC<
 							alt="Balloons"
 						/>
 					</div> */}
+					</div>
 				</div>
-			</div>
-
+			</Sequence>
 			<LorenzoBertoliniLogo2 theme={theme} color="white" />
 		</div>
 	);
