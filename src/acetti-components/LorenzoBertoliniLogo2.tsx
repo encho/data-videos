@@ -35,7 +35,7 @@ export const LorenzoBertoliniLogo2 = ({
 				right: 40, // todo from pageContext
 			}}
 		>
-			<JustLorenzoLogo color={colorProp} theme={theme} />
+			<JustLorenzoLogo color={color} theme={theme} fontSize={fontSize} />
 			{/* <div style={{color, fontSize}}>
 				<span style={{fontFamily: 'Inter-Regular'}}>lorenzo</span>
 				<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>

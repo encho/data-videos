@@ -40,10 +40,9 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		titleColor: '#222222',
 		subTitleColor: '#888888',
 		textColor: '#222222',
-		logoColor: '#222222',
+		logoColor: '#888',
 		textStyles: {
 			h1: {
-				// fontFamily: 'Inter-28pt-Thin' as const,
 				fontFamily: 'Inter-Bold' as const,
 				capHeightInBaselines: 3,
 				lineGapInBaselines: 1,
@@ -53,7 +52,7 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 2,
 				lineGapInBaselines: 1,
-				color: '#666',
+				color: '#888',
 			},
 			body: {
 				fontFamily: 'Inter-Regular' as const,
@@ -65,13 +64,19 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
-				color: 'magenta',
+				color: '#555',
 			},
 			datavizValueLabel: {
-				fontFamily: 'Inter-Regular' as const,
+				fontFamily: 'Inter-Bold' as const,
+				capHeightInBaselines: 0.7,
+				lineGapInBaselines: 1,
+				color: '#555',
+			},
+			datavizTickLabel: {
+				fontFamily: 'Inter-Bold',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
-				color: 'magenta',
+				color: '#bbb',
 			},
 		},
 	},
@@ -179,7 +184,7 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		},
 	},
 	EconomistDataSource: {
-		textColor: '#909090',
+		textColor: '#888',
 	},
 	TwoChangeBars: {
 		barsColor: monoColor,

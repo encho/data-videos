@@ -86,14 +86,14 @@ export const XAxis_SparklineLarge: React.FC<{
 				from={KF_START_DATE_ENTER_START}
 				durationInFrames={durationInFrames - Math.floor(fps * 0.3)}
 			>
-				<TypographyLabel
-					color={tickLabelColor}
+				<TypographyTickLabel
+					// color={tickLabelColor}
 					theme={theme}
 					baseline={baseline}
 					style={{left: 0}}
 				>
 					{firstLabelSpec.label}
-				</TypographyLabel>
+				</TypographyTickLabel>
 			</Sequence>
 
 			<Sequence
@@ -102,14 +102,14 @@ export const XAxis_SparklineLarge: React.FC<{
 				from={KF_END_DATE_ENTER_START}
 				durationInFrames={durationInFrames}
 			>
-				<TypographyLabel
-					color={tickLabelColor}
+				<TypographyTickLabel
+					// color={tickLabelColor}
 					theme={theme}
 					baseline={baseline}
 					style={{right: 0}}
 				>
 					{secondLabelSpec.label}
-				</TypographyLabel>
+				</TypographyTickLabel>
 			</Sequence>
 
 			<svg
@@ -141,7 +141,7 @@ export const XAxis_SparklineLarge: React.FC<{
 	);
 };
 
-// TODO centralize in acetti-typography
+// TODO inside this use the new <Text type="typographyTickLabel">...
 export const TypographyLabel: React.FC<{
 	children: string;
 	color: string;
@@ -160,6 +160,30 @@ export const TypographyLabel: React.FC<{
 				typographyStyle={theme.typography.textStyles.datavizLabel}
 				baseline={baseline}
 				color={color}
+			>
+				<WaterfallTextEffect>{children}</WaterfallTextEffect>
+			</TypographyStyle>
+		</div>
+	);
+};
+
+// TODO inside this use the new <Text type="typographyTickLabel">...
+export const TypographyTickLabel: React.FC<{
+	children: string;
+	style: {left: number} | {right: number};
+	theme: ThemeType;
+	baseline: number;
+}> = ({children, style, theme, baseline}) => {
+	return (
+		<div
+			style={{
+				position: 'absolute',
+				...style,
+			}}
+		>
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.datavizTickLabel}
+				baseline={baseline}
 			>
 				<WaterfallTextEffect>{children}</WaterfallTextEffect>
 			</TypographyStyle>

@@ -72,6 +72,12 @@ export const lorenzobertoliniTheme: ThemeType = {
 				lineGapInBaselines: 1,
 				color: 'magenta',
 			},
+			datavizTickLabel: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+				color: 'magenta',
+			},
 		},
 	},
 	yAxis: {

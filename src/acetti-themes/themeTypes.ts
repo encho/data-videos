@@ -34,6 +34,7 @@ export const zodThemeType = z.object({
 			body: zTextStyle,
 			datavizLabel: zTextStyle,
 			datavizValueLabel: zTextStyle,
+			datavizTickLabel: zTextStyle,
 		}),
 	}),
 	yAxis: z.object({
