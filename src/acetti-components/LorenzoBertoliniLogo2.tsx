@@ -16,7 +16,8 @@ export const LorenzoBertoliniLogo2 = ({
 
 	const entryDurationInFrames = fps * 1;
 
-	const percentageProgress = frame / entryDurationInFrames;
+	// const percentageProgress = frame / entryDurationInFrames;
+	const percentageProgress = 1;
 
 	const barProgress = interpolate(percentageProgress, [0, 0.5], [0, 1], {
 		extrapolateRight: 'clamp',

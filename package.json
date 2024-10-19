@@ -26,6 +26,7 @@
     "@remotion/bundler": "4.0.220",
     "@remotion/cli": "4.0.220",
     "@remotion/layout-utils": "4.0.220",
+    "@remotion/motion-blur": "^4.0.221",
     "@remotion/paths": "4.0.220",
     "@remotion/shapes": "4.0.220",
     "@remotion/transitions": "4.0.220",

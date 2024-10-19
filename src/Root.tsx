@@ -145,6 +145,11 @@ import {
 	swissPoster01CompositionSchema,
 } from './compositions/POCs/02-TypographicLayouts/SwissPoster01/SwissPoster01Composition';
 
+import {
+	FrameAnimationComposition,
+	frameAnimationCompositionSchema,
+} from './compositions/POCs/01-TextEffects/FramesAnimation/FramesAnimationComposition';
+
 import './tailwind.css';
 
 const squareVideo = {
@@ -238,6 +243,20 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...squareVideo}
 						schema={startingFiveSlideCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+						}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="FrameAnimation"
+						component={FrameAnimationComposition}
+						durationInFrames={30 * 7}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={30}
+						{...squareVideo}
+						schema={frameAnimationCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 						}}
