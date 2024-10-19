@@ -12,7 +12,9 @@ const textColor = chroma('#9b9b9b').hex();
 // const backgroundColor = chroma('#222222').darken().hex();
 // const backgroundColor = chroma('#f0f0f0').hex();
 // const backgroundColor = chroma(monoColor).hex();
-const backgroundColor = chroma('#d0d0d0').hex();
+// const backgroundColor = chroma('#d0d0d0').hex();
+// const backgroundColor = '#fff';
+const backgroundColor = '#f0f0f0';
 
 // TODO a component that visualizes the data colors!
 // const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
@@ -41,31 +43,32 @@ export const lorenzobertolinibrightTheme: ThemeType = {
 		logoColor: '#222222',
 		textStyles: {
 			h1: {
-				fontFamily: 'Inter-28pt-Thin' as const,
+				// fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Bold' as const,
 				capHeightInBaselines: 3,
 				lineGapInBaselines: 1,
-				color: 'magenta',
+				color: '#f05122',
 			},
 			h2: {
-				fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 2,
 				lineGapInBaselines: 1,
-				color: 'magenta',
+				color: '#666',
 			},
 			body: {
-				fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
-				color: 'magenta',
+				color: '#222',
 			},
 			datavizLabel: {
-				fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
 				color: 'magenta',
 			},
 			datavizValueLabel: {
-				fontFamily: 'Inter-28pt-Thin' as const,
+				fontFamily: 'Inter-Regular' as const,
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
 				color: 'magenta',

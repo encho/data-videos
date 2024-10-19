@@ -199,7 +199,7 @@ export const RemotionRoot: React.FC = () => {
 						{...squareVideo}
 						schema={textAnimationsCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 							kpiValue: 0.015,
 							kpiValueFormatString: '+0.00%',
 							kpiLabel: 'Net Profit ',
@@ -510,7 +510,7 @@ export const RemotionRoot: React.FC = () => {
 						{...widescreen_16x9_video}
 						// {...linkedInTallVideo}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
 					/>
 				</Folder>
 				<Folder name="07-GeoJSON">
