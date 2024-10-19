@@ -16,8 +16,8 @@ export const LorenzoBertoliniLogo2 = ({
 
 	const entryDurationInFrames = fps * 1;
 
-	// const percentageProgress = frame / entryDurationInFrames;
-	const percentageProgress = 1;
+	const percentageProgress = frame / entryDurationInFrames;
+	// const percentageProgress = 1;
 
 	const barProgress = interpolate(percentageProgress, [0, 0.5], [0, 1], {
 		extrapolateRight: 'clamp',
@@ -35,10 +35,31 @@ export const LorenzoBertoliniLogo2 = ({
 				right: 40, // todo from pageContext
 			}}
 		>
-			<div style={{color, fontSize}}>
+			<JustLorenzoLogo color={colorProp} theme={theme} />
+			{/* <div style={{color, fontSize}}>
 				<span style={{fontFamily: 'Inter-Regular'}}>lorenzo</span>
 				<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
-			</div>
+			</div> */}
+		</div>
+	);
+};
+
+export const JustLorenzoLogo = ({
+	theme,
+	color: colorProp,
+	fontSize = 32,
+}: {
+	theme: ThemeType;
+	color?: string;
+	fontSize?: number;
+}) => {
+	// const fontSize = 32;
+	const color = colorProp || theme.typography.logoColor;
+
+	return (
+		<div style={{color, fontSize}}>
+			<span style={{fontFamily: 'Inter-Regular'}}>lorenzo</span>
+			<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
 		</div>
 	);
 };

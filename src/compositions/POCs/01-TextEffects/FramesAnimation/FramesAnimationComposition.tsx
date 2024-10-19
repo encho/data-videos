@@ -1,8 +1,8 @@
 import {z} from 'zod';
 import {interpolate, useCurrentFrame, Easing, AbsoluteFill} from 'remotion';
-import {Trail} from '@remotion/motion-blur';
+import {JustLorenzoLogo} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+// import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 // import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
@@ -58,9 +58,6 @@ export const BlueSquare: React.FC<{theme: ThemeType}> = ({theme}) => {
 	const acceleratedFrame = remapSpeed(frame, takeOffSpeedFucntion);
 	const acceleratedFrameZoom = remapSpeed(frame, zoomSpeedFunction);
 
-	if (acceleratedFrameZoom < 100) {
-		console.log({acceleratedFrameZoom});
-	}
 	const translate = interpolate(acceleratedFrame, [0, 40], [-700, 0], {
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
@@ -76,15 +73,10 @@ export const BlueSquare: React.FC<{theme: ThemeType}> = ({theme}) => {
 		<div
 			style={{
 				transform: `translateY(${translate}px) scale(${zoom})`,
+				// transform: `scale(${zoom})`,
 			}}
 		>
-			<TypographyStyle
-				typographyStyle={theme.typography.textStyles.h1}
-				baseline={30}
-				color="black"
-			>
-				Hello encho.
-			</TypographyStyle>
+			<JustLorenzoLogo theme={theme} fontSize={90} color="black" />
 		</div>
 	);
 };
