@@ -14,7 +14,7 @@ import {
 import {range} from 'lodash';
 
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
+// import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
@@ -227,7 +227,6 @@ export const StartingFiveSlideComposition: React.FC<
 					</div>
 				</div>
 			</Sequence>
-			{/* <LorenzoBertoliniLogo2 theme={theme} color="white" /> */}
 		</div>
 	);
 };
