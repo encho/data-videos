@@ -38,6 +38,8 @@ export const MatrixLayoutComposition: React.FC<
 		nrRows,
 		rowSpacePixels: 20,
 		columnSpacePixels: 20,
+		rowPaddingPixels: 40,
+		columnPaddingPixels: 40,
 	});
 
 	return (
@@ -87,7 +89,6 @@ export const MatrixLayoutComposition: React.FC<
 											column: 0,
 										})}
 										fill={theme.TypographicLayouts.gridLayout.activeAreaFill}
-										// fill="rgba(200,100,0,0.6)"
 									>
 										<g></g>
 									</Area>
