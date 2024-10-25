@@ -21,7 +21,7 @@ export function getSimpleBarChartKeyframes({
 				accumulator.push({
 					type: 'SECOND',
 					value: 0,
-					id: `LABEL_APPEAR-${currentItem.label}`,
+					id: `LABEL_APPEAR__${currentItem.id}`,
 				});
 			} else {
 				const previousLabelKeyframe = accumulator[accumulator.length - 1];
@@ -29,7 +29,7 @@ export function getSimpleBarChartKeyframes({
 				accumulator.push({
 					type: 'R_SECOND',
 					value: 0.2,
-					id: `LABEL_APPEAR-${currentItem.label}`,
+					id: `LABEL_APPEAR__${currentItem.id}`,
 					relativeId: previousLabelKeyframe.id,
 				});
 			}

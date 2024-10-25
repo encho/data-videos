@@ -24,6 +24,7 @@ export type TSimpleBarChartData = {
 	value: number;
 	barColor?: string;
 	valueLabel: string;
+	id: string;
 }[];
 
 type TSimpleBarChartProps = {
