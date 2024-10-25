@@ -68,8 +68,12 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const ROW_SPACE = baseline * 0.5;
 	const COLUMN_SPACE = baseline * 0.7;
 
+	// TODO eventually use this, to introduce zero-line
+	const ROW_PADDING = baseline * 0;
+
 	// =========================================
-	const barChartHeight = nrRows * BAR_HEIGHT + (nrRows - 1) * ROW_SPACE;
+	const barChartHeight =
+		nrRows * BAR_HEIGHT + (nrRows - 1) * ROW_SPACE + 2 * ROW_PADDING;
 
 	// TODO use labelTextStyleProps after we use that text style!!!
 	// determine labelWidth from all labelWidth's
@@ -97,6 +101,17 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 
 	const valueLabelWidth = valueLabelWidthProp || Math.max(...valueLabelWidths);
 
+	// 1 TODO: document varying sizes matrix layout in flic!!!
+	// 2 TODO API: (and better to use normal layout, not matrixlayout)
+	// 3 TODO: update also column charts with all this update
+	// const barChartLayout = useBarChartLayout({data,baseline});
+	// barChartLayout.getLabelArea(i);
+	// barChartLayout.getBarArea(i);
+	// barChartLayout.getValueLabelArea(i);
+	// barChartLayout.getZeroLineArea();
+	// barChartLayout.getWidth();
+	// barChartLayout.getHeight();
+
 	const matrixLayout = useMatrixLayout({
 		width,
 		height: barChartHeight,
@@ -109,6 +124,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 			{type: 'fr', value: 1},
 			{type: 'pixel', value: valueLabelWidth},
 		],
+		rowPaddingPixels: ROW_PADDING,
 	});
 
 	const getLabelArea = (i: number) => {
@@ -138,9 +154,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
 		.range([0, getBarArea(0).width]);
-
-	// specific to one bar
-	// const fullBarWidth = barWidthScale(value);
 
 	return (
 		<div
