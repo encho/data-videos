@@ -19,14 +19,16 @@ import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOut
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 
+export type TSimpleBarChartData = {
+	label: string;
+	value: number;
+	barColor?: string;
+	valueLabel: string;
+}[];
+
 type TSimpleBarChartProps = {
 	theme: ThemeType;
-	data: {
-		label: string;
-		value: number;
-		barColor?: string;
-		valueLabel: string;
-	}[];
+	data: TSimpleBarChartData;
 	width: number;
 	baseline: number;
 	labelWidth?: number;

@@ -29,7 +29,7 @@ type TKeyFrameSpec_R_FRAME = {
 	relativeId: string;
 };
 
-type TKeyFrameSpec =
+export type TKeyFrameSpec =
 	| TKeyFrameSpec_SECOND
 	| TKeyFrameSpec_R_SECOND
 	| TKeyFrameSpec_FRAME

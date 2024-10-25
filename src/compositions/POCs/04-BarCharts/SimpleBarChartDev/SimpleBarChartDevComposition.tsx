@@ -9,6 +9,7 @@ import {EconomistDataSource} from '../EconomistDataSource';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {SimpleBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartKeyframes';
 
 export const simpleBarChartDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -45,7 +46,7 @@ export const SimpleBarChartDevComposition: React.FC<
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	const CHART_WIDTH = 900;
-	const BASELINE = 14;
+	const BASELINE = 15;
 
 	// load fonts
 	// ********************************************************
@@ -85,6 +86,15 @@ export const SimpleBarChartDevComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
+				/>
+			</div>
+
+			<div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
+				<SimpleBarChartKeyframes
+					data={barChartData}
+					width={720}
+					theme={theme}
+					baseFontSize={15}
 				/>
 			</div>
 
