@@ -149,6 +149,13 @@ export const TextStylesComposition: React.FC<
 										This is h2
 									</TypographyStyle>
 									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h3}
+										baseline={baselineLeft}
+										marginBottom={2}
+									>
+										This is h3
+									</TypographyStyle>
+									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}
 										baseline={baselineLeft}
 										marginBottom={2}
@@ -209,6 +216,13 @@ export const TextStylesComposition: React.FC<
 										marginBottom={2}
 									>
 										This is h2
+									</TypographyStyle>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h3}
+										baseline={baselineRight}
+										marginBottom={2}
+									>
+										This is h3
 									</TypographyStyle>
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.body}

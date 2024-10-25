@@ -48,6 +48,12 @@ export const nerdyTheme: ThemeType = {
 				lineGapInBaselines: 1.5,
 				color: '#777',
 			},
+			h3: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1.2,
+				lineGapInBaselines: 1.5,
+				color: '#fff',
+			},
 			body: {
 				// fontFamily: 'Inter-28pt-Thin',
 				fontFamily: 'Inter-Regular',
@@ -57,10 +63,10 @@ export const nerdyTheme: ThemeType = {
 			},
 			datavizLabel: {
 				// TODO load alos Inter-Medium
-				fontFamily: 'Inter-Bold',
+				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
-				color: '#fff',
+				color: '#888',
 			},
 			datavizValueLabel: {
 				fontFamily: 'Inter-Regular',

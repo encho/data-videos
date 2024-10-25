@@ -35,18 +35,17 @@ const wahlergebnis2024: {
 	{parteiName: 'SPD', prozent: 30.9 / 100, farbe: '#E3000F', id: 'SPD'}, // SPD Red
 	{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
 	{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
-	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
 	{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
-	{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D', id: 'GRU'}, // Grüne Green
-	{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075', id: 'LIN'}, // Die Linke Magenta
-	{
-		parteiName: 'BVB/Freie Wähler',
-		prozent: 2.6 / 100,
-		farbe: '#FFD700',
-		id: 'BVB',
-	}, // BVB Yellow
-	{parteiName: 'FDP', prozent: 0.8 / 100, farbe: '#FFED00', id: 'FDP'}, // FDP Yellow
-	{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080', id: 'SON'}, // Others Gray
+	// {parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D', id: 'GRU'}, // Grüne Green
+	// {parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075', id: 'LIN'}, // Die Linke Magenta
+	// {
+	// 	parteiName: 'BVB/Freie Wähler',
+	// 	prozent: 2.6 / 100,
+	// 	farbe: '#FFD700',
+	// 	id: 'BVB',
+	// }, // BVB Yellow
+	// {parteiName: 'FDP', prozent: 0.8 / 100, farbe: '#FFED00', id: 'FDP'}, // FDP Yellow
+	// {parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
 
 export const SimpleBarChartDevComposition: React.FC<
@@ -54,8 +53,8 @@ export const SimpleBarChartDevComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const CHART_WIDTH = 900;
-	const BASELINE = 15;
+	const CHART_WIDTH = 400;
+	const BASELINE = 18;
 
 	// load fonts
 	// ********************************************************
@@ -96,6 +95,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
+					showLayout={true}
 				/>
 			</div>
 
@@ -104,7 +104,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					data={barChartData}
 					width={720}
 					theme={theme}
-					baseFontSize={15}
+					baseFontSize={12}
 				/>
 			</div>
 

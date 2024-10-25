@@ -54,6 +54,12 @@ export const lorenzobertoliniTheme: ThemeType = {
 				lineGapInBaselines: 1,
 				color: 'magenta',
 			},
+			h3: {
+				fontFamily: 'Inter-Bold',
+				capHeightInBaselines: 1.2,
+				lineGapInBaselines: 1.5,
+				color: '#fff',
+			},
 			body: {
 				fontFamily: 'Inter-Bold',
 				capHeightInBaselines: 1,

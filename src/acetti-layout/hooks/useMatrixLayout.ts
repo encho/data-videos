@@ -1,8 +1,17 @@
-import {TGridLayoutArea, TGridRailSpec, useGridLayout, TGridLayout} from '..';
+import invariant from 'tiny-invariant';
+import {
+	TGridLayoutArea,
+	TGridRailSpec,
+	useGridLayout,
+	TGridLayout,
+	TGridRailElementSpec,
+} from '..';
 
 const makeMatrixLayoutGridLayoutSpec = ({
 	nrColumns,
 	nrRows,
+	rowSizes: rowSizesProp,
+	columnSizes: columnSizesProp,
 	rowPaddingPixels = 0,
 	columnPaddingPixels = 0,
 	rowSpacePixels = 0,
@@ -10,6 +19,8 @@ const makeMatrixLayoutGridLayoutSpec = ({
 }: {
 	nrColumns: number;
 	nrRows: number;
+	rowSizes?: {value: number; type: 'fr' | 'pixel'}[];
+	columnSizes?: {value: number; type: 'fr' | 'pixel'}[];
 	rowPaddingPixels?: number;
 	columnPaddingPixels?: number;
 	rowSpacePixels?: number;
@@ -17,6 +28,25 @@ const makeMatrixLayoutGridLayoutSpec = ({
 }) => {
 	const chartRowsRailSpec: TGridRailSpec = [];
 	const chartColsRailSpec: TGridRailSpec = [];
+
+	const gridRowsElementSpecs: TGridRailElementSpec[] = rowSizesProp
+		? rowSizesProp.map((it) => ({...it, name: 'cell'}))
+		: Array.from({length: nrRows}).map((it) => ({
+				type: 'fr' as const,
+				value: 1,
+				name: 'cell',
+		  }));
+
+	const gridColumnsElementSpecs: TGridRailElementSpec[] = columnSizesProp
+		? columnSizesProp.map((it) => ({...it, name: 'cell'}))
+		: Array.from({length: nrColumns}).map((it) => ({
+				type: 'fr' as const,
+				value: 1,
+				name: 'cell',
+		  }));
+
+	invariant(gridRowsElementSpecs.length === nrRows);
+	invariant(gridColumnsElementSpecs.length === nrColumns);
 
 	for (let i = 0; i < nrRows; i++) {
 		if (i === 0) {
@@ -26,11 +56,9 @@ const makeMatrixLayoutGridLayoutSpec = ({
 				name: 'padding',
 			});
 		}
-		chartRowsRailSpec.push({
-			type: 'fr',
-			value: 1,
-			name: 'cell',
-		});
+
+		chartRowsRailSpec.push(gridRowsElementSpecs[i]);
+
 		if (i < nrRows - 1) {
 			chartRowsRailSpec.push({
 				type: 'pixel',
@@ -55,11 +83,14 @@ const makeMatrixLayoutGridLayoutSpec = ({
 				name: 'padding',
 			});
 		}
-		chartColsRailSpec.push({
-			type: 'fr',
-			value: 1,
-			name: 'cell',
-		});
+		// chartColsRailSpec.push({
+		// 	type: 'fr',
+		// 	value: 1,
+		// 	name: 'cell',
+		// });
+
+		chartColsRailSpec.push(gridColumnsElementSpecs[i]);
+
 		if (i < nrColumns - 1) {
 			chartColsRailSpec.push({
 				type: 'pixel',
@@ -92,6 +123,8 @@ export function useMatrixLayout({
 	height,
 	nrColumns,
 	nrRows,
+	rowSizes,
+	columnSizes,
 	rowPaddingPixels = 0,
 	columnPaddingPixels = 0,
 	rowSpacePixels = 0,
@@ -101,6 +134,8 @@ export function useMatrixLayout({
 	height: number;
 	nrColumns: number;
 	nrRows: number;
+	rowSizes?: {value: number; type: 'fr' | 'pixel'}[];
+	columnSizes?: {value: number; type: 'fr' | 'pixel'}[];
 	rowPaddingPixels?: number;
 	columnPaddingPixels?: number;
 	rowSpacePixels?: number;
@@ -112,6 +147,8 @@ export function useMatrixLayout({
 		gridLayoutSpec: makeMatrixLayoutGridLayoutSpec({
 			nrColumns,
 			nrRows,
+			rowSizes,
+			columnSizes,
 			rowPaddingPixels,
 			columnPaddingPixels,
 			rowSpacePixels,

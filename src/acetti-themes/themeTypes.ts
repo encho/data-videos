@@ -31,6 +31,7 @@ export const zodThemeType = z.object({
 		textStyles: z.object({
 			h1: zTextStyle,
 			h2: zTextStyle,
+			h3: zTextStyle,
 			body: zTextStyle,
 			datavizLabel: zTextStyle,
 			datavizValueLabel: zTextStyle,

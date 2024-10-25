@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {Sequence} from 'remotion';
+import {Sequence, useVideoConfig} from 'remotion';
 
 import {EconomistDataSource} from '../EconomistDataSource';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -9,11 +9,11 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -69,6 +69,8 @@ const wahlergebnis2024_2: {
 export const MultipleSimpleBarChartComposition: React.FC<
 	z.infer<typeof multipleSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
+	const {fps} = useVideoConfig();
+
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
@@ -117,6 +119,11 @@ export const MultipleSimpleBarChartComposition: React.FC<
 	const allValues = [...barChartData, ...barChartData2].map((it) => it.value);
 	const sharedValueDomain = [0, Math.max(...allValues)] as [number, number];
 
+	const FRAME_TITLE_1 = Math.floor(fps * 0);
+	const FRAME_BARCHART_1 = Math.floor(fps * 1.2);
+	const FRAME_TITLE_2 = Math.floor(fps * 5);
+	const FRAME_BARCHART_2 = Math.floor(fps * 6.2);
+
 	return (
 		<div
 			style={{
@@ -147,25 +154,29 @@ export const MultipleSimpleBarChartComposition: React.FC<
 						flexDirection: 'column',
 					}}
 				>
-					<TypographyStyle
-						typographyStyle={theme.typography.textStyles.body}
-						baseline={22}
-						marginBottom={2}
-					>
-						<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
-					</TypographyStyle>
+					<Sequence from={FRAME_TITLE_1} layout="none">
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h3}
+							baseline={22}
+							marginBottom={2}
+						>
+							<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
+						</TypographyStyle>
+					</Sequence>
 
 					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
-					<SimpleBarChart
-						theme={theme}
-						data={barChartData}
-						width={barChartWidth}
-						baseline={baseline}
-						labelWidth={labelWidth}
-						valueLabelWidth={valueLabelWidth}
-						valueDomain={sharedValueDomain}
-						// showLayout
-					/>
+					<Sequence from={FRAME_BARCHART_1} layout="none">
+						<SimpleBarChart
+							theme={theme}
+							data={barChartData}
+							width={barChartWidth}
+							baseline={baseline}
+							labelWidth={labelWidth}
+							valueLabelWidth={valueLabelWidth}
+							valueDomain={sharedValueDomain}
+							// showLayout
+						/>
+					</Sequence>
 				</div>
 
 				<div
@@ -175,15 +186,17 @@ export const MultipleSimpleBarChartComposition: React.FC<
 						flexDirection: 'column',
 					}}
 				>
-					<TypographyStyle
-						typographyStyle={theme.typography.textStyles.body}
-						baseline={22}
-						marginBottom={2}
-					>
-						<WaterfallTextEffect>Bayern Wahl</WaterfallTextEffect>
-					</TypographyStyle>
+					<Sequence from={FRAME_TITLE_2} layout="none">
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h3}
+							baseline={22}
+							marginBottom={2}
+						>
+							<WaterfallTextEffect>Bayern Wahl</WaterfallTextEffect>
+						</TypographyStyle>
+					</Sequence>
 					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
-					<Sequence from={90 * 4} layout="none">
+					<Sequence from={FRAME_BARCHART_2} layout="none">
 						<SimpleBarChart
 							theme={theme}
 							data={barChartData2}

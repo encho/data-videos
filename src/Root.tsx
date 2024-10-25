@@ -383,7 +383,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartDev"
 						component={SimpleBarChartDevComposition}
-						durationInFrames={90 * 14}
+						durationInFrames={90 * 5}
 						fps={90}
 						{...videoSize.linkedInTall}
 						schema={simpleBarChartDevCompositionSchema}
@@ -394,7 +394,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChart"
 						component={SimpleBarChartComposition}
-						durationInFrames={90 * 20}
+						durationInFrames={90 * 7}
 						fps={90}
 						{...videoSize.square}
 						schema={simpleBarChartCompositionSchema}
