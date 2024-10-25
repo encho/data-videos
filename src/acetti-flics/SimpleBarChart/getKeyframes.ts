@@ -17,7 +17,6 @@ export function getSimpleBarChartKeyframes({
 	const labelStartKeyframes = data.reduce<TKeyFrameSpec[]>(
 		(accumulator, currentItem, index) => {
 			if (index === 0) {
-				// TODO actually add a proper id and use this instead of label
 				accumulator.push({
 					type: 'SECOND',
 					value: 0,
