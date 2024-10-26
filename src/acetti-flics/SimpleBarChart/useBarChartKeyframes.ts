@@ -1,12 +1,11 @@
 // TODO bring into acetti-keyframes or acetti-animations
-import {lab} from 'chroma-js';
 import {
 	buildKeyFramesGroup,
 	TKeyFrameSpec,
 } from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {TSimpleBarChartData} from './SimpleBarChart';
 
-export function getSimpleBarChartKeyframes({
+export function useBarChartKeyframes({
 	fps,
 	durationInFrames,
 	data,

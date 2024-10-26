@@ -104,7 +104,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					data={barChartData}
 					width={720}
 					theme={theme}
-					baseFontSize={12}
+					baseline={12}
 				/>
 			</div>
 
