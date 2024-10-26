@@ -6,7 +6,7 @@ import {TGridLayoutArea} from '../types2';
 
 type TAreaProps = {
 	area: TGridLayoutArea;
-	children: ReactNode;
+	children?: ReactNode;
 	fill?: string;
 	stroke?: string;
 	show?: boolean;
@@ -28,7 +28,7 @@ export default function Area({
 				fill={fill}
 				stroke={stroke}
 			/>
-			{children}
+			{children || null}
 		</g>
 	);
 }
@@ -82,7 +82,7 @@ export function HtmlArea({area, children, fill = 'transparent'}: TAreaProps) {
 				left: area.x1,
 			}}
 		>
-			{children}
+			{children || null}
 		</div>
 	);
 }

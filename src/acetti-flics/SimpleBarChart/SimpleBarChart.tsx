@@ -36,8 +36,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	width,
 	baseline,
 	showLayout = false,
-	labelWidth: labelWidthProp,
-	valueLabelWidth: valueLabelWidthProp,
+	labelWidth,
+	valueLabelWidth,
 	valueDomain: valueDomainProp,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
@@ -54,8 +54,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		theme,
 		data,
 		width,
-		labelWidth: labelWidthProp,
-		valueLabelWidth: valueLabelWidthProp,
+		labelWidth,
+		valueLabelWidth,
 	});
 
 	// determine domain

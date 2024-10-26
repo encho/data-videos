@@ -389,6 +389,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 5}
 						fps={90}
 						{...videoSize.linkedInTall}
+						// {...videoSize.widescreen_16x9}
 						schema={simpleBarChartDevCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
