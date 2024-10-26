@@ -9,6 +9,7 @@ import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertol
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SimpleBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartKeyframes';
 import {SimpleBarChartLayout} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartLayout';
+import {SimpleBarChartLayout2} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartLayout2';
 
 export const simpleBarChartDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -87,11 +88,19 @@ export const SimpleBarChartDevComposition: React.FC<
 				style={{
 					display: 'flex',
 					justifyContent: 'center',
+					gap: 50,
 					marginBottom: 50,
 					marginTop: 50,
 				}}
 			>
 				<SimpleBarChartLayout
+					data={barChartData}
+					width={CHART_WIDTH}
+					baseline={BASELINE}
+					theme={theme}
+					showLayout={true}
+				/>
+				<SimpleBarChartLayout2
 					data={barChartData}
 					width={CHART_WIDTH}
 					baseline={BASELINE}

@@ -17,7 +17,7 @@ function getLayoutSizes({baseline}: {baseline: number}) {
 	};
 }
 
-export function useBarChartLayout({
+export function useBarChartLayout2({
 	baseline,
 	width,
 	data,

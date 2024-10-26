@@ -22,7 +22,7 @@ type TSimpleBarChartLayoutProps = {
 	showLayout?: boolean;
 };
 
-export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
+export const SimpleBarChartLayout2: React.FC<TSimpleBarChartLayoutProps> = ({
 	theme,
 	data,
 	width,
