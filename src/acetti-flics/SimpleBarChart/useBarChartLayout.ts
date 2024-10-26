@@ -23,7 +23,7 @@ type TBarChartLayout = {
 	getValueLabelArea: (i: number) => TGridLayoutArea;
 };
 
-export function useBarChartGridLayout({
+export function useBarChartLayout({
 	theme,
 	baseline,
 	width,
