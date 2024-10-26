@@ -145,6 +145,17 @@ export function createArea({
 	};
 }
 
+export function getGridLayoutArea(
+	gridLayout: TGridLayout,
+	areaSpec: TGridLayoutAreaSpec
+): TGridLayoutArea {
+	return createArea({
+		rows: gridLayout.rows,
+		columns: gridLayout.columns,
+		areaSpec,
+	});
+}
+
 export function createGridLayout(
 	gridSpec: TGridLayoutSpec,
 	size: TGridSize

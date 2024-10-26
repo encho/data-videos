@@ -2,7 +2,7 @@ import {useVideoConfig} from 'remotion';
 
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
-import {useBarChartLayout} from './useBarChartLayout';
+import {useBarChartGridLayout} from './useBarChartGridLayout';
 
 export type TSimpleBarChartData = {
 	label: string;
@@ -34,7 +34,7 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
 	const {fps, durationInFrames} = useVideoConfig();
 
-	const barChartLayout = useBarChartLayout({
+	const barChartLayout = useBarChartGridLayout({
 		baseline,
 		theme,
 		data,

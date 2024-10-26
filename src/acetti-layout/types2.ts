@@ -20,8 +20,12 @@ export type TGridRailSpec = Array<TGridRailElementSpec>;
 
 type TElementMatcherName = {name: string};
 type TElementMatcherPosition = {position: number};
+type TElementMatcherPositionOfType = {positionOfType: number; name: string};
 
-type TRailElementMatcher = TElementMatcherName | TElementMatcherPosition;
+type TRailElementMatcher =
+	| TElementMatcherName
+	| TElementMatcherPosition
+	| TElementMatcherPositionOfType;
 
 export type TGridLayoutAreaSpec = [
 	TRailElementMatcher, // first row (start)

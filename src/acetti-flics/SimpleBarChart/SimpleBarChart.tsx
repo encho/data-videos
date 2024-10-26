@@ -9,7 +9,7 @@ import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOut
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
-import {useBarChartLayout} from './useBarChartLayout';
+import {useBarChartGridLayout} from './useBarChartGridLayout';
 
 export type TSimpleBarChartData = {
 	label: string;
@@ -49,7 +49,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		data,
 	});
 
-	const barChartLayout = useBarChartLayout({
+	const barChartLayout = useBarChartGridLayout({
 		baseline,
 		theme,
 		data,
