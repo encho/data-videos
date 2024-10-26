@@ -1,33 +1,63 @@
 import {z} from 'zod';
+import {Sequence, useVideoConfig} from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
+import {useFontFamiliesLoader} from '../../../../../acetti-typography/useFontFamiliesLoader';
+import {LorenzoBertoliniLogo2} from '../../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
-} from '../../../../acetti-themes/getThemeFromEnum';
-import {DisplayGridRails, Area} from '../../../../acetti-layout';
+} from '../../../../../acetti-themes/getThemeFromEnum';
+import {DisplayGridRails, Area} from '../../../../../acetti-layout';
 
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
-} from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {SlideTitle} from '../SlideTitle';
+} from '../../../../../acetti-layout/hooks/useMatrixLayout';
+import {SlideTitle} from '../../SlideTitle';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
-export const matrixLayoutCompositionSchema = z.object({
+export const simpleMatrixLayoutCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
 const LAYOUT_WIDTH = 800;
 const LAYOUT_HEIGHT = 600;
 
-export const MatrixLayoutComposition: React.FC<
-	z.infer<typeof matrixLayoutCompositionSchema>
+export const SimpleMatrixLayoutComposition: React.FC<
+	z.infer<typeof simpleMatrixLayoutCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
+	const {fps} = useVideoConfig();
+
 	useFontFamiliesLoader(theme);
 
+	return (
+		<div
+			style={{
+				backgroundColor: theme.global.backgroundColor,
+				position: 'absolute',
+				width: '100%',
+				height: '100%',
+			}}
+		>
+			<Sequence layout="none">
+				<SlideTitle theme={theme}>The Matrix Layout</SlideTitle>
+			</Sequence>
+			<Sequence
+				from={Math.floor(fps * 1)}
+				// durationInFrames={fps * 3}
+				layout="none"
+			>
+				<StandardMatrixLayoutExample theme={theme} />
+			</Sequence>
+
+			<LorenzoBertoliniLogo2 theme={theme} />
+		</div>
+	);
+};
+
+const StandardMatrixLayoutExample: React.FC<{theme: ThemeType}> = ({theme}) => {
 	const nrRows = 5;
 	const nrColumns = 5;
 
@@ -43,16 +73,7 @@ export const MatrixLayoutComposition: React.FC<
 	});
 
 	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<SlideTitle theme={theme}>The Matrix Layout</SlideTitle>
-
+		<div>
 			<div
 				style={{
 					display: 'flex',
@@ -109,8 +130,6 @@ export const MatrixLayoutComposition: React.FC<
 					</div>
 				</div>
 			</div>
-
-			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
 };

@@ -13,7 +13,6 @@ import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/Wat
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const multipleSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

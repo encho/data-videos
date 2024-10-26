@@ -71,9 +71,9 @@ import {
 } from './compositions/POCs/01-TextEffects/TextMask/TextMaskComposition';
 
 import {
-	MatrixLayoutComposition,
-	matrixLayoutCompositionSchema,
-} from './compositions/POCs/02-TypographicLayouts/MatrixLayout/MatrixLayoutComposition';
+	SimpleMatrixLayoutComposition,
+	simpleMatrixLayoutCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/MatrixLayout/SimpleMatrixLayout/SimpleMatrixLayoutComposition';
 
 import {
 	SilkscreenFontComposition,
@@ -155,22 +155,12 @@ import {
 	simpleBarChartDevCompositionSchema,
 } from './compositions/POCs/04-BarCharts/SimpleBarChartDev/SimpleBarChartDevComposition';
 
+import {
+	VaryingSizesMatrixLayoutComposition,
+	varyingSizesMatrixLayoutCompositionSchema,
+} from './compositions/POCs/02-TypographicLayouts/MatrixLayout/VaryingSizesMatrixLayout/VaryingSizesMatrixLayoutComposition';
+
 import './tailwind.css';
-
-// const squareVideo = {
-// 	width: 1080,
-// 	height: 1080,
-// };
-
-const linkedInTallVideo = {
-	width: 1080,
-	height: 1350,
-};
-
-const widescreen_16x9_video = {
-	width: 1920,
-	height: 1080,
-};
 
 // TODO use this
 const videoSize = {
@@ -316,21 +306,34 @@ export const RemotionRoot: React.FC = () => {
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
-					{/* this is actually lower lever information about how our grid-layout system works */}
-					{/* keep, but it's lower level section */}
-					{/* ********************************************************************************** */}
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="MatrixLayout"
-						component={MatrixLayoutComposition}
-						durationInFrames={90 * 10}
-						fps={90}
-						{...videoSize.linkedInTall}
-						schema={matrixLayoutCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
-					/>
+					<Folder name="MatrixLayout">
+						{/* this is actually lower lever information about how our grid-layout system works */}
+						{/* keep, but it's lower level section */}
+						{/* ********************************************************************************** */}
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="SimpleMatrixLayout"
+							component={SimpleMatrixLayoutComposition}
+							durationInFrames={90 * 10}
+							fps={90}
+							{...videoSize.linkedInTall}
+							schema={simpleMatrixLayoutCompositionSchema}
+							defaultProps={{themeEnum: 'NERDY' as const}}
+						/>
 
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="VaryingSizesMatrixLayout"
+							component={VaryingSizesMatrixLayoutComposition}
+							durationInFrames={90 * 10}
+							fps={90}
+							{...videoSize.linkedInTall}
+							schema={varyingSizesMatrixLayoutCompositionSchema}
+							defaultProps={{themeEnum: 'NERDY' as const}}
+						/>
+					</Folder>
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
