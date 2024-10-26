@@ -43,6 +43,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
+	console.log({baseline});
+
 	const barChartKeyframes = useBarChartKeyframes({
 		fps,
 		durationInFrames,
@@ -143,7 +145,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					<>
 						<HtmlArea area={barArea}>
 							<svg width={barArea.width} height={barArea.height}>
-								<rect
+								{/* <rect
 									// TODO add opacity eventually
 									// opacity={opacity}
 									y={0}
@@ -153,6 +155,15 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									fill={it.barColor || 'cyan'}
 									rx={3}
 									ry={3}
+								/> */}
+								<RoundedRightRect
+									y={0}
+									x={0}
+									height={barArea.height}
+									width={currentBarWidth}
+									fill={it.barColor || 'cyan'}
+									// TODO: get radius from baseline?
+									radius={3}
 								/>
 							</svg>
 						</HtmlArea>
@@ -183,5 +194,48 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				);
 			})}
 		</div>
+	);
+};
+
+interface RoundedRightRectProps {
+	x: number; // X-coordinate of the rectangle's top-left corner
+	y: number; // Y-coordinate of the rectangle's top-left corner
+	width: number;
+	height: number;
+	radius: number;
+	fill?: string;
+	stroke?: string;
+	strokeWidth?: number;
+}
+
+const RoundedRightRect: React.FC<RoundedRightRectProps> = ({
+	x,
+	y,
+	width,
+	height,
+	radius,
+	fill = 'blue',
+	stroke = 'black',
+	strokeWidth = 1,
+}) => {
+	// Ensure the radius does not exceed half the height
+	const r = Math.min(radius, height / 2);
+
+	// Define the path for a rectangle with only the right corners rounded
+	const path = `
+    M ${x} ${y}
+    H ${x + width - r}
+    A ${r} ${r} 0 0 1 ${x + width} ${y + r}
+    V ${y + height - r}
+    A ${r} ${r} 0 0 1 ${x + width - r} ${y + height}
+    H ${x}
+    V ${y}
+    Z
+  `;
+
+	return (
+		<svg>
+			<path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+		</svg>
 	);
 };

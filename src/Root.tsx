@@ -160,6 +160,11 @@ import {
 	varyingSizesMatrixLayoutCompositionSchema,
 } from './compositions/POCs/02-TypographicLayouts/MatrixLayout/VaryingSizesMatrixLayout/VaryingSizesMatrixLayoutComposition';
 
+import {
+	SimpleBarChartPerfectSizingComposition,
+	simpleBarChartPerfectSizingCompositionSchema,
+} from './compositions/POCs/04-BarCharts/SimpleBarChartPerfectSizing/SimpleBarChartPerfectSizingComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -402,6 +407,17 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSize.square}
 						schema={simpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SimpleBarChartPerfectSizing"
+						component={SimpleBarChartPerfectSizingComposition}
+						durationInFrames={90 * 7}
+						fps={90}
+						{...videoSize.square}
+						schema={simpleBarChartPerfectSizingCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition

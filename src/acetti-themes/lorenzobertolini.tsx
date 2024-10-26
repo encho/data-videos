@@ -84,6 +84,12 @@ export const lorenzobertoliniTheme: ThemeType = {
 				lineGapInBaselines: 1,
 				color: 'magenta',
 			},
+			dataSource: {
+				fontFamily: 'Inter-Regular',
+				capHeightInBaselines: 1,
+				lineGapInBaselines: 1,
+				color: 'magenta',
+			},
 		},
 	},
 	yAxis: {

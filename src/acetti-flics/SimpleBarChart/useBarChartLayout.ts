@@ -1,7 +1,3 @@
-import {
-	useMatrixLayout,
-	getMatrixLayoutCellArea,
-} from '../../acetti-layout/hooks/useMatrixLayout';
 import {getGridLayoutArea} from '../../acetti-layout/gridLayout';
 import {
 	useGridLayout,
@@ -13,6 +9,33 @@ import {
 import {TSimpleBarChartData} from './SimpleBarChart';
 import {getTextDimensions} from '../../acetti-typography/CapSizeTextNew';
 import {ThemeType} from '../../acetti-themes/themeTypes';
+
+export function getIbcsSizes(baseline: number) {
+	// TODO from theme
+	const ibcsSizes = {
+		barHeight: baseline * 2.25,
+		rowSpace: baseline * 0.65,
+		barMarginLeft: baseline * 0.5,
+		barMarginRight: baseline * 0.5,
+	};
+
+	return ibcsSizes;
+}
+
+export function getBarChartHeight({
+	baseline,
+	nrRows,
+}: {
+	baseline: number;
+	nrRows: number;
+}) {
+	const ibcsSizes = getIbcsSizes(baseline);
+
+	const barChartHeight =
+		nrRows * ibcsSizes.barHeight + (nrRows - 1) * ibcsSizes.rowSpace;
+
+	return barChartHeight;
+}
 
 type TBarChartLayout = {
 	gridLayout: TGridLayout;
@@ -39,19 +62,11 @@ export function useBarChartLayout({
 	valueLabelWidth?: number;
 }): TBarChartLayout {
 	// TODO from theme
-	const ibcsSizes = {
-		barHeight: baseline * 2,
-		rowSpace: baseline * 0.5,
-		barMarginLeft: baseline * 0.5,
-		barMarginRight: baseline * 0.5,
-	};
+	const ibcsSizes = getIbcsSizes(baseline);
 
 	const nrRows = data.length;
 
-	// =========================================
-	const barChartHeight =
-		nrRows * ibcsSizes.barHeight + (nrRows - 1) * ibcsSizes.rowSpace;
-	// + 2 * ROW_PADDING;
+	const barChartHeight = getBarChartHeight({baseline, nrRows});
 
 	const labelWidths = data.map(
 		(it) =>
@@ -59,7 +74,7 @@ export function useBarChartLayout({
 				.width
 	);
 
-	const labelWidth = labelWidthProp || Math.max(...labelWidths) * 1.1;
+	const labelWidth = labelWidthProp || Math.max(...labelWidths);
 
 	// TODO use valueLabelTextStyleProps after we use that text style!!!
 	// determine valueLabelWidth from all valueLabelWidth's

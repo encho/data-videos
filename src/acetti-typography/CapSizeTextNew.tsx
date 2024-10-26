@@ -3,6 +3,7 @@ import {ReactNode} from 'react';
 import {measureText as remotionMeasureText} from '@remotion/layout-utils';
 import {TAvailableFontFamily, getFontMetrics} from './fontMetricsLibrary';
 import {ThemeTextStyle, ThemeType} from '../acetti-themes/themeTypes';
+import {FlexibleElement} from './FlexibleElement';
 
 export function getTextStyleCapHeight({
 	theme,
@@ -90,6 +91,8 @@ export const measureText = ({
 	});
 };
 
+type AllowedElements = 'div' | 'span' | 'section' | 'p';
+
 export const CapSizeTextNew: React.FC<{
 	children: ReactNode;
 	capHeight: number;
@@ -99,6 +102,8 @@ export const CapSizeTextNew: React.FC<{
 	marginBottom?: number;
 	marginTop?: number;
 	color: string;
+	as?: AllowedElements;
+	style?: React.CSSProperties;
 }> = ({
 	children,
 	fontFamily,
@@ -108,6 +113,8 @@ export const CapSizeTextNew: React.FC<{
 	color,
 	capHeight,
 	lineGap,
+	as = 'div',
+	style: styleProp = {},
 }) => {
 	const fontMetrics = getFontMetrics(fontFamily);
 
@@ -118,35 +125,59 @@ export const CapSizeTextNew: React.FC<{
 	});
 
 	// Generate a unique class name to avoid conflicts
-	const className = `text-component-${Math.random().toString(36).substring(7)}`;
+	// const className = `text-component-${Math.random().toString(36).substring(7)}`;
 
 	// Create the CSS styles as a string
-	const style = `
-	 .${className} {
-		 font-size: ${capSizeStyles.fontSize};
-		 line-height: ${capSizeStyles.lineHeight};
-		 font-family: ${fontFamily};
-		 font-weight: ${fontWeight};
-		 color: ${color};
-		 margin-bottom: ${marginBottom}px;
-		 margin-top: ${marginTop}px;
-	 }
-	 .${className}::before {
-		 content: '';
-		 display: block;
-		 margin-bottom: ${capSizeStyles['::before'].marginBottom};
-	 }
-	 .${className}::after {
-		 content: '';
-		 display: block;
-		 margin-top: ${capSizeStyles['::after'].marginTop};
-	 }
- `;
+	// const style = `
+	// 	 .${className} {
+	// 		 font-size: ${capSizeStyles.fontSize};
+	// 		 line-height: ${capSizeStyles.lineHeight};
+	// 		 font-family: ${fontFamily};
+	// 		 font-weight: ${fontWeight};
+	// 		 color: ${color};
+	// 		 margin-bottom: ${marginBottom}px;
+	// 		 margin-top: ${marginTop}px;
+	// 	 }
+	// 	 .${className}::before {
+	// 		 content: '';
+	// 		 display: block;
+	// 		 margin-bottom: ${capSizeStyles['::before'].marginBottom};
+	// 	 }
+	// 	 .${className}::after {
+	// 		 content: '';
+	// 		 display: block;
+	// 		 margin-top: ${capSizeStyles['::after'].marginTop};
+	// 	 }
+	//  `;
+
+	const combinedMarginTop =
+		marginTop +
+		parseFloat(capSizeStyles.fontSize) *
+			parseFloat(capSizeStyles['::before'].marginBottom);
+	const combinedMarginBottom =
+		marginBottom +
+		parseFloat(capSizeStyles.fontSize) *
+			parseFloat(capSizeStyles['::after'].marginTop);
+
+	// Define the style object
+	const alternativeStyle: React.CSSProperties = {
+		...styleProp,
+		fontSize: parseFloat(capSizeStyles.fontSize),
+		lineHeight: capSizeStyles.lineHeight,
+		fontFamily: fontFamily,
+		fontWeight: fontWeight,
+		color: color,
+		marginTop: combinedMarginTop,
+		marginBottom: combinedMarginBottom,
+	};
 
 	return (
-		<>
-			<style>{style}</style>
-			<div className={className}>{children}</div>
-		</>
+		<FlexibleElement
+			as={as}
+			// className={className}
+			style={alternativeStyle}
+		>
+			{children}
+		</FlexibleElement>
 	);
 };
