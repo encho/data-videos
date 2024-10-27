@@ -44,7 +44,7 @@ export const nerdyTheme: ThemeType = {
 			},
 			h2: {
 				fontFamily: 'Inter-Regular',
-				capHeightInBaselines: 1.5,
+				capHeightInBaselines: 2,
 				lineGapInBaselines: 1.5,
 				// color: '#777',
 				color: '#fff',

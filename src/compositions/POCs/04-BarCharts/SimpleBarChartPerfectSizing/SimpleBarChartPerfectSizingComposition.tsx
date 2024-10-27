@@ -64,7 +64,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
 
-	const {height, width} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	// Create a ref to the div you want to measure
 	const divRef = useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 			await document.fonts.ready;
 
 			// Introduce an additional delay to ensure styles are applied
-			await new Promise((resolve) => setTimeout(resolve, 100));
+			await new Promise((resolve) => setTimeout(resolve, 2000));
 			// ***********************************************************
 
 			if (divRef.current) {
@@ -125,7 +125,8 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 		value: it.prozent,
 		id: it.id,
 		// barColor: it.farbe,
-		barColor: '#fff',
+		// barColor: '#fff',
+		barColor: '#f05122',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
@@ -157,15 +158,17 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 					height: '100%',
 				}}
 			>
-				<EconomistTitleWithSubtitle
-					// title={'AfD: Vormarsch in Brandenburg'}
-					// title={'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'}
-					title={
-						'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern. Wer will ne jute Curreywurst??'
-					}
-					subtitle={'Wahlergebnisse Brandenburg 2024'}
-					theme={theme}
-				/>
+				<div>
+					<EconomistTitleWithSubtitle
+						// title={'AfD: Vormarsch in Brandenburg'}
+						// title={'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'}
+						title={
+							'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern. Wer will ne jute Curreywurst??'
+						}
+						subtitle={'Wahlergebnisse Brandenburg 2024'}
+						theme={theme}
+					/>
+				</div>
 
 				<div
 					ref={divRef}
@@ -234,6 +237,7 @@ export const FooterDiv: React.FC<{
 				marginRight: pageMarginRight,
 				marginBottom: pageMarginBottom,
 				paddingTop,
+				// backgroundColor: '#222',
 			}}
 		>
 			{children}

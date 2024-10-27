@@ -11,14 +11,14 @@ const REGULAR_WHITESPACE_CODE = '\u0020';
 export const WaterfallTextEffect: React.FC<{children: string}> = ({
 	children,
 }) => {
-	const {durationInFrames} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const characters = children.split('');
 
 	// FLY IN INFORMATION
 	// *****************************************************
-	const FLY_IN_CHARACTER_DURATION = Math.floor(90 * 0.35);
-	const FLY_IN_AVG_DELAY_PER_CHARACTER = Math.floor(90 * 0.05);
+	const FLY_IN_CHARACTER_DURATION = Math.floor(fps * 0.35);
+	const FLY_IN_AVG_DELAY_PER_CHARACTER = Math.floor(fps * 0.05);
 	const FLY_IN_LARGEST_CHARACTER_DELAY =
 		(characters.length - 1) * FLY_IN_AVG_DELAY_PER_CHARACTER;
 
@@ -42,8 +42,8 @@ export const WaterfallTextEffect: React.FC<{children: string}> = ({
 
 	// FLY OUT INFORMATION
 	// *****************************************************
-	const FLY_OUT_CHARACTER_DURATION = Math.floor(90 * 0.35);
-	const FLY_OUT_AVG_DELAY_PER_CHARACTER = Math.floor(90 * 0.05);
+	const FLY_OUT_CHARACTER_DURATION = Math.floor(fps * 0.35);
+	const FLY_OUT_AVG_DELAY_PER_CHARACTER = Math.floor(fps * 0.05);
 	const FLY_OUT_LARGEST_CHARACTER_DELAY =
 		(characters.length - 1) * FLY_OUT_AVG_DELAY_PER_CHARACTER;
 

@@ -13,8 +13,10 @@ import {ThemeType} from '../../acetti-themes/themeTypes';
 export function getIbcsSizes(baseline: number) {
 	// TODO from theme
 	const ibcsSizes = {
-		barHeight: baseline * 2.25,
-		rowSpace: baseline * 0.65,
+		// barHeight: baseline * 2.25,
+		// rowSpace: baseline * 0.65,
+		barHeight: baseline * 2,
+		rowSpace: baseline * 0.5,
 		barMarginLeft: baseline * 0.5,
 		barMarginRight: baseline * 0.5,
 	};

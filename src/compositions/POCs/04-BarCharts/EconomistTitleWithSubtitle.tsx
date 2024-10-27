@@ -10,7 +10,7 @@ export const EconomistTitleWithSubtitle: React.FC<{
 	const pageMarginLeft = baseline * 2;
 	const pageMarginRight = baseline * 2;
 	const pageMarginTop = baseline * 2;
-	const elementPaddingBottom = baseline * 3;
+	const elementPaddingBottom = baseline * 4;
 
 	return (
 		<div
@@ -28,7 +28,7 @@ export const EconomistTitleWithSubtitle: React.FC<{
 				<TypographyStyle
 					typographyStyle={theme.typography.textStyles.h1}
 					baseline={baseline}
-					marginBottom={6}
+					marginBottom={4}
 				>
 					{title}
 				</TypographyStyle>

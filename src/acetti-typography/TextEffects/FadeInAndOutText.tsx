@@ -6,19 +6,17 @@ import {
 	interpolate,
 } from 'remotion';
 
-import {ThemeType} from '../../acetti-themes/themeTypes';
-
 // TODO introduce a delay prop, where we render with opacity=0, to respect the layout in KPI
 export const FadeInAndOutText: React.FC<{
 	children: string;
 	innerDelay?: number;
-	enterDurationInFrames?: number;
-}> = ({children, innerDelay = 0, enterDurationInFrames = 120}) => {
-	const {durationInFrames} = useVideoConfig();
+}> = ({children, innerDelay = 0}) => {
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const characters = children.split('');
 
-	let exitSequenceDurationInFrames = 200;
+	const enterDurationInFrames = Math.floor(fps * 1.5);
+	let exitSequenceDurationInFrames = Math.floor(fps * 2.5);
 	let displaySequenceDurationInFrames =
 		durationInFrames -
 		innerDelay -
@@ -63,7 +61,10 @@ export const FadeInAndOutText: React.FC<{
 				layout="none"
 			>
 				{characters.map((char, index) => (
-					<FadeInCharacter delay={index * 5} fadeInDurationInFrames={30}>
+					<FadeInCharacter
+						delay={index * 5}
+						fadeInDurationInFrames={Math.floor(fps / 3)}
+					>
 						{char}
 					</FadeInCharacter>
 				))}
@@ -141,22 +142,4 @@ const FadeOutCharacter: React.FC<{
 	);
 
 	return <span style={{opacity}}>{children}</span>;
-};
-
-const getTitleStyles = (theme: ThemeType) => {
-	const titleStyles = {
-		fontWeight: 700,
-		fontFamily: theme.typography.title.fontFamily,
-		color: theme.typography.title.color,
-	};
-	return titleStyles;
-};
-
-const getSubTitleStyles = (theme: ThemeType) => {
-	const subTitleStyles = {
-		fontWeight: 500,
-		fontFamily: theme.typography.subTitle.fontFamily,
-		color: theme.typography.subTitle.color,
-	};
-	return subTitleStyles;
 };
