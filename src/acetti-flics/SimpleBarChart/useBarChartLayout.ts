@@ -13,12 +13,12 @@ import {ThemeType} from '../../acetti-themes/themeTypes';
 export function getIbcsSizes(baseline: number) {
 	// TODO from theme
 	const ibcsSizes = {
-		// barHeight: baseline * 2.25,
-		// rowSpace: baseline * 0.65,
 		barHeight: baseline * 2,
 		rowSpace: baseline * 0.5,
-		barMarginLeft: baseline * 0.5,
+		barMarginLeft: baseline * 0.9,
 		barMarginRight: baseline * 0.5,
+		topPadding: baseline * 0.25,
+		bottomPadding: baseline * 0.25,
 	};
 
 	return ibcsSizes;
@@ -46,6 +46,7 @@ type TBarChartLayout = {
 	getLabelArea: (i: number) => TGridLayoutArea;
 	getBarArea: (i: number) => TGridLayoutArea;
 	getValueLabelArea: (i: number) => TGridLayoutArea;
+	getZeroLineArea: () => TGridLayoutArea;
 };
 
 export function useBarChartLayout({
@@ -96,13 +97,22 @@ export function useBarChartLayout({
 	const barChartRowsRailSpec: TGridRailSpec = Array.from(
 		{length: nrRows},
 		(_, index) => {
-			const items: TGridRailElementSpec[] = [
-				{
+			const items: TGridRailElementSpec[] = [];
+
+			// Add top padding, if first index
+			if (index === 0) {
+				items.push({
 					type: 'pixel',
-					value: ibcsSizes.barHeight,
-					name: 'dataItem',
-				},
-			];
+					value: ibcsSizes.topPadding,
+					name: 'topPadding',
+				});
+			}
+
+			items.push({
+				type: 'pixel',
+				value: ibcsSizes.barHeight,
+				name: 'dataItem',
+			});
 
 			// Add 'space' after each 'dataItem' except the last one
 			if (index < nrRows - 1) {
@@ -110,6 +120,15 @@ export function useBarChartLayout({
 					type: 'pixel',
 					value: ibcsSizes.rowSpace,
 					name: 'space',
+				});
+			}
+
+			// Add bottom padding, if last index
+			if (index === nrRows - 1) {
+				items.push({
+					type: 'pixel',
+					value: ibcsSizes.bottomPadding,
+					name: 'bottomPadding',
 				});
 			}
 
@@ -180,6 +199,16 @@ export function useBarChartLayout({
 		return labelArea;
 	};
 
+	const getZeroLineArea = () => {
+		const zeroLineArea = getGridLayoutArea(chartLayout, [
+			{name: 'topPadding'}, // start-row
+			{name: 'bar'}, // start-column
+			{name: 'bottomPadding'}, // end-row
+			{name: 'bar'}, // end-column
+		]);
+		return zeroLineArea;
+	};
+
 	return {
 		gridLayout: chartLayout,
 		width: chartLayout.width,
@@ -187,5 +216,6 @@ export function useBarChartLayout({
 		getLabelArea,
 		getBarArea,
 		getValueLabelArea,
+		getZeroLineArea,
 	};
 }

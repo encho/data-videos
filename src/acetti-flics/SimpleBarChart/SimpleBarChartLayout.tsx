@@ -43,6 +43,8 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 		valueLabelWidth,
 	});
 
+	const zeroLineArea = barChartLayout.getZeroLineArea();
+
 	return (
 		<div
 			style={{
@@ -56,6 +58,8 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 					<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
 				</div>
 			) : null}
+
+			<HtmlArea area={zeroLineArea} fill="cyan"></HtmlArea>
 
 			{data.map((it, i) => {
 				const barArea = barChartLayout.getBarArea(i);

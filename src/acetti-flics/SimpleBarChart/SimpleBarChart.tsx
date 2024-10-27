@@ -76,6 +76,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		.domain(valueDomain)
 		.range([0, barChartLayout.getBarArea(0).width]);
 
+	const zeroLineArea = barChartLayout.getZeroLineArea();
+
 	return (
 		<div
 			style={{
@@ -193,6 +195,17 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					</>
 				);
 			})}
+
+			<HtmlArea area={zeroLineArea} fill="transparent">
+				<div
+					style={{
+						height: zeroLineArea.height,
+						width: baseline * 0.2,
+						// backgroundColor: '#888',
+						backgroundColor: '#fff',
+					}}
+				/>
+			</HtmlArea>
 		</div>
 	);
 };
@@ -215,8 +228,8 @@ const RoundedRightRect: React.FC<RoundedRightRectProps> = ({
 	height,
 	radius,
 	fill = 'blue',
-	stroke = 'black',
-	strokeWidth = 1,
+	stroke = 'transparent',
+	strokeWidth = 0,
 }) => {
 	// Ensure the radius does not exceed half the height
 	const r = Math.min(radius, height / 2);
