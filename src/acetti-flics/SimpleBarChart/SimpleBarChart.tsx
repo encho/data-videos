@@ -43,8 +43,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	console.log({baseline});
-
 	const barChartKeyframes = useBarChartKeyframes({
 		fps,
 		durationInFrames,
@@ -75,8 +73,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
 		.range([0, barChartLayout.getBarArea(0).width]);
-
-	const zeroLineArea = barChartLayout.getZeroLineArea();
 
 	return (
 		<div
@@ -122,6 +118,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					(kf) => kf.id === 'VALUE_LABEL_APPEAR__' + it.id
 				);
 				invariant(valueLabelKeyframe);
+				const valueLabelDissappearKeyframe = barChartKeyframes.keyFrames.find(
+					(kf) => kf.id === 'VALUE_LABEL_DISSAPPEAR__' + it.id
+				);
+				invariant(valueLabelDissappearKeyframe);
 
 				const fullBarWidth = barWidthScale(it.value);
 
@@ -138,7 +138,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				);
 
 				const currentBarWidth = interpolateCurrentBarWidth(frame);
-
 				const barArea = barChartLayout.getBarArea(i);
 
 				const valueLabelMarginLeft = -1 * (barArea.width - currentBarWidth);
@@ -165,12 +164,19 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									width={currentBarWidth}
 									fill={it.barColor || 'cyan'}
 									// TODO: get radius from baseline?
-									radius={3}
+									radius={5}
 								/>
 							</svg>
 						</HtmlArea>
 
-						<Sequence from={valueLabelKeyframe.frame} layout="none">
+						{/* TODO use KeyframeSequence component */}
+						<Sequence
+							from={valueLabelKeyframe.frame}
+							durationInFrames={
+								valueLabelDissappearKeyframe.frame - valueLabelKeyframe.frame
+							}
+							layout="none"
+						>
 							<HtmlArea area={barChartLayout.getValueLabelArea(i)}>
 								<div
 									style={{
@@ -196,16 +202,72 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				);
 			})}
 
-			<HtmlArea area={zeroLineArea} fill="transparent">
-				<div
-					style={{
-						height: zeroLineArea.height,
-						width: baseline * 0.2,
-						// backgroundColor: '#888',
-						backgroundColor: '#fff',
-					}}
-				/>
-			</HtmlArea>
+			{(() => {
+				const zeroLineArea = barChartLayout.getZeroLineArea();
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[0, 0, 0, zeroLineArea.height],
+					[Easing.ease, Easing.ease, Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[0, zeroLineArea.height, zeroLineArea.height, zeroLineArea.height],
+					[Easing.ease, Easing.ease, Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__opacity = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[0, 1, 1, 0],
+					[Easing.ease, Easing.ease, Easing.ease]
+				);
+
+				const y1 = interpolateZeroLine__y1(frame);
+				const y2 = interpolateZeroLine__y2(frame);
+				const opacity = interpolateZeroLine__opacity(frame);
+
+				return (
+					<HtmlArea area={zeroLineArea} fill="transparent">
+						<svg
+							width={zeroLineArea.width}
+							height={zeroLineArea.height}
+							style={{overflow: 'visible'}}
+						>
+							<line
+								x1={0}
+								x2={0}
+								y1={y1}
+								y2={y2}
+								stroke="#666"
+								strokeWidth={baseline * 0.2}
+								opacity={opacity}
+							/>
+						</svg>
+					</HtmlArea>
+				);
+			})()}
 		</div>
 	);
 };

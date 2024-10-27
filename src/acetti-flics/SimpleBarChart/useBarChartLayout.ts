@@ -15,7 +15,7 @@ export function getIbcsSizes(baseline: number) {
 	const ibcsSizes = {
 		barHeight: baseline * 2,
 		rowSpace: baseline * 0.5,
-		barMarginLeft: baseline * 0.9,
+		barMarginLeft: baseline * 0.85,
 		barMarginRight: baseline * 0.5,
 		topPadding: baseline * 0.25,
 		bottomPadding: baseline * 0.25,

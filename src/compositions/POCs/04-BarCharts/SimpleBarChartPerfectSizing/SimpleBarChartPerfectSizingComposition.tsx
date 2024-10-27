@@ -126,7 +126,8 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 		id: it.id,
 		// barColor: it.farbe,
 		// barColor: '#fff',
-		barColor: '#f05122',
+		// barColor: '#f05122',
+		barColor: '#FF396E',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 

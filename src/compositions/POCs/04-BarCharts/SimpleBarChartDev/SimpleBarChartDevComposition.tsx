@@ -80,7 +80,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
-					showLayout={true}
+					// showLayout={true}
 				/>
 			</div>
 			<div
