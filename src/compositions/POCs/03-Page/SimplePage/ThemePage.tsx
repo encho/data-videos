@@ -3,7 +3,7 @@ import {ReactNode} from 'react';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
-export function ThemePage({
+export function Page({
 	theme,
 	children,
 }: {
@@ -14,7 +14,6 @@ export function ThemePage({
 		<div
 			style={{
 				backgroundColor: theme.global.backgroundColor,
-				// backgroundColor: '#000444',
 				position: 'absolute',
 				width: '100%',
 				height: '100%',
@@ -22,7 +21,6 @@ export function ThemePage({
 		>
 			<div
 				style={{
-					// backgroundColor: 'rgba(0,255,255,0.2)',
 					marginTop: theme.page.marginTop,
 					marginBottom: theme.page.marginBottom,
 					marginRight: theme.page.marginRight,
@@ -38,14 +36,15 @@ export function ThemePage({
 export const PageFooter: React.FC<{
 	children: React.ReactNode;
 	theme: ThemeType;
-}> = ({children, theme}) => {
+	showArea?: boolean;
+}> = ({children, theme, showArea = false}) => {
 	const baseline = theme.page.baseline;
 	const paddingTopInBaselines = 3;
 
 	return (
 		<div
 			style={{
-				backgroundColor: 'rgba(255,100,0,0.2)',
+				backgroundColor: showArea ? 'rgba(255,100,0,0.2)' : undefined,
 				paddingTop: paddingTopInBaselines * baseline,
 			}}
 		>
@@ -57,14 +56,15 @@ export const PageFooter: React.FC<{
 export const PageHeader: React.FC<{
 	children: React.ReactNode;
 	theme: ThemeType;
-}> = ({children, theme}) => {
+	showArea?: boolean;
+}> = ({children, theme, showArea = false}) => {
 	const baseline = theme.page.baseline;
 	const paddingBottomInBaselines = 3;
 
 	return (
 		<div
 			style={{
-				backgroundColor: 'rgba(255,100,0,0.2)',
+				backgroundColor: showArea ? 'rgba(255,100,0,0.2)' : undefined,
 				paddingBottom: paddingBottomInBaselines * baseline,
 			}}
 		>
@@ -106,9 +106,7 @@ export const LorenzoBertoliniLogo = ({
 	const capHeight = baseline * capHeightInBaselines;
 
 	return (
-		<div
-		// style={{zIndex: 1000}}
-		>
+		<div>
 			<CapSizeTextNew
 				fontFamily={'Inter-Regular'}
 				capHeight={capHeight}

@@ -2,7 +2,7 @@ import React from 'react';
 import {z} from 'zod';
 
 import {useElementDimensions} from './useElementDimensions';
-import {ThemePage, PageFooter, PageLogo, PageHeader} from './ThemePage';
+import {Page, PageFooter, PageLogo, PageHeader} from './ThemePage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
@@ -58,6 +58,9 @@ const data = wahlergebnis2024.map((it) => ({
 	valueLabel: formatPercentage(it.prozent),
 }));
 
+const showAreas = true;
+const showGrid = true;
+
 export const SimplePageComposition: React.FC<
 	z.infer<typeof simplePageCompositionSchema>
 > = ({themeEnum}) => {
@@ -65,7 +68,7 @@ export const SimplePageComposition: React.FC<
 	const {ref, dimensions} = useElementDimensions();
 
 	return (
-		<ThemePage theme={theme}>
+		<Page theme={theme}>
 			<div
 				style={{
 					width: theme.page.contentWidth,
@@ -73,22 +76,26 @@ export const SimplePageComposition: React.FC<
 					position: 'relative',
 				}}
 			>
-				<BaselineGrid
-					width={theme.page.contentWidth}
-					height={theme.page.contentHeight}
-					baseline={theme.page.baseline}
-					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(90,60,0,1.0)"
-					strokeWidth={2}
-				/>
-				<VerticalBaselineGrid
-					width={theme.page.contentWidth}
-					height={theme.page.contentHeight}
-					baseline={theme.page.baseline}
-					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(90,60,0,1.0)"
-					strokeWidth={2}
-				/>
+				{showGrid ? (
+					<>
+						<BaselineGrid
+							width={theme.page.contentWidth}
+							height={theme.page.contentHeight}
+							baseline={theme.page.baseline}
+							{...theme.TypographicLayouts.baselineGrid}
+							lineColor="rgba(90,60,0,1.0)"
+							strokeWidth={2}
+						/>
+						<VerticalBaselineGrid
+							width={theme.page.contentWidth}
+							height={theme.page.contentHeight}
+							baseline={theme.page.baseline}
+							{...theme.TypographicLayouts.baselineGrid}
+							lineColor="rgba(90,60,0,1.0)"
+							strokeWidth={2}
+						/>
+					</>
+				) : null}
 
 				<div
 					style={{
@@ -98,8 +105,7 @@ export const SimplePageComposition: React.FC<
 						position: 'relative',
 					}}
 				>
-					{/* TODO wrap perhaps like footer in PageHeader */}
-					<PageHeader theme={theme}>
+					<PageHeader theme={theme} showArea={showAreas}>
 						<EconomistTitleWithSubtitle
 							title={'Simple Page Composition. This will be great stuff...'}
 							subtitle={'This is a subtitle. Lol...'}
@@ -129,7 +135,7 @@ export const SimplePageComposition: React.FC<
 					</div>
 
 					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter theme={theme}>
+					<PageFooter theme={theme} showArea={showAreas}>
 						<div
 							style={{
 								display: 'flex',
@@ -151,6 +157,6 @@ export const SimplePageComposition: React.FC<
 				</div>
 			</div>
 			<PageLogo theme={theme} />
-		</ThemePage>
+		</Page>
 	);
 };
