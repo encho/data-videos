@@ -52,6 +52,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	hideLabels = false,
 	labelWidth,
 	valueLabelWidth,
+	// negativeValueLabelWidth, // TODO
 	valueDomain: valueDomainProp,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
@@ -62,6 +63,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		durationInFrames,
 		data,
 	});
+
+	const hasNegativeValues = data.some((item) => item.value < 0);
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
@@ -74,7 +77,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		data,
 		width,
 		labelWidth,
+		// TODO pass better width, using only positive values to determine
 		valueLabelWidth,
+		// TODO pass better width, using only negative values to determine
+		// negativeValueLabelWidth: hasNegativeValues ? valueLabelWidth : undefined,
 	});
 
 	// determine domain
@@ -92,6 +98,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(valueDomain)
 		.range([0, barChartLayout.getBarArea(0).width]);
+
+	const zeroLineX = barWidthScale(0);
 
 	return (
 		<div
@@ -144,7 +152,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				);
 				invariant(valueLabelDissappearKeyframe);
 
-				const fullBarWidth = barWidthScale(it.value);
+				const fullBarWidth = Math.abs(barWidthScale(it.value) - zeroLineX);
 
 				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
 					barChartKeyframes,
@@ -161,32 +169,36 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				const currentBarWidth = interpolateCurrentBarWidth(frame);
 				const barArea = barChartLayout.getBarArea(i);
 
-				const valueLabelMarginLeft = -1 * (barArea.width - currentBarWidth);
+				const positiveValueLabelMarginLeft =
+					-1 * (barArea.width - (currentBarWidth + zeroLineX));
+
+				const negativeValueLabelMarginLeft = -1 * (zeroLineX - currentBarWidth);
 
 				return (
 					<>
 						<HtmlArea area={barArea}>
 							<svg width={barArea.width} height={barArea.height}>
-								{/* <rect
-									// TODO add opacity eventually
-									// opacity={opacity}
-									y={0}
-									x={0}
-									height={barArea.height}
-									width={currentBarWidth}
-									fill={it.barColor || 'cyan'}
-									rx={3}
-									ry={3}
-								/> */}
-								<RoundedRightRect
-									y={0}
-									x={0}
-									height={barArea.height}
-									width={currentBarWidth}
-									fill={it.barColor || 'cyan'}
-									// TODO: get radius from baseline?
-									radius={5}
-								/>
+								{it.value > 0 && currentBarWidth ? (
+									<RoundedRightRect
+										y={0}
+										x={zeroLineX}
+										height={barArea.height}
+										width={currentBarWidth}
+										fill={it.barColor || 'cyan'}
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : it.value < 0 && currentBarWidth ? (
+									<RoundedLeftRect
+										y={0}
+										x={zeroLineX - currentBarWidth}
+										height={barArea.height}
+										width={currentBarWidth}
+										fill={it.barColor || 'cyan'}
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : null}
 							</svg>
 						</HtmlArea>
 
@@ -198,14 +210,23 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 							}
 							layout="none"
 						>
-							<HtmlArea area={barChartLayout.getValueLabelArea(i)}>
+							<HtmlArea
+								area={
+									it.value >= 0
+										? barChartLayout.getValueLabelArea(i)
+										: barChartLayout.getNegativeValueLabelArea(i)
+								}
+							>
 								<div
 									style={{
 										display: 'flex',
-										justifyContent: 'flex-start',
+										justifyContent: it.value >= 0 ? 'flex-start' : 'flex-end',
 										alignItems: 'center',
 										height: '100%',
-										marginLeft: valueLabelMarginLeft,
+										marginLeft:
+											it.value >= 0 ? positiveValueLabelMarginLeft : 0,
+										marginRight:
+											it.value >= 0 ? 0 : negativeValueLabelMarginLeft,
 									}}
 								>
 									<TypographyStyle
@@ -277,8 +298,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 							style={{overflow: 'visible'}}
 						>
 							<line
-								x1={0}
-								x2={0}
+								x1={zeroLineX}
+								x2={zeroLineX}
 								y1={y1}
 								y2={y2}
 								stroke="#666"
@@ -293,7 +314,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	);
 };
 
-interface RoundedRightRectProps {
+interface RoundedRectProps {
 	x: number; // X-coordinate of the rectangle's top-left corner
 	y: number; // Y-coordinate of the rectangle's top-left corner
 	width: number;
@@ -304,7 +325,7 @@ interface RoundedRightRectProps {
 	strokeWidth?: number;
 }
 
-const RoundedRightRect: React.FC<RoundedRightRectProps> = ({
+const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	x,
 	y,
 	width,
@@ -331,6 +352,42 @@ const RoundedRightRect: React.FC<RoundedRightRectProps> = ({
 
 	return (
 		<svg>
+			<path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+		</svg>
+	);
+};
+
+const RoundedLeftRect: React.FC<RoundedRectProps> = ({
+	x,
+	y,
+	width,
+	height,
+	radius,
+	fill = 'blue',
+	stroke = 'transparent',
+	strokeWidth = 0,
+}) => {
+	// Ensure the radius does not exceed half the height
+	const r = Math.min(radius, height / 2);
+
+	// Define the path for a rectangle with only the left corners rounded
+	const path = `
+    M ${x + r} ${y}
+    H ${x + width}
+    V ${y + height}
+    H ${x + r}
+    A ${r} ${r} 0 0 1 ${x} ${y + height - r}
+    V ${y + r}
+    A ${r} ${r} 0 0 1 ${x + r} ${y}
+    Z
+  `;
+
+	// Calculate SVG canvas size to accommodate the rectangle and stroke
+	const svgWidth = x + width + strokeWidth;
+	const svgHeight = y + height + strokeWidth;
+
+	return (
+		<svg width={svgWidth} height={svgHeight} xmlns="http://www.w3.org/2000/svg">
 			<path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
 		</svg>
 	);

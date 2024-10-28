@@ -1,17 +1,14 @@
 import {z} from 'zod';
-import {Sequence, useVideoConfig} from 'remotion';
+import {useVideoConfig} from 'remotion';
 
 import {EconomistDataSource} from '../EconomistDataSource';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
 	useMatrixLayout,
@@ -58,6 +55,29 @@ const wahlergebnis2024: {
 	{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
 
+const wahlergebnis2024_percChange: {
+	parteiName: string;
+	change: number;
+	farbe: string;
+	id: string;
+}[] = [
+	{parteiName: 'SPD', change: -0.1, farbe: '#E3000F', id: 'SPD'}, // SPD Red
+	{parteiName: 'AfD', change: -0.3, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
+	{parteiName: 'BSW', change: 0.5, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
+	// {parteiName: 'CDU', change: 12.1 / 100, farbe: '#000000'}, // CDU Black
+	{parteiName: 'CDU', change: 0.2, farbe: '#fff', id: 'CDU'}, // CDU Black
+	{parteiName: 'Grüne', change: -0.05, farbe: '#64A12D', id: 'GRU'}, // Grüne Green
+	{parteiName: 'Die Linke', change: 0.1, farbe: '#BE3075', id: 'LIN'}, // Die Linke Magenta
+	{
+		parteiName: 'BVB',
+		change: 0.02,
+		farbe: '#FFD700',
+		id: 'BVB',
+	}, // BVB Yellow
+	{parteiName: 'FDP', change: -0.8, farbe: '#FFED00', id: 'FDP'}, // FDP Yellow
+	{parteiName: 'Sonstige', change: 0.9, farbe: '#808080', id: 'SON'}, // Others Gray
+];
+
 export const ComposedSimpleBarChartComposition: React.FC<
 	z.infer<typeof composedSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
@@ -74,7 +94,9 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		nrColumns: 2,
 		nrRows: 1,
 		columnSizes: [
-			{type: 'fr', value: 4},
+			// {type: 'fr', value: 4},
+			// {type: 'fr', value: 1},
+			{type: 'fr', value: 2},
 			{type: 'fr', value: 1},
 		],
 		rowSpacePixels: 80,
@@ -99,16 +121,18 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
-		barColor: it.farbe,
+		barColor: '#444',
+		// barColor: it.farbe,
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
-	const barChartData2 = wahlergebnis2024.map((it) => ({
+	const barChartDataPercChange = wahlergebnis2024_percChange.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
-		value: it.prozent,
-		barColor: '#fff',
-		valueLabel: formatPercentage(it.prozent),
+		value: it.change,
+		barColor: it.change > 0 ? 'green' : 'red',
+		// valueLabel: formatPercentage(it.prozent),
+		valueLabel: formatPercentage(it.change),
 	}));
 
 	return (
@@ -132,15 +156,11 @@ export const ComposedSimpleBarChartComposition: React.FC<
 					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
 					// stroke={'#292929'}
 					stroke={'#252525'}
-					// stroke={'rgba(255,0,255,0.175)'}
 					// stroke={'transparent'}
 					// stroke={'magenta'}
 				/>
 
-				<HtmlArea
-					area={leftArea}
-					// fill="rgba(255,0,255,0.2)"
-				>
+				<HtmlArea area={leftArea}>
 					<SimpleBarChart
 						theme={theme}
 						data={barChartData}
@@ -149,15 +169,13 @@ export const ComposedSimpleBarChartComposition: React.FC<
 						// showLayout
 					/>
 				</HtmlArea>
-				<HtmlArea
-					area={rightArea}
-					// fill="rgba(255,0,255,0.2)"
-				>
+				<HtmlArea area={rightArea}>
 					<SimpleBarChart
 						theme={theme}
-						data={barChartData2}
+						data={barChartDataPercChange}
 						width={rightArea.width}
 						height={rightArea.height}
+						valueDomain={[-1, 1]}
 						hideLabels
 						// showLayout
 					/>

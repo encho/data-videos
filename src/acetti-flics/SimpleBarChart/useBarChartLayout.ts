@@ -17,7 +17,8 @@ export function getIbcsSizes(baseline: number) {
 		// rowSpace: baseline * 0.5,
 		rowSpace: baseline * 0.75,
 		barMarginLeft: baseline * 0.85,
-		barMarginRight: baseline * 0.5,
+		// barMarginRight: baseline * 0.5,
+		valueLabelMargin: baseline * 0.5,
 		topPadding: baseline * 0.25,
 		bottomPadding: baseline * 0.25,
 	};
@@ -66,6 +67,7 @@ type TBarChartLayout = {
 	getLabelArea: (i: number) => TGridLayoutArea;
 	getBarArea: (i: number) => TGridLayoutArea;
 	getValueLabelArea: (i: number) => TGridLayoutArea;
+	getNegativeValueLabelArea: (i: number) => TGridLayoutArea;
 	getZeroLineArea: () => TGridLayoutArea;
 };
 
@@ -84,6 +86,7 @@ export function useBarChartLayout({
 	data: TSimpleBarChartData;
 	labelWidth?: number;
 	valueLabelWidth?: number;
+	negativeValueLabelWidth?: number;
 	hideLabels?: boolean;
 }): TBarChartLayout {
 	// TODO from theme
@@ -92,6 +95,8 @@ export function useBarChartLayout({
 	const nrRows = data.length;
 
 	const barChartHeight = getBarChartHeight({baseline, nrRows});
+
+	const hasNegativeValues = data.some((item) => item.value < 0);
 
 	// TODO evtl. useCallback to improve performance
 	const getLabelWidth = () => {
@@ -125,6 +130,12 @@ export function useBarChartLayout({
 	);
 
 	const valueLabelWidth = valueLabelWidthProp || Math.max(...valueLabelWidths);
+
+	// TODO pass better width, using only negative values to determine
+	const negativeValueLabelWidth = hasNegativeValues ? valueLabelWidth : 0;
+	const negativeValueLabelMargin = hasNegativeValues
+		? ibcsSizes.valueLabelMargin
+		: 0;
 
 	const barChartRowsRailSpec: TGridRailSpec = Array.from(
 		{length: nrRows},
@@ -180,9 +191,19 @@ export function useBarChartLayout({
 
 	const barChartColsRailSpec: TGridRailSpec = [
 		{type: 'pixel', value: labelWidth, name: 'label'},
-		{type: 'pixel', value: barMarginLeft, name: 'barMarginLeft'},
+		{type: 'pixel', value: barMarginLeft, name: 'barMarginLeft'}, // TODO rename to labelMargin
+		{type: 'pixel', value: negativeValueLabelWidth, name: 'negativeValueLabel'},
+		{
+			type: 'pixel',
+			value: negativeValueLabelMargin,
+			name: 'negativeValueLabelMargin',
+		},
 		{type: 'fr', value: 1, name: 'bar'},
-		{type: 'pixel', value: ibcsSizes.barMarginRight, name: 'barMarginRight'},
+		{
+			type: 'pixel',
+			value: ibcsSizes.valueLabelMargin,
+			name: 'valueLabelMargin',
+		},
 		{type: 'pixel', value: valueLabelWidth, name: 'valueLabel'},
 	];
 
@@ -231,6 +252,16 @@ export function useBarChartLayout({
 		return labelArea;
 	};
 
+	const getNegativeValueLabelArea = (i: number) => {
+		const labelArea = getGridLayoutArea(chartLayout, [
+			{positionOfType: i, name: 'dataItem'}, // start-row
+			{name: 'negativeValueLabel'}, // start-column
+			{positionOfType: i, name: 'dataItem'}, // end-row
+			{name: 'negativeValueLabel'}, // end-column
+		]);
+		return labelArea;
+	};
+
 	const getZeroLineArea = () => {
 		const zeroLineArea = getGridLayoutArea(chartLayout, [
 			{name: 'topPadding'}, // start-row
@@ -248,6 +279,7 @@ export function useBarChartLayout({
 		getLabelArea,
 		getBarArea,
 		getValueLabelArea,
+		getNegativeValueLabelArea,
 		getZeroLineArea,
 	};
 }
