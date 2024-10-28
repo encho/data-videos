@@ -45,8 +45,27 @@ export const PageFooter: React.FC<{
 	return (
 		<div
 			style={{
+				backgroundColor: 'rgba(255,100,0,0.2)',
 				paddingTop: paddingTopInBaselines * baseline,
-				// backgroundColor: 'rgba(255,0,255,0.3)',
+			}}
+		>
+			{children}
+		</div>
+	);
+};
+
+export const PageHeader: React.FC<{
+	children: React.ReactNode;
+	theme: ThemeType;
+}> = ({children, theme}) => {
+	const baseline = theme.page.baseline;
+	const paddingBottomInBaselines = 3;
+
+	return (
+		<div
+			style={{
+				backgroundColor: 'rgba(255,100,0,0.2)',
+				paddingBottom: paddingBottomInBaselines * baseline,
 			}}
 		>
 			{children}

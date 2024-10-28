@@ -8,17 +8,11 @@ export const EconomistTitleWithSubtitle: React.FC<{
 	baseline?: number;
 }> = ({title, subtitle, theme, baseline: baselineProp}) => {
 	const titleMarginBottomInBaselines = 4;
-	const elementPaddingBottomInBaselines = 3;
 
 	const baseline = baselineProp || theme.page.baseline;
 
 	return (
-		<div
-			style={{
-				paddingBottom: elementPaddingBottomInBaselines * baseline,
-				// backgroundColor: 'rgba(255,0,255,0.3)',
-			}}
-		>
+		<div>
 			<div>
 				<TypographyStyle
 					typographyStyle={theme.typography.textStyles.h1}

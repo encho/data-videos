@@ -2,11 +2,10 @@ import React from 'react';
 import {z} from 'zod';
 
 import {useElementDimensions} from './useElementDimensions';
-import {ThemePage, PageFooter, PageLogo} from './ThemePage';
+import {ThemePage, PageFooter, PageLogo, PageHeader} from './ThemePage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {BaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/BaselineGrid';
 import {VerticalBaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/VerticalBaselineGrid';
@@ -50,21 +49,20 @@ const wahlergebnis2024: {
 	{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
 
+// TODO from centralilzed location/ fake data generator
+const data = wahlergebnis2024.map((it) => ({
+	label: it.parteiName,
+	value: it.prozent,
+	id: it.id,
+	barColor: '#fff',
+	valueLabel: formatPercentage(it.prozent),
+}));
+
 export const SimplePageComposition: React.FC<
 	z.infer<typeof simplePageCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
-
 	const {ref, dimensions} = useElementDimensions();
-
-	// TODO from centralilzed location/ fake data generator
-	const barChartData = wahlergebnis2024.map((it) => ({
-		label: it.parteiName,
-		value: it.prozent,
-		id: it.id,
-		barColor: '#fff',
-		valueLabel: formatPercentage(it.prozent),
-	}));
 
 	return (
 		<ThemePage theme={theme}>
@@ -101,11 +99,13 @@ export const SimplePageComposition: React.FC<
 					}}
 				>
 					{/* TODO wrap perhaps like footer in PageHeader */}
-					<EconomistTitleWithSubtitle
-						title={'Simple Page Composition. This will be great stuff...'}
-						subtitle={'This is a subtitle. Lol...'}
-						theme={theme}
-					/>
+					<PageHeader theme={theme}>
+						<EconomistTitleWithSubtitle
+							title={'Simple Page Composition. This will be great stuff...'}
+							subtitle={'This is a subtitle. Lol...'}
+							theme={theme}
+						/>
+					</PageHeader>
 
 					<div
 						ref={ref}
@@ -118,7 +118,7 @@ export const SimplePageComposition: React.FC<
 						{dimensions ? (
 							<div>
 								<SimpleBarChart
-									data={barChartData}
+									data={data}
 									width={dimensions.width}
 									height={dimensions.height}
 									// showLayout
