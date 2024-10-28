@@ -3,7 +3,7 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
+import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
@@ -17,7 +17,7 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 import {data} from './inflationData';

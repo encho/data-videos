@@ -3,7 +3,7 @@ import {z} from 'zod';
 import numeral from 'numeral';
 
 import {zodThemeType} from '../../acetti-themes/themeTypes';
-import {useChartLayout} from '../../compositions/POCs/05-ColumnCharts/TwoChangeBars/useChartLayout';
+import {useChartLayout} from '../../compositions/POCs/06-ColumnCharts/TwoChangeBars/useChartLayout';
 import {AnimatedArrowPath} from './AnimatedArrowPath';
 import {ChangeBar} from './ChangeBar';
 import {DisplayGridLayout} from '../../acetti-layout';

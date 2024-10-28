@@ -5,7 +5,7 @@ import {geoMercator, geoPath} from 'd3-geo';
 import {GeoJSON, FeatureCollection, Geometry} from 'geojson';
 import {evolvePath} from '@remotion/paths';
 
-import {EconomistTitleWithSubtitle} from '../04-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistTitleWithSubtitle} from '../05-BarCharts/EconomistTitleWithSubtitle';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {LorenzoBertoliniLogo2} from '../../../acetti-components/LorenzoBertoliniLogo2';
 import {

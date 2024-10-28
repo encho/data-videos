@@ -39,7 +39,7 @@ export const nerdyTheme: ThemeType = {
 			h1: {
 				fontFamily: 'Inter-28pt-Black',
 				capHeightInBaselines: 3,
-				lineGapInBaselines: 1.5,
+				lineGapInBaselines: 2,
 				color: '#fff',
 			},
 			h2: {

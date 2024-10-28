@@ -4,8 +4,8 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {getThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {Position} from '../../../../acetti-ts-base/Position';
 import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
-import {EconomistTitleWithSubtitle} from '../../04-BarCharts/EconomistTitleWithSubtitle';
-import {EconomistDataSource} from '../../04-BarCharts/EconomistDataSource';
+import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const twoChangeBarsComponentProps = z.object({

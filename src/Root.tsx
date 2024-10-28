@@ -43,12 +43,12 @@ import {
 import {
 	SimpleColumnChartComposition,
 	simpleColumnChartCompositionSchema,
-} from './compositions/POCs/05-ColumnCharts/SimpleColumnChartPOC/SimpleColumnChartComposition';
+} from './compositions/POCs/06-ColumnCharts/SimpleColumnChartPOC/SimpleColumnChartComposition';
 
 import {
 	twoChangeBarsWithImageCompositionSchema,
 	TwoChangeBarsWithImageComposition,
-} from './compositions/POCs/05-ColumnCharts/TwoChangeBars/TwoChangeBarsWithImageComposition';
+} from './compositions/POCs/06-ColumnCharts/TwoChangeBars/TwoChangeBarsWithImageComposition';
 
 import {
 	SimpleKPIComposition,
@@ -58,7 +58,7 @@ import {
 import {
 	TwoChangeBarsComposition,
 	twoChangeBarsCompositionSchema,
-} from './compositions/POCs/05-ColumnCharts/TwoChangeBars/TwoChangeBarsComposition';
+} from './compositions/POCs/06-ColumnCharts/TwoChangeBars/TwoChangeBarsComposition';
 
 import {
 	TextAnimationsComposition,
@@ -83,27 +83,27 @@ import {
 import {
 	SimpleBarChartComposition,
 	simpleBarChartCompositionSchema,
-} from './compositions/POCs/04-BarCharts/SimpleBarChart/SimpleBarChartComposition';
+} from './compositions/POCs/05-BarCharts/SimpleBarChart/SimpleBarChartComposition';
 
 import {
 	SimpleSparklineComposition,
 	simpleSparklineCompositionSchema,
-} from './compositions/POCs/06-Sparklines/SimpleSparkline/SimpleSparklineComposition';
+} from './compositions/POCs/07-Sparklines/SimpleSparkline/SimpleSparklineComposition';
 
 import {
 	MultipleSimpleSparklineComposition,
 	multipleSimpleSparklineCompositionSchema,
-} from './compositions/POCs/06-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparklineComposition';
+} from './compositions/POCs/07-Sparklines/MultipleSimpleSparkline/MultipleSimpleSparklineComposition';
 
 import {
 	MultipleSimpleColumnChartComposition,
 	multipleSimpleColumnChartCompositionSchema,
-} from './compositions/POCs/05-ColumnCharts/MultipleSimpleColumnChart/MultipleSimpleColumnChartComposition';
+} from './compositions/POCs/06-ColumnCharts/MultipleSimpleColumnChart/MultipleSimpleColumnChartComposition';
 
 import {
 	MultipleSimpleBarChartComposition,
 	multipleSimpleBarChartCompositionSchema,
-} from './compositions/POCs/04-BarCharts/MultipleSimpleBarChart/MultipleSimpleBarChartComposition';
+} from './compositions/POCs/05-BarCharts/MultipleSimpleBarChart/MultipleSimpleBarChartComposition';
 
 import {
 	ModularScaleComposition,
@@ -153,7 +153,7 @@ import {
 import {
 	SimpleBarChartDevComposition,
 	simpleBarChartDevCompositionSchema,
-} from './compositions/POCs/04-BarCharts/SimpleBarChartDev/SimpleBarChartDevComposition';
+} from './compositions/POCs/05-BarCharts/SimpleBarChartDev/SimpleBarChartDevComposition';
 
 import {
 	VaryingSizesMatrixLayoutComposition,
@@ -163,17 +163,22 @@ import {
 import {
 	SimpleBarChartPerfectSizingComposition,
 	simpleBarChartPerfectSizingCompositionSchema,
-} from './compositions/POCs/04-BarCharts/SimpleBarChartPerfectSizing/SimpleBarChartPerfectSizingComposition';
+} from './compositions/POCs/05-BarCharts/SimpleBarChartPerfectSizing/SimpleBarChartPerfectSizingComposition';
 
 import {
 	ComposedSimpleBarChartComposition,
 	composedSimpleBarChartCompositionSchema,
-} from './compositions/POCs/04-BarCharts/ComposedSimpleBarChart/ComposedSImpleBarChartComposition';
+} from './compositions/POCs/05-BarCharts/ComposedSimpleBarChart/ComposedSImpleBarChartComposition';
 
 import {
 	NegativeSimpleBarChartComposition,
 	negativeSimpleBarChartCompositionSchema,
-} from './compositions/POCs/04-BarCharts/NegativeSimpleBarChart/NegativeSimpleBarChartComposition';
+} from './compositions/POCs/05-BarCharts/NegativeSimpleBarChart/NegativeSimpleBarChartComposition';
+
+import {
+	SimplePageComposition,
+	simplePageCompositionSchema,
+} from './compositions/POCs/03-Page/SimplePage/SimplePageComposition';
 
 import './tailwind.css';
 
@@ -374,7 +379,24 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="03-SimpleStats">
+				<Folder name="03-Page">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SquarePage"
+						component={SimplePageComposition}
+						durationInFrames={90 * 8}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={90}
+						{...videoSize.square}
+						schema={simplePageCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+						}}
+					/>
+				</Folder>
+
+				<Folder name="04-SimpleStats">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -395,7 +417,7 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="04-BarCharts">
+				<Folder name="05-BarCharts">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -466,7 +488,7 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="05-ColumnCharts">
+				<Folder name="06-ColumnCharts">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -542,7 +564,7 @@ export const RemotionRoot: React.FC = () => {
 					</Folder>
 				</Folder>
 
-				<Folder name="06-Sparklines">
+				<Folder name="07-Sparklines">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -567,7 +589,7 @@ export const RemotionRoot: React.FC = () => {
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
-				<Folder name="07-GeoJSON">
+				<Folder name="08-GeoJSON">
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
