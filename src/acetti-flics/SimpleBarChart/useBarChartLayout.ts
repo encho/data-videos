@@ -14,7 +14,8 @@ export function getIbcsSizes(baseline: number) {
 	// TODO from theme
 	const ibcsSizes = {
 		barHeight: baseline * 2,
-		rowSpace: baseline * 0.5,
+		// rowSpace: baseline * 0.5,
+		rowSpace: baseline * 0.75,
 		barMarginLeft: baseline * 0.85,
 		barMarginRight: baseline * 0.5,
 		topPadding: baseline * 0.25,
@@ -24,6 +25,7 @@ export function getIbcsSizes(baseline: number) {
 	return ibcsSizes;
 }
 
+// TODO account for flag includeSecondaryBars
 export function getBarChartHeight({
 	baseline,
 	nrRows,
@@ -34,10 +36,28 @@ export function getBarChartHeight({
 	const ibcsSizes = getIbcsSizes(baseline);
 
 	const barChartHeight =
-		nrRows * ibcsSizes.barHeight + (nrRows - 1) * ibcsSizes.rowSpace;
+		nrRows * ibcsSizes.barHeight +
+		(nrRows - 1) * ibcsSizes.rowSpace +
+		ibcsSizes.topPadding +
+		ibcsSizes.bottomPadding;
 
 	return barChartHeight;
 }
+
+// TODO account for flag includeSecondaryBars
+export const getBarChartBaseline = (
+	targetHeight: number,
+	data: TSimpleBarChartData
+) => {
+	const testBaseline = 10;
+	const heightForTestBaseline = getBarChartHeight({
+		baseline: testBaseline,
+		nrRows: data.length,
+	});
+
+	const perfectBaseline = (testBaseline * targetHeight) / heightForTestBaseline;
+	return perfectBaseline;
+};
 
 type TBarChartLayout = {
 	gridLayout: TGridLayout;

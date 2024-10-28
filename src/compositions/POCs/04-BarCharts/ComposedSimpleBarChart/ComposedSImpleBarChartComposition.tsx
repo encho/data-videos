@@ -74,25 +74,33 @@ const wahlergebnis2024_2: {
 export const ComposedSimpleBarChartComposition: React.FC<
 	z.infer<typeof composedSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps, width} = useVideoConfig();
+	const {
+		// fps,
+		width,
+	} = useVideoConfig();
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
 
-	const barChartWidth = 800;
-	const baseline = 18;
+	// const barChartWidth = 800;
+	// const baseline = 18;
 
 	const matrixLayout = useMatrixLayout({
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
-		height: 400,
+		height: 600,
 		nrColumns: 2,
 		nrRows: 1,
+		columnSizes: [
+			{type: 'fr', value: 2},
+			{type: 'fr', value: 1},
+		],
 		rowSpacePixels: 80,
 		columnSpacePixels: 50,
 		rowPaddingPixels: 0,
-		columnPaddingPixels: 2 * 16, // TODO page margin
+		// columnPaddingPixels: 2 * 16, // TODO page margin
+		columnPaddingPixels: 12 * 16, // TODO page margin
 	});
 
 	const leftArea = getMatrixLayoutCellArea({
@@ -116,42 +124,14 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
-	const barChartData2 = wahlergebnis2024_2.map((it) => ({
+	const barChartData2 = wahlergebnis2024.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
-		barColor: it.farbe,
-		// barColor: '#fff',
+		// barColor: it.farbe,
+		barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
-
-	const labelWidths = [...barChartData, ...barChartData2].map(
-		(it) =>
-			getTextDimensions({key: 'datavizLabel', theme, baseline, text: it.label})
-				.width
-	);
-
-	const labelWidth = Math.max(...labelWidths);
-
-	const valueLabelWidths = [...barChartData, ...barChartData2].map(
-		(it) =>
-			getTextDimensions({
-				key: 'datavizValueLabel',
-				theme,
-				baseline,
-				text: it.valueLabel,
-			}).width
-	);
-
-	const valueLabelWidth = Math.max(...valueLabelWidths);
-
-	const allValues = [...barChartData, ...barChartData2].map((it) => it.value);
-	const sharedValueDomain = [0, Math.max(...allValues)] as [number, number];
-
-	const FRAME_TITLE_1 = Math.floor(fps * 0);
-	const FRAME_BARCHART_1 = Math.floor(fps * 1.2);
-	const FRAME_TITLE_2 = Math.floor(fps * 5);
-	const FRAME_BARCHART_2 = Math.floor(fps * 6.2);
 
 	return (
 		<div
@@ -173,84 +153,35 @@ export const ComposedSimpleBarChartComposition: React.FC<
 					{...matrixLayout}
 					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
 					// stroke={'#292929'}
+					stroke={'rgba(255,0,255,0.175)'}
 					// stroke={'transparent'}
-					stroke={'magenta'}
+					// stroke={'magenta'}
 				/>
 
-				<HtmlArea area={leftArea} fill="rgba(255,0,255,0.2)"></HtmlArea>
-				<HtmlArea area={rightArea} fill="rgba(255,0,255,0.2)"></HtmlArea>
-			</div>
-
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					gap: 80,
-					marginTop: 100,
-				}}
-			>
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						flexDirection: 'column',
-					}}
+				<HtmlArea
+					area={leftArea}
+					// fill="rgba(255,0,255,0.2)"
 				>
-					<Sequence from={FRAME_TITLE_1} layout="none">
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.h3}
-							baseline={22}
-							marginBottom={2}
-						>
-							<WaterfallTextEffect>Brandenburg Wahl</WaterfallTextEffect>
-						</TypographyStyle>
-					</Sequence>
-
-					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
-					<Sequence from={FRAME_BARCHART_1} layout="none">
-						<SimpleBarChart
-							theme={theme}
-							data={barChartData}
-							width={barChartWidth}
-							baseline={baseline}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							valueDomain={sharedValueDomain}
-							// showLayout
-						/>
-					</Sequence>
-				</div>
-
-				<div
-					style={{
-						display: 'flex',
-						alignItems: 'center',
-						flexDirection: 'column',
-					}}
+					<SimpleBarChart
+						theme={theme}
+						data={barChartData}
+						width={leftArea.width}
+						height={leftArea.height}
+						// showLayout
+					/>
+				</HtmlArea>
+				<HtmlArea
+					area={rightArea}
+					// fill="rgba(255,0,255,0.2)"
 				>
-					<Sequence from={FRAME_TITLE_2} layout="none">
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.h3}
-							baseline={22}
-							marginBottom={2}
-						>
-							<WaterfallTextEffect>Bayern Wahl</WaterfallTextEffect>
-						</TypographyStyle>
-					</Sequence>
-					{/* TODO pass shared domainValues, but also shared label widths and valueLabelWidths */}
-					<Sequence from={FRAME_BARCHART_2} layout="none">
-						<SimpleBarChart
-							theme={theme}
-							data={barChartData2}
-							width={barChartWidth}
-							baseline={baseline}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							valueDomain={sharedValueDomain}
-							// showLayout
-						/>
-					</Sequence>
-				</div>
+					<SimpleBarChart
+						theme={theme}
+						data={barChartData2}
+						width={rightArea.width}
+						height={rightArea.height}
+						// showLayout
+					/>
+				</HtmlArea>
 			</div>
 
 			<EconomistDataSource theme={theme}>

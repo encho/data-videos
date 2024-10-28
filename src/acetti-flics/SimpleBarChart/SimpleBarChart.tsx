@@ -9,7 +9,7 @@ import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOut
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
-import {useBarChartLayout} from './useBarChartLayout';
+import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
 
 export type TSimpleBarChartData = {
 	label: string;
@@ -19,11 +19,24 @@ export type TSimpleBarChartData = {
 	id: string;
 }[];
 
-type TSimpleBarChartProps = {
+interface HeightProp {
+	height: number;
+	baseline?: never; // Ensures baseline cannot be provided when height is present
+}
+
+interface BaselineProp {
+	baseline: number;
+	height?: never; // Ensures height cannot be provided when baseline is present
+}
+
+type TBaselineOrHeight = HeightProp | BaselineProp;
+
+type TSimpleBarChartProps = TBaselineOrHeight & {
 	theme: ThemeType;
 	data: TSimpleBarChartData;
 	width: number;
-	baseline: number;
+	// height?: number;
+	// baseline?: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
 	valueDomain?: [number, number];
@@ -34,7 +47,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	theme,
 	data,
 	width,
-	baseline,
+	height,
+	baseline: baseLineProp,
 	showLayout = false,
 	labelWidth,
 	valueLabelWidth,
@@ -48,6 +62,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		durationInFrames,
 		data,
 	});
+
+	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
+	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
+	invariant(baseline);
 
 	const barChartLayout = useBarChartLayout({
 		baseline,

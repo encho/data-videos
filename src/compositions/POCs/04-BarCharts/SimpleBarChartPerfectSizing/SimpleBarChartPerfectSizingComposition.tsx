@@ -1,10 +1,5 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {
-	continueRender,
-	delayRender,
-	useCurrentScale,
-	useVideoConfig,
-} from 'remotion';
+import {continueRender, delayRender, useVideoConfig} from 'remotion';
 import {z} from 'zod';
 
 import {
@@ -12,12 +7,12 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistDataSource} from '../EconomistDataSource';
+// import {EconomistDataSource} from '../EconomistDataSource';
+// import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import {getBarChartHeight} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
+import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 
@@ -131,18 +126,6 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
-	const getPerfectSizingChartBaseline = (targetHeight: number) => {
-		const testBaseline = 10;
-		const heightForTestBaseline = getBarChartHeight({
-			baseline: testBaseline,
-			nrRows: barChartData.length,
-		});
-
-		const perfectBaseline =
-			(testBaseline * targetHeight) / heightForTestBaseline;
-		return perfectBaseline;
-	};
-
 	return (
 		<div
 			style={{
@@ -185,7 +168,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 								data={barChartData}
 								width={CHART_WIDTH}
 								// showLayout
-								baseline={getPerfectSizingChartBaseline(dimensions.height)}
+								baseline={getBarChartBaseline(dimensions.height, barChartData)}
 								theme={theme}
 							/>
 						</div>
