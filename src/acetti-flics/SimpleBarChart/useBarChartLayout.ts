@@ -71,6 +71,32 @@ type TBarChartLayout = {
 	getZeroLineArea: () => TGridLayoutArea;
 };
 
+export function getMaxValueLabelWidth({
+	data,
+	theme,
+	baseline,
+}: {
+	data: TSimpleBarChartData;
+	theme: ThemeType;
+	baseline: number;
+}) {
+	if (data.length === 0) {
+		return 0;
+	}
+
+	const valueLabelWidths = data.map(
+		(it) =>
+			getTextDimensions({
+				key: 'datavizValueLabel',
+				theme,
+				baseline,
+				text: it.valueLabel,
+			}).width
+	);
+
+	return Math.max(...valueLabelWidths);
+}
+
 export function useBarChartLayout({
 	theme,
 	baseline,
@@ -78,6 +104,7 @@ export function useBarChartLayout({
 	data,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
+	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	hideLabels = false,
 }: {
 	theme: ThemeType;
@@ -117,22 +144,22 @@ export function useBarChartLayout({
 	const labelWidth = !hideLabels ? getLabelWidth() : 0;
 	const barMarginLeft = !hideLabels ? ibcsSizes.barMarginLeft : 0;
 
-	// determine valueLabelWidth from all valueLabelWidth's
-	// ------------------------------------------
-	const valueLabelWidths = data.map(
-		(it) =>
-			getTextDimensions({
-				key: 'datavizValueLabel',
-				theme,
-				baseline,
-				text: it.valueLabel,
-			}).width
-	);
+	const valueLabelWidth =
+		valueLabelWidthProp ||
+		getMaxValueLabelWidth({
+			data: data.filter((it) => it.value >= 0),
+			baseline,
+			theme,
+		});
 
-	const valueLabelWidth = valueLabelWidthProp || Math.max(...valueLabelWidths);
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp ||
+		getMaxValueLabelWidth({
+			data: data.filter((it) => it.value < 0),
+			baseline,
+			theme,
+		});
 
-	// TODO pass better width, using only negative values to determine
-	const negativeValueLabelWidth = hasNegativeValues ? valueLabelWidth : 0;
 	const negativeValueLabelMargin = hasNegativeValues
 		? ibcsSizes.valueLabelMargin
 		: 0;

@@ -74,7 +74,7 @@ export const nerdyTheme: ThemeType = {
 				fontFamily: 'Inter-Regular',
 				capHeightInBaselines: 1,
 				lineGapInBaselines: 1,
-				color: '#fff',
+				color: '#aaa',
 			},
 			datavizTickLabel: {
 				fontFamily: 'Inter-Bold',

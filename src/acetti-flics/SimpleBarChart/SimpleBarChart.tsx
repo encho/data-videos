@@ -37,6 +37,7 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	width: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
+	negativeValueLabelWidth?: number;
 	valueDomain?: [number, number];
 	showLayout?: boolean;
 	hideLabels?: boolean;
@@ -52,7 +53,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	hideLabels = false,
 	labelWidth,
 	valueLabelWidth,
-	// negativeValueLabelWidth, // TODO
+	negativeValueLabelWidth,
 	valueDomain: valueDomainProp,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
@@ -64,7 +65,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		data,
 	});
 
-	const hasNegativeValues = data.some((item) => item.value < 0);
+	// const hasNegativeValues = data.some((item) => item.value < 0);
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
@@ -77,10 +78,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		data,
 		width,
 		labelWidth,
-		// TODO pass better width, using only positive values to determine
 		valueLabelWidth,
-		// TODO pass better width, using only negative values to determine
-		// negativeValueLabelWidth: hasNegativeValues ? valueLabelWidth : undefined,
+		negativeValueLabelWidth,
 	});
 
 	// determine domain

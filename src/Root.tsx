@@ -170,6 +170,11 @@ import {
 	composedSimpleBarChartCompositionSchema,
 } from './compositions/POCs/04-BarCharts/ComposedSimpleBarChart/ComposedSImpleBarChartComposition';
 
+import {
+	NegativeSimpleBarChartComposition,
+	negativeSimpleBarChartCompositionSchema,
+} from './compositions/POCs/04-BarCharts/NegativeSimpleBarChart/NegativeSimpleBarChartComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -412,6 +417,17 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSize.square}
 						schema={simpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="NegativeSimpleBarChart"
+						component={NegativeSimpleBarChartComposition}
+						durationInFrames={30 * 7}
+						fps={30}
+						{...videoSize.square}
+						schema={negativeSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition
