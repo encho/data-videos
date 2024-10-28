@@ -1,8 +1,7 @@
-import React, {ReactNode} from 'react';
+import React from 'react';
 import {z} from 'zod';
 
 import {useElementDimensions} from './useElementDimensions';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {ThemePage, PageFooter, PageLogo} from './ThemePage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
@@ -56,9 +55,7 @@ export const SimplePageComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const {ref, dimensions} = useElementDimensions();
 
 	// TODO from centralilzed location/ fake data generator
 	const barChartData = wahlergebnis2024.map((it) => ({
@@ -68,64 +65,6 @@ export const SimplePageComposition: React.FC<
 		barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
-
-	return (
-		<PerfectPage
-			headerEl={
-				<EconomistTitleWithSubtitle
-					title={'Simple Page Composition. This will be great stuff...'}
-					subtitle={'This is a subtitle. Lol...'}
-					theme={theme}
-				/>
-			}
-			footerEl={
-				<div
-					style={{
-						display: 'flex',
-						justifyContent: 'space-between',
-						alignItems: 'flex-end',
-					}}
-				>
-					<div style={{maxWidth: '62%'}}>
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.dataSource}
-							baseline={theme.page.baseline}
-						>
-							Data Source: German Bundesbank 2024 Paper on Evolutional Finance
-						</TypographyStyle>
-					</div>
-				</div>
-			}
-			renderContent={({width, height}) => {
-				return (
-					<div>
-						<SimpleBarChart
-							data={barChartData}
-							width={width}
-							height={height}
-							// showLayout
-							theme={theme}
-						/>
-					</div>
-				);
-			}}
-			theme={theme}
-		/>
-	);
-};
-
-type TSize = {
-	width: number;
-	height: number;
-};
-
-export const PerfectPage: React.FC<{
-	renderContent: (x: TSize) => ReactNode;
-	headerEl: ReactNode;
-	footerEl: ReactNode;
-	theme: ThemeType;
-}> = ({headerEl, footerEl, theme, renderContent}) => {
-	const {ref, dimensions} = useElementDimensions();
 
 	return (
 		<ThemePage theme={theme}>
@@ -141,16 +80,16 @@ export const PerfectPage: React.FC<{
 					height={theme.page.contentHeight}
 					baseline={theme.page.baseline}
 					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(0,150,255,0.25)"
-					strokeWidth={4}
+					lineColor="rgba(90,60,0,1.0)"
+					strokeWidth={2}
 				/>
 				<VerticalBaselineGrid
 					width={theme.page.contentWidth}
 					height={theme.page.contentHeight}
 					baseline={theme.page.baseline}
 					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(0,150,255,0.25)"
-					strokeWidth={4}
+					lineColor="rgba(90,60,0,1.0)"
+					strokeWidth={2}
 				/>
 
 				<div
@@ -162,7 +101,11 @@ export const PerfectPage: React.FC<{
 					}}
 				>
 					{/* TODO wrap perhaps like footer in PageHeader */}
-					{headerEl}
+					<EconomistTitleWithSubtitle
+						title={'Simple Page Composition. This will be great stuff...'}
+						subtitle={'This is a subtitle. Lol...'}
+						theme={theme}
+					/>
 
 					<div
 						ref={ref}
@@ -172,15 +115,39 @@ export const PerfectPage: React.FC<{
 							justifyContent: 'center',
 						}}
 					>
-						{dimensions &&
-							renderContent({
-								width: dimensions.width,
-								height: dimensions.height,
-							})}
+						{dimensions ? (
+							<div>
+								<SimpleBarChart
+									data={barChartData}
+									width={dimensions.width}
+									height={dimensions.height}
+									// showLayout
+									theme={theme}
+								/>
+							</div>
+						) : null}
 					</div>
 
 					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter theme={theme}>{footerEl}</PageFooter>
+					<PageFooter theme={theme}>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'flex-end',
+							}}
+						>
+							<div style={{maxWidth: '62%'}}>
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.dataSource}
+									baseline={theme.page.baseline}
+								>
+									Data Source: German Bundesbank 2024 Paper on Evolutional
+									Finance
+								</TypographyStyle>
+							</div>
+						</div>
+					</PageFooter>
 				</div>
 			</div>
 			<PageLogo theme={theme} />

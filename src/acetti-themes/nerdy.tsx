@@ -65,12 +65,14 @@ export const nerdyTheme = ({
 			textStyles: {
 				h1: {
 					fontFamily: 'Inter-28pt-Black',
+					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 3,
 					lineGapInBaselines: 1.75,
 					color: '#fff',
 				},
 				h2: {
 					fontFamily: 'Inter-Regular',
+					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 2,
 					lineGapInBaselines: 1.5,
 					// color: '#777',

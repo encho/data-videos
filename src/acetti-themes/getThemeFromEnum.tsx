@@ -4,6 +4,7 @@ import {useVideoConfig} from 'remotion';
 import {lorenzobertoliniTheme} from './lorenzobertolini';
 import {nerdyTheme} from './nerdy';
 import {lorenzobertolinibrightTheme} from './lorenzobertolinibright';
+import {useFontFamiliesLoader} from '../acetti-typography/useFontFamiliesLoader';
 
 export const zThemeEnum = z.enum([
 	'NERDY',
@@ -36,5 +37,12 @@ export const useThemeFromEnum = (themeEnum: ThemeEnum) => {
 			: lorenzobertolinibrightTheme;
 
 	// return theme;
-	return createTheme({width, height});
+	const theme = createTheme({width, height});
+
+	// load fonts
+	// TODO: eventually wait for docoment.fonts.ready// and/or introduce Timeout instead of in useElementDimensions
+	// ********************************************************
+	useFontFamiliesLoader(theme);
+
+	return theme;
 };
