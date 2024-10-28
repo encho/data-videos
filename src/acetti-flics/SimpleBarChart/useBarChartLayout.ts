@@ -76,6 +76,7 @@ export function useBarChartLayout({
 	data,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
+	hideLabels = false,
 }: {
 	theme: ThemeType;
 	baseline: number;
@@ -83,6 +84,7 @@ export function useBarChartLayout({
 	data: TSimpleBarChartData;
 	labelWidth?: number;
 	valueLabelWidth?: number;
+	hideLabels?: boolean;
 }): TBarChartLayout {
 	// TODO from theme
 	const ibcsSizes = getIbcsSizes(baseline);
@@ -91,15 +93,25 @@ export function useBarChartLayout({
 
 	const barChartHeight = getBarChartHeight({baseline, nrRows});
 
-	const labelWidths = data.map(
-		(it) =>
-			getTextDimensions({key: 'datavizLabel', theme, baseline, text: it.label})
-				.width
-	);
+	// TODO evtl. useCallback to improve performance
+	const getLabelWidth = () => {
+		const labelWidths = data.map(
+			(it) =>
+				getTextDimensions({
+					key: 'datavizLabel',
+					theme,
+					baseline,
+					text: it.label,
+				}).width
+		);
 
-	const labelWidth = labelWidthProp || Math.max(...labelWidths);
+		return labelWidthProp || Math.max(...labelWidths);
+	};
 
-	// TODO use valueLabelTextStyleProps after we use that text style!!!
+	// layout sizes contingent on whether labels are shown
+	const labelWidth = !hideLabels ? getLabelWidth() : 0;
+	const barMarginLeft = !hideLabels ? ibcsSizes.barMarginLeft : 0;
+
 	// determine valueLabelWidth from all valueLabelWidth's
 	// ------------------------------------------
 	const valueLabelWidths = data.map(
@@ -168,7 +180,7 @@ export function useBarChartLayout({
 
 	const barChartColsRailSpec: TGridRailSpec = [
 		{type: 'pixel', value: labelWidth, name: 'label'},
-		{type: 'pixel', value: ibcsSizes.barMarginLeft, name: 'barMarginLeft'},
+		{type: 'pixel', value: barMarginLeft, name: 'barMarginLeft'},
 		{type: 'fr', value: 1, name: 'bar'},
 		{type: 'pixel', value: ibcsSizes.barMarginRight, name: 'barMarginRight'},
 		{type: 'pixel', value: valueLabelWidth, name: 'valueLabel'},

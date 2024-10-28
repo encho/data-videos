@@ -35,12 +35,11 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	theme: ThemeType;
 	data: TSimpleBarChartData;
 	width: number;
-	// height?: number;
-	// baseline?: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
 	valueDomain?: [number, number];
 	showLayout?: boolean;
+	hideLabels?: boolean;
 };
 
 export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
@@ -50,6 +49,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	height,
 	baseline: baseLineProp,
 	showLayout = false,
+	hideLabels = false,
 	labelWidth,
 	valueLabelWidth,
 	valueDomain: valueDomainProp,
@@ -68,6 +68,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	invariant(baseline);
 
 	const barChartLayout = useBarChartLayout({
+		hideLabels,
 		baseline,
 		theme,
 		data,
@@ -106,29 +107,31 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				</div>
 			) : null}
 
-			{labelKeyframes.map((labelKeyframe, i) => {
-				return (
-					<Sequence from={labelKeyframe.frame} layout="none">
-						<HtmlArea area={barChartLayout.getLabelArea(i)}>
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'flex-end',
-									alignItems: 'center',
-									height: '100%',
-								}}
-							>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.datavizLabel}
-									baseline={baseline}
-								>
-									<WaterfallTextEffect>{data[i].label}</WaterfallTextEffect>
-								</TypographyStyle>
-							</div>
-						</HtmlArea>
-					</Sequence>
-				);
-			})}
+			{!hideLabels
+				? labelKeyframes.map((labelKeyframe, i) => {
+						return (
+							<Sequence from={labelKeyframe.frame} layout="none">
+								<HtmlArea area={barChartLayout.getLabelArea(i)}>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'flex-end',
+											alignItems: 'center',
+											height: '100%',
+										}}
+									>
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.datavizLabel}
+											baseline={baseline}
+										>
+											<WaterfallTextEffect>{data[i].label}</WaterfallTextEffect>
+										</TypographyStyle>
+									</div>
+								</HtmlArea>
+							</Sequence>
+						);
+				  })
+				: null}
 
 			{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
 			{data.map((it, i) => {

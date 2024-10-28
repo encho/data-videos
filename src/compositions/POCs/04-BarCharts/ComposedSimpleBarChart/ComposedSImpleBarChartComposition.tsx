@@ -49,7 +49,7 @@ const wahlergebnis2024: {
 	{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D', id: 'GRU'}, // Grüne Green
 	{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075', id: 'LIN'}, // Die Linke Magenta
 	{
-		parteiName: 'BVB/Freie Wähler',
+		parteiName: 'BVB',
 		prozent: 2.6 / 100,
 		farbe: '#FFD700',
 		id: 'BVB',
@@ -58,49 +58,29 @@ const wahlergebnis2024: {
 	{parteiName: 'Sonstige', prozent: 4.6 / 100, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
 
-const wahlergebnis2024_2: {
-	parteiName: string;
-	prozent: number;
-	farbe: string;
-	id: string;
-}[] = [
-	{parteiName: 'SPD', prozent: 50 / 100, farbe: '#E3000F', id: 'SPD'}, // SPD Red
-	{parteiName: 'AfD', prozent: 20 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
-	{parteiName: 'BSW', prozent: 10 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
-	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
-	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
-];
-
 export const ComposedSimpleBarChartComposition: React.FC<
 	z.infer<typeof composedSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const {
-		// fps,
-		width,
-	} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
 
-	// const barChartWidth = 800;
-	// const baseline = 18;
-
 	const matrixLayout = useMatrixLayout({
 		width: width - 4, // to better show grid rails!
 		// width, TODO enable when we are not showing gridlayout any more
-		height: 600,
+		height: 680,
 		nrColumns: 2,
 		nrRows: 1,
 		columnSizes: [
-			{type: 'fr', value: 2},
+			{type: 'fr', value: 4},
 			{type: 'fr', value: 1},
 		],
 		rowSpacePixels: 80,
 		columnSpacePixels: 50,
 		rowPaddingPixels: 0,
-		// columnPaddingPixels: 2 * 16, // TODO page margin
-		columnPaddingPixels: 12 * 16, // TODO page margin
+		columnPaddingPixels: 12 * 16, // TODO page margin/baseline
 	});
 
 	const leftArea = getMatrixLayoutCellArea({
@@ -120,7 +100,6 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		label: it.parteiName,
 		value: it.prozent,
 		barColor: it.farbe,
-		// barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
@@ -128,7 +107,6 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
-		// barColor: it.farbe,
 		barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
@@ -153,7 +131,8 @@ export const ComposedSimpleBarChartComposition: React.FC<
 					{...matrixLayout}
 					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
 					// stroke={'#292929'}
-					stroke={'rgba(255,0,255,0.175)'}
+					stroke={'#252525'}
+					// stroke={'rgba(255,0,255,0.175)'}
 					// stroke={'transparent'}
 					// stroke={'magenta'}
 				/>
@@ -179,6 +158,7 @@ export const ComposedSimpleBarChartComposition: React.FC<
 						data={barChartData2}
 						width={rightArea.width}
 						height={rightArea.height}
+						hideLabels
 						// showLayout
 					/>
 				</HtmlArea>
