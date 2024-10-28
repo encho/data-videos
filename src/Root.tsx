@@ -385,14 +385,12 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SquarePage"
 						component={SimplePageComposition}
-						durationInFrames={90 * 8}
+						durationInFrames={30 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-						fps={90}
+						fps={30}
 						{...videoSize.square}
 						schema={simplePageCompositionSchema}
-						defaultProps={{
-							themeEnum: 'NERDY' as const,
-						}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 

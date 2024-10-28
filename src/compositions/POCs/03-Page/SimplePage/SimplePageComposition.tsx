@@ -1,20 +1,19 @@
 import React, {useRef, useEffect, useState} from 'react';
-import {continueRender, delayRender, useVideoConfig} from 'remotion';
+import {continueRender, delayRender} from 'remotion';
 import {z} from 'zod';
 
-import {
-	getThemeFromEnum,
-	zThemeEnum,
-} from '../../../../acetti-themes/getThemeFromEnum';
+import {ThemePage, PageFooter, PageLogo} from './ThemePage';
+import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
+// import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
+// import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {BaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/BaselineGrid';
 import {VerticalBaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/VerticalBaselineGrid';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 export const simplePageCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -57,23 +56,10 @@ const wahlergebnis2024: {
 export const SimplePageComposition: React.FC<
 	z.infer<typeof simplePageCompositionSchema>
 > = ({themeEnum}) => {
-	// const {fps, durationInFrames} = useVideoConfig();
-
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	const {width, height} = useVideoConfig();
+	const theme = useThemeFromEnum(themeEnum as any);
 
 	// Create a ref to the div you want to measure
 	const divRef = useRef<HTMLDivElement>(null);
-
-	// const scale = useCurrentScale();
-	// const scale = 1;
-
-	const PAGE_BASELINE = height / 40;
-	const PAGE_MARGIN_TOP = PAGE_BASELINE * 1;
-	const PAGE_MARGIN_BOTTOM = PAGE_BASELINE * 1;
-	const PAGE_MARGIN_LEFT = PAGE_BASELINE * 1;
-	const PAGE_MARGIN_RIGHT = PAGE_BASELINE * 1;
 
 	// State to store dimensions
 	const [dimensions, setDimensions] = useState<{
@@ -82,10 +68,10 @@ export const SimplePageComposition: React.FC<
 	} | null>(null);
 
 	// Handle to delay rendering
-	const [handle] = useState(() => delayRender());
+	// const [handle] = useState(() => delayRender());
 
 	useEffect(() => {
-		const measure = async () => {
+		const waitFirstTime = async () => {
 			// ***********************************************************
 			// TODO bring these waiting checks into the fonts loader!!!!!
 			// ***********************************************************
@@ -94,7 +80,20 @@ export const SimplePageComposition: React.FC<
 
 			// Introduce an additional delay to ensure styles are applied
 			// await new Promise((resolve) => setTimeout(resolve, 2000));
-			await new Promise((resolve) => setTimeout(resolve, 200));
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		};
+
+		const measure = async () => {
+			const handle = delayRender();
+			// ***********************************************************
+			// TODO bring these waiting checks into the fonts loader!!!!!
+			// ***********************************************************
+			// await for when the fonts are loaded in the browser
+			// await document.fonts.ready;
+
+			// Introduce an additional delay to ensure styles are applied
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
+			// await new Promise((resolve) => setTimeout(resolve, 200));
 			// ***********************************************************
 
 			if (divRef.current) {
@@ -106,7 +105,8 @@ export const SimplePageComposition: React.FC<
 		};
 
 		// Measure after the component has mounted and rendered
-		measure();
+		waitFirstTime().then(() => measure());
+		// measure();
 
 		// Optionally, add a resize listener if dimensions might change
 		// window.addEventListener('resize', measure);
@@ -115,56 +115,47 @@ export const SimplePageComposition: React.FC<
 		return () => {
 			// window.removeEventListener('resize', measure);
 		};
-	}, [handle]);
+	}, []);
+	// }, [handle]);
 
-	// TODO utilize the page settings for baseline and page margins
-	const CHART_WIDTH = width - PAGE_MARGIN_LEFT - PAGE_MARGIN_RIGHT;
+	const CHART_WIDTH = theme.page.contentWidth;
 
 	// load fonts
 	// ********************************************************
 	useFontFamiliesLoader(theme);
 
+	// TODO from centralilzed location/ fake data generator
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
 		id: it.id,
-		// barColor: it.farbe,
-		// barColor: '#fff',
-		// barColor: '#f05122',
-		barColor: '#FF396E',
+		barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
 	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
+		<ThemePage theme={theme}>
 			<div
 				style={{
-					width,
-					height,
+					width: theme.page.contentWidth,
+					height: theme.page.contentHeight,
 					position: 'relative',
 				}}
 			>
 				<BaselineGrid
-					width={width}
-					height={height}
-					baseline={PAGE_BASELINE}
+					width={theme.page.contentWidth}
+					height={theme.page.contentHeight}
+					baseline={theme.page.baseline}
 					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(255,0,255,0.4)"
+					lineColor="rgba(0,150,255,0.25)"
 					strokeWidth={4}
 				/>
 				<VerticalBaselineGrid
-					width={width}
-					height={height}
-					baseline={PAGE_BASELINE}
+					width={theme.page.contentWidth}
+					height={theme.page.contentHeight}
+					baseline={theme.page.baseline}
 					{...theme.TypographicLayouts.baselineGrid}
-					lineColor="rgba(255,0,255,0.4)"
+					lineColor="rgba(0,150,255,0.25)"
 					strokeWidth={4}
 				/>
 
@@ -176,18 +167,11 @@ export const SimplePageComposition: React.FC<
 						position: 'relative',
 					}}
 				>
-					<div>
-						<EconomistTitleWithSubtitle
-							title={'Simple Page Composition'}
-							subtitle={'This is a subtitle'}
-							theme={theme}
-							pageMarginLeft={PAGE_MARGIN_LEFT}
-							pageMarginRight={PAGE_MARGIN_RIGHT}
-							pageMarginTop={PAGE_MARGIN_TOP}
-							// baseline={18}
-							baseline={PAGE_BASELINE}
-						/>
-					</div>
+					<EconomistTitleWithSubtitle
+						title={'Simple Page Composition. This will be great stuff...'}
+						subtitle={'This is a subtitle. Lol...'}
+						theme={theme}
+					/>
 
 					<div
 						ref={divRef}
@@ -213,7 +197,8 @@ export const SimplePageComposition: React.FC<
 						)}
 					</div>
 
-					<FooterDiv baseline={18}>
+					{/* TODO introduce evtl. also absolute positioned footer */}
+					<PageFooter theme={theme}>
 						<div
 							style={{
 								display: 'flex',
@@ -224,76 +209,17 @@ export const SimplePageComposition: React.FC<
 							<div style={{maxWidth: '62%'}}>
 								<TypographyStyle
 									typographyStyle={theme.typography.textStyles.dataSource}
-									baseline={18}
+									baseline={theme.page.baseline}
 								>
 									Data Source: German Bundesbank 2024 Paper on Evolutional
 									Finance
 								</TypographyStyle>
 							</div>
-
-							<LorenzoBertoliniLogo
-								baseline={18}
-								capHeightInBaselines={1.5}
-								theme={theme}
-							/>
 						</div>
-					</FooterDiv>
+					</PageFooter>
 				</div>
 			</div>
-		</div>
-	);
-};
-
-export const FooterDiv: React.FC<{
-	children: React.ReactNode;
-	baseline: number;
-}> = ({children, baseline}) => {
-	const paddingTop = 3 * baseline;
-
-	const pageMarginLeft = baseline * 2;
-	const pageMarginRight = baseline * 2;
-	const pageMarginBottom = baseline * 2;
-
-	return (
-		<div
-			style={{
-				marginLeft: pageMarginLeft,
-				marginRight: pageMarginRight,
-				marginBottom: pageMarginBottom,
-				paddingTop,
-				// backgroundColor: '#222',
-			}}
-		>
-			{children}
-		</div>
-	);
-};
-
-export const LorenzoBertoliniLogo = ({
-	theme,
-	color: colorProp,
-	baseline,
-	capHeightInBaselines = 1,
-}: {
-	theme: ThemeType;
-	color?: string;
-	capHeightInBaselines?: number;
-	baseline: number;
-}) => {
-	const color = colorProp || theme.typography.logoColor;
-	const capHeight = baseline * capHeightInBaselines;
-
-	return (
-		<div>
-			<CapSizeTextNew
-				fontFamily={'Inter-Regular'}
-				capHeight={capHeight}
-				lineGap={0}
-				color={color}
-			>
-				<span>lorenzo</span>
-				<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
-			</CapSizeTextNew>
-		</div>
+			<PageLogo theme={theme} />
+		</ThemePage>
 	);
 };

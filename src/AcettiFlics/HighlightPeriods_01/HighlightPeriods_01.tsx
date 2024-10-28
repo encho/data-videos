@@ -14,10 +14,8 @@ import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from '../../acetti-http/nerdy-finance/fetchPriceChartData';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
+import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 // import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
@@ -46,12 +44,7 @@ export const HighlightPeriods_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
+	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
 

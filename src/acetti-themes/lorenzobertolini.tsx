@@ -5,7 +5,7 @@ import {ThemeType} from './themeTypes';
 // this theme is a mono colored theme
 // const monoColor = "#f50274";
 // const monoColor = '#f05122';
-const monoColor = '#222';
+const monoColor = '#f05122';
 
 const textColor = chroma('#9b9b9b').hex();
 // const textColor = chroma(monoColor).brighten(2).hex();
@@ -24,200 +24,227 @@ const backgroundColor = chroma(monoColor).hex();
 // 	.colors(6);
 const dataScale = chroma.scale('Set1').colors(6);
 
-export const lorenzobertoliniTheme: ThemeType = {
-	global: {backgroundColor},
-	typography: {
-		title: {
-			fontFamily: 'Inter-Bold',
-			color: '#ffffff',
+export const lorenzobertoliniTheme = ({
+	width,
+	height,
+}: {
+	width: number;
+	height: number;
+}): ThemeType => {
+	const PAGE_MARGIN_TOP = width / 30;
+	const PAGE_MARGIN_BOTTOM = width / 30;
+	const PAGE_MARGIN_LEFT = width / 30;
+	const PAGE_MARGIN_RIGHT = width / 30;
+	const PAGE_CONTENT_HEIGHT = height - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM;
+	const PAGE_CONTENT_WIDTH = width - PAGE_MARGIN_RIGHT - PAGE_MARGIN_LEFT;
+	const PAGE_BASELINE = PAGE_CONTENT_HEIGHT / 50;
+
+	const page = {
+		marginTop: PAGE_MARGIN_TOP,
+		marginBottom: PAGE_MARGIN_BOTTOM,
+		marginLeft: PAGE_MARGIN_LEFT,
+		marginRight: PAGE_MARGIN_RIGHT,
+		contentWidth: PAGE_CONTENT_WIDTH,
+		contentHeight: PAGE_CONTENT_HEIGHT,
+		baseline: PAGE_BASELINE,
+	};
+
+	return {
+		page,
+		global: {backgroundColor},
+		typography: {
+			title: {
+				fontFamily: 'Inter-Bold',
+				color: '#ffffff',
+			},
+			subTitle: {
+				fontFamily: 'Inter-Medium',
+				color: '#ffffff',
+			},
+			titleColor: '#fff',
+			subTitleColor: '#fff',
+			textColor: '#fff',
+			logoColor: '#fff',
+			textStyles: {
+				h1: {
+					// fontFamily: 'Inter-28pt-Thin' as const,
+					// fontFamily: 'Inter-28pt-Thin' as const,
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 3,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				h2: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 2,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				h3: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 1.2,
+					lineGapInBaselines: 1.5,
+					color: '#fff',
+				},
+				body: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 1,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				datavizLabel: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 1,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				datavizValueLabel: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 1,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				datavizTickLabel: {
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 1,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+				dataSource: {
+					fontFamily: 'Inter-Regular',
+					capHeightInBaselines: 1,
+					lineGapInBaselines: 1,
+					color: 'magenta',
+				},
+			},
 		},
-		subTitle: {
-			fontFamily: 'Inter-Medium',
-			color: '#ffffff',
-		},
-		titleColor: '#fff',
-		subTitleColor: '#fff',
-		textColor: '#fff',
-		logoColor: '#fff',
-		textStyles: {
-			h1: {
-				// fontFamily: 'Inter-28pt-Thin' as const,
-				// fontFamily: 'Inter-28pt-Thin' as const,
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 3,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			h2: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 2,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			h3: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 1.2,
-				lineGapInBaselines: 1.5,
-				color: '#fff',
-			},
-			body: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			datavizLabel: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			datavizValueLabel: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			datavizTickLabel: {
-				fontFamily: 'Inter-Bold',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-			dataSource: {
-				fontFamily: 'Inter-Regular',
-				capHeightInBaselines: 1,
-				lineGapInBaselines: 1,
-				color: 'magenta',
-			},
-		},
-	},
-	yAxis: {
-		fontSize: 15,
-		strokeWidth: 2,
-		color: textColor,
-		tickColor: textColor,
-	},
-	xAxis: {
-		fontSize: 16,
-		strokeWidth: 2,
-		color: textColor,
-		tickColor: textColor,
-	},
-	candlesticks: {
-		up: {
-			bodyColor: '#222',
-			bodyStrokeColor: '#555',
-			lineColor: '#333',
+		yAxis: {
+			fontSize: 15,
 			strokeWidth: 2,
+			color: textColor,
+			tickColor: textColor,
 		},
-		down: {
-			bodyColor: '#222',
-			bodyStrokeColor: '#111',
-			lineColor: '#444',
+		xAxis: {
+			fontSize: 16,
 			strokeWidth: 2,
+			color: textColor,
+			tickColor: textColor,
 		},
-	},
-	dataColors: [
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: '#ff0000',
-			BASE: dataScale[0],
-			P1: '#666',
-			P2: '#566',
-			P3: '#444',
+		candlesticks: {
+			up: {
+				bodyColor: '#222',
+				bodyStrokeColor: '#555',
+				lineColor: '#333',
+				strokeWidth: 2,
+			},
+			down: {
+				bodyColor: '#222',
+				bodyStrokeColor: '#111',
+				lineColor: '#444',
+				strokeWidth: 2,
+			},
 		},
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: 'cyan',
-			BASE: dataScale[1],
-			P1: 'magenta',
-			P2: '#566',
-			P3: '#444',
+		dataColors: [
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: '#ff0000',
+				BASE: dataScale[0],
+				P1: '#666',
+				P2: '#566',
+				P3: '#444',
+			},
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: 'cyan',
+				BASE: dataScale[1],
+				P1: 'magenta',
+				P2: '#566',
+				P3: '#444',
+			},
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: 'cyan',
+				BASE: dataScale[2],
+				P1: 'magenta',
+				P2: '#566',
+				P3: '#444',
+			},
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: 'cyan',
+				BASE: dataScale[3],
+				P1: 'magenta',
+				P2: '#566',
+				P3: '#444',
+			},
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: 'cyan',
+				BASE: dataScale[4],
+				P1: 'magenta',
+				P2: '#566',
+				P3: '#444',
+			},
+			{
+				M3: '#333',
+				M2: '#555',
+				M1: 'cyan',
+				BASE: dataScale[5],
+				P1: 'magenta',
+				P2: '#566',
+				P3: '#444',
+			},
+		],
+		minimap: {
+			lineColor: dataScale[2],
+			areaColor: chroma(dataScale[2]).hex(),
+			// areaColor: '#ff0000',
+			areaOpacity: 0.2,
 		},
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: 'cyan',
-			BASE: dataScale[2],
-			P1: 'magenta',
-			P2: '#566',
-			P3: '#444',
+		platte: {
+			backgroundColor: '#ffffff',
+			borderColor: '#e0e0e0',
+			// borderColor: '#ff0000',
+			// backgroundColor: '#ffff00',
 		},
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: 'cyan',
-			BASE: dataScale[3],
-			P1: 'magenta',
-			P2: '#566',
-			P3: '#444',
+		TypographicLayouts: {
+			baselineGrid: {
+				// lineColor: 'green',
+				lineColor: '#666',
+			},
+			gridLayout: {
+				lineColor: '#f05122',
+				activeAreaFill: chroma('#f05122').alpha(0.35).css(),
+			},
 		},
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: 'cyan',
-			BASE: dataScale[4],
-			P1: 'magenta',
-			P2: '#566',
-			P3: '#444',
+		EconomistDataSource: {
+			textColor: '#777',
 		},
-		{
-			M3: '#333',
-			M2: '#555',
-			M1: 'cyan',
-			BASE: dataScale[5],
-			P1: 'magenta',
-			P2: '#566',
-			P3: '#444',
+		TwoChangeBars: {
+			barsColor: textColor,
 		},
-	],
-	minimap: {
-		lineColor: dataScale[2],
-		areaColor: chroma(dataScale[2]).hex(),
-		// areaColor: '#ff0000',
-		areaOpacity: 0.2,
-	},
-	platte: {
-		backgroundColor: '#ffffff',
-		borderColor: '#e0e0e0',
-		// borderColor: '#ff0000',
-		// backgroundColor: '#ffff00',
-	},
-	TypographicLayouts: {
-		baselineGrid: {
-			// lineColor: 'green',
-			lineColor: '#666',
+		SimpleKPI: {
+			kpiColor: textColor,
+			labelColor: 'gray',
 		},
-		gridLayout: {
-			lineColor: '#f05122',
-			activeAreaFill: chroma('#f05122').alpha(0.35).css(),
+		timeseriesComponents: {
+			percentageChangeArea: {
+				lineColor: monoColor,
+				textColor: monoColor,
+				gradientColor: monoColor,
+				lineStrokeWidth: 1.5,
+			},
+			HighlightPeriodsArea: {
+				backgroundColor: dataScale[3],
+				backgroundOpacity: 0.4,
+				borderColor: dataScale[3],
+				textColor: dataScale[3],
+			},
 		},
-	},
-	EconomistDataSource: {
-		textColor: '#777',
-	},
-	TwoChangeBars: {
-		barsColor: textColor,
-	},
-	SimpleKPI: {
-		kpiColor: textColor,
-		labelColor: 'gray',
-	},
-	timeseriesComponents: {
-		percentageChangeArea: {
-			lineColor: monoColor,
-			textColor: monoColor,
-			gradientColor: monoColor,
-			lineStrokeWidth: 1.5,
-		},
-		HighlightPeriodsArea: {
-			backgroundColor: dataScale[3],
-			backgroundOpacity: 0.4,
-			borderColor: dataScale[3],
-			textColor: dataScale[3],
-		},
-	},
+	};
 };

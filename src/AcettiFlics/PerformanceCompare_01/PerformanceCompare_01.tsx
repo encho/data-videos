@@ -7,12 +7,10 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
+import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
 import {Position} from '../../acetti-ts-base/Position';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
@@ -47,12 +45,7 @@ export const PerformanceCompare_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePerformanceCompareChartDataResult>(null);
 
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
+	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
 

@@ -22,6 +22,7 @@ import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {Performance_01} from '../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
+import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 
 export const performance_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -45,12 +46,7 @@ export const Performance_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
+	const theme = getThemeFromEnum(themeEnum as any);
 
 	useFontFamiliesLoader(theme);
 

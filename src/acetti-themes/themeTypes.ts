@@ -11,7 +11,28 @@ const zTextStyle = z.object({
 
 export type ThemeTextStyle = z.infer<typeof zTextStyle>;
 
+type TPageConfig = {
+	marginTop: number;
+	marginBottom: number;
+	marginLeft: number;
+	marginRight: number;
+	contentWidth: number;
+	contentHeight: number;
+	baseline: number;
+};
+
+const zPageConfig = z.object({
+	marginTop: z.number(),
+	marginBottom: z.number(),
+	marginLeft: z.number(),
+	marginRight: z.number(),
+	contentWidth: z.number(),
+	contentHeight: z.number(),
+	baseline: z.number(),
+});
+
 export const zodThemeType = z.object({
+	page: zPageConfig,
 	global: z.object({
 		backgroundColor: zColor(),
 	}),

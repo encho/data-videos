@@ -172,12 +172,15 @@ export const CapSizeTextNew: React.FC<{
 	};
 
 	return (
-		<FlexibleElement
-			as={as}
-			// className={className}
-			style={alternativeStyle}
-		>
-			{children}
-		</FlexibleElement>
+		<>
+			{/* <style>{style}</style> */}
+			<FlexibleElement
+				as={as}
+				// className={className}
+				style={alternativeStyle}
+			>
+				{children}
+			</FlexibleElement>
+		</>
 	);
 };
