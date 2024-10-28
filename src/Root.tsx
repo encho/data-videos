@@ -165,6 +165,11 @@ import {
 	simpleBarChartPerfectSizingCompositionSchema,
 } from './compositions/POCs/04-BarCharts/SimpleBarChartPerfectSizing/SimpleBarChartPerfectSizingComposition';
 
+import {
+	ComposedSimpleBarChartComposition,
+	composedSimpleBarChartCompositionSchema,
+} from './compositions/POCs/04-BarCharts/ComposedSimpleBarChart/ComposedSImpleBarChartComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -432,6 +437,18 @@ export const RemotionRoot: React.FC = () => {
 						schema={multipleSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="ComposedSimpleBarChart"
+						component={ComposedSimpleBarChartComposition}
+						durationInFrames={90 * 20}
+						fps={90}
+						// {...videoSize.square}
+						{...videoSize.linkedInTall}
+						schema={composedSimpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
 				</Folder>
 
 				<Folder name="05-ColumnCharts">
@@ -532,7 +549,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSize.widescreen_16x9}
 						// {...videoSize.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 				<Folder name="07-GeoJSON">
