@@ -60,9 +60,9 @@ const wahlergebnis2024_2: {
 }[] = [
 	{parteiName: 'SPD', prozent: 50 / 100, farbe: '#E3000F', id: 'SPD'}, // SPD Red
 	{parteiName: 'AfD', prozent: 20 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
+	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
 	{parteiName: 'BSW', prozent: 10 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
 	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
-	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
 ];
 
 export const MultipleSimpleBarChartComposition: React.FC<
@@ -75,7 +75,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 	useFontFamiliesLoader(theme);
 
 	const barChartWidth = 800;
-	const baseline = 18;
+	const baseline = 15;
 
 	const barChartData = wahlergebnis2024.map((it) => ({
 		id: it.id,

@@ -175,7 +175,6 @@ export const ComposedSimpleBarChartComposition: React.FC<
 						data={barChartDataPercChange}
 						width={rightArea.width}
 						height={rightArea.height}
-						valueDomain={[-1, 1]}
 						hideLabels
 						// showLayout
 					/>

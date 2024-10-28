@@ -86,7 +86,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	// ------------------------------------------
 	const values = data.map((it) => it.value);
 	const valueDomain =
-		valueDomainProp || ([0, Math.max(...values)] as [number, number]);
+		valueDomainProp ||
+		([Math.min(0, Math.min(...values)), Math.max(...values)] as [
+			number,
+			number
+		]);
 
 	// the keyframes for the labels
 	// -------------------------------------------------------------------

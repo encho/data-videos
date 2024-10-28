@@ -94,7 +94,7 @@ export const NegativeSimpleBarChartComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
-					valueDomain={[-1, 1]} // TODO automatize from within barChart
+					// valueDomain={[-1, 1]} // TODO automatize from within barChart
 					// showLayout
 				/>
 			</div>
