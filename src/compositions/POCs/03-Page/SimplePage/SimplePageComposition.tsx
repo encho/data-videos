@@ -1,7 +1,8 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState, ReactNode} from 'react';
 import {continueRender, delayRender} from 'remotion';
 import {z} from 'zod';
 
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {ThemePage, PageFooter, PageLogo} from './ThemePage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
@@ -134,6 +135,134 @@ export const SimplePageComposition: React.FC<
 	}));
 
 	return (
+		<PerfectPage
+			headerEl={
+				<EconomistTitleWithSubtitle
+					title={'Simple Page Composition. This will be great stuff...'}
+					subtitle={'This is a subtitle. Lol...'}
+					theme={theme}
+				/>
+			}
+			footerEl={
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'flex-end',
+					}}
+				>
+					<div style={{maxWidth: '62%'}}>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.dataSource}
+							baseline={theme.page.baseline}
+						>
+							Data Source: German Bundesbank 2024 Paper on Evolutional Finance
+						</TypographyStyle>
+					</div>
+				</div>
+			}
+			renderContent={({width, height}) => {
+				return (
+					<div>
+						<SimpleBarChart
+							data={barChartData}
+							width={width}
+							height={height}
+							// showLayout
+							// baseline={getBarChartBaseline(
+							// 	dimensions.height,
+							// 	barChartData
+							// )}
+							theme={theme}
+						/>
+					</div>
+				);
+			}}
+			theme={theme}
+		/>
+	);
+};
+
+type TSize = {
+	width: number;
+	height: number;
+};
+
+export const PerfectPage: React.FC<{
+	renderContent: (x: TSize) => ReactNode;
+	headerEl: ReactNode;
+	footerEl: ReactNode;
+	theme: ThemeType;
+}> = ({headerEl, footerEl, theme, renderContent}) => {
+	// const theme = useThemeFromEnum(themeEnum as any);
+
+	// Create a ref to the div you want to measure
+	const divRef = useRef<HTMLDivElement>(null);
+
+	// State to store dimensions
+	const [dimensions, setDimensions] = useState<{
+		width: number;
+		height: number;
+	} | null>(null);
+
+	// Handle to delay rendering
+	// const [handle] = useState(() => delayRender());
+
+	useEffect(() => {
+		const waitFirstTime = async () => {
+			// ***********************************************************
+			// TODO bring these waiting checks into the fonts loader!!!!!
+			// ***********************************************************
+			// await for when the fonts are loaded in the browser
+			await document.fonts.ready;
+
+			// Introduce an additional delay to ensure styles are applied
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
+			await new Promise((resolve) => setTimeout(resolve, 1000));
+		};
+
+		const measure = async () => {
+			const handle = delayRender();
+			// ***********************************************************
+			// TODO bring these waiting checks into the fonts loader!!!!!
+			// ***********************************************************
+			// await for when the fonts are loaded in the browser
+			// await document.fonts.ready;
+
+			// Introduce an additional delay to ensure styles are applied
+			// await new Promise((resolve) => setTimeout(resolve, 2000));
+			// await new Promise((resolve) => setTimeout(resolve, 200));
+			// ***********************************************************
+
+			if (divRef.current) {
+				const {offsetWidth, offsetHeight} = divRef.current;
+				setDimensions({width: offsetWidth, height: offsetHeight});
+				// Once measurement is done, continue rendering
+				continueRender(handle);
+			}
+		};
+
+		// Measure after the component has mounted and rendered
+		waitFirstTime().then(() => measure());
+		// measure();
+
+		// Optionally, add a resize listener if dimensions might change
+		// window.addEventListener('resize', measure);
+
+		// Cleanup on unmount
+		return () => {
+			// window.removeEventListener('resize', measure);
+		};
+	}, []);
+	// }, [handle]);
+
+	// load fonts
+	// ********************************************************
+	// useFontFamiliesLoader(theme);
+
+	// TODO from centralilzed location/ fake data generator
+
+	return (
 		<ThemePage theme={theme}>
 			<div
 				style={{
@@ -167,11 +296,8 @@ export const SimplePageComposition: React.FC<
 						position: 'relative',
 					}}
 				>
-					<EconomistTitleWithSubtitle
-						title={'Simple Page Composition. This will be great stuff...'}
-						subtitle={'This is a subtitle. Lol...'}
-						theme={theme}
-					/>
+					{/* TODO wrap perhaps like footer in PageHeader */}
+					{headerEl}
 
 					<div
 						ref={divRef}
@@ -181,42 +307,15 @@ export const SimplePageComposition: React.FC<
 							justifyContent: 'center',
 						}}
 					>
-						{dimensions && (
-							<div>
-								<SimpleBarChart
-									data={barChartData}
-									width={CHART_WIDTH}
-									// showLayout
-									baseline={getBarChartBaseline(
-										dimensions.height,
-										barChartData
-									)}
-									theme={theme}
-								/>
-							</div>
-						)}
+						{dimensions &&
+							renderContent({
+								width: dimensions.width,
+								height: dimensions.height,
+							})}
 					</div>
 
 					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter theme={theme}>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'flex-end',
-							}}
-						>
-							<div style={{maxWidth: '62%'}}>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.dataSource}
-									baseline={theme.page.baseline}
-								>
-									Data Source: German Bundesbank 2024 Paper on Evolutional
-									Finance
-								</TypographyStyle>
-							</div>
-						</div>
-					</PageFooter>
+					<PageFooter theme={theme}>{footerEl}</PageFooter>
 				</div>
 			</div>
 			<PageLogo theme={theme} />
