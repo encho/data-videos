@@ -25,12 +25,17 @@ export const NegativeSimpleBarChartComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
+	const positiveColor = theme.positiveNegativeColors.positiveColor;
+	const negativeColor = theme.positiveNegativeColors.negativeColor;
+
 	const barChartData = wahlergebnis2024_percChange.map((it) => ({
 		label: it.parteiName,
 		value: it.change,
-		barColor: it.change > 0 ? '#088E81' : '#E53F1D', // TODO could be automatic!! within SimpleBarChart
+		barColor: it.change > 0 ? positiveColor : negativeColor, // TODO could be automatic!! within SimpleBarChart
 		id: it.id,
-		valueLabel: formatPercentage(it.change),
+		// valueLabel: formatPercentage(it.change),
+		valueLabel: `${'h%'} perc.`,
+		// valueLabel: `${formatPercentage(it.change)} perc.`,
 	}));
 
 	return (

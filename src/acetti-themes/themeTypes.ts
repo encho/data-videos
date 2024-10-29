@@ -76,6 +76,10 @@ export const zodThemeType = z.object({
 			strokeWidth: z.number(),
 		}),
 	}),
+	positiveNegativeColors: z.object({
+		positiveColor: zColor(),
+		negativeColor: zColor(),
+	}),
 	dataColors: z.array(
 		z.object({
 			M3: zColor(),

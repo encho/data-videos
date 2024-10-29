@@ -144,6 +144,10 @@ export const lorenzobertoliniTheme = ({
 				strokeWidth: 2,
 			},
 		},
+		positiveNegativeColors: {
+			positiveColor: 'cyan',
+			negativeColor: 'magenta',
+		},
 		dataColors: [
 			{
 				M3: '#333',
