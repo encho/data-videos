@@ -2,6 +2,12 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 
+import {
+	Page,
+	PageHeader,
+	PageFooter,
+	PageLogo,
+} from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {HtmlArea} from '../../../../acetti-layout';
@@ -9,7 +15,7 @@ import {DisplayGridRails} from '../../../../acetti-layout';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
@@ -18,8 +24,7 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {data} from './inflationData';
 
 export const multipleSimpleSparklineCompositionSchema = z.object({
@@ -29,11 +34,8 @@ export const multipleSimpleSparklineCompositionSchema = z.object({
 export const MultipleSimpleSparklineComposition: React.FC<
 	z.infer<typeof multipleSimpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum as any);
+	const {ref, dimensions} = useElementDimensions();
 
 	const {fps, width} = useVideoConfig();
 
@@ -42,9 +44,8 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	const props = data;
 
 	const matrixLayout = useMatrixLayout({
-		width: width - 4, // to better show grid rails!
-		// width, TODO enable when we are not showing gridlayout any more
-		height: 640,
+		width: dimensions ? dimensions.width : 2000, // to better show grid rails!
+		height: dimensions ? dimensions.height : 1000,
 		nrColumns: 2,
 		nrRows: 2,
 		rowSpacePixels: 80,
@@ -55,28 +56,24 @@ export const MultipleSimpleSparklineComposition: React.FC<
 
 	const area_1 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		cellName: 'cell',
 		row: 0,
 		column: 0,
 	});
 
 	const area_2 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		cellName: 'cell',
 		row: 0,
 		column: 1,
 	});
 
 	const area_3 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		cellName: 'cell',
 		row: 1,
 		column: 0,
 	});
 
 	const area_4 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		cellName: 'cell',
 		row: 1,
 		column: 1,
 	});
@@ -119,164 +116,204 @@ export const MultipleSimpleSparklineComposition: React.FC<
 
 	const commonDomain = [min, max] as [number, number];
 
-	console.log({commonDomain});
-
 	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<EconomistTitleWithSubtitle
-				title={props.title}
-				subtitle={props.subtitle}
-				theme={theme}
-			/>
-
-			<Sequence from={Math.floor(fps * 0.75)} layout="none">
-				<div style={{position: 'relative'}}>
-					<DisplayGridRails
-						{...matrixLayout}
-						// stroke={theme.TypographicLayouts.gridLayout.lineColor}
-						// stroke={'#292929'}
-						stroke={'transparent'}
+		<Page theme={theme}>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					height: '100%',
+					position: 'relative',
+				}}
+			>
+				<PageHeader
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<EconomistTitleWithSubtitle
+						title={props.title}
+						subtitle={props.subtitle}
+						theme={theme}
 					/>
-					<HtmlArea area={area_1}>
-						<Sequence from={0} layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
-								baseline={baseline}
-								marginBottom={2}
-							>
-								<WaterfallTextEffect>
-									{props.sparklines[0].title}
-								</WaterfallTextEffect>
-							</TypographyStyle>
+				</PageHeader>
 
-							<Sequence from={Math.floor(90 * 0.0)} layout="none">
-								<SparklineLarge
-									baseline={baseline}
-									id={'001'}
-									data={props.sparklines[0].timeseries}
-									width={area_1.width}
-									height={
-										area_1.height -
-										sparklineTitleProps.fontSize -
-										sparklineTitleProps.marginBottom
-									}
-									theme={theme}
-									domain={commonDomain}
-									lineColor={neonColors.neonGreen}
-									formatString="0.00 %"
-									// showLayout={true}
+				<div
+					ref={ref}
+					style={{
+						flex: 1,
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					{dimensions &&
+					Math.round(matrixLayout.width) === Math.round(dimensions.width) ? (
+						<Sequence from={Math.floor(fps * 0.75)} layout="none">
+							<div style={{position: 'relative'}}>
+								<DisplayGridRails
+									{...matrixLayout}
+									// stroke={theme.TypographicLayouts.gridLayout.lineColor}
+									// stroke={'#292929'}
+									stroke={'transparent'}
 								/>
-							</Sequence>
+								<HtmlArea area={area_1}>
+									<Sequence from={0} layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+											marginBottom={2}
+										>
+											<WaterfallTextEffect>
+												{props.sparklines[0].title}
+											</WaterfallTextEffect>
+										</TypographyStyle>
+
+										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+											<SparklineLarge
+												baseline={baseline}
+												id={'001'}
+												data={props.sparklines[0].timeseries}
+												width={area_1.width}
+												height={
+													area_1.height -
+													sparklineTitleProps.fontSize -
+													sparklineTitleProps.marginBottom
+												}
+												theme={theme}
+												domain={commonDomain}
+												lineColor={neonColors.neonGreen}
+												formatString="0.00 %"
+												// showLayout={true}
+											/>
+										</Sequence>
+									</Sequence>
+								</HtmlArea>
+								<HtmlArea area={area_2}>
+									<Sequence from={Math.floor(fps * 3.5)} layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+											marginBottom={2}
+										>
+											<WaterfallTextEffect>
+												{props.sparklines[1].title}
+											</WaterfallTextEffect>
+										</TypographyStyle>
+										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+											<SparklineLarge
+												baseline={baseline}
+												id={'002'}
+												data={props.sparklines[1].timeseries}
+												width={area_2.width}
+												height={
+													area_2.height -
+													sparklineTitleProps.fontSize -
+													sparklineTitleProps.marginBottom
+												}
+												theme={theme}
+												domain={commonDomain}
+												lineColor={neonColors.neonBlue}
+												formatString="0.00 %"
+												// showLayout={true}
+											/>
+										</Sequence>
+									</Sequence>
+								</HtmlArea>
+								<HtmlArea area={area_3}>
+									<Sequence from={Math.floor(fps * 7)} layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+											marginBottom={2}
+										>
+											<WaterfallTextEffect>
+												{props.sparklines[2].title}
+											</WaterfallTextEffect>
+										</TypographyStyle>
+										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+											<SparklineLarge
+												baseline={baseline}
+												id={'003'}
+												data={props.sparklines[2].timeseries}
+												width={area_3.width}
+												height={
+													area_3.height -
+													sparklineTitleProps.fontSize -
+													sparklineTitleProps.marginBottom
+												}
+												theme={theme}
+												domain={commonDomain}
+												lineColor={neonColors.neonOrange}
+												formatString="0.00 %"
+												// showLayout={true}
+											/>
+										</Sequence>
+									</Sequence>
+								</HtmlArea>
+								<HtmlArea area={area_4}>
+									<Sequence from={Math.floor(fps * 10.5)} layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+											marginBottom={2}
+										>
+											<WaterfallTextEffect>
+												{props.sparklines[3].title}
+											</WaterfallTextEffect>
+										</TypographyStyle>
+										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+											<SparklineLarge
+												baseline={baseline}
+												id={'004'}
+												data={props.sparklines[3].timeseries}
+												width={area_4.width}
+												height={
+													area_4.height -
+													sparklineTitleProps.fontSize -
+													sparklineTitleProps.marginBottom
+												}
+												theme={theme}
+												domain={commonDomain}
+												lineColor={neonColors.neonPink}
+												formatString="0.00 %"
+												// showLayout={true}
+											/>
+										</Sequence>
+									</Sequence>
+								</HtmlArea>
+							</div>
 						</Sequence>
-					</HtmlArea>
-					<HtmlArea area={area_2}>
-						<Sequence from={Math.floor(fps * 3.5)} layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
-								baseline={baseline}
-								marginBottom={2}
-							>
-								<WaterfallTextEffect>
-									{props.sparklines[1].title}
-								</WaterfallTextEffect>
-							</TypographyStyle>
-							<Sequence from={Math.floor(90 * 0.0)} layout="none">
-								<SparklineLarge
-									baseline={baseline}
-									id={'002'}
-									data={props.sparklines[1].timeseries}
-									width={area_2.width}
-									height={
-										area_2.height -
-										sparklineTitleProps.fontSize -
-										sparklineTitleProps.marginBottom
-									}
-									theme={theme}
-									domain={commonDomain}
-									lineColor={neonColors.neonBlue}
-									formatString="0.00 %"
-									// showLayout={true}
-								/>
-							</Sequence>
-						</Sequence>
-					</HtmlArea>
-					<HtmlArea area={area_3}>
-						<Sequence from={Math.floor(fps * 7)} layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
-								baseline={baseline}
-								marginBottom={2}
-							>
-								<WaterfallTextEffect>
-									{props.sparklines[2].title}
-								</WaterfallTextEffect>
-							</TypographyStyle>
-							<Sequence from={Math.floor(90 * 0.0)} layout="none">
-								<SparklineLarge
-									baseline={baseline}
-									id={'003'}
-									data={props.sparklines[2].timeseries}
-									width={area_3.width}
-									height={
-										area_3.height -
-										sparklineTitleProps.fontSize -
-										sparklineTitleProps.marginBottom
-									}
-									theme={theme}
-									domain={commonDomain}
-									lineColor={neonColors.neonOrange}
-									formatString="0.00 %"
-									// showLayout={true}
-								/>
-							</Sequence>
-						</Sequence>
-					</HtmlArea>
-					<HtmlArea area={area_4}>
-						<Sequence from={Math.floor(fps * 10.5)} layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
-								baseline={baseline}
-								marginBottom={2}
-							>
-								<WaterfallTextEffect>
-									{props.sparklines[3].title}
-								</WaterfallTextEffect>
-							</TypographyStyle>
-							<Sequence from={Math.floor(90 * 0.0)} layout="none">
-								<SparklineLarge
-									baseline={baseline}
-									id={'004'}
-									data={props.sparklines[3].timeseries}
-									width={area_4.width}
-									height={
-										area_4.height -
-										sparklineTitleProps.fontSize -
-										sparklineTitleProps.marginBottom
-									}
-									theme={theme}
-									domain={commonDomain}
-									lineColor={neonColors.neonPink}
-									formatString="0.00 %"
-									// showLayout={true}
-								/>
-							</Sequence>
-						</Sequence>
-					</HtmlArea>
+					) : null}
 				</div>
-			</Sequence>
 
-			<EconomistDataSource theme={theme}>
-				{props.dataSource}
-			</EconomistDataSource>
-
-			<LorenzoBertoliniLogo2 theme={theme} />
-		</div>
+				{/* TODO introduce evtl. also absolute positioned footer */}
+				<PageFooter
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'flex-end',
+						}}
+					>
+						<div
+							style={{
+								maxWidth: '62%',
+								textWrap: 'pretty',
+							}}
+						>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.dataSource}
+								baseline={theme.page.baseline}
+							>
+								{props.dataSource}
+							</TypographyStyle>
+						</div>
+					</div>
+					<PageLogo theme={theme} />
+				</PageFooter>
+			</div>
+		</Page>
 	);
 };

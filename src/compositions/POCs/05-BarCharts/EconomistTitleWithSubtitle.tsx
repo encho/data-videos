@@ -7,7 +7,7 @@ export const EconomistTitleWithSubtitle: React.FC<{
 	theme: ThemeType;
 	baseline?: number;
 }> = ({title, subtitle, theme, baseline: baselineProp}) => {
-	const titleMarginBottomInBaselines = 4;
+	const titleMarginBottomInBaselines = 3;
 
 	const baseline = baselineProp || theme.page.baseline;
 
