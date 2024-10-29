@@ -13,9 +13,7 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistDataSource} from '../EconomistDataSource';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -105,26 +103,6 @@ export const SimpleBarChartComposition: React.FC<
 				</PageFooter>
 			</div>
 			<PageLogo theme={theme} />
-
-			{/* <div
-				style={{
-					display: 'flex',
-					justifyContent: 'center',
-				}}
-			>
-				<SimpleBarChart
-					data={barChartData}
-					width={CHART_WIDTH}
-					baseline={BASELINE}
-					theme={theme}
-				/>
-			</div> */}
-
-			{/* <EconomistDataSource theme={theme}>
-				AirVisual World Air Quality Report 2018
-			</EconomistDataSource> */}
-
-			{/* <LorenzoBertoliniLogo2 theme={theme} /> */}
 		</Page>
 	);
 };

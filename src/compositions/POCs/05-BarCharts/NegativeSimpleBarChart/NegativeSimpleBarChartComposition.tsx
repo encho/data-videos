@@ -1,18 +1,107 @@
 import {z} from 'zod';
 
 import {
-	getThemeFromEnum,
+	Page,
+	PageHeader,
+	PageFooter,
+	PageLogo,
+} from '../../03-Page/SimplePage/ThemePage';
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
+import {
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistDataSource} from '../EconomistDataSource';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const negativeSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
+
+export const NegativeSimpleBarChartComposition: React.FC<
+	z.infer<typeof negativeSimpleBarChartCompositionSchema>
+> = ({themeEnum}) => {
+	const theme = useThemeFromEnum(themeEnum as any);
+	const {ref, dimensions} = useElementDimensions();
+
+	const barChartData = wahlergebnis2024_percChange.map((it) => ({
+		label: it.parteiName,
+		value: it.change,
+		barColor: it.change > 0 ? '#088E81' : '#E53F1D', // TODO could be automatic!! within SimpleBarChart
+		id: it.id,
+		valueLabel: formatPercentage(it.change),
+	}));
+
+	return (
+		<Page theme={theme}>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					height: '100%',
+					position: 'relative',
+				}}
+			>
+				<PageHeader
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<EconomistTitleWithSubtitle
+						title={'Negative Simple Bar Chart'}
+						subtitle={'Wahlergebnisse Brandenburg 2024'}
+						theme={theme}
+					/>
+				</PageHeader>
+
+				<div
+					ref={ref}
+					style={{
+						flex: 1,
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					{dimensions ? (
+						<div>
+							<SimpleBarChart
+								data={barChartData}
+								width={dimensions.width}
+								height={dimensions.height}
+								// baseline={BASELINE}
+								theme={theme}
+							/>
+						</div>
+					) : null}
+				</div>
+
+				{/* TODO introduce evtl. also absolute positioned footer */}
+				<PageFooter
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'flex-end',
+						}}
+					>
+						<div style={{maxWidth: '62%'}}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.dataSource}
+								baseline={theme.page.baseline}
+							>
+								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
+							</TypographyStyle>
+						</div>
+					</div>
+				</PageFooter>
+			</div>
+			<PageLogo theme={theme} />
+		</Page>
+	);
+};
 
 function formatPercentage(value: number): string {
 	return (
@@ -47,63 +136,3 @@ const wahlergebnis2024_percChange: {
 	{parteiName: 'FDP', change: -0.8, farbe: '#FFED00', id: 'FDP'}, // FDP Yellow
 	{parteiName: 'Sonstige', change: 0.9, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
-
-export const NegativeSimpleBarChartComposition: React.FC<
-	z.infer<typeof negativeSimpleBarChartCompositionSchema>
-> = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	const CHART_WIDTH = 900;
-	const BASELINE = 26;
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
-
-	const barChartData = wahlergebnis2024_percChange.map((it) => ({
-		label: it.parteiName,
-		value: it.change,
-		barColor: it.change > 0 ? '#088E81' : '#E53F1D', // TODO could be automatic!! within SimpleBarChart
-		id: it.id,
-		valueLabel: formatPercentage(it.change),
-	}));
-
-	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<EconomistTitleWithSubtitle
-				title={'Negative Simple Bar Chart'}
-				subtitle={'Wahlergebnisse Brandenburg 2024'}
-				theme={theme}
-			/>
-
-			<div
-				style={{
-					display: 'flex',
-					justifyContent: 'center',
-				}}
-			>
-				<SimpleBarChart
-					data={barChartData}
-					width={CHART_WIDTH}
-					baseline={BASELINE}
-					theme={theme}
-					// valueDomain={[-1, 1]} // TODO automatize from within barChart
-					// showLayout
-				/>
-			</div>
-
-			<EconomistDataSource theme={theme}>
-				AirVisual World Air Quality Report 2018
-			</EconomistDataSource>
-
-			<LorenzoBertoliniLogo2 theme={theme} />
-		</div>
-	);
-};
