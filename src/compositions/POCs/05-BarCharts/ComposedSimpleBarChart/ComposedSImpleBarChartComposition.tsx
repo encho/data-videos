@@ -1,15 +1,22 @@
 import {z} from 'zod';
 import {useVideoConfig} from 'remotion';
 
+import {
+	Page,
+	PageHeader,
+	PageFooter,
+	PageLogo,
+} from '../../03-Page/SimplePage/ThemePage';
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {EconomistDataSource} from '../EconomistDataSource';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
@@ -20,6 +27,200 @@ import {HtmlArea} from '../../../../acetti-layout';
 export const composedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
+
+export const ComposedSimpleBarChartComposition: React.FC<
+	z.infer<typeof composedSimpleBarChartCompositionSchema>
+> = ({themeEnum}) => {
+	const theme = useThemeFromEnum(themeEnum as any);
+	const {ref, dimensions} = useElementDimensions();
+
+	const matrixLayout = useMatrixLayout({
+		width: dimensions ? dimensions.width : 20000, // to better show grid rails!
+		height: dimensions ? dimensions.height : 20000,
+		nrColumns: 2,
+		nrRows: 1,
+		columnSizes: [
+			{type: 'fr', value: 2},
+			{type: 'fr', value: 1},
+		],
+		rowSpacePixels: 80,
+		columnSpacePixels: 50,
+		rowPaddingPixels: 0,
+		columnPaddingPixels: 0,
+	});
+
+	const leftArea = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 0,
+		column: 0,
+	});
+
+	const rightArea = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 0,
+		column: 1,
+	});
+
+	const barChartData = wahlergebnis2024.map((it) => ({
+		id: it.id,
+		label: it.parteiName,
+		value: it.prozent,
+		barColor: '#444',
+		// barColor: it.farbe,
+		valueLabel: formatPercentage(it.prozent),
+	}));
+
+	const barChartDataPercChange = wahlergebnis2024_percChange.map((it) => ({
+		id: it.id,
+		label: it.parteiName,
+		value: it.change,
+		barColor: it.change > 0 ? 'green' : 'red',
+		// valueLabel: formatPercentage(it.prozent),
+		valueLabel: formatPercentage(it.change),
+	}));
+
+	return (
+		<Page theme={theme}>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					height: '100%',
+					position: 'relative',
+				}}
+			>
+				<PageHeader
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<EconomistTitleWithSubtitle
+						title={'Negative Simple Bar Chart'}
+						subtitle={'Wahlergebnisse Brandenburg 2024'}
+						theme={theme}
+					/>
+				</PageHeader>
+
+				<div
+					ref={ref}
+					style={{
+						flex: 1,
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					{dimensions &&
+					Math.round(matrixLayout.width) === Math.round(dimensions.width) ? (
+						<div style={{position: 'relative'}}>
+							<DisplayGridRails
+								{...matrixLayout}
+								// stroke={'#252525'}
+								stroke={'transparent'}
+							/>
+
+							<HtmlArea area={leftArea}>
+								<SimpleBarChart
+									theme={theme}
+									data={barChartData}
+									width={leftArea.width}
+									height={leftArea.height}
+									// showLayout
+								/>
+							</HtmlArea>
+							<HtmlArea area={rightArea}>
+								<SimpleBarChart
+									theme={theme}
+									data={barChartDataPercChange}
+									width={rightArea.width}
+									height={rightArea.height}
+									hideLabels
+									// showLayout
+								/>
+							</HtmlArea>
+						</div>
+					) : null}
+				</div>
+
+				{/* TODO introduce evtl. also absolute positioned footer */}
+				<PageFooter
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'flex-end',
+						}}
+					>
+						<div style={{maxWidth: '62%'}}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.dataSource}
+								baseline={theme.page.baseline}
+							>
+								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
+							</TypographyStyle>
+						</div>
+					</div>
+				</PageFooter>
+			</div>
+			<PageLogo theme={theme} />
+		</Page>
+	);
+
+	return (
+		<div
+			style={{
+				backgroundColor: theme.global.backgroundColor,
+				position: 'absolute',
+				width: '100%',
+				height: '100%',
+			}}
+		>
+			<EconomistTitleWithSubtitle
+				title={'Composed Simple Barchart'}
+				subtitle={'Wahlergebnisse Brandenburg 2024'}
+				theme={theme}
+			/>
+
+			<div style={{position: 'relative'}}>
+				<DisplayGridRails
+					{...matrixLayout}
+					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
+					// stroke={'#292929'}
+					stroke={'#252525'}
+					// stroke={'transparent'}
+					// stroke={'magenta'}
+				/>
+
+				<HtmlArea area={leftArea}>
+					<SimpleBarChart
+						theme={theme}
+						data={barChartData}
+						width={leftArea.width}
+						height={leftArea.height}
+						// showLayout
+					/>
+				</HtmlArea>
+				<HtmlArea area={rightArea}>
+					<SimpleBarChart
+						theme={theme}
+						data={barChartDataPercChange}
+						width={rightArea.width}
+						height={rightArea.height}
+						hideLabels
+						// showLayout
+					/>
+				</HtmlArea>
+			</div>
+
+			<EconomistDataSource theme={theme}>
+				AirVisual World Air Quality Report 2018
+			</EconomistDataSource>
+
+			<LorenzoBertoliniLogo2 theme={theme} />
+		</div>
+	);
+};
 
 function formatPercentage(value: number): string {
 	return (
@@ -77,115 +278,3 @@ const wahlergebnis2024_percChange: {
 	{parteiName: 'FDP', change: -0.8, farbe: '#FFED00', id: 'FDP'}, // FDP Yellow
 	{parteiName: 'Sonstige', change: 0.9, farbe: '#808080', id: 'SON'}, // Others Gray
 ];
-
-export const ComposedSimpleBarChartComposition: React.FC<
-	z.infer<typeof composedSimpleBarChartCompositionSchema>
-> = ({themeEnum}) => {
-	const {width} = useVideoConfig();
-
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	useFontFamiliesLoader(theme);
-
-	const matrixLayout = useMatrixLayout({
-		width: width - 4, // to better show grid rails!
-		// width, TODO enable when we are not showing gridlayout any more
-		height: 680,
-		nrColumns: 2,
-		nrRows: 1,
-		columnSizes: [
-			// {type: 'fr', value: 4},
-			// {type: 'fr', value: 1},
-			{type: 'fr', value: 2},
-			{type: 'fr', value: 1},
-		],
-		rowSpacePixels: 80,
-		columnSpacePixels: 50,
-		rowPaddingPixels: 0,
-		columnPaddingPixels: 12 * 16, // TODO page margin/baseline
-	});
-
-	const leftArea = getMatrixLayoutCellArea({
-		layout: matrixLayout,
-		row: 0,
-		column: 0,
-	});
-
-	const rightArea = getMatrixLayoutCellArea({
-		layout: matrixLayout,
-		row: 0,
-		column: 1,
-	});
-
-	const barChartData = wahlergebnis2024.map((it) => ({
-		id: it.id,
-		label: it.parteiName,
-		value: it.prozent,
-		barColor: '#444',
-		// barColor: it.farbe,
-		valueLabel: formatPercentage(it.prozent),
-	}));
-
-	const barChartDataPercChange = wahlergebnis2024_percChange.map((it) => ({
-		id: it.id,
-		label: it.parteiName,
-		value: it.change,
-		barColor: it.change > 0 ? 'green' : 'red',
-		// valueLabel: formatPercentage(it.prozent),
-		valueLabel: formatPercentage(it.change),
-	}));
-
-	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<EconomistTitleWithSubtitle
-				title={'Composed Simple Barchart'}
-				subtitle={'Wahlergebnisse Brandenburg 2024'}
-				theme={theme}
-			/>
-
-			<div style={{position: 'relative'}}>
-				<DisplayGridRails
-					{...matrixLayout}
-					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
-					// stroke={'#292929'}
-					stroke={'#252525'}
-					// stroke={'transparent'}
-					// stroke={'magenta'}
-				/>
-
-				<HtmlArea area={leftArea}>
-					<SimpleBarChart
-						theme={theme}
-						data={barChartData}
-						width={leftArea.width}
-						height={leftArea.height}
-						// showLayout
-					/>
-				</HtmlArea>
-				<HtmlArea area={rightArea}>
-					<SimpleBarChart
-						theme={theme}
-						data={barChartDataPercChange}
-						width={rightArea.width}
-						height={rightArea.height}
-						hideLabels
-						// showLayout
-					/>
-				</HtmlArea>
-			</div>
-
-			<EconomistDataSource theme={theme}>
-				AirVisual World Air Quality Report 2018
-			</EconomistDataSource>
-
-			<LorenzoBertoliniLogo2 theme={theme} />
-		</div>
-	);
-};
