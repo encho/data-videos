@@ -27,7 +27,18 @@ export function Page({
 					marginLeft: theme.page.marginLeft,
 				}}
 			>
-				{children}
+				<div
+					style={{
+						// display: 'flex',
+						// flexDirection: 'column',
+						// height: '100%',
+						width: theme.page.contentWidth,
+						height: theme.page.contentHeight,
+						position: 'relative',
+					}}
+				>
+					{children}
+				</div>
 			</div>
 		</div>
 	);
