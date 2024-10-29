@@ -1,6 +1,6 @@
 import {z} from 'zod';
-import {useVideoConfig} from 'remotion';
 
+import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {
 	Page,
 	PageHeader,
@@ -61,11 +61,14 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		column: 1,
 	});
 
+	const positiveColor = theme.positiveNegativeColors.positiveColor;
+	const negativeColor = theme.positiveNegativeColors.negativeColor;
+
 	const barChartData = wahlergebnis2024.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
-		barColor: '#444',
+		barColor: colorPalettes['Slate']['500'], // TODO from theme
 		// barColor: it.farbe,
 		valueLabel: formatPercentage(it.prozent),
 	}));
@@ -74,7 +77,7 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		id: it.id,
 		label: it.parteiName,
 		value: it.change,
-		barColor: it.change > 0 ? 'green' : 'red',
+		barColor: it.change > 0 ? positiveColor : negativeColor,
 		// valueLabel: formatPercentage(it.prozent),
 		valueLabel: formatPercentage(it.change),
 	}));
@@ -94,7 +97,7 @@ export const ComposedSimpleBarChartComposition: React.FC<
 					// showArea={showAreas}
 				>
 					<EconomistTitleWithSubtitle
-						title={'Negative Simple Bar Chart'}
+						title={'Composed Simple Bar Chart'}
 						subtitle={'Wahlergebnisse Brandenburg 2024'}
 						theme={theme}
 					/>

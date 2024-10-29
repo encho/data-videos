@@ -33,9 +33,9 @@ export const NegativeSimpleBarChartComposition: React.FC<
 		value: it.change,
 		barColor: it.change > 0 ? positiveColor : negativeColor, // TODO could be automatic!! within SimpleBarChart
 		id: it.id,
-		// valueLabel: formatPercentage(it.change),
-		valueLabel: `${'h%'} perc.`,
-		// valueLabel: `${formatPercentage(it.change)} perc.`,
+		valueLabel: formatPercentage(it.change),
+		// valueLabel: `${'h%'} perc.`,
+		// valueLabel: `${formatPercentage(it.change)} perc. asdu **&`,
 	}));
 
 	return (
@@ -73,8 +73,8 @@ export const NegativeSimpleBarChartComposition: React.FC<
 								data={barChartData}
 								width={dimensions.width}
 								height={dimensions.height}
-								// baseline={BASELINE}
 								theme={theme}
+								// showLayout
 							/>
 						</div>
 					) : null}

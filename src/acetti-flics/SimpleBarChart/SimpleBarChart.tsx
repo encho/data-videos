@@ -45,81 +45,6 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	hideLabels?: boolean;
 };
 
-interface LabelsDivProps {
-	data: TSimpleBarChartData;
-	theme: ThemeType;
-	baseline: number;
-}
-
-const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
-	({data, theme, baseline}, ref) => {
-		return (
-			<div
-				ref={ref}
-				style={{
-					position: 'fixed',
-					left: '-9999px', // Move off-screen
-					top: '-9999px',
-					whiteSpace: 'nowrap', // Prevent labels from wrapping
-					// color: 'cyan',
-					visibility: 'hidden',
-				}}
-			>
-				{data
-					.map((it) => it.label)
-					.map((label) => (
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.datavizLabel}
-							baseline={baseline}
-							key={label}
-						>
-							{label.split('').map((char, i) => (
-								<span key={i}>{char}</span>
-							))}
-							{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
-						</TypographyStyle>
-					))}
-			</div>
-		);
-	}
-);
-
-const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
-	({data, theme, baseline}, ref) => {
-		return (
-			<div
-				ref={ref}
-				style={{
-					position: 'fixed',
-					left: '-9999px', // Move off-screen
-					top: '-9999px',
-					whiteSpace: 'nowrap', // Prevent labels from wrapping
-					// color: 'cyan',
-					visibility: 'hidden',
-				}}
-			>
-				{data
-					.map((it) => it.valueLabel)
-					.map((valueLabel) => (
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.datavizValueLabel}
-							baseline={baseline}
-							key={valueLabel}
-						>
-							{valueLabel.split('').map((char, i) => (
-								<span key={i}>{char}</span>
-							))}
-							{/* <FadeInAndOutText>{valueLabel}</FadeInAndOutText> */}
-						</TypographyStyle>
-					))}
-			</div>
-		);
-	}
-);
-
-// Optional: Set a display name for easier debugging
-MeasureValueLabels.displayName = 'MeasureValueLabels';
-
 export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	theme,
 	data,
@@ -130,7 +55,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	hideLabels = false,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
-	negativeValueLabelWidth,
+	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	valueDomain: valueDomainProp,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
@@ -140,6 +65,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		useElementDimensions(true);
 	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
 		useElementDimensions(true);
+	const {
+		ref: negativeValueLabelsRef,
+		dimensions: negativeValueLabelsDimensions,
+	} = useElementDimensions(true);
 	// TODO useElementDimensions("skipFontsWaiting")
 
 	const barChartKeyframes = useBarChartKeyframes({
@@ -157,6 +86,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
 	const valueLabelWidth =
 		valueLabelWidthProp || valueLabelsDimensions?.width || 0;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
 
 	const barChartLayout = useBarChartLayout({
 		hideLabels,
@@ -195,15 +126,27 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 
 	return (
 		<>
+			{/* measure labels */}
 			<MeasureLabels
+				key="labelMeasurement"
 				ref={labelsRef}
 				data={data}
 				theme={theme}
 				baseline={baseline}
 			/>
+			{/* measure positive value labels */}
 			<MeasureValueLabels
+				key="valueLabelMeasurement"
 				ref={valueLabelsRef}
-				data={data}
+				data={data.filter((it) => it.value >= 0)}
+				theme={theme}
+				baseline={baseline}
+			/>
+			{/* measure negative value labels */}
+			<MeasureValueLabels
+				key="negativeValueLabelMeasurement"
+				ref={negativeValueLabelsRef}
+				data={data.filter((it) => it.value < 0)}
 				theme={theme}
 				baseline={baseline}
 			/>
@@ -361,6 +304,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 												}
 												baseline={baseline}
 											>
+												{/* {data[i].valueLabel.split('').map((it) => (
+													<span>{it}</span>
+												))} */}
+
 												<FadeInAndOutText>
 													{data[i].valueLabel}
 												</FadeInAndOutText>
@@ -529,3 +476,76 @@ const RoundedLeftRect: React.FC<RoundedRectProps> = ({
 		</svg>
 	);
 };
+
+interface LabelsDivProps {
+	data: TSimpleBarChartData;
+	theme: ThemeType;
+	baseline: number;
+}
+
+const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+	({data, theme, baseline}, ref) => {
+		return (
+			<div
+				ref={ref}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					whiteSpace: 'nowrap', // Prevent labels from wrapping
+					visibility: 'hidden',
+				}}
+			>
+				{data
+					.map((it) => it.label)
+					.map((label) => (
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizLabel}
+							baseline={baseline}
+							key={label}
+						>
+							{label.split('').map((char, i) => (
+								<span key={i}>{char}</span>
+							))}
+							{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
+						</TypographyStyle>
+					))}
+			</div>
+		);
+	}
+);
+
+const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+	({data, theme, baseline}, ref) => {
+		return (
+			<div
+				ref={ref}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					whiteSpace: 'nowrap', // Prevent labels from wrapping
+					visibility: 'hidden',
+				}}
+			>
+				{data
+					.map((it) => it.valueLabel)
+					.map((valueLabel) => (
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizValueLabel}
+							baseline={baseline}
+							key={valueLabel}
+						>
+							{valueLabel.split('').map((char, i) => (
+								<span key={i}>{char}</span>
+							))}
+							{/* <FadeInAndOutText>{valueLabel}</FadeInAndOutText> */}
+						</TypographyStyle>
+					))}
+			</div>
+		);
+	}
+);
+
+// Optional: Set a display name for easier debugging
+MeasureValueLabels.displayName = 'MeasureValueLabels';

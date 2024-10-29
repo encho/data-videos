@@ -2,6 +2,7 @@ import React from 'react';
 // import {continueRender, delayRender, useVideoConfig} from 'remotion';
 import {z} from 'zod';
 
+import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {
 	Page,
 	PageHeader,
@@ -32,9 +33,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 		value: it.prozent,
 		id: it.id,
 		// barColor: it.farbe,
-		// barColor: '#fff',
-		// barColor: '#f05122',
-		barColor: '#FF396E',
+		barColor: colorPalettes.Indigo[500],
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
