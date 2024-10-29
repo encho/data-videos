@@ -103,10 +103,10 @@ export const nerdyTheme = ({
 					color: '#fff',
 				},
 				datavizValueLabel: {
-					fontFamily: 'Inter-Regular',
+					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
-					color: '#888',
+					color: '#aaa',
 				},
 				datavizTickLabel: {
 					fontFamily: 'Inter-Bold',

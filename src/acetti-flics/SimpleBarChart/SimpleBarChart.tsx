@@ -135,7 +135,14 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 											typographyStyle={theme.typography.textStyles.datavizLabel}
 											baseline={baseline}
 										>
-											<WaterfallTextEffect>{data[i].label}</WaterfallTextEffect>
+											{/* <WaterfallTextEffect>{data[i].label}</WaterfallTextEffect> */}
+											<FadeInAndOutText>{data[i].label}</FadeInAndOutText>
+											{/* <FadeInAndOutText> */}
+											{/* {data[i].label} */}
+											{/* {data[i].label.split('').map((it) => (
+												<span>{it}</span>
+											))} */}
+											{/* </FadeInAndOutText> */}
 										</TypographyStyle>
 									</div>
 								</HtmlArea>

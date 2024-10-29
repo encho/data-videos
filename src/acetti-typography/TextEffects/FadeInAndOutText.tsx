@@ -15,8 +15,8 @@ export const FadeInAndOutText: React.FC<{
 
 	const characters = children.split('');
 
-	const enterDurationInFrames = Math.floor(fps * 1.5);
-	let exitSequenceDurationInFrames = Math.floor(fps * 2.5);
+	const enterDurationInFrames = Math.floor(fps * 0.2 * characters.length);
+	let exitSequenceDurationInFrames = Math.floor(fps * 0.2 * characters.length);
 	let displaySequenceDurationInFrames =
 		durationInFrames -
 		innerDelay -

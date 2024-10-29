@@ -1,4 +1,5 @@
 import {Composition, Folder} from 'remotion';
+import chroma from 'chroma-js';
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
@@ -179,6 +180,11 @@ import {
 	SimplePageComposition,
 	simplePageCompositionSchema,
 } from './compositions/POCs/03-Page/SimplePage/SimplePageComposition';
+
+import {
+	ApiBasedSimpleBarChartComposition,
+	apiBasedSimpleBarChartCompositionSchema,
+} from './compositions/POCs/05-BarCharts/ApiBasedSimpleBarChart/ApiBasedSimpleBarChartComposition';
 
 import './tailwind.css';
 
@@ -491,6 +497,98 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						schema={composedSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						id="ApiBasedSimpleBarChart"
+						component={ApiBasedSimpleBarChartComposition}
+						durationInFrames={30 * 12}
+						fps={30}
+						{...videoSizes.linkedInTall}
+						schema={apiBasedSimpleBarChartCompositionSchema}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+							data: [],
+							title: 'Bundesliga Tabelle',
+							subtitle: 'Punktestand am 29. Oktober 2024',
+						}}
+						// defaultProps={{
+						// 	dateString: '4. März 2024',
+						// 	year: 2024,
+						// 	apiData: null,
+						// }}
+						calculateMetadata={async ({props}) => {
+							const year = 2024;
+							// const apiUrl = `https://api.openligadb.de/getbltable/bl1/${props.year}`;
+							const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;
+							const data = await fetch(apiUrl);
+							const json = (await data.json()) as {
+								teamName: string;
+								points: number;
+								teamInfoId: number;
+							}[];
+
+							const maxPoints = Math.max(...json.map((it) => it.points));
+							const minPoints = Math.min(...json.map((it) => it.points));
+
+							const oceanBreezeScale = chroma
+								.scale(['#00c6ff', '#0072ff', '#004e92'])
+								.mode('lab') // Use CIE Lab color space for perceptual uniformity
+								.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
+
+							const colorScale = chroma
+								.scale([
+									// '#f05122',
+									'#CC2B52',
+									// '#0099cc',
+									'#00aadd',
+									// '#555',
+									// '#00ccaa',
+									// '#54C392',
+								])
+								.mode('lab') // Use CIE Lab color space for perceptual uniformity
+								.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
+
+							// const colors = {
+							// 	championsLeague: '#15B392',
+							// 	championsOrUefaLeague: '#54C392',
+							// 	uefaLeague: '#73EC8B',
+							// 	uefaConferenceLeague: '#D2FF72',
+							// 	relegation: '#CC2B52',
+							// 	abstieg: '#AF1740',
+							// 	mittlerePosition: '#555',
+							// };
+
+							const parsedData = json.map((it, i) => ({
+								label: it.teamName,
+								value: it.points,
+								barColor: colorScale(it.points).hex(),
+								// barColor: oceanBreezeScale(it.points).hex(),
+								// barColor:
+								// 	i < 2
+								// 		? colors.championsLeague
+								// 		: i === 2
+								// 		? colors.championsOrUefaLeague
+								// 		: i === 3
+								// 		? colors.uefaLeague
+								// 		: i === 4
+								// 		? colors.uefaConferenceLeague
+								// 		: i === 15
+								// 		? colors.relegation
+								// 		: i > 15
+								// 		? colors.abstieg
+								// 		: colors.mittlerePosition,
+								id: `id-${it.teamInfoId}`,
+								valueLabel: `${it.points}`,
+							}));
+
+							return {
+								props: {
+									...props,
+									data: parsedData,
+								},
+							};
+						}}
 					/>
 				</Folder>
 
