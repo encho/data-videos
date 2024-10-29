@@ -14,7 +14,7 @@ export const EconomistTitleWithSubtitle: React.FC<{
 	return (
 		<div
 			style={{
-				textWrap: 'pretty',
+				textWrap: 'balance',
 			}}
 		>
 			<div>
