@@ -502,7 +502,7 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						id="ApiBasedSimpleBarChart"
 						component={ApiBasedSimpleBarChartComposition}
-						durationInFrames={30 * 12}
+						durationInFrames={30 * 15}
 						fps={30}
 						{...videoSizes.linkedInTall}
 						schema={apiBasedSimpleBarChartCompositionSchema}
@@ -531,10 +531,10 @@ export const RemotionRoot: React.FC = () => {
 							const maxPoints = Math.max(...json.map((it) => it.points));
 							const minPoints = Math.min(...json.map((it) => it.points));
 
-							const oceanBreezeScale = chroma
-								.scale(['#00c6ff', '#0072ff', '#004e92'])
-								.mode('lab') // Use CIE Lab color space for perceptual uniformity
-								.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
+							// const oceanBreezeScale = chroma
+							// 	.scale(['#00c6ff', '#0072ff', '#004e92'])
+							// 	.mode('lab') // Use CIE Lab color space for perceptual uniformity
+							// 	.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
 
 							const colorScale = chroma
 								.scale([
@@ -579,7 +579,10 @@ export const RemotionRoot: React.FC = () => {
 								// 		? colors.abstieg
 								// 		: colors.mittlerePosition,
 								id: `id-${it.teamInfoId}`,
-								valueLabel: `${it.points}`,
+								valueLabel:
+									it.points !== 1
+										? `${it.points} Punkte`
+										: `${it.points} Punkt`,
 							}));
 
 							return {

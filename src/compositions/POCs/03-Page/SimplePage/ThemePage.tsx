@@ -67,7 +67,7 @@ export const PageHeader: React.FC<{
 	showArea?: boolean;
 }> = ({children, theme, showArea = false}) => {
 	const baseline = theme.page.baseline;
-	const paddingBottomInBaselines = 5;
+	const paddingBottomInBaselines = 4;
 
 	return (
 		<div

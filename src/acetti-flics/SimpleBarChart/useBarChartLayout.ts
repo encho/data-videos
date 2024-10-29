@@ -16,9 +16,9 @@ export function getIbcsSizes(baseline: number) {
 		barHeight: baseline * 2,
 		// rowSpace: baseline * 0.5,
 		rowSpace: baseline * 0.75,
-		barMarginLeft: baseline * 0.85,
+		barMarginLeft: baseline * 0.9, // TODO rename to labelMarginRight
 		// barMarginRight: baseline * 0.5,
-		valueLabelMargin: baseline * 0.5,
+		valueLabelMargin: baseline * 0.6,
 		topPadding: baseline * 0.25,
 		bottomPadding: baseline * 0.25,
 	};

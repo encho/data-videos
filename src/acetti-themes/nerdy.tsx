@@ -2,6 +2,7 @@ import chroma from 'chroma-js';
 
 import {ThemeType} from './themeTypes';
 import {isVideoSize} from '../Root';
+import {grayPalettes} from './grayPalettes';
 
 const textColor = chroma('#888').hex();
 // const backgroundColor = chroma('#222222').darken().hex();
@@ -50,7 +51,7 @@ export const nerdyTheme = ({
 
 	return {
 		page,
-		global: {backgroundColor},
+		global: {backgroundColor: grayPalettes['Slate']['950']},
 		typography: {
 			title: {
 				fontFamily: 'Inter-Bold',
@@ -64,14 +65,15 @@ export const nerdyTheme = ({
 			titleColor: '#666', // TODO deprecate
 			subTitleColor: '#888',
 			textColor: '#ffffff',
-			logoColor: '#666',
+			// logoColor: '#666',
+			logoColor: grayPalettes['Slate']['700'],
 			textStyles: {
 				h1: {
 					fontFamily: 'Inter-28pt-Black',
 					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 3,
 					lineGapInBaselines: 1.75,
-					color: '#fff',
+					color: grayPalettes['Slate']['200'],
 				},
 				h2: {
 					fontFamily: 'Inter-Regular',
@@ -79,7 +81,7 @@ export const nerdyTheme = ({
 					capHeightInBaselines: 2,
 					lineGapInBaselines: 1.5,
 					// color: '#777',
-					color: '#fff',
+					color: grayPalettes['Slate']['500'],
 				},
 				h3: {
 					fontFamily: 'Inter-Bold',
@@ -100,13 +102,14 @@ export const nerdyTheme = ({
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
 					// color: '#888',
-					color: '#fff',
+					color: grayPalettes['Slate']['300'],
 				},
 				datavizValueLabel: {
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
-					color: '#aaa',
+					// color: '#64748b',
+					color: grayPalettes['Slate']['500'],
 				},
 				datavizTickLabel: {
 					fontFamily: 'Inter-Bold',
@@ -118,7 +121,7 @@ export const nerdyTheme = ({
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 0.75,
-					color: '#666',
+					color: grayPalettes['Slate']['700'],
 				},
 			},
 		},
@@ -126,13 +129,15 @@ export const nerdyTheme = ({
 		yAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			color: textColor,
+			// color: textColor,
+			color: grayPalettes['Slate']['600'],
 			tickColor: textColor,
 		},
 		xAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			color: textColor,
+			// color: textColor,
+			color: grayPalettes['Slate']['600'],
 			tickColor: textColor,
 		},
 		candlesticks: {

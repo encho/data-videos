@@ -1,9 +1,11 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
+import {forwardRef} from 'react';
 
+import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
 import {getKeyFramesInterpolator} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
-import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
+// import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {ThemeType} from '../../acetti-themes/themeTypes';
@@ -43,6 +45,81 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	hideLabels?: boolean;
 };
 
+interface LabelsDivProps {
+	data: TSimpleBarChartData;
+	theme: ThemeType;
+	baseline: number;
+}
+
+const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+	({data, theme, baseline}, ref) => {
+		return (
+			<div
+				ref={ref}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					whiteSpace: 'nowrap', // Prevent labels from wrapping
+					// color: 'cyan',
+					visibility: 'hidden',
+				}}
+			>
+				{data
+					.map((it) => it.label)
+					.map((label) => (
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizLabel}
+							baseline={baseline}
+							key={label}
+						>
+							{label.split('').map((char, i) => (
+								<span key={i}>{char}</span>
+							))}
+							{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
+						</TypographyStyle>
+					))}
+			</div>
+		);
+	}
+);
+
+const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+	({data, theme, baseline}, ref) => {
+		return (
+			<div
+				ref={ref}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					whiteSpace: 'nowrap', // Prevent labels from wrapping
+					// color: 'cyan',
+					visibility: 'hidden',
+				}}
+			>
+				{data
+					.map((it) => it.valueLabel)
+					.map((valueLabel) => (
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizValueLabel}
+							baseline={baseline}
+							key={valueLabel}
+						>
+							{valueLabel.split('').map((char, i) => (
+								<span key={i}>{char}</span>
+							))}
+							{/* <FadeInAndOutText>{valueLabel}</FadeInAndOutText> */}
+						</TypographyStyle>
+					))}
+			</div>
+		);
+	}
+);
+
+// Optional: Set a display name for easier debugging
+MeasureValueLabels.displayName = 'MeasureValueLabels';
+
 export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	theme,
 	data,
@@ -51,13 +128,19 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	baseline: baseLineProp,
 	showLayout = false,
 	hideLabels = false,
-	labelWidth,
-	valueLabelWidth,
+	labelWidth: labelWidthProp,
+	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth,
 	valueDomain: valueDomainProp,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
+
+	const {ref: labelsRef, dimensions: labelsDimensions} =
+		useElementDimensions(true);
+	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+		useElementDimensions(true);
+	// TODO useElementDimensions("skipFontsWaiting")
 
 	const barChartKeyframes = useBarChartKeyframes({
 		fps,
@@ -71,12 +154,18 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
 	invariant(baseline);
 
+	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
+	const valueLabelWidth =
+		valueLabelWidthProp || valueLabelsDimensions?.width || 0;
+
 	const barChartLayout = useBarChartLayout({
 		hideLabels,
 		baseline,
 		theme,
 		data,
 		width,
+		// labelWidth: labelsDimensions?.width || 0,
+		// valueLabelWidth: valueLabelsDimensions?.width || 0,
 		labelWidth,
 		valueLabelWidth,
 		negativeValueLabelWidth,
@@ -105,222 +194,260 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const zeroLineX = barWidthScale(0);
 
 	return (
-		<div
-			style={{
-				position: 'relative',
-				width: barChartLayout.width,
-				height: barChartLayout.height,
-			}}
-		>
-			{showLayout ? (
-				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
-				</div>
-			) : null}
+		<>
+			<MeasureLabels
+				ref={labelsRef}
+				data={data}
+				theme={theme}
+				baseline={baseline}
+			/>
+			<MeasureValueLabels
+				ref={valueLabelsRef}
+				data={data}
+				theme={theme}
+				baseline={baseline}
+			/>
 
-			{!hideLabels
-				? labelKeyframes.map((labelKeyframe, i) => {
-						return (
-							<Sequence from={labelKeyframe.frame} layout="none">
-								<HtmlArea area={barChartLayout.getLabelArea(i)}>
-									<div
-										style={{
-											display: 'flex',
-											justifyContent: 'flex-end',
-											alignItems: 'center',
-											height: '100%',
-										}}
-									>
-										<TypographyStyle
-											typographyStyle={theme.typography.textStyles.datavizLabel}
-											baseline={baseline}
-										>
-											{/* <WaterfallTextEffect>{data[i].label}</WaterfallTextEffect> */}
-											<FadeInAndOutText>{data[i].label}</FadeInAndOutText>
-											{/* <FadeInAndOutText> */}
-											{/* {data[i].label} */}
-											{/* {data[i].label.split('').map((it) => (
+			{labelsDimensions && valueLabelsDimensions ? (
+				<div
+					style={{
+						position: 'relative',
+						width: barChartLayout.width,
+						height: barChartLayout.height,
+					}}
+				>
+					{showLayout ? (
+						<div style={{position: 'absolute', top: 0, left: 0}}>
+							<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
+						</div>
+					) : null}
+
+					{!hideLabels
+						? labelKeyframes.map((labelKeyframe, i) => {
+								return (
+									<Sequence from={labelKeyframe.frame} layout="none">
+										<HtmlArea area={barChartLayout.getLabelArea(i)}>
+											<div
+												style={{
+													display: 'flex',
+													justifyContent: 'flex-end',
+													alignItems: 'center',
+													height: '100%',
+													// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+													textWrap: 'nowrap',
+												}}
+											>
+												<TypographyStyle
+													typographyStyle={
+														theme.typography.textStyles.datavizLabel
+													}
+													baseline={baseline}
+												>
+													{/* <WaterfallTextEffect>{data[i].label}</WaterfallTextEffect> */}
+													<FadeInAndOutText>{data[i].label}</FadeInAndOutText>
+													{/* <FadeInAndOutText> */}
+													{/* {data[i].label} */}
+													{/* {data[i].label.split('').map((it) => (
 												<span>{it}</span>
 											))} */}
-											{/* </FadeInAndOutText> */}
-										</TypographyStyle>
-									</div>
-								</HtmlArea>
-							</Sequence>
+													{/* </FadeInAndOutText> */}
+												</TypographyStyle>
+											</div>
+										</HtmlArea>
+									</Sequence>
+								);
+						  })
+						: null}
+
+					{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
+					{data.map((it, i) => {
+						const valueLabelKeyframe = barChartKeyframes.keyFrames.find(
+							(kf) => kf.id === 'VALUE_LABEL_APPEAR__' + it.id
 						);
-				  })
-				: null}
+						invariant(valueLabelKeyframe);
+						const valueLabelDissappearKeyframe =
+							barChartKeyframes.keyFrames.find(
+								(kf) => kf.id === 'VALUE_LABEL_DISSAPPEAR__' + it.id
+							);
+						invariant(valueLabelDissappearKeyframe);
 
-			{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
-			{data.map((it, i) => {
-				const valueLabelKeyframe = barChartKeyframes.keyFrames.find(
-					(kf) => kf.id === 'VALUE_LABEL_APPEAR__' + it.id
-				);
-				invariant(valueLabelKeyframe);
-				const valueLabelDissappearKeyframe = barChartKeyframes.keyFrames.find(
-					(kf) => kf.id === 'VALUE_LABEL_DISSAPPEAR__' + it.id
-				);
-				invariant(valueLabelDissappearKeyframe);
+						const fullBarWidth = Math.abs(barWidthScale(it.value) - zeroLineX);
 
-				const fullBarWidth = Math.abs(barWidthScale(it.value) - zeroLineX);
+						const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+							barChartKeyframes,
+							[
+								`BAR_ENTER_START__${it.id}`,
+								`BAR_ENTER_END__${it.id}`,
+								`BAR_EXIT_START__${it.id}`,
+								`BAR_EXIT_END__${it.id}`,
+							],
+							[0, fullBarWidth, fullBarWidth, 0],
+							[Easing.ease, Easing.ease, Easing.ease]
+						);
 
-				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
-					barChartKeyframes,
-					[
-						`BAR_ENTER_START__${it.id}`,
-						`BAR_ENTER_END__${it.id}`,
-						`BAR_EXIT_START__${it.id}`,
-						`BAR_EXIT_END__${it.id}`,
-					],
-					[0, fullBarWidth, fullBarWidth, 0],
-					[Easing.ease, Easing.ease, Easing.ease]
-				);
+						const currentBarWidth = interpolateCurrentBarWidth(frame);
+						const barArea = barChartLayout.getBarArea(i);
 
-				const currentBarWidth = interpolateCurrentBarWidth(frame);
-				const barArea = barChartLayout.getBarArea(i);
+						const positiveValueLabelMarginLeft =
+							-1 * (barArea.width - (currentBarWidth + zeroLineX));
 
-				const positiveValueLabelMarginLeft =
-					-1 * (barArea.width - (currentBarWidth + zeroLineX));
+						const negativeValueLabelMarginLeft =
+							-1 * (zeroLineX - currentBarWidth);
 
-				const negativeValueLabelMarginLeft = -1 * (zeroLineX - currentBarWidth);
+						return (
+							<>
+								<HtmlArea area={barArea}>
+									<svg width={barArea.width} height={barArea.height}>
+										{it.value > 0 && currentBarWidth ? (
+											<RoundedRightRect
+												y={0}
+												x={zeroLineX}
+												height={barArea.height}
+												width={currentBarWidth}
+												fill={it.barColor || 'cyan'}
+												// TODO: get radius from baseline?
+												radius={5}
+											/>
+										) : it.value < 0 && currentBarWidth ? (
+											<RoundedLeftRect
+												y={0}
+												x={zeroLineX - currentBarWidth}
+												height={barArea.height}
+												width={currentBarWidth}
+												fill={it.barColor || 'cyan'}
+												// TODO: get radius from baseline?
+												radius={5}
+											/>
+										) : null}
+									</svg>
+								</HtmlArea>
 
-				return (
-					<>
-						<HtmlArea area={barArea}>
-							<svg width={barArea.width} height={barArea.height}>
-								{it.value > 0 && currentBarWidth ? (
-									<RoundedRightRect
-										y={0}
-										x={zeroLineX}
-										height={barArea.height}
-										width={currentBarWidth}
-										fill={it.barColor || 'cyan'}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : it.value < 0 && currentBarWidth ? (
-									<RoundedLeftRect
-										y={0}
-										x={zeroLineX - currentBarWidth}
-										height={barArea.height}
-										width={currentBarWidth}
-										fill={it.barColor || 'cyan'}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : null}
-							</svg>
-						</HtmlArea>
-
-						{/* TODO use KeyframeSequence component */}
-						<Sequence
-							from={valueLabelKeyframe.frame}
-							durationInFrames={
-								valueLabelDissappearKeyframe.frame - valueLabelKeyframe.frame
-							}
-							layout="none"
-						>
-							<HtmlArea
-								area={
-									it.value >= 0
-										? barChartLayout.getValueLabelArea(i)
-										: barChartLayout.getNegativeValueLabelArea(i)
-								}
-							>
-								<div
-									style={{
-										display: 'flex',
-										justifyContent: it.value >= 0 ? 'flex-start' : 'flex-end',
-										alignItems: 'center',
-										height: '100%',
-										marginLeft:
-											it.value >= 0 ? positiveValueLabelMarginLeft : 0,
-										marginRight:
-											it.value >= 0 ? 0 : negativeValueLabelMarginLeft,
-									}}
+								{/* TODO use KeyframeSequence component */}
+								<Sequence
+									from={valueLabelKeyframe.frame}
+									durationInFrames={
+										valueLabelDissappearKeyframe.frame -
+										valueLabelKeyframe.frame
+									}
+									layout="none"
 								>
-									<TypographyStyle
-										typographyStyle={
-											theme.typography.textStyles.datavizValueLabel
+									<HtmlArea
+										area={
+											it.value >= 0
+												? barChartLayout.getValueLabelArea(i)
+												: barChartLayout.getNegativeValueLabelArea(i)
 										}
-										baseline={baseline}
 									>
-										<FadeInAndOutText>{data[i].valueLabel}</FadeInAndOutText>
-									</TypographyStyle>
-								</div>
+										<div
+											style={{
+												display: 'flex',
+												justifyContent:
+													it.value >= 0 ? 'flex-start' : 'flex-end',
+												alignItems: 'center',
+												height: '100%',
+												marginLeft:
+													it.value >= 0 ? positiveValueLabelMarginLeft : 0,
+												marginRight:
+													it.value >= 0 ? 0 : negativeValueLabelMarginLeft,
+
+												//
+												// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+												textWrap: 'nowrap',
+											}}
+										>
+											<TypographyStyle
+												typographyStyle={
+													theme.typography.textStyles.datavizValueLabel
+												}
+												baseline={baseline}
+											>
+												<FadeInAndOutText>
+													{data[i].valueLabel}
+												</FadeInAndOutText>
+											</TypographyStyle>
+										</div>
+									</HtmlArea>
+								</Sequence>
+							</>
+						);
+					})}
+
+					{(() => {
+						const zeroLineArea = barChartLayout.getZeroLineArea();
+
+						// TODO eventually useCallback at start of the component to have more efficiency
+						const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+							barChartKeyframes,
+							[
+								'ZEROLINE_ENTER_START',
+								'ZEROLINE_ENTER_END',
+								'ZEROLINE_EXIT_START',
+								'ZEROLINE_EXIT_END',
+							],
+							[0, 0, 0, zeroLineArea.height],
+							[Easing.ease, Easing.ease, Easing.ease]
+						);
+
+						// TODO eventually useCallback at start of the component to have more efficiency
+						const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+							barChartKeyframes,
+							[
+								'ZEROLINE_ENTER_START',
+								'ZEROLINE_ENTER_END',
+								'ZEROLINE_EXIT_START',
+								'ZEROLINE_EXIT_END',
+							],
+							[
+								0,
+								zeroLineArea.height,
+								zeroLineArea.height,
+								zeroLineArea.height,
+							],
+							[Easing.ease, Easing.ease, Easing.ease]
+						);
+
+						// TODO eventually useCallback at start of the component to have more efficiency
+						const interpolateZeroLine__opacity = getKeyFramesInterpolator(
+							barChartKeyframes,
+							[
+								'ZEROLINE_ENTER_START',
+								'ZEROLINE_ENTER_END',
+								'ZEROLINE_EXIT_START',
+								'ZEROLINE_EXIT_END',
+							],
+							[0, 1, 1, 0],
+							[Easing.ease, Easing.ease, Easing.ease]
+						);
+
+						const y1 = interpolateZeroLine__y1(frame);
+						const y2 = interpolateZeroLine__y2(frame);
+						const opacity = interpolateZeroLine__opacity(frame);
+
+						const lineColor = theme.yAxis.color;
+
+						return (
+							<HtmlArea area={zeroLineArea} fill="transparent">
+								<svg
+									width={zeroLineArea.width}
+									height={zeroLineArea.height}
+									style={{overflow: 'visible'}}
+								>
+									<line
+										x1={zeroLineX}
+										x2={zeroLineX}
+										y1={y1}
+										y2={y2}
+										stroke={lineColor}
+										strokeWidth={baseline * 0.2}
+										opacity={opacity}
+									/>
+								</svg>
 							</HtmlArea>
-						</Sequence>
-					</>
-				);
-			})}
-
-			{(() => {
-				const zeroLineArea = barChartLayout.getZeroLineArea();
-
-				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
-					barChartKeyframes,
-					[
-						'ZEROLINE_ENTER_START',
-						'ZEROLINE_ENTER_END',
-						'ZEROLINE_EXIT_START',
-						'ZEROLINE_EXIT_END',
-					],
-					[0, 0, 0, zeroLineArea.height],
-					[Easing.ease, Easing.ease, Easing.ease]
-				);
-
-				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
-					barChartKeyframes,
-					[
-						'ZEROLINE_ENTER_START',
-						'ZEROLINE_ENTER_END',
-						'ZEROLINE_EXIT_START',
-						'ZEROLINE_EXIT_END',
-					],
-					[0, zeroLineArea.height, zeroLineArea.height, zeroLineArea.height],
-					[Easing.ease, Easing.ease, Easing.ease]
-				);
-
-				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__opacity = getKeyFramesInterpolator(
-					barChartKeyframes,
-					[
-						'ZEROLINE_ENTER_START',
-						'ZEROLINE_ENTER_END',
-						'ZEROLINE_EXIT_START',
-						'ZEROLINE_EXIT_END',
-					],
-					[0, 1, 1, 0],
-					[Easing.ease, Easing.ease, Easing.ease]
-				);
-
-				const y1 = interpolateZeroLine__y1(frame);
-				const y2 = interpolateZeroLine__y2(frame);
-				const opacity = interpolateZeroLine__opacity(frame);
-
-				return (
-					<HtmlArea area={zeroLineArea} fill="transparent">
-						<svg
-							width={zeroLineArea.width}
-							height={zeroLineArea.height}
-							style={{overflow: 'visible'}}
-						>
-							<line
-								x1={zeroLineX}
-								x2={zeroLineX}
-								y1={y1}
-								y2={y2}
-								stroke="#666"
-								strokeWidth={baseline * 0.2}
-								opacity={opacity}
-							/>
-						</svg>
-					</HtmlArea>
-				);
-			})()}
-		</div>
+						);
+					})()}
+				</div>
+			) : null}
+		</>
 	);
 };
 

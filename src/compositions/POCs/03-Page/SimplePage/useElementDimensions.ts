@@ -1,7 +1,7 @@
 import {useRef, useEffect, useState} from 'react';
 import {continueRender, delayRender} from 'remotion';
 
-export function useElementDimensions() {
+export function useElementDimensions(skipFontsWaiting: boolean = false) {
 	// Create a ref to the div you want to measure
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -49,7 +49,12 @@ export function useElementDimensions() {
 		};
 
 		// Measure after the component has mounted and rendered
-		waitFirstTime().then(() => measure());
+		if (!skipFontsWaiting) {
+			waitFirstTime().then(() => measure());
+		} else {
+			measure();
+		}
+
 		// measure();
 
 		// Optionally, add a resize listener if dimensions might change
