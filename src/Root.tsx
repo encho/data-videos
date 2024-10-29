@@ -183,7 +183,7 @@ import {
 import './tailwind.css';
 
 // TODO use this
-const videoSize = {
+export const videoSizes = {
 	square: {
 		width: 1080,
 		height: 1080,
@@ -198,6 +198,14 @@ const videoSize = {
 	},
 };
 
+export function isVideoSize(
+	{width, height}: {width: number; height: number},
+	sizeKey: keyof typeof videoSizes
+) {
+	const expectedSize = videoSizes[sizeKey];
+	return width === expectedSize.width && height === expectedSize.height;
+}
+
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
@@ -211,7 +219,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={textAnimationsCompositionSchema}
 						defaultProps={{
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
@@ -229,7 +237,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={textMaskCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -241,7 +249,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={svgMaskCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
@@ -255,7 +263,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
@@ -269,7 +277,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={30 * 7}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={frameAnimationCompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
@@ -285,7 +293,7 @@ export const RemotionRoot: React.FC = () => {
 						component={TypesettingComposition} // TODO rename
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={typesettingCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -297,7 +305,7 @@ export const RemotionRoot: React.FC = () => {
 						component={TextStylesComposition} // TODO rename
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.widescreen_16x9}
+						{...videoSizes.widescreen_16x9}
 						schema={textStylesCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -309,7 +317,7 @@ export const RemotionRoot: React.FC = () => {
 						component={BaselineGridComposition} // TODO rename
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={baselineGridCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -321,7 +329,7 @@ export const RemotionRoot: React.FC = () => {
 						component={ModularScaleComposition}
 						durationInFrames={90 * 12}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={modularScaleCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -337,7 +345,7 @@ export const RemotionRoot: React.FC = () => {
 							component={SimpleMatrixLayoutComposition}
 							durationInFrames={90 * 10}
 							fps={90}
-							{...videoSize.linkedInTall}
+							{...videoSizes.linkedInTall}
 							schema={simpleMatrixLayoutCompositionSchema}
 							defaultProps={{themeEnum: 'NERDY' as const}}
 						/>
@@ -349,7 +357,7 @@ export const RemotionRoot: React.FC = () => {
 							component={VaryingSizesMatrixLayoutComposition}
 							durationInFrames={90 * 10}
 							fps={90}
-							{...videoSize.linkedInTall}
+							{...videoSizes.linkedInTall}
 							schema={varyingSizesMatrixLayoutCompositionSchema}
 							defaultProps={{themeEnum: 'NERDY' as const}}
 						/>
@@ -361,7 +369,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SwissPoster01Composition}
 						durationInFrames={30 * 5}
 						fps={30}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={swissPoster01CompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -373,7 +381,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SilkscreenFontComposition}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={silkscreenFontCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -388,7 +396,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={30 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={simplePageCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -403,7 +411,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={90 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={simpleKPICompositionSchema}
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
@@ -423,8 +431,8 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartDevComposition}
 						durationInFrames={90 * 5}
 						fps={90}
-						{...videoSize.linkedInTall}
-						// {...videoSize.widescreen_16x9}
+						{...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
 						schema={simpleBarChartDevCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -435,7 +443,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartComposition}
 						durationInFrames={30 * 7}
 						fps={30}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={simpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -446,7 +454,7 @@ export const RemotionRoot: React.FC = () => {
 						component={NegativeSimpleBarChartComposition}
 						durationInFrames={30 * 7}
 						fps={30}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={negativeSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -457,7 +465,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartPerfectSizingComposition}
 						durationInFrames={30 * 7}
 						fps={30}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={simpleBarChartPerfectSizingCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -466,10 +474,10 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="MultipleSimpleBarChart"
 						component={MultipleSimpleBarChartComposition}
-						durationInFrames={90 * 20}
-						fps={90}
-						// {...videoSize.square}
-						{...videoSize.linkedInTall}
+						durationInFrames={30 * 12}
+						fps={30}
+						// {...videoSizes.square}
+						{...videoSizes.linkedInTall}
 						schema={multipleSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -480,7 +488,7 @@ export const RemotionRoot: React.FC = () => {
 						component={ComposedSimpleBarChartComposition}
 						durationInFrames={30 * 8}
 						fps={30}
-						{...videoSize.widescreen_16x9}
+						{...videoSizes.widescreen_16x9}
 						schema={composedSimpleBarChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -494,7 +502,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleColumnChartComposition}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={simpleColumnChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -505,7 +513,7 @@ export const RemotionRoot: React.FC = () => {
 						component={MultipleSimpleColumnChartComposition}
 						durationInFrames={90 * 24}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={multipleSimpleColumnChartCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -519,7 +527,7 @@ export const RemotionRoot: React.FC = () => {
 							durationInFrames={90 * 15}
 							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 							fps={90}
-							{...videoSize.square}
+							{...videoSizes.square}
 							schema={twoChangeBarsCompositionSchema}
 							defaultProps={{
 								themeEnum: 'NERDY' as const,
@@ -544,7 +552,7 @@ export const RemotionRoot: React.FC = () => {
 							durationInFrames={90 * 15}
 							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 							fps={90}
-							{...videoSize.widescreen_16x9}
+							{...videoSizes.widescreen_16x9}
 							schema={twoChangeBarsWithImageCompositionSchema}
 							defaultProps={{
 								themeEnum: 'NERDY' as const,
@@ -570,7 +578,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleSparklineComposition}
 						durationInFrames={90 * 9}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={simpleSparklineCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -581,8 +589,8 @@ export const RemotionRoot: React.FC = () => {
 						component={MultipleSimpleSparklineComposition}
 						durationInFrames={90 * 22}
 						fps={90}
-						{...videoSize.widescreen_16x9}
-						// {...videoSize.linkedInTall}
+						{...videoSizes.widescreen_16x9}
+						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -595,7 +603,7 @@ export const RemotionRoot: React.FC = () => {
 						component={GermanyBerlinPOC}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={germanyBerlinPOCSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -609,7 +617,7 @@ export const RemotionRoot: React.FC = () => {
 						component={KeyframesComposition}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.linkedInTall}
+						{...videoSizes.linkedInTall}
 						schema={keyframesCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -622,7 +630,7 @@ export const RemotionRoot: React.FC = () => {
 						component={CircleToRectPath}
 						durationInFrames={90 * 3}
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={circleToRectPathSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -633,7 +641,7 @@ export const RemotionRoot: React.FC = () => {
 						component={ScatterPlotToBarChart}
 						durationInFrames={90 * 10}
 						fps={90}
-						{...videoSize.square}
+						{...videoSizes.square}
 						schema={scatterPlotToBarChartSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -650,7 +658,7 @@ export const RemotionRoot: React.FC = () => {
 					durationInFrames={90 * 15}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={performanceCompare_01_example_schema}
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
@@ -671,7 +679,7 @@ export const RemotionRoot: React.FC = () => {
 					durationInFrames={90 * 15}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={highlightPeriods_01_example_schema}
 					defaultProps={{
 						ticker: 'TESLA' as const,
@@ -691,7 +699,7 @@ export const RemotionRoot: React.FC = () => {
 					durationInFrames={90 * 15}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={performance_01_example_schema}
 					defaultProps={{
 						ticker: 'AMZN' as const,
@@ -711,7 +719,7 @@ export const RemotionRoot: React.FC = () => {
 					durationInFrames={8000}
 					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 					fps={90}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={colorPaletteSchema}
 					defaultProps={{themeEnum: 'NERDY' as const}}
 				/>
@@ -723,7 +731,7 @@ export const RemotionRoot: React.FC = () => {
 					component={HorizontalBarsStar}
 					durationInFrames={240}
 					fps={30}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={horizontalBarsStarSchema}
 					defaultProps={barChartFixtureProps}
 				/>
@@ -732,7 +740,7 @@ export const RemotionRoot: React.FC = () => {
 					component={BundesligaTop10BarChart}
 					durationInFrames={240}
 					fps={30}
-					{...videoSize.square}
+					{...videoSizes.square}
 					schema={bundesligaTop10BarChartSchema}
 					defaultProps={{dateString: '4. März 2024', year: 2024, apiData: null}}
 					calculateMetadata={async ({props}) => {

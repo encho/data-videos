@@ -29,9 +29,6 @@ export function Page({
 			>
 				<div
 					style={{
-						// display: 'flex',
-						// flexDirection: 'column',
-						// height: '100%',
 						width: theme.page.contentWidth,
 						height: theme.page.contentHeight,
 						position: 'relative',
@@ -70,7 +67,7 @@ export const PageHeader: React.FC<{
 	showArea?: boolean;
 }> = ({children, theme, showArea = false}) => {
 	const baseline = theme.page.baseline;
-	const paddingBottomInBaselines = 3;
+	const paddingBottomInBaselines = 4;
 
 	return (
 		<div

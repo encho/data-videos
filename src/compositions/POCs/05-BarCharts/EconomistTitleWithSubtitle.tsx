@@ -12,7 +12,11 @@ export const EconomistTitleWithSubtitle: React.FC<{
 	const baseline = baselineProp || theme.page.baseline;
 
 	return (
-		<div>
+		<div
+			style={{
+				textWrap: 'pretty',
+			}}
+		>
 			<div>
 				<TypographyStyle
 					typographyStyle={theme.typography.textStyles.h1}

@@ -1,6 +1,7 @@
 import chroma from 'chroma-js';
 
 import {ThemeType} from './themeTypes';
+import {isVideoSize} from '../Root';
 
 const textColor = chroma('#888').hex();
 // const backgroundColor = chroma('#222222').darken().hex();
@@ -33,7 +34,9 @@ export const nerdyTheme = ({
 	const PAGE_MARGIN_RIGHT = width / 20;
 	const PAGE_CONTENT_HEIGHT = height - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM;
 	const PAGE_CONTENT_WIDTH = width - PAGE_MARGIN_RIGHT - PAGE_MARGIN_LEFT;
-	const PAGE_BASELINE = PAGE_CONTENT_HEIGHT / 50;
+	const PAGE_BASELINE = isVideoSize({width, height}, 'widescreen_16x9')
+		? PAGE_CONTENT_HEIGHT / 50
+		: PAGE_CONTENT_WIDTH / 50;
 
 	const page = {
 		marginTop: PAGE_MARGIN_TOP,
@@ -80,7 +83,7 @@ export const nerdyTheme = ({
 				},
 				h3: {
 					fontFamily: 'Inter-Bold',
-					capHeightInBaselines: 1.2,
+					capHeightInBaselines: 1.5,
 					lineGapInBaselines: 1.5,
 					color: '#fff',
 				},
