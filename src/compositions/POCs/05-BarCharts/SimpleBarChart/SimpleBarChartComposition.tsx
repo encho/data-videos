@@ -28,9 +28,6 @@ export const SimpleBarChartComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
-	// const CHART_WIDTH = 900;
-	// const BASELINE = 26;
-
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,

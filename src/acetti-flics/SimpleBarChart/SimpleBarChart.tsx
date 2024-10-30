@@ -1,13 +1,14 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
-import {forwardRef} from 'react';
+import {forwardRef, useCallback} from 'react';
 
+import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
 import {getKeyFramesInterpolator} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
 // import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
+// import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
-import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
@@ -83,6 +84,47 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
 	invariant(baseline);
 
+	// TODO get the corresponding component and it's parametrization from theme
+	const BarChartLabel = useCallback(
+		({children}: {children: string}) => {
+			return (
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizLabel}
+					baseline={baseline}
+				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.2}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+			);
+		},
+		[theme, baseline] // Dependencies
+	);
+
+	// TODO get the corresponding component and it's parametrization from theme
+	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
+	const BarChartValueLabel = useCallback(
+		({children}: {children: string}) => {
+			return (
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizValueLabel}
+					baseline={baseline}
+				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.2}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+			);
+		},
+		[theme, baseline] // Dependencies
+	);
+
 	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
 	const valueLabelWidth =
 		valueLabelWidthProp || valueLabelsDimensions?.width || 0;
@@ -95,8 +137,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		theme,
 		data,
 		width,
-		// labelWidth: labelsDimensions?.width || 0,
-		// valueLabelWidth: valueLabelsDimensions?.width || 0,
 		labelWidth,
 		valueLabelWidth,
 		negativeValueLabelWidth,
@@ -133,6 +173,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data}
 				theme={theme}
 				baseline={baseline}
+				Component={BarChartLabel}
 			/>
 			{/* measure positive value labels */}
 			<MeasureValueLabels
@@ -141,6 +182,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data.filter((it) => it.value >= 0)}
 				theme={theme}
 				baseline={baseline}
+				Component={BarChartValueLabel}
 			/>
 			{/* measure negative value labels */}
 			<MeasureValueLabels
@@ -149,6 +191,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data.filter((it) => it.value < 0)}
 				theme={theme}
 				baseline={baseline}
+				Component={BarChartValueLabel}
 			/>
 
 			{labelsDimensions && valueLabelsDimensions ? (
@@ -180,21 +223,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 													textWrap: 'nowrap',
 												}}
 											>
-												<TypographyStyle
-													typographyStyle={
-														theme.typography.textStyles.datavizLabel
-													}
-													baseline={baseline}
-												>
-													{/* <WaterfallTextEffect>{data[i].label}</WaterfallTextEffect> */}
-													<FadeInAndOutText>{data[i].label}</FadeInAndOutText>
-													{/* <FadeInAndOutText> */}
-													{/* {data[i].label} */}
-													{/* {data[i].label.split('').map((it) => (
-												<span>{it}</span>
-											))} */}
-													{/* </FadeInAndOutText> */}
-												</TypographyStyle>
+												<BarChartLabel>{data[i].label}</BarChartLabel>
 											</div>
 										</HtmlArea>
 									</Sequence>
@@ -298,20 +327,20 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 												textWrap: 'nowrap',
 											}}
 										>
-											<TypographyStyle
+											<BarChartValueLabel>
+												{data[i].valueLabel}
+											</BarChartValueLabel>
+
+											{/* <TypographyStyle
 												typographyStyle={
 													theme.typography.textStyles.datavizValueLabel
 												}
 												baseline={baseline}
 											>
-												{/* {data[i].valueLabel.split('').map((it) => (
-													<span>{it}</span>
-												))} */}
-
 												<FadeInAndOutText>
 													{data[i].valueLabel}
 												</FadeInAndOutText>
-											</TypographyStyle>
+											</TypographyStyle> */}
 										</div>
 									</HtmlArea>
 								</Sequence>
@@ -481,10 +510,11 @@ interface LabelsDivProps {
 	data: TSimpleBarChartData;
 	theme: ThemeType;
 	baseline: number;
+	Component: React.ComponentType<{children: string}>;
 }
 
 const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
-	({data, theme, baseline}, ref) => {
+	({data, theme, baseline, Component}, ref) => {
 		return (
 			<div
 				ref={ref}
@@ -499,16 +529,7 @@ const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 				{data
 					.map((it) => it.label)
 					.map((label) => (
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.datavizLabel}
-							baseline={baseline}
-							key={label}
-						>
-							{label.split('').map((char, i) => (
-								<span key={i}>{char}</span>
-							))}
-							{/* <FadeInAndOutText>{label}</FadeInAndOutText> */}
-						</TypographyStyle>
+						<Component>{label}</Component>
 					))}
 			</div>
 		);
@@ -516,7 +537,7 @@ const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 );
 
 const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
-	({data, theme, baseline}, ref) => {
+	({data, theme, baseline, Component}, ref) => {
 		return (
 			<div
 				ref={ref}
@@ -531,16 +552,7 @@ const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 				{data
 					.map((it) => it.valueLabel)
 					.map((valueLabel) => (
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.datavizValueLabel}
-							baseline={baseline}
-							key={valueLabel}
-						>
-							{valueLabel.split('').map((char, i) => (
-								<span key={i}>{char}</span>
-							))}
-							{/* <FadeInAndOutText>{valueLabel}</FadeInAndOutText> */}
-						</TypographyStyle>
+						<Component>{valueLabel}</Component>
 					))}
 			</div>
 		);
