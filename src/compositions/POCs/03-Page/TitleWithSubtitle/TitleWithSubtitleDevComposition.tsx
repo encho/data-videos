@@ -13,12 +13,12 @@ import {
 // import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {buildKeyFramesGroup, getKeyFramesInterpolator} from './keyframes';
 
-export const titleWithSubtitleCompositionSchema = z.object({
+export const titleWithSubtitleDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const TitleWithSubtitleComposition: React.FC<
-	z.infer<typeof titleWithSubtitleCompositionSchema>
+export const TitleWithSubtitleDevComposition: React.FC<
+	z.infer<typeof titleWithSubtitleDevCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {height} = useVideoConfig();

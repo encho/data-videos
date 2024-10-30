@@ -187,9 +187,9 @@ import {
 } from './compositions/POCs/05-BarCharts/ApiBasedSimpleBarChart/ApiBasedSimpleBarChartComposition';
 
 import {
-	TitleWithSubtitleComposition,
-	titleWithSubtitleCompositionSchema,
-} from './compositions/POCs/03-Page/TitleWithSubtitle/TitleWithSubtitleComposition';
+	TitleWithSubtitleDevComposition,
+	titleWithSubtitleDevCompositionSchema,
+} from './compositions/POCs/03-Page/TitleWithSubtitle/TitleWithSubtitleDevComposition';
 
 import './tailwind.css';
 
@@ -414,13 +414,13 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="TitleWithSubtitle"
-						component={TitleWithSubtitleComposition}
+						id="TitleWithSubtitleDev"
+						component={TitleWithSubtitleDevComposition}
 						durationInFrames={30 * 10}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
 						{...videoSizes.linkedInTall}
-						schema={titleWithSubtitleCompositionSchema}
+						schema={titleWithSubtitleDevCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
