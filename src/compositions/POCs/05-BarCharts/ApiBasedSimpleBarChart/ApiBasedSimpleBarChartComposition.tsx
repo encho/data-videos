@@ -15,6 +15,7 @@ import {
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {zColor} from '@remotion/zod-types';
+import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 export const apiBasedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -94,7 +95,12 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 								typographyStyle={theme.typography.textStyles.dataSource}
 								baseline={theme.page.baseline}
 							>
-								Datenquelle: https://api.openligadb.de
+								<TextAnimationSubtle
+									translateY={theme.page.baseline * 1.1}
+									innerDelayInSeconds={6}
+								>
+									Datenquelle: https://api.openligadb.de
+								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>
 					</div>
