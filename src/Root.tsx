@@ -416,7 +416,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="TitleWithSubtitleDev"
 						component={TitleWithSubtitleDevComposition}
-						durationInFrames={30 * 10}
+						durationInFrames={30 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
 						{...videoSizes.linkedInTall}

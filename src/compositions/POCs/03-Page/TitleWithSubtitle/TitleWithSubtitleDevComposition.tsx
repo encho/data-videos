@@ -52,7 +52,7 @@ export function useTitleWithSubtitleKeyframes() {
 		{type: 'SECOND', value: 0, id: 'TITLE_ENTER_START'},
 		{
 			type: 'R_SECOND',
-			value: 0.5,
+			value: 0.6,
 			id: 'TITLE_ENTER_END',
 			relativeId: 'TITLE_ENTER_START',
 		},
@@ -63,14 +63,14 @@ export function useTitleWithSubtitleKeyframes() {
 		},
 		{
 			type: 'R_SECOND',
-			value: -0.5,
+			value: -0.6,
 			id: 'TITLE_EXIT_START',
 			relativeId: 'TITLE_EXIT_END',
 		},
 		// the subtitle...
 		{
 			type: 'R_SECOND',
-			value: 0.75,
+			value: 0.1,
 			id: 'SUBTITLE_ENTER_START',
 			relativeId: 'TITLE_ENTER_START',
 		},
@@ -87,7 +87,7 @@ export function useTitleWithSubtitleKeyframes() {
 		},
 		{
 			type: 'R_SECOND',
-			value: -0.5,
+			value: -0.6,
 			id: 'SUBTITLE_EXIT_START',
 			relativeId: 'SUBTITLE_EXIT_END',
 		},
