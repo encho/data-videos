@@ -258,8 +258,9 @@ export const RemotionRoot: React.FC = () => {
 							schema={textAnimationSubtleDevCompositionSchema}
 							defaultProps={{
 								themeEnum: 'NERDY' as const,
-								title: 'Subtle Text Animation',
-								subtitle: 'Sample Subtitle',
+								text: 'Subtle Text Animation',
+								innerDelayInSeconds: 1,
+								translateYInPageBaselines: 1,
 							}}
 						/>
 					</Folder>

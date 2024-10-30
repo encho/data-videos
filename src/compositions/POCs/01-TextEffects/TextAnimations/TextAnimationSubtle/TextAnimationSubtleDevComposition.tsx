@@ -14,13 +14,14 @@ import {
 
 export const textAnimationSubtleDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
-	title: z.string(),
-	subtitle: z.string(),
+	text: z.string(),
+	innerDelayInSeconds: z.number(),
+	translateYInPageBaselines: z.number(),
 });
 
 export const TextAnimationSubtleDevComposition: React.FC<
 	z.infer<typeof textAnimationSubtleDevCompositionSchema>
-> = ({themeEnum, title, subtitle}) => {
+> = ({themeEnum, text, innerDelayInSeconds, translateYInPageBaselines}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 
 	return (
@@ -38,16 +39,15 @@ export const TextAnimationSubtleDevComposition: React.FC<
 					baseline={theme.page.baseline}
 				>
 					<TextAnimationSubtle
-						innerDelayInSeconds={0.5}
-						translateY={theme.page.baseline * 2}
+						innerDelayInSeconds={innerDelayInSeconds}
+						translateY={theme.page.baseline * translateYInPageBaselines}
 					>
-						{title}
+						{text}
 					</TextAnimationSubtle>
 				</TypographyStyle>
-
-				{/* <TextAnimationSubtle theme={theme}>{title}</TextAnimationSubtle> */}
 			</div>
-			<TextAnimationSubtleKeyframes innerDelayInSeconds={0.5} />;
+			<TextAnimationSubtleKeyframes innerDelayInSeconds={innerDelayInSeconds} />
+			;
 		</Page>
 	);
 };
