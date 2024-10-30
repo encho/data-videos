@@ -25,6 +25,7 @@ export const zodThemeType = z.object({
 	page: zPageConfig,
 	global: z.object({
 		backgroundColor: zColor(),
+		platteColor: zColor(),
 	}),
 	typography: z.object({
 		title: z.object({

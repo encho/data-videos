@@ -2,15 +2,15 @@ import {z} from 'zod';
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../SimplePage/ThemePage';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {KeyFramesInspector} from './KeyframesInspector'; // TODO from acetti-keyframes or so
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
+// import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 import {buildKeyFramesGroup, getKeyFramesInterpolator} from './keyframes';
 
 export const titleWithSubtitleCompositionSchema = z.object({
@@ -21,11 +21,24 @@ export const TitleWithSubtitleComposition: React.FC<
 	z.infer<typeof titleWithSubtitleCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {height} = useVideoConfig();
 
 	return (
 		<Page theme={theme}>
-			<SlideTitle theme={theme}>Keyframe-Transitions</SlideTitle>
-			<TitleWithSubtitle theme={theme} title="Title" subtitle="Subtitle" />;
+			<div
+				style={{
+					width: 900,
+					// height: 300,
+					// padding: 50,
+					backgroundColor: theme.global.platteColor,
+					// overflow: 'visible',
+					// overflow: 'visible',
+					overflow: 'hidden',
+					marginBottom: height / 20,
+				}}
+			>
+				<TitleWithSubtitle theme={theme} title="Title" subtitle="Subtitle" />
+			</div>
 			<TitleWithSubtitleKeyframes theme={theme} />;
 		</Page>
 	);
@@ -36,7 +49,7 @@ export function useTitleWithSubtitleKeyframes() {
 
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
 		// the title...
-		{type: 'SECOND', value: 1, id: 'TITLE_ENTER_START'},
+		{type: 'SECOND', value: 0, id: 'TITLE_ENTER_START'},
 		{
 			type: 'R_SECOND',
 			value: 0.5,
@@ -88,14 +101,14 @@ export const TitleWithSubtitle: React.FC<{
 	theme: ThemeType;
 	title: string;
 	subtitle: string;
-}> = ({theme, title, subtitle}) => {
+	baseline?: number;
+}> = ({theme, title, subtitle, baseline: baselineProp}) => {
 	// const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes();
+	const baseline = baselineProp || theme.page.baseline;
 
-	const width = 600;
-	const height = 600;
+	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes();
 
 	const interpolateTitleOpacity = getKeyFramesInterpolator(
 		keyFramesGroup,
@@ -106,10 +119,10 @@ export const TitleWithSubtitle: React.FC<{
 			'TITLE_EXIT_END',
 		],
 		[0, 1, 1, 0],
-		[Easing.bounce, Easing.bounce, Easing.bounce]
+		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
-	const interpolateTitleZoom = getKeyFramesInterpolator(
+	const interpolateTitleFilterPixels = getKeyFramesInterpolator(
 		keyFramesGroup,
 		[
 			'TITLE_ENTER_START',
@@ -117,7 +130,19 @@ export const TitleWithSubtitle: React.FC<{
 			'TITLE_EXIT_START',
 			'TITLE_EXIT_END',
 		],
-		[10, 1, 1, 20],
+		[10, 0, 0, 10],
+		[Easing.ease, Easing.ease, Easing.ease]
+	);
+
+	const interpolateTitleTranslateY = getKeyFramesInterpolator(
+		keyFramesGroup,
+		[
+			'TITLE_ENTER_START',
+			'TITLE_ENTER_END',
+			'TITLE_EXIT_START',
+			'TITLE_EXIT_END',
+		],
+		[88, 0, 0, 88],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
@@ -130,10 +155,10 @@ export const TitleWithSubtitle: React.FC<{
 			'SUBTITLE_EXIT_END',
 		],
 		[0, 1, 1, 0],
-		[Easing.bounce, Easing.bounce, Easing.bounce]
+		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
-	const interpolateSubtitleZoom = getKeyFramesInterpolator(
+	const interpolateSubtitleFilterPixels = getKeyFramesInterpolator(
 		keyFramesGroup,
 		[
 			'SUBTITLE_ENTER_START',
@@ -141,51 +166,59 @@ export const TitleWithSubtitle: React.FC<{
 			'SUBTITLE_EXIT_START',
 			'SUBTITLE_EXIT_END',
 		],
-		[10, 1, 1, 20],
+		[10, 0, 0, 10],
+		[Easing.ease, Easing.ease, Easing.ease]
+	);
+
+	const interpolateSubtitleTranslateY = getKeyFramesInterpolator(
+		keyFramesGroup,
+		[
+			'SUBTITLE_ENTER_START',
+			'SUBTITLE_ENTER_END',
+			'SUBTITLE_EXIT_START',
+			'SUBTITLE_EXIT_END',
+		],
+		[88, 0, 0, 88],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
 	const titleOpacity = interpolateTitleOpacity(frame);
-	const subtitleOpacity = interpolateSubtitleOpacity(frame);
+	const titleFilterPixels = interpolateTitleFilterPixels(frame);
+	const titleTranslateY = interpolateTitleTranslateY(frame);
 
-	const titleZoom = interpolateTitleZoom(frame);
-	const subtitleZoom = interpolateSubtitleZoom(frame);
+	const subtitleOpacity = interpolateSubtitleOpacity(frame);
+	const subtitleFilterPixels = interpolateSubtitleFilterPixels(frame);
+	const subtitleTranslateY = interpolateSubtitleTranslateY(frame);
+
+	// const titleZoom = interpolateTitleZoom(frame);
+	// const subtitleZoom = interpolateSubtitleZoom(frame);
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-				width,
-				height,
-				backgroundColor: '#222',
-				overflow: 'hidden',
-			}}
-		>
-			<div
+		<div>
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.h1}
+				baseline={baseline}
 				style={{
-					transform: `scale(${titleZoom})`,
-					color: '#f05122',
-					fontFamily: 'Inter-Bold',
-					fontSize: 80,
 					opacity: titleOpacity,
+					filter: `blur(${titleFilterPixels}px)`,
+					transform: `translateY(${titleTranslateY}px)`,
 				}}
+				marginBottom={2}
 			>
 				{title}
-			</div>
-			<div
+			</TypographyStyle>
+
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.h2}
+				baseline={baseline}
 				style={{
-					transform: `scale(${subtitleZoom})`,
-					color: '#f05122',
-					fontFamily: 'Inter-Bold',
-					fontSize: 50,
 					opacity: subtitleOpacity,
+					filter: `blur(${subtitleFilterPixels}px)`,
+					transform: `translateY(${subtitleTranslateY}px)`,
 				}}
 			>
 				{subtitle}
-			</div>
+			</TypographyStyle>
 		</div>
 	);
 };

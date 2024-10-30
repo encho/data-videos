@@ -53,7 +53,7 @@ export const lorenzobertolinibrightTheme = ({
 
 	return {
 		page,
-		global: {backgroundColor},
+		global: {backgroundColor, platteColor: 'yellow'},
 		typography: {
 			title: {
 				fontFamily: 'Inter-Bold',

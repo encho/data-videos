@@ -51,7 +51,10 @@ export const nerdyTheme = ({
 
 	return {
 		page,
-		global: {backgroundColor: colorPalettes['Slate']['950']},
+		global: {
+			backgroundColor: colorPalettes['Slate']['950'],
+			platteColor: colorPalettes['Slate']['800'],
+		},
 		typography: {
 			title: {
 				fontFamily: 'Inter-Bold',

@@ -31,6 +31,7 @@ export function TypographyStyle({
 	typographyStyle,
 	marginBottom = 0,
 	marginTop = 0,
+	style,
 }: {
 	children: ReactNode;
 	baseline: number;
@@ -38,6 +39,7 @@ export function TypographyStyle({
 	marginTop?: number;
 	color?: string;
 	typographyStyle: ThemeTextStyle;
+	style?: React.CSSProperties;
 }) {
 	const {fontFamily, capHeightInBaselines, lineGapInBaselines, color} =
 		typographyStyle;
@@ -50,6 +52,7 @@ export function TypographyStyle({
 			color={colorProp || color}
 			marginBottom={marginBottom * baseline}
 			marginTop={marginTop * baseline}
+			style={style}
 		>
 			{children}
 		</CapSizeTextNew>
