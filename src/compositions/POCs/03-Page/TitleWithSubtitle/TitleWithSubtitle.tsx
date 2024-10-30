@@ -4,9 +4,12 @@ import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {KeyFramesInspector} from './KeyframesInspector'; // TODO from acetti-keyframes or so
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {buildKeyFramesGroup, getKeyFramesInterpolator} from './keyframes';
+import {
+	buildKeyFramesGroup,
+	getKeyFramesInterpolator,
+} from '../../Keyframes/Keyframes/keyframes';
+import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 
 export const titleWithSubtitleDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

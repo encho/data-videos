@@ -222,24 +222,26 @@ export const RemotionRoot: React.FC = () => {
 		<>
 			<Folder name="POCs">
 				<Folder name="01-TextEffects">
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="TextAnimations"
-						component={TextAnimationsComposition}
-						durationInFrames={90 * 5}
-						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-						fps={90}
-						{...videoSizes.square}
-						schema={textAnimationsCompositionSchema}
-						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
-							kpiValue: 0.015,
-							kpiValueFormatString: '+0.00%',
-							kpiLabel: 'Net Profit ',
-							fontSize: 120,
-						}}
-					/>
+					<Folder name="TextAnimations">
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="TextAnimationsOverview"
+							component={TextAnimationsComposition}
+							durationInFrames={90 * 5}
+							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+							fps={90}
+							{...videoSizes.square}
+							schema={textAnimationsCompositionSchema}
+							defaultProps={{
+								themeEnum: 'NERDY' as const,
+								kpiValue: 0.015,
+								kpiValueFormatString: '+0.00%',
+								kpiLabel: 'Net Profit ',
+								fontSize: 120,
+							}}
+						/>
+					</Folder>
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -421,7 +423,11 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.linkedInTall}
 						schema={titleWithSubtitleDevCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+							title: 'Sample Title',
+							subtitle: 'Sample Subtitle',
+						}}
 					/>
 				</Folder>
 

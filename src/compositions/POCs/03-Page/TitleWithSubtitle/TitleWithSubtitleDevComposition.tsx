@@ -1,6 +1,5 @@
 import {z} from 'zod';
 import React from 'react';
-import {useVideoConfig} from 'remotion';
 
 import {
 	TitleWithSubtitle,
@@ -14,29 +13,26 @@ import {
 
 export const titleWithSubtitleDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
+	title: z.string(),
+	subtitle: z.string(),
 });
 
 export const TitleWithSubtitleDevComposition: React.FC<
 	z.infer<typeof titleWithSubtitleDevCompositionSchema>
-> = ({themeEnum}) => {
+> = ({themeEnum, title, subtitle}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
-	const {height} = useVideoConfig();
 
 	return (
 		<Page theme={theme}>
 			<div
 				style={{
 					width: 900,
-					// height: 300,
-					// padding: 50,
 					backgroundColor: theme.global.platteColor,
-					// overflow: 'visible',
-					// overflow: 'visible',
 					overflow: 'hidden',
-					marginBottom: height / 20,
+					marginBottom: theme.page.baseline * 4,
 				}}
 			>
-				<TitleWithSubtitle theme={theme} title="Title" subtitle="Subtitle" />
+				<TitleWithSubtitle theme={theme} title={title} subtitle={subtitle} />
 			</div>
 			<TitleWithSubtitleKeyframes theme={theme} />;
 		</Page>

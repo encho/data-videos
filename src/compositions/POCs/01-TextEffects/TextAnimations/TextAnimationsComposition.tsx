@@ -46,7 +46,8 @@ export const TextAnimationsComposition: React.FC<
 							baseline={24}
 							marginBottom={2}
 						>
-							<FadeInAndOutText>Fade In And Out Text</FadeInAndOutText>
+							{/* <FadeInAndOutText>Fade In And Out Text</FadeInAndOutText> */}
+							<FadeInAndOutText>Fade In/Out</FadeInAndOutText>
 						</TypographyStyle>
 					</Sequence>
 					<Sequence layout="none">
