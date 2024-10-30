@@ -1,5 +1,7 @@
 import {Composition, Folder} from 'remotion';
 import chroma from 'chroma-js';
+import {colorPalettes} from './acetti-themes/tailwindPalettes';
+
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
@@ -556,6 +558,7 @@ export const RemotionRoot: React.FC = () => {
 							data: [],
 							title: 'Bundesliga Tabelle',
 							subtitle: 'Punktestand am 29. Oktober 2024',
+							dataSource: 'Datenquelle: https://api.openligadb.de',
 						}}
 						// defaultProps={{
 						// 	dateString: '4. März 2024',
@@ -564,65 +567,55 @@ export const RemotionRoot: React.FC = () => {
 						// }}
 						calculateMetadata={async ({props}) => {
 							const year = 2024;
-							// const apiUrl = `https://api.openligadb.de/getbltable/bl1/${props.year}`;
 							const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;
 							const data = await fetch(apiUrl);
 							const json = (await data.json()) as {
 								teamName: string;
 								points: number;
 								teamInfoId: number;
+								teamIconUrl: string;
 							}[];
 
-							const maxPoints = Math.max(...json.map((it) => it.points));
-							const minPoints = Math.min(...json.map((it) => it.points));
+							// const maxPoints = Math.max(...json.map((it) => it.points));
+							// const minPoints = Math.min(...json.map((it) => it.points));
 
-							// const oceanBreezeScale = chroma
-							// 	.scale(['#00c6ff', '#0072ff', '#004e92'])
+							// const colorScale = chroma
+							// 	.scale([
+							// 		'#CC2B52',
+							// 		'#00aadd',
+							// 	])
 							// 	.mode('lab') // Use CIE Lab color space for perceptual uniformity
 							// 	.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
 
-							const colorScale = chroma
-								.scale([
-									// '#f05122',
-									'#CC2B52',
-									// '#0099cc',
-									'#00aadd',
-									// '#555',
-									// '#00ccaa',
-									// '#54C392',
-								])
-								.mode('lab') // Use CIE Lab color space for perceptual uniformity
-								.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
-
-							// const colors = {
-							// 	championsLeague: '#15B392',
-							// 	championsOrUefaLeague: '#54C392',
-							// 	uefaLeague: '#73EC8B',
-							// 	uefaConferenceLeague: '#D2FF72',
-							// 	relegation: '#CC2B52',
-							// 	abstieg: '#AF1740',
-							// 	mittlerePosition: '#555',
-							// };
+							const colors = {
+								championsLeague: colorPalettes.Emerald[400],
+								championsOrUefaLeague: colorPalettes.Emerald[500],
+								uefaLeague: colorPalettes.Emerald[600],
+								uefaConferenceLeague: colorPalettes.Emerald[700],
+								relegation: colorPalettes.Rose[700],
+								abstieg: colorPalettes.Rose[600],
+								mittlerePosition: colorPalettes['Slate'][600],
+							};
 
 							const parsedData = json.map((it, i) => ({
+								teamIconUrl: it.teamIconUrl,
 								label: it.teamName,
 								value: it.points,
-								barColor: colorScale(it.points).hex(),
-								// barColor: oceanBreezeScale(it.points).hex(),
-								// barColor:
-								// 	i < 2
-								// 		? colors.championsLeague
-								// 		: i === 2
-								// 		? colors.championsOrUefaLeague
-								// 		: i === 3
-								// 		? colors.uefaLeague
-								// 		: i === 4
-								// 		? colors.uefaConferenceLeague
-								// 		: i === 15
-								// 		? colors.relegation
-								// 		: i > 15
-								// 		? colors.abstieg
-								// 		: colors.mittlerePosition,
+								// barColor: colorScale(it.points).hex(),
+								barColor:
+									i < 2
+										? colors.championsLeague
+										: i === 2
+										? colors.championsOrUefaLeague
+										: i === 3
+										? colors.uefaLeague
+										: i === 4
+										? colors.uefaConferenceLeague
+										: i === 15
+										? colors.relegation
+										: i > 15
+										? colors.abstieg
+										: colors.mittlerePosition,
 								id: `id-${it.teamInfoId}`,
 								valueLabel:
 									it.points !== 1

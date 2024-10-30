@@ -1,5 +1,7 @@
 import {z} from 'zod';
+import {useVideoConfig, Img} from 'remotion';
 
+import {useBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/useBarChartKeyframes';
 import {
 	Page,
 	PageHeader,
@@ -16,11 +18,14 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {zColor} from '@remotion/zod-types';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
+import invariant from 'tiny-invariant';
 
 export const apiBasedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 	title: z.string(),
 	subtitle: z.string(),
+	dataSource: z.string(),
 	data: z.array(
 		z.object({
 			label: z.string(),
@@ -28,15 +33,82 @@ export const apiBasedSimpleBarChartCompositionSchema = z.object({
 			barColor: zColor(),
 			id: z.string(),
 			valueLabel: z.string(),
+			teamIconUrl: z.string(),
 		})
 	),
 });
 
 export const ApiBasedSimpleBarChartComposition: React.FC<
 	z.infer<typeof apiBasedSimpleBarChartCompositionSchema>
-> = ({themeEnum, data, title, subtitle}) => {
+> = ({themeEnum, data, title, subtitle, dataSource}) => {
+	const {fps, durationInFrames} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
+
+	const keyframes = useBarChartKeyframes({
+		fps,
+		durationInFrames,
+		data,
+	});
+
+	const enterEndKeyframes = keyframes.keyFrames.filter((it) =>
+		it.id.includes('BAR_ENTER_END')
+	);
+	const enterEndFrames = enterEndKeyframes.map((it) => it.frame);
+	const lastEnterEndFrame = Math.max(...enterEndFrames);
+	const lastEnterEndSecond = lastEnterEndFrame / fps;
+
+	const barChartBaseline = dimensions
+		? getBarChartBaseline(dimensions.height, data)
+		: 10;
+
+	// TODO useCallback
+	const CustomBarChartLabelComponent = ({
+		children,
+		id,
+	}: {
+		children: string;
+		id: string;
+	}) => {
+		const imageSrc = data.find((it) => it.id === id)?.teamIconUrl;
+		invariant(imageSrc);
+
+		return (
+			<div
+				style={{
+					display: 'flex',
+					gap: barChartBaseline * 0.6,
+					alignItems: 'center',
+				}}
+			>
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizLabel}
+					baseline={barChartBaseline}
+				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={barChartBaseline * 1.15}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+
+				<TextAnimationSubtle
+					innerDelayInSeconds={0}
+					translateY={barChartBaseline * 1.15}
+				>
+					<Img
+						style={{
+							borderRadius: '50%',
+							width: barChartBaseline * 2,
+							height: barChartBaseline * 2,
+						}}
+						src={imageSrc}
+					/>
+				</TextAnimationSubtle>
+			</div>
+		);
+	};
 
 	return (
 		<Page theme={theme}>
@@ -66,23 +138,19 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 					{dimensions ? (
 						<div>
 							<SimpleBarChart
-								// data={barChartData}
 								data={data}
 								width={dimensions.width}
-								height={dimensions.height}
-								// baseline={BASELINE}
+								baseline={barChartBaseline}
 								theme={theme}
-								// showLayout
+								keyframes={keyframes}
+								CustomLabelComponent={CustomBarChartLabelComponent}
 							/>
 						</div>
 					) : null}
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageFooter theme={theme}>
 					<div
 						style={{
 							display: 'flex',
@@ -97,9 +165,9 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 							>
 								<TextAnimationSubtle
 									translateY={theme.page.baseline * 1.1}
-									innerDelayInSeconds={6}
+									innerDelayInSeconds={lastEnterEndSecond}
 								>
-									Datenquelle: https://api.openligadb.de
+									{dataSource}
 								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>

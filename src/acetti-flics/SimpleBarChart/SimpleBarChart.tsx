@@ -5,9 +5,10 @@ import {forwardRef, useCallback} from 'react';
 
 import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
-import {getKeyFramesInterpolator} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
-// import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
-// import {FadeInAndOutText} from '../../acetti-typography/TextEffects/FadeInAndOutText';
+import {
+	getKeyFramesInterpolator,
+	TKeyFramesGroup,
+} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -44,6 +45,13 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	valueDomain?: [number, number];
 	showLayout?: boolean;
 	hideLabels?: boolean;
+	keyframes?: TKeyFramesGroup;
+	//
+	CustomLabelComponent?: React.ComponentType<{children: string; id: string}>;
+	CustomValueLabelComponent?: React.ComponentType<{
+		children: string;
+		id: string;
+	}>;
 };
 
 export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
@@ -58,6 +66,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	valueDomain: valueDomainProp,
+	keyframes,
+	CustomLabelComponent,
+	CustomValueLabelComponent,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -76,16 +87,15 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		fps,
 		durationInFrames,
 		data,
+		keyframes,
 	});
-
-	// const hasNegativeValues = data.some((item) => item.value < 0);
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
 	invariant(baseline);
 
 	// TODO get the corresponding component and it's parametrization from theme
-	const BarChartLabel = useCallback(
+	const DefaultBarChartLabelComponent = useCallback(
 		({children}: {children: string}) => {
 			return (
 				<TypographyStyle
@@ -94,7 +104,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				>
 					<TextAnimationSubtle
 						innerDelayInSeconds={0}
-						translateY={baseline * 1.2}
+						translateY={baseline * 1.15}
 					>
 						{children}
 					</TextAnimationSubtle>
@@ -104,9 +114,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		[theme, baseline] // Dependencies
 	);
 
+	const BarChartLabel = CustomLabelComponent || DefaultBarChartLabelComponent;
+
 	// TODO get the corresponding component and it's parametrization from theme
 	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
-	const BarChartValueLabel = useCallback(
+	const DefaultBarChartValueLabelComponent = useCallback(
 		({children}: {children: string}) => {
 			return (
 				<TypographyStyle
@@ -115,7 +127,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				>
 					<TextAnimationSubtle
 						innerDelayInSeconds={0}
-						translateY={baseline * 1.2}
+						translateY={baseline * 1.15}
 					>
 						{children}
 					</TextAnimationSubtle>
@@ -124,6 +136,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		},
 		[theme, baseline] // Dependencies
 	);
+
+	const BarChartValueLabel =
+		CustomValueLabelComponent || DefaultBarChartValueLabelComponent;
 
 	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
 	const valueLabelWidth =
@@ -223,7 +238,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 													textWrap: 'nowrap',
 												}}
 											>
-												<BarChartLabel>{data[i].label}</BarChartLabel>
+												<BarChartLabel id={data[i].id}>
+													{data[i].label}
+												</BarChartLabel>
 											</div>
 										</HtmlArea>
 									</Sequence>
@@ -327,20 +344,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 												textWrap: 'nowrap',
 											}}
 										>
-											<BarChartValueLabel>
+											<BarChartValueLabel id={data[i].id}>
 												{data[i].valueLabel}
 											</BarChartValueLabel>
-
-											{/* <TypographyStyle
-												typographyStyle={
-													theme.typography.textStyles.datavizValueLabel
-												}
-												baseline={baseline}
-											>
-												<FadeInAndOutText>
-													{data[i].valueLabel}
-												</FadeInAndOutText>
-											</TypographyStyle> */}
 										</div>
 									</HtmlArea>
 								</Sequence>
@@ -392,7 +398,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 								'ZEROLINE_EXIT_END',
 							],
 							[0, 1, 1, 0],
-							[Easing.ease, Easing.ease, Easing.ease]
+							[
+								Easing.bezier(0.64, 0, 0.78, 0), // easeInQuint
+								Easing.linear,
+								Easing.bezier(0.22, 1, 0.36, 1), // easeOutQuint
+							]
 						);
 
 						const y1 = interpolateZeroLine__y1(frame);
@@ -510,7 +520,7 @@ interface LabelsDivProps {
 	data: TSimpleBarChartData;
 	theme: ThemeType;
 	baseline: number;
-	Component: React.ComponentType<{children: string}>;
+	Component: React.ComponentType<{children: string; id: string}>;
 }
 
 const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
@@ -527,9 +537,9 @@ const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 				}}
 			>
 				{data
-					.map((it) => it.label)
-					.map((label) => (
-						<Component>{label}</Component>
+					// .map((it) => it.label)
+					.map((it) => (
+						<Component id={it.id}>{it.label}</Component>
 					))}
 			</div>
 		);
@@ -549,11 +559,9 @@ const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 					visibility: 'hidden',
 				}}
 			>
-				{data
-					.map((it) => it.valueLabel)
-					.map((valueLabel) => (
-						<Component>{valueLabel}</Component>
-					))}
+				{data.map((it) => (
+					<Component id={it.id}>{it.valueLabel}</Component>
+				))}
 			</div>
 		);
 	}

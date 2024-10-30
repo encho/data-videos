@@ -1,6 +1,7 @@
 // TODO bring into acetti-keyframes or acetti-animations
 import {
 	buildKeyFramesGroup,
+	TKeyFramesGroup,
 	TKeyFrameSpec,
 } from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {TSimpleBarChartData} from './SimpleBarChart';
@@ -10,11 +11,17 @@ export function useBarChartKeyframes({
 	fps,
 	durationInFrames,
 	data,
+	keyframes: keyframesProp,
 }: {
 	fps: number;
 	durationInFrames: number;
 	data: TSimpleBarChartData;
+	keyframes?: TKeyFramesGroup;
 }) {
+	if (keyframesProp) {
+		return keyframesProp;
+	}
+
 	const labelStartKeyframes = data.reduce<TKeyFrameSpec[]>(
 		(accumulator, currentItem, index) => {
 			if (index === 0) {
@@ -28,7 +35,7 @@ export function useBarChartKeyframes({
 
 				accumulator.push({
 					type: 'R_SECOND',
-					value: 0.05,
+					value: 0.025,
 					id: `LABEL_APPEAR__${currentItem.id}`,
 					relativeId: previousLabelKeyframe.id,
 				});
@@ -41,7 +48,7 @@ export function useBarChartKeyframes({
 	const zeroLineKeyframes: TKeyFrameSpec[] = [
 		{
 			type: 'R_SECOND',
-			value: 0.4,
+			value: 0.2,
 			id: `ZEROLINE_ENTER_START`,
 			relativeId: labelStartKeyframes[labelStartKeyframes.length - 1].id,
 		},
@@ -108,7 +115,7 @@ export function useBarChartKeyframes({
 
 				accumulator.push({
 					type: 'R_SECOND',
-					value: 0.2,
+					value: 0.05,
 					id: `BAR_ENTER_START__${currentItem.id}`,
 					relativeId: `BAR_ENTER_START__${data[index - 1].id}`,
 				});
