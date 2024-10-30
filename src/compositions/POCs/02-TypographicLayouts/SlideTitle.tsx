@@ -11,12 +11,17 @@ export const SlideTitle: React.FC<{children: string; theme: ThemeType}> = ({
 	const baseline = 20;
 
 	return (
-		<div style={{display: 'flex', justifyContent: 'center'}}>
+		<div
+			style={{
+				display: 'flex',
+				// ,justifyContent: 'center'
+			}}
+		>
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.h1}
 				baseline={baseline}
-				marginBottom={4}
-				marginTop={5}
+				// marginBottom={4}
+				// marginTop={5}
 			>
 				<FadeInAndOutText>{children}</FadeInAndOutText>
 			</TypographyStyle>

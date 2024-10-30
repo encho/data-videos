@@ -5,6 +5,7 @@ import {
 } from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {TSimpleBarChartData} from './SimpleBarChart';
 
+// TODO fps and durationInframes can be taken from useVideoConfig!!!
 export function useBarChartKeyframes({
 	fps,
 	durationInFrames,

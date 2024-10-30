@@ -66,7 +66,7 @@ export const nerdyTheme = ({
 			subTitleColor: '#888',
 			textColor: '#ffffff',
 			// logoColor: '#666',
-			logoColor: colorPalettes['Slate']['700'],
+			logoColor: colorPalettes['Slate']['600'],
 			textStyles: {
 				h1: {
 					fontFamily: 'Inter-28pt-Black',
@@ -121,7 +121,7 @@ export const nerdyTheme = ({
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 0.75,
-					color: colorPalettes['Slate']['700'],
+					color: colorPalettes['Slate']['600'],
 				},
 			},
 		},

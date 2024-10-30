@@ -186,6 +186,11 @@ import {
 	apiBasedSimpleBarChartCompositionSchema,
 } from './compositions/POCs/05-BarCharts/ApiBasedSimpleBarChart/ApiBasedSimpleBarChartComposition';
 
+import {
+	TitleWithSubtitleComposition,
+	titleWithSubtitleCompositionSchema,
+} from './compositions/POCs/03-Page/TitleWithSubtitle/TitleWithSubtitleComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -397,13 +402,25 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SquarePage"
+						id="SimplePageComposition"
 						component={SimplePageComposition}
 						durationInFrames={30 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
 						{...videoSizes.square}
 						schema={simplePageCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="TitleWithSubtitle"
+						component={TitleWithSubtitleComposition}
+						durationInFrames={30 * 10}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={30}
+						{...videoSizes.linkedInTall}
+						schema={titleWithSubtitleCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
