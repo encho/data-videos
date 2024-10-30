@@ -191,6 +191,11 @@ import {
 	titleWithSubtitleDevCompositionSchema,
 } from './compositions/POCs/03-Page/TitleWithSubtitle/TitleWithSubtitleDevComposition';
 
+import {
+	TextAnimationSubtleDevComposition,
+	textAnimationSubtleDevCompositionSchema,
+} from './compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtleDevComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -239,6 +244,22 @@ export const RemotionRoot: React.FC = () => {
 								kpiValueFormatString: '+0.00%',
 								kpiLabel: 'Net Profit ',
 								fontSize: 120,
+							}}
+						/>
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="TextAnimationSubtleDev"
+							component={TextAnimationSubtleDevComposition}
+							durationInFrames={30 * 5}
+							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+							fps={30}
+							{...videoSizes.linkedInTall}
+							schema={textAnimationSubtleDevCompositionSchema}
+							defaultProps={{
+								themeEnum: 'NERDY' as const,
+								title: 'Subtle Text Animation',
+								subtitle: 'Sample Subtitle',
 							}}
 						/>
 					</Folder>

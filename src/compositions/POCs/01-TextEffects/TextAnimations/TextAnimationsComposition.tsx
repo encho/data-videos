@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {Sequence} from 'remotion';
 
+import {TextAnimationSubtle} from './TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
@@ -57,6 +58,17 @@ export const TextAnimationsComposition: React.FC<
 							marginBottom={2}
 						>
 							<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>
+						</TypographyStyle>
+					</Sequence>
+					<Sequence layout="none">
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h2}
+							baseline={24}
+							marginBottom={2}
+						>
+							<TextAnimationSubtle translateY={theme.page.baseline * 1.25}>
+								Text Animation Subtle
+							</TextAnimationSubtle>
 						</TypographyStyle>
 					</Sequence>
 				</div>
