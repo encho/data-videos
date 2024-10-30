@@ -8,14 +8,12 @@ import {
 	PageLogo,
 } from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {EconomistDataSource} from '../EconomistDataSource';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
 	useMatrixLayout,
@@ -96,7 +94,7 @@ export const ComposedSimpleBarChartComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
+					<TitleWithSubtitle
 						title={'Composed Simple Bar Chart'}
 						subtitle={'Wahlergebnisse Brandenburg 2024'}
 						theme={theme}
@@ -168,60 +166,6 @@ export const ComposedSimpleBarChartComposition: React.FC<
 			</div>
 			<PageLogo theme={theme} />
 		</Page>
-	);
-
-	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<EconomistTitleWithSubtitle
-				title={'Composed Simple Barchart'}
-				subtitle={'Wahlergebnisse Brandenburg 2024'}
-				theme={theme}
-			/>
-
-			<div style={{position: 'relative'}}>
-				<DisplayGridRails
-					{...matrixLayout}
-					// stroke={theme.TypographicLayouts.gridLayout.lineColor}
-					// stroke={'#292929'}
-					stroke={'#252525'}
-					// stroke={'transparent'}
-					// stroke={'magenta'}
-				/>
-
-				<HtmlArea area={leftArea}>
-					<SimpleBarChart
-						theme={theme}
-						data={barChartData}
-						width={leftArea.width}
-						height={leftArea.height}
-						// showLayout
-					/>
-				</HtmlArea>
-				<HtmlArea area={rightArea}>
-					<SimpleBarChart
-						theme={theme}
-						data={barChartDataPercChange}
-						width={rightArea.width}
-						height={rightArea.height}
-						hideLabels
-						// showLayout
-					/>
-				</HtmlArea>
-			</div>
-
-			<EconomistDataSource theme={theme}>
-				AirVisual World Air Quality Report 2018
-			</EconomistDataSource>
-
-			<LorenzoBertoliniLogo2 theme={theme} />
-		</div>
 	);
 };
 

@@ -78,6 +78,8 @@ export const TitleWithSubtitle: React.FC<{
 
 	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes();
 
+	const translateY = baseline * 2;
+
 	const interpolateTitleOpacity = getKeyFramesInterpolator(
 		keyFramesGroup,
 		[
@@ -110,7 +112,7 @@ export const TitleWithSubtitle: React.FC<{
 			'TITLE_EXIT_START',
 			'TITLE_EXIT_END',
 		],
-		[88, 0, 0, 88],
+		[translateY, 0, 0, 0],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
@@ -146,7 +148,7 @@ export const TitleWithSubtitle: React.FC<{
 			'SUBTITLE_EXIT_START',
 			'SUBTITLE_EXIT_END',
 		],
-		[88, 0, 0, 88],
+		[translateY, 0, 0, 0],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
@@ -168,7 +170,7 @@ export const TitleWithSubtitle: React.FC<{
 					filter: `blur(${titleFilterPixels}px)`,
 					transform: `translateY(${titleTranslateY}px)`,
 				}}
-				marginBottom={2}
+				marginBottom={3}
 			>
 				{title}
 			</TypographyStyle>

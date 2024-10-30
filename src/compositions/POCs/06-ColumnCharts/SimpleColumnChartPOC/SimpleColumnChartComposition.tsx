@@ -1,12 +1,11 @@
 import {z} from 'zod';
 
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
-import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
@@ -50,7 +49,7 @@ export const SimpleColumnChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<EconomistTitleWithSubtitle
+			<TitleWithSubtitle
 				title={'Simple Column Chart'}
 				subtitle={'Display Categorical Data Horizontally'}
 				theme={theme}

@@ -15,7 +15,7 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 
 export const simpleBarChartPerfectSizingCompositionSchema = z.object({
@@ -51,7 +51,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
+					<TitleWithSubtitle
 						// title={'AfD: Vormarsch in Brandenburg'}
 						title={
 							'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'

@@ -13,7 +13,7 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {zColor} from '@remotion/zod-types';
 
 export const apiBasedSimpleBarChartCompositionSchema = z.object({
@@ -51,11 +51,7 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
-						title={title}
-						subtitle={subtitle}
-						theme={theme}
-					/>
+					<TitleWithSubtitle title={title} subtitle={subtitle} theme={theme} />
 				</PageHeader>
 
 				<div

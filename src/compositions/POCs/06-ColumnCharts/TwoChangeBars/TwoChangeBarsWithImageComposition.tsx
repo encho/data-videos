@@ -4,7 +4,7 @@ import {useVideoConfig, Img, staticFile, Sequence} from 'remotion';
 import {getThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {Position} from '../../../../acetti-ts-base/Position';
 import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
-import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
@@ -64,11 +64,7 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 					height,
 				}}
 			>
-				<EconomistTitleWithSubtitle
-					title={title}
-					subtitle={subTitle}
-					theme={theme}
-				/>
+				<TitleWithSubtitle title={title} subtitle={subTitle} theme={theme} />
 
 				<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
 					<Position

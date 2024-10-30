@@ -9,11 +9,9 @@ import {
 	PageLogo,
 } from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
@@ -23,7 +21,7 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {data} from './inflationData';
 
@@ -130,7 +128,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
+					<TitleWithSubtitle
 						title={props.title}
 						subtitle={props.subtitle}
 						theme={theme}

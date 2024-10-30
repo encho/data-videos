@@ -1,4 +1,5 @@
 import {z} from 'zod';
+import {Sequence, useVideoConfig} from 'remotion';
 
 import {
 	Page,
@@ -13,7 +14,8 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+// import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 
 export const simpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -22,6 +24,7 @@ export const simpleBarChartCompositionSchema = z.object({
 export const SimpleBarChartComposition: React.FC<
 	z.infer<typeof simpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
+	const {fps} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
@@ -51,7 +54,7 @@ export const SimpleBarChartComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
+					<TitleWithSubtitle
 						title={'AfD: Vormarsch in Brandenburg'}
 						subtitle={'Wahlergebnisse Brandenburg 2024'}
 						theme={theme}
@@ -67,7 +70,7 @@ export const SimpleBarChartComposition: React.FC<
 					}}
 				>
 					{dimensions ? (
-						<div>
+						<Sequence from={Math.floor(fps * 0.75)} layout="none">
 							<SimpleBarChart
 								data={barChartData}
 								width={dimensions.width}
@@ -75,7 +78,7 @@ export const SimpleBarChartComposition: React.FC<
 								// baseline={BASELINE}
 								theme={theme}
 							/>
-						</div>
+						</Sequence>
 					) : null}
 				</div>
 

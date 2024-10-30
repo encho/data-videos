@@ -5,7 +5,7 @@ import {geoMercator, geoPath} from 'd3-geo';
 import {GeoJSON, FeatureCollection, Geometry} from 'geojson';
 import {evolvePath} from '@remotion/paths';
 
-import {EconomistTitleWithSubtitle} from '../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {LorenzoBertoliniLogo2} from '../../../acetti-components/LorenzoBertoliniLogo2';
 import {
@@ -111,7 +111,7 @@ export const GermanyBerlin: React.FC<{
 				height: '100%',
 			}}
 		>
-			<EconomistTitleWithSubtitle
+			<TitleWithSubtitle
 				title={'Hello title'}
 				subtitle={'Hello subtitle'}
 				theme={theme}

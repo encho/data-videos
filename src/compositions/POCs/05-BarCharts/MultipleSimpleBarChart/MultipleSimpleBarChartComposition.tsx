@@ -17,7 +17,7 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
@@ -176,7 +176,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 					theme={theme}
 					// showArea={showAreas}
 				>
-					<EconomistTitleWithSubtitle
+					<TitleWithSubtitle
 						title={'Multiple Bar Charts'}
 						subtitle={'Wahlergebnisse 2024 Brandenburg & Sachsen'}
 						theme={theme}

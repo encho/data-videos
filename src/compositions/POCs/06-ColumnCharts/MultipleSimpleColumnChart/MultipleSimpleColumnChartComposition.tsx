@@ -2,14 +2,13 @@ import {z} from 'zod';
 import {Sequence} from 'remotion';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
@@ -74,7 +73,7 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<EconomistTitleWithSubtitle
+			<TitleWithSubtitle
 				title={'Multiple Simple Column Chart'}
 				subtitle={'Display Multiple Categorical Data Horizontally'}
 				theme={theme}

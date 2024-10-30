@@ -5,7 +5,7 @@ import {useElementDimensions} from './useElementDimensions';
 import {Page, PageFooter, PageLogo, PageHeader} from './ThemePage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {EconomistTitleWithSubtitle} from '../../05-BarCharts/EconomistTitleWithSubtitle';
+import {TitleWithSubtitle} from '../TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {BaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/BaselineGrid';
 import {VerticalBaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/VerticalBaselineGrid';
@@ -57,7 +57,7 @@ export const SimplePageComposition: React.FC<
 					}}
 				>
 					<PageHeader theme={theme} showArea={showAreas}>
-						<EconomistTitleWithSubtitle
+						<TitleWithSubtitle
 							title={'Simple Page Composition. This will be great stuff...'}
 							subtitle={'This is a subtitle. Lol...'}
 							theme={theme}
