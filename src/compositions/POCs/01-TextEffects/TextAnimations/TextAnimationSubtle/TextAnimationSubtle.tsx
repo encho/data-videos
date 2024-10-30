@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactNode} from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {
@@ -8,7 +8,7 @@ import {
 import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
 
 export const TextAnimationSubtle: React.FC<{
-	children: string;
+	children: ReactNode;
 	translateY: number;
 	innerDelayInSeconds?: number;
 }> = ({children, translateY, innerDelayInSeconds = 0}) => {

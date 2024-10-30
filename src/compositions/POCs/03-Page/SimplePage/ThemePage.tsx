@@ -2,6 +2,7 @@ import {ReactNode} from 'react';
 
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 export function Page({
 	theme,
@@ -114,16 +115,16 @@ export const LorenzoBertoliniLogo = ({
 	const capHeight = baseline * capHeightInBaselines;
 
 	return (
-		<div>
-			<CapSizeTextNew
-				fontFamily={'Inter-Regular'}
-				capHeight={capHeight}
-				lineGap={0}
-				color={color}
-			>
+		<CapSizeTextNew
+			fontFamily={'Inter-Regular'}
+			capHeight={capHeight}
+			lineGap={0}
+			color={color}
+		>
+			<TextAnimationSubtle translateY={baseline * 1.1}>
 				<span>lorenzo</span>
 				<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
-			</CapSizeTextNew>
-		</div>
+			</TextAnimationSubtle>
+		</CapSizeTextNew>
 	);
 };
