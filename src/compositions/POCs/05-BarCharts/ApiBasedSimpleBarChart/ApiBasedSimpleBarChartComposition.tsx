@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, Sequence} from 'remotion';
+import chroma from 'chroma-js';
 
 import {useBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/useBarChartKeyframes';
 import {
@@ -25,6 +26,7 @@ import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnima
 import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
 import invariant from 'tiny-invariant';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 
 export const apiBasedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -91,16 +93,16 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 				>
 					{dimensions ? (
 						<div>
-							{/* <SimpleBarChart
-								data={data}
-								width={dimensions.width}
-								baseline={barChartBaseline}
-								theme={theme}
-								keyframes={keyframes}
-								CustomLabelComponent={CustomBarChartLabelComponent}
-							/> */}
-							<Sequence from={0} layout="none">
+							<Sequence from={0} durationInFrames={30 * 6} layout="none">
 								<BarChartWithLogos
+									theme={theme}
+									width={dimensions.width}
+									height={dimensions.height}
+									data={data}
+								/>
+							</Sequence>
+							<Sequence from={30 * 6} durationInFrames={30 * 6} layout="none">
+								<BarChartWithDualColors
 									theme={theme}
 									width={dimensions.width}
 									height={dimensions.height}
@@ -141,14 +143,74 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 	);
 };
 
+export const BarChartWithDualColors: React.FC<{
+	theme: ThemeType;
+	data: TSimpleBarChartData;
+	height: number;
+	width: number;
+}> = ({theme, data: dataProp, width, height}) => {
+	const barChartBaseline = getBarChartBaseline(height, dataProp);
+
+	const maxPoints = Math.max(...dataProp.map((it) => it.value));
+	const minPoints = Math.min(...dataProp.map((it) => it.value));
+
+	const colorScale = chroma
+		.scale(['#CC2B52', '#00aadd'])
+		.mode('lab') // Use CIE Lab color space for perceptual uniformity
+		.domain([minPoints, maxPoints]); // Map input numbers from 1 to 20
+
+	const data = dataProp.map((it, i) => ({
+		...it,
+		barColor: colorScale(it.value).hex(),
+	}));
+
+	return (
+		<SimpleBarChart
+			data={data}
+			width={width}
+			baseline={barChartBaseline}
+			theme={theme}
+			// keyframes={keyframes} // TODO evtl. pass from above
+		/>
+	);
+};
+
 // TODO adjusted BasrChartDataItem
 export const BarChartWithLogos: React.FC<{
 	theme: ThemeType;
 	data: Array<TSimpleBarChartDataItem & {teamIconUrl: string}>;
 	height: number;
 	width: number;
-}> = ({theme, data, width, height}) => {
-	const barChartBaseline = getBarChartBaseline(height, data);
+}> = ({theme, data: dataProp, width, height}) => {
+	const barChartBaseline = getBarChartBaseline(height, dataProp);
+
+	const colors = {
+		championsLeague: colorPalettes.Emerald[400],
+		championsOrUefaLeague: colorPalettes.Emerald[500],
+		uefaLeague: colorPalettes.Emerald[600],
+		uefaConferenceLeague: colorPalettes.Emerald[700],
+		relegation: colorPalettes.Rose[700],
+		abstieg: colorPalettes.Rose[600],
+		mittlerePosition: colorPalettes['Slate'][600],
+	};
+
+	const data = dataProp.map((it, i) => ({
+		...it,
+		barColor:
+			i < 2
+				? colors.championsLeague
+				: i === 2
+				? colors.championsOrUefaLeague
+				: i === 3
+				? colors.uefaLeague
+				: i === 4
+				? colors.uefaConferenceLeague
+				: i === 15
+				? colors.relegation
+				: i > 15
+				? colors.abstieg
+				: colors.mittlerePosition,
+	}));
 
 	// TODO useCallback
 	const CustomBarChartLabelComponent = ({

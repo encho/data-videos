@@ -335,5 +335,3 @@ export const colorPalettes: Palettes = {
 		'950': '#4c0519',
 	},
 };
-
-export default colorPalettes;

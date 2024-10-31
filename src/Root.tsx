@@ -635,26 +635,27 @@ export const RemotionRoot: React.FC = () => {
 								teamIconUrl: it.teamIconUrl,
 								label: it.teamName,
 								value: it.points,
-								// barColor: colorScale(it.points).hex(),
-								barColor:
-									i < 2
-										? colors.championsLeague
-										: i === 2
-										? colors.championsOrUefaLeague
-										: i === 3
-										? colors.uefaLeague
-										: i === 4
-										? colors.uefaConferenceLeague
-										: i === 15
-										? colors.relegation
-										: i > 15
-										? colors.abstieg
-										: colors.mittlerePosition,
+								barColor: '#ffffff',
 								id: `id-${it.teamInfoId}`,
 								valueLabel:
 									it.points !== 1
 										? `${it.points} Punkte`
 										: `${it.points} Punkt`,
+								// barColor: colorScale(it.points).hex(),
+								// barColor:
+								// 	i < 2
+								// 		? colors.championsLeague
+								// 		: i === 2
+								// 		? colors.championsOrUefaLeague
+								// 		: i === 3
+								// 		? colors.uefaLeague
+								// 		: i === 4
+								// 		? colors.uefaConferenceLeague
+								// 		: i === 15
+								// 		? colors.relegation
+								// 		: i > 15
+								// 		? colors.abstieg
+								// 		: colors.mittlerePosition,
 							}));
 
 							return {
