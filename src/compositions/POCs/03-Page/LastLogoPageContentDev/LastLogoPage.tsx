@@ -1,6 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
+import {Page} from '../SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {
@@ -135,5 +136,25 @@ export const LastLogoPageContentKeyframes: React.FC<{
 			baseFontSize={18}
 			frame={frame}
 		/>
+	);
+};
+
+export const LastLogoPage: React.FC<{
+	theme: ThemeType;
+	baseline?: number;
+}> = ({theme, baseline: baselineProp}) => {
+	// TODO evtl. from theme directly
+	const baseline = baselineProp || theme.page.baseline * 2;
+	return (
+		<Page theme={theme}>
+			<div
+				style={{
+					width: '100%',
+					height: '100%',
+				}}
+			>
+				<LastLogoPageContent theme={theme} baseline={baseline} />
+			</div>
+		</Page>
 	);
 };

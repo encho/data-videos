@@ -203,6 +203,11 @@ import {
 	lastLogoPageContentDevCompositionSchema,
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageContentDevComposition';
 
+import {
+	LastLogoPageComposition,
+	lastLogoPageCompositionSchema,
+} from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -468,6 +473,18 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={lastLogoPageContentDevCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="LastLogoPage"
+						component={LastLogoPageComposition}
+						durationInFrames={30 * 8}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={30}
+						{...videoSizes.square}
+						schema={lastLogoPageCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

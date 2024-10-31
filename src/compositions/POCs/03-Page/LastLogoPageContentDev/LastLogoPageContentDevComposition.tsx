@@ -5,7 +5,7 @@ import React from 'react';
 import {
 	LastLogoPageContent,
 	LastLogoPageContentKeyframes,
-} from './LastLogoPageContent';
+} from './LastLogoPage';
 import {Page} from '../SimplePage/ThemePage';
 import {
 	useThemeFromEnum,
