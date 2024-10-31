@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
-// import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {
 	buildKeyFramesGroup,
@@ -21,6 +21,19 @@ export function useLastLogoPageContentKeyframes() {
 			id: 'LOGO_ENTER_END',
 			relativeId: 'LOGO_ENTER_START',
 		},
+		// the linkedin address...
+		{
+			type: 'R_SECOND',
+			value: 0.5,
+			id: 'LINK_ENTER_START',
+			relativeId: 'LOGO_ENTER_START',
+		},
+		{
+			type: 'R_SECOND',
+			value: 1.75,
+			id: 'LINK_ENTER_END',
+			relativeId: 'LINK_ENTER_START',
+		},
 	]);
 
 	// TODO perhaps also return interpolators..
@@ -37,22 +50,39 @@ export const LastLogoPageContent: React.FC<{
 
 	const {keyframes: keyFramesGroup} = useLastLogoPageContentKeyframes();
 
-	const interpolateTitleOpacity = getKeyFramesInterpolator(
+	const interpolateLogoOpacity = getKeyFramesInterpolator(
 		keyFramesGroup,
 		['LOGO_ENTER_START', 'LOGO_ENTER_END'],
 		[0, 1],
 		[Easing.ease]
 	);
 
-	const interpolateTitleFilterPixels = getKeyFramesInterpolator(
+	const interpolateLogoFilterPixels = getKeyFramesInterpolator(
 		keyFramesGroup,
 		['LOGO_ENTER_START', 'LOGO_ENTER_END'],
 		[10, 0],
 		[Easing.ease]
 	);
 
-	const titleOpacity = interpolateTitleOpacity(frame);
-	const titleFilterPixels = interpolateTitleFilterPixels(frame);
+	const interpolateLinkOpacity = getKeyFramesInterpolator(
+		keyFramesGroup,
+		['LINK_ENTER_START', 'LINK_ENTER_END'],
+		[0, 1],
+		[Easing.ease]
+	);
+
+	const interpolateLinkFilterPixels = getKeyFramesInterpolator(
+		keyFramesGroup,
+		['LINK_ENTER_START', 'LINK_ENTER_END'],
+		[10, 0],
+		[Easing.ease]
+	);
+
+	const logoOpacity = interpolateLogoOpacity(frame);
+	const logoFilterPixels = interpolateLogoFilterPixels(frame);
+
+	const linkOpacity = interpolateLinkOpacity(frame);
+	const linkFilterPixels = interpolateLinkFilterPixels(frame);
 
 	return (
 		<div
@@ -60,14 +90,16 @@ export const LastLogoPageContent: React.FC<{
 				width: '100%',
 				height: '100%',
 				display: 'flex',
+				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
+				gap: baseline / 1.5,
 			}}
 		>
 			<div
 				style={{
-					opacity: titleOpacity,
-					filter: `blur(${titleFilterPixels}px)`,
+					opacity: logoOpacity,
+					filter: `blur(${logoFilterPixels}px)`,
 				}}
 			>
 				<LorenzoBertoliniLogoNoAnimation
@@ -76,6 +108,16 @@ export const LastLogoPageContent: React.FC<{
 					color={'#fff'}
 				/>
 			</div>
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.h2}
+				baseline={theme.page.baseline / 2}
+				style={{
+					opacity: linkOpacity,
+					filter: `blur(${linkFilterPixels}px)`,
+				}}
+			>
+				www.linkedin.com/in/lorenzobertolini
+			</TypographyStyle>
 		</div>
 	);
 };
