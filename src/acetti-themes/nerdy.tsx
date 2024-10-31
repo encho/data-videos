@@ -118,7 +118,7 @@ export const nerdyTheme = ({
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
-					color: '#666',
+					color: colorPalettes['Slate']['600'],
 				},
 				dataSource: {
 					fontFamily: 'Inter-Regular',
@@ -134,14 +134,14 @@ export const nerdyTheme = ({
 			strokeWidth: 3,
 			// color: textColor,
 			color: colorPalettes['Slate']['600'],
-			tickColor: textColor,
+			tickColor: colorPalettes['Slate']['600'],
 		},
 		xAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
 			// color: textColor,
 			color: colorPalettes['Slate']['600'],
-			tickColor: textColor,
+			tickColor: colorPalettes['Slate']['600'],
 		},
 		candlesticks: {
 			up: {

@@ -105,8 +105,8 @@ export const SparklineChartComponent: React.FC<{
 						area={layoutAreas.xAxis}
 						axisSpec={axisSpec}
 						fadeInDurationInFrames={XAXIS_FADE_IN_DURATION}
-						tickLabelColor={theme.typography.subTitle.color}
-						lineColor={theme.typography.subTitle.color}
+						tickLabelColor={theme.yAxis.tickColor}
+						lineColor={theme.yAxis.color}
 					/>
 				</Position>
 			</KeyFramesSequence>

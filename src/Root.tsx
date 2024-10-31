@@ -208,6 +208,11 @@ import {
 	lastLogoPageCompositionSchema,
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
 
+import {
+	ApiBasedSparklinesPresentationComposition,
+	apiBasedSparklinesPresentationCompositionSchema,
+} from './compositions/POCs/07-Sparklines/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -732,6 +737,18 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="ApiBasedSparklines"
+						component={ApiBasedSparklinesPresentationComposition}
+						durationInFrames={90 * 30}
+						fps={90}
+						{...videoSizes.widescreen_16x9}
+						// {...videoSizes.linkedInTall}
+						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

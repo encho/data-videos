@@ -35,7 +35,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
-	const {fps, width} = useVideoConfig();
+	const {fps} = useVideoConfig();
 
 	const baseline = 26;
 
