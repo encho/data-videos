@@ -199,9 +199,9 @@ import {
 } from './compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtleDevComposition';
 
 import {
-	LastLogoPageDevComposition,
-	lastLogoPageDevCompositionSchema,
-} from './compositions/POCs/03-Page/LastLogoPageDev/LastLogoPageDevComposition';
+	LastLogoPageContentDevComposition,
+	lastLogoPageContentDevCompositionSchema,
+} from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageContentDevComposition';
 
 import './tailwind.css';
 
@@ -461,13 +461,13 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="LastLogoPageDev"
-						component={LastLogoPageDevComposition}
+						id="LastLogoPageContentDev"
+						component={LastLogoPageContentDevComposition}
 						durationInFrames={30 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
 						{...videoSizes.square}
-						schema={lastLogoPageDevCompositionSchema}
+						schema={lastLogoPageContentDevCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>

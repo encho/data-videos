@@ -1,24 +1,23 @@
 import {z} from 'zod';
 import React from 'react';
 
+// TODO LastLogoPageContentContent rather
 import {
-	TitleWithSubtitle,
-	TitleWithSubtitleKeyframes,
-} from './TitleWithSubtitle';
+	LastLogoPageContent,
+	LastLogoPageContentKeyframes,
+} from './LastLogoPageContent';
 import {Page} from '../SimplePage/ThemePage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 
-export const lastLogoPageDevCompositionSchema = z.object({
+export const lastLogoPageContentDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
-	// title: z.string(),
-	// subtitle: z.string(),
 });
 
-export const LastLogoPageDevComposition: React.FC<
-	z.infer<typeof lastLogoPageDevCompositionSchema>
+export const LastLogoPageContentDevComposition: React.FC<
+	z.infer<typeof lastLogoPageContentDevCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 
@@ -27,14 +26,15 @@ export const LastLogoPageDevComposition: React.FC<
 			<div
 				style={{
 					width: 900,
+					height: 500,
 					backgroundColor: theme.global.platteColor,
 					overflow: 'hidden',
 					marginBottom: theme.page.baseline * 4,
 				}}
 			>
-				<TitleWithSubtitle theme={theme} title={'LOGO'} subtitle={'LOGO'} />
+				<LastLogoPageContent theme={theme} baseline={theme.page.baseline * 2} />
 			</div>
-			<TitleWithSubtitleKeyframes theme={theme} />;
+			<LastLogoPageContentKeyframes theme={theme} />;
 		</Page>
 	);
 };

@@ -128,3 +128,30 @@ export const LorenzoBertoliniLogo = ({
 		</CapSizeTextNew>
 	);
 };
+
+export const LorenzoBertoliniLogoNoAnimation = ({
+	theme,
+	color: colorProp,
+	baseline,
+	capHeightInBaselines = 1,
+}: {
+	theme: ThemeType;
+	color?: string;
+	capHeightInBaselines?: number;
+	baseline: number;
+}) => {
+	const color = colorProp || theme.typography.logoColor;
+	const capHeight = baseline * capHeightInBaselines;
+
+	return (
+		<CapSizeTextNew
+			fontFamily={'Inter-Regular'}
+			capHeight={capHeight}
+			lineGap={0}
+			color={color}
+		>
+			<span>lorenzo</span>
+			<span style={{fontFamily: 'Inter-Bold'}}>bertolini</span>
+		</CapSizeTextNew>
+	);
+};
