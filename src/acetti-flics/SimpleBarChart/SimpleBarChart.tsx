@@ -15,13 +15,15 @@ import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/Tex
 import {useBarChartKeyframes} from './useBarChartKeyframes';
 import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
 
-export type TSimpleBarChartData = {
+export type TSimpleBarChartDataItem = {
 	label: string;
 	value: number;
 	barColor?: string;
 	valueLabel: string;
 	id: string;
-}[];
+};
+
+export type TSimpleBarChartData = TSimpleBarChartDataItem[];
 
 interface HeightProp {
 	height: number;
