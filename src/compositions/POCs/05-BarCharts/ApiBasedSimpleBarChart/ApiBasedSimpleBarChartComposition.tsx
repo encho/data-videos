@@ -27,6 +27,7 @@ import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBa
 import invariant from 'tiny-invariant';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
+import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
 
 export const apiBasedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -48,9 +49,38 @@ export const apiBasedSimpleBarChartCompositionSchema = z.object({
 export const ApiBasedSimpleBarChartComposition: React.FC<
 	z.infer<typeof apiBasedSimpleBarChartCompositionSchema>
 > = ({themeEnum, data, title, subtitle, dataSource}) => {
-	const {fps, durationInFrames} = useVideoConfig();
+	const {
+		fps,
+		// durationInFrames
+	} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
-	// const theme2 = useThemeFromEnum(themeEnum as any);
+
+	return (
+		<div>
+			<Sequence layout="none" from={0} durationInFrames={fps * 20}>
+				<BundesligaBarChartsPage
+					theme={theme}
+					data={data}
+					title={title}
+					subtitle={subtitle}
+					dataSource={dataSource}
+				/>
+			</Sequence>
+			<Sequence layout="none" from={fps * 20} durationInFrames={fps * 4}>
+				<LastLogoPage theme={theme} />
+			</Sequence>
+		</div>
+	);
+};
+
+export const BundesligaBarChartsPage: React.FC<{
+	theme: ThemeType;
+	data: Array<TSimpleBarChartDataItem & {teamIconUrl: string}>;
+	title: string;
+	subtitle: string;
+	dataSource: string;
+}> = ({theme, data, title, subtitle, dataSource}) => {
+	const {fps, durationInFrames} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 
 	const keyframes = useBarChartKeyframes({
@@ -93,7 +123,7 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 				>
 					{dimensions ? (
 						<div>
-							<Sequence from={0} durationInFrames={30 * 6} layout="none">
+							<Sequence from={0} durationInFrames={fps * 10} layout="none">
 								<BarChartWithLogos
 									theme={theme}
 									width={dimensions.width}
@@ -101,7 +131,11 @@ export const ApiBasedSimpleBarChartComposition: React.FC<
 									data={data}
 								/>
 							</Sequence>
-							<Sequence from={30 * 6} durationInFrames={30 * 6} layout="none">
+							<Sequence
+								from={fps * 10}
+								durationInFrames={fps * 10}
+								layout="none"
+							>
 								<BarChartWithDualColors
 									theme={theme}
 									width={dimensions.width}
