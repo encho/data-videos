@@ -198,6 +198,11 @@ import {
 	textAnimationSubtleDevCompositionSchema,
 } from './compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtleDevComposition';
 
+import {
+	LastLogoPageDevComposition,
+	lastLogoPageDevCompositionSchema,
+} from './compositions/POCs/03-Page/LastLogoPageDev/LastLogoPageDevComposition';
+
 import './tailwind.css';
 
 // TODO use this
@@ -452,6 +457,18 @@ export const RemotionRoot: React.FC = () => {
 							title: 'Sample Title',
 							subtitle: 'Sample Subtitle',
 						}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="LastLogoPageDev"
+						component={LastLogoPageDevComposition}
+						durationInFrames={30 * 8}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={30}
+						{...videoSizes.square}
+						schema={lastLogoPageDevCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 
