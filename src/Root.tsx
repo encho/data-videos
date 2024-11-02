@@ -775,6 +775,33 @@ export const RemotionRoot: React.FC = () => {
 								return percReturn;
 							};
 
+							const spx = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'SPX_INDEX',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+
+							const dax = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'DAX_INDEX',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+
+							const btcusd = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'BTC-USD',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+
 							const xauusd = await fetchNerdyFinancePriceChartData(
 								{
 									ticker: 'XAU-USD',
@@ -791,14 +818,14 @@ export const RemotionRoot: React.FC = () => {
 								},
 								'STAGE'
 							);
-							const rippleusd = await fetchNerdyFinancePriceChartData(
-								{
-									ticker: 'XRP-USD',
-									endDate: new Date(),
-									timePeriod: '3Y',
-								},
-								'STAGE'
-							);
+							// const rippleusd = await fetchNerdyFinancePriceChartData(
+							// 	{
+							// 		ticker: 'XRP-USD',
+							// 		endDate: new Date(),
+							// 		timePeriod: '3Y',
+							// 	},
+							// 	'STAGE'
+							// );
 							const tesla = await fetchNerdyFinancePriceChartData(
 								{
 									ticker: 'TESLA',
@@ -816,16 +843,39 @@ export const RemotionRoot: React.FC = () => {
 								'STAGE'
 							);
 
-							const btcusd = await fetchNerdyFinancePriceChartData(
-								{
-									ticker: 'BTC-USD',
-									endDate: new Date(),
-									timePeriod: '3Y',
-								},
-								'STAGE'
-							);
+							// const apple = await fetchNerdyFinancePriceChartData(
+							// 	{
+							// 		ticker: 'AAPL',
+							// 		endDate: new Date(),
+							// 		timePeriod: '3Y',
+							// 	},
+							// 	'STAGE'
+							// );
 
-							const data = [btcusd, ethusd, rippleusd, xauusd, amazon, tesla];
+							// const goldman = await fetchNerdyFinancePriceChartData(
+							// 	{
+							// 		ticker: 'GS',
+							// 		endDate: new Date(),
+							// 		timePeriod: '3Y',
+							// 	},
+							// 	'STAGE'
+							// );
+
+							const data = [
+								// stocks
+								spx,
+								dax,
+								// commodities,
+								xauusd,
+								// crypto
+								btcusd,
+								ethusd,
+								// stocks,
+								// apple,
+								tesla,
+								amazon,
+								// goldman,
+							];
 
 							const fps = 30;
 							const singleDurationInSeconds =
@@ -844,17 +894,6 @@ export const RemotionRoot: React.FC = () => {
 								sparklinesTotalDuration +
 								lastSlideTotalDurationInFrames +
 								percentageComparisonDurationInFrames;
-
-							const neonColors = {
-								neonGreen: '#39FF14', // Neon Green
-								neonPink: '#FF1493', // Neon Pink
-								neonYellow: '#FFFF33', // Neon Yellow
-								neonOrange: '#FF4500', // Neon Orange
-								neonBlue: '#1F51FF', // Neon Blue
-								neonPurple: '#BF00FF', // Neon Purple
-								neonCyan: '#00FFFF', // Neon Cyan
-								neonMagenta: '#FF00FF', // Neon Magenta
-							};
 
 							const theme = getThemeFromEnum(props.themeEnum as any);
 							const positiveColor = theme.positiveNegativeColors.positiveColor;
@@ -888,17 +927,42 @@ export const RemotionRoot: React.FC = () => {
 								};
 							});
 
+							const barChartData = returnComparisonBarChartData.sort(
+								(a, b) => b.value - a.value
+							);
+
+							const neonColors = {
+								neonGreen: '#39FF14', // Neon Green
+								neonPink: '#FF1493', // Neon Pink
+								neonYellow: '#FFFF33', // Neon Yellow
+								neonOrange: '#FF4500', // Neon Orange
+								neonBlue: '#1F51FF', // Neon Blue
+								neonPurple: '#BF00FF', // Neon Purple
+								neonCyan: '#00FFFF', // Neon Cyan
+								neonMagenta: '#FF00FF', // Neon Magenta
+							};
+
 							return {
 								durationInFrames,
 								props: {
 									...props,
 									data,
-									barChartData: returnComparisonBarChartData,
+									barChartData,
 									dataInfo: [
 										{
-											ticker: 'TESLA',
+											ticker: 'SPX_INDEX',
 											color: neonColors.neonGreen,
-											formatter: '$0.00',
+											formatter: '0,0.0',
+										},
+										{
+											ticker: 'DAX_INDEX',
+											color: neonColors.neonPink,
+											formatter: '0,0.0',
+										},
+										{
+											ticker: 'XAU-USD',
+											color: neonColors.neonYellow,
+											formatter: '$0,0.0',
 										},
 										{
 											ticker: 'BTC-USD',
@@ -906,25 +970,35 @@ export const RemotionRoot: React.FC = () => {
 											formatter: '$0,0',
 										},
 										{
-											ticker: 'XRP-USD',
-											color: neonColors.neonBlue,
-											formatter: '$0,0.00',
-										},
-										{
 											ticker: 'ETH-USD',
-											color: neonColors.neonPurple,
+											color: neonColors.neonBlue,
 											formatter: '$0,0',
 										},
 										{
-											ticker: 'AMZN',
-											color: neonColors.neonPink,
+											ticker: 'TESLA',
+											color: neonColors.neonPurple,
 											formatter: '$0.00',
 										},
+										// {
+										// 	ticker: 'XRP-USD',
+										// 	color: neonColors.neonBlue,
+										// 	formatter: '$0,0.00',
+										// },
 										{
-											ticker: 'XAU-USD',
-											color: neonColors.neonYellow,
-											formatter: '$0,0.0',
+											ticker: 'AMZN',
+											color: neonColors.neonCyan,
+											formatter: '$0.00',
 										},
+										// {
+										// 	ticker: 'AAPL',
+										// 	color: neonColors.neonPink,
+										// 	formatter: '$0.00',
+										// },
+										// {
+										// 	ticker: 'GS',
+										// 	color: neonColors.neonPink,
+										// 	formatter: '$0.00',
+										// },
 									],
 								},
 							};

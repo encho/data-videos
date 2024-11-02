@@ -19,7 +19,7 @@ export function useChartLayout({
 }) {
 	// TODO define in ibcs theme
 	// *************************************
-	const SPACE_ABOVE_XAXIS = baseline * 2;
+	const SPACE_ABOVE_XAXIS = baseline * 1;
 	const SPACE_FOR_XAXIS = baseline * 1.5;
 	const VERTICAL_SPACE = baseline * 1;
 
