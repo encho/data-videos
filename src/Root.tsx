@@ -1,6 +1,7 @@
 import {Composition, Folder} from 'remotion';
 import invariant from 'tiny-invariant';
 
+import {getThemeFromEnum} from './acetti-themes/getThemeFromEnum';
 import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
 	HorizontalBarsStar,
@@ -855,17 +856,34 @@ export const RemotionRoot: React.FC = () => {
 								neonMagenta: '#FF00FF', // Neon Magenta
 							};
 
+							const theme = getThemeFromEnum(props.themeEnum as any);
+							const positiveColor = theme.positiveNegativeColors.positiveColor;
+							const negativeColor = theme.positiveNegativeColors.negativeColor;
+
 							const returnComparisonBarChartData = data.map((it) => {
+								const percReturn = getPercentageReturn(
+									it.data.map((dataItem) => ({
+										...dataItem,
+										date: dataItem.index,
+									}))
+								);
+
+								const valueLabelFormatted =
+									(percReturn * 100).toLocaleString(undefined, {
+										minimumFractionDigits: 1,
+										maximumFractionDigits: 1,
+									}) + '%';
+
+								const valueLabel =
+									percReturn >= 0
+										? `+${valueLabelFormatted}`
+										: valueLabelFormatted;
+
 								return {
 									label: it.tickerMetadata.name,
-									value: getPercentageReturn(
-										it.data.map((dataItem) => ({
-											...dataItem,
-											date: dataItem.index,
-										}))
-									),
-									valueLabel: 'hehe',
-									barColor: 'green',
+									value: percReturn,
+									valueLabel,
+									barColor: percReturn >= 0 ? positiveColor : negativeColor,
 									id: it.ticker,
 								};
 							});

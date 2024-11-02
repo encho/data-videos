@@ -172,6 +172,7 @@ export const TitleWithSubtitle: React.FC<{
 					opacity: titleOpacity,
 					filter: `blur(${titleFilterPixels}px)`,
 					transform: `translateY(${titleTranslateY}px)`,
+					textWrap: 'balance',
 				}}
 				marginBottom={3}
 			>
@@ -185,6 +186,7 @@ export const TitleWithSubtitle: React.FC<{
 					opacity: subtitleOpacity,
 					filter: `blur(${subtitleFilterPixels}px)`,
 					transform: `translateY(${subtitleTranslateY}px)`,
+					textWrap: 'balance',
 				}}
 			>
 				{subtitle}

@@ -32,6 +32,7 @@ export const NegativeSimpleBarChartComposition: React.FC<
 			theme={theme}
 			subtitle="With Green and Red Bars"
 			data={barChartData}
+			dataSource="Data Source: Some Data SOurce here..."
 		/>
 	);
 };

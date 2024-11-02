@@ -9,6 +9,7 @@ import {
 	PageFooter,
 	PageLogo,
 } from '../../03-Page/SimplePage/ThemePage';
+import {NegativeBarChartPage} from '../../05-BarCharts/NegativeSimpleBarChart/NegativeBarChartPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
@@ -90,8 +91,6 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 		durationInFrames: lastSlideDurationInSeconds * fps,
 	};
 
-	console.log({barChartData, hello: 'hehe'});
-
 	return (
 		<>
 			{data.map((it, i) => {
@@ -123,9 +122,13 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 			})}
 
 			<Sequence {...barChartSlideSequence} layout="none">
-				<div style={{backgroundColor: 'red', color: 'yellow', fontSize: 100}}>
-					barchartslide
-				</div>
+				<NegativeBarChartPage
+					title="Performance Overview"
+					subtitle="3-Year Performance of Selected Assets in Percent"
+					theme={theme}
+					data={barChartData}
+					dataSource={'Data Source: Yahoo Finance, own calculations.'}
+				/>
 			</Sequence>
 
 			<Sequence {...lastSlideSequence} layout="none">
