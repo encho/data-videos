@@ -1,20 +1,10 @@
 import {z} from 'zod';
-import {Sequence, useVideoConfig} from 'remotion';
 
-import {
-	Page,
-	PageHeader,
-	PageFooter,
-	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
+import {NegativeBarChartPage} from './NegativeBarChartPage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 
 export const negativeSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -23,9 +13,7 @@ export const negativeSimpleBarChartCompositionSchema = z.object({
 export const NegativeSimpleBarChartComposition: React.FC<
 	z.infer<typeof negativeSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
-	const {ref, dimensions} = useElementDimensions();
 
 	const positiveColor = theme.positiveNegativeColors.positiveColor;
 	const negativeColor = theme.positiveNegativeColors.negativeColor;
@@ -36,77 +24,15 @@ export const NegativeSimpleBarChartComposition: React.FC<
 		barColor: it.change > 0 ? positiveColor : negativeColor, // TODO could be automatic!! within SimpleBarChart
 		id: it.id,
 		valueLabel: formatPercentage(it.change),
-		// valueLabel: `${'h%'} perc.`,
-		// valueLabel: `${formatPercentage(it.change)} perc. asdu **&`,
 	}));
 
 	return (
-		<Page theme={theme}>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					position: 'relative',
-				}}
-			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<TitleWithSubtitle
-						title={'Negative Simple Bar Chart'}
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
-						theme={theme}
-					/>
-				</PageHeader>
-
-				<div
-					ref={ref}
-					style={{
-						flex: 1,
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-				>
-					{dimensions ? (
-						<Sequence from={Math.floor(fps * 0.75)} layout="none">
-							<SimpleBarChart
-								data={barChartData}
-								width={dimensions.width}
-								height={dimensions.height}
-								theme={theme}
-								// showLayout
-							/>
-						</Sequence>
-					) : null}
-				</div>
-
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
-						}}
-					>
-						<div style={{maxWidth: '62%'}}>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
-							>
-								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
-							</TypographyStyle>
-						</div>
-					</div>
-				</PageFooter>
-			</div>
-			<PageLogo theme={theme} />
-		</Page>
+		<NegativeBarChartPage
+			title="Negative Bar Chart"
+			theme={theme}
+			subtitle="With Green and Red Bars"
+			data={barChartData}
+		/>
 	);
 };
 
