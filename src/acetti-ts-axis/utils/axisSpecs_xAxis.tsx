@@ -1,4 +1,4 @@
-import {getYear} from 'date-fns';
+import {getYear, format, parseISO} from 'date-fns';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
 type TTickSpec = {
@@ -434,33 +434,23 @@ function getDayNumber(date: Date): string {
 
 // TODO rename to getJustFirstAndLastYearsAxisSpec
 export function getJustFirstAndLastAxisSpec(
-	periodsScale: TPeriodsScale
+	periodsScale: TPeriodsScale,
+	formatStringProp?: string
 ): TXAxisSpec {
 	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
 
-	// const ticks = [];
-
-	// ticks.push({
-	// 	id: 'start-0.5-tick',
-	// 	periodFloatIndex: visibleDomainIndices[0] + 0.5,
-	// });
-
-	// ticks.push({
-	// 	id: 'last-0.5-tick',
-	// 	periodFloatIndex: visibleDomainIndices[1] - 0.5,
-	// });
+	const formatString = formatStringProp || 'yyyy';
 
 	const labels = [];
 
 	const startDate = periodsScale.getDateFromIndex(visibleDomainIndices[0]);
-	const startYearNumberString = `${getYear(startDate)}`;
+	const startYearNumberString = format(startDate, formatString);
 
 	const endDate = periodsScale.getDateFromIndex(visibleDomainIndices[1] - 1);
-	const endYearNumberString = `${getYear(endDate)}`;
+	const endYearNumberString = format(endDate, formatString);
 
 	labels.push({
 		id: 'start-0.5-label',
-		// textAnchor: 'middle' as const,
 		textAnchor: 'start' as const,
 		label: startYearNumberString,
 		periodFloatIndex: visibleDomainIndices[0] + 0.5,

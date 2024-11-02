@@ -28,6 +28,7 @@ type TSparklineChartWrapperProps = {
 	formatString?: string;
 	leftValueLabelWidth?: number;
 	rightValueLabelWidth?: number;
+	xAxisFormatString?: string;
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
@@ -41,6 +42,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	lineColor,
 	showLayout = false,
 	formatString = '$ 0.0',
+	xAxisFormatString = 'yyyy',
 	leftValueLabelWidth: leftValueLabelWidthProp,
 	rightValueLabelWidth: rightValueLabelWidthProp,
 }) => {
@@ -138,6 +140,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 								currentSliceInfo={currentSliceInfo}
 								leftValueLabel={firstValueLabel}
 								rightValueLabel={lastValueLabel}
+								xAxisFormatString={xAxisFormatString}
 							/>
 						);
 					}}

@@ -41,6 +41,7 @@ export const SparklineChartComponent: React.FC<{
 	leftValueLabel: string;
 	rightValueLabel: string;
 	lineColor?: string;
+	xAxisFormatString?: string;
 }> = ({
 	id,
 	baseline,
@@ -52,10 +53,14 @@ export const SparklineChartComponent: React.FC<{
 	leftValueLabel,
 	rightValueLabel,
 	lineColor,
+	xAxisFormatString,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 
-	const axisSpec = getJustFirstAndLastAxisSpec(currentPeriodsScale);
+	const axisSpec = getJustFirstAndLastAxisSpec(
+		currentPeriodsScale,
+		xAxisFormatString
+	);
 
 	const keyframes = getLargeSparklineKeyFrames({durationInFrames, fps});
 

@@ -211,6 +211,7 @@ import {
 import {
 	ApiBasedSparklinesPresentationComposition,
 	apiBasedSparklinesPresentationCompositionSchema,
+	SingleSparklineSlide,
 } from './compositions/POCs/07-Sparklines/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
 
 import './tailwind.css';
@@ -758,6 +759,7 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 							data: [],
 							dataInfo: [],
+							singleSparklineDurationInSeconds: 10,
 						}}
 						calculateMetadata={async ({props}) => {
 							const xauusd = await fetchNerdyFinancePriceChartData(
@@ -794,6 +796,21 @@ export const RemotionRoot: React.FC = () => {
 								'STAGE'
 							);
 
+							const data = [amazon, btcusd, tesla, xauusd];
+
+							const fps = 30;
+							const singleDurationInSeconds =
+								props.singleSparklineDurationInSeconds;
+							const singleDurationInFrames = singleDurationInSeconds * fps;
+
+							const sparklinesTotalDuration =
+								data.length * singleDurationInFrames;
+
+							const lastSlideTotalDurationInFrames = fps * 3;
+
+							const durationInFrames =
+								sparklinesTotalDuration + lastSlideTotalDurationInFrames;
+
 							const neonColors = {
 								neonGreen: '#39FF14', // Neon Green
 								neonPink: '#FF1493', // Neon Pink
@@ -802,6 +819,7 @@ export const RemotionRoot: React.FC = () => {
 							};
 
 							return {
+								durationInFrames,
 								props: {
 									...props,
 									data: [amazon, btcusd, tesla, xauusd],

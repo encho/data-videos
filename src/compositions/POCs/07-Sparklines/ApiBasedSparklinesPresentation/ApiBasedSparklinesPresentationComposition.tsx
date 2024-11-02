@@ -35,6 +35,7 @@ export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	dataInfo: z.array(
 		z.object({ticker: z.string(), formatter: z.string(), color: zColor()})
 	),
+	singleSparklineDurationInSeconds: z.number(),
 });
 
 function getDataColor(
@@ -56,11 +57,11 @@ function getDataFormatter(
 
 export const ApiBasedSparklinesPresentationComposition: React.FC<
 	z.infer<typeof apiBasedSparklinesPresentationCompositionSchema>
-> = ({themeEnum, data, dataInfo}) => {
+> = ({themeEnum, data, dataInfo, singleSparklineDurationInSeconds}) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 
-	const singleDuration = Math.floor(fps * 7);
+	const singleDuration = Math.floor(fps * singleSparklineDurationInSeconds);
 	const remainingDuration = durationInFrames - data.length * singleDuration;
 
 	const getSequenceForIndex = (i: number) => {
@@ -76,7 +77,8 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 		<>
 			{data.map((it, i) => {
 				const ticker = it.ticker;
-				const description = it.tickerMetadata.name;
+				// const description = it.tickerMetadata.name;
+				const description = `3-Year Performance Overview`;
 				const sequence = getSequenceForIndex(i);
 
 				const sparklineSlideData = it.data.map((it) => ({
@@ -90,8 +92,8 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 				return (
 					<Sequence key={ticker} layout="none" {...sequence}>
 						<SingleSparklineSlide
+							title={it.tickerMetadata.name}
 							description={description}
-							ticker={ticker}
 							theme={theme}
 							data={sparklineSlideData}
 							lineColor={lineColor}
@@ -109,13 +111,13 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 };
 
 export const SingleSparklineSlide: React.FC<{
-	ticker: string;
+	title: string;
 	description: string;
 	theme: ThemeType;
 	data: TimeSeries;
 	lineColor: string;
 	formatString: string;
-}> = ({ticker, description, theme, data, lineColor, formatString}) => {
+}> = ({title, description, theme, data, lineColor, formatString}) => {
 	// const DEBUG = true;
 	const DEBUG = false;
 
@@ -123,7 +125,7 @@ export const SingleSparklineSlide: React.FC<{
 
 	const {fps} = useVideoConfig();
 
-	const baseline = theme.page.baseline * 2;
+	const baseline = theme.page.baseline * 1.75;
 
 	const matrixLayout = useMatrixLayout({
 		width: dimensions ? dimensions.width : 2000, // to better show grid rails!
@@ -159,7 +161,7 @@ export const SingleSparklineSlide: React.FC<{
 					// showArea={DEBUG}
 				>
 					<TitleWithSubtitle
-						title={ticker}
+						title={title}
 						subtitle={description}
 						theme={theme}
 					/>
@@ -196,6 +198,7 @@ export const SingleSparklineSlide: React.FC<{
 												lineColor={lineColor}
 												formatString={formatString}
 												showLayout={DEBUG}
+												xAxisFormatString={'MMM yy'}
 											/>
 										</Sequence>
 									</Sequence>
