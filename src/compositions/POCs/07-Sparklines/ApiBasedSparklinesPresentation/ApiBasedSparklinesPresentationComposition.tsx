@@ -1,7 +1,6 @@
 import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
-// import invariant from 'tiny-invariant';
 import {zColor} from '@remotion/zod-types';
 import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
@@ -25,17 +24,20 @@ import {
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-// import {data} from './inflationData';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {zSimpleBarChartData} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 	data: z.array(zNerdyFinancePriceChartDataResult),
+	barChartData: zSimpleBarChartData,
 	dataInfo: z.array(
 		z.object({ticker: z.string(), formatter: z.string(), color: zColor()})
 	),
 	singleSparklineDurationInSeconds: z.number(),
+	barChartDurationInSeconds: z.number(),
+	lastSlideDurationInSeconds: z.number(),
 });
 
 function getDataColor(
@@ -57,27 +59,43 @@ function getDataFormatter(
 
 export const ApiBasedSparklinesPresentationComposition: React.FC<
 	z.infer<typeof apiBasedSparklinesPresentationCompositionSchema>
-> = ({themeEnum, data, dataInfo, singleSparklineDurationInSeconds}) => {
-	const {fps, durationInFrames} = useVideoConfig();
+> = ({
+	themeEnum,
+	data,
+	dataInfo,
+	singleSparklineDurationInSeconds,
+	barChartDurationInSeconds,
+	lastSlideDurationInSeconds,
+	barChartData,
+}) => {
+	const {
+		fps,
+		// durationInFrames
+	} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 
 	const singleDuration = Math.floor(fps * singleSparklineDurationInSeconds);
-	const remainingDuration = durationInFrames - data.length * singleDuration;
 
 	const getSequenceForIndex = (i: number) => {
 		return {from: i * singleDuration, durationInFrames: singleDuration};
 	};
 
-	const lastSlideSequence = {
-		from: singleDuration * 4,
-		durationInFrames: remainingDuration,
+	const barChartSlideSequence = {
+		from: singleDuration * data.length,
+		durationInFrames: barChartDurationInSeconds * fps,
 	};
+
+	const lastSlideSequence = {
+		from: singleDuration * data.length + barChartDurationInSeconds * fps,
+		durationInFrames: lastSlideDurationInSeconds * fps,
+	};
+
+	console.log({barChartData, hello: 'hehe'});
 
 	return (
 		<>
 			{data.map((it, i) => {
 				const ticker = it.ticker;
-				// const description = it.tickerMetadata.name;
 				const description = `3-Year Performance Overview`;
 				const sequence = getSequenceForIndex(i);
 
@@ -103,6 +121,13 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 					</Sequence>
 				);
 			})}
+
+			<Sequence {...barChartSlideSequence} layout="none">
+				<div style={{backgroundColor: 'red', color: 'yellow', fontSize: 100}}>
+					barchartslide
+				</div>
+			</Sequence>
+
 			<Sequence {...lastSlideSequence} layout="none">
 				<LastLogoPage theme={theme} />
 			</Sequence>

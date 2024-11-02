@@ -2,6 +2,8 @@ import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {forwardRef, useCallback} from 'react';
+import {z} from 'zod';
+import {zColor} from '@remotion/zod-types';
 
 import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
@@ -14,6 +16,16 @@ import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
 import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
+
+export const zSimpleBarChartDataItem = z.object({
+	label: z.string(),
+	value: z.number(),
+	barColor: zColor(), // TODO maybe color
+	valueLabel: z.string(),
+	id: z.string(),
+});
+
+export const zSimpleBarChartData = z.array(zSimpleBarChartDataItem);
 
 export type TSimpleBarChartDataItem = {
 	label: string;

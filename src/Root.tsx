@@ -1,7 +1,7 @@
 import {Composition, Folder} from 'remotion';
-import chroma from 'chroma-js';
-import {colorPalettes} from './acetti-themes/tailwindPalettes';
+import invariant from 'tiny-invariant';
 
+import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
@@ -216,6 +216,7 @@ import {
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
+import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 
 // TODO use this
 export const videoSizes = {
@@ -759,12 +760,39 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 							data: [],
 							dataInfo: [],
-							singleSparklineDurationInSeconds: 10,
+							singleSparklineDurationInSeconds: 6,
+							barChartDurationInSeconds: 6,
+							lastSlideDurationInSeconds: 6,
+							barChartData: [],
 						}}
 						calculateMetadata={async ({props}) => {
+							const getPercentageReturn = (ts: TimeSeries) => {
+								const firstValue = ts[0].value;
+								const lastValue = ts[ts.length - 1].value;
+								const percReturn = lastValue / firstValue - 1;
+								invariant(percReturn);
+								return percReturn;
+							};
+
 							const xauusd = await fetchNerdyFinancePriceChartData(
 								{
 									ticker: 'XAU-USD',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+							const ethusd = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'ETH-USD',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+							const rippleusd = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'XRP-USD',
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
@@ -796,7 +824,7 @@ export const RemotionRoot: React.FC = () => {
 								'STAGE'
 							);
 
-							const data = [amazon, btcusd, tesla, xauusd];
+							const data = [btcusd, ethusd, rippleusd, xauusd, amazon, tesla];
 
 							const fps = 30;
 							const singleDurationInSeconds =
@@ -806,23 +834,48 @@ export const RemotionRoot: React.FC = () => {
 							const sparklinesTotalDuration =
 								data.length * singleDurationInFrames;
 
-							const lastSlideTotalDurationInFrames = fps * 3;
+							const percentageComparisonDurationInFrames =
+								fps * props.barChartDurationInSeconds;
+							const lastSlideTotalDurationInFrames =
+								fps * props.lastSlideDurationInSeconds;
 
 							const durationInFrames =
-								sparklinesTotalDuration + lastSlideTotalDurationInFrames;
+								sparklinesTotalDuration +
+								lastSlideTotalDurationInFrames +
+								percentageComparisonDurationInFrames;
 
 							const neonColors = {
 								neonGreen: '#39FF14', // Neon Green
 								neonPink: '#FF1493', // Neon Pink
 								neonYellow: '#FFFF33', // Neon Yellow
 								neonOrange: '#FF4500', // Neon Orange
+								neonBlue: '#1F51FF', // Neon Blue
+								neonPurple: '#BF00FF', // Neon Purple
+								neonCyan: '#00FFFF', // Neon Cyan
+								neonMagenta: '#FF00FF', // Neon Magenta
 							};
+
+							const returnComparisonBarChartData = data.map((it) => {
+								return {
+									label: it.tickerMetadata.name,
+									value: getPercentageReturn(
+										it.data.map((dataItem) => ({
+											...dataItem,
+											date: dataItem.index,
+										}))
+									),
+									valueLabel: 'hehe',
+									barColor: 'green',
+									id: it.ticker,
+								};
+							});
 
 							return {
 								durationInFrames,
 								props: {
 									...props,
-									data: [amazon, btcusd, tesla, xauusd],
+									data,
+									barChartData: returnComparisonBarChartData,
 									dataInfo: [
 										{
 											ticker: 'TESLA',
@@ -832,6 +885,16 @@ export const RemotionRoot: React.FC = () => {
 										{
 											ticker: 'BTC-USD',
 											color: neonColors.neonOrange,
+											formatter: '$0,0',
+										},
+										{
+											ticker: 'XRP-USD',
+											color: neonColors.neonBlue,
+											formatter: '$0,0.00',
+										},
+										{
+											ticker: 'ETH-USD',
+											color: neonColors.neonPurple,
 											formatter: '$0,0',
 										},
 										{
