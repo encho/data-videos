@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
+import invariant from 'tiny-invariant';
 
 import {
 	Page,
@@ -11,7 +12,7 @@ import {
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
-import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
+import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
@@ -33,36 +34,38 @@ export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 export const ApiBasedSparklinesPresentationComposition: React.FC<
 	z.infer<typeof apiBasedSparklinesPresentationCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 
 	const tickers = ['DJX', 'S&P 500', 'Bitcoin', 'Gold'];
 
+	const singleDuration = Math.floor(fps * 5);
+	const remainingDuration = durationInFrames - tickers.length * singleDuration;
+
+	const sequences: {[k: string]: {from: number; durationInFrames: number}} = {
+		DJX: {from: 0, durationInFrames: singleDuration},
+		'S&P 500': {from: singleDuration * 1, durationInFrames: singleDuration},
+		Bitcoin: {from: singleDuration * 2, durationInFrames: singleDuration},
+		Gold: {from: singleDuration * 3, durationInFrames: singleDuration},
+		LastSlide: {from: singleDuration * 4, durationInFrames: remainingDuration},
+	};
+
 	return (
 		<>
 			{tickers.map((it, i) => {
-				const singleDuration = Math.floor(fps * 6);
-
 				const ticker = it;
-				const from = singleDuration * i;
-				const durationInFrames = singleDuration;
+				const sequence = sequences[ticker];
+				invariant(sequence);
 
 				return (
-					<Sequence
-						key={ticker}
-						from={from}
-						durationInFrames={durationInFrames}
-					>
+					<Sequence key={ticker} layout="none" {...sequence}>
 						<SingleSparklineSlide ticker={it} theme={theme} />;
 					</Sequence>
 				);
 			})}
-			{/* <Sequence from={0} durationInFrames={Math.floor(fps * 5)}>
-				<SingleSparklineSlide ticker="zzz" theme={theme} />;
+			<Sequence {...sequences['LastSlide']} layout="none">
+				<LastLogoPage theme={theme} />
 			</Sequence>
-			<Sequence from={0} durationInFrames={Math.floor(fps * 5)}>
-				<SingleSparklineSlide ticker="hehehe" theme={theme} />;
-			</Sequence> */}
 		</>
 	);
 };
@@ -78,7 +81,7 @@ export const SingleSparklineSlide: React.FC<{
 
 	const {fps} = useVideoConfig();
 
-	const baseline = theme.page.baseline * 3;
+	const baseline = theme.page.baseline * 2;
 
 	const props = data;
 

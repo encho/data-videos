@@ -744,10 +744,11 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="ApiBasedSparklines"
 						component={ApiBasedSparklinesPresentationComposition}
-						durationInFrames={90 * 30}
-						fps={90}
-						{...videoSizes.widescreen_16x9}
+						durationInFrames={30 * 30}
+						fps={30}
+						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
+						{...videoSizes.square}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>

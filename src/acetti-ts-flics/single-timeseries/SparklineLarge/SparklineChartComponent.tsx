@@ -1,6 +1,7 @@
 import {ScaleLinear} from 'd3-scale';
 import {useVideoConfig} from 'remotion';
 
+import {TextAnimationSubtle} from '../../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
@@ -14,7 +15,7 @@ import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpe
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
-import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
+// import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
@@ -189,7 +190,9 @@ export const SparklineChartComponent: React.FC<{
 								baseline={baseline}
 								color={lineColor}
 							>
-								<FadeInAndOutText>{leftValueLabel}</FadeInAndOutText>
+								<TextAnimationSubtle translateY={baseline * 1.1}>
+									{leftValueLabel}
+								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>
 					</div>
@@ -232,7 +235,9 @@ export const SparklineChartComponent: React.FC<{
 								baseline={baseline}
 								color={lineColor}
 							>
-								<FadeInAndOutText>{rightValueLabel}</FadeInAndOutText>
+								<TextAnimationSubtle translateY={baseline * 1.1}>
+									{rightValueLabel}
+								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>
 					</div>

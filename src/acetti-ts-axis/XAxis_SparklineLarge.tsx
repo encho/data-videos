@@ -7,10 +7,10 @@ import {
 } from 'remotion';
 import invariant from 'tiny-invariant';
 
+import {TextAnimationSubtle} from '../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
-import {WaterfallTextEffect} from '../acetti-typography/TextEffects/WaterfallTextEffect';
 import {TypographyStyle} from '../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
 	getTextDimensions,
@@ -161,7 +161,10 @@ export const TypographyLabel: React.FC<{
 				baseline={baseline}
 				color={color}
 			>
-				<WaterfallTextEffect>{children}</WaterfallTextEffect>
+				<TextAnimationSubtle translateY={baseline * 1.1}>
+					{children}
+				</TextAnimationSubtle>
+				{/* <WaterfallTextEffect>{children}</WaterfallTextEffect> */}
 			</TypographyStyle>
 		</div>
 	);
@@ -185,7 +188,10 @@ export const TypographyTickLabel: React.FC<{
 				typographyStyle={theme.typography.textStyles.datavizTickLabel}
 				baseline={baseline}
 			>
-				<WaterfallTextEffect>{children}</WaterfallTextEffect>
+				{/* <WaterfallTextEffect>{children}</WaterfallTextEffect> */}
+				<TextAnimationSubtle translateY={baseline * 1.1}>
+					{children}
+				</TextAnimationSubtle>
 			</TypographyStyle>
 		</div>
 	);

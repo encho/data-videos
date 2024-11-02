@@ -26,6 +26,8 @@ type TSparklineChartWrapperProps = {
 	lineColor?: string;
 	showLayout?: boolean;
 	formatString?: string;
+	leftValueLabelWidth?: number;
+	rightValueLabelWidth?: number;
 };
 
 export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
@@ -39,6 +41,8 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	lineColor,
 	showLayout = false,
 	formatString = '$ 0.0',
+	leftValueLabelWidth: leftValueLabelWidthProp,
+	rightValueLabelWidth: rightValueLabelWidthProp,
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
@@ -48,28 +52,35 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 	const firstValueLabel = numeral(firstDataValue).format(formatString);
 	const lastValueLabel = numeral(lastDataValue).format(formatString);
 
-	// TODO make a smaller value label in theme
-	const leftValueLabelWidth = getTextDimensions({
+	// QUICK-FIX: At the moment with the current TextAnimationComponent this is fine
+	// it would be more robust, if rendered and measured
+	const measuredLeftValueLabelWidth = getTextDimensions({
 		key: 'datavizValueLabel',
 		theme,
 		baseline,
 		text: firstValueLabel,
 	}).width;
 
-	const rightValueLabelWidth = getTextDimensions({
+	// QUICK-FIX: At the moment with the current TextAnimationComponent this is fine
+	// it would be more robust, if rendered and measured
+	const measuredRightValueLabelWidth = getTextDimensions({
 		key: 'datavizValueLabel',
 		theme,
 		baseline,
 		text: lastValueLabel,
 	}).width;
 
+	const leftValueLabelWidth =
+		leftValueLabelWidthProp || measuredLeftValueLabelWidth;
+	const rightValueLabelWidth =
+		rightValueLabelWidthProp || measuredRightValueLabelWidth;
+
 	const chartLayout = useChartLayout({
 		baseline,
 		width,
 		height,
-		// QUICK-FIX: Currently we need to adjust the widths, as small errors may arise
-		leftValueLabelWidth: leftValueLabelWidth * 1.25,
-		rightValueLabelWidth: rightValueLabelWidth * 1.25,
+		leftValueLabelWidth,
+		rightValueLabelWidth,
 	});
 
 	return (
