@@ -931,6 +931,14 @@ export const RemotionRoot: React.FC = () => {
 								(a, b) => b.value - a.value
 							);
 
+							// const forChat = barChartData.map((it) => {
+							// 	return {
+							// 		asset: it.label,
+							// 		percentagePerformanceInLast3Years: it.value * 100,
+							// 	};
+							// });
+							// console.log({forChat});
+
 							const neonColors = {
 								neonGreen: '#39FF14', // Neon Green
 								neonPink: '#FF1493', // Neon Pink
