@@ -1,3 +1,25 @@
+import {z} from 'zod';
+
+export const zNerdyFinancePriceChartDataResult = z.object({
+	title: z.string(),
+	subtitle: z.string(),
+	ticker: z.string(),
+	tickerMetadata: z.object({
+		ticker: z.string(),
+		quote: z.string(),
+		name: z.string(),
+		type: z.string(),
+	}),
+	percentageChange: z.number(),
+	timePeriod: z.string(),
+	data: z.array(
+		z.object({
+			value: z.number(),
+			index: z.date(),
+		})
+	),
+});
+
 export type TNerdyFinancePriceChartDataResult = {
 	title: string;
 	subtitle: string;
@@ -15,12 +37,12 @@ export type TNerdyFinancePriceChartDataResult = {
 
 type NerdyFinancePriceChartsArgs = {
 	ticker: string;
-	endDate: string;
-	timePeriod: '1M' | '3M' | '1Y' | '2Y' | 'YTD' | 'QTD';
+	endDate: string | Date;
+	timePeriod: '1M' | '3M' | '1Y' | '2Y' | '3Y' | 'YTD' | 'QTD';
 };
 
 export const fetchNerdyFinancePriceChartData = async (
-	{ticker, endDate, timePeriod}: NerdyFinancePriceChartsArgs,
+	{ticker, endDate: endDateProp, timePeriod}: NerdyFinancePriceChartsArgs,
 	nerdyFinanceEnv: 'DEV' | 'STAGE' | 'PROD'
 ): Promise<TNerdyFinancePriceChartDataResult> => {
 	const apiBase =
@@ -30,9 +52,10 @@ export const fetchNerdyFinancePriceChartData = async (
 			? 'https://coinfolio-quant-stage.onrender.com'
 			: 'https://coinfolio-quant.onrender.com';
 
-	const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDate}&timePeriod=${timePeriod}`;
+	const endDateString =
+		typeof endDateProp === 'string' ? endDateProp : endDateProp.toISOString();
 
-	console.log(apiUrl);
+	const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDateString}&timePeriod=${timePeriod}`;
 
 	const data = await fetch(apiUrl);
 
@@ -40,7 +63,6 @@ export const fetchNerdyFinancePriceChartData = async (
 
 	// TODO validate a specific return type
 	// maybe with zod it is possible?
-	// TODO parse within the component!
 	const parsedData = json.data.map((it: {value: number; index: string}) => ({
 		value: it.value,
 		index: new Date(it.index),

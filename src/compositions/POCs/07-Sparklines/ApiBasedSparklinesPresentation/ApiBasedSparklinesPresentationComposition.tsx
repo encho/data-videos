@@ -1,8 +1,9 @@
 import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
-import invariant from 'tiny-invariant';
-
+// import invariant from 'tiny-invariant';
+import {zColor} from '@remotion/zod-types';
+import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
 	Page,
 	PageHeader,
@@ -24,46 +25,83 @@ import {
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {data} from './inflationData';
+// import {data} from './inflationData';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 
 export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
+	data: z.array(zNerdyFinancePriceChartDataResult),
+	dataInfo: z.array(
+		z.object({ticker: z.string(), formatter: z.string(), color: zColor()})
+	),
 });
+
+function getDataColor(
+	dataInfo: {ticker: string; color: string; formatter: string}[],
+	ticker: string
+) {
+	const color = dataInfo.find((it) => it.ticker === ticker)?.color || 'magenta';
+	return color;
+}
+
+function getDataFormatter(
+	dataInfo: {ticker: string; color: string; formatter: string}[],
+	ticker: string
+) {
+	const color =
+		dataInfo.find((it) => it.ticker === ticker)?.formatter || '0.00';
+	return color;
+}
 
 export const ApiBasedSparklinesPresentationComposition: React.FC<
 	z.infer<typeof apiBasedSparklinesPresentationCompositionSchema>
-> = ({themeEnum}) => {
+> = ({themeEnum, data, dataInfo}) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 
-	const tickers = ['DJX', 'S&P 500', 'Bitcoin', 'Gold'];
+	const singleDuration = Math.floor(fps * 7);
+	const remainingDuration = durationInFrames - data.length * singleDuration;
 
-	const singleDuration = Math.floor(fps * 5);
-	const remainingDuration = durationInFrames - tickers.length * singleDuration;
+	const getSequenceForIndex = (i: number) => {
+		return {from: i * singleDuration, durationInFrames: singleDuration};
+	};
 
-	const sequences: {[k: string]: {from: number; durationInFrames: number}} = {
-		DJX: {from: 0, durationInFrames: singleDuration},
-		'S&P 500': {from: singleDuration * 1, durationInFrames: singleDuration},
-		Bitcoin: {from: singleDuration * 2, durationInFrames: singleDuration},
-		Gold: {from: singleDuration * 3, durationInFrames: singleDuration},
-		LastSlide: {from: singleDuration * 4, durationInFrames: remainingDuration},
+	const lastSlideSequence = {
+		from: singleDuration * 4,
+		durationInFrames: remainingDuration,
 	};
 
 	return (
 		<>
-			{tickers.map((it, i) => {
-				const ticker = it;
-				const sequence = sequences[ticker];
-				invariant(sequence);
+			{data.map((it, i) => {
+				const ticker = it.ticker;
+				const description = it.tickerMetadata.name;
+				const sequence = getSequenceForIndex(i);
+
+				const sparklineSlideData = it.data.map((it) => ({
+					...it,
+					date: it.index,
+				}));
+
+				const lineColor = getDataColor(dataInfo, ticker);
+				const formatString = getDataFormatter(dataInfo, ticker);
 
 				return (
 					<Sequence key={ticker} layout="none" {...sequence}>
-						<SingleSparklineSlide ticker={it} theme={theme} />;
+						<SingleSparklineSlide
+							description={description}
+							ticker={ticker}
+							theme={theme}
+							data={sparklineSlideData}
+							lineColor={lineColor}
+							formatString={formatString}
+						/>
+						;
 					</Sequence>
 				);
 			})}
-			<Sequence {...sequences['LastSlide']} layout="none">
+			<Sequence {...lastSlideSequence} layout="none">
 				<LastLogoPage theme={theme} />
 			</Sequence>
 		</>
@@ -72,8 +110,12 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 
 export const SingleSparklineSlide: React.FC<{
 	ticker: string;
+	description: string;
 	theme: ThemeType;
-}> = ({ticker, theme}) => {
+	data: TimeSeries;
+	lineColor: string;
+	formatString: string;
+}> = ({ticker, description, theme, data, lineColor, formatString}) => {
 	// const DEBUG = true;
 	const DEBUG = false;
 
@@ -82,8 +124,6 @@ export const SingleSparklineSlide: React.FC<{
 	const {fps} = useVideoConfig();
 
 	const baseline = theme.page.baseline * 2;
-
-	const props = data;
 
 	const matrixLayout = useMatrixLayout({
 		width: dimensions ? dimensions.width : 2000, // to better show grid rails!
@@ -102,20 +142,7 @@ export const SingleSparklineSlide: React.FC<{
 		column: 0,
 	});
 
-	const neonColors = {
-		neonGreen: '#39FF14',
-		neonPink: '#FF6EC7',
-		neonBlue: '#0D98BA',
-		neonOrange: '#FF5F1F',
-	};
-
-	const ts1Extent = extent(props.sparklines[0].timeseries, (it) => it.value);
-
-	// TODO deprecate for this use case
-	const min = Math.min(ts1Extent[0] as number);
-	const max = Math.max(ts1Extent[1] as number);
-	// TODO deprecate for this use case
-	const commonDomain = [min, max] as [number, number];
+	const domain = extent(data, (it) => it.value);
 
 	return (
 		<Page theme={theme}>
@@ -133,7 +160,7 @@ export const SingleSparklineSlide: React.FC<{
 				>
 					<TitleWithSubtitle
 						title={ticker}
-						subtitle={'Description for Ticker here...'}
+						subtitle={description}
 						theme={theme}
 					/>
 				</PageHeader>
@@ -161,13 +188,13 @@ export const SingleSparklineSlide: React.FC<{
 											<SparklineLarge
 												baseline={baseline}
 												id={'001'}
-												data={props.sparklines[0].timeseries}
+												data={data}
 												width={area_1.width}
 												height={area_1.height}
 												theme={theme}
-												domain={commonDomain}
-												lineColor={neonColors.neonGreen}
-												formatString="0.00 %"
+												domain={domain as [number, number]}
+												lineColor={lineColor}
+												formatString={formatString}
 												showLayout={DEBUG}
 											/>
 										</Sequence>
@@ -200,7 +227,7 @@ export const SingleSparklineSlide: React.FC<{
 								typographyStyle={theme.typography.textStyles.dataSource}
 								baseline={theme.page.baseline}
 							>
-								{props.dataSource}
+								{'Data Source: Yahoo Finance'}
 							</TypographyStyle>
 						</div>
 					</div>

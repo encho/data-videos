@@ -214,6 +214,7 @@ import {
 } from './compositions/POCs/07-Sparklines/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
 
 import './tailwind.css';
+import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 
 // TODO use this
 export const videoSizes = {
@@ -224,6 +225,10 @@ export const videoSizes = {
 	linkedInTall: {
 		width: 1080,
 		height: 1350,
+	},
+	linkedInWide: {
+		height: 1080,
+		width: 1350,
 	},
 	widescreen_16x9: {
 		width: 1920,
@@ -744,13 +749,87 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="ApiBasedSparklines"
 						component={ApiBasedSparklinesPresentationComposition}
-						durationInFrames={30 * 30}
+						durationInFrames={30 * 32}
 						fps={30}
-						// {...videoSizes.widescreen_16x9}
-						// {...videoSizes.linkedInTall}
-						{...videoSizes.square}
+						// {...videoSizes.square}
+						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{
+							themeEnum: 'NERDY' as const,
+							data: [],
+							dataInfo: [],
+						}}
+						calculateMetadata={async ({props}) => {
+							const xauusd = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'XAU-USD',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+							const tesla = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'TESLA',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+							const amazon = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'AMZN',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+
+							const btcusd = await fetchNerdyFinancePriceChartData(
+								{
+									ticker: 'BTC-USD',
+									endDate: new Date(),
+									timePeriod: '3Y',
+								},
+								'STAGE'
+							);
+
+							const neonColors = {
+								neonGreen: '#39FF14', // Neon Green
+								neonPink: '#FF1493', // Neon Pink
+								neonYellow: '#FFFF33', // Neon Yellow
+								neonOrange: '#FF4500', // Neon Orange
+							};
+
+							return {
+								props: {
+									...props,
+									data: [amazon, btcusd, tesla, xauusd],
+									dataInfo: [
+										{
+											ticker: 'TESLA',
+											color: neonColors.neonGreen,
+											formatter: '$0.00',
+										},
+										{
+											ticker: 'BTC-USD',
+											color: neonColors.neonOrange,
+											formatter: '$0,0',
+										},
+										{
+											ticker: 'AMZN',
+											color: neonColors.neonPink,
+											formatter: '$0.00',
+										},
+										{
+											ticker: 'XAU-USD',
+											color: neonColors.neonYellow,
+											formatter: '$0,0.0',
+										},
+									],
+								},
+							};
+						}}
 					/>
 				</Folder>
 				<Folder name="08-GeoJSON">

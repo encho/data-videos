@@ -7,14 +7,16 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
+import {
+	// getThemeFromEnum,
+	useThemeFromEnum,
+} from '../../acetti-themes/getThemeFromEnum';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
 import {Position} from '../../acetti-ts-base/Position';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
-import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 import {PerformanceCompare_01} from '../../acetti-ts-flics/single-timeseries/PerformanceCompare_01/PerformanceCompare_01';
 
 import {
@@ -34,10 +36,7 @@ export const PerformanceCompare_01_Example: React.FC<
 	z.infer<typeof performanceCompare_01_example_schema>
 > = ({ticker, ticker2, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
-	const {
-		// height,
-		width,
-	} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	const today = new Date();
 	const endDate = today.toISOString();
@@ -45,9 +44,7 @@ export const PerformanceCompare_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePerformanceCompareChartDataResult>(null);
 
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum as any);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');

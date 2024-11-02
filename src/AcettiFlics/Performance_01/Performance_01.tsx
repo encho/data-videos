@@ -7,22 +7,18 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../acetti-components/LorenzoBertoliniLogo';
 import {Position} from '../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from '../../acetti-http/nerdy-finance/fetchPriceChartData';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {Performance_01} from '../../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 import {TitleAndSubtitle} from '../../acetti-components/TitleAndSubtitle';
-import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
+import {useThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 
 export const performance_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -35,10 +31,7 @@ export const Performance_01_Example: React.FC<
 	z.infer<typeof performance_01_example_schema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
-	const {
-		// height,
-		width,
-	} = useVideoConfig();
+	const {width} = useVideoConfig();
 
 	const today = new Date();
 	const endDate = today.toISOString();
@@ -46,9 +39,7 @@ export const Performance_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum as any);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
