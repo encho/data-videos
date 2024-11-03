@@ -60,7 +60,7 @@ export const getBarChartBaseline = (
 	return perfectBaseline;
 };
 
-type TBarChartLayout = {
+export type TBarChartLayout = {
 	gridLayout: TGridLayout;
 	width: number;
 	height: number;

@@ -8,7 +8,10 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SimpleBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartKeyframes';
-import {SimpleBarChartLayout} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartLayout';
+import {
+	SimpleBarChartLayout,
+	SimpleAnimatedBarChartLayout,
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartLayout';
 
 export const simpleBarChartDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -34,7 +37,8 @@ const wahlergebnis2024: {
 	{parteiName: 'SPD', prozent: 30.9 / 100, farbe: '#E3000F', id: 'SPD'}, // SPD Red
 	{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
 	{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
-	{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
+	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
+	{parteiName: 'CDU', prozent: -12.1 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
 ];
 
 export const SimpleBarChartDevComposition: React.FC<
@@ -89,6 +93,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					justifyContent: 'center',
 					marginBottom: 50,
 					marginTop: 50,
+					gap: 50,
 				}}
 			>
 				<SimpleBarChartLayout
@@ -97,6 +102,14 @@ export const SimpleBarChartDevComposition: React.FC<
 					baseline={BASELINE}
 					theme={theme}
 					showLayout={true}
+				/>
+				<SimpleAnimatedBarChartLayout
+					data={barChartData}
+					width={CHART_WIDTH}
+					baseline={BASELINE}
+					theme={theme}
+					showLayout={true}
+					valueDomain={[0, 0.309] as [number, number]}
 				/>
 			</div>
 
