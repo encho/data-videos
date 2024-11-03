@@ -567,7 +567,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={simpleBarChartPerfectSizingCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -745,7 +745,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -775,13 +775,15 @@ export const RemotionRoot: React.FC = () => {
 								return percReturn;
 							};
 
+							const nerdyENV = 'PROD';
+
 							const spx = await fetchNerdyFinancePriceChartData(
 								{
 									ticker: 'SPX_INDEX',
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 
 							const dax = await fetchNerdyFinancePriceChartData(
@@ -790,7 +792,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 
 							const btcusd = await fetchNerdyFinancePriceChartData(
@@ -799,7 +801,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 
 							const xauusd = await fetchNerdyFinancePriceChartData(
@@ -808,7 +810,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 							const ethusd = await fetchNerdyFinancePriceChartData(
 								{
@@ -816,7 +818,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 							// const rippleusd = await fetchNerdyFinancePriceChartData(
 							// 	{
@@ -832,7 +834,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 							const amazon = await fetchNerdyFinancePriceChartData(
 								{
@@ -840,7 +842,7 @@ export const RemotionRoot: React.FC = () => {
 									endDate: new Date(),
 									timePeriod: '3Y',
 								},
-								'STAGE'
+								nerdyENV
 							);
 
 							// const apple = await fetchNerdyFinancePriceChartData(

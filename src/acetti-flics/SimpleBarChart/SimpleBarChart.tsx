@@ -1,5 +1,4 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {forwardRef, useCallback} from 'react';
 import {z} from 'zod';
@@ -15,7 +14,8 @@ import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
-import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
+import {getBarChartBaseline} from './useBarChartLayout';
+import {useAnimatedBarChartLayout} from './useAnimatedBarChartLayout';
 
 export const zSimpleBarChartDataItem = z.object({
 	label: z.string(),
@@ -160,17 +160,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const negativeValueLabelWidth =
 		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
 
-	const barChartLayout = useBarChartLayout({
-		hideLabels,
-		baseline,
-		theme,
-		data,
-		width,
-		labelWidth,
-		valueLabelWidth,
-		negativeValueLabelWidth,
-	});
-
 	// determine domain
 	// ------------------------------------------
 	const values = data.map((it) => it.value);
@@ -181,17 +170,23 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 			number
 		]);
 
+	const animatedBarChartLayout = useAnimatedBarChartLayout({
+		hideLabels,
+		baseline,
+		theme,
+		data,
+		width,
+		labelWidth,
+		valueLabelWidth,
+		negativeValueLabelWidth,
+		valueDomain,
+	});
+
 	// the keyframes for the labels
 	// -------------------------------------------------------------------
 	const labelKeyframes = barChartKeyframes.keyFrames.filter((kf) =>
 		kf.id.startsWith('LABEL_APPEAR__')
 	);
-
-	const barWidthScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(valueDomain)
-		.range([0, barChartLayout.getBarArea(0).width]);
-
-	const zeroLineX = barWidthScale(0);
 
 	return (
 		<>
@@ -227,13 +222,16 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				<div
 					style={{
 						position: 'relative',
-						width: barChartLayout.width,
-						height: barChartLayout.height,
+						width: animatedBarChartLayout.width,
+						height: animatedBarChartLayout.height,
 					}}
 				>
 					{showLayout ? (
 						<div style={{position: 'absolute', top: 0, left: 0}}>
-							<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
+							<DisplayGridRails
+								{...animatedBarChartLayout.gridLayout}
+								stroke="#555"
+							/>
 						</div>
 					) : null}
 
@@ -241,7 +239,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 						? labelKeyframes.map((labelKeyframe, i) => {
 								return (
 									<Sequence from={labelKeyframe.frame} layout="none">
-										<HtmlArea area={barChartLayout.getLabelArea(data[i].id)}>
+										<HtmlArea
+											area={animatedBarChartLayout.getLabelArea(data[i].id)}
+										>
 											{/* <HtmlArea area={barChartLayout.getLabelArea(i)}> */}
 											<div
 												style={{
@@ -275,50 +275,35 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 							);
 						invariant(valueLabelDissappearKeyframe);
 
-						const fullBarWidth = Math.abs(barWidthScale(it.value) - zeroLineX);
-
-						const interpolateCurrentBarWidth = getKeyFramesInterpolator(
-							barChartKeyframes,
-							[
-								`BAR_ENTER_START__${it.id}`,
-								`BAR_ENTER_END__${it.id}`,
-								`BAR_EXIT_START__${it.id}`,
-								`BAR_EXIT_END__${it.id}`,
-							],
-							[0, fullBarWidth, fullBarWidth, 0],
-							[Easing.ease, Easing.ease, Easing.ease]
-						);
-
-						const currentBarWidth = interpolateCurrentBarWidth(frame);
-						const barArea = barChartLayout.getBarArea(it.id);
-
-						const positiveValueLabelMarginLeft =
-							-1 * (barArea.width - (currentBarWidth + zeroLineX));
-
-						const negativeValueLabelMarginLeft =
-							-1 * (zeroLineX - currentBarWidth);
+						const animatedBarArea = animatedBarChartLayout.getBarArea(it.id);
 
 						return (
 							<>
-								<HtmlArea area={barArea}>
-									<svg width={barArea.width} height={barArea.height}>
-										{it.value > 0 && currentBarWidth ? (
+								<HtmlArea
+									area={animatedBarArea}
+									// fill="orange" opacity={1}
+								>
+									<svg
+										width={animatedBarArea.width}
+										height={animatedBarArea.height}
+									>
+										{it.value > 0 && animatedBarArea.width ? (
 											<RoundedRightRect
 												y={0}
-												x={zeroLineX}
-												height={barArea.height}
-												width={currentBarWidth}
-												fill={it.barColor || 'cyan'}
+												x={0}
+												height={animatedBarArea.height}
+												width={animatedBarArea.width}
+												fill={it.barColor || 'magenta'}
 												// TODO: get radius from baseline?
 												radius={5}
 											/>
-										) : it.value < 0 && currentBarWidth ? (
+										) : it.value < 0 && animatedBarArea.width ? (
 											<RoundedLeftRect
 												y={0}
-												x={zeroLineX - currentBarWidth}
-												height={barArea.height}
-												width={currentBarWidth}
-												fill={it.barColor || 'cyan'}
+												x={0}
+												height={animatedBarArea.height}
+												width={animatedBarArea.width}
+												fill={it.barColor || 'magenta'}
 												// TODO: get radius from baseline?
 												radius={5}
 											/>
@@ -336,11 +321,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									layout="none"
 								>
 									<HtmlArea
-										area={
-											it.value >= 0
-												? barChartLayout.getValueLabelArea(it.id)
-												: barChartLayout.getNegativeValueLabelArea(it.id)
-										}
+										area={animatedBarChartLayout.getValueLabelArea(it.id)}
 									>
 										<div
 											style={{
@@ -349,12 +330,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 													it.value >= 0 ? 'flex-start' : 'flex-end',
 												alignItems: 'center',
 												height: '100%',
-												marginLeft:
-													it.value >= 0 ? positiveValueLabelMarginLeft : 0,
-												marginRight:
-													it.value >= 0 ? 0 : negativeValueLabelMarginLeft,
-
-												//
 												// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
 												textWrap: 'nowrap',
 											}}
@@ -370,7 +345,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					})}
 
 					{(() => {
-						const zeroLineArea = barChartLayout.getZeroLineArea();
+						const zeroLineArea = animatedBarChartLayout.getZeroLineArea();
 
 						// TODO eventually useCallback at start of the component to have more efficiency
 						const interpolateZeroLine__y1 = getKeyFramesInterpolator(
@@ -434,8 +409,14 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									style={{overflow: 'visible'}}
 								>
 									<line
-										x1={zeroLineX}
-										x2={zeroLineX}
+										x1={
+											animatedBarChartLayout.zeroLineX -
+											animatedBarChartLayout.getZeroLineArea().x1
+										}
+										x2={
+											animatedBarChartLayout.zeroLineX -
+											animatedBarChartLayout.getZeroLineArea().x1
+										}
 										y1={y1}
 										y2={y2}
 										stroke={lineColor}

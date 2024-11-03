@@ -52,6 +52,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 					// showArea={showAreas}
 				>
 					<TitleWithSubtitle
+						baseline={theme.page.baseline * 0.8}
 						// title={'AfD: Vormarsch in Brandenburg'}
 						title={
 							'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
