@@ -38,6 +38,8 @@ export function useAnimatedBarChartLayout({
 	negativeValueLabelWidth,
 	hideLabels = false,
 	valueDomain,
+	animateExit = true,
+	animateEnter = true,
 }: {
 	theme: ThemeType;
 	baseline: number;
@@ -48,6 +50,8 @@ export function useAnimatedBarChartLayout({
 	negativeValueLabelWidth?: number;
 	hideLabels?: boolean;
 	valueDomain: [number, number];
+	animateExit?: boolean;
+	animateEnter?: boolean;
 }): TBarChartLayout & {zeroLineX: number} {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -99,7 +103,12 @@ export function useAnimatedBarChartLayout({
 				`BAR_EXIT_START__${it.id}`,
 				`BAR_EXIT_END__${it.id}`,
 			],
-			[0, fullBarWidth, fullBarWidth, 0],
+			[
+				animateEnter ? 0 : fullBarWidth,
+				fullBarWidth,
+				fullBarWidth,
+				animateExit ? 0 : fullBarWidth,
+			],
 			[Easing.ease, Easing.ease, Easing.ease]
 		);
 

@@ -11,7 +11,15 @@ export const TextAnimationSubtle: React.FC<{
 	children: ReactNode;
 	translateY: number;
 	innerDelayInSeconds?: number;
-}> = ({children, translateY, innerDelayInSeconds = 0}) => {
+	animateExit?: boolean;
+	animateEnter?: boolean;
+}> = ({
+	children,
+	translateY,
+	innerDelayInSeconds = 0,
+	animateExit = true,
+	animateEnter = true,
+}) => {
 	// const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
@@ -22,21 +30,21 @@ export const TextAnimationSubtle: React.FC<{
 	const interpolateTextOpacity = getKeyFramesInterpolator(
 		keyFramesGroup,
 		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[0, 1, 1, 0],
+		[animateEnter ? 0 : 1, 1, 1, animateExit ? 0 : 1],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
 	const interpolateTextFilterPixels = getKeyFramesInterpolator(
 		keyFramesGroup,
 		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[10, 0, 0, 10],
+		[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 
 	const interpolateTextTranslateY = getKeyFramesInterpolator(
 		keyFramesGroup,
 		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[translateY, 0, 0, 0],
+		[animateEnter ? translateY : 0, 0, 0, 0],
 		[Easing.ease, Easing.ease, Easing.ease]
 	);
 

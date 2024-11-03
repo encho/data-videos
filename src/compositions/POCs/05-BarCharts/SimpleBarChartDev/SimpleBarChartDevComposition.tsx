@@ -86,7 +86,16 @@ export const SimpleBarChartDevComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
-					showLayout={true}
+					// showLayout={true}
+				/>
+				<SimpleBarChart
+					data={barChartData}
+					width={CHART_WIDTH}
+					baseline={BASELINE}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+					// showLayout={true}
 				/>
 				{/* <SimpleBarChart2
 					data={barChartData}

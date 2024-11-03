@@ -60,11 +60,18 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	showLayout?: boolean;
 	hideLabels?: boolean;
 	keyframes?: TKeyFramesGroup;
+	animateEnter?: boolean;
+	animateExit?: boolean;
 	//
-	CustomLabelComponent?: React.ComponentType<{children: string; id: string}>;
+	CustomLabelComponent?: React.ComponentType<{
+		children: string;
+		id: string;
+		animateExit?: boolean;
+	}>;
 	CustomValueLabelComponent?: React.ComponentType<{
 		children: string;
 		id: string;
+		animateExit?: boolean;
 	}>;
 };
 
@@ -76,6 +83,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	baseline: baseLineProp,
 	showLayout = false,
 	hideLabels = false,
+	animateEnter = true,
+	animateExit = true,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
@@ -86,6 +95,9 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
+
+	const ANIMATE_EXIT = animateEnter;
+	const ANIMATE_ENTER = animateExit;
 
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
@@ -102,6 +114,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		durationInFrames,
 		data,
 		keyframes,
+		// animateExit: false,
 	});
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
@@ -110,7 +123,15 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 
 	// TODO get the corresponding component and it's parametrization from theme
 	const DefaultBarChartLabelComponent = useCallback(
-		({children}: {children: string}) => {
+		({
+			children,
+			animateExit,
+			animateEnter,
+		}: {
+			children: string;
+			animateExit?: boolean;
+			animateEnter?: boolean;
+		}) => {
 			return (
 				<TypographyStyle
 					typographyStyle={theme.typography.textStyles.datavizLabel}
@@ -119,6 +140,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					<TextAnimationSubtle
 						innerDelayInSeconds={0}
 						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateExit}
 					>
 						{children}
 					</TextAnimationSubtle>
@@ -133,7 +156,15 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	// TODO get the corresponding component and it's parametrization from theme
 	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
 	const DefaultBarChartValueLabelComponent = useCallback(
-		({children}: {children: string}) => {
+		({
+			children,
+			animateExit,
+			animateEnter,
+		}: {
+			children: string;
+			animateExit?: boolean;
+			animateEnter?: boolean;
+		}) => {
 			return (
 				<TypographyStyle
 					typographyStyle={theme.typography.textStyles.datavizValueLabel}
@@ -142,6 +173,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					<TextAnimationSubtle
 						innerDelayInSeconds={0}
 						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateEnter}
 					>
 						{children}
 					</TextAnimationSubtle>
@@ -180,6 +213,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		valueLabelWidth,
 		negativeValueLabelWidth,
 		valueDomain,
+		animateExit: ANIMATE_EXIT,
+		animateEnter: ANIMATE_ENTER,
 	});
 
 	// the keyframes for the labels
@@ -238,7 +273,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					{!hideLabels
 						? labelKeyframes.map((labelKeyframe, i) => {
 								return (
-									<Sequence from={labelKeyframe.frame} layout="none">
+									<Sequence
+										from={ANIMATE_ENTER ? labelKeyframe.frame : 0}
+										layout="none"
+									>
 										<HtmlArea
 											area={animatedBarChartLayout.getLabelArea(data[i].id)}
 										>
@@ -253,7 +291,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 													textWrap: 'nowrap',
 												}}
 											>
-												<BarChartLabel id={data[i].id}>
+												<BarChartLabel
+													id={data[i].id}
+													animateExit={ANIMATE_EXIT}
+													animateEnter={ANIMATE_ENTER}
+												>
 													{data[i].label}
 												</BarChartLabel>
 											</div>
@@ -313,10 +355,12 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 
 								{/* TODO use KeyframeSequence component */}
 								<Sequence
-									from={valueLabelKeyframe.frame}
+									from={ANIMATE_ENTER ? valueLabelKeyframe.frame : 0}
 									durationInFrames={
-										valueLabelDissappearKeyframe.frame -
-										valueLabelKeyframe.frame
+										ANIMATE_EXIT
+											? valueLabelDissappearKeyframe.frame -
+											  valueLabelKeyframe.frame
+											: undefined
 									}
 									layout="none"
 								>
@@ -334,7 +378,11 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 												textWrap: 'nowrap',
 											}}
 										>
-											<BarChartValueLabel id={data[i].id}>
+											<BarChartValueLabel
+												id={data[i].id}
+												animateExit={ANIMATE_EXIT}
+												animateEnter={ANIMATE_ENTER}
+											>
 												{data[i].valueLabel}
 											</BarChartValueLabel>
 										</div>
@@ -356,7 +404,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 								'ZEROLINE_EXIT_START',
 								'ZEROLINE_EXIT_END',
 							],
-							[0, 0, 0, zeroLineArea.height],
+							[0, 0, 0, ANIMATE_EXIT ? zeroLineArea.height : 0],
 							[Easing.ease, Easing.ease, Easing.ease]
 						);
 
@@ -370,7 +418,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 								'ZEROLINE_EXIT_END',
 							],
 							[
-								0,
+								ANIMATE_ENTER ? 0 : zeroLineArea.height,
 								zeroLineArea.height,
 								zeroLineArea.height,
 								zeroLineArea.height,
@@ -387,7 +435,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 								'ZEROLINE_EXIT_START',
 								'ZEROLINE_EXIT_END',
 							],
-							[0, 1, 1, 0],
+							[ANIMATE_ENTER ? 0 : 1, 1, 1, ANIMATE_EXIT ? 0 : 1],
 							[
 								Easing.bezier(0.64, 0, 0.78, 0), // easeInQuint
 								Easing.linear,

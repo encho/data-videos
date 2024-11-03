@@ -12,11 +12,13 @@ export function useBarChartKeyframes({
 	durationInFrames,
 	data,
 	keyframes: keyframesProp,
-}: {
+}: // animateExit = true,
+{
 	fps: number;
 	durationInFrames: number;
 	data: TSimpleBarChartData;
 	keyframes?: TKeyFramesGroup;
+	// animateExit?: boolean;
 }) {
 	if (keyframesProp) {
 		return keyframesProp;
