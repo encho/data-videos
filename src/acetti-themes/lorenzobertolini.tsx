@@ -20,6 +20,12 @@ const palette = {
 		title: {
 			main: GRAYS['900'],
 		},
+		label: {
+			main: GRAYS['900'],
+		},
+		valueLabel: {
+			main: GRAYS['900'],
+		},
 		axis: {
 			main: {
 				tickLabel: GRAYS['400'],
@@ -136,16 +142,13 @@ export const lorenzobertoliniTheme = ({
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
-					// color: '#888',
-					color: GRAYS['100'],
+					color: palette.typography.label.main,
 				},
 				datavizValueLabel: {
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
-					// color: '#64748b',
-					// color: GRAYS['500'],
-					color: GRAYS['300'],
+					color: palette.typography.valueLabel.main,
 				},
 				datavizTickLabel: {
 					fontFamily: 'Inter-Regular',
