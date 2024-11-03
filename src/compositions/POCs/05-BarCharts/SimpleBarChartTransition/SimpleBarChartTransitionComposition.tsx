@@ -15,6 +15,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {SimpleBarChartStill} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartStill';
 
 export const simpleBarChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -74,12 +75,14 @@ export const SimpleBarChartTransitionComposition: React.FC<
 									// baseline={BASELINE}
 									theme={theme}
 								/>
-								<SimpleBarChart
+								<SimpleBarChartStill
 									data={barChartData}
 									width={dimensions.width / 3}
-									height={dimensions.height}
+									// height={dimensions.height}
 									// baseline={BASELINE}
+									baseline={20}
 									theme={theme}
+									valueDomain={[0, 0.31]}
 								/>
 							</div>
 						</Sequence>
