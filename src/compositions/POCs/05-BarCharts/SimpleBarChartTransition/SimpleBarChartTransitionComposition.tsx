@@ -66,27 +66,53 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					}}
 				>
 					{dimensions ? (
-						<Sequence from={Math.floor(fps * 0.75)} layout="none">
+						<Sequence from={Math.floor(fps * 0)} layout="none">
 							<div style={{display: 'flex', gap: 50}}>
-								<Sequence from={0} durationInFrames={fps * 5} layout="none">
+								<Sequence
+									from={0}
+									durationInFrames={fps * 5}
+									layout="none"
+									key="sdfdf"
+								>
 									<SimpleBarChart
 										data={barChartData}
-										width={dimensions.width / 3}
+										width={dimensions.width}
 										// height={dimensions.height}
 										baseline={20}
 										theme={theme}
+										animateExit={false}
 									/>
 								</Sequence>
-								<Sequence from={fps * 5} layout="none">
+								<Sequence
+									from={fps * 5}
+									durationInFrames={fps * 1}
+									layout="none"
+									key="alskdfas"
+								>
 									<SimpleBarChartTransition
 										dataFrom={barChartData}
 										dataTo={[...barChartData].reverse()}
-										width={dimensions.width / 3}
-										// height={dimensions.height}
-										// baseline={BASELINE}
+										width={dimensions.width}
+										// height={dimensions.height} // TODO use height
 										baseline={20}
 										theme={theme}
 										valueDomain={[0, 0.31]}
+									/>
+								</Sequence>
+								<Sequence
+									from={fps * 6}
+									//  durationInFrames={fps * 1}
+									layout="none"
+									key="sdsdsddfff"
+								>
+									<SimpleBarChart
+										data={[...barChartData].reverse()}
+										// data={barChartData}
+										width={dimensions.width}
+										// height={dimensions.height}
+										baseline={20}
+										theme={theme}
+										animateEnter={false}
 									/>
 								</Sequence>
 							</div>

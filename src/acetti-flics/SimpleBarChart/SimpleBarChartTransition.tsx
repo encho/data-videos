@@ -335,15 +335,23 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 				);
 			})}
 
-			<HtmlArea
-				area={{
-					...zeroLineArea,
-					x1: barChartLayout.zeroLineX - 10 / 2,
-					width: 10,
-				}}
-				fill="#fff"
-				opacity={0.5}
-			></HtmlArea>
+			<HtmlArea area={zeroLineArea} fill="transparent">
+				<svg
+					width={zeroLineArea.width}
+					height={zeroLineArea.height}
+					style={{overflow: 'visible'}}
+				>
+					<line
+						x1={barChartLayout.zeroLineX - zeroLineArea.x1}
+						x2={barChartLayout.zeroLineX - zeroLineArea.x1}
+						y1={0}
+						y2={zeroLineArea.height}
+						stroke={theme.yAxis.color}
+						strokeWidth={baseline * 0.2}
+						// opacity={opacity}
+					/>
+				</svg>
+			</HtmlArea>
 		</div>
 	);
 };

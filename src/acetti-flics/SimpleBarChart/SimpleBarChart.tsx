@@ -83,8 +83,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	baseline: baseLineProp,
 	showLayout = false,
 	hideLabels = false,
-	animateEnter = true,
-	animateExit = true,
+	animateEnter: ANIMATE_ENTER = true,
+	animateExit: ANIMATE_EXIT = true,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
@@ -96,8 +96,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	const ANIMATE_EXIT = animateEnter;
-	const ANIMATE_ENTER = animateExit;
+	// const ANIMATE_EXIT = animateEnter;
+	// const ANIMATE_ENTER = animateExit;
 
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
@@ -141,7 +141,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 						innerDelayInSeconds={0}
 						translateY={baseline * 1.15}
 						animateExit={animateExit}
-						animateEnter={animateExit}
+						animateEnter={animateEnter}
 					>
 						{children}
 					</TextAnimationSubtle>
@@ -359,7 +359,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									durationInFrames={
 										ANIMATE_EXIT
 											? valueLabelDissappearKeyframe.frame -
-											  valueLabelKeyframe.frame
+											  valueLabelKeyframe.frame +
+											  (ANIMATE_ENTER ? 0 : valueLabelKeyframe.frame)
 											: undefined
 									}
 									layout="none"

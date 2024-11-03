@@ -603,7 +603,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartTransition"
 						component={SimpleBarChartTransitionComposition}
-						durationInFrames={30 * 8}
+						durationInFrames={30 * 10}
 						fps={30}
 						{...videoSizes.widescreen_16x9}
 						schema={simpleBarChartTransitionCompositionSchema}
