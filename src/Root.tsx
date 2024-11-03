@@ -740,12 +740,12 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="MultipleSimpleSparkline"
 						component={MultipleSimpleSparklineComposition}
-						durationInFrames={90 * 22}
-						fps={90}
+						durationInFrames={30 * 22}
+						fps={30}
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -758,7 +758,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							data: [],
 							dataInfo: [],
 							singleSparklineDurationInSeconds: 6,
