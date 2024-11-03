@@ -8,6 +8,7 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SimpleBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartKeyframes';
+import {SimpleBarChart2} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart2';
 import {
 	SimpleBarChartLayout,
 	SimpleAnimatedBarChartLayout,
@@ -77,6 +78,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					justifyContent: 'center',
 					marginBottom: 50,
 					marginTop: 50,
+					gap: 50,
 				}}
 			>
 				<SimpleBarChart
@@ -84,7 +86,14 @@ export const SimpleBarChartDevComposition: React.FC<
 					width={CHART_WIDTH}
 					baseline={BASELINE}
 					theme={theme}
-					// showLayout={true}
+					showLayout={true}
+				/>
+				<SimpleBarChart2
+					data={barChartData}
+					width={CHART_WIDTH}
+					baseline={BASELINE}
+					theme={theme}
+					showLayout={true}
 				/>
 			</div>
 			<div
