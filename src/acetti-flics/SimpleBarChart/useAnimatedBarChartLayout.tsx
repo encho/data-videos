@@ -39,7 +39,7 @@ export function useAnimatedBarChartLayout({
 	negativeValueLabelWidth?: number;
 	hideLabels?: boolean;
 	valueDomain: [number, number];
-}): TBarChartLayout {
+}): TBarChartLayout & {zeroLineX: number} {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
@@ -71,14 +71,16 @@ export function useAnimatedBarChartLayout({
 		.domain(valueDomain)
 		.range([0, barChartLayout.getBarArea(0).width]);
 
-	const zeroLineX = barWidthScale(0);
+	const normalizedZeroLineX = barWidthScale(0);
 
 	const getBarArea = (i: string | number): TGridLayoutArea => {
 		const dataIndex =
 			typeof i === 'number' ? i : data.findIndex((it) => it.id === i);
 
 		const it = data[dataIndex];
-		const fullBarWidth = Math.abs(barWidthScale(it.value) - zeroLineX);
+		const fullBarWidth = Math.abs(
+			barWidthScale(it.value) - normalizedZeroLineX
+		);
 
 		const interpolateCurrentBarWidth = getKeyFramesInterpolator(
 			barChartKeyframes,
@@ -96,17 +98,15 @@ export function useAnimatedBarChartLayout({
 
 		const originalBarArea = barChartLayout.getBarArea(i);
 
-		// const animatedBarArea: TGridLayoutArea = {
-		// 	x1: originalBarArea.x1,
-		// 	x2: originalBarArea.x1 + fullBarWidth,
-		// 	y1: originalBarArea.y1,
-		// 	y2: originalBarArea.y2,
-		// 	height: originalBarArea.height,
-		// 	width: fullBarWidth,
-		// };
 		const animatedBarArea: TGridLayoutArea = {
-			x1: originalBarArea.x1,
-			x2: originalBarArea.x1 + currentBarWidth,
+			x1:
+				it.value >= 0
+					? originalBarArea.x1 + normalizedZeroLineX
+					: originalBarArea.x1 + normalizedZeroLineX - currentBarWidth,
+			x2:
+				it.value >= 0
+					? normalizedZeroLineX + currentBarWidth
+					: normalizedZeroLineX,
 			y1: originalBarArea.y1,
 			y2: originalBarArea.y2,
 			height: originalBarArea.height,
@@ -122,25 +122,26 @@ export function useAnimatedBarChartLayout({
 
 		const it = data[dataIndex];
 
-		const animatedBarArea = getBarArea(i);
-
-		// const fullPossibleWidth = barChartLayout.getBar
-
-		const positiveValueLabelMarginLeft =
-			+1 *
-			(animatedBarArea.width -
-				(barChartLayout.getBarArea(i).width + zeroLineX));
-
-		// const negativeValueLabelMarginLeft =
-		// 	-1 * (zeroLineX - animatedBarArea.width);
-
-		const marginLeft = it.value >= 0 ? positiveValueLabelMarginLeft : 0;
-		// const marginRight = it.value >= 0 ? 0 : negativeValueLabelMarginLeft;
-
 		const originalValueLabelArea =
 			it.value >= 0
 				? barChartLayout.getValueLabelArea(i)
 				: barChartLayout.getNegativeValueLabelArea(i);
+
+		const animatedBarArea = getBarArea(i);
+
+		const positiveValueLabelMarginLeft =
+			-1 * (barChartLayout.getBarArea(i).width - animatedBarArea.x2);
+
+		const negativeValueLabelMarginLeft = animatedBarArea.x1;
+
+		// const marginLeft = it.value >= 0 ? positiveValueLabelMarginLeft : 0;
+		const marginLeft =
+			it.value >= 0
+				? positiveValueLabelMarginLeft
+				: negativeValueLabelMarginLeft;
+		// const marginRight = it.value >= 0 ? 0 : negativeValueLabelMarginLeft;
+
+		const xxx = animatedBarArea.x1 - barChartLayout.getBarArea(i).x1;
 
 		const animatedValueLabelArea: TGridLayoutArea =
 			it.value >= 0
@@ -153,8 +154,8 @@ export function useAnimatedBarChartLayout({
 						width: originalValueLabelArea.width,
 				  }
 				: {
-						x1: originalValueLabelArea.x1,
-						x2: originalValueLabelArea.x2,
+						x1: originalValueLabelArea.x1 + xxx,
+						x2: originalValueLabelArea.x2 + xxx,
 						y1: originalValueLabelArea.y1,
 						y2: originalValueLabelArea.y2,
 						height: originalValueLabelArea.height,
@@ -164,5 +165,11 @@ export function useAnimatedBarChartLayout({
 		return animatedValueLabelArea;
 	};
 
-	return {...barChartLayout, getBarArea, getValueLabelArea};
+	return {
+		...barChartLayout,
+		getBarArea,
+		getValueLabelArea,
+		// zeroLineX: normalizedZeroLineX + barChartLayout.getZeroLineArea().x1,
+		zeroLineX: barChartLayout.getZeroLineArea().x1 + normalizedZeroLineX,
+	};
 }

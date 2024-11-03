@@ -121,7 +121,7 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 				</div>
 			) : null}
 
-			<HtmlArea area={zeroLineArea} fill="cyan"></HtmlArea>
+			<HtmlArea area={zeroLineArea} fill="#fff" opacity={0.2}></HtmlArea>
 
 			{data.map((it) => {
 				const barArea = barChartLayout.getBarArea(it.id);
@@ -131,12 +131,26 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 				// TODO better colors
 				return (
 					<>
-						<HtmlArea area={labelArea} fill="yellow"></HtmlArea>
-						<HtmlArea area={barArea} fill="magenta"></HtmlArea>
-						<HtmlArea area={valueLabelArea} fill="green"></HtmlArea>
+						<HtmlArea area={labelArea} fill="#fff" opacity={0.5}></HtmlArea>
+						<HtmlArea area={barArea} fill="#fff" opacity={0.5}></HtmlArea>
+						<HtmlArea
+							area={valueLabelArea}
+							fill="#fff"
+							opacity={0.5}
+						></HtmlArea>
 					</>
 				);
 			})}
+
+			<HtmlArea
+				area={{
+					...zeroLineArea,
+					x1: barChartLayout.zeroLineX - 10 / 2,
+					width: 10,
+				}}
+				fill="#fff"
+				opacity={0.5}
+			></HtmlArea>
 		</div>
 	);
 };

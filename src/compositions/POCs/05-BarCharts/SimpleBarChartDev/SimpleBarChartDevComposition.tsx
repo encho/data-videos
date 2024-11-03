@@ -109,7 +109,7 @@ export const SimpleBarChartDevComposition: React.FC<
 					baseline={BASELINE}
 					theme={theme}
 					showLayout={true}
-					valueDomain={[0, 0.309] as [number, number]}
+					valueDomain={[-0.5, 0.5] as [number, number]}
 				/>
 			</div>
 

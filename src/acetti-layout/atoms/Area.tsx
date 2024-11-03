@@ -69,13 +69,18 @@ function AreaRect({
 	);
 }
 
-export function HtmlArea({area, children, fill = 'transparent'}: TAreaProps) {
+export function HtmlArea({
+	area,
+	children,
+	fill = 'transparent',
+	opacity,
+}: TAreaProps & {opacity?: number}) {
 	return (
 		<div
 			style={{
 				position: 'absolute',
 				backgroundColor: fill,
-				// opacity: 0.3,
+				opacity,
 				width: area.width,
 				height: area.height,
 				top: area.y1,
