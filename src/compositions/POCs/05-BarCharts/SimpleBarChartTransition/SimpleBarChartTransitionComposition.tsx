@@ -15,7 +15,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {SimpleBarChartStill} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartStill';
+import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartTransition';
 
 export const simpleBarChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -68,22 +68,27 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					{dimensions ? (
 						<Sequence from={Math.floor(fps * 0.75)} layout="none">
 							<div style={{display: 'flex', gap: 50}}>
-								<SimpleBarChart
-									data={barChartData}
-									width={dimensions.width / 3}
-									height={dimensions.height}
-									// baseline={BASELINE}
-									theme={theme}
-								/>
-								<SimpleBarChartStill
-									data={barChartData}
-									width={dimensions.width / 3}
-									// height={dimensions.height}
-									// baseline={BASELINE}
-									baseline={20}
-									theme={theme}
-									valueDomain={[0, 0.31]}
-								/>
+								<Sequence from={0} durationInFrames={fps * 5} layout="none">
+									<SimpleBarChart
+										data={barChartData}
+										width={dimensions.width / 3}
+										// height={dimensions.height}
+										baseline={20}
+										theme={theme}
+									/>
+								</Sequence>
+								<Sequence from={fps * 5} layout="none">
+									<SimpleBarChartTransition
+										dataFrom={barChartData}
+										dataTo={[...barChartData].reverse()}
+										width={dimensions.width / 3}
+										// height={dimensions.height}
+										// baseline={BASELINE}
+										baseline={20}
+										theme={theme}
+										valueDomain={[0, 0.31]}
+									/>
+								</Sequence>
 							</div>
 						</Sequence>
 					) : null}

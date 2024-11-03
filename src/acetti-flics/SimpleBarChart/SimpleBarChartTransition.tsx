@@ -4,6 +4,7 @@ import {useCallback, ComponentType} from 'react';
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {useBarChartLayout} from './useBarChartLayout';
+import {useStillBarChartLayout} from './useStillBarChartLayout';
 import {
 	mixBarChartLayout,
 	useAnimatedBarChartLayout,
@@ -22,7 +23,8 @@ export type TSimpleBarChartData = {
 
 type TSimpleBarChartStillProps = {
 	theme: ThemeType;
-	data: TSimpleBarChartData;
+	dataFrom: TSimpleBarChartData;
+	dataTo: TSimpleBarChartData;
 	width: number;
 	baseline: number;
 	labelWidth?: number;
@@ -36,9 +38,10 @@ type TSimpleBarChartStillProps = {
 	valueDomain: [number, number];
 };
 
-export const SimpleBarChartStill: React.FC<TSimpleBarChartStillProps> = ({
+export const SimpleBarChartTransition: React.FC<TSimpleBarChartStillProps> = ({
 	theme,
-	data,
+	dataTo,
+	dataFrom,
 	width,
 	baseline,
 	showLayout = false,
@@ -60,22 +63,23 @@ export const SimpleBarChartStill: React.FC<TSimpleBarChartStillProps> = ({
 	const frame = useCurrentFrame();
 	const animationProgress = (frame + 1) / durationInFrames;
 
-	const barChartLayout1 = useAnimatedBarChartLayout({
+	// TODO check same data length and same id's
+	// invariant(fromData.length === toData.length)
+
+	const barChartLayout1 = useStillBarChartLayout({
 		baseline,
 		theme,
-		data,
+		data: dataFrom,
 		width,
 		labelWidth,
 		valueLabelWidth,
 		valueDomain,
 	});
 
-	const reversedData = [...data].reverse();
-
-	const barChartLayout2 = useAnimatedBarChartLayout({
+	const barChartLayout2 = useStillBarChartLayout({
 		baseline,
 		theme,
-		data: reversedData,
+		data: dataTo,
 		width,
 		labelWidth,
 		valueLabelWidth,
@@ -88,7 +92,7 @@ export const SimpleBarChartStill: React.FC<TSimpleBarChartStillProps> = ({
 		1 - animationProgress
 	);
 
-	const zeroLineArea = barChartLayout.getZeroLineArea();
+	// const zeroLineArea = barChartLayout.getZeroLineArea();
 
 	// TODO get the corresponding component and it's parametrization from theme
 	const DefaultBarChartLabelComponent = useCallback(
@@ -149,7 +153,7 @@ export const SimpleBarChartStill: React.FC<TSimpleBarChartStillProps> = ({
 	return (
 		<SimpleBarChartStillFromDataAndLayout
 			theme={theme}
-			data={data}
+			data={dataFrom} // TODO how to transition the labels????
 			barChartLayout={barChartLayout}
 			baseline={baseline}
 			CustomLabelComponent={BarChartLabel}
@@ -245,7 +249,7 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 				height: barChartLayout.height,
 			}}
 		>
-			{true ? (
+			{false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
 				</div>
