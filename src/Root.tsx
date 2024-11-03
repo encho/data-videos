@@ -2,7 +2,7 @@ import {Composition, Folder} from 'remotion';
 import invariant from 'tiny-invariant';
 
 import {getThemeFromEnum} from './acetti-themes/getThemeFromEnum';
-import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
+// import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
@@ -212,8 +212,13 @@ import {
 import {
 	ApiBasedSparklinesPresentationComposition,
 	apiBasedSparklinesPresentationCompositionSchema,
-	SingleSparklineSlide,
+	// SingleSparklineSlide,
 } from './compositions/POCs/07-Sparklines/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
+
+import {
+	SimpleBarChartTransitionComposition,
+	simpleBarChartTransitionCompositionSchema,
+} from './compositions/POCs/05-BarCharts/SimpleBarChartTransition/SimpleBarChartTransitionComposition';
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
@@ -590,6 +595,18 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.widescreen_16x9}
 						schema={composedSimpleBarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SimpleBarChartTransition"
+						component={SimpleBarChartTransitionComposition}
+						durationInFrames={30 * 8}
+						fps={30}
+						{...videoSizes.widescreen_16x9}
+						schema={simpleBarChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
