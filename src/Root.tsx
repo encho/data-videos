@@ -605,7 +605,7 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartTransitionComposition}
 						durationInFrames={30 * 10}
 						fps={30}
-						{...videoSizes.widescreen_16x9}
+						{...videoSizes.linkedInTall}
 						schema={simpleBarChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
@@ -700,7 +700,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.square}
 							schema={twoChangeBarsCompositionSchema}
 							defaultProps={{
-								themeEnum: 'NERDY' as const,
+								themeEnum: 'LORENZOBERTOLINI' as const,
 								title: 'Global Car Sales',
 								subTitle: '2023 vs. 2024 (in USD)',
 								leftBarValue: 1000,

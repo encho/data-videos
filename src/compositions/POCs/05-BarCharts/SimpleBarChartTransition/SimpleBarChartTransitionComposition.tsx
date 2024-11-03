@@ -28,13 +28,20 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
-	const barChartData = wahlergebnis2024.map((it) => ({
-		label: it.parteiName,
-		value: it.prozent,
-		barColor: it.farbe,
-		id: it.id,
-		valueLabel: formatPercentage(it.prozent),
-	}));
+	const barChartData = wahlergebnis2024
+		.map((it) => ({
+			label: it.parteiName,
+			value: it.prozent,
+			// barColor: it.farbe,
+			barColor: theme.data.tenColors[0].main,
+			id: it.id,
+			valueLabel: formatPercentage(it.prozent),
+		}))
+		.sort((a, b) => a.label.localeCompare(b.label));
+
+	const barChartDataSorted = [...barChartData].sort(
+		(a, b) => b.value - a.value
+	);
 
 	return (
 		<Page theme={theme}>
@@ -52,7 +59,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 				>
 					<TitleWithSubtitle
 						title={'Transitioning a Bar Chart'}
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
+						subtitle={'Good for sorting data, for Example:'}
 						theme={theme}
 					/>
 				</PageHeader>
@@ -68,51 +75,38 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					{dimensions ? (
 						<Sequence from={Math.floor(fps * 0)} layout="none">
 							<div style={{display: 'flex', gap: 50}}>
-								<Sequence
-									from={0}
-									durationInFrames={fps * 5}
-									layout="none"
-									key="sdfdf"
-								>
+								<Sequence from={0} durationInFrames={fps * 5} layout="none">
 									<SimpleBarChart
 										data={barChartData}
 										width={dimensions.width}
-										// height={dimensions.height}
-										baseline={20}
+										height={dimensions.height}
 										theme={theme}
 										animateExit={false}
-									/>
-								</Sequence>
-								<Sequence
-									from={fps * 5}
-									durationInFrames={fps * 1}
-									layout="none"
-									key="alskdfas"
-								>
-									<SimpleBarChartTransition
-										dataFrom={barChartData}
-										dataTo={[...barChartData].reverse()}
-										width={dimensions.width}
-										// height={dimensions.height} // TODO use height
-										baseline={20}
-										theme={theme}
 										valueDomain={[0, 0.31]}
 									/>
 								</Sequence>
 								<Sequence
-									from={fps * 6}
-									//  durationInFrames={fps * 1}
+									from={fps * 5}
+									durationInFrames={fps * 0.5}
 									layout="none"
-									key="sdsdsddfff"
 								>
-									<SimpleBarChart
-										data={[...barChartData].reverse()}
-										// data={barChartData}
+									<SimpleBarChartTransition
+										height={dimensions.height}
+										dataFrom={barChartData}
+										dataTo={barChartDataSorted}
 										width={dimensions.width}
-										// height={dimensions.height}
-										baseline={20}
+										theme={theme}
+										valueDomain={[0, 0.31]}
+									/>
+								</Sequence>
+								<Sequence from={fps * 5.5} layout="none">
+									<SimpleBarChart
+										data={barChartDataSorted}
+										width={dimensions.width}
+										height={dimensions.height}
 										theme={theme}
 										animateEnter={false}
+										valueDomain={[0, 0.31]}
 									/>
 								</Sequence>
 							</div>

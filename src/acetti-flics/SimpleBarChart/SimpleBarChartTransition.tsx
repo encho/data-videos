@@ -1,17 +1,21 @@
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {useCurrentFrame, useVideoConfig, interpolate, Easing} from 'remotion';
 import {useCallback, ComponentType} from 'react';
+import invariant from 'tiny-invariant';
 
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
-import {useBarChartLayout} from './useBarChartLayout';
+// import {useBarChartLayout} from './useBarChartLayout';
 import {useStillBarChartLayout} from './useStillBarChartLayout';
+import {getBarChartBaseline} from './useBarChartLayout';
 import {
 	mixBarChartLayout,
-	useAnimatedBarChartLayout,
+	// useAnimatedBarChartLayout,
 } from './useAnimatedBarChartLayout';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+// import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TBarChartLayout} from './useBarChartLayout';
+import {TBaselineOrHeight} from './SimpleBarChart';
+// import {interpolate} from 'chroma-js';
 
 export type TSimpleBarChartData = {
 	label: string;
@@ -21,12 +25,11 @@ export type TSimpleBarChartData = {
 	id: string;
 }[];
 
-type TSimpleBarChartStillProps = {
+type TSimpleBarChartTransitionProps = TBaselineOrHeight & {
 	theme: ThemeType;
 	dataFrom: TSimpleBarChartData;
 	dataTo: TSimpleBarChartData;
 	width: number;
-	baseline: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
 	showLayout?: boolean;
@@ -38,12 +41,15 @@ type TSimpleBarChartStillProps = {
 	valueDomain: [number, number];
 };
 
-export const SimpleBarChartTransition: React.FC<TSimpleBarChartStillProps> = ({
+export const SimpleBarChartTransition: React.FC<
+	TSimpleBarChartTransitionProps
+> = ({
 	theme,
 	dataTo,
 	dataFrom,
 	width,
-	baseline,
+	height,
+	baseline: baselineProp,
 	showLayout = false,
 	labelWidth,
 	valueLabelWidth,
@@ -62,6 +68,14 @@ export const SimpleBarChartTransition: React.FC<TSimpleBarChartStillProps> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 	const animationProgress = (frame + 1) / durationInFrames;
+
+	const mixPercentage = interpolate(animationProgress, [0, 1], [1, 0], {
+		easing: Easing.ease,
+	});
+
+	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
+	const baseline = height ? getBarChartBaseline(height, dataTo) : baselineProp;
+	invariant(baseline);
 
 	// TODO check same data length and same id's
 	// invariant(fromData.length === toData.length)
@@ -89,7 +103,7 @@ export const SimpleBarChartTransition: React.FC<TSimpleBarChartStillProps> = ({
 	const barChartLayout = mixBarChartLayout(
 		barChartLayout1,
 		barChartLayout2,
-		1 - animationProgress
+		mixPercentage
 	);
 
 	// const zeroLineArea = barChartLayout.getZeroLineArea();

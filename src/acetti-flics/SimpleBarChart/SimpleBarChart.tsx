@@ -47,7 +47,7 @@ interface BaselineProp {
 	height?: never; // Ensures height cannot be provided when baseline is present
 }
 
-type TBaselineOrHeight = HeightProp | BaselineProp;
+export type TBaselineOrHeight = HeightProp | BaselineProp;
 
 type TSimpleBarChartProps = TBaselineOrHeight & {
 	theme: ThemeType;
