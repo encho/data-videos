@@ -607,7 +607,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.widescreen_16x9}
 						schema={simpleBarChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition

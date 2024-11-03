@@ -1,21 +1,30 @@
-import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import {
+	// Sequence,
+	useCurrentFrame,
+	useVideoConfig,
+	Easing,
+} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import invariant from 'tiny-invariant';
-import {forwardRef, useCallback} from 'react';
-import {z} from 'zod';
-import {zColor} from '@remotion/zod-types';
+// import invariant from 'tiny-invariant';
+// import {forwardRef, useCallback} from 'react';
+// import {z} from 'zod';
+// import {zColor} from '@remotion/zod-types';
 
-import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
+// import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+// import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
+import {useBarChartLayout} from './useBarChartLayout';
 import {
 	getKeyFramesInterpolator,
-	TKeyFramesGroup,
+	// TKeyFramesGroup,
 } from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
-import {DisplayGridRails, HtmlArea, TGridLayoutArea} from '../../acetti-layout';
+import {
+	// DisplayGridRails, HtmlArea,
+	TGridLayoutArea,
+} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
-import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+// import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useBarChartKeyframes} from './useBarChartKeyframes';
-import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
+// import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
 import {TBarChartLayout} from './useBarChartLayout';
 import {TSimpleBarChartData} from './SimpleBarChart';
 
@@ -134,28 +143,27 @@ export function useAnimatedBarChartLayout({
 
 		const negativeValueLabelMarginLeft = animatedBarArea.x1;
 
-		// const marginLeft = it.value >= 0 ? positiveValueLabelMarginLeft : 0;
-		const marginLeft =
+		const marginForPositive =
 			it.value >= 0
 				? positiveValueLabelMarginLeft
 				: negativeValueLabelMarginLeft;
-		// const marginRight = it.value >= 0 ? 0 : negativeValueLabelMarginLeft;
 
-		const xxx = animatedBarArea.x1 - barChartLayout.getBarArea(i).x1;
+		const marginForNegative =
+			animatedBarArea.x1 - barChartLayout.getBarArea(i).x1;
 
 		const animatedValueLabelArea: TGridLayoutArea =
 			it.value >= 0
 				? {
-						x1: originalValueLabelArea.x1 + marginLeft,
-						x2: originalValueLabelArea.x2 + marginLeft,
+						x1: originalValueLabelArea.x1 + marginForPositive,
+						x2: originalValueLabelArea.x2 + marginForPositive,
 						y1: originalValueLabelArea.y1,
 						y2: originalValueLabelArea.y2,
 						height: originalValueLabelArea.height,
 						width: originalValueLabelArea.width,
 				  }
 				: {
-						x1: originalValueLabelArea.x1 + xxx,
-						x2: originalValueLabelArea.x2 + xxx,
+						x1: originalValueLabelArea.x1 + marginForNegative,
+						x2: originalValueLabelArea.x2 + marginForNegative,
 						y1: originalValueLabelArea.y1,
 						y2: originalValueLabelArea.y2,
 						height: originalValueLabelArea.height,
@@ -172,4 +180,47 @@ export function useAnimatedBarChartLayout({
 		// zeroLineX: normalizedZeroLineX + barChartLayout.getZeroLineArea().x1,
 		zeroLineX: barChartLayout.getZeroLineArea().x1 + normalizedZeroLineX,
 	};
+}
+
+export function mixLayoutArea(
+	area1: TGridLayoutArea,
+	area2: TGridLayoutArea,
+	percent: number
+): TGridLayoutArea {
+	// TODO validate opercent between 0 and 1
+
+	return {
+		x1: area1.x1 * percent + area2.x1 * (1 - percent),
+		x2: area1.x2 * percent + area2.x2 * (1 - percent),
+		y1: area1.y1 * percent + area2.y1 * (1 - percent),
+		y2: area1.y2 * percent + area2.y2 * (1 - percent),
+		width: area1.width * percent + area2.width * (1 - percent),
+		height: area1.height * percent + area2.height * (1 - percent),
+	};
+}
+
+export function mixBarChartLayout(
+	layout1: TBarChartLayout & {zeroLineX: number},
+	layout2: TBarChartLayout & {zeroLineX: number},
+	percent: number
+) {
+	const getBarArea = (i: number | string): TGridLayoutArea => {
+		const barArea1 = layout1.getBarArea(i);
+		const barArea2 = layout2.getBarArea(i);
+		return mixLayoutArea(barArea1, barArea2, percent);
+	};
+
+	const getValueLabelArea = (i: number | string): TGridLayoutArea => {
+		const barArea1 = layout1.getValueLabelArea(i);
+		const barArea2 = layout2.getValueLabelArea(i);
+		return mixLayoutArea(barArea1, barArea2, percent);
+	};
+
+	const getLabelArea = (i: number | string): TGridLayoutArea => {
+		const barArea1 = layout1.getLabelArea(i);
+		const barArea2 = layout2.getLabelArea(i);
+		return mixLayoutArea(barArea1, barArea2, percent);
+	};
+
+	return {...layout1, getBarArea, getValueLabelArea, getLabelArea};
 }
