@@ -241,7 +241,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 						? labelKeyframes.map((labelKeyframe, i) => {
 								return (
 									<Sequence from={labelKeyframe.frame} layout="none">
-										<HtmlArea area={barChartLayout.getLabelArea(i)}>
+										<HtmlArea area={barChartLayout.getLabelArea(data[i].id)}>
+											{/* <HtmlArea area={barChartLayout.getLabelArea(i)}> */}
 											<div
 												style={{
 													display: 'flex',
@@ -289,7 +290,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 						);
 
 						const currentBarWidth = interpolateCurrentBarWidth(frame);
-						const barArea = barChartLayout.getBarArea(i);
+						const barArea = barChartLayout.getBarArea(it.id);
 
 						const positiveValueLabelMarginLeft =
 							-1 * (barArea.width - (currentBarWidth + zeroLineX));
@@ -337,8 +338,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 									<HtmlArea
 										area={
 											it.value >= 0
-												? barChartLayout.getValueLabelArea(i)
-												: barChartLayout.getNegativeValueLabelArea(i)
+												? barChartLayout.getValueLabelArea(it.id)
+												: barChartLayout.getNegativeValueLabelArea(it.id)
 										}
 									>
 										<div

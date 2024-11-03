@@ -64,10 +64,10 @@ type TBarChartLayout = {
 	gridLayout: TGridLayout;
 	width: number;
 	height: number;
-	getLabelArea: (i: number) => TGridLayoutArea;
-	getBarArea: (i: number) => TGridLayoutArea;
-	getValueLabelArea: (i: number) => TGridLayoutArea;
-	getNegativeValueLabelArea: (i: number) => TGridLayoutArea;
+	getLabelArea: (i: number | string) => TGridLayoutArea;
+	getBarArea: (i: number | string) => TGridLayoutArea;
+	getValueLabelArea: (i: number | string) => TGridLayoutArea;
+	getNegativeValueLabelArea: (i: number | string) => TGridLayoutArea;
 	getZeroLineArea: () => TGridLayoutArea;
 };
 
@@ -249,44 +249,64 @@ export function useBarChartLayout({
 		gridLayoutSpec: barChartGridLayoutSpec,
 	});
 
-	const getLabelArea = (i: number) => {
-		const labelArea = getGridLayoutArea(chartLayout, [
-			{positionOfType: i, name: 'dataItem'}, // start-row
-			{name: 'label'}, // start-column
-			{positionOfType: i, name: 'dataItem'}, // end-row
-			{name: 'label'}, // end-column
-		]);
-		return labelArea;
+	const getLabelArea = (i: number | string): TGridLayoutArea => {
+		if (typeof i === 'number') {
+			const labelArea = getGridLayoutArea(chartLayout, [
+				{positionOfType: i, name: 'dataItem'}, // start-row
+				{name: 'label'}, // start-column
+				{positionOfType: i, name: 'dataItem'}, // end-row
+				{name: 'label'}, // end-column
+			]);
+			return labelArea;
+		}
+
+		const stringToIx = data.findIndex((it) => it.id === i);
+		return getLabelArea(stringToIx);
 	};
 
-	const getBarArea = (i: number) => {
-		const labelArea = getGridLayoutArea(chartLayout, [
-			{positionOfType: i, name: 'dataItem'}, // start-row
-			{name: 'bar'}, // start-column
-			{positionOfType: i, name: 'dataItem'}, // end-row
-			{name: 'bar'}, // end-column
-		]);
-		return labelArea;
+	const getBarArea = (i: number | string): TGridLayoutArea => {
+		if (typeof i === 'number') {
+			const labelArea = getGridLayoutArea(chartLayout, [
+				{positionOfType: i, name: 'dataItem'}, // start-row
+				{name: 'bar'}, // start-column
+				{positionOfType: i, name: 'dataItem'}, // end-row
+				{name: 'bar'}, // end-column
+			]);
+			return labelArea;
+		}
+
+		const stringToIx = data.findIndex((it) => it.id === i);
+		return getBarArea(stringToIx);
 	};
 
-	const getValueLabelArea = (i: number) => {
-		const labelArea = getGridLayoutArea(chartLayout, [
-			{positionOfType: i, name: 'dataItem'}, // start-row
-			{name: 'valueLabel'}, // start-column
-			{positionOfType: i, name: 'dataItem'}, // end-row
-			{name: 'valueLabel'}, // end-column
-		]);
-		return labelArea;
+	const getValueLabelArea = (i: number | string): TGridLayoutArea => {
+		if (typeof i === 'number') {
+			const labelArea = getGridLayoutArea(chartLayout, [
+				{positionOfType: i, name: 'dataItem'}, // start-row
+				{name: 'valueLabel'}, // start-column
+				{positionOfType: i, name: 'dataItem'}, // end-row
+				{name: 'valueLabel'}, // end-column
+			]);
+			return labelArea;
+		}
+
+		const stringToIx = data.findIndex((it) => it.id === i);
+		return getValueLabelArea(stringToIx);
 	};
 
-	const getNegativeValueLabelArea = (i: number) => {
-		const labelArea = getGridLayoutArea(chartLayout, [
-			{positionOfType: i, name: 'dataItem'}, // start-row
-			{name: 'negativeValueLabel'}, // start-column
-			{positionOfType: i, name: 'dataItem'}, // end-row
-			{name: 'negativeValueLabel'}, // end-column
-		]);
-		return labelArea;
+	const getNegativeValueLabelArea = (i: number | string): TGridLayoutArea => {
+		if (typeof i === 'number') {
+			const labelArea = getGridLayoutArea(chartLayout, [
+				{positionOfType: i, name: 'dataItem'}, // start-row
+				{name: 'negativeValueLabel'}, // start-column
+				{positionOfType: i, name: 'dataItem'}, // end-row
+				{name: 'negativeValueLabel'}, // end-column
+			]);
+			return labelArea;
+		}
+
+		const stringToIx = data.findIndex((it) => it.id === i);
+		return getNegativeValueLabelArea(stringToIx);
 	};
 
 	const getZeroLineArea = () => {

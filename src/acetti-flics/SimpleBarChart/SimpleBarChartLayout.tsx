@@ -61,10 +61,10 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 
 			<HtmlArea area={zeroLineArea} fill="cyan"></HtmlArea>
 
-			{data.map((it, i) => {
-				const barArea = barChartLayout.getBarArea(i);
-				const labelArea = barChartLayout.getLabelArea(i);
-				const valueLabelArea = barChartLayout.getValueLabelArea(i);
+			{data.map((it) => {
+				const barArea = barChartLayout.getBarArea(it.id);
+				const labelArea = barChartLayout.getLabelArea(it.id);
+				const valueLabelArea = barChartLayout.getValueLabelArea(it.id);
 
 				// TODO better colors
 				return (
