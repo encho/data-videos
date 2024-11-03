@@ -74,40 +74,51 @@ export const SimpleSparklineComposition: React.FC<
 				height: '100%',
 			}}
 		>
-			<SlideTitle theme={theme}>The Sparkline</SlideTitle>
+			<div>
+				<SlideTitle theme={theme}>The Sparkline</SlideTitle>
+				<SlideTitle theme={theme}>The Sparkline</SlideTitle>
+				<SlideTitle theme={theme}>The Sparkline</SlideTitle>
+				<SlideTitle theme={theme}>The Sparkline</SlideTitle>
+				<SlideTitle theme={theme}>The Sparkline</SlideTitle>
 
-			<Sequence from={fps * 1.5} layout="none">
-				{/* <Sequence from={fps * 4.5} layout="none"> */}
-				<div>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'center',
-							marginTop: 0,
-							opacity,
-						}}
-					>
-						<SparklineLarge
-							id="001"
-							data={timeSeries}
-							width={CHART_WIDTH}
-							height={CHART_HEIGHT}
-							theme={theme}
-							baseline={baseline}
-						/>
-					</div>
+				<Sequence from={fps * 1.5} layout="none">
+					{/* <Sequence from={fps * 4.5} layout="none"> */}
+					<div>
+						<div
+							style={{
+								marginTop: baseline * 3,
+								display: 'flex',
+								justifyContent: 'center',
+								// marginTop: 0,
+								opacity,
+							}}
+						>
+							<SparklineLarge
+								id="001"
+								data={timeSeries}
+								width={CHART_WIDTH}
+								height={CHART_HEIGHT}
+								theme={theme}
+								baseline={baseline}
+							/>
+						</div>
 
-					<div
-						style={{display: 'flex', justifyContent: 'center', marginTop: 350}}
-					>
-						<SparklineLargeKeyframes
-							width={720}
-							theme={theme}
-							baseFontSize={15}
-						/>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								marginTop: 350,
+							}}
+						>
+							<SparklineLargeKeyframes
+								width={720}
+								theme={theme}
+								baseFontSize={15}
+							/>
+						</div>
 					</div>
-				</div>
-			</Sequence>
+				</Sequence>
+			</div>
 
 			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
