@@ -33,7 +33,6 @@ export const SimpleBarChartComposition: React.FC<
 		value: it.prozent,
 		barColor: it.farbe,
 		id: it.id,
-		// barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
