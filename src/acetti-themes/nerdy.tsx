@@ -4,19 +4,46 @@ import {ThemeType} from './themeTypes';
 import {isVideoSize} from '../Root';
 import {colorPalettes} from './tailwindPalettes';
 
-const textColor = chroma('#888').hex();
-// const backgroundColor = chroma('#222222').darken().hex();
-// const backgroundColor = chroma('#222222').darken().hex();
+// const GRAYS = colorPalettes.Zinc;
+// const GRAYS = colorPalettes.Stone;
+// const GRAYS = colorPalettes.Slate;
+const GRAYS = colorPalettes.Neutral;
+// const GRAYS = colorPalettes.Blue;
+// const GRAYS = colorPalettes.Orange;
 
-// const platteBackground = '#202020';
 const platteBackground = '#232323';
 const platteBorder = '#292929';
 
-// TODO a component that visualizes the data colors!
-// const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
-// const dataScale = chroma.scale(['#f05122', '#ffff00']).mode('lch').colors(6);
-// const dataScale = chroma.scale(['lightgreen', 'magenta']).mode('lab').colors(6);
-// const dataScale = chroma.scale(['cyan', 'magenta']).mode('lab').colors(6);
+const palette = {
+	background: GRAYS['950'],
+	typography: {
+		title: {
+			main: GRAYS['100'],
+		},
+		axis: {
+			main: {
+				tickLabel: GRAYS['400'],
+				line: GRAYS['400'],
+				tick: 'magenta',
+			},
+		},
+	},
+	data: {
+		tenColors: {
+			0: {main: GRAYS['100']},
+			1: {main: 'magenta'},
+			2: {main: 'magenta'},
+			3: {main: 'magenta'},
+			4: {main: 'magenta'},
+			5: {main: 'magenta'},
+			6: {main: 'magenta'},
+			7: {main: 'magenta'},
+			8: {main: 'magenta'},
+			9: {main: 'magenta'},
+		},
+	},
+};
+
 const dataScale = chroma
 	.scale(['#fff', '#f05122', '#555'])
 	.mode('lab')
@@ -52,40 +79,44 @@ export const nerdyTheme = ({
 	return {
 		page,
 		global: {
-			backgroundColor: colorPalettes['Slate']['950'],
-			platteColor: colorPalettes['Slate']['800'],
+			backgroundColor: palette.background,
+			platteColor: GRAYS['800'],
 		},
+
 		typography: {
+			// TODO deprecate
 			title: {
 				fontFamily: 'Inter-Bold',
 				// fontFamily: 'SourceSerifPro-Light',
 				color: '#ffffff',
 			},
+			// TODO deprecate
 			subTitle: {
 				fontFamily: 'Inter-Medium',
 				color: '#666',
 			},
+			// TODO deprecate
 			titleColor: '#666', // TODO deprecate
+			// TODO deprecate
 			subTitleColor: '#888',
+			// TODO deprecate
 			textColor: '#ffffff',
-			// logoColor: '#666',
-			logoColor: colorPalettes['Slate']['600'],
+			// TODO deprecate
+			logoColor: palette.typography.title.main, // TODO own section in theme (as highly individual)
 			textStyles: {
 				h1: {
 					fontFamily: 'Inter-28pt-Black',
 					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 3,
 					lineGapInBaselines: 1.75,
-					// color: colorPalettes['Slate']['200'],
-					color: colorPalettes['Slate']['500'],
+					color: palette.typography.title.main,
 				},
 				h2: {
 					fontFamily: 'Inter-Regular',
 					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 2,
 					lineGapInBaselines: 1.5,
-					// color: '#777',
-					color: colorPalettes['Slate']['500'],
+					color: palette.typography.title.main,
 				},
 				h3: {
 					fontFamily: 'Inter-Bold',
@@ -106,28 +137,28 @@ export const nerdyTheme = ({
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
 					// color: '#888',
-					color: colorPalettes['Slate']['100'],
+					color: GRAYS['100'],
 				},
 				datavizValueLabel: {
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
 					// color: '#64748b',
-					// color: colorPalettes['Slate']['500'],
-					color: colorPalettes['Slate']['300'],
+					// color: GRAYS['500'],
+					color: GRAYS['300'],
 				},
 				datavizTickLabel: {
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 0.8,
 					lineGapInBaselines: 1,
-					// color: colorPalettes['Slate']['600'],
-					color: colorPalettes['Slate']['400'],
+					// color: GRAYS['600'],
+					color: palette.typography.axis.main.tickLabel,
 				},
 				dataSource: {
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 0.75,
-					color: colorPalettes['Slate']['600'],
+					color: palette.typography.title.main,
 				},
 			},
 		},
@@ -136,16 +167,17 @@ export const nerdyTheme = ({
 			fontSize: 16,
 			strokeWidth: 3,
 			// color: textColor,
-			// color: colorPalettes['Slate']['600'],
-			color: colorPalettes['Slate']['400'],
-			tickColor: colorPalettes['Slate']['600'],
+			// color: GRAYS['600'],
+			// color: GRAYS['400'],
+			color: palette.typography.axis.main.line,
+			tickColor: palette.typography.axis.main.tick,
 		},
 		xAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
 			// color: textColor,
-			color: colorPalettes['Slate']['600'],
-			tickColor: colorPalettes['Slate']['600'],
+			color: GRAYS['600'],
+			tickColor: GRAYS['600'],
 		},
 		candlesticks: {
 			up: {
@@ -165,6 +197,7 @@ export const nerdyTheme = ({
 			positiveColor: colorPalettes.Emerald['500'],
 			negativeColor: colorPalettes.Rose['600'],
 		},
+		data: palette.data,
 		dataColors: [
 			{
 				M3: '#333',
@@ -244,7 +277,7 @@ export const nerdyTheme = ({
 			textColor: '#666',
 		},
 		TwoChangeBars: {
-			barsColor: textColor,
+			barsColor: palette.typography.title.main, // TODO change
 		},
 		SimpleKPI: {
 			kpiColor: '#fff',

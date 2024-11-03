@@ -28,6 +28,20 @@ const palette = {
 			},
 		},
 	},
+	data: {
+		tenColors: {
+			0: {main: GRAYS['900']},
+			1: {main: 'magenta'},
+			2: {main: 'magenta'},
+			3: {main: 'magenta'},
+			4: {main: 'magenta'},
+			5: {main: 'magenta'},
+			6: {main: 'magenta'},
+			7: {main: 'magenta'},
+			8: {main: 'magenta'},
+			9: {main: 'magenta'},
+		},
+	},
 };
 
 const dataScale = chroma
@@ -183,6 +197,7 @@ export const lorenzobertoliniTheme = ({
 			positiveColor: colorPalettes.Emerald['500'],
 			negativeColor: colorPalettes.Rose['600'],
 		},
+		data: palette.data,
 		dataColors: [
 			{
 				M3: '#333',

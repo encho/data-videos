@@ -76,11 +76,11 @@ export const MultipleSimpleSparklineComposition: React.FC<
 		column: 1,
 	});
 
-	const neonColors = {
-		neonGreen: '#39FF14',
-		neonPink: '#FF6EC7',
-		neonBlue: '#0D98BA',
-		neonOrange: '#FF5F1F',
+	const sparklineColors = {
+		0: theme.data.tenColors[0].main,
+		1: theme.data.tenColors[0].main,
+		2: theme.data.tenColors[0].main,
+		3: theme.data.tenColors[0].main,
 	};
 
 	// TODO measure capHeight rather...
@@ -165,7 +165,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 											</WaterfallTextEffect>
 										</TypographyStyle>
 
-										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
 												id={'001'}
@@ -178,7 +178,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												}
 												theme={theme}
 												domain={commonDomain}
-												lineColor={neonColors.neonGreen}
+												lineColor={sparklineColors[0]}
 												formatString="0.00 %"
 												// showLayout={true}
 											/>
@@ -196,7 +196,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												{props.sparklines[1].title}
 											</WaterfallTextEffect>
 										</TypographyStyle>
-										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
 												id={'002'}
@@ -209,7 +209,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												}
 												theme={theme}
 												domain={commonDomain}
-												lineColor={neonColors.neonBlue}
+												lineColor={sparklineColors[1]}
 												formatString="0.00 %"
 												// showLayout={true}
 											/>
@@ -227,7 +227,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												{props.sparklines[2].title}
 											</WaterfallTextEffect>
 										</TypographyStyle>
-										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
 												id={'003'}
@@ -240,7 +240,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												}
 												theme={theme}
 												domain={commonDomain}
-												lineColor={neonColors.neonOrange}
+												lineColor={sparklineColors[2]}
 												formatString="0.00 %"
 												// showLayout={true}
 											/>
@@ -258,7 +258,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												{props.sparklines[3].title}
 											</WaterfallTextEffect>
 										</TypographyStyle>
-										<Sequence from={Math.floor(90 * 0.0)} layout="none">
+										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
 												id={'004'}
@@ -271,7 +271,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 												}
 												theme={theme}
 												domain={commonDomain}
-												lineColor={neonColors.neonPink}
+												lineColor={sparklineColors[3]}
 												formatString="0.00 %"
 												// showLayout={true}
 											/>

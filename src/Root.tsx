@@ -745,7 +745,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:

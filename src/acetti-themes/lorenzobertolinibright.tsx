@@ -1,28 +1,51 @@
 import chroma from 'chroma-js';
 
 import {ThemeType} from './themeTypes';
+import {isVideoSize} from '../Root';
+import {colorPalettes} from './tailwindPalettes';
 
-// this theme is a mono colored theme
-// const monoColor = "#f50274";
-// const monoColor = '#f05122';
-const monoColor = '#222';
+// const GRAYS = colorPalettes.Zinc;
+// const GRAYS = colorPalettes.Stone;
+// const GRAYS = colorPalettes.Slate;
+const GRAYS = colorPalettes.Neutral;
+// const GRAYS = colorPalettes.Blue;
+// const GRAYS = colorPalettes.Orange;
 
-const textColor = chroma('#9b9b9b').hex();
-// const textColor = chroma(monoColor).brighten(2).hex();
-// const backgroundColor = chroma('#222222').darken().hex();
-// const backgroundColor = chroma('#f0f0f0').hex();
-// const backgroundColor = chroma(monoColor).hex();
-// const backgroundColor = chroma('#d0d0d0').hex();
-// const backgroundColor = '#fff';
-const backgroundColor = '#f0f0f0';
+const platteBackground = '#232323';
+const platteBorder = '#292929';
 
-// TODO a component that visualizes the data colors!
-// const dataScale = chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6);
-// const dataScale = chroma.scale(['#f05122', '#ffff00']).mode('lch').colors(6);
-// const dataScale = chroma.scale(['lightgreen', 'magenta']).mode('lab').colors(6);
-// const dataScale = chroma.scale(['cyan', 'magenta']).mode('lab').colors(6);
+const palette = {
+	background: GRAYS['50'],
+	typography: {
+		title: {
+			main: GRAYS['900'],
+		},
+		axis: {
+			main: {
+				tickLabel: GRAYS['400'],
+				line: GRAYS['400'],
+				tick: 'magenta',
+			},
+		},
+	},
+	data: {
+		tenColors: {
+			0: {main: GRAYS['900']},
+			1: {main: 'magenta'},
+			2: {main: 'magenta'},
+			3: {main: 'magenta'},
+			4: {main: 'magenta'},
+			5: {main: 'magenta'},
+			6: {main: 'magenta'},
+			7: {main: 'magenta'},
+			8: {main: 'magenta'},
+			9: {main: 'magenta'},
+		},
+	},
+};
+
 const dataScale = chroma
-	.scale([monoColor, '#888888', '#0099cc'])
+	.scale(['#fff', '#f05122', '#555'])
 	.mode('lab')
 	.colors(6);
 
@@ -33,13 +56,15 @@ export const lorenzobertolinibrightTheme = ({
 	width: number;
 	height: number;
 }): ThemeType => {
-	const PAGE_MARGIN_TOP = width / 30;
-	const PAGE_MARGIN_BOTTOM = width / 30;
-	const PAGE_MARGIN_LEFT = width / 30;
-	const PAGE_MARGIN_RIGHT = width / 30;
+	const PAGE_MARGIN_TOP = width / 20;
+	const PAGE_MARGIN_BOTTOM = width / 20;
+	const PAGE_MARGIN_LEFT = width / 20;
+	const PAGE_MARGIN_RIGHT = width / 20;
 	const PAGE_CONTENT_HEIGHT = height - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM;
 	const PAGE_CONTENT_WIDTH = width - PAGE_MARGIN_RIGHT - PAGE_MARGIN_LEFT;
-	const PAGE_BASELINE = PAGE_CONTENT_HEIGHT / 40;
+	const PAGE_BASELINE = isVideoSize({width, height}, 'widescreen_16x9')
+		? PAGE_CONTENT_HEIGHT / 50
+		: PAGE_CONTENT_WIDTH / 50;
 
 	const page = {
 		marginTop: PAGE_MARGIN_TOP,
@@ -53,82 +78,106 @@ export const lorenzobertolinibrightTheme = ({
 
 	return {
 		page,
-		global: {backgroundColor, platteColor: 'yellow'},
+		global: {
+			backgroundColor: palette.background,
+			platteColor: GRAYS['800'],
+		},
+
 		typography: {
+			// TODO deprecate
 			title: {
 				fontFamily: 'Inter-Bold',
-				color: '#999',
+				// fontFamily: 'SourceSerifPro-Light',
+				color: '#ffffff',
 			},
+			// TODO deprecate
 			subTitle: {
 				fontFamily: 'Inter-Medium',
-				color: '#aaa',
+				color: '#666',
 			},
-			titleColor: '#222222',
-			subTitleColor: '#888888',
-			textColor: '#222222',
-			logoColor: '#888',
+			// TODO deprecate
+			titleColor: '#666', // TODO deprecate
+			// TODO deprecate
+			subTitleColor: '#888',
+			// TODO deprecate
+			textColor: '#ffffff',
+			// TODO deprecate
+			logoColor: palette.typography.title.main, // TODO own section in theme (as highly individual)
 			textStyles: {
 				h1: {
-					fontFamily: 'Inter-Bold' as const,
+					fontFamily: 'Inter-28pt-Black',
+					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 3,
-					lineGapInBaselines: 1,
-					color: '#f05122',
+					lineGapInBaselines: 1.75,
+					color: palette.typography.title.main,
 				},
 				h2: {
-					fontFamily: 'Inter-Regular' as const,
+					fontFamily: 'Inter-Regular',
+					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 2,
-					lineGapInBaselines: 1,
-					color: '#888',
+					lineGapInBaselines: 1.5,
+					color: palette.typography.title.main,
 				},
 				h3: {
 					fontFamily: 'Inter-Bold',
-					capHeightInBaselines: 1.2,
+					capHeightInBaselines: 1.5,
 					lineGapInBaselines: 1.5,
 					color: '#fff',
 				},
 				body: {
-					fontFamily: 'Inter-Regular' as const,
+					// fontFamily: 'Inter-28pt-Thin',
+					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
-					lineGapInBaselines: 1,
-					color: '#222',
+					lineGapInBaselines: 0.5,
+					color: '#fff',
 				},
 				datavizLabel: {
-					fontFamily: 'Inter-Regular' as const,
+					// TODO load alos Inter-Medium
+					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
-					color: '#555',
+					// color: '#888',
+					color: GRAYS['100'],
 				},
 				datavizValueLabel: {
-					fontFamily: 'Inter-Bold' as const,
-					capHeightInBaselines: 0.7,
+					fontFamily: 'Inter-Bold',
+					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
-					color: '#555',
+					// color: '#64748b',
+					// color: GRAYS['500'],
+					color: GRAYS['300'],
 				},
 				datavizTickLabel: {
-					fontFamily: 'Inter-Bold',
-					capHeightInBaselines: 1,
+					fontFamily: 'Inter-Regular',
+					capHeightInBaselines: 0.8,
 					lineGapInBaselines: 1,
-					color: '#bbb',
+					// color: GRAYS['600'],
+					color: palette.typography.axis.main.tickLabel,
 				},
 				dataSource: {
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
-					lineGapInBaselines: 1,
-					color: 'magenta',
+					lineGapInBaselines: 0.75,
+					color: palette.typography.title.main,
 				},
 			},
 		},
+
 		yAxis: {
-			fontSize: 15,
-			strokeWidth: 2,
-			color: textColor,
-			tickColor: textColor,
+			fontSize: 16,
+			strokeWidth: 3,
+			// color: textColor,
+			// color: GRAYS['600'],
+			// color: GRAYS['400'],
+			color: palette.typography.axis.main.line,
+			tickColor: palette.typography.axis.main.tick,
 		},
 		xAxis: {
 			fontSize: 16,
-			strokeWidth: 2,
-			color: textColor,
-			tickColor: textColor,
+			strokeWidth: 3,
+			// color: textColor,
+			color: GRAYS['600'],
+			tickColor: GRAYS['600'],
 		},
 		candlesticks: {
 			up: {
@@ -145,9 +194,10 @@ export const lorenzobertolinibrightTheme = ({
 			},
 		},
 		positiveNegativeColors: {
-			positiveColor: 'cyan',
-			negativeColor: 'magenta',
+			positiveColor: colorPalettes.Emerald['500'],
+			negativeColor: colorPalettes.Rose['600'],
 		},
+		data: palette.data,
 		dataColors: [
 			{
 				M3: '#333',
@@ -211,36 +261,34 @@ export const lorenzobertolinibrightTheme = ({
 			areaOpacity: 0.2,
 		},
 		platte: {
-			backgroundColor: '#ffffff',
-			borderColor: '#cccccc',
-			// borderColor: '#ff0000',
-			// backgroundColor: '#ffff00',
+			backgroundColor: platteBackground,
+			borderColor: platteBorder,
 		},
 		TypographicLayouts: {
 			baselineGrid: {
-				lineColor: '#aaa',
+				lineColor: '#4a4a4a',
 			},
 			gridLayout: {
 				lineColor: '#f05122',
-				activeAreaFill: chroma('#f05122').alpha(0.35).css(),
+				activeAreaFill: chroma('#f05122').alpha(0.45).css(),
 			},
 		},
 		EconomistDataSource: {
-			textColor: '#888',
+			textColor: '#666',
 		},
 		TwoChangeBars: {
-			barsColor: monoColor,
+			barsColor: palette.typography.title.main, // TODO change
 		},
 		SimpleKPI: {
-			kpiColor: textColor,
-			labelColor: 'gray',
+			kpiColor: '#fff',
+			labelColor: '#888',
 		},
 		timeseriesComponents: {
 			percentageChangeArea: {
-				lineColor: monoColor,
-				textColor: monoColor,
-				gradientColor: monoColor,
-				lineStrokeWidth: 1.5,
+				lineColor: '#f05122',
+				textColor: '#f05122',
+				gradientColor: '#f05122',
+				lineStrokeWidth: 0.8,
 			},
 			HighlightPeriodsArea: {
 				backgroundColor: dataScale[3],
@@ -248,6 +296,7 @@ export const lorenzobertolinibrightTheme = ({
 				borderColor: dataScale[3],
 				textColor: dataScale[3],
 			},
+			// TODO: bring highlightArea here!! and rename to HighlightPeriodsArea
 		},
 	};
 };

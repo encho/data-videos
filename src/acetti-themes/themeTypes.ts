@@ -21,8 +21,24 @@ const zPageConfig = z.object({
 	baseline: z.number(),
 });
 
+const zThemeData = z.object({
+	tenColors: z.object({
+		0: z.object({main: zColor()}),
+		1: z.object({main: zColor()}),
+		2: z.object({main: zColor()}),
+		3: z.object({main: zColor()}),
+		4: z.object({main: zColor()}),
+		5: z.object({main: zColor()}),
+		6: z.object({main: zColor()}),
+		7: z.object({main: zColor()}),
+		8: z.object({main: zColor()}),
+		9: z.object({main: zColor()}),
+	}),
+});
+
 export const zodThemeType = z.object({
 	page: zPageConfig,
+	data: zThemeData,
 	global: z.object({
 		backgroundColor: zColor(),
 		platteColor: zColor(),
