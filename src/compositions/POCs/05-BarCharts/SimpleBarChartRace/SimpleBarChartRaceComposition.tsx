@@ -30,8 +30,6 @@ export const SimpleBarChartRaceComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
-	const LEFT_CHART_WIDTH_PERCENTAGE = 1;
-
 	const domain = extent(gdpData[2020].map((it) => it.gdp)) as [number, number];
 	domain[0] = 0;
 
