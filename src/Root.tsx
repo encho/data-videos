@@ -220,6 +220,11 @@ import {
 	simpleBarChartTransitionCompositionSchema,
 } from './compositions/POCs/05-BarCharts/SimpleBarChartTransition/SimpleBarChartTransitionComposition';
 
+import {
+	SimpleBarChartRaceComposition,
+	simpleBarChartRaceCompositionSchema,
+} from './compositions/POCs/05-BarCharts/SimpleBarChartRace/SimpleBarChartRaceComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -609,6 +614,20 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						{...videoSizes.square}
 						schema={simpleBarChartTransitionCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SimpleBarChartRace"
+						component={SimpleBarChartRaceComposition}
+						durationInFrames={30 * 18}
+						fps={30}
+						// {...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
+						{...videoSizes.square}
+						schema={simpleBarChartRaceCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
