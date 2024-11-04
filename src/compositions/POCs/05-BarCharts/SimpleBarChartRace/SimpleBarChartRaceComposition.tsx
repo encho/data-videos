@@ -39,6 +39,11 @@ function getPairs(dataIds: string[]): [string, string][] {
 // const result = getPairs(dataIds);
 // console.log(result); // Output: [["2020", "2021"], ["2021", "2022"], ["2022", "2023"]]
 
+// Function to round numbers to two decimal places
+function roundToTwo(num: number): number {
+	return Math.round(num * 100) / 100;
+}
+
 export const simpleBarChartRaceCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -94,7 +99,7 @@ export const SimpleBarChartRaceComposition: React.FC<
 	const dataStart = gdpData[dataIds[0]].map((it) => ({
 		value: it.gdp,
 		label: it.country,
-		valueLabel: `${Math.round(it.gdp)} T$`,
+		valueLabel: `${roundToTwo(it.gdp)} T$`,
 		id: it.id,
 		barColor: theme.data.tenColors[0].main,
 	}));
@@ -107,7 +112,7 @@ export const SimpleBarChartRaceComposition: React.FC<
 	const dataEnd = gdpData[dataIds[dataIds.length - 1]].map((it) => ({
 		value: it.gdp,
 		label: it.country,
-		valueLabel: `${Math.round(it.gdp)} T$`,
+		valueLabel: `${roundToTwo(it.gdp)} T$`,
 		id: it.id,
 		barColor: theme.data.tenColors[0].main,
 	}));
@@ -162,7 +167,7 @@ export const SimpleBarChartRaceComposition: React.FC<
 					const dataFrom = gdpData[fromId].map((it) => ({
 						value: it.gdp,
 						label: it.country,
-						valueLabel: `${Math.round(it.gdp)} T$`,
+						valueLabel: `${roundToTwo(it.gdp)} T$`,
 						id: it.id,
 						barColor: theme.data.tenColors[0].main,
 					}));
@@ -170,7 +175,7 @@ export const SimpleBarChartRaceComposition: React.FC<
 					const dataTo = gdpData[toId].map((it) => ({
 						value: it.gdp,
 						label: it.country,
-						valueLabel: `${Math.round(it.gdp)} T$`,
+						valueLabel: `${roundToTwo(it.gdp)} T$`,
 						id: it.id,
 						barColor: theme.data.tenColors[0].main,
 					}));
@@ -302,7 +307,7 @@ function generateData(startYear: number, endYear: number) {
 
 // Generate data from 2000 to 2024
 // generateData(2000, 2024);
-generateData(2012, 2024);
+generateData(1980, 2024);
 
 // Example of how to access the generated data
 console.log(gdpData);

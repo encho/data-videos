@@ -614,7 +614,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						{...videoSizes.square}
 						schema={simpleBarChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
@@ -622,7 +622,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartRace"
 						component={SimpleBarChartRaceComposition}
-						durationInFrames={30 * 18}
+						durationInFrames={30 * 60}
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
@@ -796,7 +796,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnum: 'NERDY' as const,
 							data: [],
 							dataInfo: [],
 							singleSparklineDurationInSeconds: 6,
