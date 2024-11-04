@@ -96,9 +96,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	// const ANIMATE_EXIT = animateEnter;
-	// const ANIMATE_ENTER = animateExit;
-
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
 	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
@@ -114,7 +111,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		durationInFrames,
 		data,
 		keyframes,
-		// animateExit: false,
 	});
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used

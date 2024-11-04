@@ -72,6 +72,7 @@ export function useAnimatedBarChartLayout({
 		labelWidth,
 		valueLabelWidth,
 		negativeValueLabelWidth,
+		hideLabels,
 	});
 
 	// the keyframes for the labels

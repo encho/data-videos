@@ -68,6 +68,7 @@ export function useStillBarChartLayout({
 		labelWidth,
 		valueLabelWidth,
 		negativeValueLabelWidth,
+		hideLabels,
 	});
 
 	// the keyframes for the labels

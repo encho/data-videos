@@ -39,6 +39,7 @@ type TSimpleBarChartTransitionProps = TBaselineOrHeight & {
 		id: string;
 	}>;
 	valueDomain: [number, number];
+	hideLabels?: boolean;
 };
 
 export const SimpleBarChartTransition: React.FC<
@@ -51,6 +52,7 @@ export const SimpleBarChartTransition: React.FC<
 	height,
 	baseline: baselineProp,
 	showLayout = false,
+	hideLabels = false,
 	labelWidth,
 	valueLabelWidth,
 	valueDomain,
@@ -88,6 +90,7 @@ export const SimpleBarChartTransition: React.FC<
 		labelWidth,
 		valueLabelWidth,
 		valueDomain,
+		hideLabels,
 	});
 
 	const barChartLayout2 = useStillBarChartLayout({
@@ -98,6 +101,7 @@ export const SimpleBarChartTransition: React.FC<
 		labelWidth,
 		valueLabelWidth,
 		valueDomain,
+		hideLabels,
 	});
 
 	const barChartLayout = mixBarChartLayout(
@@ -169,6 +173,7 @@ export const SimpleBarChartTransition: React.FC<
 			theme={theme}
 			data={dataFrom} // TODO how to transition the labels????
 			barChartLayout={barChartLayout}
+			hideLabels={hideLabels}
 			baseline={baseline}
 			CustomLabelComponent={BarChartLabel}
 			CustomValueLabelComponent={BarChartValueLabel}
@@ -186,6 +191,7 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 		children: string;
 		id: string;
 	}>;
+	hideLabels?: boolean;
 }> = ({
 	theme,
 	data,
@@ -193,6 +199,7 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 	baseline,
 	CustomLabelComponent,
 	CustomValueLabelComponent,
+	hideLabels = false,
 }) => {
 	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
 	// const {fps, durationInFrames} = useVideoConfig();
@@ -269,8 +276,6 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 				</div>
 			) : null}
 
-			{/* <HtmlArea area={zeroLineArea} fill="#fff" opacity={0.2}></HtmlArea> */}
-
 			{data.map((it, i) => {
 				const barArea = barChartLayout.getBarArea(it.id);
 				const labelArea = barChartLayout.getLabelArea(it.id);
@@ -279,23 +284,22 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 				// TODO better colors
 				return (
 					<>
-						<HtmlArea
-							area={labelArea}
-							//  fill="rgba(255,255,255,0.2)"
-						>
-							<div
-								style={{
-									display: 'flex',
-									justifyContent: 'flex-end',
-									alignItems: 'center',
-									height: '100%',
-									// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
-									textWrap: 'nowrap',
-								}}
-							>
-								<BarChartLabel id={data[i].id}>{data[i].label}</BarChartLabel>
-							</div>
-						</HtmlArea>
+						{!hideLabels ? (
+							<HtmlArea area={labelArea}>
+								<div
+									style={{
+										display: 'flex',
+										justifyContent: 'flex-end',
+										alignItems: 'center',
+										height: '100%',
+										// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+										textWrap: 'nowrap',
+									}}
+								>
+									<BarChartLabel id={data[i].id}>{data[i].label}</BarChartLabel>
+								</div>
+							</HtmlArea>
+						) : null}
 						<HtmlArea
 							area={barArea}
 							// fill="#fff" opacity={0.5}

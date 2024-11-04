@@ -605,7 +605,8 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartTransitionComposition}
 						durationInFrames={30 * 12}
 						fps={30}
-						{...videoSizes.linkedInTall}
+						// {...videoSizes.linkedInTall}
+						{...videoSizes.square}
 						schema={simpleBarChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
