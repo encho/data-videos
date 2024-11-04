@@ -603,9 +603,10 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartTransition"
 						component={SimpleBarChartTransitionComposition}
-						durationInFrames={30 * 12}
+						durationInFrames={30 * 18}
 						fps={30}
 						// {...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
 						{...videoSizes.square}
 						schema={simpleBarChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
@@ -614,7 +615,7 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						id="ApiBasedSimpleBarChart"
 						component={ApiBasedSimpleBarChartComposition}
-						durationInFrames={30 * 24}
+						durationInFrames={30 * 20}
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}

@@ -29,8 +29,8 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
-	const LEFT_CHART_WIDTH_PERCENTAGE = 0.7;
-	const RIGHT_CHART_WIDTH_PERCENTAGE = 0.3;
+	const LEFT_CHART_WIDTH_PERCENTAGE = 0.65;
+	const RIGHT_CHART_WIDTH_PERCENTAGE = 0.35;
 	const HIDE_LABELS = true;
 
 	const wahlergebnisWinnerSort = [...wahlergebnis2024].sort(
@@ -51,6 +51,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 
 	const barChartData_right = wahlergebnisWinnerSort.map((it) => ({
 		label: it.parteiName,
+		// value: it.prozent,
 		value: it.change,
 		// barColor: it.farbe,
 		barColor:
@@ -73,6 +74,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const barChartDataSorted_right = wahlergebnisChangeSort.map((it) => ({
 		label: it.parteiName,
 		value: it.change,
+		// value: it.prozent,
 		// barColor: it.farbe,
 		barColor:
 			it.change >= 0
@@ -82,7 +84,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 		valueLabel: formatPercentage(it.change),
 	}));
 
-	const chartGap = theme.page.baseline * 8;
+	const chartGap = theme.page.baseline * 2;
 
 	return (
 		<Page theme={theme}>
@@ -107,16 +109,30 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					ref={ref}
 					style={{
 						flex: 1,
-						display: 'flex',
-						justifyContent: 'center',
+						// display: 'flex',
+						// justifyContent: 'center',
 					}}
 				>
 					{dimensions ? (
 						// TODO start after title and subtitle are in (using their keyframes...)
 						<Sequence from={Math.floor(fps * 2.75)} layout="none">
-							<div style={{display: 'flex', gap: 50}}>
-								<Sequence from={0} durationInFrames={fps * 5} layout="none">
-									<div style={{display: 'flex', gap: chartGap}}>
+							<div
+								style={
+									{
+										// display: 'flex', gap: 50
+									}
+								}
+							>
+								<Sequence from={0} durationInFrames={fps * 7} layout="none">
+									<div
+										style={{
+											display: 'flex',
+											flexDirection: 'row',
+											justifyContent: 'flex-start',
+											gap: chartGap,
+											// backgroundColor: 'cyan',
+										}}
+									>
 										<SimpleBarChart
 											data={barChartData_left}
 											width={
@@ -127,24 +143,32 @@ export const SimpleBarChartTransitionComposition: React.FC<
 											theme={theme}
 											animateExit={false}
 											valueDomain={[0, 0.31]}
+											// showLayout
 											// hideLabels={HIDE_LABELS}
 										/>
-										<SimpleBarChart
-											data={barChartData_right}
-											width={
-												(dimensions.width - chartGap) *
-												RIGHT_CHART_WIDTH_PERCENTAGE
-											}
-											height={dimensions.height}
-											theme={theme}
-											animateExit={false}
-											valueDomain={[0, 0.31]}
-											hideLabels={HIDE_LABELS}
-										/>
+										<Sequence
+											from={fps * 3}
+											durationInFrames={fps * 5}
+											layout="none"
+										>
+											<SimpleBarChart
+												data={barChartData_right}
+												width={
+													(dimensions.width - chartGap) *
+													RIGHT_CHART_WIDTH_PERCENTAGE
+												}
+												height={dimensions.height}
+												theme={theme}
+												animateExit={false}
+												valueDomain={[-0.5, 0.5]}
+												// showLayout
+												hideLabels={HIDE_LABELS}
+											/>
+										</Sequence>
 									</div>
 								</Sequence>
 								<Sequence
-									from={fps * 5}
+									from={fps * 7}
 									durationInFrames={fps * 0.5}
 									layout="none"
 								>
@@ -169,12 +193,12 @@ export const SimpleBarChartTransitionComposition: React.FC<
 												RIGHT_CHART_WIDTH_PERCENTAGE
 											}
 											theme={theme}
-											valueDomain={[0, 0.31]}
+											valueDomain={[-0.5, 0.5]}
 											hideLabels={HIDE_LABELS}
 										/>
 									</div>
 								</Sequence>
-								<Sequence from={fps * 5.5} layout="none">
+								<Sequence from={fps * 7.5} layout="none">
 									<div style={{display: 'flex', gap: chartGap}}>
 										<SimpleBarChart
 											data={barChartDataSorted_left}
@@ -196,7 +220,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 											height={dimensions.height}
 											theme={theme}
 											animateEnter={false}
-											valueDomain={[0, 0.31]}
+											valueDomain={[-0.5, 0.5]}
 											hideLabels={HIDE_LABELS}
 										/>
 									</div>
