@@ -6,10 +6,11 @@ import {colorPalettes} from './tailwindPalettes';
 
 // const GRAYS = colorPalettes.Zinc;
 // const GRAYS = colorPalettes.Stone;
-// const GRAYS = colorPalettes.Slate;
-const GRAYS = colorPalettes.Neutral;
+const GRAYS = colorPalettes.Slate;
+// const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
 // const GRAYS = colorPalettes.Orange;
+// const GRAYS = colorPalettes.Emerald;
 
 const platteBackground = '#232323';
 const platteBorder = '#292929';
@@ -128,7 +129,7 @@ export const lorenzobertoliniTheme = ({
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 1.5,
 					lineGapInBaselines: 1.5,
-					color: '#fff',
+					color: GRAYS['900'],
 				},
 				body: {
 					// fontFamily: 'Inter-28pt-Thin',

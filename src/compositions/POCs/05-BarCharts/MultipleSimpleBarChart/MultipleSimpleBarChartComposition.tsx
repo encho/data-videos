@@ -43,6 +43,7 @@ export const MultipleSimpleBarChartComposition: React.FC<
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
+		// barColor: it.farbe,
 		barColor: it.farbe,
 		// barColor: '#fff',
 		valueLabel: formatPercentage(it.prozent),
@@ -311,7 +312,7 @@ const wahlergebnis2024: {
 	{parteiName: 'AfD', prozent: 29.2 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
 	{parteiName: 'BSW', prozent: 13.5 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
 	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
-	{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
+	{parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#222', id: 'CDU'}, // CDU Black
 	{parteiName: 'Grüne', prozent: 4.1 / 100, farbe: '#64A12D', id: 'GRU'}, // Grüne Green
 	{parteiName: 'Die Linke', prozent: 3.0 / 100, farbe: '#BE3075', id: 'LIN'}, // Die Linke Magenta
 	{
@@ -332,7 +333,7 @@ const wahlergebnis2024_2: {
 }[] = [
 	{parteiName: 'SPD', prozent: 50 / 100, farbe: '#E3000F', id: 'SPD'}, // SPD Red
 	{parteiName: 'AfD', prozent: 20 / 100, farbe: '#009EE0', id: 'AFD'}, // AfD Blue
-	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#fff', id: 'CDU'}, // CDU Black
+	{parteiName: 'CDU', prozent: 20 / 100, farbe: '#222', id: 'CDU'}, // CDU Black
 	{parteiName: 'BSW', prozent: 10 / 100, farbe: '#FFA500', id: 'BSW'}, // BSW Orange (aligned with Sahra Wagenknecht's movement)
 	// {parteiName: 'CDU', prozent: 12.1 / 100, farbe: '#000000'}, // CDU Black
 ];

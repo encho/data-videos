@@ -584,7 +584,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.square}
 						{...videoSizes.linkedInTall}
 						schema={multipleSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -603,11 +603,11 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartTransition"
 						component={SimpleBarChartTransitionComposition}
-						durationInFrames={30 * 10}
+						durationInFrames={30 * 12}
 						fps={30}
 						{...videoSizes.linkedInTall}
 						schema={simpleBarChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -700,7 +700,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.square}
 							schema={twoChangeBarsCompositionSchema}
 							defaultProps={{
-								themeEnum: 'LORENZOBERTOLINI' as const,
+								themeEnum: 'NERDY' as const,
 								title: 'Global Car Sales',
 								subTitle: '2023 vs. 2024 (in USD)',
 								leftBarValue: 1000,

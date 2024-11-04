@@ -16,6 +16,7 @@ import {
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartTransition';
+import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 export const simpleBarChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -53,14 +54,12 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageHeader theme={theme}>
 					<TitleWithSubtitle
 						title={'Transitioning a Bar Chart'}
 						subtitle={'Good for sorting data, for Example:'}
 						theme={theme}
+						innerDelayInSeconds={1}
 					/>
 				</PageHeader>
 
@@ -73,7 +72,8 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					}}
 				>
 					{dimensions ? (
-						<Sequence from={Math.floor(fps * 0)} layout="none">
+						// TODO start after title and subtitle are in (using their keyframes...)
+						<Sequence from={Math.floor(fps * 2.75)} layout="none">
 							<div style={{display: 'flex', gap: 50}}>
 								<Sequence from={0} durationInFrames={fps * 5} layout="none">
 									<SimpleBarChart
@@ -115,10 +115,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageFooter theme={theme}>
 					<div
 						style={{
 							display: 'flex',
@@ -131,7 +128,13 @@ export const SimpleBarChartTransitionComposition: React.FC<
 								typographyStyle={theme.typography.textStyles.dataSource}
 								baseline={theme.page.baseline}
 							>
-								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
+								<TextAnimationSubtle
+									translateY={theme.page.baseline * 1.1}
+									innerDelayInSeconds={5.25} // TODO time better...
+								>
+									Data Source: German Bundesbank 2024 Paper on Evolutional
+									Finance
+								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>
 					</div>

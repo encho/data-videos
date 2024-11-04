@@ -15,12 +15,16 @@ export const titleWithSubtitleDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export function useTitleWithSubtitleKeyframes() {
+export function useTitleWithSubtitleKeyframes({
+	innerDelayInSeconds = 0,
+}: {
+	innerDelayInSeconds?: number;
+}) {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
 		// the title...
-		{type: 'SECOND', value: 0, id: 'TITLE_ENTER_START'},
+		{type: 'SECOND', value: innerDelayInSeconds, id: 'TITLE_ENTER_START'},
 		{
 			type: 'R_SECOND',
 			value: 0.6,
@@ -41,9 +45,9 @@ export function useTitleWithSubtitleKeyframes() {
 		// the subtitle...
 		{
 			type: 'R_SECOND',
-			value: 0.1,
+			value: 0,
 			id: 'SUBTITLE_ENTER_START',
-			relativeId: 'TITLE_ENTER_START',
+			relativeId: 'TITLE_ENTER_END',
 		},
 		{
 			type: 'R_SECOND',
@@ -73,13 +77,22 @@ export const TitleWithSubtitle: React.FC<{
 	title: string;
 	subtitle: string;
 	baseline?: number;
-}> = ({theme, title, subtitle, baseline: baselineProp}) => {
+	innerDelayInSeconds?: number;
+}> = ({
+	theme,
+	title,
+	subtitle,
+	baseline: baselineProp,
+	innerDelayInSeconds,
+}) => {
 	// const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
 	const baseline = baselineProp || theme.page.baseline;
 
-	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes();
+	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes({
+		innerDelayInSeconds,
+	});
 
 	const translateY = baseline * 2;
 
@@ -197,9 +210,12 @@ export const TitleWithSubtitle: React.FC<{
 
 export const TitleWithSubtitleKeyframes: React.FC<{
 	theme: ThemeType;
-}> = ({theme}) => {
+	innerDelayInSeconds?: number;
+}> = ({theme, innerDelayInSeconds = 0}) => {
 	const frame = useCurrentFrame();
-	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes();
+	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes({
+		innerDelayInSeconds,
+	});
 
 	return (
 		<KeyFramesInspector

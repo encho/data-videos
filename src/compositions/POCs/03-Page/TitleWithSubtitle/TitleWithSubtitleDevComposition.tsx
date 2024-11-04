@@ -22,6 +22,8 @@ export const TitleWithSubtitleDevComposition: React.FC<
 > = ({themeEnum, title, subtitle}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 
+	const INNER_DELAY_SECONDS = 1;
+
 	return (
 		<Page theme={theme}>
 			<div
@@ -32,9 +34,18 @@ export const TitleWithSubtitleDevComposition: React.FC<
 					marginBottom: theme.page.baseline * 4,
 				}}
 			>
-				<TitleWithSubtitle theme={theme} title={title} subtitle={subtitle} />
+				<TitleWithSubtitle
+					theme={theme}
+					title={title}
+					subtitle={subtitle}
+					innerDelayInSeconds={INNER_DELAY_SECONDS}
+				/>
 			</div>
-			<TitleWithSubtitleKeyframes theme={theme} />;
+			<TitleWithSubtitleKeyframes
+				theme={theme}
+				innerDelayInSeconds={INNER_DELAY_SECONDS}
+			/>
+			;
 		</Page>
 	);
 };
