@@ -7,9 +7,13 @@ import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnima
 export function Page({
 	theme,
 	children,
-}: {
+}: // width: widthProp,
+// height: heightProp,
+{
 	theme: ThemeType;
 	children: ReactNode;
+	// width?: number;
+	// height?: number;
 }) {
 	return (
 		<div

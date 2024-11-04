@@ -38,7 +38,8 @@ type TSimpleBarChartTransitionProps = TBaselineOrHeight & {
 		children: string;
 		id: string;
 	}>;
-	valueDomain: [number, number];
+	valueDomainFrom: [number, number];
+	valueDomainTo: [number, number];
 	hideLabels?: boolean;
 };
 
@@ -55,7 +56,8 @@ export const SimpleBarChartTransition: React.FC<
 	hideLabels = false,
 	labelWidth,
 	valueLabelWidth,
-	valueDomain,
+	valueDomainFrom,
+	valueDomainTo,
 	CustomLabelComponent,
 	CustomValueLabelComponent,
 	// TODO add the below to be compatible!!!
@@ -89,7 +91,7 @@ export const SimpleBarChartTransition: React.FC<
 		width,
 		labelWidth,
 		valueLabelWidth,
-		valueDomain,
+		valueDomain: valueDomainFrom,
 		hideLabels,
 	});
 
@@ -100,7 +102,7 @@ export const SimpleBarChartTransition: React.FC<
 		width,
 		labelWidth,
 		valueLabelWidth,
-		valueDomain,
+		valueDomain: valueDomainTo,
 		hideLabels,
 	});
 

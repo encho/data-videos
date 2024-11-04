@@ -11,12 +11,14 @@ export const KeyFramesSequence: React.FC<{
 	to: string;
 	name: string;
 	children: ReactNode;
-}> = ({keyframes, from, to, name, children}) => {
+	exclusive?: boolean;
+}> = ({keyframes, from, to, name, children, exclusive = false}) => {
 	const keyFrameFrom = getKeyFrame(keyframes, from).frame; // e.g.
 	const keyFrameTo = getKeyFrame(keyframes, to).frame;
 
-	// inclusive duration!!!
-	const durationInFrames = keyFrameTo - keyFrameFrom + 1;
+	const durationInFrames = !exclusive
+		? keyFrameTo - keyFrameFrom + 1
+		: keyFrameTo - keyFrameFrom;
 
 	return (
 		<Sequence

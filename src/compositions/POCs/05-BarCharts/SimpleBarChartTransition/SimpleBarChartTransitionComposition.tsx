@@ -182,7 +182,8 @@ export const SimpleBarChartTransitionComposition: React.FC<
 												LEFT_CHART_WIDTH_PERCENTAGE
 											}
 											theme={theme}
-											valueDomain={[0, 0.31]}
+											valueDomainFrom={[0, 0.31]}
+											valueDomainTo={[0, 0.31]}
 										/>
 										<SimpleBarChartTransition
 											height={dimensions.height}
@@ -193,7 +194,8 @@ export const SimpleBarChartTransitionComposition: React.FC<
 												RIGHT_CHART_WIDTH_PERCENTAGE
 											}
 											theme={theme}
-											valueDomain={[-0.5, 0.5]}
+											valueDomainFrom={[-0.5, 0.5]}
+											valueDomainTo={[-0.5, 0.5]}
 											hideLabels={HIDE_LABELS}
 										/>
 									</div>
