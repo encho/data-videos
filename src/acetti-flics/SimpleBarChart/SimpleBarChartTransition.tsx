@@ -1,5 +1,5 @@
 import {useCurrentFrame, useVideoConfig, interpolate, Easing} from 'remotion';
-import {useCallback, ComponentType} from 'react';
+import {useCallback} from 'react';
 import invariant from 'tiny-invariant';
 import {isNumber} from 'lodash';
 
@@ -9,9 +9,16 @@ import {useStillBarChartLayout} from './useStillBarChartLayout';
 import {getBarChartBaseline} from './useBarChartLayout';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
 import {mixBarChartLayout} from './useAnimatedBarChartLayout';
-import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TBaselineOrHeight} from './SimpleBarChart';
 import {MeasureLabels, MeasureValueLabels} from './SimpleBarChart';
+import {
+	DefaultLabelComponent,
+	DefaultValueLabelComponent,
+} from './SimpleBarChart';
+import {
+	TBarChartLabelComponent,
+	TBarChartValueLabelComponent,
+} from './SimpleBarChart';
 
 export type TSimpleBarChartData = {
 	label: string;
@@ -30,14 +37,11 @@ type TSimpleBarChartTransitionProps = TBaselineOrHeight & {
 	valueLabelWidth?: number;
 	negativeValueLabelWidth?: number;
 	showLayout?: boolean;
-	CustomLabelComponent?: ComponentType<{children: string; id: string}>;
-	CustomValueLabelComponent?: ComponentType<{
-		children: string;
-		id: string;
-	}>;
 	valueDomainFrom: [number, number];
 	valueDomainTo: [number, number];
 	hideLabels?: boolean;
+	CustomLabelComponent?: TBarChartLabelComponent;
+	CustomValueLabelComponent?: TBarChartValueLabelComponent;
 };
 
 export const SimpleBarChartTransition: React.FC<
@@ -58,13 +62,6 @@ export const SimpleBarChartTransition: React.FC<
 	valueDomainTo,
 	CustomLabelComponent,
 	CustomValueLabelComponent,
-	// TODO add the below to be compatible!!!
-	// ***************************************
-	// negativeValueLabelWidth?: number;
-	// showLayout?: boolean;
-	// hideLabels?: boolean;
-	// keyframes?: TKeyFramesGroup;
-	// //
 }) => {
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
@@ -80,67 +77,42 @@ export const SimpleBarChartTransition: React.FC<
 	invariant(baseline);
 
 	// TODO get the corresponding component and it's parametrization from theme
-	const DefaultLabelComponent = useCallback(
-		({
-			children,
-			id,
-			animateEnter,
-			animateExit,
-		}: {
-			children: string;
-			id: string;
-			animateEnter?: boolean;
-			animateExit?: boolean;
-		}) => {
+	const MeasureLabelComponent = useCallback(
+		({id, children}: {children: string; id: string}) => {
 			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizLabel}
+				<LabelComponent
+					children={children}
+					id={id}
 					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				/>
 			);
 		},
-		[theme, baseline] // Dependencies
+		// [baseline, theme]  // TODO ensure theme has stable ref
+		[baseline]
+	);
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureValueLabelComponent = useCallback(
+		({id, children}: {children: string; id: string}) => {
+			return (
+				<ValueLabelComponent
+					children={children}
+					id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				/>
+			);
+		},
+		// [baseline, theme]  // TODO ensure theme has stable ref
+		[baseline]
 	);
 
 	const LabelComponent = CustomLabelComponent || DefaultLabelComponent;
-
-	// TODO get the corresponding component and it's parametrization from theme
-	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
-	const DefaultValueLabelComponent = useCallback(
-		({children, id}: {children: string; id: string}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizValueLabel}
-					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
 
 	const ValueLabelComponent =
 		CustomValueLabelComponent || DefaultValueLabelComponent;
@@ -159,7 +131,7 @@ export const SimpleBarChartTransition: React.FC<
 				data={[...dataTo, ...dataFrom]}
 				theme={theme}
 				baseline={baseline}
-				Component={LabelComponent}
+				Component={MeasureLabelComponent}
 			/>
 			{/* measure positive value labels */}
 			<MeasureValueLabels
@@ -168,7 +140,7 @@ export const SimpleBarChartTransition: React.FC<
 				data={[...dataTo, ...dataFrom].filter((it) => it.value >= 0)}
 				theme={theme}
 				baseline={baseline}
-				Component={ValueLabelComponent}
+				Component={MeasureValueLabelComponent}
 			/>
 			{/* measure negative value labels */}
 			<MeasureValueLabels
@@ -177,7 +149,7 @@ export const SimpleBarChartTransition: React.FC<
 				data={[...dataTo, ...dataFrom].filter((it) => it.value < 0)}
 				theme={theme}
 				baseline={baseline}
-				Component={ValueLabelComponent}
+				Component={MeasureValueLabelComponent}
 			/>
 
 			{isNumber(labelWidth) &&
@@ -185,7 +157,6 @@ export const SimpleBarChartTransition: React.FC<
 			isNumber(negativeValueLabelWidth) ? (
 				<SimpleBarChartTransitionWithMeasurements
 					theme={theme}
-					// data={dataFrom} // TODO how to transition the labels????
 					hideLabels={hideLabels}
 					baseline={baseline}
 					LabelComponent={LabelComponent}
@@ -207,11 +178,6 @@ export const SimpleBarChartTransition: React.FC<
 export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 	theme: ThemeType;
 	baseline: number;
-	LabelComponent: ComponentType<{children: string; id: string}>;
-	ValueLabelComponent: ComponentType<{
-		children: string;
-		id: string;
-	}>;
 	hideLabels?: boolean;
 	valueLabelWidth: number;
 	labelWidth: number;
@@ -221,6 +187,8 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 	width: number;
 	valueDomainFrom: [number, number];
 	valueDomainTo: [number, number];
+	LabelComponent: TBarChartLabelComponent;
+	ValueLabelComponent: TBarChartValueLabelComponent;
 }> = ({
 	theme,
 	baseline,
@@ -274,8 +242,6 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 		mixPercentage
 	);
 
-	//////////////////////////////////////////////////////////////
-
 	invariant(
 		areIdsEqual(dataFrom, dataTo),
 		"dataFrom and dataTo id's should be equal"
@@ -317,7 +283,13 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 										textWrap: 'nowrap',
 									}}
 								>
-									<LabelComponent id={dataTo[i].id}>
+									<LabelComponent
+										id={dataTo[i].id}
+										animateEnter={false}
+										animateExit={false}
+										baseline={baseline}
+										theme={theme}
+									>
 										{dataTo[i].label}
 									</LabelComponent>
 								</div>
@@ -360,7 +332,13 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 									textWrap: 'nowrap',
 								}}
 							>
-								<ValueLabelComponent id={dataTo[i].id}>
+								<ValueLabelComponent
+									id={dataTo[i].id}
+									animateEnter={false}
+									animateExit={false}
+									baseline={baseline}
+									theme={theme}
+								>
 									{dataTo[i].valueLabel}
 								</ValueLabelComponent>
 							</div>

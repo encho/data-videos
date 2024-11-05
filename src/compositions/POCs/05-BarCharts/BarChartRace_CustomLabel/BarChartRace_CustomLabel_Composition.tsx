@@ -1,7 +1,6 @@
 import {z} from 'zod';
 import {useCurrentFrame, useVideoConfig, Img} from 'remotion';
 import {extent} from 'd3-array';
-import invariant from 'tiny-invariant';
 import React, {useCallback, useMemo} from 'react';
 
 import {Page} from '../../03-Page/SimplePage/ThemePage';
@@ -17,6 +16,7 @@ import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {KeyFramesSequence} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {getGdpData} from '../BarChartRace_Simple/BarChartRace_Simple_Composition';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
 function getPairs(dataIds: string[]): [string, string][] {
 	return dataIds
@@ -48,7 +48,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	// const {ref, dimensions} = useElementDimensions();
 
-	const gdpData = useMemo(() => getGdpData(2020, 2024), []);
+	const gdpData = useMemo(() => getGdpData(2000, 2024), []);
 
 	const domain = extent(gdpData[2020].map((it) => it.gdp)) as [number, number];
 	domain[0] = 0;
@@ -89,7 +89,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	];
 	valueDomainEnd[0] = 0;
 
-	const BARCHARTRACE_HEIGHT = 340;
+	const BARCHARTRACE_HEIGHT = 600;
 	const BARCHARTRACE_WIDTH = theme.page.contentWidth;
 
 	const CustomBarChartLabelComponent = useCallback(
@@ -97,62 +97,59 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 			({
 				children,
 				id,
+				animateEnter,
+				animateExit,
+				baseline,
+				theme,
 			}: {
 				children: string;
 				id: string;
-				// baseline: number;  // TODO inject chart baseline
+				animateEnter: boolean;
+				animateExit: boolean;
+				baseline: number;
+				theme: ThemeType;
 				// dataItem: TODO inject chart Dataitem
 				// index: TODO inject dataItem index
 			}) => {
-				const countryGDP = gdpData[2020].find((it) => it.id === id)?.gdp;
-				invariant(countryGDP);
-
 				const imageSrc = getCountryImageURL(id);
-
-				const BASELINE = 15;
 
 				return (
 					<div
 						style={{
 							display: 'flex',
-							gap: BASELINE * 0.6,
+							gap: baseline * 0.6,
 							alignItems: 'center',
 						}}
 					>
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.datavizLabel}
-							baseline={BASELINE}
+							baseline={baseline}
 						>
-							{id}
-							{/* <TextAnimationSubtle
+							<TextAnimationSubtle
 								innerDelayInSeconds={0}
-								translateY={BASELINE * 1.15}
+								translateY={baseline * 1.15}
+								animateEnter={animateEnter}
+								animateExit={animateExit}
 							>
-								{id}
-							</TextAnimationSubtle> */}
+								{children}
+							</TextAnimationSubtle>
 						</TypographyStyle>
 
-						{/* <TextAnimationSubtle
+						<TextAnimationSubtle
 							innerDelayInSeconds={0}
-							translateY={BASELINE * 1.15}
+							translateY={baseline * 1.15}
+							animateEnter={animateEnter}
+							animateExit={animateExit}
 						>
 							<Img
 								style={{
 									borderRadius: '50%',
-									width: BASELINE * 2,
-									height: BASELINE * 2,
+									width: baseline * 2,
+									height: baseline * 2,
 								}}
 								src={imageSrc}
 							/>
-						</TextAnimationSubtle> */}
-						<Img
-							style={{
-								borderRadius: '50%',
-								width: BASELINE * 2,
-								height: BASELINE * 2,
-							}}
-							src={imageSrc}
-						/>
+						</TextAnimationSubtle>
 					</div>
 				);
 			}
@@ -161,8 +158,11 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	);
 
 	return (
-		<Page theme={theme} show>
-			<div
+		<Page
+			theme={theme}
+			// show
+		>
+			{/* <div
 				style={{
 					position: 'absolute',
 					top: 520,
@@ -175,7 +175,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 					frame={frame}
 					theme={theme}
 				/>
-			</div>
+			</div> */}
 			<div>
 				<KeyFramesSequence
 					exclusive
@@ -200,8 +200,6 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						animateExit={false}
 						valueDomain={valueDomainStart}
 						CustomLabelComponent={CustomBarChartLabelComponent}
-						// showLayout
-						// hideLabels={HIDE_LABELS}
 					/>
 				</KeyFramesSequence>
 
@@ -311,17 +309,36 @@ function getCountryImageURL(countryId: string): string {
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/germany-flag-circular-1024.png';
 	const italy =
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/italy-flag-circular-1024.png';
+	const uk =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/uk-flag-circular-1024.png';
 
-	if (countryId === 'US') return germany;
-	if (countryId === 'CN') return italy;
-	if (countryId === 'JP') return germany;
-	if (countryId === 'DE') return italy;
-	if (countryId === 'IN') return germany;
-	if (countryId === 'GB') return italy;
-	if (countryId === 'FR') return germany;
+	const china =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/china-flag-circular-1024.png';
+	const usa =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/usa-flag-circular-1024.png';
+
+	const india =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/india-flag-circular-1024.png';
+	const france =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/france-flag-circular-1024.png';
+	const canada =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png';
+	const japan =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/japan-flag-circular-1024.png';
+
+	const southKorea =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/south-korea-flag-circular-1024.png';
+
+	if (countryId === 'US') return usa;
+	if (countryId === 'CN') return china;
+	if (countryId === 'JP') return japan;
+	if (countryId === 'DE') return germany;
+	if (countryId === 'IN') return india;
+	if (countryId === 'GB') return uk;
+	if (countryId === 'FR') return france;
 	if (countryId === 'IT') return italy;
-	if (countryId === 'CA') return germany;
-	if (countryId === 'KR') return italy;
+	if (countryId === 'CA') return canada;
+	if (countryId === 'KR') return southKorea;
 
 	throw Error('no matching image found');
 }

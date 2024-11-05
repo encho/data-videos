@@ -1,8 +1,9 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import invariant from 'tiny-invariant';
-import React, {forwardRef, useCallback} from 'react';
+import React, {forwardRef, useCallback, ComponentType} from 'react';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
+import {isNumber} from 'lodash';
 
 import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
@@ -49,6 +50,24 @@ interface BaselineProp {
 
 export type TBaselineOrHeight = HeightProp | BaselineProp;
 
+export type TBarChartLabelComponent = React.ComponentType<{
+	children: string;
+	id: string;
+	animateExit: boolean;
+	animateEnter: boolean;
+	baseline: number;
+	theme: ThemeType;
+}>;
+
+export type TBarChartValueLabelComponent = React.ComponentType<{
+	children: string;
+	id: string;
+	animateExit?: boolean;
+	animateEnter?: boolean;
+	baseline: number;
+	theme: ThemeType;
+}>;
+
 type TSimpleBarChartProps = TBaselineOrHeight & {
 	theme: ThemeType;
 	data: TSimpleBarChartData;
@@ -62,23 +81,8 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	keyframes?: TKeyFramesGroup;
 	animateEnter?: boolean;
 	animateExit?: boolean;
-	//
-	CustomLabelComponent?: React.ComponentType<{
-		children: string;
-		id: string;
-		animateExit?: boolean;
-		animateEnter?: boolean;
-		baseline: number;
-		theme: ThemeType;
-	}>;
-	CustomValueLabelComponent?: React.ComponentType<{
-		children: string;
-		id: string;
-		animateExit?: boolean;
-		animateEnter?: boolean;
-		baseline: number;
-		theme: ThemeType;
-	}>;
+	CustomLabelComponent?: TBarChartLabelComponent;
+	CustomValueLabelComponent?: TBarChartValueLabelComponent;
 };
 
 export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
@@ -99,9 +103,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	CustomLabelComponent,
 	CustomValueLabelComponent,
 }) => {
-	const {fps, durationInFrames} = useVideoConfig();
-	const frame = useCurrentFrame();
-
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
 	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
@@ -112,27 +113,20 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	} = useElementDimensions(true);
 	// TODO useElementDimensions("skipFontsWaiting")
 
-	const barChartKeyframes = useBarChartKeyframes({
-		fps,
-		durationInFrames,
-		data,
-		keyframes,
-	});
-
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
 	invariant(baseline);
 
-	const BarChartLabel = CustomLabelComponent || DefaultLabelComponent;
+	const LabelComponent = CustomLabelComponent || DefaultLabelComponent;
 
-	const BarChartValueLabel =
+	const ValueLabelComponent =
 		CustomValueLabelComponent || DefaultValueLabelComponent;
 
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureLabelComponent = useCallback(
 		({id, children}: {children: string; id: string}) => {
 			return (
-				<BarChartLabel
+				<LabelComponent
 					children={children}
 					id={id}
 					baseline={baseline}
@@ -150,7 +144,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const MeasureValueLabelComponent = useCallback(
 		({id, children}: {children: string; id: string}) => {
 			return (
-				<BarChartValueLabel
+				<ValueLabelComponent
 					children={children}
 					id={id}
 					baseline={baseline}
@@ -164,11 +158,16 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		[baseline]
 	);
 
-	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
-	const valueLabelWidth =
-		valueLabelWidthProp || valueLabelsDimensions?.width || 0;
+	// const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
+	// const valueLabelWidth =
+	// 	valueLabelWidthProp || valueLabelsDimensions?.width || 0;
+	// const negativeValueLabelWidth =
+	// 	negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
 	const negativeValueLabelWidth =
-		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
 
 	// determine domain
 	// ------------------------------------------
@@ -179,26 +178,6 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 			number,
 			number
 		]);
-
-	const animatedBarChartLayout = useAnimatedBarChartLayout({
-		hideLabels,
-		baseline,
-		theme,
-		data,
-		width,
-		labelWidth,
-		valueLabelWidth,
-		negativeValueLabelWidth,
-		valueDomain,
-		animateExit: ANIMATE_EXIT,
-		animateEnter: ANIMATE_ENTER,
-	});
-
-	// the keyframes for the labels
-	// -------------------------------------------------------------------
-	const labelKeyframes = barChartKeyframes.keyFrames.filter((kf) =>
-		kf.id.startsWith('LABEL_APPEAR__')
-	);
 
 	return (
 		<>
@@ -230,243 +209,325 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				Component={MeasureValueLabelComponent}
 			/>
 
-			{/* {labelsDimensions && valueLabelsDimensions  ? ( */}
-			{labelsDimensions &&
-			valueLabelsDimensions &&
-			negativeValueLabelsDimensions ? (
-				<div
-					style={{
-						position: 'relative',
-						width: animatedBarChartLayout.width,
-						height: animatedBarChartLayout.height,
-					}}
-				>
-					{showLayout ? (
-						<div style={{position: 'absolute', top: 0, left: 0}}>
-							<DisplayGridRails
-								{...animatedBarChartLayout.gridLayout}
-								stroke="#555"
-							/>
-						</div>
-					) : null}
-
-					{!hideLabels
-						? labelKeyframes.map((labelKeyframe, i) => {
-								return (
-									<Sequence
-										from={ANIMATE_ENTER ? labelKeyframe.frame : 0}
-										layout="none"
-									>
-										<HtmlArea
-											area={animatedBarChartLayout.getLabelArea(data[i].id)}
-										>
-											{/* <HtmlArea area={barChartLayout.getLabelArea(i)}> */}
-											<div
-												style={{
-													display: 'flex',
-													justifyContent: 'flex-end',
-													alignItems: 'center',
-													height: '100%',
-													// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
-													textWrap: 'nowrap',
-												}}
-											>
-												<BarChartLabel
-													id={data[i].id}
-													animateExit={ANIMATE_EXIT}
-													animateEnter={ANIMATE_ENTER}
-													baseline={baseline}
-													theme={theme}
-												>
-													{data[i].label}
-												</BarChartLabel>
-											</div>
-										</HtmlArea>
-									</Sequence>
-								);
-						  })
-						: null}
-
-					{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
-					{data.map((it, i) => {
-						const valueLabelKeyframe = barChartKeyframes.keyFrames.find(
-							(kf) => kf.id === 'VALUE_LABEL_APPEAR__' + it.id
-						);
-						invariant(valueLabelKeyframe);
-						const valueLabelDissappearKeyframe =
-							barChartKeyframes.keyFrames.find(
-								(kf) => kf.id === 'VALUE_LABEL_DISSAPPEAR__' + it.id
-							);
-						invariant(valueLabelDissappearKeyframe);
-
-						const animatedBarArea = animatedBarChartLayout.getBarArea(it.id);
-
-						return (
-							<>
-								<HtmlArea
-									area={animatedBarArea}
-									// fill="orange" opacity={1}
-								>
-									<svg
-										width={animatedBarArea.width}
-										height={animatedBarArea.height}
-									>
-										{it.value > 0 && animatedBarArea.width ? (
-											<RoundedRightRect
-												y={0}
-												x={0}
-												height={animatedBarArea.height}
-												width={animatedBarArea.width}
-												fill={it.barColor || 'magenta'}
-												// TODO: get radius from baseline?
-												radius={5}
-											/>
-										) : it.value < 0 && animatedBarArea.width ? (
-											<RoundedLeftRect
-												y={0}
-												x={0}
-												height={animatedBarArea.height}
-												width={animatedBarArea.width}
-												fill={it.barColor || 'magenta'}
-												// TODO: get radius from baseline?
-												radius={5}
-											/>
-										) : null}
-									</svg>
-								</HtmlArea>
-
-								{/* TODO use KeyframeSequence component */}
-								<Sequence
-									from={ANIMATE_ENTER ? valueLabelKeyframe.frame : 0}
-									durationInFrames={
-										ANIMATE_EXIT
-											? valueLabelDissappearKeyframe.frame -
-											  valueLabelKeyframe.frame +
-											  (ANIMATE_ENTER ? 0 : valueLabelKeyframe.frame)
-											: undefined
-									}
-									layout="none"
-								>
-									<HtmlArea
-										area={animatedBarChartLayout.getValueLabelArea(it.id)}
-									>
-										<div
-											style={{
-												display: 'flex',
-												justifyContent:
-													it.value >= 0 ? 'flex-start' : 'flex-end',
-												alignItems: 'center',
-												height: '100%',
-												// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
-												textWrap: 'nowrap',
-											}}
-										>
-											<BarChartValueLabel
-												id={data[i].id}
-												animateExit={ANIMATE_EXIT}
-												animateEnter={ANIMATE_ENTER}
-												baseline={baseline}
-												theme={theme}
-											>
-												{data[i].valueLabel}
-											</BarChartValueLabel>
-										</div>
-									</HtmlArea>
-								</Sequence>
-							</>
-						);
-					})}
-
-					{(() => {
-						const zeroLineArea = animatedBarChartLayout.getZeroLineArea();
-
-						// TODO eventually useCallback at start of the component to have more efficiency
-						const interpolateZeroLine__y1 = getKeyFramesInterpolator(
-							barChartKeyframes,
-							[
-								'ZEROLINE_ENTER_START',
-								'ZEROLINE_ENTER_END',
-								'ZEROLINE_EXIT_START',
-								'ZEROLINE_EXIT_END',
-							],
-							[0, 0, 0, ANIMATE_EXIT ? zeroLineArea.height : 0],
-							[Easing.ease, Easing.ease, Easing.ease]
-						);
-
-						// TODO eventually useCallback at start of the component to have more efficiency
-						const interpolateZeroLine__y2 = getKeyFramesInterpolator(
-							barChartKeyframes,
-							[
-								'ZEROLINE_ENTER_START',
-								'ZEROLINE_ENTER_END',
-								'ZEROLINE_EXIT_START',
-								'ZEROLINE_EXIT_END',
-							],
-							[
-								ANIMATE_ENTER ? 0 : zeroLineArea.height,
-								zeroLineArea.height,
-								zeroLineArea.height,
-								zeroLineArea.height,
-							],
-							[Easing.ease, Easing.ease, Easing.ease]
-						);
-
-						// TODO eventually useCallback at start of the component to have more efficiency
-						const interpolateZeroLine__opacity = getKeyFramesInterpolator(
-							barChartKeyframes,
-							[
-								'ZEROLINE_ENTER_START',
-								'ZEROLINE_ENTER_END',
-								'ZEROLINE_EXIT_START',
-								'ZEROLINE_EXIT_END',
-							],
-							[ANIMATE_ENTER ? 0 : 1, 1, 1, ANIMATE_EXIT ? 0 : 1],
-							[
-								Easing.bezier(0.64, 0, 0.78, 0), // easeInQuint
-								Easing.linear,
-								Easing.bezier(0.22, 1, 0.36, 1), // easeOutQuint
-							]
-						);
-
-						const y1 = interpolateZeroLine__y1(frame);
-						const y2 = interpolateZeroLine__y2(frame);
-						const opacity = interpolateZeroLine__opacity(frame);
-
-						const lineColor = theme.yAxis.color;
-
-						return (
-							<HtmlArea area={zeroLineArea} fill="transparent">
-								<svg
-									width={zeroLineArea.width}
-									height={zeroLineArea.height}
-									style={{overflow: 'visible'}}
-								>
-									<line
-										x1={
-											animatedBarChartLayout.zeroLineX -
-											animatedBarChartLayout.getZeroLineArea().x1
-										}
-										x2={
-											animatedBarChartLayout.zeroLineX -
-											animatedBarChartLayout.getZeroLineArea().x1
-										}
-										y1={y1}
-										y2={y2}
-										stroke={lineColor}
-										strokeWidth={baseline * 0.2}
-										opacity={opacity}
-									/>
-								</svg>
-							</HtmlArea>
-						);
-					})()}
-				</div>
+			{isNumber(labelWidth) &&
+			isNumber(valueLabelWidth) &&
+			isNumber(negativeValueLabelWidth) ? (
+				<SimpleBarChartWithMeasurements
+					theme={theme}
+					hideLabels={hideLabels}
+					baseline={baseline}
+					LabelComponent={LabelComponent}
+					ValueLabelComponent={ValueLabelComponent}
+					valueLabelWidth={valueLabelWidth}
+					negativeValueLabelWidth={negativeValueLabelWidth}
+					labelWidth={labelWidth}
+					data={data}
+					width={width}
+					valueDomain={valueDomain}
+					animateEnter={ANIMATE_ENTER}
+					animateExit={ANIMATE_EXIT}
+					showLayout={showLayout}
+				/>
 			) : null}
 		</>
 	);
 };
 
-const DefaultLabelComponent = React.memo(
+export const SimpleBarChartWithMeasurements: React.FC<{
+	theme: ThemeType;
+	hideLabels: boolean;
+	baseline: number;
+	showLayout?: boolean;
+	LabelComponent: TBarChartLabelComponent;
+	ValueLabelComponent: TBarChartValueLabelComponent;
+	valueLabelWidth: number;
+	negativeValueLabelWidth: number;
+	labelWidth: number;
+	data: TSimpleBarChartData;
+	width: number;
+	valueDomain: [number, number];
+	animateExit: boolean;
+	animateEnter: boolean;
+	keyframes?: TKeyFramesGroup;
+}> = ({
+	theme,
+	data,
+	width,
+	baseline,
+	hideLabels = false,
+	labelWidth,
+	valueLabelWidth,
+	negativeValueLabelWidth,
+	valueDomain,
+	LabelComponent,
+	ValueLabelComponent,
+	animateExit: ANIMATE_EXIT,
+	animateEnter: ANIMATE_ENTER,
+	keyframes,
+	showLayout = false,
+	// TODO add the below to be compatible!!!
+	// ***************************************
+	// negativeValueLabelWidth?: number;
+	// showLayout?: boolean;
+	// hideLabels?: boolean;
+	// keyframes?: TKeyFramesGroup;
+	// //
+}) => {
+	const {fps, durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const barChartKeyframes = useBarChartKeyframes({
+		fps,
+		durationInFrames,
+		data,
+		keyframes,
+	});
+
+	const animatedBarChartLayout = useAnimatedBarChartLayout({
+		hideLabels,
+		baseline,
+		theme,
+		data,
+		width,
+		labelWidth,
+		valueLabelWidth,
+		negativeValueLabelWidth,
+		valueDomain,
+		animateExit: ANIMATE_EXIT,
+		animateEnter: ANIMATE_ENTER,
+	});
+
+	// the keyframes for the labels
+	// -------------------------------------------------------------------
+	const labelKeyframes = barChartKeyframes.keyFrames.filter((kf) =>
+		kf.id.startsWith('LABEL_APPEAR__')
+	);
+
+	return (
+		<div
+			style={{
+				position: 'relative',
+				width: animatedBarChartLayout.width,
+				height: animatedBarChartLayout.height,
+			}}
+		>
+			{showLayout ? (
+				<div style={{position: 'absolute', top: 0, left: 0}}>
+					<DisplayGridRails
+						{...animatedBarChartLayout.gridLayout}
+						stroke="#555"
+					/>
+				</div>
+			) : null}
+
+			{!hideLabels
+				? labelKeyframes.map((labelKeyframe, i) => {
+						return (
+							<Sequence
+								from={ANIMATE_ENTER ? labelKeyframe.frame : 0}
+								layout="none"
+							>
+								<HtmlArea
+									area={animatedBarChartLayout.getLabelArea(data[i].id)}
+								>
+									{/* <HtmlArea area={barChartLayout.getLabelArea(i)}> */}
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'flex-end',
+											alignItems: 'center',
+											height: '100%',
+											// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+											textWrap: 'nowrap',
+										}}
+									>
+										<LabelComponent
+											id={data[i].id}
+											animateExit={ANIMATE_EXIT}
+											animateEnter={ANIMATE_ENTER}
+											baseline={baseline}
+											theme={theme}
+										>
+											{data[i].label}
+										</LabelComponent>
+									</div>
+								</HtmlArea>
+							</Sequence>
+						);
+				  })
+				: null}
+
+			{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
+			{data.map((it, i) => {
+				const valueLabelKeyframe = barChartKeyframes.keyFrames.find(
+					(kf) => kf.id === 'VALUE_LABEL_APPEAR__' + it.id
+				);
+				invariant(valueLabelKeyframe);
+				const valueLabelDissappearKeyframe = barChartKeyframes.keyFrames.find(
+					(kf) => kf.id === 'VALUE_LABEL_DISSAPPEAR__' + it.id
+				);
+				invariant(valueLabelDissappearKeyframe);
+
+				const animatedBarArea = animatedBarChartLayout.getBarArea(it.id);
+
+				return (
+					<>
+						<HtmlArea area={animatedBarArea}>
+							<svg
+								width={animatedBarArea.width}
+								height={animatedBarArea.height}
+							>
+								{it.value > 0 && animatedBarArea.width ? (
+									<RoundedRightRect
+										y={0}
+										x={0}
+										height={animatedBarArea.height}
+										width={animatedBarArea.width}
+										fill={it.barColor || 'magenta'}
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : it.value < 0 && animatedBarArea.width ? (
+									<RoundedLeftRect
+										y={0}
+										x={0}
+										height={animatedBarArea.height}
+										width={animatedBarArea.width}
+										fill={it.barColor || 'magenta'}
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : null}
+							</svg>
+						</HtmlArea>
+
+						{/* TODO use KeyframeSequence component */}
+						<Sequence
+							from={ANIMATE_ENTER ? valueLabelKeyframe.frame : 0}
+							durationInFrames={
+								ANIMATE_EXIT
+									? valueLabelDissappearKeyframe.frame -
+									  valueLabelKeyframe.frame +
+									  (ANIMATE_ENTER ? 0 : valueLabelKeyframe.frame)
+									: undefined
+							}
+							layout="none"
+						>
+							<HtmlArea area={animatedBarChartLayout.getValueLabelArea(it.id)}>
+								<div
+									style={{
+										display: 'flex',
+										justifyContent: it.value >= 0 ? 'flex-start' : 'flex-end',
+										alignItems: 'center',
+										height: '100%',
+										// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+										textWrap: 'nowrap',
+									}}
+								>
+									<ValueLabelComponent
+										id={data[i].id}
+										animateExit={ANIMATE_EXIT}
+										animateEnter={ANIMATE_ENTER}
+										baseline={baseline}
+										theme={theme}
+									>
+										{data[i].valueLabel}
+									</ValueLabelComponent>
+								</div>
+							</HtmlArea>
+						</Sequence>
+					</>
+				);
+			})}
+
+			{(() => {
+				const zeroLineArea = animatedBarChartLayout.getZeroLineArea();
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[0, 0, 0, ANIMATE_EXIT ? zeroLineArea.height : 0],
+					[Easing.ease, Easing.ease, Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[
+						ANIMATE_ENTER ? 0 : zeroLineArea.height,
+						zeroLineArea.height,
+						zeroLineArea.height,
+						zeroLineArea.height,
+					],
+					[Easing.ease, Easing.ease, Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__opacity = getKeyFramesInterpolator(
+					barChartKeyframes,
+					[
+						'ZEROLINE_ENTER_START',
+						'ZEROLINE_ENTER_END',
+						'ZEROLINE_EXIT_START',
+						'ZEROLINE_EXIT_END',
+					],
+					[ANIMATE_ENTER ? 0 : 1, 1, 1, ANIMATE_EXIT ? 0 : 1],
+					[
+						Easing.bezier(0.64, 0, 0.78, 0), // easeInQuint
+						Easing.linear,
+						Easing.bezier(0.22, 1, 0.36, 1), // easeOutQuint
+					]
+				);
+
+				const y1 = interpolateZeroLine__y1(frame);
+				const y2 = interpolateZeroLine__y2(frame);
+				const opacity = interpolateZeroLine__opacity(frame);
+
+				const lineColor = theme.yAxis.color;
+
+				return (
+					<HtmlArea area={zeroLineArea} fill="transparent">
+						<svg
+							width={zeroLineArea.width}
+							height={zeroLineArea.height}
+							style={{overflow: 'visible'}}
+						>
+							<line
+								x1={
+									animatedBarChartLayout.zeroLineX -
+									animatedBarChartLayout.getZeroLineArea().x1
+								}
+								x2={
+									animatedBarChartLayout.zeroLineX -
+									animatedBarChartLayout.getZeroLineArea().x1
+								}
+								y1={y1}
+								y2={y2}
+								stroke={lineColor}
+								strokeWidth={baseline * 0.2}
+								opacity={opacity}
+							/>
+						</svg>
+					</HtmlArea>
+				);
+			})()}
+		</div>
+	);
+};
+
+export const DefaultLabelComponent = React.memo(
 	({
 		id,
 		children,
@@ -500,7 +561,7 @@ const DefaultLabelComponent = React.memo(
 	}
 );
 
-const DefaultValueLabelComponent = React.memo(
+export const DefaultValueLabelComponent = React.memo(
 	({
 		id,
 		children,
@@ -617,7 +678,7 @@ interface LabelsDivProps {
 	data: TSimpleBarChartData;
 	theme: ThemeType;
 	baseline: number;
-	Component: React.ComponentType<{children: string; id: string}>;
+	Component: TBarChartLabelComponent;
 }
 
 export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
@@ -636,39 +697,57 @@ export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 				{data
 					// .map((it) => it.label)
 					.map((it) => (
-						<Component id={it.id}>{it.label}</Component>
+						<Component
+							id={it.id}
+							theme={theme}
+							baseline={baseline}
+							animateEnter={false}
+							animateExit={false}
+						>
+							{it.label}
+						</Component>
 					))}
 			</div>
 		);
 	}
 );
 
-export const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
-	({data, theme, baseline, Component}, ref) => {
-		return (
-			<div
-				ref={ref}
-				style={{
-					position: 'fixed',
-					left: '-9999px', // Move off-screen
-					top: '-9999px',
-					whiteSpace: 'nowrap', // Prevent labels from wrapping
-					visibility: 'hidden',
-				}}
-			>
-				{data.map((it) => (
-					<Component
-						id={it.id}
-						// TODO ensure that the component is not animating in while measureing
-						// animateEnter={false} animateExit={false}
-					>
-						{it.valueLabel}
-					</Component>
-				))}
-			</div>
-		);
-	}
-);
+interface ValueLabelsDivProps {
+	data: TSimpleBarChartData;
+	theme: ThemeType;
+	baseline: number;
+	Component: TBarChartValueLabelComponent;
+}
+
+export const MeasureValueLabels = forwardRef<
+	HTMLDivElement,
+	ValueLabelsDivProps
+>(({data, theme, baseline, Component}, ref) => {
+	return (
+		<div
+			ref={ref}
+			style={{
+				position: 'fixed',
+				left: '-9999px', // Move off-screen
+				top: '-9999px',
+				whiteSpace: 'nowrap', // Prevent labels from wrapping
+				visibility: 'hidden',
+			}}
+		>
+			{data.map((it) => (
+				<Component
+					id={it.id}
+					theme={theme}
+					baseline={baseline}
+					animateEnter={false}
+					animateExit={false}
+				>
+					{it.valueLabel}
+				</Component>
+			))}
+		</div>
+	);
+});
 
 // Optional: Set a display name for easier debugging
 MeasureValueLabels.displayName = 'MeasureValueLabels';

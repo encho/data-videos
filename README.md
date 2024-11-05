@@ -24,6 +24,10 @@ https://www.worldbank.org/en/research/brief/inflation-database
 
 https://www.youtube.com/watch?v=BQEVqWiD304&ab_channel=GarethDavidStudio
 
+## Flag icons
+
+https://www.iconpacks.net/free-icon-pack/free-circular-country-flags-icon-pack-211.html
+
 ## Commands
 
 **Install Dependencies**
