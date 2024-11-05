@@ -122,19 +122,25 @@ export const SimpleBarChartRaceComposition: React.FC<
 	];
 	valueDomainEnd[0] = 0;
 
-	const BARCHARTRACE_HEIGHT = 400;
+	const BARCHARTRACE_HEIGHT = 340;
 	const BARCHARTRACE_WIDTH = theme.page.contentWidth;
 
 	return (
 		<Page theme={theme} show>
-			{/* <div style={{height: 500, backgroundColor: 'black', padding: 50}}>
+			<div
+				style={{
+					position: 'absolute',
+					top: 520,
+				}}
+			>
 				<KeyFramesInspector
 					keyFramesGroup={keyframes}
 					width={BARCHARTRACE_WIDTH}
 					baseFontSize={22}
 					frame={frame}
+					theme={theme}
 				/>
-			</div> */}
+			</div>
 			<div>
 				<KeyFramesSequence
 					exclusive
@@ -309,8 +315,9 @@ function generateData(startYear: number, endYear: number) {
 }
 
 // Generate data from 2000 to 2024
-// generateData(2000, 2024);
-generateData(1980, 2024);
+generateData(2020, 2024);
+// generateData(1980, 2024);
+// generateData(1980, 2024);
 
 // Example of how to access the generated data
 console.log(gdpData);

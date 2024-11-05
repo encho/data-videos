@@ -3,6 +3,7 @@ import {scaleLinear} from 'd3-scale';
 import chroma from 'chroma-js';
 import {Sequence} from 'remotion';
 
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TKeyFramesGroup, getSign, getKeyFrame} from './keyframes';
 
 export const KeyFramesSequence: React.FC<{
@@ -37,7 +38,8 @@ export const KeyFramesInspector: React.FC<{
 	frame: number;
 	width: number;
 	baseFontSize: number;
-}> = ({keyFramesGroup, width, baseFontSize, frame}) => {
+	theme?: ThemeType; // TODO make compulsory input
+}> = ({keyFramesGroup, width, baseFontSize, frame, theme}) => {
 	const {durationInFrames, fps, keyFrames} = keyFramesGroup;
 
 	const HEIGHT_PER_FRAME = baseFontSize * 1.5;
@@ -57,8 +59,17 @@ export const KeyFramesInspector: React.FC<{
 
 	const secondsTicks = secondToPixel.ticks();
 
+	const BACKGROUND_COLOR = theme ? theme.global.backgroundColor : 'brown';
+
 	return (
-		<div style={{width, height, position: 'relative'}}>
+		<div
+			style={{
+				width,
+				height,
+				position: 'relative',
+				backgroundColor: BACKGROUND_COLOR,
+			}}
+		>
 			<div style={{marginBottom: 18}}>
 				<div style={{fontSize: 26, color: '#fff', fontFamily: 'Inter-Regular'}}>
 					Key-Frames Inspector

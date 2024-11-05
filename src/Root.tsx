@@ -622,13 +622,13 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="SimpleBarChartRace"
 						component={SimpleBarChartRaceComposition}
-						durationInFrames={30 * 60}
+						durationInFrames={30 * 12}
 						fps={30}
 						{...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.square}
 						schema={simpleBarChartRaceCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
