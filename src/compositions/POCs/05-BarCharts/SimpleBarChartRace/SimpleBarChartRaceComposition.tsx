@@ -51,7 +51,7 @@ export const simpleBarChartRaceCompositionSchema = z.object({
 export const SimpleBarChartRaceComposition: React.FC<
 	z.infer<typeof simpleBarChartRaceCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps, durationInFrames} = useVideoConfig();
+	const {fps, durationInFrames, width} = useVideoConfig();
 	const frame = useCurrentFrame();
 	// const {durationInFrames, }
 	const theme = useThemeFromEnum(themeEnum as any);
@@ -122,12 +122,15 @@ export const SimpleBarChartRaceComposition: React.FC<
 	];
 	valueDomainEnd[0] = 0;
 
+	const BARCHARTRACE_HEIGHT = 400;
+	const BARCHARTRACE_WIDTH = theme.page.contentWidth;
+
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			{/* <div style={{height: 500, backgroundColor: 'black', padding: 50}}>
 				<KeyFramesInspector
 					keyFramesGroup={keyframes}
-					width={1000}
+					width={BARCHARTRACE_WIDTH}
 					baseFontSize={22}
 					frame={frame}
 				/>
@@ -150,8 +153,8 @@ export const SimpleBarChartRaceComposition: React.FC<
 
 					<SimpleBarChart
 						data={dataStart}
-						width={1000}
-						height={500}
+						width={BARCHARTRACE_WIDTH}
+						height={BARCHARTRACE_HEIGHT}
 						theme={theme}
 						animateExit={false}
 						valueDomain={valueDomainStart}
@@ -211,12 +214,12 @@ export const SimpleBarChartRaceComposition: React.FC<
 
 								{/* TODO here we need the  */}
 								<SimpleBarChartTransition
-									height={500}
+									height={BARCHARTRACE_HEIGHT}
 									dataFrom={dataFrom}
 									valueDomainFrom={valueDomainFrom}
 									dataTo={dataTo}
 									valueDomainTo={valueDomainTo}
-									width={1000}
+									width={BARCHARTRACE_WIDTH}
 									theme={theme}
 								/>
 							</KeyFramesSequence>
@@ -241,8 +244,8 @@ export const SimpleBarChartRaceComposition: React.FC<
 
 					<SimpleBarChart
 						data={dataEnd}
-						width={1000}
-						height={500}
+						width={BARCHARTRACE_WIDTH}
+						height={BARCHARTRACE_HEIGHT}
 						theme={theme}
 						animateEnter={false}
 						valueDomain={valueDomainEnd}

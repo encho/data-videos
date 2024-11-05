@@ -7,11 +7,13 @@ import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnima
 export function Page({
 	theme,
 	children,
+	show = false,
 }: // width: widthProp,
 // height: heightProp,
 {
 	theme: ThemeType;
 	children: ReactNode;
+	show?: boolean;
 	// width?: number;
 	// height?: number;
 }) {
@@ -24,22 +26,69 @@ export function Page({
 				height: '100%',
 			}}
 		>
-			<div
-				style={{
-					marginTop: theme.page.marginTop,
-					marginBottom: theme.page.marginBottom,
-					marginRight: theme.page.marginRight,
-					marginLeft: theme.page.marginLeft,
-				}}
-			>
+			<div style={{position: 'fixed', width: '100%', height: '100%'}}>
+				{show ? (
+					<>
+						<div
+							style={{
+								position: 'absolute',
+								top: 0,
+								left: 0,
+								width: theme.page.marginLeft,
+								height: theme.page.marginTop,
+								backgroundColor: 'rgba(255,0,255,0.3)',
+							}}
+						/>
+						<div
+							style={{
+								position: 'absolute',
+								bottom: 0,
+								left: 0,
+								width: theme.page.marginLeft,
+								height: theme.page.marginBottom,
+								backgroundColor: 'rgba(255,0,255,0.3)',
+							}}
+						/>
+						<div
+							style={{
+								position: 'absolute',
+								top: 0,
+								right: 0,
+								width: theme.page.marginRight,
+								height: theme.page.marginTop,
+								backgroundColor: 'rgba(255,0,255,0.3)',
+							}}
+						/>
+						<div
+							style={{
+								position: 'absolute',
+								bottom: 0,
+								right: 0,
+								width: theme.page.marginRight,
+								height: theme.page.marginBottom,
+								backgroundColor: 'rgba(255,0,255,0.3)',
+							}}
+						/>
+					</>
+				) : null}
 				<div
 					style={{
-						width: theme.page.contentWidth,
-						height: theme.page.contentHeight,
-						position: 'relative',
+						marginTop: theme.page.marginTop,
+						marginBottom: theme.page.marginBottom,
+						marginRight: theme.page.marginRight,
+						marginLeft: theme.page.marginLeft,
 					}}
 				>
-					{children}
+					<div
+						style={{
+							width: theme.page.contentWidth,
+							height: theme.page.contentHeight,
+							position: 'relative',
+							border: show ? '2px solid magenta' : 'transparent',
+						}}
+					>
+						{children}
+					</div>
 				</div>
 			</div>
 		</div>

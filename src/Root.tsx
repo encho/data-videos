@@ -624,9 +624,9 @@ export const RemotionRoot: React.FC = () => {
 						component={SimpleBarChartRaceComposition}
 						durationInFrames={30 * 60}
 						fps={30}
-						// {...videoSizes.linkedInTall}
+						{...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
-						{...videoSizes.square}
+						// {...videoSizes.square}
 						schema={simpleBarChartRaceCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
