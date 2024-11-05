@@ -233,7 +233,7 @@ export const BarChartRace_Simple_Composition: React.FC<
 	);
 };
 
-function getGdpData(startYear: number, endYear: number) {
+export function getGdpData(startYear: number, endYear: number) {
 	const gdpData: {
 		[year: string]: {
 			country: string;

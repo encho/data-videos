@@ -604,7 +604,13 @@ export const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 				}}
 			>
 				{data.map((it) => (
-					<Component id={it.id}>{it.valueLabel}</Component>
+					<Component
+						id={it.id}
+						// TODO ensure that the component is not animating in while measureing
+						// animateEnter={false} animateExit={false}
+					>
+						{it.valueLabel}
+					</Component>
 				))}
 			</div>
 		);

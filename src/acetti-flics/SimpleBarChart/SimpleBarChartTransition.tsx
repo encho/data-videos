@@ -1,6 +1,7 @@
 import {useCurrentFrame, useVideoConfig, interpolate, Easing} from 'remotion';
 import {useCallback, ComponentType} from 'react';
 import invariant from 'tiny-invariant';
+import {isNumber} from 'lodash';
 
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
@@ -55,7 +56,7 @@ export const SimpleBarChartTransition: React.FC<
 	width,
 	height,
 	baseline: baselineProp,
-	showLayout = false,
+	showLayout = false, // TODO implement functionality
 	hideLabels = false,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
@@ -72,41 +73,185 @@ export const SimpleBarChartTransition: React.FC<
 	// keyframes?: TKeyFramesGroup;
 	// //
 }) => {
-	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
-	const {fps, durationInFrames} = useVideoConfig();
-	const frame = useCurrentFrame();
-	const animationProgress = (frame + 1) / durationInFrames;
-	const mixPercentage = interpolate(animationProgress, [0, 1], [1, 0], {
-		easing: Easing.ease,
-	});
-
-	// const {ref: labelsRef, dimensions: labelsDimensions} =
-	// 	useElementDimensions(true);
-	// const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
-	// 	useElementDimensions(true);
-	// const {
-	// 	ref: negativeValueLabelsRef,
-	// 	dimensions: negativeValueLabelsDimensions,
-	// } = useElementDimensions(true);
-
-	// const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
-	// const valueLabelWidth =
-	// 	valueLabelWidthProp || valueLabelsDimensions?.width || 0;
-	// const negativeValueLabelWidth =
-	// 	negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
-
-	const labelWidth = labelWidthProp;
-	const valueLabelWidth = valueLabelWidthProp;
-	const negativeValueLabelWidth = negativeValueLabelWidthProp;
+	const {ref: labelsRef, dimensions: labelsDimensions} =
+		useElementDimensions(true);
+	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+		useElementDimensions(true);
+	const {
+		ref: negativeValueLabelsRef,
+		dimensions: negativeValueLabelsDimensions,
+	} = useElementDimensions(true);
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, dataTo) : baselineProp;
 	invariant(baseline);
 
-	// TODO check same data length and same id's
-	// invariant(fromData.length === toData.length)
+	// TODO get the corresponding component and it's parametrization from theme
+	const DefaultLabelComponent = useCallback(
+		({
+			children,
+			id,
+			animateEnter,
+			animateExit,
+		}: {
+			children: string;
+			id: string;
+			animateEnter?: boolean;
+			animateExit?: boolean;
+		}) => {
+			return (
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizLabel}
+					baseline={baseline}
+				>
+					{/* <TextAnimationSubtle
+					................
+					TODO !!!!!
+					enter={false}
+					exit={false}
+					................
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+					> */}
+					{children}
+					{/* </TextAnimationSubtle> */}
+				</TypographyStyle>
+			);
+		},
+		[theme, baseline] // Dependencies
+	);
 
-	const barChartLayout1 = useStillBarChartLayout({
+	const LabelComponent = CustomLabelComponent || DefaultLabelComponent;
+
+	// TODO get the corresponding component and it's parametrization from theme
+	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
+	const DefaultValueLabelComponent = useCallback(
+		({children, id}: {children: string; id: string}) => {
+			return (
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizValueLabel}
+					baseline={baseline}
+				>
+					{/* <TextAnimationSubtle
+					................
+					TODO !!!!!
+					enter={false}
+					exit={false}
+					................
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+					> */}
+					{children}
+					{/* </TextAnimationSubtle> */}
+				</TypographyStyle>
+			);
+		},
+		[theme, baseline] // Dependencies
+	);
+
+	const ValueLabelComponent =
+		CustomValueLabelComponent || DefaultValueLabelComponent;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
+
+	return (
+		<>
+			{/* measure labels */}
+			<MeasureLabels
+				key="labelMeasurement"
+				ref={labelsRef}
+				data={[...dataTo, ...dataFrom]}
+				theme={theme}
+				baseline={baseline}
+				Component={LabelComponent}
+			/>
+			{/* measure positive value labels */}
+			<MeasureValueLabels
+				key="valueLabelMeasurement"
+				ref={valueLabelsRef}
+				data={[...dataTo, ...dataFrom].filter((it) => it.value >= 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={ValueLabelComponent}
+			/>
+			{/* measure negative value labels */}
+			<MeasureValueLabels
+				key="negativeValueLabelMeasurement"
+				ref={negativeValueLabelsRef}
+				data={[...dataTo, ...dataFrom].filter((it) => it.value < 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={ValueLabelComponent}
+			/>
+
+			{isNumber(labelWidth) &&
+			isNumber(valueLabelWidth) &&
+			isNumber(negativeValueLabelWidth) ? (
+				<SimpleBarChartTransitionWithMeasurements
+					theme={theme}
+					// data={dataFrom} // TODO how to transition the labels????
+					hideLabels={hideLabels}
+					baseline={baseline}
+					LabelComponent={LabelComponent}
+					ValueLabelComponent={ValueLabelComponent}
+					valueLabelWidth={valueLabelWidth}
+					negativeValueLabelWidth={negativeValueLabelWidth}
+					labelWidth={labelWidth}
+					dataFrom={dataFrom}
+					dataTo={dataTo}
+					width={width}
+					valueDomainFrom={valueDomainFrom}
+					valueDomainTo={valueDomainTo}
+				/>
+			) : null}
+		</>
+	);
+};
+
+export const SimpleBarChartTransitionWithMeasurements: React.FC<{
+	theme: ThemeType;
+	baseline: number;
+	LabelComponent: ComponentType<{children: string; id: string}>;
+	ValueLabelComponent: ComponentType<{
+		children: string;
+		id: string;
+	}>;
+	hideLabels?: boolean;
+	valueLabelWidth: number;
+	labelWidth: number;
+	negativeValueLabelWidth: number;
+	dataFrom: TSimpleBarChartData;
+	dataTo: TSimpleBarChartData;
+	width: number;
+	valueDomainFrom: [number, number];
+	valueDomainTo: [number, number];
+}> = ({
+	theme,
+	baseline,
+	LabelComponent,
+	ValueLabelComponent,
+	hideLabels = false,
+	valueLabelWidth,
+	negativeValueLabelWidth,
+	labelWidth,
+	dataFrom,
+	dataTo,
+	width,
+	valueDomainFrom,
+	valueDomainTo,
+}) => {
+	const {durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const animationProgress = (frame + 1) / durationInFrames;
+	const mixPercentage = interpolate(animationProgress, [0, 1], [1, 0], {
+		easing: Easing.ease,
+	});
+
+	const barChartLayout_from = useStillBarChartLayout({
 		baseline,
 		theme,
 		data: dataFrom,
@@ -118,7 +263,7 @@ export const SimpleBarChartTransition: React.FC<
 		hideLabels,
 	});
 
-	const barChartLayout2 = useStillBarChartLayout({
+	const barChartLayout_to = useStillBarChartLayout({
 		baseline,
 		theme,
 		data: dataTo,
@@ -131,208 +276,19 @@ export const SimpleBarChartTransition: React.FC<
 	});
 
 	const barChartLayout = mixBarChartLayout(
-		barChartLayout1,
-		barChartLayout2,
+		barChartLayout_from,
+		barChartLayout_to,
 		mixPercentage
 	);
 
-	// const zeroLineArea = barChartLayout.getZeroLineArea();
+	//////////////////////////////////////////////////////////////
 
-	// TODO get the corresponding component and it's parametrization from theme
-	const DefaultBarChartLabelComponent = useCallback(
-		({children}: {children: string}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizLabel}
-					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
+	invariant(
+		areIdsEqual(dataFrom, dataTo),
+		"dataFrom and dataTo id's should be equal"
 	);
-
-	const BarChartLabel = CustomLabelComponent || DefaultBarChartLabelComponent;
-
-	// TODO get the corresponding component and it's parametrization from theme
-	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
-	const DefaultBarChartValueLabelComponent = useCallback(
-		({children}: {children: string}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizValueLabel}
-					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
-
-	const BarChartValueLabel =
-		CustomValueLabelComponent || DefaultBarChartValueLabelComponent;
-
-	return (
-		<SimpleBarChartStillFromDataAndLayout
-			theme={theme}
-			data={dataFrom} // TODO how to transition the labels????
-			barChartLayout={barChartLayout}
-			hideLabels={hideLabels}
-			baseline={baseline}
-			CustomLabelComponent={BarChartLabel}
-			CustomValueLabelComponent={BarChartValueLabel}
-		/>
-	);
-
-	// return (
-	// 	<>
-	// 		{/* measure labels */}
-	// 		<MeasureLabels
-	// 			key="labelMeasurement"
-	// 			ref={labelsRef}
-	// 			data={[...dataTo, ...dataFrom]}
-	// 			theme={theme}
-	// 			baseline={baseline}
-	// 			Component={BarChartLabel}
-	// 		/>
-	// 		{/* measure positive value labels */}
-	// 		<MeasureValueLabels
-	// 			key="valueLabelMeasurement"
-	// 			ref={valueLabelsRef}
-	// 			data={[...dataTo, ...dataFrom].filter((it) => it.value >= 0)}
-	// 			theme={theme}
-	// 			baseline={baseline}
-	// 			Component={BarChartValueLabel}
-	// 		/>
-	// 		{/* measure negative value labels */}
-	// 		<MeasureValueLabels
-	// 			key="negativeValueLabelMeasurement"
-	// 			ref={negativeValueLabelsRef}
-	// 			data={[...dataTo, ...dataFrom].filter((it) => it.value < 0)}
-	// 			theme={theme}
-	// 			baseline={baseline}
-	// 			Component={BarChartValueLabel}
-	// 		/>
-
-	// 		{labelsDimensions &&
-	// 		valueLabelsDimensions &&
-	// 		negativeValueLabelsDimensions ? (
-	// 			<SimpleBarChartStillFromDataAndLayout
-	// 				theme={theme}
-	// 				data={dataFrom} // TODO how to transition the labels????
-	// 				barChartLayout={barChartLayout}
-	// 				hideLabels={hideLabels}
-	// 				baseline={baseline}
-	// 				CustomLabelComponent={BarChartLabel}
-	// 				CustomValueLabelComponent={BarChartValueLabel}
-	// 			/>
-	// 		) : null}
-	// 	</>
-	// );
-};
-
-export const SimpleBarChartStillFromDataAndLayout: React.FC<{
-	theme: ThemeType;
-	data: TSimpleBarChartData;
-	barChartLayout: TBarChartLayout & {zeroLineX: number};
-	baseline: number;
-	CustomLabelComponent?: ComponentType<{children: string; id: string}>;
-	CustomValueLabelComponent?: ComponentType<{
-		children: string;
-		id: string;
-	}>;
-	hideLabels?: boolean;
-}> = ({
-	theme,
-	data,
-	barChartLayout,
-	baseline,
-	CustomLabelComponent,
-	CustomValueLabelComponent,
-	hideLabels = false,
-}) => {
-	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
-	// const {fps, durationInFrames} = useVideoConfig();
 
 	const zeroLineArea = barChartLayout.getZeroLineArea();
-
-	// TODO get the corresponding component and it's parametrization from theme
-	const DefaultBarChartLabelComponent = useCallback(
-		({children}: {children: string}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizLabel}
-					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
-
-	const BarChartLabel = CustomLabelComponent || DefaultBarChartLabelComponent;
-
-	// TODO get the corresponding component and it's parametrization from theme
-	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
-	const DefaultBarChartValueLabelComponent = useCallback(
-		({children}: {children: string}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizValueLabel}
-					baseline={baseline}
-				>
-					{/* <TextAnimationSubtle
-					................
-					TODO !!!!!
-					enter={false}
-					exit={false}
-					................
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-					> */}
-					{children}
-					{/* </TextAnimationSubtle> */}
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
-
-	const BarChartValueLabel =
-		CustomValueLabelComponent || DefaultBarChartValueLabelComponent;
 
 	return (
 		<div
@@ -348,7 +304,7 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 				</div>
 			) : null}
 
-			{data.map((it, i) => {
+			{dataTo.map((it, i) => {
 				const barArea = barChartLayout.getBarArea(it.id);
 				const labelArea = barChartLayout.getLabelArea(it.id);
 				const valueLabelArea = barChartLayout.getValueLabelArea(it.id);
@@ -368,14 +324,13 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 										textWrap: 'nowrap',
 									}}
 								>
-									<BarChartLabel id={data[i].id}>{data[i].label}</BarChartLabel>
+									<LabelComponent id={dataTo[i].id}>
+										{dataTo[i].label}
+									</LabelComponent>
 								</div>
 							</HtmlArea>
 						) : null}
-						<HtmlArea
-							area={barArea}
-							// fill="#fff" opacity={0.5}
-						>
+						<HtmlArea area={barArea}>
 							<svg width={barArea.width} height={barArea.height}>
 								{it.value > 0 && barArea.width ? (
 									<RoundedRightRect
@@ -401,11 +356,7 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 							</svg>
 						</HtmlArea>
 
-						<HtmlArea
-							area={valueLabelArea}
-							// fill="#fff" opacity={0.5}
-							// fill="rgba(255,255,255,0.2)"
-						>
+						<HtmlArea area={valueLabelArea}>
 							<div
 								style={{
 									display: 'flex',
@@ -416,9 +367,9 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 									textWrap: 'nowrap',
 								}}
 							>
-								<BarChartValueLabel id={data[i].id}>
-									{data[i].valueLabel}
-								</BarChartValueLabel>
+								<ValueLabelComponent id={dataTo[i].id}>
+									{dataTo[i].valueLabel}
+								</ValueLabelComponent>
 							</div>
 						</HtmlArea>
 					</>
@@ -438,7 +389,6 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 						y2={zeroLineArea.height}
 						stroke={theme.yAxis.color}
 						strokeWidth={baseline * 0.2}
-						// opacity={opacity}
 					/>
 				</svg>
 			</HtmlArea>
@@ -446,6 +396,38 @@ export const SimpleBarChartStillFromDataAndLayout: React.FC<{
 	);
 };
 
+interface IdObject {
+	id: string;
+}
+
+function areIdsEqual(arr1: IdObject[], arr2: IdObject[]): boolean {
+	// Check if the lengths of the arrays are the same
+	if (arr1.length !== arr2.length) {
+		return false; // If lengths are different, ids cannot be equal
+	}
+
+	// Sort both arrays by id to ensure order does not affect comparison
+	const sortedArr1 = arr1.slice().sort((a, b) => a.id.localeCompare(b.id));
+	const sortedArr2 = arr2.slice().sort((a, b) => a.id.localeCompare(b.id));
+
+	// Compare the ids in both sorted arrays
+	for (let i = 0; i < sortedArr1.length; i++) {
+		if (sortedArr1[i].id !== sortedArr2[i].id) {
+			return false; // If any id does not match, return false
+		}
+	}
+
+	return true; // All ids match
+}
+// Example usage:
+// const array1 = [{ id: '1' }, { id: '2' }, { id: '3' }];
+// const array2 = [{ id: '3' }, { id: '1' }, { id: '2' }];
+// const array3 = [{ id: '1' }, { id: '2' }];
+
+// console.log(areIdsEqual(array1, array2)); // true
+// console.log(areIdsEqual(array1, array3)); // false
+
+// TODO use only one
 interface RoundedRectProps {
 	x: number; // X-coordinate of the rectangle's top-left corner
 	y: number; // Y-coordinate of the rectangle's top-left corner
@@ -489,6 +471,7 @@ const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	);
 };
 
+// TODO use only one
 const RoundedLeftRect: React.FC<RoundedRectProps> = ({
 	x,
 	y,

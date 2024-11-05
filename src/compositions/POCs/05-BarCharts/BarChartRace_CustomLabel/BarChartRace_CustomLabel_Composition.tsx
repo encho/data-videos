@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {useCurrentFrame, useVideoConfig, Img} from 'remotion';
 import {extent} from 'd3-array';
 import invariant from 'tiny-invariant';
-import {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
 import {Page} from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -16,6 +16,7 @@ import {useBarChartRaceKeyframes} from './useBarChartRaceKeyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {KeyFramesSequence} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {getGdpData} from '../BarChartRace_Simple/BarChartRace_Simple_Composition';
 
 function getPairs(dataIds: string[]): [string, string][] {
 	return dataIds
@@ -46,6 +47,8 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	// const {durationInFrames, }
 	const theme = useThemeFromEnum(themeEnum as any);
 	// const {ref, dimensions} = useElementDimensions();
+
+	const gdpData = useMemo(() => getGdpData(2020, 2024), []);
 
 	const domain = extent(gdpData[2020].map((it) => it.gdp)) as [number, number];
 	domain[0] = 0;
@@ -89,50 +92,59 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	const BARCHARTRACE_HEIGHT = 340;
 	const BARCHARTRACE_WIDTH = theme.page.contentWidth;
 
-	// TODO useCallback
 	const CustomBarChartLabelComponent = useCallback(
-		({
-			children,
-			id,
-		}: {
-			children: string;
-			id: string;
-			// baseline: number;  // TODO inject chart baseline
-			// dataItem: TODO inject chart Dataitem
-			// index: TODO inject dataItem index
-		}) => {
-			const countryGDP = gdpData[2020].find((it) => it.id === id)?.gdp;
-			invariant(countryGDP);
+		React.memo(
+			({
+				children,
+				id,
+			}: {
+				children: string;
+				id: string;
+				// baseline: number;  // TODO inject chart baseline
+				// dataItem: TODO inject chart Dataitem
+				// index: TODO inject dataItem index
+			}) => {
+				const countryGDP = gdpData[2020].find((it) => it.id === id)?.gdp;
+				invariant(countryGDP);
 
-			const imageSrc = getCountryImageURL(id);
+				const imageSrc = getCountryImageURL(id);
 
-			const BASELINE = 15;
+				const BASELINE = 15;
 
-			return (
-				<div
-					style={{
-						display: 'flex',
-						gap: BASELINE * 0.6,
-						alignItems: 'center',
-					}}
-				>
-					<TypographyStyle
-						typographyStyle={theme.typography.textStyles.datavizLabel}
-						baseline={BASELINE}
+				return (
+					<div
+						style={{
+							display: 'flex',
+							gap: BASELINE * 0.6,
+							alignItems: 'center',
+						}}
 					>
-						<TextAnimationSubtle
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.datavizLabel}
+							baseline={BASELINE}
+						>
+							{id}
+							{/* <TextAnimationSubtle
+								innerDelayInSeconds={0}
+								translateY={BASELINE * 1.15}
+							>
+								{id}
+							</TextAnimationSubtle> */}
+						</TypographyStyle>
+
+						{/* <TextAnimationSubtle
 							innerDelayInSeconds={0}
 							translateY={BASELINE * 1.15}
 						>
-							{/* {children} */}
-							{id}
-						</TextAnimationSubtle>
-					</TypographyStyle>
-
-					<TextAnimationSubtle
-						innerDelayInSeconds={0}
-						translateY={BASELINE * 1.15}
-					>
+							<Img
+								style={{
+									borderRadius: '50%',
+									width: BASELINE * 2,
+									height: BASELINE * 2,
+								}}
+								src={imageSrc}
+							/>
+						</TextAnimationSubtle> */}
 						<Img
 							style={{
 								borderRadius: '50%',
@@ -141,11 +153,11 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 							}}
 							src={imageSrc}
 						/>
-					</TextAnimationSubtle>
-				</div>
-			);
-		},
-		[theme]
+					</div>
+				);
+			}
+		),
+		[]
 	);
 
 	return (
@@ -187,7 +199,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						theme={theme}
 						animateExit={false}
 						valueDomain={valueDomainStart}
-						// CustomLabelComponent={CustomBarChartLabelComponent}
+						CustomLabelComponent={CustomBarChartLabelComponent}
 						// showLayout
 						// hideLabels={HIDE_LABELS}
 					/>
@@ -251,7 +263,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 									valueDomainTo={valueDomainTo}
 									width={BARCHARTRACE_WIDTH}
 									theme={theme}
-									// CustomLabelComponent={CustomBarChartLabelComponent}
+									CustomLabelComponent={CustomBarChartLabelComponent}
 								/>
 							</KeyFramesSequence>
 						</div>
@@ -294,15 +306,6 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	);
 };
 
-const gdpData: {
-	[year: string]: {
-		country: string;
-		id: string;
-		gdp: number;
-		averageLifespan: number;
-	}[];
-} = {};
-
 function getCountryImageURL(countryId: string): string {
 	const germany =
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/germany-flag-circular-1024.png';
@@ -322,48 +325,3 @@ function getCountryImageURL(countryId: string): string {
 
 	throw Error('no matching image found');
 }
-
-// Sample data initialization
-const countries = [
-	{country: 'United States', id: 'US', gdp: 21.43, averageLifespan: 78.54},
-	{country: 'China', id: 'CN', gdp: 14.69, averageLifespan: 76.91},
-	{country: 'Japan', id: 'JP', gdp: 5.08, averageLifespan: 84.63},
-	{country: 'Germany', id: 'DE', gdp: 3.84, averageLifespan: 81.21},
-	{country: 'India', id: 'IN', gdp: 2.87, averageLifespan: 69.66},
-	{country: 'United Kingdom', id: 'GB', gdp: 2.83, averageLifespan: 81.26},
-	{country: 'France', id: 'FR', gdp: 2.78, averageLifespan: 82.52},
-	{country: 'Italy', id: 'IT', gdp: 2.05, averageLifespan: 83.57},
-	{country: 'Canada', id: 'CA', gdp: 1.64, averageLifespan: 82.52},
-	{country: 'South Korea', id: 'KR', gdp: 1.63, averageLifespan: 83.08},
-];
-
-// Function to generate realistic data with dynamic ranking
-function generateData(startYear: number, endYear: number) {
-	for (let year = startYear; year <= endYear; year++) {
-		// Randomly shuffle countries to vary initial order each year
-		const shuffledCountries = countries.map((country) => ({...country}));
-
-		gdpData[year.toString()] = shuffledCountries.map((country) => {
-			// Simulating GDP growth with a random fluctuation (positive or negative)
-			const growthRate = Math.random() * 0.08 - 0.04; // Between -4% and +4%
-			country.gdp *= 1 + growthRate; // Update GDP
-
-			// Simulating average lifespan increase (0.3-0.5 years annually)
-			const lifespanIncrease = Math.random() * 0.2 + 0.3; // Between 0.3 and 0.5 years
-			country.averageLifespan += lifespanIncrease; // Update average lifespan
-
-			return {...country}; // Return a new object to avoid mutations
-		});
-
-		// Sort countries by GDP for this year to reflect new rankings
-		gdpData[year.toString()].sort((a, b) => b.gdp - a.gdp);
-	}
-}
-
-// Generate data from 2000 to 2024
-generateData(2020, 2024);
-// generateData(1980, 2024);
-// generateData(1980, 2024);
-
-// Example of how to access the generated data
-console.log(gdpData);
