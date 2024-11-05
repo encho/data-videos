@@ -7,6 +7,7 @@ import {ThemeType} from '../../acetti-themes/themeTypes';
 // import {useBarChartLayout} from './useBarChartLayout';
 import {useStillBarChartLayout} from './useStillBarChartLayout';
 import {getBarChartBaseline} from './useBarChartLayout';
+import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
 import {
 	mixBarChartLayout,
 	// useAnimatedBarChartLayout,
@@ -15,6 +16,7 @@ import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/Tex
 // import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TBarChartLayout} from './useBarChartLayout';
 import {TBaselineOrHeight} from './SimpleBarChart';
+import {MeasureLabels, MeasureValueLabels} from './SimpleBarChart';
 // import {interpolate} from 'chroma-js';
 
 export type TSimpleBarChartData = {
@@ -32,6 +34,7 @@ type TSimpleBarChartTransitionProps = TBaselineOrHeight & {
 	width: number;
 	labelWidth?: number;
 	valueLabelWidth?: number;
+	negativeValueLabelWidth?: number;
 	showLayout?: boolean;
 	CustomLabelComponent?: ComponentType<{children: string; id: string}>;
 	CustomValueLabelComponent?: ComponentType<{
@@ -54,8 +57,9 @@ export const SimpleBarChartTransition: React.FC<
 	baseline: baselineProp,
 	showLayout = false,
 	hideLabels = false,
-	labelWidth,
-	valueLabelWidth,
+	labelWidth: labelWidthProp,
+	valueLabelWidth: valueLabelWidthProp,
+	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	valueDomainFrom,
 	valueDomainTo,
 	CustomLabelComponent,
@@ -72,10 +76,28 @@ export const SimpleBarChartTransition: React.FC<
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 	const animationProgress = (frame + 1) / durationInFrames;
-
 	const mixPercentage = interpolate(animationProgress, [0, 1], [1, 0], {
 		easing: Easing.ease,
 	});
+
+	// const {ref: labelsRef, dimensions: labelsDimensions} =
+	// 	useElementDimensions(true);
+	// const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+	// 	useElementDimensions(true);
+	// const {
+	// 	ref: negativeValueLabelsRef,
+	// 	dimensions: negativeValueLabelsDimensions,
+	// } = useElementDimensions(true);
+
+	// const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
+	// const valueLabelWidth =
+	// 	valueLabelWidthProp || valueLabelsDimensions?.width || 0;
+	// const negativeValueLabelWidth =
+	// 	negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width || 0;
+
+	const labelWidth = labelWidthProp;
+	const valueLabelWidth = valueLabelWidthProp;
+	const negativeValueLabelWidth = negativeValueLabelWidthProp;
 
 	// if height is passed, the baseline is computed for that height, otherwise the baseline prop is used
 	const baseline = height ? getBarChartBaseline(height, dataTo) : baselineProp;
@@ -91,6 +113,7 @@ export const SimpleBarChartTransition: React.FC<
 		width,
 		labelWidth,
 		valueLabelWidth,
+		negativeValueLabelWidth,
 		valueDomain: valueDomainFrom,
 		hideLabels,
 	});
@@ -102,6 +125,7 @@ export const SimpleBarChartTransition: React.FC<
 		width,
 		labelWidth,
 		valueLabelWidth,
+		negativeValueLabelWidth,
 		valueDomain: valueDomainTo,
 		hideLabels,
 	});
@@ -181,6 +205,52 @@ export const SimpleBarChartTransition: React.FC<
 			CustomValueLabelComponent={BarChartValueLabel}
 		/>
 	);
+
+	// return (
+	// 	<>
+	// 		{/* measure labels */}
+	// 		<MeasureLabels
+	// 			key="labelMeasurement"
+	// 			ref={labelsRef}
+	// 			data={[...dataTo, ...dataFrom]}
+	// 			theme={theme}
+	// 			baseline={baseline}
+	// 			Component={BarChartLabel}
+	// 		/>
+	// 		{/* measure positive value labels */}
+	// 		<MeasureValueLabels
+	// 			key="valueLabelMeasurement"
+	// 			ref={valueLabelsRef}
+	// 			data={[...dataTo, ...dataFrom].filter((it) => it.value >= 0)}
+	// 			theme={theme}
+	// 			baseline={baseline}
+	// 			Component={BarChartValueLabel}
+	// 		/>
+	// 		{/* measure negative value labels */}
+	// 		<MeasureValueLabels
+	// 			key="negativeValueLabelMeasurement"
+	// 			ref={negativeValueLabelsRef}
+	// 			data={[...dataTo, ...dataFrom].filter((it) => it.value < 0)}
+	// 			theme={theme}
+	// 			baseline={baseline}
+	// 			Component={BarChartValueLabel}
+	// 		/>
+
+	// 		{labelsDimensions &&
+	// 		valueLabelsDimensions &&
+	// 		negativeValueLabelsDimensions ? (
+	// 			<SimpleBarChartStillFromDataAndLayout
+	// 				theme={theme}
+	// 				data={dataFrom} // TODO how to transition the labels????
+	// 				barChartLayout={barChartLayout}
+	// 				hideLabels={hideLabels}
+	// 				baseline={baseline}
+	// 				CustomLabelComponent={BarChartLabel}
+	// 				CustomValueLabelComponent={BarChartValueLabel}
+	// 			/>
+	// 		) : null}
+	// 	</>
+	// );
 };
 
 export const SimpleBarChartStillFromDataAndLayout: React.FC<{

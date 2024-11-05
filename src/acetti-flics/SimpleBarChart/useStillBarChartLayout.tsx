@@ -1,30 +1,7 @@
-import {
-	// Sequence,
-	useCurrentFrame,
-	useVideoConfig,
-	Easing,
-} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-// import invariant from 'tiny-invariant';
-// import {forwardRef, useCallback} from 'react';
-// import {z} from 'zod';
-// import {zColor} from '@remotion/zod-types';
-
-// import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-// import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
 import {useBarChartLayout} from './useBarChartLayout';
-import {
-	getKeyFramesInterpolator,
-	// TKeyFramesGroup,
-} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
-import {
-	// DisplayGridRails, HtmlArea,
-	TGridLayoutArea,
-} from '../../acetti-layout';
+import {TGridLayoutArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
-// import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useBarChartKeyframes} from './useBarChartKeyframes';
-// import {getBarChartBaseline, useBarChartLayout} from './useBarChartLayout';
 import {TBarChartLayout} from './useBarChartLayout';
 import {TSimpleBarChartData} from './SimpleBarChart';
 

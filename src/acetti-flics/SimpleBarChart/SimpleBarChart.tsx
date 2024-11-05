@@ -249,7 +249,10 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				Component={BarChartValueLabel}
 			/>
 
-			{labelsDimensions && valueLabelsDimensions ? (
+			{/* {labelsDimensions && valueLabelsDimensions  ? ( */}
+			{labelsDimensions &&
+			valueLabelsDimensions &&
+			negativeValueLabelsDimensions ? (
 				<div
 					style={{
 						position: 'relative',
@@ -564,7 +567,7 @@ interface LabelsDivProps {
 	Component: React.ComponentType<{children: string; id: string}>;
 }
 
-const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 	({data, theme, baseline, Component}, ref) => {
 		return (
 			<div
@@ -587,7 +590,7 @@ const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 	}
 );
 
-const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+export const MeasureValueLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 	({data, theme, baseline, Component}, ref) => {
 		return (
 			<div
