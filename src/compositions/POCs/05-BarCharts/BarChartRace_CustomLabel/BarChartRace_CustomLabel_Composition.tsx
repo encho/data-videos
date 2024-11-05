@@ -292,7 +292,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						theme={theme}
 						animateEnter={false}
 						valueDomain={valueDomainEnd}
-						// CustomLabelComponent={CustomBarChartLabelComponent}
+						CustomLabelComponent={CustomBarChartLabelComponent}
 						// showLayout
 						// hideLabels={HIDE_LABELS}
 					/>

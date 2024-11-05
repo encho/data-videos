@@ -647,7 +647,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.square}
 						schema={barChartRaceCustomLabelCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
