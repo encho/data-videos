@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
+import {useMemo} from 'react';
 
 import {Page} from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -13,6 +14,7 @@ import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/
 import {useBarChartRaceKeyframes} from './useBarChartRaceKeyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {KeyFramesSequence} from '../../Keyframes/Keyframes/KeyframesInspector';
+import {SeededRandom} from '../../01-TextEffects/StartingFiveSlide/StartingFiveSlideComposition';
 
 function getPairs(dataIds: string[]): [string, string][] {
 	return dataIds
@@ -42,6 +44,8 @@ export const BarChartRace_Simple_Composition: React.FC<
 	const frame = useCurrentFrame();
 	// const {durationInFrames, }
 	const theme = useThemeFromEnum(themeEnum as any);
+
+	const gdpData = useMemo(() => getGdpData(2020, 2024), []);
 	// const {ref, dimensions} = useElementDimensions();
 
 	const domain = extent(gdpData[2020].map((it) => it.gdp)) as [number, number];
@@ -229,56 +233,63 @@ export const BarChartRace_Simple_Composition: React.FC<
 	);
 };
 
-const gdpData: {
-	[year: string]: {
-		country: string;
-		id: string;
-		gdp: number;
-		averageLifespan: number;
-	}[];
-} = {};
+function getGdpData(startYear: number, endYear: number) {
+	const gdpData: {
+		[year: string]: {
+			country: string;
+			id: string;
+			gdp: number;
+			averageLifespan: number;
+		}[];
+	} = {};
 
-// Sample data initialization
-const countries = [
-	{country: 'United States', id: 'US', gdp: 21.43, averageLifespan: 78.54},
-	{country: 'China', id: 'CN', gdp: 14.69, averageLifespan: 76.91},
-	{country: 'Japan', id: 'JP', gdp: 5.08, averageLifespan: 84.63},
-	{country: 'Germany', id: 'DE', gdp: 3.84, averageLifespan: 81.21},
-	{country: 'India', id: 'IN', gdp: 2.87, averageLifespan: 69.66},
-	{country: 'United Kingdom', id: 'GB', gdp: 2.83, averageLifespan: 81.26},
-	{country: 'France', id: 'FR', gdp: 2.78, averageLifespan: 82.52},
-	{country: 'Italy', id: 'IT', gdp: 2.05, averageLifespan: 83.57},
-	{country: 'Canada', id: 'CA', gdp: 1.64, averageLifespan: 82.52},
-	{country: 'South Korea', id: 'KR', gdp: 1.63, averageLifespan: 83.08},
-];
+	const seed = 999; // Your seed value
+	const seededRandom = new SeededRandom(seed);
+	const MyRandom = () => seededRandom.randomBetween(0, 100) / 100;
 
-// Function to generate realistic data with dynamic ranking
-function generateData(startYear: number, endYear: number) {
-	for (let year = startYear; year <= endYear; year++) {
-		// Randomly shuffle countries to vary initial order each year
-		const shuffledCountries = countries.map((country) => ({...country}));
+	// Sample data initialization
+	const countries = [
+		{country: 'United States', id: 'US', gdp: 21.43, averageLifespan: 78.54},
+		{country: 'China', id: 'CN', gdp: 14.69, averageLifespan: 76.91},
+		{country: 'Japan', id: 'JP', gdp: 5.08, averageLifespan: 84.63},
+		{country: 'Germany', id: 'DE', gdp: 3.84, averageLifespan: 81.21},
+		{country: 'India', id: 'IN', gdp: 2.87, averageLifespan: 69.66},
+		{country: 'United Kingdom', id: 'GB', gdp: 2.83, averageLifespan: 81.26},
+		{country: 'France', id: 'FR', gdp: 2.78, averageLifespan: 82.52},
+		{country: 'Italy', id: 'IT', gdp: 2.05, averageLifespan: 83.57},
+		{country: 'Canada', id: 'CA', gdp: 1.64, averageLifespan: 82.52},
+		{country: 'South Korea', id: 'KR', gdp: 1.63, averageLifespan: 83.08},
+	];
 
-		gdpData[year.toString()] = shuffledCountries.map((country) => {
-			// Simulating GDP growth with a random fluctuation (positive or negative)
-			const growthRate = Math.random() * 0.08 - 0.04; // Between -4% and +4%
-			country.gdp *= 1 + growthRate; // Update GDP
+	// Function to generate realistic data with dynamic ranking
+	function generateData(startYear: number, endYear: number) {
+		for (let year = startYear; year <= endYear; year++) {
+			// Randomly shuffle countries to vary initial order each year
+			const shuffledCountries = countries.map((country) => ({...country}));
 
-			// Simulating average lifespan increase (0.3-0.5 years annually)
-			const lifespanIncrease = Math.random() * 0.2 + 0.3; // Between 0.3 and 0.5 years
-			country.averageLifespan += lifespanIncrease; // Update average lifespan
+			gdpData[year.toString()] = shuffledCountries.map((country) => {
+				// Simulating GDP growth with a random fluctuation (positive or negative)
+				const growthRate = MyRandom() * 0.08 - 0.04; // Between -4% and +4%
+				country.gdp *= 1 + growthRate; // Update GDP
 
-			return {...country}; // Return a new object to avoid mutations
-		});
+				// Simulating average lifespan increase (0.3-0.5 years annually)
+				const lifespanIncrease = MyRandom() * 0.2 + 0.3; // Between 0.3 and 0.5 years
+				country.averageLifespan += lifespanIncrease; // Update average lifespan
 
-		// Sort countries by GDP for this year to reflect new rankings
-		gdpData[year.toString()].sort((a, b) => b.gdp - a.gdp);
+				return {...country}; // Return a new object to avoid mutations
+			});
+
+			// Sort countries by GDP for this year to reflect new rankings
+			gdpData[year.toString()].sort((a, b) => b.gdp - a.gdp);
+		}
 	}
+
+	// Generate data from 2000 to 2024
+	generateData(startYear, endYear);
+	// generateData(1980, 2024);
+
+	// Example of how to access the generated data
+	console.log(gdpData);
+
+	return gdpData;
 }
-
-// Generate data from 2000 to 2024
-generateData(2020, 2024);
-// generateData(1980, 2024);
-// generateData(1980, 2024);
-
-// Example of how to access the generated data
-console.log(gdpData);

@@ -397,7 +397,7 @@ export const TSpanCharacter: React.FC<{
 	);
 };
 
-class SeededRandom {
+export class SeededRandom {
 	private seed: number;
 
 	constructor(seed: number) {
