@@ -1,6 +1,6 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import invariant from 'tiny-invariant';
-import {forwardRef, useCallback} from 'react';
+import React, {forwardRef, useCallback} from 'react';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
@@ -67,11 +67,17 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 		children: string;
 		id: string;
 		animateExit?: boolean;
+		animateEnter?: boolean;
+		baseline: number;
+		theme: ThemeType;
 	}>;
 	CustomValueLabelComponent?: React.ComponentType<{
 		children: string;
 		id: string;
 		animateExit?: boolean;
+		animateEnter?: boolean;
+		baseline: number;
+		theme: ThemeType;
 	}>;
 };
 
@@ -117,71 +123,46 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	const baseline = height ? getBarChartBaseline(height, data) : baseLineProp;
 	invariant(baseline);
 
-	// TODO get the corresponding component and it's parametrization from theme
-	const DefaultBarChartLabelComponent = useCallback(
-		({
-			children,
-			animateExit,
-			animateEnter,
-		}: {
-			children: string;
-			animateExit?: boolean;
-			animateEnter?: boolean;
-		}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizLabel}
-					baseline={baseline}
-				>
-					<TextAnimationSubtle
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-						animateExit={animateExit}
-						animateEnter={animateEnter}
-					>
-						{children}
-					</TextAnimationSubtle>
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
-
-	const BarChartLabel = CustomLabelComponent || DefaultBarChartLabelComponent;
-
-	// TODO get the corresponding component and it's parametrization from theme
-	// e.g. api: const BarChartValueLabel = useBarChartValueLabelComponent({theme});
-	const DefaultBarChartValueLabelComponent = useCallback(
-		({
-			children,
-			animateExit,
-			animateEnter,
-		}: {
-			children: string;
-			animateExit?: boolean;
-			animateEnter?: boolean;
-		}) => {
-			return (
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizValueLabel}
-					baseline={baseline}
-				>
-					<TextAnimationSubtle
-						innerDelayInSeconds={0}
-						translateY={baseline * 1.15}
-						animateExit={animateExit}
-						animateEnter={animateEnter}
-					>
-						{children}
-					</TextAnimationSubtle>
-				</TypographyStyle>
-			);
-		},
-		[theme, baseline] // Dependencies
-	);
+	const BarChartLabel = CustomLabelComponent || DefaultLabelComponent;
 
 	const BarChartValueLabel =
-		CustomValueLabelComponent || DefaultBarChartValueLabelComponent;
+		CustomValueLabelComponent || DefaultValueLabelComponent;
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureLabelComponent = useCallback(
+		({id, children}: {children: string; id: string}) => {
+			return (
+				<BarChartLabel
+					children={children}
+					id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				/>
+			);
+		},
+		// [baseline, theme]  // TODO ensure theme has stable ref
+		[baseline]
+	);
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureValueLabelComponent = useCallback(
+		({id, children}: {children: string; id: string}) => {
+			return (
+				<BarChartValueLabel
+					children={children}
+					id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				/>
+			);
+		},
+		// [baseline, theme]  // TODO ensure theme has stable ref
+		[baseline]
+	);
 
 	const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
 	const valueLabelWidth =
@@ -228,7 +209,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data}
 				theme={theme}
 				baseline={baseline}
-				Component={BarChartLabel}
+				Component={MeasureLabelComponent}
 			/>
 			{/* measure positive value labels */}
 			<MeasureValueLabels
@@ -237,7 +218,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data.filter((it) => it.value >= 0)}
 				theme={theme}
 				baseline={baseline}
-				Component={BarChartValueLabel}
+				Component={MeasureValueLabelComponent}
 			/>
 			{/* measure negative value labels */}
 			<MeasureValueLabels
@@ -246,7 +227,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 				data={data.filter((it) => it.value < 0)}
 				theme={theme}
 				baseline={baseline}
-				Component={BarChartValueLabel}
+				Component={MeasureValueLabelComponent}
 			/>
 
 			{/* {labelsDimensions && valueLabelsDimensions  ? ( */}
@@ -294,6 +275,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 													id={data[i].id}
 													animateExit={ANIMATE_EXIT}
 													animateEnter={ANIMATE_ENTER}
+													baseline={baseline}
+													theme={theme}
 												>
 													{data[i].label}
 												</BarChartLabel>
@@ -382,6 +365,8 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 												id={data[i].id}
 												animateExit={ANIMATE_EXIT}
 												animateEnter={ANIMATE_ENTER}
+												baseline={baseline}
+												theme={theme}
 											>
 												{data[i].valueLabel}
 											</BarChartValueLabel>
@@ -480,6 +465,74 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		</>
 	);
 };
+
+const DefaultLabelComponent = React.memo(
+	({
+		id,
+		children,
+		animateExit,
+		animateEnter,
+		baseline,
+		theme,
+	}: {
+		children: string;
+		id: string;
+		baseline: number;
+		theme: ThemeType;
+		animateEnter?: boolean;
+		animateExit?: boolean;
+	}) => {
+		return (
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.datavizLabel}
+				baseline={baseline}
+			>
+				<TextAnimationSubtle
+					innerDelayInSeconds={0}
+					translateY={baseline * 1.15}
+					animateExit={animateExit}
+					animateEnter={animateEnter}
+				>
+					{children}
+				</TextAnimationSubtle>
+			</TypographyStyle>
+		);
+	}
+);
+
+const DefaultValueLabelComponent = React.memo(
+	({
+		id,
+		children,
+		animateExit,
+		animateEnter,
+		baseline,
+		theme,
+	}: {
+		children: string;
+		id: string;
+		baseline: number;
+		theme: ThemeType;
+		animateEnter?: boolean;
+		animateExit?: boolean;
+	}) => {
+		return (
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.datavizValueLabel}
+				baseline={baseline}
+			>
+				<TextAnimationSubtle
+					innerDelayInSeconds={0}
+					translateY={baseline * 1.15}
+					animateExit={animateExit}
+					animateEnter={animateEnter}
+				>
+					{children}
+				</TextAnimationSubtle>
+			</TypographyStyle>
+		);
+	}
+);
 
 interface RoundedRectProps {
 	x: number; // X-coordinate of the rectangle's top-left corner
