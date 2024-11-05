@@ -15,12 +15,7 @@ type TSparklineLargeKeyframesProps = {
 
 export const SimpleBarChartKeyframes: React.FC<
 	TSparklineLargeKeyframesProps
-> = ({
-	width,
-	baseline,
-	data,
-	theme, // TODO utilize Theme
-}) => {
+> = ({width, baseline, data, theme}) => {
 	const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
@@ -32,6 +27,7 @@ export const SimpleBarChartKeyframes: React.FC<
 			width={width}
 			baseFontSize={baseline}
 			frame={frame}
+			theme={theme}
 		/>
 	);
 };

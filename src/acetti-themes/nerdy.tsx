@@ -22,9 +22,9 @@ const palette = {
 		},
 		axis: {
 			main: {
-				tickLabel: GRAYS['400'],
-				line: GRAYS['400'],
-				tick: 'magenta',
+				tickLabel: GRAYS['500'],
+				line: GRAYS['500'],
+				tick: GRAYS['500'],
 			},
 		},
 	},
@@ -166,18 +166,14 @@ export const nerdyTheme = ({
 		yAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			// color: textColor,
-			// color: GRAYS['600'],
-			// color: GRAYS['400'],
 			color: palette.typography.axis.main.line,
 			tickColor: palette.typography.axis.main.tick,
 		},
 		xAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			// color: textColor,
-			color: GRAYS['600'],
-			tickColor: GRAYS['600'],
+			color: palette.typography.axis.main.line,
+			tickColor: palette.typography.axis.main.tick,
 		},
 		candlesticks: {
 			up: {

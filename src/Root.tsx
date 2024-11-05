@@ -221,9 +221,9 @@ import {
 } from './compositions/POCs/05-BarCharts/SimpleBarChartTransition/SimpleBarChartTransitionComposition';
 
 import {
-	SimpleBarChartRaceComposition,
-	simpleBarChartRaceCompositionSchema,
-} from './compositions/POCs/05-BarCharts/SimpleBarChartRace/SimpleBarChartRaceComposition';
+	BarChartRace_Simple_Composition,
+	barChartRaceSimpleCompositionSchema,
+} from './compositions/POCs/05-BarCharts/BarChartRace_Simple/BarChartRace_Simple_Composition';
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
@@ -620,14 +620,28 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SimpleBarChartRace"
-						component={SimpleBarChartRaceComposition}
+						id="BarChartRace-Simple"
+						component={BarChartRace_Simple_Composition}
 						durationInFrames={30 * 12}
 						fps={30}
 						{...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.square}
-						schema={simpleBarChartRaceCompositionSchema}
+						schema={barChartRaceSimpleCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="BarChartRace-CustomLabel"
+						component={BarChartRace_Simple_Composition}
+						durationInFrames={30 * 12}
+						fps={30}
+						{...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
+						// {...videoSizes.square}
+						schema={barChartRaceSimpleCompositionSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
@@ -1077,7 +1091,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={keyframesCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 				<Folder name="Path-Animation-Experiments">

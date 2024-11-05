@@ -31,7 +31,7 @@ const palette = {
 			main: {
 				tickLabel: GRAYS['400'],
 				line: GRAYS['400'],
-				tick: 'magenta',
+				tick: GRAYS['400'],
 			},
 		},
 	},
@@ -170,18 +170,14 @@ export const lorenzobertoliniTheme = ({
 		yAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			// color: textColor,
-			// color: GRAYS['600'],
-			// color: GRAYS['400'],
 			color: palette.typography.axis.main.line,
 			tickColor: palette.typography.axis.main.tick,
 		},
 		xAxis: {
 			fontSize: 16,
 			strokeWidth: 3,
-			// color: textColor,
-			color: GRAYS['600'],
-			tickColor: GRAYS['600'],
+			color: palette.typography.axis.main.line,
+			tickColor: palette.typography.axis.main.tick,
 		},
 		candlesticks: {
 			up: {

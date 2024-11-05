@@ -1,30 +1,17 @@
 import {z} from 'zod';
-import {Sequence, useCurrentFrame, useVideoConfig} from 'remotion';
+import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {
-	Page,
-	PageHeader,
-	PageFooter,
-	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+import {Page} from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartTransition';
-import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {useBarChartRaceKeyframes} from './useBarChartRaceKeyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
-import {
-	getExclusiveSequenceDuration,
-	getKeyFrame,
-} from '../../Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../Keyframes/Keyframes/KeyframesInspector';
 
 function getPairs(dataIds: string[]): [string, string][] {
@@ -44,14 +31,14 @@ function roundToTwo(num: number): number {
 	return Math.round(num * 100) / 100;
 }
 
-export const simpleBarChartRaceCompositionSchema = z.object({
+export const barChartRaceSimpleCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const SimpleBarChartRaceComposition: React.FC<
-	z.infer<typeof simpleBarChartRaceCompositionSchema>
+export const BarChartRace_Simple_Composition: React.FC<
+	z.infer<typeof barChartRaceSimpleCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps, durationInFrames, width} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 	// const {durationInFrames, }
 	const theme = useThemeFromEnum(themeEnum as any);
@@ -59,32 +46,6 @@ export const SimpleBarChartRaceComposition: React.FC<
 
 	const domain = extent(gdpData[2020].map((it) => it.gdp)) as [number, number];
 	domain[0] = 0;
-
-	// ***********************
-	// keyframes:
-	// ***********************
-	// ENTER_BARS_START
-	// ENTER_BARS_END
-	// TRANSITION_BARS_START_2020_2021
-	// TRANSITION_BARS_END_2020_2021
-	// TRANSITION_BARS_START_2021_2022
-	// TRANSITION_BARS_END_2021_2022
-	// ...
-	// EXIT_BARS_START
-	// EXIT_BARS_END
-
-	// const barChartData_left = gdpData[2020].map((it) => ({
-	// 	label: it.country,
-	// 	value: it.gdp,
-	// 	barColor: theme.data.tenColors[0].main,
-	// 	id: it.id,
-	// 	valueLabel: `${it.gdp}`,
-	// }));
-
-	// const barChartDataSorted_left = barChartData_left;
-	// const chartGap = theme.page.baseline * 2;
-
-	// const dataIds = ['2020', '2021', '2022', '2023'];
 
 	const dataIds = Object.keys(gdpData).map((it) => `${it}`);
 

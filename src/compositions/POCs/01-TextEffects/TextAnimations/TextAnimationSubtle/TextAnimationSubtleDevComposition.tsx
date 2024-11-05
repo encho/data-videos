@@ -46,8 +46,10 @@ export const TextAnimationSubtleDevComposition: React.FC<
 					</TextAnimationSubtle>
 				</TypographyStyle>
 			</div>
-			<TextAnimationSubtleKeyframes innerDelayInSeconds={innerDelayInSeconds} />
-			;
+			<TextAnimationSubtleKeyframes
+				innerDelayInSeconds={innerDelayInSeconds}
+				theme={theme}
+			/>
 		</Page>
 	);
 };

@@ -6,6 +6,7 @@ import {
 	getKeyFramesInterpolator,
 } from '../../../Keyframes/Keyframes/keyframes';
 import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
 export const TextAnimationSubtle: React.FC<{
 	children: ReactNode;
@@ -99,9 +100,9 @@ export function useTextAnimationSubtleKeyframes({
 }
 
 export const TextAnimationSubtleKeyframes: React.FC<{
-	// theme: ThemeType;
+	theme: ThemeType;
 	innerDelayInSeconds?: number;
-}> = ({innerDelayInSeconds = 0}) => {
+}> = ({innerDelayInSeconds = 0, theme}) => {
 	const frame = useCurrentFrame();
 	const {keyframes: keyFramesGroup} = useTextAnimationSubtleKeyframes({
 		innerDelayInSeconds,
@@ -113,6 +114,7 @@ export const TextAnimationSubtleKeyframes: React.FC<{
 			width={700}
 			baseFontSize={18}
 			frame={frame}
+			theme={theme}
 		/>
 	);
 };

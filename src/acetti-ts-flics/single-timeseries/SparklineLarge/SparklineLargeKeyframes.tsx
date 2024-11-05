@@ -12,12 +12,7 @@ type TSparklineLargeKeyframesProps = {
 
 export const SparklineLargeKeyframes: React.FC<
 	TSparklineLargeKeyframesProps
-> = ({
-	width,
-	baseFontSize,
-	theme, // TODO utilize Theme
-	// TODO pass text props // Inter-Bold e.g.
-}) => {
+> = ({width, baseFontSize, theme}) => {
 	const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
 
@@ -29,6 +24,7 @@ export const SparklineLargeKeyframes: React.FC<
 			width={width}
 			baseFontSize={baseFontSize}
 			frame={frame}
+			theme={theme}
 		/>
 	);
 };

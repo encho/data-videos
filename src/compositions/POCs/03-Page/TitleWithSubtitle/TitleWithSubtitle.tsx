@@ -223,6 +223,7 @@ export const TitleWithSubtitleKeyframes: React.FC<{
 			width={700}
 			baseFontSize={18}
 			frame={frame}
+			theme={theme}
 		/>
 	);
 };

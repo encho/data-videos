@@ -38,7 +38,7 @@ export const KeyFramesInspector: React.FC<{
 	frame: number;
 	width: number;
 	baseFontSize: number;
-	theme?: ThemeType; // TODO make compulsory input
+	theme: ThemeType; // TODO make compulsory input
 }> = ({keyFramesGroup, width, baseFontSize, frame, theme}) => {
 	const {durationInFrames, fps, keyFrames} = keyFramesGroup;
 
@@ -59,7 +59,18 @@ export const KeyFramesInspector: React.FC<{
 
 	const secondsTicks = secondToPixel.ticks();
 
-	const BACKGROUND_COLOR = theme ? theme.global.backgroundColor : 'brown';
+	// const BACKGROUND_COLOR = theme ? theme.global.backgroundColor : 'brown';
+
+	const GRID_LINE_COLOR = theme.xAxis.color; // TODO own theme entry?
+
+	const AXIS_LINE_COLOR = theme.xAxis.color;
+	const AXIS_TICKS_COLOR = theme.xAxis.tickColor;
+	const AXIS_TICKLABEL_COLOR =
+		theme.typography.textStyles.datavizTickLabel.color;
+
+	const ANCHOR_LINE_COLOR = theme.positiveNegativeColors.positiveColor; // TODO theme
+	const CROSSHAIR_COLOR = theme.positiveNegativeColors.positiveColor; // TODO theme
+	const CROSSHAIR_TEXT_COLOR = '#000'; // TODO theme
 
 	return (
 		<div
@@ -67,7 +78,7 @@ export const KeyFramesInspector: React.FC<{
 				width,
 				height,
 				position: 'relative',
-				backgroundColor: BACKGROUND_COLOR,
+				// backgroundColor: BACKGROUND_COLOR,
 			}}
 		>
 			<div style={{marginBottom: 18}}>
@@ -89,21 +100,12 @@ export const KeyFramesInspector: React.FC<{
 						keyFrames.length * HEIGHT_PER_FRAME + 10
 					})`}
 				>
-					{/* <rect
-						x={0}
-						y={0}
-						height={X_AXIS_HEIGHT}
-						width={width}
-						stroke="rgba(255,0,0,1)"
-						fill="rgba(255,0,0,0.2)"
-					/> */}
-
 					<line
 						x1={frameToPixel(0)}
 						x2={frameToPixel(durationInFrames - 1)}
 						y1={0}
 						y2={0}
-						stroke={'#999'}
+						stroke={AXIS_LINE_COLOR}
 						strokeWidth={2}
 					/>
 					{ticks.map((tick, i) => {
@@ -114,12 +116,12 @@ export const KeyFramesInspector: React.FC<{
 									x2={frameToPixel(tick)}
 									y1={0}
 									y2={20}
-									stroke={'#999'}
+									stroke={AXIS_TICKS_COLOR}
 									strokeWidth={2}
 								/>
 
 								<text
-									fill={'#999'}
+									fill={AXIS_TICKLABEL_COLOR}
 									fontSize={baseFontSize}
 									y={20 + 5}
 									x={frameToPixel(tick)}
@@ -141,21 +143,12 @@ export const KeyFramesInspector: React.FC<{
 						keyFrames.length * HEIGHT_PER_FRAME + 10 + 80
 					})`}
 				>
-					{/* <rect
-						x={0}
-						y={0}
-						height={X_AXIS_HEIGHT}
-						width={width}
-						stroke="rgba(255,0,0,1)"
-						fill="rgba(255,0,0,0.2)"
-					/> */}
-
 					<line
 						x1={secondToPixel(0)}
 						x2={secondToPixel(durationInFrames / fps)}
 						y1={0}
 						y2={0}
-						stroke={'#999'}
+						stroke={AXIS_LINE_COLOR}
 						strokeWidth={2}
 					/>
 					{secondsTicks.map((tick, i) => {
@@ -166,12 +159,12 @@ export const KeyFramesInspector: React.FC<{
 									x2={secondToPixel(tick)}
 									y1={0}
 									y2={20}
-									stroke={'#999'}
+									stroke={AXIS_TICKS_COLOR}
 									strokeWidth={2}
 								/>
 
 								<text
-									fill={'#999'}
+									fill={AXIS_TICKLABEL_COLOR}
 									fontSize={baseFontSize}
 									y={20 + 5}
 									x={secondToPixel(tick)}
@@ -195,16 +188,21 @@ export const KeyFramesInspector: React.FC<{
 							x2={frameToPixel(frame)}
 							y1={0}
 							y2={height + 100}
-							stroke={'#f05122'}
+							stroke={CROSSHAIR_COLOR}
 							strokeWidth={2}
 						/>
 						<circle
 							cx={frameToPixel(frame)}
 							cy={height + 100}
-							fill={'#f05122'}
+							fill={CROSSHAIR_COLOR}
 							r={4}
 						/>
-						<circle cx={frameToPixel(frame)} cy={0} fill={'#f05122'} r={4} />
+						<circle
+							cx={frameToPixel(frame)}
+							cy={0}
+							fill={CROSSHAIR_COLOR}
+							r={4}
+						/>
 					</g>
 
 					{/* The x axis current frame flag */}
@@ -218,12 +216,12 @@ export const KeyFramesInspector: React.FC<{
 							y={20}
 							height={baseFontSize + 10}
 							width={35 * 2}
-							fill="#f05122"
+							fill={CROSSHAIR_COLOR}
 							rx={3}
 							ry={3}
 						/>
 						<text
-							fill={'#000'}
+							fill={CROSSHAIR_TEXT_COLOR}
 							fontSize={baseFontSize}
 							// y={height + 5}
 							y={20 + 5}
@@ -248,13 +246,13 @@ export const KeyFramesInspector: React.FC<{
 							y={20}
 							height={baseFontSize + 10}
 							width={35 * 2}
-							fill="#f05122"
+							fill={CROSSHAIR_COLOR}
 							rx={3}
 							ry={3}
 						/>
 
 						<text
-							fill={'#000'}
+							fill={CROSSHAIR_TEXT_COLOR}
 							fontSize={baseFontSize}
 							y={20 + 5}
 							x={secondToPixel(frame / fps)}
@@ -321,7 +319,7 @@ export const KeyFramesInspector: React.FC<{
 								y={0}
 								height={HEIGHT_PER_FRAME}
 								width={width}
-								stroke="rgba(255,255,255,0.2)"
+								stroke={GRID_LINE_COLOR}
 								fill="transparent"
 							/>
 
@@ -332,7 +330,7 @@ export const KeyFramesInspector: React.FC<{
 									x2={frameToPixel(keyFrame.frame)}
 									y1={HEIGHT_PER_FRAME / 2}
 									y2={HEIGHT_PER_FRAME / 2}
-									stroke={'cyan'}
+									stroke={ANCHOR_LINE_COLOR}
 									opacity={0.75}
 									strokeWidth={1}
 								/>
@@ -343,7 +341,7 @@ export const KeyFramesInspector: React.FC<{
 									y2={HEIGHT_PER_FRAME - 20}
 									// y1={0}
 									// y2={HEIGHT_PER_FRAME}
-									stroke={'cyan'}
+									stroke={ANCHOR_LINE_COLOR}
 									opacity={0.75}
 									strokeWidth={1}
 								/>
