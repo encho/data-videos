@@ -5,20 +5,13 @@ import {isNumber} from 'lodash';
 
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
-// import {useBarChartLayout} from './useBarChartLayout';
 import {useStillBarChartLayout} from './useStillBarChartLayout';
 import {getBarChartBaseline} from './useBarChartLayout';
 import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
-import {
-	mixBarChartLayout,
-	// useAnimatedBarChartLayout,
-} from './useAnimatedBarChartLayout';
+import {mixBarChartLayout} from './useAnimatedBarChartLayout';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
-// import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {TBarChartLayout} from './useBarChartLayout';
 import {TBaselineOrHeight} from './SimpleBarChart';
 import {MeasureLabels, MeasureValueLabels} from './SimpleBarChart';
-// import {interpolate} from 'chroma-js';
 
 export type TSimpleBarChartData = {
 	label: string;
