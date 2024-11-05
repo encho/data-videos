@@ -145,7 +145,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 				</div>
 			);
 		},
-		[]
+		[theme]
 	);
 
 	return (
@@ -187,7 +187,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						theme={theme}
 						animateExit={false}
 						valueDomain={valueDomainStart}
-						CustomLabelComponent={CustomBarChartLabelComponent}
+						// CustomLabelComponent={CustomBarChartLabelComponent}
 						// showLayout
 						// hideLabels={HIDE_LABELS}
 					/>
@@ -251,7 +251,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 									valueDomainTo={valueDomainTo}
 									width={BARCHARTRACE_WIDTH}
 									theme={theme}
-									CustomLabelComponent={CustomBarChartLabelComponent}
+									// CustomLabelComponent={CustomBarChartLabelComponent}
 								/>
 							</KeyFramesSequence>
 						</div>
@@ -280,7 +280,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						theme={theme}
 						animateEnter={false}
 						valueDomain={valueDomainEnd}
-						CustomLabelComponent={CustomBarChartLabelComponent}
+						// CustomLabelComponent={CustomBarChartLabelComponent}
 						// showLayout
 						// hideLabels={HIDE_LABELS}
 					/>
