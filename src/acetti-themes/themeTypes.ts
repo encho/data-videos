@@ -142,6 +142,11 @@ export const zodThemeType = z.object({
 			activeAreaFill: zColor(),
 		}),
 	}),
+	BarChart: z.object({
+		barColors: z.object({
+			subtle: z.string(),
+		}),
+	}),
 	timeseriesComponents: z.object({
 		percentageChangeArea: z.object({
 			lineColor: zColor(),

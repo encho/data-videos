@@ -43,7 +43,6 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const barChartData_left = wahlergebnisWinnerSort.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
-		// barColor: it.farbe,
 		barColor: theme.data.tenColors[0].main,
 		id: it.id,
 		valueLabel: formatPercentage(it.prozent),
@@ -51,9 +50,7 @@ export const SimpleBarChartTransitionComposition: React.FC<
 
 	const barChartData_right = wahlergebnisWinnerSort.map((it) => ({
 		label: it.parteiName,
-		// value: it.prozent,
 		value: it.change,
-		// barColor: it.farbe,
 		barColor:
 			it.change >= 0
 				? theme.positiveNegativeColors.positiveColor
@@ -65,7 +62,6 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const barChartDataSorted_left = wahlergebnisChangeSort.map((it) => ({
 		label: it.parteiName,
 		value: it.prozent,
-		// barColor: it.farbe,
 		barColor: theme.data.tenColors[0].main,
 		id: it.id,
 		valueLabel: formatPercentage(it.prozent),
@@ -74,8 +70,6 @@ export const SimpleBarChartTransitionComposition: React.FC<
 	const barChartDataSorted_right = wahlergebnisChangeSort.map((it) => ({
 		label: it.parteiName,
 		value: it.change,
-		// value: it.prozent,
-		// barColor: it.farbe,
 		barColor:
 			it.change >= 0
 				? theme.positiveNegativeColors.positiveColor
@@ -109,20 +103,12 @@ export const SimpleBarChartTransitionComposition: React.FC<
 					ref={ref}
 					style={{
 						flex: 1,
-						// display: 'flex',
-						// justifyContent: 'center',
 					}}
 				>
 					{dimensions ? (
 						// TODO start after title and subtitle are in (using their keyframes...)
 						<Sequence from={Math.floor(fps * 2.75)} layout="none">
-							<div
-								style={
-									{
-										// display: 'flex', gap: 50
-									}
-								}
-							>
+							<div style={{}}>
 								<Sequence from={0} durationInFrames={fps * 7} layout="none">
 									<div
 										style={{

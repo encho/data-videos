@@ -106,7 +106,7 @@ export const LastLogoPageContent: React.FC<{
 				<LorenzoBertoliniLogoNoAnimation
 					baseline={baseline}
 					theme={theme}
-					color={'#fff'}
+					color={theme.typography.logoColor}
 				/>
 			</div>
 			<TypographyStyle

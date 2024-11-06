@@ -6,7 +6,8 @@ import {colorPalettes} from './tailwindPalettes';
 
 // const GRAYS = colorPalettes.Zinc;
 // const GRAYS = colorPalettes.Stone;
-const GRAYS = colorPalettes.Slate;
+// const GRAYS = colorPalettes.Slate;
+const GRAYS = colorPalettes.Gray;
 // const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
 // const GRAYS = colorPalettes.Orange;
@@ -282,6 +283,11 @@ export const lorenzobertoliniTheme = ({
 		SimpleKPI: {
 			kpiColor: '#fff',
 			labelColor: '#888',
+		},
+		BarChart: {
+			barColors: {
+				subtle: GRAYS['400'],
+			},
 		},
 		timeseriesComponents: {
 			percentageChangeArea: {

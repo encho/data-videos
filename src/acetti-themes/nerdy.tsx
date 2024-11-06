@@ -7,7 +7,8 @@ import {colorPalettes} from './tailwindPalettes';
 // const GRAYS = colorPalettes.Zinc;
 // const GRAYS = colorPalettes.Stone;
 // const GRAYS = colorPalettes.Slate;
-const GRAYS = colorPalettes.Neutral;
+const GRAYS = colorPalettes.Gray;
+// const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
 // const GRAYS = colorPalettes.Orange;
 
@@ -250,6 +251,11 @@ export const nerdyTheme = ({
 				P3: '#444',
 			},
 		],
+		BarChart: {
+			barColors: {
+				subtle: GRAYS['600'],
+			},
+		},
 		minimap: {
 			lineColor: dataScale[2],
 			areaColor: chroma(dataScale[2]).hex(),

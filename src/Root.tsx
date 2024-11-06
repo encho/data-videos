@@ -230,6 +230,11 @@ import {
 	barChartRaceCustomLabelCompositionSchema,
 } from './compositions/POCs/05-BarCharts/BarChartRace_CustomLabel/BarChartRace_CustomLabel_Composition';
 
+import {
+	BundesligaTabelleComposition,
+	bundesligaTabelleCompositionSchema,
+} from './compositions/POCs/05-BarCharts/BundesligaTabelle/BundesligaTabelleComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -265,6 +270,53 @@ export function isVideoSize(
 export const RemotionRoot: React.FC = () => {
 	return (
 		<>
+			<Folder name="Production-Flics">
+				<Composition
+					id="Bundesliga-Tabelle"
+					component={BundesligaTabelleComposition}
+					durationInFrames={30 * 22}
+					fps={30}
+					// {...videoSizes.square}
+					{...videoSizes.linkedInTall}
+					schema={bundesligaTabelleCompositionSchema}
+					defaultProps={{
+						themeEnum: 'LORENZOBERTOLINI' as const,
+						data: [],
+						title: 'Bundesliga Tabelle',
+						subtitle: 'Punktestand am 6. November 2024',
+						dataSource: 'Datenquelle: https://api.openligadb.de',
+					}}
+					calculateMetadata={async ({props}) => {
+						const year = 2024;
+						const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;
+						const data = await fetch(apiUrl);
+						const json = (await data.json()) as {
+							teamName: string;
+							points: number;
+							teamInfoId: number;
+							teamIconUrl: string;
+						}[];
+
+						const parsedData = json.map((it, i) => ({
+							teamIconUrl: it.teamIconUrl,
+							label: it.teamName,
+							value: it.points,
+							barColor: '#ffffff',
+							id: `id-${it.teamInfoId}`,
+							valueLabel:
+								it.points !== 1 ? `${it.points} Punkte` : `${it.points} Punkt`,
+						}));
+
+						return {
+							props: {
+								...props,
+								data: parsedData,
+							},
+						};
+					}}
+				/>
+			</Folder>
+
 			<Folder name="POCs">
 				<Folder name="01-TextEffects">
 					<Folder name="TextAnimations">
@@ -330,20 +382,6 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 						}}
 					/>
-					{/* <Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="StartingFiveSlide"
-						component={StartingFiveSlideComposition}
-						durationInFrames={90 * 8}
-						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-						fps={90}
-						{...videoSizes.square}
-						schema={startingFiveSlideCompositionSchema}
-						defaultProps={{
-							themeEnum: 'NERDY' as const,
-						}}
-					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -359,9 +397,9 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 							fontSizeInBaselines: 4,
 							lineHeightInBaselines: 4,
-							numberOfWordRows: 15,
-							word: 'DOW JONES.',
-							video: 'STOCK_MARKET' as const,
+							numberOfWordRows: 29,
+							word: 'GOLD.',
+							video: 'GOLD' as const,
 						}}
 					/>
 					<Composition
@@ -675,8 +713,6 @@ export const RemotionRoot: React.FC = () => {
 						component={ApiBasedSimpleBarChartComposition}
 						durationInFrames={30 * 20}
 						fps={30}
-						// {...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
 						{...videoSizes.square}
 						schema={apiBasedSimpleBarChartCompositionSchema}
 						defaultProps={{
@@ -686,11 +722,6 @@ export const RemotionRoot: React.FC = () => {
 							subtitle: 'Punktestand am 6. November 2024',
 							dataSource: 'Datenquelle: https://api.openligadb.de',
 						}}
-						// defaultProps={{
-						// 	dateString: '4. März 2024',
-						// 	year: 2024,
-						// 	apiData: null,
-						// }}
 						calculateMetadata={async ({props}) => {
 							const year = 2024;
 							const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;

@@ -56,7 +56,7 @@ export const StartingFiveSlide: React.FC<
 	const videoSrc = videoSources[video];
 	invariant(videoSrc);
 
-	const {width, fps, durationInFrames} = useVideoConfig();
+	const {width, height, fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
 	const maxZoomScale = 30;
@@ -106,7 +106,7 @@ export const StartingFiveSlide: React.FC<
 	);
 
 	const videoWidth = width;
-	const videoHeight = width;
+	const videoHeight = height;
 
 	const seed = 999; // Your seed value
 	const seededRandom = new SeededRandom(seed);
@@ -208,9 +208,10 @@ export const StartingFiveSlide: React.FC<
 							// src="https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4"
 							style={{
 								position: 'absolute',
-								// width: '100%',
+								width: '100%',
 								height: '100%',
 								objectFit: 'cover',
+								// objectFit: 'fill',
 								WebkitMaskImage: 'url(#mySvgMask)',
 							}}
 							playbackRate={4 / 5}

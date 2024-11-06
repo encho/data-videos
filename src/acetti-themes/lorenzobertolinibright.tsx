@@ -283,6 +283,11 @@ export const lorenzobertolinibrightTheme = ({
 			kpiColor: '#fff',
 			labelColor: '#888',
 		},
+		BarChart: {
+			barColors: {
+				subtle: GRAYS['700'],
+			},
+		},
 		timeseriesComponents: {
 			percentageChangeArea: {
 				lineColor: '#f05122',
