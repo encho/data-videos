@@ -1,6 +1,6 @@
 import {Sequence, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import invariant from 'tiny-invariant';
-import React, {forwardRef, useCallback, ComponentType} from 'react';
+import React, {forwardRef, useCallback} from 'react';
 import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 import {isNumber} from 'lodash';
