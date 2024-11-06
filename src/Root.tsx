@@ -235,6 +235,11 @@ import {
 	bundesligaTabelleCompositionSchema,
 } from './compositions/POCs/05-BarCharts/BundesligaTabelle/BundesligaTabelleComposition';
 
+import {
+	ThreeD_BarChartComposition,
+	threeD_BarChartCompositionSchema,
+} from './compositions/POCs/3D-Experiments/3D-BarChart/3D-BarChartComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -1148,6 +1153,19 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInTall}
 						schema={keyframesCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+				</Folder>
+				<Folder name="3d-Experiments">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="ThreeD-BarChart"
+						component={ThreeD_BarChartComposition}
+						durationInFrames={90 * 3}
+						fps={90}
+						{...videoSizes.square}
+						schema={threeD_BarChartCompositionSchema}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 				<Folder name="Path-Animation-Experiments">
