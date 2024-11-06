@@ -10,6 +10,8 @@ import {KeyFramesSequence} from '../../compositions/POCs/Keyframes/Keyframes/Key
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {TBarChartLabelComponent} from './SimpleBarChart';
 import {TKeyFramesGroup} from '../../compositions/POCs/Keyframes/Keyframes/keyframes';
+import {useElementDimensions} from '../../compositions/POCs/03-Page/SimplePage/useElementDimensions';
+import {TextAnimationSubtle} from '../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 type TBarChartRaceData = {
 	index: string;
@@ -46,8 +48,8 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 		keyframes: keyframesProp,
 	});
 
-	const BARCHARTRACE_HEIGHT = height;
-	const BARCHARTRACE_WIDTH = width;
+	const {ref: labelRef, dimensions: labelDimensions} =
+		useElementDimensions(true);
 
 	const dataStart = data[0].data;
 	const valueDomainStart = data[0].valueDomain;
@@ -59,111 +61,137 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 	invariant(dataEnd);
 	invariant(valueDomainEnd);
 
+	const PeriodLabelTransition = DefaultPeriodLabelTransition;
+
+	const BARCHARTRACE_HEIGHT = labelDimensions
+		? height - labelDimensions.height
+		: null;
+	const BARCHARTRACE_WIDTH = width;
+
 	return (
-		<div>
-			<KeyFramesSequence
-				exclusive
-				name={`enter-${dataIds[0]}`}
-				from={`DATA_ENTER_START__${dataIds[0]}`}
-				to={`DATA_ENTER_END__${dataIds[0]}`}
-				keyframes={keyframes}
+		<>
+			<div
+				ref={labelRef}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					visibility: 'hidden',
+				}}
 			>
-				{/* <TypographyStyle
-					typographyStyle={theme.typography.textStyles.h1}
-					baseline={20}
-					marginBottom={3}
-				>
-					{dataIds[0]}
-				</TypographyStyle> */}
-
-				<SimpleBarChart
-					data={dataStart}
-					width={BARCHARTRACE_WIDTH}
-					height={BARCHARTRACE_HEIGHT}
-					theme={theme}
-					animateExit={false}
-					valueDomain={valueDomainStart}
-					CustomLabelComponent={CustomLabelComponent}
-				/>
-			</KeyFramesSequence>
-
-			{transitionPairs.map(([fromId, toId]) => {
-				const startKeyframe = `TRANSITION_START__${fromId}_${toId}`;
-				const endKeyframe = `TRANSITION_END__${fromId}_${toId}`;
-
-				const itemFrom = data.find((it) => it.index === fromId);
-				const itemTo = data.find((it) => it.index === toId);
-
-				invariant(itemFrom);
-				invariant(itemTo);
-
-				const dataFrom = itemFrom.data;
-				const valueDomainFrom = itemFrom.valueDomain;
-
-				const dataTo = itemTo.data;
-				const valueDomainTo = itemTo.valueDomain;
-
-				return (
-					<div>
-						<KeyFramesSequence
-							exclusive
-							name={`${fromId}-${toId}`}
-							from={startKeyframe}
-							to={endKeyframe}
-							keyframes={keyframes}
-						>
-							{/* <TypographyStyle
-								typographyStyle={theme.typography.textStyles.h1}
-								baseline={20}
-								marginBottom={3}
-							>
-								{toId}
-							</TypographyStyle> */}
-
-							{/* TODO here we need the  */}
-							<SimpleBarChartTransition
-								height={BARCHARTRACE_HEIGHT}
-								dataFrom={dataFrom}
-								valueDomainFrom={valueDomainFrom}
-								dataTo={dataTo}
-								valueDomainTo={valueDomainTo}
-								width={BARCHARTRACE_WIDTH}
-								theme={theme}
-								CustomLabelComponent={CustomLabelComponent}
-							/>
-						</KeyFramesSequence>
-					</div>
-				);
-			})}
-
-			<KeyFramesSequence
-				exclusive
-				name={`enter-${dataIds[dataIds.length - 1]}`}
-				from={`DATA_EXIT_START__${dataIds[dataIds.length - 1]}`}
-				to={`DATA_EXIT_END__${dataIds[dataIds.length - 1]}`}
-				keyframes={keyframes}
-			>
-				{/* <TypographyStyle
-					typographyStyle={theme.typography.textStyles.h1}
-					baseline={20}
-					marginBottom={3}
-				>
-					{dataIds[dataIds.length - 1]}
-				</TypographyStyle> */}
-
-				<SimpleBarChart
-					data={dataEnd}
-					width={BARCHARTRACE_WIDTH}
-					height={BARCHARTRACE_HEIGHT}
+				<PeriodLabelTransition
+					toPeriod={dataIds[0]}
 					theme={theme}
 					animateEnter={false}
-					valueDomain={valueDomainEnd}
-					CustomLabelComponent={CustomLabelComponent}
-					// showLayout
-					// hideLabels={HIDE_LABELS}
+					animateExit={false}
 				/>
-			</KeyFramesSequence>
-		</div>
+			</div>
+
+			{BARCHARTRACE_HEIGHT ? (
+				<div>
+					<KeyFramesSequence
+						exclusive
+						name={`enter-${dataIds[0]}`}
+						from={`DATA_ENTER_START__${dataIds[0]}`}
+						to={`DATA_ENTER_END__${dataIds[0]}`}
+						keyframes={keyframes}
+					>
+						<PeriodLabelTransition
+							toPeriod={dataIds[0]}
+							theme={theme}
+							animateEnter={true}
+							animateExit={false}
+						/>
+
+						<SimpleBarChart
+							data={dataStart}
+							width={BARCHARTRACE_WIDTH}
+							height={BARCHARTRACE_HEIGHT}
+							theme={theme}
+							animateExit={false}
+							valueDomain={valueDomainStart}
+							CustomLabelComponent={CustomLabelComponent}
+						/>
+					</KeyFramesSequence>
+
+					{transitionPairs.map(([fromId, toId]) => {
+						const startKeyframe = `TRANSITION_START__${fromId}_${toId}`;
+						const endKeyframe = `TRANSITION_END__${fromId}_${toId}`;
+
+						const itemFrom = data.find((it) => it.index === fromId);
+						const itemTo = data.find((it) => it.index === toId);
+
+						invariant(itemFrom);
+						invariant(itemTo);
+
+						const dataFrom = itemFrom.data;
+						const valueDomainFrom = itemFrom.valueDomain;
+
+						const dataTo = itemTo.data;
+						const valueDomainTo = itemTo.valueDomain;
+
+						return (
+							<div>
+								<KeyFramesSequence
+									exclusive
+									name={`${fromId}-${toId}`}
+									from={startKeyframe}
+									to={endKeyframe}
+									keyframes={keyframes}
+								>
+									<PeriodLabelTransition
+										toPeriod={toId}
+										fromPeriod={fromId}
+										theme={theme}
+										animateEnter={false}
+										animateExit={false}
+									/>
+
+									{/* TODO here we need the  */}
+									<SimpleBarChartTransition
+										height={BARCHARTRACE_HEIGHT}
+										dataFrom={dataFrom}
+										valueDomainFrom={valueDomainFrom}
+										dataTo={dataTo}
+										valueDomainTo={valueDomainTo}
+										width={BARCHARTRACE_WIDTH}
+										theme={theme}
+										CustomLabelComponent={CustomLabelComponent}
+									/>
+								</KeyFramesSequence>
+							</div>
+						);
+					})}
+
+					<KeyFramesSequence
+						exclusive
+						name={`enter-${dataIds[dataIds.length - 1]}`}
+						from={`DATA_EXIT_START__${dataIds[dataIds.length - 1]}`}
+						to={`DATA_EXIT_END__${dataIds[dataIds.length - 1]}`}
+						keyframes={keyframes}
+					>
+						<PeriodLabelTransition
+							toPeriod={dataIds[dataIds.length - 1]}
+							theme={theme}
+							animateEnter={false}
+							animateExit={true}
+						/>
+
+						<SimpleBarChart
+							data={dataEnd}
+							width={BARCHARTRACE_WIDTH}
+							height={BARCHARTRACE_HEIGHT}
+							theme={theme}
+							animateEnter={false}
+							valueDomain={valueDomainEnd}
+							CustomLabelComponent={CustomLabelComponent}
+							// showLayout
+							// hideLabels={HIDE_LABELS}
+						/>
+					</KeyFramesSequence>
+				</div>
+			) : null}
+		</>
 	);
 };
 
@@ -178,3 +206,41 @@ function getPairs(dataIds: string[]): [string, string][] {
 // const dataIds = ['2020', '2021', '2022', '2023'];
 // const result = getPairs(dataIds);
 // console.log(result); // Output: [["2020", "2021"], ["2021", "2022"], ["2022", "2023"]]
+
+type TPeriodLabelTransitionProps = {
+	theme: ThemeType;
+	fromPeriod?: string; // because for the first simple bar chart this can be empty
+	toPeriod: string;
+	animateEnter: boolean;
+	animateExit: boolean;
+};
+
+// TODO perhaps pass in whole data items that are transitioned...
+export const DefaultPeriodLabelTransition: React.FC<
+	TPeriodLabelTransitionProps
+> = ({theme, fromPeriod, toPeriod, animateEnter, animateExit}) => {
+	return (
+		<div
+			style={{
+				// backgroundColor: 'green',
+				display: 'flex',
+				justifyContent: 'flex-end',
+			}}
+		>
+			<TypographyStyle
+				typographyStyle={theme.typography.textStyles.h3}
+				baseline={theme.page.baseline}
+				marginBottom={2}
+			>
+				<TextAnimationSubtle
+					innerDelayInSeconds={0}
+					translateY={theme.page.baseline * 1.15}
+					animateEnter={animateEnter}
+					animateExit={animateExit}
+				>
+					{toPeriod}
+				</TextAnimationSubtle>
+			</TypographyStyle>
+		</div>
+	);
+};

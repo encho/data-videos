@@ -643,11 +643,11 @@ export const RemotionRoot: React.FC = () => {
 						component={BarChartRace_CustomLabel_Composition}
 						durationInFrames={30 * 40}
 						fps={30}
-						// {...videoSizes.linkedInTall}
+						{...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
-						{...videoSizes.square}
+						// {...videoSizes.square}
 						schema={barChartRaceCustomLabelCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 
 					<Composition
