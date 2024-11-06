@@ -19,6 +19,9 @@ type TBarChartRaceData = {
 	valueDomain: [number, number];
 }[];
 
+type TBarChartRace_PeriodLabelTransitionComponent =
+	React.ComponentType<TPeriodLabelTransitionProps>;
+
 type TBarChartRaceProps = {
 	theme: ThemeType;
 	data: TBarChartRaceData;
@@ -26,6 +29,7 @@ type TBarChartRaceProps = {
 	height: number;
 	keyframes?: TKeyFramesGroup;
 	CustomLabelComponent?: TBarChartLabelComponent;
+	CustomPeriodLabelTransitionComponent?: TBarChartRace_PeriodLabelTransitionComponent;
 };
 
 export const BarChartRace: React.FC<TBarChartRaceProps> = ({
@@ -35,6 +39,7 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 	height,
 	keyframes: keyframesProp,
 	CustomLabelComponent,
+	CustomPeriodLabelTransitionComponent,
 }) => {
 	const {fps, durationInFrames} = useVideoConfig();
 
@@ -61,7 +66,8 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 	invariant(dataEnd);
 	invariant(valueDomainEnd);
 
-	const PeriodLabelTransition = DefaultPeriodLabelTransition;
+	const PeriodLabelTransition =
+		CustomPeriodLabelTransitionComponent || DefaultPeriodLabelTransition;
 
 	const BARCHARTRACE_HEIGHT = labelDimensions
 		? height - labelDimensions.height
@@ -147,7 +153,6 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 										animateExit={false}
 									/>
 
-									{/* TODO here we need the  */}
 									<SimpleBarChartTransition
 										height={BARCHARTRACE_HEIGHT}
 										dataFrom={dataFrom}

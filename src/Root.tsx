@@ -663,7 +663,7 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 							data: [],
 							title: 'Bundesliga Tabelle',
-							subtitle: 'Punktestand am 29. Oktober 2024',
+							subtitle: 'Punktestand am 6. November 2024',
 							dataSource: 'Datenquelle: https://api.openligadb.de',
 						}}
 						// defaultProps={{

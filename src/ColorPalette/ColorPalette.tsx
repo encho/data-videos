@@ -15,6 +15,7 @@ import {ColorsList} from '../acetti-flics/ColorsList';
 import {TitleSlide} from './TitleSlide';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
+import {useThemeFromEnum} from '../acetti-themes/getThemeFromEnum';
 
 // TODO into global components acetti-components
 import {Position} from '../acetti-ts-base/Position';
@@ -37,8 +38,8 @@ export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 	themeEnum,
 }) => {
 	const {width, durationInFrames} = useVideoConfig();
-	// TODO integrate into colorpalette
-	const theme = themeEnum === 'NERDY' ? nerdyTheme : lorenzobertoliniTheme;
+
+	const theme = useThemeFromEnum(themeEnum as any);
 
 	const titleSlideDuration = 200;
 
