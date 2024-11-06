@@ -16,7 +16,7 @@ import {
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartTransition';
 import {useBarChartRaceKeyframes} from './useBarChartRaceKeyframes';
-import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
+// import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {KeyFramesSequence} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {getGdpData} from '../BarChartRace_Simple/BarChartRace_Simple_Composition';
@@ -78,71 +78,6 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 
 	const BARCHARTRACE_HEIGHT = 600;
 
-	const CustomBarChartLabelComponent = useCallback(
-		React.memo(
-			({
-				children,
-				id,
-				animateEnter,
-				animateExit,
-				baseline,
-				theme,
-			}: {
-				children: string;
-				id: string;
-				animateEnter: boolean;
-				animateExit: boolean;
-				baseline: number;
-				theme: ThemeType;
-				// dataItem: TODO inject chart Dataitem
-				// index: TODO inject dataItem index
-			}) => {
-				const imageSrc = getCountryImageURL(id);
-
-				return (
-					<div
-						style={{
-							display: 'flex',
-							gap: baseline * 0.6,
-							alignItems: 'center',
-						}}
-					>
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.datavizLabel}
-							baseline={baseline}
-						>
-							<TextAnimationSubtle
-								innerDelayInSeconds={0}
-								translateY={baseline * 1.15}
-								animateEnter={animateEnter}
-								animateExit={animateExit}
-							>
-								{children}
-							</TextAnimationSubtle>
-						</TypographyStyle>
-
-						<TextAnimationSubtle
-							innerDelayInSeconds={0}
-							translateY={baseline * 1.15}
-							animateEnter={animateEnter}
-							animateExit={animateExit}
-						>
-							<Img
-								style={{
-									borderRadius: '50%',
-									width: baseline * 2,
-									height: baseline * 2,
-								}}
-								src={imageSrc}
-							/>
-						</TextAnimationSubtle>
-					</div>
-				);
-			}
-		),
-		[]
-	);
-
 	return (
 		<Page theme={theme} show>
 			<BarChartRace
@@ -150,7 +85,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 				data={barChartRaceData}
 				width={theme.page.contentWidth}
 				height={BARCHARTRACE_HEIGHT}
-				CustomLabelComponent={CustomBarChartLabelComponent}
+				CustomLabelComponent={CountryLogosBarChartLabel}
 			/>
 		</Page>
 	);
@@ -308,6 +243,68 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 		</div>
 	);
 };
+
+const CountryLogosBarChartLabel = React.memo(
+	({
+		children,
+		id,
+		animateEnter,
+		animateExit,
+		baseline,
+		theme,
+	}: {
+		children: string;
+		id: string;
+		animateEnter: boolean;
+		animateExit: boolean;
+		baseline: number;
+		theme: ThemeType;
+		// dataItem: TODO inject chart Dataitem
+		// index: TODO inject dataItem index
+	}) => {
+		const imageSrc = getCountryImageURL(id);
+
+		return (
+			<div
+				style={{
+					display: 'flex',
+					gap: baseline * 0.6,
+					alignItems: 'center',
+				}}
+			>
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizLabel}
+					baseline={baseline}
+				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+						animateEnter={animateEnter}
+						animateExit={animateExit}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+
+				<TextAnimationSubtle
+					innerDelayInSeconds={0}
+					translateY={baseline * 1.15}
+					animateEnter={animateEnter}
+					animateExit={animateExit}
+				>
+					<Img
+						style={{
+							borderRadius: '50%',
+							width: baseline * 2,
+							height: baseline * 2,
+						}}
+						src={imageSrc}
+					/>
+				</TextAnimationSubtle>
+			</div>
+		);
+	}
+);
 
 function getCountryImageURL(countryId: string): string {
 	const germany =
