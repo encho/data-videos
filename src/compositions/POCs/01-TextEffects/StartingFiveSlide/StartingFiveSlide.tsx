@@ -11,44 +11,48 @@ import {
 import {range} from 'lodash';
 import invariant from 'tiny-invariant';
 
-import {
-	useThemeFromEnum,
-	zThemeEnum,
-} from '../../../../acetti-themes/getThemeFromEnum';
+import {SeededRandom} from '../../../../acetti-utils/seededRandom';
+import {zodThemeType} from '../../../../acetti-themes/themeTypes';
 
-export const zVideoSrcEnum = z.enum(['GOLD', 'JUNGLE_WATERFALL']);
+export const zSquareVideoSrcEnum = z.enum([
+	'GOLD',
+	'FOOTBALL_FIELD',
+	'JUNGLE_WATERFALL',
+	'STOCK_MARKET',
+]);
 
 const videoSources = {
 	GOLD: 'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2580331760%2C+Shining+gold+bars+an%2C+gold-midjourneypng%2C+M+5.mp4',
 	JUNGLE_WATERFALL:
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2677769786%2C+zoom+into+dramatic+j%2C+lorenzobertolini_a_b%2C+M+5.mp4',
+	FOOTBALL_FIELD:
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/videos/square/Gen-2+3082600833%2C+A+football+field+wit%2C+lorenzobertolini_a_g%2C+M+5.mp4',
+	STOCK_MARKET:
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+1076122830%2C+Stock+market+diagram%2C+lorenzobertolini_Des%2C+M+5.mp4',
 };
 
-export const startingFiveSlide2CompositionSchema = z.object({
-	themeEnum: zThemeEnum,
+export const startingFiveSlideSchema = z.object({
+	theme: zodThemeType,
 	fontSizeInBaselines: z.number(),
+	lineHeightInBaselines: z.number(),
 	numberOfWordRows: z.number(),
 	word: z.string(),
-	video: zVideoSrcEnum,
+	video: zSquareVideoSrcEnum,
 });
 
-// TODO test TestPath feature for example in this lib (try paper.js first)
-// https://svgjs.dev/docs/3.1/shape-elements/
-
-export const StartingFiveSlide2Composition: React.FC<
-	z.infer<typeof startingFiveSlide2CompositionSchema>
-> = ({themeEnum, fontSizeInBaselines, numberOfWordRows, word, video}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
-
-	// settings: JungleFever
-	// const fontFamily = 'Inter-Bold';
-	const fontFamily = 'Inter-28pt-Black';
-	// const fontSize = 55;
-	// const lineHeight = 65;
+export const StartingFiveSlide: React.FC<
+	z.infer<typeof startingFiveSlideSchema>
+> = ({
+	theme,
+	fontSizeInBaselines,
+	lineHeightInBaselines,
+	numberOfWordRows,
+	word,
+	video,
+}) => {
+	const fontFamily = theme.typography.textStyles.h1.fontFamily;
 	const fontSize = theme.page.baseline * fontSizeInBaselines;
-	const lineHeight = theme.page.baseline * fontSizeInBaselines;
-	// const word = 'JUNGLE FEVER.';
-	// const numberOfWordRows = 17;
+	const lineHeight = theme.page.baseline * lineHeightInBaselines;
 	const videoSrc = videoSources[video];
 	invariant(videoSrc);
 
@@ -103,24 +107,6 @@ export const StartingFiveSlide2Composition: React.FC<
 
 	const videoWidth = width;
 	const videoHeight = width;
-
-	// // settings: Gold
-	// const fontFamily = 'Inter-28pt-Black';
-	// const fontSize = 120;
-	// const lineHeight = 110;
-	// const word = 'GOLD.';
-	// const numberOfWordRows = 17;
-	// const videoSrc =
-	// 	'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+2580331760%2C+Shining+gold+bars+an%2C+gold-midjourneypng%2C+M+5.mp4';
-
-	//settings: S&P 500
-	// const fontFamily = 'Inter-28pt-Black';
-	// const fontSize = 120;
-	// const lineHeight = 110;
-	// const word = 'S&P 500.';
-	// const numberOfWordRows = 17;
-	// const videoSrc =
-	// 	'https://s3.eu-central-1.amazonaws.com/dataflics.com/quick-tests/Gen-2+1076122830%2C+Stock+market+diagram%2C+lorenzobertolini_Des%2C+M+5.mp4';
 
 	const seed = 999; // Your seed value
 	const seededRandom = new SeededRandom(seed);
@@ -227,7 +213,7 @@ export const StartingFiveSlide2Composition: React.FC<
 								objectFit: 'cover',
 								WebkitMaskImage: 'url(#mySvgMask)',
 							}}
-							playbackRate={0.5}
+							playbackRate={4 / 5}
 						/>
 
 						{/* this would also work with an image instead of a video, like so: */}
@@ -413,31 +399,3 @@ export const TSpanCharacter: React.FC<{
 		</tspan>
 	);
 };
-
-export class SeededRandom {
-	private seed: number;
-
-	constructor(seed: number) {
-		this.seed = seed;
-	}
-
-	// Linear Congruential Generator (LCG)
-	private random(): number {
-		const a = 1664525;
-		const c = 1013904223;
-		const m = Math.pow(2, 32);
-		this.seed = (a * this.seed + c) % m;
-		return this.seed / m;
-	}
-
-	// Generate a random number between min and max (inclusive)
-	public randomBetween(min: number, max: number): number {
-		return Math.floor(this.random() * (max - min + 1)) + min;
-	}
-}
-// // Example usage:
-// const seed = 12345; // Your seed value
-// const seededRandom = new SeededRandom(seed);
-
-// const randomNumber = seededRandom.randomBetween(0, 90);
-// console.log(randomNumber);

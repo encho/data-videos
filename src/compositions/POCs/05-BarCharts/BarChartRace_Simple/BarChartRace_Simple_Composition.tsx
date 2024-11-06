@@ -10,7 +10,7 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {useBarChartRaceKeyframes} from './useBarChartRaceKeyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
-import {SeededRandom} from '../../01-TextEffects/StartingFiveSlide/StartingFiveSlideComposition';
+import {SeededRandom} from '../../../../acetti-utils/seededRandom';
 import {BarChartRace} from '../../../../acetti-flics/SimpleBarChart/BarChartRace';
 import {TSimpleBarChartData} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 

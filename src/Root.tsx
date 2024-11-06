@@ -130,11 +130,6 @@ import {
 } from './compositions/POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlideComposition';
 
 import {
-	StartingFiveSlide2Composition,
-	startingFiveSlide2CompositionSchema,
-} from './compositions/POCs/01-TextEffects/StartingFiveSlide2/StartingFiveSlide2Composition';
-
-import {
 	KeyframesComposition,
 	keyframesCompositionSchema,
 } from './compositions/POCs/Keyframes/Keyframes/KeyframesComposition';
@@ -335,7 +330,7 @@ export const RemotionRoot: React.FC = () => {
 							themeEnum: 'NERDY' as const,
 						}}
 					/>
-					<Composition
+					{/* <Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="StartingFiveSlide"
@@ -348,24 +343,25 @@ export const RemotionRoot: React.FC = () => {
 						defaultProps={{
 							themeEnum: 'NERDY' as const,
 						}}
-					/>
+					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="StartingFiveSlide-2"
-						component={StartingFiveSlide2Composition}
-						durationInFrames={90 * 5}
+						id="StartingFiveSlide"
+						component={StartingFiveSlideComposition}
+						durationInFrames={30 * 5}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-						fps={90}
+						fps={30}
 						{...videoSizes.square}
 						// {...videoSizes.linkedInTall}
-						schema={startingFiveSlide2CompositionSchema}
+						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnum: 'NERDY' as const,
 							fontSizeInBaselines: 4,
+							lineHeightInBaselines: 4,
 							numberOfWordRows: 15,
-							word: 'WATER.',
-							video: 'JUNGLE_WATERFALL' as const,
+							word: 'DOW JONES.',
+							video: 'STOCK_MARKET' as const,
 						}}
 					/>
 					<Composition
