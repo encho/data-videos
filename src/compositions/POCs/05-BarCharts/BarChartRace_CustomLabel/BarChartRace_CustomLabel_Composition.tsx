@@ -1,9 +1,14 @@
 import {z} from 'zod';
-import {Img} from 'remotion';
+import {Img, useVideoConfig, Sequence} from 'remotion';
 import {extent} from 'd3-array';
 import React, {useMemo} from 'react';
 
-import {Page} from '../../03-Page/SimplePage/ThemePage';
+import {
+	Page,
+	PageHeader,
+	PageFooter,
+	PageLogo,
+} from '../../03-Page/SimplePage/ThemePage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
 	useThemeFromEnum,
@@ -14,6 +19,8 @@ import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnima
 import {getGdpData} from '../BarChartRace_Simple/BarChartRace_Simple_Composition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {BarChartRace} from '../../../../acetti-flics/SimpleBarChart/BarChartRace';
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
+import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 
 export const barChartRaceCustomLabelCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -23,6 +30,9 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	z.infer<typeof barChartRaceCustomLabelCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {fps} = useVideoConfig();
+
+	const {ref, dimensions} = useElementDimensions();
 
 	const gdpData = useMemo(() => getGdpData(2000, 2024), []);
 
@@ -51,17 +61,79 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 		};
 	});
 
-	const BARCHARTRACE_HEIGHT = 600;
-
 	return (
-		<Page theme={theme} show>
-			<BarChartRace
-				theme={theme}
-				data={barChartRaceData}
-				width={theme.page.contentWidth}
-				height={BARCHARTRACE_HEIGHT}
-				CustomLabelComponent={CountryLogosBarChartLabel}
-			/>
+		<Page theme={theme}>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					height: '100%',
+					position: 'relative',
+				}}
+			>
+				<PageHeader
+					theme={theme}
+					// showArea={showAreas}
+				>
+					<TitleWithSubtitle
+						title={'Bar Chart Race'}
+						subtitle={'Based on Mock Chat-GPT generated data'}
+						theme={theme}
+						innerDelayInSeconds={1}
+					/>
+				</PageHeader>
+
+				<div
+					ref={ref}
+					style={{
+						flex: 1,
+						display: 'flex',
+						justifyContent: 'center',
+					}}
+				>
+					{dimensions ? (
+						<Sequence from={Math.floor(fps * 2.75)} layout="none">
+							<BarChartRace
+								theme={theme}
+								data={barChartRaceData}
+								width={theme.page.contentWidth}
+								height={dimensions.height}
+								CustomLabelComponent={CountryLogosBarChartLabel}
+							/>
+						</Sequence>
+					) : null}
+				</div>
+
+				<PageFooter
+					theme={theme}
+					// showArea
+				>
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'flex-end',
+						}}
+					>
+						<div style={{maxWidth: '62%'}}>
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.dataSource}
+								baseline={theme.page.baseline}
+							>
+								<TextAnimationSubtle
+									translateY={theme.page.baseline * 1.1}
+									innerDelayInSeconds={5.25} // TODO time better...
+								>
+									Data Source: German Bundesbank 2024 Paper on Evolutional
+									Finance
+								</TextAnimationSubtle>
+							</TypographyStyle>
+						</div>
+					</div>
+				</PageFooter>
+			</div>
+
+			<PageLogo theme={theme} />
 		</Page>
 	);
 };

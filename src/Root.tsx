@@ -641,7 +641,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="BarChartRace-CustomLabel"
 						component={BarChartRace_CustomLabel_Composition}
-						durationInFrames={30 * 30}
+						durationInFrames={30 * 40}
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}

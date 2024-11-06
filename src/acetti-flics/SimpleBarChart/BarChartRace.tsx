@@ -68,13 +68,13 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 				to={`DATA_ENTER_END__${dataIds[0]}`}
 				keyframes={keyframes}
 			>
-				<TypographyStyle
+				{/* <TypographyStyle
 					typographyStyle={theme.typography.textStyles.h1}
 					baseline={20}
 					marginBottom={3}
 				>
 					{dataIds[0]}
-				</TypographyStyle>
+				</TypographyStyle> */}
 
 				<SimpleBarChart
 					data={dataStart}
@@ -112,13 +112,13 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 							to={endKeyframe}
 							keyframes={keyframes}
 						>
-							<TypographyStyle
+							{/* <TypographyStyle
 								typographyStyle={theme.typography.textStyles.h1}
 								baseline={20}
 								marginBottom={3}
 							>
 								{toId}
-							</TypographyStyle>
+							</TypographyStyle> */}
 
 							{/* TODO here we need the  */}
 							<SimpleBarChartTransition
@@ -143,13 +143,13 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 				to={`DATA_EXIT_END__${dataIds[dataIds.length - 1]}`}
 				keyframes={keyframes}
 			>
-				<TypographyStyle
+				{/* <TypographyStyle
 					typographyStyle={theme.typography.textStyles.h1}
 					baseline={20}
 					marginBottom={3}
 				>
 					{dataIds[dataIds.length - 1]}
-				</TypographyStyle>
+				</TypographyStyle> */}
 
 				<SimpleBarChart
 					data={dataEnd}
