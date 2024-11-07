@@ -14,24 +14,27 @@ import {LorenzoBertoliniLogoNoAnimation} from '../SimplePage/ThemePage';
 export function useLastLogoPageContentKeyframes() {
 	const {durationInFrames, fps} = useVideoConfig();
 
+	const FADE_IN_DURATION_IN_SECONDS = 1;
+	const SUBTITLE_DELAY_IN_SECONDS = 0.3;
+
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'SECOND', value: 0, id: 'LOGO_ENTER_START'},
 		{
 			type: 'R_SECOND',
-			value: 1,
+			value: FADE_IN_DURATION_IN_SECONDS,
 			id: 'LOGO_ENTER_END',
 			relativeId: 'LOGO_ENTER_START',
 		},
 		// the linkedin address...
 		{
 			type: 'R_SECOND',
-			value: 0.5,
+			value: SUBTITLE_DELAY_IN_SECONDS,
 			id: 'LINK_ENTER_START',
 			relativeId: 'LOGO_ENTER_START',
 		},
 		{
 			type: 'R_SECOND',
-			value: 1.75,
+			value: FADE_IN_DURATION_IN_SECONDS,
 			id: 'LINK_ENTER_END',
 			relativeId: 'LINK_ENTER_START',
 		},
@@ -117,7 +120,9 @@ export const LastLogoPageContent: React.FC<{
 					filter: `blur(${linkFilterPixels}px)`,
 				}}
 			>
-				www.linkedin.com/in/lorenzobertolini
+				{/* www.linkedin.com/in/lorenzobertolini */}
+				{/* FINANCE & SPORTS DATA VISUALIZATION NERD */}
+				DATA VISUALIZATION & DESIGN NERD
 			</TypographyStyle>
 		</div>
 	);

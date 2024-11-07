@@ -279,13 +279,13 @@ export const RemotionRoot: React.FC = () => {
 				<Composition
 					id="Bundesliga-Tabelle"
 					component={BundesligaTabelleComposition}
-					durationInFrames={30 * 22}
+					durationInFrames={30 * 12}
 					fps={30}
 					// {...videoSizes.square}
 					{...videoSizes.linkedInTall}
 					schema={bundesligaTabelleCompositionSchema}
 					defaultProps={{
-						themeEnum: 'LORENZOBERTOLINI' as const,
+						themeEnum: 'NERDY' as const,
 						data: [],
 						title: 'Bundesliga Tabelle',
 						subtitle: 'Punktestand am 6. November 2024',

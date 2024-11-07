@@ -15,17 +15,34 @@ const GRAYS = colorPalettes.Gray;
 const platteBackground = '#232323';
 const platteBorder = '#292929';
 
+// in zod format
+// type ThemeColorPalette = {
+// 	grays: {
+// 		"50": zColor();
+// 	}
+// }
+
 const palette = {
+	grays: GRAYS,
 	background: GRAYS['950'],
 	typography: {
 		title: {
 			main: GRAYS['100'],
 		},
+		subtitle: {
+			main: GRAYS['500'],
+		},
+		dataSource: {
+			main: GRAYS['500'],
+		},
+		logo: {
+			main: GRAYS['500'],
+		},
 		axis: {
 			main: {
-				tickLabel: GRAYS['500'],
-				line: GRAYS['500'],
-				tick: GRAYS['500'],
+				tickLabel: GRAYS['600'],
+				line: GRAYS['600'],
+				tick: GRAYS['600'],
 			},
 		},
 	},
@@ -103,7 +120,7 @@ export const nerdyTheme = ({
 			// TODO deprecate
 			textColor: '#ffffff',
 			// TODO deprecate
-			logoColor: palette.typography.title.main, // TODO own section in theme (as highly individual)
+			logoColor: palette.typography.logo.main, // TODO own section in theme (as highly individual)
 			textStyles: {
 				h1: {
 					fontFamily: 'Inter-28pt-Black',
@@ -114,10 +131,9 @@ export const nerdyTheme = ({
 				},
 				h2: {
 					fontFamily: 'Inter-Regular',
-					// fontFamily: 'Inter-28pt-Thin',
 					capHeightInBaselines: 2,
 					lineGapInBaselines: 1.5,
-					color: palette.typography.title.main,
+					color: palette.typography.subtitle.main,
 				},
 				h3: {
 					fontFamily: 'Inter-Bold',
@@ -126,40 +142,34 @@ export const nerdyTheme = ({
 					color: '#fff',
 				},
 				body: {
-					// fontFamily: 'Inter-28pt-Thin',
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 0.5,
 					color: '#fff',
 				},
 				datavizLabel: {
-					// TODO load alos Inter-Medium
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 1,
-					// color: '#888',
 					color: GRAYS['100'],
 				},
 				datavizValueLabel: {
 					fontFamily: 'Inter-Bold',
 					capHeightInBaselines: 0.85,
 					lineGapInBaselines: 1,
-					// color: '#64748b',
-					// color: GRAYS['500'],
 					color: GRAYS['300'],
 				},
 				datavizTickLabel: {
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 0.8,
 					lineGapInBaselines: 1,
-					// color: GRAYS['600'],
 					color: palette.typography.axis.main.tickLabel,
 				},
 				dataSource: {
 					fontFamily: 'Inter-Regular',
 					capHeightInBaselines: 1,
 					lineGapInBaselines: 0.75,
-					color: palette.typography.title.main,
+					color: palette.typography.dataSource.main,
 				},
 			},
 		},

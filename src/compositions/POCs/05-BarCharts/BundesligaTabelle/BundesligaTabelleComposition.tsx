@@ -18,7 +18,6 @@ import {
 import {
 	SimpleBarChart,
 	TSimpleBarChartDataItem,
-	TSimpleBarChartData,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {zColor} from '@remotion/zod-types';
@@ -50,15 +49,30 @@ export const bundesligaTabelleCompositionSchema = z.object({
 export const BundesligaTabelleComposition: React.FC<
 	z.infer<typeof bundesligaTabelleCompositionSchema>
 > = ({themeEnum, data, title, subtitle, dataSource}) => {
-	const {
-		fps,
-		// durationInFrames
-	} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
+
+	const startingFiveSlideDurationInFrames = Math.floor(fps * 3.5);
+	const whiteSpaceSlideDurationInFrames = Math.floor(fps * 0);
+	const lastSlideDurationInFrames = Math.floor(fps * 2);
+
+	const barChartDurationInFrames =
+		durationInFrames -
+		startingFiveSlideDurationInFrames -
+		whiteSpaceSlideDurationInFrames -
+		lastSlideDurationInFrames;
+
+	const barChartFrom =
+		startingFiveSlideDurationInFrames + whiteSpaceSlideDurationInFrames;
+	const lastSlideFrom = barChartFrom + barChartDurationInFrames;
 
 	return (
 		<>
-			<Sequence layout="none" from={fps * 0} durationInFrames={fps * 5}>
+			<Sequence
+				layout="none"
+				from={fps * 0}
+				durationInFrames={startingFiveSlideDurationInFrames}
+			>
 				<StartingFiveSlide
 					theme={theme}
 					fontSizeInBaselines={4}
@@ -70,13 +84,21 @@ export const BundesligaTabelleComposition: React.FC<
 			</Sequence>
 
 			{/* This is to have 0.6 seconds of pause */}
-			<Sequence layout="none" from={fps * 5} durationInFrames={fps * 0.6}>
+			{/* <Sequence
+				layout="none"
+				from={startingFiveSlideDurationInFrames}
+				durationInFrames={whiteSpaceSlideDurationInFrames}
+			>
 				<Page theme={theme}>
 					<></>
 				</Page>
-			</Sequence>
+			</Sequence> */}
 
-			<Sequence layout="none" from={fps * 5.6} durationInFrames={fps * 12}>
+			<Sequence
+				layout="none"
+				from={barChartFrom}
+				durationInFrames={barChartDurationInFrames}
+			>
 				<BundesligaBarChartsPage
 					theme={theme}
 					data={data}
@@ -85,7 +107,7 @@ export const BundesligaTabelleComposition: React.FC<
 					dataSource={dataSource}
 				/>
 			</Sequence>
-			<Sequence layout="none" from={fps * (12 + 5.6)}>
+			<Sequence layout="none" from={lastSlideFrom}>
 				<LastLogoPage theme={theme} />
 			</Sequence>
 		</>
@@ -115,7 +137,7 @@ export const BundesligaBarChartsPage: React.FC<{
 	const lastEnterEndFrame = Math.max(...enterEndFrames);
 	const lastEnterEndSecond = lastEnterEndFrame / fps;
 
-	const barChartDelayInSeconds = 2.75;
+	const barChartDelayInSeconds = 0.7;
 
 	return (
 		<Page theme={theme}>
@@ -135,7 +157,7 @@ export const BundesligaBarChartsPage: React.FC<{
 						title={title}
 						subtitle={subtitle}
 						theme={theme}
-						innerDelayInSeconds={1}
+						innerDelayInSeconds={0.35}
 					/>
 				</PageHeader>
 

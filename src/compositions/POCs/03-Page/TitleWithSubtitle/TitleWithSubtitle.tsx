@@ -17,8 +17,10 @@ export const titleWithSubtitleDevCompositionSchema = z.object({
 
 export function useTitleWithSubtitleKeyframes({
 	innerDelayInSeconds = 0,
+	subtitleDelayInSeconds = 0.35,
 }: {
 	innerDelayInSeconds?: number;
+	subtitleDelayInSeconds?: number;
 }) {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -45,9 +47,9 @@ export function useTitleWithSubtitleKeyframes({
 		// the subtitle...
 		{
 			type: 'R_SECOND',
-			value: 0,
+			value: subtitleDelayInSeconds,
 			id: 'SUBTITLE_ENTER_START',
-			relativeId: 'TITLE_ENTER_END',
+			relativeId: 'TITLE_ENTER_START',
 		},
 		{
 			type: 'R_SECOND',
