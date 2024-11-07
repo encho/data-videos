@@ -264,8 +264,11 @@ export function getMonthStartsAxisSpec(
 	});
 
 	const firstDatesOfYears = getFirstDateOfEachYear(visibleDates);
+	const firstDatesOfYears_justJanuary = firstDatesOfYears.filter(
+		(date) => date.getMonth() === 0
+	); // January is 0
 
-	const secondaryLabels = firstDatesOfYears.map((d) => {
+	const secondaryLabels = firstDatesOfYears_justJanuary.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
 		return {
@@ -348,13 +351,11 @@ export function getQuarterStartsAxisSpec(
 		};
 	});
 
-	// const firstDatesOfYears = getFirstDateOfEachYear(periodsScale.dates);
 	const firstDatesOfYears = getFirstDateOfEachYear(visibleDates);
 	const firstDatesOfYears_justJanuary = firstDatesOfYears.filter(
 		(date) => date.getMonth() === 0
 	); // January is 0
 
-	// const secondaryLabels = firstDatesOfYears.map((d) => {
 	const secondaryLabels = firstDatesOfYears_justJanuary.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
