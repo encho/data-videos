@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import React from 'react';
-import {staticFile} from 'remotion';
+// import {staticFile} from 'remotion';
 // import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
@@ -29,7 +29,7 @@ export const ThreeD_BarChartComposition: React.FC<
 
 	useFontFamiliesLoader(theme);
 
-	const fontFilePath = staticFile('/fonts/Inter/Inter-Bold.ttf');
+	// const fontFilePath = staticFile('/fonts/Inter/Inter-Bold.ttf');
 
 	// const width = 600;
 	// const height = 600;
