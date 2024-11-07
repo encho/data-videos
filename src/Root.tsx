@@ -245,6 +245,11 @@ import {
 	singleTimeseriesBuildupCompositionSchema,
 } from './compositions/POCs/09-Timeseries/SingleTimeseriesBuildup/SingleTimeseriesBuildupComposition';
 
+import {
+	xAxisSpecsDevCompositionSchema,
+	XAxisSpecsDevComposition,
+} from './compositions/POCs/09-Timeseries/XAxisSpecsDev/XAxisSpecsDevComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -1144,6 +1149,22 @@ export const RemotionRoot: React.FC = () => {
 				</Folder>
 
 				<Folder name="09-Timeseries">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="XAxisSpecs-Dev"
+						component={XAxisSpecsDevComposition}
+						durationInFrames={90 * 9}
+						fps={90}
+						{...videoSizes.linkedInTall}
+						schema={xAxisSpecsDevCompositionSchema}
+						defaultProps={{
+							ticker: 'TESLA' as const,
+							timePeriod: '2Y' as const,
+							nerdyFinanceEnv: 'PROD' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
+						}}
+					/>
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
