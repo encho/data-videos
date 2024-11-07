@@ -212,7 +212,7 @@ export const SingleTimeseriesBuildupChart: React.FC<{
 			</KeyFramesSequence>
 
 			{/* start dot */}
-			<KeyFramesSequence
+			{/* <KeyFramesSequence
 				name="LEFT_VALUE__DOT"
 				from="LEFT_VALUE_ENTER"
 				to="LEFT_VALUE_EXIT_END"
@@ -231,7 +231,7 @@ export const SingleTimeseriesBuildupChart: React.FC<{
 						fadeOutDurationInFrames={LEFT_VALUE_EXIT_DURATION}
 					/>
 				</Position>
-			</KeyFramesSequence>
+			</KeyFramesSequence> */}
 
 			<KeyFramesSequence
 				name="LEFT_VALUE__LABEL"

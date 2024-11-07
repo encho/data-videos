@@ -350,7 +350,7 @@ export const XAxis_Transition: React.FC<{
 			}}
 		>
 			<defs>
-				<clipPath id="xAxisAreaClipPath">
+				<clipPath id="xAxisAreaClipPath_____xxxxxxx">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>

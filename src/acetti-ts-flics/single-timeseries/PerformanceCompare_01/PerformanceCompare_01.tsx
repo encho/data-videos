@@ -33,7 +33,7 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries2,
 	theme,
 }) => {
-	const {durationInFrames} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -129,37 +129,43 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 						durationInFrames: td_buildup,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// easingFunction: Easing.linear, // TODO why linear is broken??
-						numberOfSlices: 20,
+						// numberOfSlices: 20,
+						numberOfSlices: Math.floor(td_buildup / (fps * 1)),
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaEnter,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						// numberOfSlices: 40,
+						numberOfSlices: Math.floor(td_periodsAreaEnter / (fps * 1)),
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomIn,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 5,
+						// numberOfSlices: 5,
+						numberOfSlices: Math.floor(td_periodsAreaZoomIn / (fps * 1)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomed,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 5,
+						// numberOfSlices: 5,
+						numberOfSlices: Math.floor(td_periodsAreaZoomed / (fps * 1)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomOut,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 20,
+						// numberOfSlices: 20,
+						numberOfSlices: Math.floor(td_periodsAreaZoomOut / (fps * 1)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaExit,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						// numberOfSlices: 40,
+						numberOfSlices: Math.floor(td_periodsAreaExit / (fps * 1)),
 						transitionType: 'ZOOM',
 					},
 				]}
