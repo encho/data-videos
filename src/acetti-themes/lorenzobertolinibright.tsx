@@ -3,9 +3,9 @@ import {makeThemeGenerator} from './makeThemeGenerator';
 import {ThemePalette} from './makeThemeGenerator';
 
 // const GRAYS = colorPalettes.Zinc;
-// const GRAYS = colorPalettes.Stone;
+const GRAYS = colorPalettes.Stone;
 // const GRAYS = colorPalettes.Slate;
-const GRAYS = colorPalettes.Gray;
+// const GRAYS = colorPalettes.Gray;
 // const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
 // const GRAYS = colorPalettes.Orange;
@@ -14,8 +14,8 @@ const GRAYS = colorPalettes.Gray;
 const palette: ThemePalette = {
 	// grays: GRAYS,
 	background: {
-		main: 'white',
-		soft: 'yellow',
+		main: GRAYS['50'],
+		soft: GRAYS['200'],
 	},
 	typography: {
 		title: {
@@ -39,7 +39,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		logo: {
-			main: GRAYS['500'],
+			main: GRAYS['900'],
 			soft: GRAYS['400'],
 		},
 		axisTickLabel: {

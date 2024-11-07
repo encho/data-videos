@@ -130,14 +130,15 @@ export const LastLogoPageContent: React.FC<{
 
 export const LastLogoPageContentKeyframes: React.FC<{
 	theme: ThemeType;
-}> = ({theme}) => {
+	width: number;
+}> = ({theme, width}) => {
 	const frame = useCurrentFrame();
 	const {keyframes: keyFramesGroup} = useLastLogoPageContentKeyframes();
 
 	return (
 		<KeyFramesInspector
 			keyFramesGroup={keyFramesGroup}
-			width={700}
+			width={width}
 			baseFontSize={18}
 			frame={frame}
 			theme={theme}

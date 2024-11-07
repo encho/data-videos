@@ -336,7 +336,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.square}
 							schema={textAnimationsCompositionSchema}
 							defaultProps={{
-								themeEnum: 'NERDY' as const,
+								themeEnum: 'LORENZOBERTOLINI' as const,
 								kpiValue: 0.015,
 								kpiValueFormatString: '+0.00%',
 								kpiLabel: 'Net Profit ',
@@ -354,7 +354,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.linkedInTall}
 							schema={textAnimationSubtleDevCompositionSchema}
 							defaultProps={{
-								themeEnum: 'NERDY' as const,
+								themeEnum: 'LORENZOBERTOLINI' as const,
 								text: 'Subtle Text Animation',
 								innerDelayInSeconds: 1,
 								translateYInPageBaselines: 1,
@@ -383,9 +383,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={svgMaskCompositionSchema}
-						defaultProps={{
-							themeEnum: 'NERDY' as const,
-						}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -417,9 +415,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={frameAnimationCompositionSchema}
-						defaultProps={{
-							themeEnum: 'NERDY' as const,
-						}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 
@@ -433,7 +429,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={typesettingCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -445,7 +441,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.widescreen_16x9}
 						schema={textStylesCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -457,7 +453,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={baselineGridCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -469,7 +465,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={modularScaleCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Folder name="MatrixLayout">
@@ -485,7 +481,7 @@ export const RemotionRoot: React.FC = () => {
 							fps={90}
 							{...videoSizes.linkedInTall}
 							schema={simpleMatrixLayoutCompositionSchema}
-							defaultProps={{themeEnum: 'NERDY' as const}}
+							defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 						/>
 
 						<Composition
@@ -497,7 +493,7 @@ export const RemotionRoot: React.FC = () => {
 							fps={90}
 							{...videoSizes.linkedInTall}
 							schema={varyingSizesMatrixLayoutCompositionSchema}
-							defaultProps={{themeEnum: 'NERDY' as const}}
+							defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 						/>
 					</Folder>
 					<Composition
@@ -509,7 +505,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.linkedInTall}
 						schema={swissPoster01CompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -521,7 +517,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={silkscreenFontCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 
@@ -536,7 +532,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={simplePageCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -549,7 +545,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInTall}
 						schema={titleWithSubtitleDevCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							title: 'Sample Title',
 							subtitle: 'Sample Subtitle',
 						}}
@@ -564,7 +560,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={lastLogoPageContentDevCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -576,7 +572,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={lastLogoPageCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 
@@ -592,7 +588,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.square}
 						schema={simpleKPICompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							kpiValue: 0.015,
 							kpiValueFormatString: '+0.00%',
 							kpiLabel: 'Net Profits',
@@ -612,7 +608,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
 						schema={simpleBarChartDevCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -623,7 +619,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={simpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -634,7 +630,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.square}
 						schema={negativeSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -668,7 +664,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.widescreen_16x9}
 						schema={composedSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -682,7 +678,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						{...videoSizes.square}
 						schema={simpleBarChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -696,7 +692,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.square}
 						schema={barChartRaceSimpleCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -710,7 +706,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						// {...videoSizes.square}
 						schema={barChartRaceCustomLabelCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Composition
@@ -721,7 +717,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.square}
 						schema={apiBasedSimpleBarChartCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							data: [],
 							title: 'Bundesliga Tabelle',
 							subtitle: 'Punktestand am 6. November 2024',

@@ -25,8 +25,8 @@ export const LastLogoPageContentDevComposition: React.FC<
 		<Page theme={theme}>
 			<div
 				style={{
-					width: 900,
-					height: 500,
+					width: theme.page.contentWidth,
+					height: theme.page.contentHeight / 2,
 					backgroundColor: theme.global.platteColor,
 					overflow: 'hidden',
 					marginBottom: theme.page.baseline * 4,
@@ -34,7 +34,11 @@ export const LastLogoPageContentDevComposition: React.FC<
 			>
 				<LastLogoPageContent theme={theme} baseline={theme.page.baseline * 2} />
 			</div>
-			<LastLogoPageContentKeyframes theme={theme} />;
+			<LastLogoPageContentKeyframes
+				theme={theme}
+				width={theme.page.contentWidth}
+			/>
+			;
 		</Page>
 	);
 };
