@@ -240,6 +240,11 @@ import {
 	threeD_BarChartCompositionSchema,
 } from './compositions/POCs/3D-Experiments/3D-BarChart/3D-BarChartComposition';
 
+import {
+	SingleTimeseriesBuildupComposition,
+	singleTimeseriesBuildupCompositionSchema,
+} from './compositions/POCs/09-Timeseries/SingleTimeseriesBuildup/SingleTimeseriesBuildupComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -842,7 +847,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={simpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -1134,7 +1139,21 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={germanyBerlinPOCSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+				</Folder>
+
+				<Folder name="09-Timeseries">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SingleTimeseries-Buildup"
+						component={SingleTimeseriesBuildupComposition}
+						durationInFrames={90 * 9}
+						fps={90}
+						{...videoSizes.linkedInTall}
+						schema={singleTimeseriesBuildupCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 
@@ -1244,10 +1263,10 @@ export const RemotionRoot: React.FC = () => {
 					{...videoSizes.square}
 					schema={performance_01_example_schema}
 					defaultProps={{
-						ticker: 'AMZN' as const,
-						timePeriod: 'YTD' as const,
+						ticker: 'XAU-USD' as const,
+						timePeriod: '2Y' as const,
 						nerdyFinanceEnv: 'PROD' as const,
-						themeEnum: 'NERDY' as const,
+						themeEnum: 'LORENZOBERTOLINI' as const,
 					}}
 				/>
 			</Folder>

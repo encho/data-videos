@@ -233,7 +233,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 					M3: '#333',
 					M2: '#555',
 					M1: '#ff0000',
-					BASE: 'magenta',
+					BASE: 'cyan',
 					P1: '#666',
 					P2: '#566',
 					P3: '#444',
@@ -295,8 +295,8 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 				areaOpacity: 0.2,
 			},
 			platte: {
-				backgroundColor: 'magenta',
-				borderColor: 'cyan',
+				backgroundColor: 'rgba(255,0,255,0.1)',
+				borderColor: 'rgba(255,0,255,0.5)',
 			},
 			TypographicLayouts: {
 				baselineGrid: {

@@ -9,10 +9,8 @@ import {
 	periodsScale,
 	TPeriodsScale,
 } from '../acetti-ts-periodsScale/periodsScale';
-// import {getYDomain} from '../acetti-ts-utils/timeSeries/timeSeries';
-// import {TYAxis} from './components/axisSpecs_yAxis';
 
-type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+// type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
 export type TLineChartAnimationContext = {
 	periodsScale: TPeriodsScale;
@@ -25,7 +23,6 @@ export type TLineChartAnimationContext = {
 		framesPercentage: number;
 		easingPercentage: number;
 	};
-	// TODO rename to currentSliceInfo
 	currentSliceInfo: {
 		index: number;
 		frameRange: TFrameRange;
@@ -46,7 +43,7 @@ export type TLineChartAnimationContext = {
 
 type TChildrenFuncArgs = TLineChartAnimationContext;
 
-const yDomainType: TYDomainType = 'VISIBLE';
+// const yDomainType: TYDomainType = 'VISIBLE';
 // const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';
 
@@ -260,17 +257,6 @@ export const LineChartAnimationContainer: React.FC<{
 		],
 		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
 	});
-
-	// const fromPeriodScale = periodsScale({
-	// 	dates,
-	// 	visibleDomainIndices: fromViewSpec.visibleDomainIndices,
-	// 	visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
-	// });
-	// const toPeriodScale = periodsScale({
-	// 	dates,
-	// 	visibleDomainIndices: toViewSpec.visibleDomainIndices,
-	// 	visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
-	// });
 
 	const currentTransitionType = currentTransition.transitionType;
 

@@ -29,7 +29,7 @@ const getSecondaryLabel = (axisSpec: TXAxisSpec, labelId: string) => {
 	return labelObj;
 };
 
-export const XAxis_Transition: React.FC<{
+export const XAxis_EntryTransition: React.FC<{
 	area: TGridLayoutArea;
 	fromAxisSpec: TXAxisSpec;
 	toAxisSpec: TXAxisSpec;
@@ -54,7 +54,7 @@ export const XAxis_Transition: React.FC<{
 	// const FADE_IN_OUT_DURATION = fps * 3;
 	const FADE_IN_OUT_DURATION = Math.min(
 		currentSliceInfo.durationInFrames,
-		fps * 0.8
+		fps * 0.5
 	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -94,7 +94,10 @@ export const XAxis_Transition: React.FC<{
 		return {id: tickId, value};
 	});
 
-	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
+	const enterTicks = ticksEnterUpdateExits.enter.map((tickId, i) => {
+		const DELAY_PER_TICK_FRAMES = Math.floor(fps * 0.05);
+		const tickDelayFrames = i * DELAY_PER_TICK_FRAMES;
+
 		const endTick = getTick(toAxisSpec, tickId);
 
 		const interpolatedOpacity = interpolate(
@@ -110,20 +113,21 @@ export const XAxis_Transition: React.FC<{
 		const currentPeriodFloatIndex = endTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
 
-		// const interpolatedValue = interpolate(
-		// 	relativeFrame,
-		// 	[0, FADE_IN_OUT_DURATION],
-		// 	[0, value],
-		// 	{
-		// 		extrapolateLeft: 'clamp',
-		// 		extrapolateRight: 'clamp',
-		// 	}
-		// );
+		const interpolatedValue = interpolate(
+			relativeFrame,
+			[tickDelayFrames, FADE_IN_OUT_DURATION + tickDelayFrames],
+			[value * 0.8, value],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
 
 		return {
 			id: tickId,
-			value: value,
+			value: interpolatedValue,
 			opacity: interpolatedOpacity,
+			color: 'green',
 		};
 	});
 
@@ -187,7 +191,10 @@ export const XAxis_Transition: React.FC<{
 		};
 	});
 
-	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
+	const enterLabels = labelsEnterUpdateExits.enter.map((labelId, i) => {
+		const DELAY_PER_LABEL_FRAMES = Math.floor(fps * 0.05);
+		const labelDelayFrames = i * DELAY_PER_LABEL_FRAMES;
+
 		const endLabel = getLabel(toAxisSpec, labelId);
 		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
@@ -203,13 +210,25 @@ export const XAxis_Transition: React.FC<{
 
 		const marginLeft = endLabel.marginLeft || 0;
 
+		const interpolatedValue = interpolate(
+			relativeFrame,
+			[labelDelayFrames, FADE_IN_OUT_DURATION + labelDelayFrames],
+			[endX * 0.8, endX],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
 		return {
 			id: labelId,
-			value: endX,
+			// value: endX,
+			value: interpolatedValue,
 			opacity: interpolatedOpacity,
 			label: endLabel.label,
 			textAnchor: endLabel.textAnchor,
 			marginLeft,
+			color: 'green',
 		};
 	});
 
@@ -350,7 +369,7 @@ export const XAxis_Transition: React.FC<{
 			}}
 		>
 			<defs>
-				<clipPath id="xAxisAreaClipPath">
+				<clipPath id="xAxisAreaClipPath_xxxxxxx">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
@@ -365,7 +384,6 @@ export const XAxis_Transition: React.FC<{
 					>
 						<text
 							textAnchor={it.textAnchor}
-							fill={theme.color}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
 							alignmentBaseline="baseline"
@@ -374,6 +392,8 @@ export const XAxis_Transition: React.FC<{
 							y={TICK_TEXT_FONT_SIZE}
 							x={it.value + it.marginLeft}
 							opacity={it.opacity}
+							// fill={theme.color}
+							fill={it.color}
 						>
 							{it.label}
 						</text>
@@ -519,7 +539,8 @@ export const XAxis_Transition: React.FC<{
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							// stroke={theme.tickColor}
+							stroke={it.color}
 							strokeWidth={4}
 							opacity={it.opacity}
 						/>

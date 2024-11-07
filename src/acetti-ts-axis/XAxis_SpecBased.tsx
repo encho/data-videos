@@ -17,16 +17,19 @@ export const XAxis_SpecBased: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
+	console.log({axisSpec});
+
 	return (
 		<svg
 			width={area.width}
 			height={area.height}
 			style={{
 				overflow: 'visible',
+				backgroundColor: 'blue',
 			}}
 		>
 			<defs>
-				<clipPath id="xAxisAreaClipPath">
+				<clipPath id="xAxisAreaClipPath____xxxxxx">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
