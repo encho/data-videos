@@ -1,5 +1,6 @@
 import {z} from 'zod';
 import React from 'react';
+import {staticFile} from 'remotion';
 // import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
@@ -11,6 +12,7 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
+import TallBox from './TallBox';
 // import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 // import {buildKeyFramesGroup, getKeyFramesInterpolator} from './keyframes';
 
@@ -27,6 +29,8 @@ export const ThreeD_BarChartComposition: React.FC<
 
 	useFontFamiliesLoader(theme);
 
+	const fontFilePath = staticFile('/fonts/Inter/Inter-Bold.ttf');
+
 	// const width = 600;
 	// const height = 600;
 
@@ -39,6 +43,12 @@ export const ThreeD_BarChartComposition: React.FC<
 				height: '100%',
 			}}
 		>
+			{/* <TallBox fontFilePath={fontFilePath} /> */}
+			<TallBox
+				width={1000}
+				height={1000}
+				// fontFilePath={fontFilePath}
+			/>
 			<LorenzoBertoliniLogo2 theme={theme} />
 		</div>
 	);
