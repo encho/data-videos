@@ -5,17 +5,13 @@ import {
 	getThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
-import {DisplayGridRails} from '../../../../acetti-layout';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {HtmlArea} from '../../../../acetti-layout';
-// import {SlideTitle} from '../SlideTitle';
 import {useChartLayout} from './useChartLayout';
 import {getTextDimensionsFromTextStyle} from '../../../../acetti-typography/CapSizeTextNew';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {TypographyStyle} from '../TextStyles/TextStylesComposition';
-// import {LorenzoBertoliniLogo}
 
 export const swissPoster01CompositionSchema = z.object({
 	themeEnum: zThemeEnum,

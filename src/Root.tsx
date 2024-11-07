@@ -285,7 +285,7 @@ export const RemotionRoot: React.FC = () => {
 					{...videoSizes.linkedInTall}
 					schema={bundesligaTabelleCompositionSchema}
 					defaultProps={{
-						themeEnum: 'NERDY' as const,
+						themeEnum: 'LORENZOBERTOLINI' as const,
 						data: [],
 						title: 'Bundesliga Tabelle',
 						subtitle: 'Punktestand am 6. November 2024',
@@ -1165,7 +1165,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.square}
 						schema={threeD_BarChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 				<Folder name="Path-Animation-Experiments">

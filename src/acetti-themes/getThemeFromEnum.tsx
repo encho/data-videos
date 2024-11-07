@@ -1,9 +1,9 @@
 import {z} from 'zod';
 import {useVideoConfig} from 'remotion';
 
-import {lorenzobertoliniTheme} from './lorenzobertolini';
-import {nerdyTheme} from './nerdy';
-import {lorenzobertolinibrightTheme} from './lorenzobertolinibright';
+import {theme as lorenzobertoliniTheme} from './lorenzobertolini';
+import {theme as nerdyTheme} from './nerdy';
+import {theme as lorenzobertolinibrightTheme} from './lorenzobertolinibright';
 import {useFontFamiliesLoader} from '../acetti-typography/useFontFamiliesLoader';
 
 export const zThemeEnum = z.enum([
