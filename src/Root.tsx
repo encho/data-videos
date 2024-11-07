@@ -371,7 +371,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.square}
 						schema={textMaskCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -397,7 +397,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.linkedInTall}
 						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							fontSizeInBaselines: 4,
 							lineHeightInBaselines: 4,
 							numberOfWordRows: 29,
