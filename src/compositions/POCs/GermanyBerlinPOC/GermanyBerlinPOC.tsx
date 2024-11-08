@@ -115,6 +115,7 @@ export const GermanyBerlin: React.FC<{
 				title={'Hello title'}
 				subtitle={'Hello subtitle'}
 				theme={theme}
+				baseline={20}
 			/>
 			<Sequence layout="none" from={fps * 1.5}>
 				<div

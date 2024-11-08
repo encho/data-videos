@@ -1253,7 +1253,7 @@ export const RemotionRoot: React.FC = () => {
 					fps={90}
 					{...videoSizes.square}
 					schema={colorPaletteSchema}
-					defaultProps={{themeEnum: 'NERDY' as const}}
+					defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 				/>
 			</Folder>
 

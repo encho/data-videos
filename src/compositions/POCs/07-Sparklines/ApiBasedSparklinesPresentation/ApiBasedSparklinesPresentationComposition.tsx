@@ -2,13 +2,18 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 import {zColor} from '@remotion/zod-types';
-import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
+
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
+import {
+	zNerdyFinancePriceChartDataResult,
+	TNerdyFinancePriceChartDataResult,
+} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {NegativeBarChartPage} from '../../05-BarCharts/NegativeSimpleBarChart/NegativeBarChartPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';
@@ -27,7 +32,10 @@ import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtit
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-import {zSimpleBarChartData} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {
+	TSimpleBarChartData,
+	zSimpleBarChartData,
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -40,6 +48,21 @@ export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	barChartDurationInSeconds: z.number(),
 	lastSlideDurationInSeconds: z.number(),
 });
+
+type FlicProps = {
+	theme: ThemeType;
+	barChartData: TSimpleBarChartData;
+	dataInfo: {
+		ticker: string;
+		formatter: string;
+		color: string;
+	}[];
+	data: TNerdyFinancePriceChartDataResult[];
+
+	singleSparklineDurationInSeconds: number;
+	barChartDurationInSeconds: number;
+	lastSlideDurationInSeconds: number;
+};
 
 function getDataColor(
 	dataInfo: {ticker: string; color: string; formatter: string}[],
@@ -69,11 +92,37 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 	lastSlideDurationInSeconds,
 	barChartData,
 }) => {
+	const theme = useThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
+
+	return (
+		<PageContext width={width} height={height} margin={60} nrBaselines={50}>
+			<ApiBasedSparklinesPresentationFlic
+				theme={theme}
+				data={data}
+				dataInfo={dataInfo}
+				singleSparklineDurationInSeconds={singleSparklineDurationInSeconds}
+				barChartDurationInSeconds={barChartDurationInSeconds}
+				lastSlideDurationInSeconds={lastSlideDurationInSeconds}
+				barChartData={barChartData}
+			/>
+		</PageContext>
+	);
+};
+
+export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
+	theme,
+	data,
+	dataInfo,
+	singleSparklineDurationInSeconds,
+	barChartDurationInSeconds,
+	lastSlideDurationInSeconds,
+	barChartData,
+}) => {
 	const {
 		fps,
 		// durationInFrames
 	} = useVideoConfig();
-	const theme = useThemeFromEnum(themeEnum as any);
 
 	const singleDuration = Math.floor(fps * singleSparklineDurationInSeconds);
 
@@ -149,11 +198,13 @@ export const SingleSparklineSlide: React.FC<{
 	// const DEBUG = true;
 	const DEBUG = false;
 
+	const page = usePage();
+
 	const {ref, dimensions} = useElementDimensions();
 
 	const {fps} = useVideoConfig();
 
-	const baseline = theme.page.baseline * 1.75;
+	const baseline = page.baseline * 1.75;
 
 	const matrixLayout = useMatrixLayout({
 		width: dimensions ? dimensions.width : 2000, // to better show grid rails!
@@ -163,7 +214,7 @@ export const SingleSparklineSlide: React.FC<{
 		rowSpacePixels: 0,
 		columnSpacePixels: 0,
 		rowPaddingPixels: 0,
-		columnPaddingPixels: theme.page.baseline * 0,
+		columnPaddingPixels: page.baseline * 0,
 	});
 
 	const area_1 = getMatrixLayoutCellArea({
@@ -175,7 +226,7 @@ export const SingleSparklineSlide: React.FC<{
 	const domain = extent(data, (it) => it.value);
 
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			<div
 				style={{
 					display: 'flex',
@@ -256,7 +307,7 @@ export const SingleSparklineSlide: React.FC<{
 						>
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
+								baseline={page.baseline}
 							>
 								{'Data Source: Yahoo Finance'}
 							</TypographyStyle>
