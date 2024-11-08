@@ -3,7 +3,9 @@ import {useCurrentFrame, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 import {useMemo} from 'react';
 
-import {Page} from '../../03-Page/SimplePage/ThemePage';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {Page} from '../../03-Page/SimplePage/NewPage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
@@ -21,9 +23,23 @@ export const barChartRaceSimpleCompositionSchema = z.object({
 export const BarChartRace_Simple_Composition: React.FC<
 	z.infer<typeof barChartRaceSimpleCompositionSchema>
 > = ({themeEnum}) => {
+	const {width, height} = useVideoConfig();
+	const theme = useThemeFromEnum(themeEnum as any);
+
+	return (
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<BarChartRace_Simple_Flic theme={theme} />
+		</PageContext>
+	);
+};
+
+export const BarChartRace_Simple_Flic: React.FC<{theme: ThemeType}> = ({
+	theme,
+}) => {
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
-	const theme = useThemeFromEnum(themeEnum as any);
+
+	const page = usePage();
 
 	const gdpData = useMemo(() => getGdpData(2020, 2024), []);
 
@@ -72,7 +88,7 @@ export const BarChartRace_Simple_Composition: React.FC<
 			>
 				<KeyFramesInspector
 					keyFramesGroup={keyframes}
-					width={theme.page.contentWidth}
+					width={page.contentWidth}
 					baseFontSize={22}
 					frame={frame}
 					theme={theme}
@@ -82,7 +98,7 @@ export const BarChartRace_Simple_Composition: React.FC<
 			<BarChartRace
 				theme={theme}
 				data={barChartRaceData}
-				width={theme.page.contentWidth}
+				width={page.contentWidth}
 				height={360}
 				keyframes={keyframes}
 				// CustomLabelComponent={CountryLogosBarChartLabel}

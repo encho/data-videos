@@ -8,7 +8,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
 	useThemeFromEnum,
@@ -21,6 +21,7 @@ import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {BarChartRace} from '../../../../acetti-flics/SimpleBarChart/BarChartRace';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 
 export const barChartRaceCustomLabelCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -29,10 +30,23 @@ export const barChartRaceCustomLabelCompositionSchema = z.object({
 export const BarChartRace_CustomLabel_Composition: React.FC<
 	z.infer<typeof barChartRaceCustomLabelCompositionSchema>
 > = ({themeEnum}) => {
+	const {width, height} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
+	return (
+		<PageContext margin={50} nrBaselines={50} width={width} height={height}>
+			<BarChartRace_CustomLabel_Flic theme={theme} />
+		</PageContext>
+	);
+};
+
+export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
+	theme,
+}) => {
 	const {fps} = useVideoConfig();
 
 	const {ref, dimensions} = useElementDimensions();
+
+	const page = usePage();
 
 	const gdpData = useMemo(() => getGdpData(2000, 2024), []);
 
@@ -62,7 +76,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	});
 
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			<div
 				style={{
 					display: 'flex',
@@ -96,7 +110,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 							<BarChartRace
 								theme={theme}
 								data={barChartRaceData}
-								width={theme.page.contentWidth}
+								width={page.contentWidth}
 								height={dimensions.height}
 								CustomLabelComponent={CountryLogosBarChartLabel}
 							/>
@@ -118,10 +132,10 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 						<div style={{maxWidth: '62%'}}>
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
+								baseline={page.baseline}
 							>
 								<TextAnimationSubtle
-									translateY={theme.page.baseline * 1.1}
+									translateY={page.baseline * 1.1}
 									innerDelayInSeconds={5.25} // TODO time better...
 								>
 									Data Source: German Bundesbank 2024 Paper on Evolutional
