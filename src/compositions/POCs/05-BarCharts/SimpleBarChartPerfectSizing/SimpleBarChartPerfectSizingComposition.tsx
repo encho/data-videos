@@ -39,77 +39,82 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 	}));
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+		<PageContext margin={50} nrBaselines={60} width={width} height={height}>
 			<Page show theme={theme}>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						height: '100%',
-						position: 'relative',
-					}}
-				>
-					<PageHeader
-						theme={theme}
-						// showArea={showAreas}
-					>
-						<TitleWithSubtitle
-							baseline={theme.page.baseline * 0.8}
-							title={
-								'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
-							}
-							subtitle={'Wahlergebnisse Brandenburg 2024'}
-							theme={theme}
-						/>
-					</PageHeader>
-
-					<div
-						ref={divRef}
-						style={{
-							flex: 1,
-							display: 'flex',
-							justifyContent: 'center',
-						}}
-					>
-						{dimensions ? (
-							<div>
-								<SimpleBarChart
-									data={barChartData}
-									width={dimensions.width}
-									height={dimensions.height}
-									// showLayout
-									// baseline={getBarChartBaseline(dimensions.height, barChartData)}
+				{({baseline}) => {
+					return (
+						<>
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									height: '100%',
+									position: 'relative',
+								}}
+							>
+								<PageHeader
 									theme={theme}
-								/>
-							</div>
-						) : null}
-					</div>
-
-					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter
-						theme={theme}
-						// showArea={showAreas}
-					>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'flex-end',
-							}}
-						>
-							<div style={{maxWidth: '62%'}}>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.dataSource}
-									baseline={theme.page.baseline}
+									// showArea={showAreas}
 								>
-									Data Source: German Bundesbank 2024 Paper on Evolutional
-									Finance
-								</TypographyStyle>
+									<TitleWithSubtitle
+										title={
+											'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
+										}
+										subtitle={'Wahlergebnisse Brandenburg 2024'}
+										theme={theme}
+									/>
+								</PageHeader>
+
+								<div
+									ref={divRef}
+									style={{
+										flex: 1,
+										display: 'flex',
+										justifyContent: 'center',
+									}}
+								>
+									{dimensions ? (
+										<div>
+											<SimpleBarChart
+												data={barChartData}
+												width={dimensions.width}
+												height={dimensions.height}
+												// showLayout
+												// baseline={getBarChartBaseline(dimensions.height, barChartData)}
+												theme={theme}
+											/>
+										</div>
+									) : null}
+								</div>
+
+								{/* TODO introduce evtl. also absolute positioned footer */}
+								<PageFooter
+									theme={theme}
+									// showArea={showAreas}
+								>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											alignItems: 'flex-end',
+										}}
+									>
+										<div style={{maxWidth: '62%'}}>
+											<TypographyStyle
+												typographyStyle={theme.typography.textStyles.dataSource}
+												baseline={baseline}
+											>
+												Data Source: German Bundesbank 2024 Paper on Evolutional
+												Finance
+											</TypographyStyle>
+										</div>
+									</div>
+								</PageFooter>
 							</div>
-						</div>
-					</PageFooter>
-				</div>
-				<PageLogo theme={theme} />
+							<PageLogo theme={theme} />
+						</>
+					);
+				}}
 			</Page>
 		</PageContext>
 	);

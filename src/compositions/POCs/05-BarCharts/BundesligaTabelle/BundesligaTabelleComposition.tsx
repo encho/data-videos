@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, Sequence} from 'remotion';
 
-import {PageContext} from '../../../../acetti-components/PageContext';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {useBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/useBarChartKeyframes';
 import {
 	Page,
@@ -67,7 +67,7 @@ export const BundesligaTabelleComposition: React.FC<
 	const lastSlideFrom = barChartFrom + barChartDurationInFrames;
 
 	return (
-		<PageContext width={width} height={height} margin={40} nrBaselines={40}>
+		<PageContext width={width} height={height} margin={50} nrBaselines={60}>
 			<Sequence
 				layout="none"
 				from={fps * 0}
@@ -139,6 +139,8 @@ export const BundesligaBarChartsPage: React.FC<{
 
 	const barChartDelayInSeconds = 0.7;
 
+	const page = usePage();
+
 	return (
 		<Page theme={theme} show>
 			<div
@@ -198,10 +200,10 @@ export const BundesligaBarChartsPage: React.FC<{
 						<div style={{maxWidth: '62%'}}>
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
+								baseline={page.baseline}
 							>
 								<TextAnimationSubtle
-									translateY={theme.page.baseline * 1.1}
+									translateY={page.baseline * 1.1}
 									innerDelayInSeconds={
 										lastEnterEndSecond + barChartDelayInSeconds
 									}

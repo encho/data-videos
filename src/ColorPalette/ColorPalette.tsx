@@ -9,8 +9,6 @@ import chroma from 'chroma-js';
 import {linearTiming, TransitionSeries} from '@remotion/transitions';
 import {slide} from '@remotion/transitions/slide';
 
-import {lorenzobertoliniTheme} from '../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../acetti-themes/nerdy';
 import {ColorsList} from '../acetti-flics/ColorsList';
 import {TitleSlide} from './TitleSlide';
 import {ThemeType} from '../acetti-themes/themeTypes';

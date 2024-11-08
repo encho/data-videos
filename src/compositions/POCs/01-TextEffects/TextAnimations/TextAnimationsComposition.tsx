@@ -36,41 +36,51 @@ export const TextAnimationsComposition: React.FC<
 	return (
 		<PageContext width={width} height={height} margin={40} nrBaselines={40}>
 			<Page theme={theme} show>
-				<Position position={{top: 100, left: 100}}>
-					<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
-						<Sequence layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.h2}
-								baseline={24}
-								marginBottom={2}
-							>
-								{/* <FadeInAndOutText>Fade In And Out Text</FadeInAndOutText> */}
-								<FadeInAndOutText>Fade In/Out</FadeInAndOutText>
-							</TypographyStyle>
-						</Sequence>
-						<Sequence layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.h2}
-								baseline={24}
-								marginBottom={2}
-							>
-								<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>
-							</TypographyStyle>
-						</Sequence>
-						<Sequence layout="none">
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.h2}
-								baseline={24}
-								marginBottom={2}
-							>
-								<TextAnimationSubtle translateY={theme.page.baseline * 1.25}>
-									Text Animation Subtle
-								</TextAnimationSubtle>
-							</TypographyStyle>
-						</Sequence>
-					</div>
-				</Position>
-				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+				{({baseline}) => {
+					return (
+						<>
+							<Position position={{top: 100, left: 100}}>
+								<div
+									style={{display: 'flex', flexDirection: 'column', gap: 80}}
+								>
+									<Sequence layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.h2}
+											baseline={24}
+											marginBottom={2}
+										>
+											{/* <FadeInAndOutText>Fade In And Out Text</FadeInAndOutText> */}
+											<FadeInAndOutText>Fade In/Out</FadeInAndOutText>
+										</TypographyStyle>
+									</Sequence>
+									<Sequence layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.h2}
+											baseline={24}
+											marginBottom={2}
+										>
+											<WaterfallTextEffect>
+												Waterfall Text Effect
+											</WaterfallTextEffect>
+										</TypographyStyle>
+									</Sequence>
+									<Sequence layout="none">
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.h2}
+											baseline={24}
+											marginBottom={2}
+										>
+											<TextAnimationSubtle translateY={baseline * 1.25}>
+												Text Animation Subtle
+											</TextAnimationSubtle>
+										</TypographyStyle>
+									</Sequence>
+								</div>
+							</Position>
+							<LorenzoBertoliniLogo color={theme.typography.textColor} />
+						</>
+					);
+				}}
 			</Page>
 		</PageContext>
 	);

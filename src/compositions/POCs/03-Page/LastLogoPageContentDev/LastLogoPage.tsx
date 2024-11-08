@@ -1,6 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
+import {usePage} from '../../../../acetti-components/PageContext';
 import {Page} from '../SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -49,8 +50,9 @@ export const LastLogoPageContent: React.FC<{
 	baseline?: number;
 }> = ({theme, baseline: baselineProp}) => {
 	const frame = useCurrentFrame();
+	const page = usePage();
 
-	const baseline = baselineProp || theme.page.baseline;
+	const baseline = baselineProp || page.baseline;
 
 	const {keyframes: keyFramesGroup} = useLastLogoPageContentKeyframes();
 
@@ -114,7 +116,7 @@ export const LastLogoPageContent: React.FC<{
 			</div>
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.h2}
-				baseline={theme.page.baseline / 2}
+				baseline={page.baseline / 2}
 				style={{
 					opacity: linkOpacity,
 					filter: `blur(${linkFilterPixels}px)`,
@@ -150,8 +152,8 @@ export const LastLogoPage: React.FC<{
 	theme: ThemeType;
 	baseline?: number;
 }> = ({theme, baseline: baselineProp}) => {
-	// TODO evtl. from theme directly
-	const baseline = baselineProp || theme.page.baseline * 2;
+	const page = usePage();
+	const baseline = baselineProp || page.baseline * 2;
 	return (
 		<Page theme={theme} show>
 			<div

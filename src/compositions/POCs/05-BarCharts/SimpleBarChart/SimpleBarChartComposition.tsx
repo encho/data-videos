@@ -39,71 +39,77 @@ export const SimpleBarChartComposition: React.FC<
 	return (
 		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
 			<Page theme={theme} show>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						height: '100%',
-						position: 'relative',
-					}}
-				>
-					<PageHeader
-						theme={theme}
-						// showArea={showAreas}
-					>
-						<TitleWithSubtitle
-							title={'AfD: Vormarsch in Brandenburg'}
-							subtitle={'Wahlergebnisse Brandenburg 2024'}
-							theme={theme}
-						/>
-					</PageHeader>
-
-					<div
-						ref={ref}
-						style={{
-							flex: 1,
-							display: 'flex',
-							justifyContent: 'center',
-						}}
-					>
-						{dimensions ? (
-							<Sequence from={Math.floor(fps * 0.75)} layout="none">
-								<SimpleBarChart
-									data={barChartData}
-									width={dimensions.width}
-									height={dimensions.height}
-									// baseline={BASELINE}
+				{({baseline}) => {
+					return (
+						<>
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									height: '100%',
+									position: 'relative',
+								}}
+							>
+								<PageHeader
 									theme={theme}
-								/>
-							</Sequence>
-						) : null}
-					</div>
-
-					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter
-						theme={theme}
-						// showArea={showAreas}
-					>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'flex-end',
-							}}
-						>
-							<div style={{maxWidth: '62%'}}>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.dataSource}
-									baseline={theme.page.baseline}
+									// showArea={showAreas}
 								>
-									Data Source: German Bundesbank 2024 Paper on Evolutional
-									Finance
-								</TypographyStyle>
+									<TitleWithSubtitle
+										title={'AfD: Vormarsch in Brandenburg'}
+										subtitle={'Wahlergebnisse Brandenburg 2024'}
+										theme={theme}
+									/>
+								</PageHeader>
+
+								<div
+									ref={ref}
+									style={{
+										flex: 1,
+										display: 'flex',
+										justifyContent: 'center',
+									}}
+								>
+									{dimensions ? (
+										<Sequence from={Math.floor(fps * 0.75)} layout="none">
+											<SimpleBarChart
+												data={barChartData}
+												width={dimensions.width}
+												height={dimensions.height}
+												// baseline={BASELINE}
+												theme={theme}
+											/>
+										</Sequence>
+									) : null}
+								</div>
+
+								{/* TODO introduce evtl. also absolute positioned footer */}
+								<PageFooter
+									theme={theme}
+									// showArea={showAreas}
+								>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											alignItems: 'flex-end',
+										}}
+									>
+										<div style={{maxWidth: '62%'}}>
+											<TypographyStyle
+												typographyStyle={theme.typography.textStyles.dataSource}
+												baseline={baseline}
+											>
+												Data Source: German Bundesbank 2024 Paper on Evolutional
+												Finance
+											</TypographyStyle>
+										</div>
+									</div>
+								</PageFooter>
 							</div>
-						</div>
-					</PageFooter>
-				</div>
-				<PageLogo theme={theme} />
+							<PageLogo theme={theme} />
+						</>
+					);
+				}}
 			</Page>
 		</PageContext>
 	);

@@ -2,6 +2,7 @@ import {useVideoConfig} from 'remotion';
 import React from 'react';
 import invariant from 'tiny-invariant';
 
+import {usePage} from '../../acetti-components/PageContext';
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {SimpleBarChart, TSimpleBarChartData} from './SimpleBarChart';
 import {SimpleBarChartTransition} from './SimpleBarChartTransition';
@@ -224,6 +225,7 @@ type TPeriodLabelTransitionProps = {
 export const DefaultPeriodLabelTransition: React.FC<
 	TPeriodLabelTransitionProps
 > = ({theme, fromPeriod, toPeriod, animateEnter, animateExit}) => {
+	const page = usePage();
 	return (
 		<div
 			style={{
@@ -234,12 +236,12 @@ export const DefaultPeriodLabelTransition: React.FC<
 		>
 			<TypographyStyle
 				typographyStyle={theme.typography.textStyles.h3}
-				baseline={theme.page.baseline}
+				baseline={page.baseline}
 				marginBottom={2}
 			>
 				<TextAnimationSubtle
 					innerDelayInSeconds={0}
-					translateY={theme.page.baseline * 1.15}
+					translateY={page.baseline * 1.15}
 					animateEnter={animateEnter}
 					animateExit={animateExit}
 				>
