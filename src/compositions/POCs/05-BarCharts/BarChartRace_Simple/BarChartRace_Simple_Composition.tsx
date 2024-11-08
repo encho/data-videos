@@ -5,7 +5,7 @@ import {useMemo} from 'react';
 
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {Page} from '../../03-Page/SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 import {
 	useThemeFromEnum,
 	zThemeEnum,

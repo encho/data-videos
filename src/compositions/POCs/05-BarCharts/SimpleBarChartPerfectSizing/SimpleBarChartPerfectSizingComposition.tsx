@@ -9,7 +9,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/NewPage';
+} from '../../../../acetti-components/Page';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
 	useThemeFromEnum,

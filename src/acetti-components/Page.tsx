@@ -1,10 +1,10 @@
 import {ReactNode} from 'react';
 
 import chroma from 'chroma-js';
-import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {usePage} from '../../../../acetti-components/PageContext';
+import {CapSizeTextNew} from '../acetti-typography/CapSizeTextNew';
+import {ThemeType} from '../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {usePage} from './PageContext';
 
 type PageChildFunctionArgs = {
 	marginTop: number;

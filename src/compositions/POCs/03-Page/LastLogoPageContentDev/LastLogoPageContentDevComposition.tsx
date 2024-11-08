@@ -8,7 +8,7 @@ import {
 	LastLogoPageContent,
 	LastLogoPageContentKeyframes,
 } from './LastLogoPage';
-import {Page} from '../SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 import {
 	useThemeFromEnum,
 	zThemeEnum,

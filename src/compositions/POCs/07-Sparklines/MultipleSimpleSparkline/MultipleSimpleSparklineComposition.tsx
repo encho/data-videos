@@ -9,7 +9,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/NewPage';
+} from '../../../../acetti-components/Page';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';

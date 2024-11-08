@@ -3,7 +3,12 @@ import {z} from 'zod';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {useElementDimensions} from './useElementDimensions';
-import {Page, PageFooter, PageLogo, PageHeader} from './NewPage';
+import {
+	Page,
+	PageFooter,
+	PageLogo,
+	PageHeader,
+} from '../../../../acetti-components/Page';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../TitleWithSubtitle/TitleWithSubtitle';

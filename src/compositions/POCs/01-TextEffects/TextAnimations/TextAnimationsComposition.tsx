@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
-import {Page} from '../../03-Page/SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 import {TextAnimationSubtle} from './TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';

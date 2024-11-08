@@ -13,7 +13,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/NewPage';
+} from '../../../../acetti-components/Page';
 import {NegativeBarChartPage} from '../../05-BarCharts/NegativeSimpleBarChart/NegativeBarChartPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';

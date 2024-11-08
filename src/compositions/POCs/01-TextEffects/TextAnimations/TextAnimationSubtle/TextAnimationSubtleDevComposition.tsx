@@ -7,7 +7,7 @@ import {
 	TextAnimationSubtle,
 	TextAnimationSubtleKeyframes,
 } from './TextAnimationSubtle';
-import {Page} from '../../../03-Page/SimplePage/NewPage';
+import {Page} from '../../../../../acetti-components/Page';
 import {
 	useThemeFromEnum,
 	zThemeEnum,

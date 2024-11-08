@@ -7,7 +7,7 @@ import {
 	TitleWithSubtitle,
 	TitleWithSubtitleKeyframes,
 } from './TitleWithSubtitle';
-import {Page} from '../SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 import {
 	useThemeFromEnum,
 	zThemeEnum,

@@ -2,7 +2,7 @@ import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {usePage} from '../../../../acetti-components/PageContext';
-import {Page} from '../SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {
@@ -10,7 +10,7 @@ import {
 	getKeyFramesInterpolator,
 } from '../../Keyframes/Keyframes/keyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
-import {LorenzoBertoliniLogoNoAnimation} from '../SimplePage/NewPage';
+import {LorenzoBertoliniLogoNoAnimation} from '../../../../acetti-components/Page';
 
 export function useLastLogoPageContentKeyframes() {
 	const {durationInFrames, fps} = useVideoConfig();

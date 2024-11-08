@@ -8,7 +8,7 @@ import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
-import {Page} from '../../03-Page/SimplePage/NewPage';
+import {Page} from '../../../../acetti-components/Page';
 // import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 // import {TitleAndSubtitle} from '../../../../acetti-components/TitleAndSubtitle';
 // import {Position} from '../../../../acetti-ts-base/Position';

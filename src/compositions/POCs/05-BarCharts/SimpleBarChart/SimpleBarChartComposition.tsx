@@ -7,7 +7,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/NewPage';
+} from '../../../../acetti-components/Page';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
