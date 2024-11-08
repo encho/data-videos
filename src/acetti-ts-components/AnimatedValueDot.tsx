@@ -43,11 +43,18 @@ export const AnimatedValueDot: React.FC<{
 					</g>
 				) : null}
 				{/* ensures that the dot is not displayed, if out of bounds vertically */}
-				{yRight && yRight >= 0 && yRight <= area.height ? (
-					<g>
-						<Dot cx={xRight} cy={yRight} r={radius} fill={dotColor} />
-					</g>
-				) : null}
+				<g>
+					<Dot
+						cx={xRight}
+						// QUICK-FIX, (yRight || 0) as the original condition was not displaying the Dot for the last timeseries value,
+						// i.e. when the timeseries was fully visible
+						// original condition was:
+						// {yRight && yRight >= 0 && yRight <= area.height ? (<g><Dot...) : null}
+						cy={yRight || 0}
+						r={radius}
+						fill={dotColor}
+					/>
+				</g>
 			</g>
 		</svg>
 	);
