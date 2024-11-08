@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
-import {Page} from '../SimplePage/ThemePage';
+import {Page} from '../SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {
@@ -153,7 +153,7 @@ export const LastLogoPage: React.FC<{
 	// TODO evtl. from theme directly
 	const baseline = baselineProp || theme.page.baseline * 2;
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			<div
 				style={{
 					width: '100%',

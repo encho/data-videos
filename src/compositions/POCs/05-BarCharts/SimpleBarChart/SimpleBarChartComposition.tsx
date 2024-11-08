@@ -1,12 +1,13 @@
 import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
@@ -24,7 +25,7 @@ export const simpleBarChartCompositionSchema = z.object({
 export const SimpleBarChartComposition: React.FC<
 	z.infer<typeof simpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps} = useVideoConfig();
+	const {fps, width, height} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
 
@@ -37,72 +38,75 @@ export const SimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<Page theme={theme}>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					position: 'relative',
-				}}
-			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<TitleWithSubtitle
-						title={'AfD: Vormarsch in Brandenburg'}
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
-						theme={theme}
-					/>
-				</PageHeader>
-
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<Page theme={theme} show>
 				<div
-					ref={ref}
 					style={{
-						flex: 1,
 						display: 'flex',
-						justifyContent: 'center',
+						flexDirection: 'column',
+						height: '100%',
+						position: 'relative',
 					}}
 				>
-					{dimensions ? (
-						<Sequence from={Math.floor(fps * 0.75)} layout="none">
-							<SimpleBarChart
-								data={barChartData}
-								width={dimensions.width}
-								height={dimensions.height}
-								// baseline={BASELINE}
-								theme={theme}
-							/>
-						</Sequence>
-					) : null}
-				</div>
+					<PageHeader
+						theme={theme}
+						// showArea={showAreas}
+					>
+						<TitleWithSubtitle
+							title={'AfD: Vormarsch in Brandenburg'}
+							subtitle={'Wahlergebnisse Brandenburg 2024'}
+							theme={theme}
+						/>
+					</PageHeader>
 
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
 					<div
+						ref={ref}
 						style={{
+							flex: 1,
 							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
+							justifyContent: 'center',
 						}}
 					>
-						<div style={{maxWidth: '62%'}}>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
-							>
-								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
-							</TypographyStyle>
-						</div>
+						{dimensions ? (
+							<Sequence from={Math.floor(fps * 0.75)} layout="none">
+								<SimpleBarChart
+									data={barChartData}
+									width={dimensions.width}
+									height={dimensions.height}
+									// baseline={BASELINE}
+									theme={theme}
+								/>
+							</Sequence>
+						) : null}
 					</div>
-				</PageFooter>
-			</div>
-			<PageLogo theme={theme} />
-		</Page>
+
+					{/* TODO introduce evtl. also absolute positioned footer */}
+					<PageFooter
+						theme={theme}
+						// showArea={showAreas}
+					>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'flex-end',
+							}}
+						>
+							<div style={{maxWidth: '62%'}}>
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.dataSource}
+									baseline={theme.page.baseline}
+								>
+									Data Source: German Bundesbank 2024 Paper on Evolutional
+									Finance
+								</TypographyStyle>
+							</div>
+						</div>
+					</PageFooter>
+				</div>
+				<PageLogo theme={theme} />
+			</Page>
+		</PageContext>
 	);
 };
 

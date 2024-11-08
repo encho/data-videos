@@ -1,6 +1,8 @@
 import {z} from 'zod';
 import React from 'react';
+import {useVideoConfig} from 'remotion';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {LastLogoPage} from './LastLogoPage';
 import {
 	useThemeFromEnum,
@@ -15,6 +17,11 @@ export const LastLogoPageComposition: React.FC<
 	z.infer<typeof lastLogoPageCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
 
-	return <LastLogoPage theme={theme} />;
+	return (
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<LastLogoPage theme={theme} />
+		</PageContext>
+	);
 };

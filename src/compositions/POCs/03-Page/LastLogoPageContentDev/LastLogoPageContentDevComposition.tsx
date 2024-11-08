@@ -1,12 +1,14 @@
 import {z} from 'zod';
 import React from 'react';
+import {useVideoConfig} from 'remotion';
 
 // TODO LastLogoPageContentContent rather
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {
 	LastLogoPageContent,
 	LastLogoPageContentKeyframes,
 } from './LastLogoPage';
-import {Page} from '../SimplePage/ThemePage';
+import {Page} from '../SimplePage/NewPage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
@@ -20,25 +22,33 @@ export const LastLogoPageContentDevComposition: React.FC<
 	z.infer<typeof lastLogoPageContentDevCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
 
 	return (
-		<Page theme={theme}>
-			<div
-				style={{
-					width: theme.page.contentWidth,
-					height: theme.page.contentHeight / 2,
-					backgroundColor: theme.global.platteColor,
-					overflow: 'hidden',
-					marginBottom: theme.page.baseline * 4,
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<Page theme={theme} show>
+				{({baseline, contentWidth, contentHeight}) => {
+					return (
+						<>
+							<div
+								style={{
+									width: contentWidth,
+									height: contentHeight / 2,
+									backgroundColor: theme.global.platteColor,
+									overflow: 'hidden',
+									marginBottom: baseline * 4,
+								}}
+							>
+								<LastLogoPageContent theme={theme} baseline={baseline * 2} />
+							</div>
+							<LastLogoPageContentKeyframes
+								theme={theme}
+								width={contentWidth}
+							/>
+						</>
+					);
 				}}
-			>
-				<LastLogoPageContent theme={theme} baseline={theme.page.baseline * 2} />
-			</div>
-			<LastLogoPageContentKeyframes
-				theme={theme}
-				width={theme.page.contentWidth}
-			/>
-			;
-		</Page>
+			</Page>
+		</PageContext>
 	);
 };

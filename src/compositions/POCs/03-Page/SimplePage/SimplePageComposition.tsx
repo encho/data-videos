@@ -1,8 +1,9 @@
 import React from 'react';
 import {z} from 'zod';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {useElementDimensions} from './useElementDimensions';
-import {Page, PageFooter, PageLogo, PageHeader} from './ThemePage';
+import {Page, PageFooter, PageLogo, PageHeader} from './NewPage';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TitleWithSubtitle} from '../TitleWithSubtitle/TitleWithSubtitle';
@@ -10,6 +11,7 @@ import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStyles
 import {BaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/BaselineGrid';
 import {VerticalBaselineGrid} from '../../02-TypographicLayouts/BaselineGrid/VerticalBaselineGrid';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
+import {useVideoConfig} from 'remotion';
 
 export const simplePageCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -23,92 +25,101 @@ export const SimplePageComposition: React.FC<
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref, dimensions} = useElementDimensions();
+	const {width, height} = useVideoConfig();
 
 	return (
-		<Page theme={theme}>
-			<>
-				{showGrid ? (
-					<>
-						<BaselineGrid
-							width={theme.page.contentWidth}
-							height={theme.page.contentHeight}
-							baseline={theme.page.baseline}
-							{...theme.TypographicLayouts.baselineGrid}
-							lineColor="rgba(90,60,0,1.0)"
-							strokeWidth={2}
-						/>
-						<VerticalBaselineGrid
-							width={theme.page.contentWidth}
-							height={theme.page.contentHeight}
-							baseline={theme.page.baseline}
-							{...theme.TypographicLayouts.baselineGrid}
-							lineColor="rgba(90,60,0,1.0)"
-							strokeWidth={2}
-						/>
-					</>
-				) : null}
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<Page theme={theme} show>
+				{({contentWidth, contentHeight, baseline}) => {
+					return (
+						<>
+							<PageLogo theme={theme} />
+							{showGrid ? (
+								<>
+									<BaselineGrid
+										width={contentWidth}
+										height={contentHeight}
+										baseline={baseline}
+										{...theme.TypographicLayouts.baselineGrid}
+										lineColor="rgba(90,60,0,1.0)"
+										strokeWidth={2}
+									/>
+									<VerticalBaselineGrid
+										width={contentWidth}
+										height={contentHeight}
+										baseline={baseline}
+										{...theme.TypographicLayouts.baselineGrid}
+										lineColor="rgba(90,60,0,1.0)"
+										strokeWidth={2}
+									/>
+								</>
+							) : null}
 
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'column',
-						height: '100%',
-						position: 'relative',
-					}}
-				>
-					<PageHeader theme={theme} showArea={showAreas}>
-						<TitleWithSubtitle
-							title={'Simple Page Composition. This will be great stuff...'}
-							subtitle={'This is a subtitle. Lol...'}
-							theme={theme}
-						/>
-					</PageHeader>
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									height: '100%',
+									position: 'relative',
+								}}
+							>
+								<PageHeader theme={theme} showArea={showAreas}>
+									<TitleWithSubtitle
+										title={
+											'Simple Page Composition. This will be great stuff...'
+										}
+										subtitle={'This is a subtitle. Lol...'}
+										theme={theme}
+									/>
+								</PageHeader>
 
-					<div
-						ref={ref}
-						style={{
-							flex: 1,
-							display: 'flex',
-							justifyContent: 'center',
-						}}
-					>
-						{dimensions ? (
-							<div>
-								<SimpleBarChart
-									data={data}
-									width={dimensions.width}
-									height={dimensions.height}
-									// showLayout
-									theme={theme}
-								/>
-							</div>
-						) : null}
-					</div>
-
-					{/* TODO introduce evtl. also absolute positioned footer */}
-					<PageFooter theme={theme} showArea={showAreas}>
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'flex-end',
-							}}
-						>
-							<div style={{maxWidth: '62%'}}>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.dataSource}
-									baseline={theme.page.baseline}
+								<div
+									ref={ref}
+									style={{
+										flex: 1,
+										display: 'flex',
+										justifyContent: 'center',
+									}}
 								>
-									Data Source: German Bundesbank 2024 Paper on Evolutional
-									Finance
-								</TypographyStyle>
+									{dimensions ? (
+										<div>
+											<SimpleBarChart
+												data={data}
+												width={dimensions.width}
+												height={dimensions.height}
+												// showLayout
+												theme={theme}
+											/>
+										</div>
+									) : null}
+								</div>
+
+								{/* TODO introduce evtl. also absolute positioned footer */}
+								<PageFooter theme={theme} showArea={showAreas}>
+									<div
+										style={{
+											display: 'flex',
+											justifyContent: 'space-between',
+											alignItems: 'flex-end',
+										}}
+									>
+										<div style={{maxWidth: '62%'}}>
+											<TypographyStyle
+												typographyStyle={theme.typography.textStyles.dataSource}
+												baseline={baseline}
+											>
+												Data Source: German Bundesbank 2024 Paper on Evolutional
+												Finance
+											</TypographyStyle>
+										</div>
+									</div>
+								</PageFooter>
 							</div>
-						</div>
-					</PageFooter>
-				</div>
-			</>
-			<PageLogo theme={theme} />
-		</Page>
+						</>
+					);
+				}}
+			</Page>
+		</PageContext>
 	);
 };
 
