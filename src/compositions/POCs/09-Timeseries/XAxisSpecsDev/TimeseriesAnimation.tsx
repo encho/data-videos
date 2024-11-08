@@ -53,11 +53,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		td_periodsAreaZoomOut;
 
 	// TODO also allow for dates as indices eventually
-	// // TODO fix with [0,0] !!!!!!!!!
-	// const visibleDomainIndices_0 = [0, 1] as [number, number];
-	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
-	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
-	// const visibleDomainIndices_3 = [220, 420] as [number, number];
+	// TODO fix with [0,0] ??? really
 	const view_start = [0, 1] as [number, number];
 	const view_buildup = [0, timeSeries.length] as [number, number];
 	const view_periodsAreaEnter = [0, timeSeries.length] as [number, number];
