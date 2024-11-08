@@ -6,7 +6,7 @@ import {
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
@@ -17,6 +17,8 @@ import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarC
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {SimpleBarChartTransition} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartTransition';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 
 export const simpleBarChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -25,9 +27,23 @@ export const simpleBarChartTransitionCompositionSchema = z.object({
 export const SimpleBarChartTransitionComposition: React.FC<
 	z.infer<typeof simpleBarChartTransitionCompositionSchema>
 > = ({themeEnum}) => {
-	const {fps} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
+
+	// TODO pass data sets from here to the Flic
+	return (
+		<PageContext margin={50} nrBaselines={50} width={width} height={height}>
+			<SimpleBarChartTransitionFlic theme={theme} />
+		</PageContext>
+	);
+};
+
+export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
+	theme,
+}) => {
+	const {fps} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
+	const page = usePage();
 
 	const LEFT_CHART_WIDTH_PERCENTAGE = 0.65;
 	const RIGHT_CHART_WIDTH_PERCENTAGE = 0.35;
@@ -78,10 +94,10 @@ export const SimpleBarChartTransitionComposition: React.FC<
 		valueLabel: formatPercentage(it.change),
 	}));
 
-	const chartGap = theme.page.baseline * 2;
+	const chartGap = page.baseline * 2;
 
 	return (
-		<Page theme={theme}>
+		<Page show theme={theme}>
 			<div
 				style={{
 					display: 'flex',
@@ -230,10 +246,10 @@ export const SimpleBarChartTransitionComposition: React.FC<
 						<div style={{maxWidth: '62%'}}>
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
+								baseline={page.baseline}
 							>
 								<TextAnimationSubtle
-									translateY={theme.page.baseline * 1.1}
+									translateY={page.baseline * 1.1}
 									innerDelayInSeconds={5.25} // TODO time better...
 								>
 									Data Source: German Bundesbank 2024 Paper on Evolutional
