@@ -1,26 +1,13 @@
 import {z} from 'zod';
+import {useVideoConfig} from 'remotion';
 
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
-import {
-	Page,
-	PageHeader,
-	PageFooter,
-	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {
-	useMatrixLayout,
-	getMatrixLayoutCellArea,
-} from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {DisplayGridRails} from '../../../../acetti-layout';
-import {HtmlArea} from '../../../../acetti-layout';
+import {ComposedSimpleBarChartFlic} from './ComposedSImpleBarChartFlic';
 
 export const composedSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -30,39 +17,12 @@ export const ComposedSimpleBarChartComposition: React.FC<
 	z.infer<typeof composedSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
-	const {ref, dimensions} = useElementDimensions();
-
-	const matrixLayout = useMatrixLayout({
-		width: dimensions ? dimensions.width : 20000, // to better show grid rails!
-		height: dimensions ? dimensions.height : 20000,
-		nrColumns: 2,
-		nrRows: 1,
-		columnSizes: [
-			{type: 'fr', value: 2},
-			{type: 'fr', value: 1},
-		],
-		rowSpacePixels: 80,
-		columnSpacePixels: 50,
-		rowPaddingPixels: 0,
-		columnPaddingPixels: 0,
-	});
-
-	const leftArea = getMatrixLayoutCellArea({
-		layout: matrixLayout,
-		row: 0,
-		column: 0,
-	});
-
-	const rightArea = getMatrixLayoutCellArea({
-		layout: matrixLayout,
-		row: 0,
-		column: 1,
-	});
+	const {width, height} = useVideoConfig();
 
 	const positiveColor = theme.positiveNegativeColors.positiveColor;
 	const negativeColor = theme.positiveNegativeColors.negativeColor;
 
-	const barChartData = wahlergebnis2024.map((it) => ({
+	const leftData = wahlergebnis2024.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
@@ -71,7 +31,7 @@ export const ComposedSimpleBarChartComposition: React.FC<
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
-	const barChartDataPercChange = wahlergebnis2024_percChange.map((it) => ({
+	const rightData = wahlergebnis2024_percChange.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
 		value: it.change,
@@ -81,91 +41,13 @@ export const ComposedSimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<Page theme={theme}>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					position: 'relative',
-				}}
-			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<TitleWithSubtitle
-						title={'Composed Simple Bar Chart'}
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
-						theme={theme}
-					/>
-				</PageHeader>
-
-				<div
-					ref={ref}
-					style={{
-						flex: 1,
-						display: 'flex',
-						justifyContent: 'center',
-					}}
-				>
-					{dimensions &&
-					Math.round(matrixLayout.width) === Math.round(dimensions.width) ? (
-						<div style={{position: 'relative'}}>
-							<DisplayGridRails
-								{...matrixLayout}
-								// stroke={'#252525'}
-								stroke={'transparent'}
-							/>
-
-							<HtmlArea area={leftArea}>
-								<SimpleBarChart
-									theme={theme}
-									data={barChartData}
-									width={leftArea.width}
-									height={leftArea.height}
-									// showLayout
-								/>
-							</HtmlArea>
-							<HtmlArea area={rightArea}>
-								<SimpleBarChart
-									theme={theme}
-									data={barChartDataPercChange}
-									width={rightArea.width}
-									height={rightArea.height}
-									hideLabels
-									// showLayout
-								/>
-							</HtmlArea>
-						</div>
-					) : null}
-				</div>
-
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
-						}}
-					>
-						<div style={{maxWidth: '62%'}}>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
-							>
-								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
-							</TypographyStyle>
-						</div>
-					</div>
-				</PageFooter>
-			</div>
-			<PageLogo theme={theme} />
-		</Page>
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<ComposedSimpleBarChartFlic
+				theme={theme}
+				leftData={leftData}
+				rightData={rightData}
+			/>
+		</PageContext>
 	);
 };
 

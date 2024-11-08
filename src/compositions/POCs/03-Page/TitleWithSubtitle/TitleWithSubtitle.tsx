@@ -2,6 +2,7 @@ import {z} from 'zod';
 import React from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
+import {usePage} from '../../../../acetti-components/PageContext';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
@@ -87,10 +88,10 @@ export const TitleWithSubtitle: React.FC<{
 	baseline: baselineProp,
 	innerDelayInSeconds,
 }) => {
-	// const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
+	const page = usePage();
 
-	const baseline = baselineProp || theme.page.baseline;
+	const baseline = baselineProp || page.baseline;
 
 	const {keyframes: keyFramesGroup} = useTitleWithSubtitleKeyframes({
 		innerDelayInSeconds,
