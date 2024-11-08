@@ -826,7 +826,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
-							themeEnum: 'NERDY' as const,
+							themeEnum: 'LORENZOBERTOLINI' as const,
 							data: [],
 							dataInfo: [],
 							singleSparklineDurationInSeconds: 6,

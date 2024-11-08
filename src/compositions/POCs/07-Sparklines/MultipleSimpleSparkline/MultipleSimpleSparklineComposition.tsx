@@ -2,12 +2,14 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {DisplayGridRails} from '../../../../acetti-layout';
@@ -32,10 +34,30 @@ export const multipleSimpleSparklineCompositionSchema = z.object({
 export const MultipleSimpleSparklineComposition: React.FC<
 	z.infer<typeof multipleSimpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
+	const {height, width} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
+
+	return (
+		<PageContext
+			width={width}
+			// height={height * 0.7}
+			height={height}
+			margin={80}
+			nrBaselines={50}
+		>
+			<MultipleSimpleSparklineFlic theme={theme} />
+		</PageContext>
+	);
+};
+
+export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
+	theme,
+}) => {
 	const {ref, dimensions} = useElementDimensions();
 
 	const {fps} = useVideoConfig();
+
+	const page = usePage();
 
 	const baseline = 26;
 
@@ -115,7 +137,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 	const commonDomain = [min, max] as [number, number];
 
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			<div
 				style={{
 					display: 'flex',
@@ -303,7 +325,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 						>
 							<TypographyStyle
 								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
+								baseline={page.baseline}
 							>
 								{props.dataSource}
 							</TypographyStyle>
