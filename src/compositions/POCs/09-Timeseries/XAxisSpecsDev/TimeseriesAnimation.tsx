@@ -1,7 +1,5 @@
-import {Sequence, useVideoConfig, Easing} from 'remotion';
+import {useVideoConfig, Easing} from 'remotion';
 
-// import {PercentageChangeArea} from '../../../acetti-ts-components/PercentageChangeArea';
-import {HighlightPeriods3} from '../../../../acetti-ts-components/HighlightPeriods3';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -28,7 +26,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 }) => {
-	const {durationInFrames, fps} = useVideoConfig();
+	const {
+		durationInFrames,
+		// fps
+	} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -66,7 +67,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					stroke={'magenta'}
+					stroke={'rgba(255,0,255,0.4)'}
 					fill="transparent"
 					// hide={true}
 					areas={chartLayout.areas}
@@ -109,6 +110,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				]}
 				transitionSpecs={[
 					{
+						// durationInFrames: getDurationInFrames(keyframes, "START_BUILDUP", "END_BUILDUP"),
 						durationInFrames: td_buildup,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// easingFunction: Easing.linear, // TODO why linear is broken??
