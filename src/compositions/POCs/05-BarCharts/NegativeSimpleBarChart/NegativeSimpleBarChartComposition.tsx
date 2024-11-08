@@ -1,5 +1,7 @@
 import {z} from 'zod';
+import {useVideoConfig} from 'remotion';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {NegativeBarChartPage} from './NegativeBarChartPage';
 import {
 	useThemeFromEnum,
@@ -14,6 +16,7 @@ export const NegativeSimpleBarChartComposition: React.FC<
 	z.infer<typeof negativeSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {fps, width, height} = useVideoConfig();
 
 	const positiveColor = theme.positiveNegativeColors.positiveColor;
 	const negativeColor = theme.positiveNegativeColors.negativeColor;
@@ -27,13 +30,15 @@ export const NegativeSimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<NegativeBarChartPage
-			title="Negative Bar Chart"
-			theme={theme}
-			subtitle="With Green and Red Bars"
-			data={barChartData}
-			dataSource="Data Source: Some Data SOurce here..."
-		/>
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<NegativeBarChartPage
+				title="Negative Bar Chart"
+				theme={theme}
+				subtitle="With Green and Red Bars"
+				data={barChartData}
+				dataSource="Data Source: Some Data SOurce here..."
+			/>
+		</PageContext>
 	);
 };
 

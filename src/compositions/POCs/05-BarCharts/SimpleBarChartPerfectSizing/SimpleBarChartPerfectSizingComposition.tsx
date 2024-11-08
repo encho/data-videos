@@ -1,14 +1,15 @@
 import React from 'react';
-// import {continueRender, delayRender, useVideoConfig} from 'remotion';
 import {z} from 'zod';
+import {useVideoConfig} from 'remotion';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
 	useThemeFromEnum,
@@ -25,6 +26,7 @@ export const simpleBarChartPerfectSizingCompositionSchema = z.object({
 export const SimpleBarChartPerfectSizingComposition: React.FC<
 	z.infer<typeof simpleBarChartPerfectSizingCompositionSchema>
 > = ({themeEnum}) => {
+	const {width, height} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {ref: divRef, dimensions} = useElementDimensions();
 
@@ -32,86 +34,84 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 		label: it.parteiName,
 		value: it.prozent,
 		id: it.id,
-		// barColor: it.farbe,
 		barColor: colorPalettes.Indigo[500],
 		valueLabel: formatPercentage(it.prozent),
 	}));
 
 	return (
-		<Page theme={theme}>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					position: 'relative',
-				}}
-			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
-					<TitleWithSubtitle
-						baseline={theme.page.baseline * 0.8}
-						// title={'AfD: Vormarsch in Brandenburg'}
-						title={
-							'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
-						}
-						// title={
-						// 	'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern. Wer will ne jute Curreywurst??'
-						// }
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
-						theme={theme}
-					/>
-				</PageHeader>
-
+		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+			<Page show theme={theme}>
 				<div
-					ref={divRef}
 					style={{
-						flex: 1,
 						display: 'flex',
-						justifyContent: 'center',
+						flexDirection: 'column',
+						height: '100%',
+						position: 'relative',
 					}}
 				>
-					{dimensions ? (
-						<div>
-							<SimpleBarChart
-								data={barChartData}
-								width={dimensions.width}
-								height={dimensions.height}
-								// showLayout
-								// baseline={getBarChartBaseline(dimensions.height, barChartData)}
-								theme={theme}
-							/>
-						</div>
-					) : null}
-				</div>
+					<PageHeader
+						theme={theme}
+						// showArea={showAreas}
+					>
+						<TitleWithSubtitle
+							baseline={theme.page.baseline * 0.8}
+							title={
+								'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
+							}
+							subtitle={'Wahlergebnisse Brandenburg 2024'}
+							theme={theme}
+						/>
+					</PageHeader>
 
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
 					<div
+						ref={divRef}
 						style={{
+							flex: 1,
 							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
+							justifyContent: 'center',
 						}}
 					>
-						<div style={{maxWidth: '62%'}}>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={theme.page.baseline}
-							>
-								Data Source: German Bundesbank 2024 Paper on Evolutional Finance
-							</TypographyStyle>
-						</div>
+						{dimensions ? (
+							<div>
+								<SimpleBarChart
+									data={barChartData}
+									width={dimensions.width}
+									height={dimensions.height}
+									// showLayout
+									// baseline={getBarChartBaseline(dimensions.height, barChartData)}
+									theme={theme}
+								/>
+							</div>
+						) : null}
 					</div>
-				</PageFooter>
-			</div>
-			<PageLogo theme={theme} />
-		</Page>
+
+					{/* TODO introduce evtl. also absolute positioned footer */}
+					<PageFooter
+						theme={theme}
+						// showArea={showAreas}
+					>
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'flex-end',
+							}}
+						>
+							<div style={{maxWidth: '62%'}}>
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.dataSource}
+									baseline={theme.page.baseline}
+								>
+									Data Source: German Bundesbank 2024 Paper on Evolutional
+									Finance
+								</TypographyStyle>
+							</div>
+						</div>
+					</PageFooter>
+				</div>
+				<PageLogo theme={theme} />
+			</Page>
+		</PageContext>
 	);
 };
 

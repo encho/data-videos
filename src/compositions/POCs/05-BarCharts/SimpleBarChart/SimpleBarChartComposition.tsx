@@ -15,7 +15,6 @@ import {
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-// import {EconomistTitleWithSubtitle} from '../EconomistTitleWithSubtitle';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 
 export const simpleBarChartCompositionSchema = z.object({
