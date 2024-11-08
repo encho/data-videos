@@ -9,6 +9,12 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis'},
+	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: 55, name: 'xAxis_days'},
+	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: 55, name: 'xAxis_monthStarts'},
+	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: 55, name: 'xAxis_quarterStarts'},
 	{type: 'pixel', value: 40, name: 'space'},
 ];
 
@@ -33,6 +39,24 @@ const chartGridLayoutSpec = {
 			{name: 'xAxis'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
+		xAxis_days: [
+			{name: 'xAxis_days'},
+			{name: 'plot'},
+			{name: 'xAxis_days'},
+			{name: 'plot'},
+		] as TGridLayoutAreaSpec,
+		xAxis_monthStarts: [
+			{name: 'xAxis_monthStarts'},
+			{name: 'plot'},
+			{name: 'xAxis_monthStarts'},
+			{name: 'plot'},
+		] as TGridLayoutAreaSpec,
+		xAxis_quarterStarts: [
+			{name: 'xAxis_quarterStarts'},
+			{name: 'plot'},
+			{name: 'xAxis_quarterStarts'},
+			{name: 'plot'},
+		] as TGridLayoutAreaSpec,
 		yAxis: [
 			{name: 'plot'},
 			{name: 'yAxis'},
@@ -45,18 +69,6 @@ const chartGridLayoutSpec = {
 			{name: 'plot'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
-		// subPlot: [
-		// 	{name: 'subPlot'},
-		// 	{name: 'plot'},
-		// 	{name: 'subPlot'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
-		// minimapPlot: [
-		// 	{name: 'minimapPlot'},
-		// 	{name: 'plot'},
-		// 	{name: 'minimapPlot'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
 	},
 };
 

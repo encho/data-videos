@@ -5,11 +5,11 @@ import {HighlightPeriods3} from '../../../../acetti-ts-components/HighlightPerio
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {BasicLineChart} from '../../../../acetti-ts-components/BasicLineChart';
 import {
 	LineChartAnimationContainer,
 	TLineChartAnimationContext,
 } from '../../../../acetti-ts-base/LineChartAnimationContainer';
+import {LineChart_XAxisShowcase} from './LineChart_XAxisShowcase';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -75,7 +75,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				<DisplayGridLayout
 					stroke={'magenta'}
 					fill="transparent"
-					hide={true}
+					// hide={true}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -172,17 +172,20 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								/>
 							</Sequence>
 
-							<BasicLineChart
+							<LineChart_XAxisShowcase
 								timeSeries={timeSeries}
 								layoutAreas={{
 									plot: chartLayout.areas.plot,
 									xAxis: chartLayout.areas.xAxis,
 									yAxis: chartLayout.areas.yAxis,
+									xAxis_monthStarts: chartLayout.areas.xAxis_monthStarts,
+									xAxis_quarterStarts: chartLayout.areas.xAxis_quarterStarts,
 								}}
 								yDomainType={Y_DOMAIN_TYPE}
 								theme={theme}
 								yScale={yScale}
 								periodScale={periodsScale}
+								// TODO deprecate as we are passing the whole sliceInfo
 								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
 								toPeriodScale={currentSliceInfo.periodsScaleTo}
 								//

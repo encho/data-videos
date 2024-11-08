@@ -7,18 +7,20 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
-import {TitleAndSubtitle} from '../../../../acetti-components/TitleAndSubtitle';
-import {Position} from '../../../../acetti-ts-base/Position';
+import {Page} from '../../03-Page/SimplePage/ThemePage';
+// import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
+// import {TitleAndSubtitle} from '../../../../acetti-components/TitleAndSubtitle';
+// import {Position} from '../../../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
-import {getThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
-import {HighlightPeriods_01} from '../../../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+// import {HighlightPeriods_01} from '../../../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
+// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
+import {TimeseriesAnimation} from './TimeseriesAnimation';
 
 export const xAxisSpecsDevCompositionSchema = z.object({
 	ticker: zNerdyTickers,
@@ -31,10 +33,7 @@ export const XAxisSpecsDevComposition: React.FC<
 	z.infer<typeof xAxisSpecsDevCompositionSchema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
-	const {
-		// height,
-		width,
-	} = useVideoConfig();
+	// const {height, width} = useVideoConfig();
 
 	const today = new Date();
 	const endDate = today.toISOString();
@@ -42,9 +41,9 @@ export const XAxisSpecsDevComposition: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum as any);
 
-	useFontFamiliesLoader(theme);
+	// useFontFamiliesLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
@@ -77,14 +76,13 @@ export const XAxisSpecsDevComposition: React.FC<
 		date: new Date(it.index),
 	}));
 
-	const platteWidth = width * 0.9;
-	const platteHeight = platteWidth * 0.61;
+	const platteWidth = theme.page.contentWidth;
+	const platteHeight = theme.page.contentHeight;
 
 	return (
 		<GlobalVideoContextWrapper>
-			<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
-				<Position position={{left: 50, top: 50}}>
-					<TitleAndSubtitle
+			<Page theme={theme} show>
+				{/* <TitleAndSubtitle
 						title={'XAxisSpecDev TODO here showcase all xaxis specs'}
 						titleColor={theme.typography.title.color}
 						titleFontFamily={theme.typography.title.fontFamily}
@@ -93,32 +91,14 @@ export const XAxisSpecsDevComposition: React.FC<
 						subTitleColor={theme.typography.subTitle.color}
 						subTitleFontFamily={theme.typography.subTitle.fontFamily}
 						subTitleFontSize={40}
-					/>
-				</Position>
-				<AbsoluteFill>
-					<Position position={{left: 50, top: 280}}>
-						<HighlightPeriods_01
-							width={platteWidth}
-							height={platteHeight}
-							timeSeries={timeSeries}
-							theme={theme}
-						/>
-						{/* <ObliquePlatte
-							width={platteWidth}
-							height={platteHeight}
-							theme={theme.platte}
-						>
-							<HighlightPeriods_01
-								width={platteWidth}
-								height={platteHeight}
-								timeSeries={timeSeries}
-								theme={theme}
-							/>
-						</ObliquePlatte> */}
-					</Position>
-				</AbsoluteFill>
-				<LorenzoBertoliniLogo color={theme.typography.logoColor} />
-			</AbsoluteFill>
+					/> */}
+				<TimeseriesAnimation
+					width={platteWidth}
+					height={platteHeight}
+					timeSeries={timeSeries}
+					theme={theme}
+				/>
+			</Page>
 		</GlobalVideoContextWrapper>
 	);
 };

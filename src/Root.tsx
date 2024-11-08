@@ -1156,7 +1156,8 @@ export const RemotionRoot: React.FC = () => {
 						component={XAxisSpecsDevComposition}
 						durationInFrames={90 * 9}
 						fps={90}
-						{...videoSizes.linkedInTall}
+						// {...videoSizes.linkedInTall}
+						{...videoSizes.widescreen_16x9}
 						schema={xAxisSpecsDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
