@@ -1,7 +1,7 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, staticFile, Sequence} from 'remotion';
 
-import {getThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {Position} from '../../../../acetti-ts-base/Position';
 import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
@@ -48,7 +48,7 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 }) => {
 	const {width, height, durationInFrames} = useVideoConfig();
 
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum as any);
 
 	const baseline = 34;
 
@@ -64,7 +64,12 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 					height,
 				}}
 			>
-				<TitleWithSubtitle title={title} subtitle={subTitle} theme={theme} />
+				<TitleWithSubtitle
+					title={title}
+					subtitle={subTitle}
+					theme={theme}
+					baseline={20}
+				/>
 
 				<Sequence from={90 * 1} durationInFrames={durationInFrames - 90 * 2}>
 					<Position

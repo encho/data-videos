@@ -53,6 +53,7 @@ export const SimpleColumnChartComposition: React.FC<
 				title={'Simple Column Chart'}
 				subtitle={'Display Categorical Data Horizontally'}
 				theme={theme}
+				baseline={20}
 			/>
 
 			<div

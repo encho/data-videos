@@ -57,13 +57,6 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 		valueLabel: `$${it.value}`,
 	}));
 
-	const labelTextProps = {
-		fontFamily: 'Inter' as const,
-		fontWeight: 600,
-		capHeight: 28,
-		color: 'white', // TODO from theme
-	};
-
 	return (
 		<div
 			style={{
@@ -77,6 +70,7 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 				title={'Multiple Simple Column Chart'}
 				subtitle={'Display Multiple Categorical Data Horizontally'}
 				theme={theme}
+				baseline={20}
 			/>
 
 			<div

@@ -185,11 +185,6 @@ import {
 } from './compositions/POCs/03-Page/SimplePage/SimplePageComposition';
 
 import {
-	ApiBasedSimpleBarChartComposition,
-	apiBasedSimpleBarChartCompositionSchema,
-} from './compositions/POCs/05-BarCharts/ApiBasedSimpleBarChart/ApiBasedSimpleBarChartComposition';
-
-import {
 	TitleWithSubtitleDevComposition,
 	titleWithSubtitleDevCompositionSchema,
 } from './compositions/POCs/03-Page/TitleWithSubtitle/TitleWithSubtitleDevComposition';
@@ -718,52 +713,6 @@ export const RemotionRoot: React.FC = () => {
 						schema={barChartRaceCustomLabelCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
-
-					<Composition
-						id="ApiBasedSimpleBarChart"
-						component={ApiBasedSimpleBarChartComposition}
-						durationInFrames={30 * 20}
-						fps={30}
-						{...videoSizes.square}
-						schema={apiBasedSimpleBarChartCompositionSchema}
-						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI' as const,
-							data: [],
-							title: 'Bundesliga Tabelle',
-							subtitle: 'Punktestand am 6. November 2024',
-							dataSource: 'Datenquelle: https://api.openligadb.de',
-						}}
-						calculateMetadata={async ({props}) => {
-							const year = 2024;
-							const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;
-							const data = await fetch(apiUrl);
-							const json = (await data.json()) as {
-								teamName: string;
-								points: number;
-								teamInfoId: number;
-								teamIconUrl: string;
-							}[];
-
-							const parsedData = json.map((it, i) => ({
-								teamIconUrl: it.teamIconUrl,
-								label: it.teamName,
-								value: it.points,
-								barColor: '#ffffff',
-								id: `id-${it.teamInfoId}`,
-								valueLabel:
-									it.points !== 1
-										? `${it.points} Punkte`
-										: `${it.points} Punkt`,
-							}));
-
-							return {
-								props: {
-									...props,
-									data: parsedData,
-								},
-							};
-						}}
-					/>
 				</Folder>
 
 				<Folder name="06-ColumnCharts">
@@ -776,7 +725,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.square}
 						schema={simpleColumnChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
@@ -787,7 +736,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={multipleSimpleColumnChartCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 
 					<Folder name="ChangeBars">
@@ -802,7 +751,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.square}
 							schema={twoChangeBarsCompositionSchema}
 							defaultProps={{
-								themeEnum: 'NERDY' as const,
+								themeEnum: 'LORENZOBERTOLINI' as const,
 								title: 'Global Car Sales',
 								subTitle: '2023 vs. 2024 (in USD)',
 								leftBarValue: 1000,
@@ -827,7 +776,7 @@ export const RemotionRoot: React.FC = () => {
 							{...videoSizes.widescreen_16x9}
 							schema={twoChangeBarsWithImageCompositionSchema}
 							defaultProps={{
-								themeEnum: 'NERDY' as const,
+								themeEnum: 'LORENZOBERTOLINI' as const,
 								title: 'Global Car Sales',
 								subTitle: '2023 vs. 2024 (in USD)',
 								leftBarValue: 845,
@@ -864,7 +813,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
 						schema={multipleSimpleSparklineCompositionSchema}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:
