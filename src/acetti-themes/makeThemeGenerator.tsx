@@ -96,28 +96,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 		width: number;
 		height: number;
 	}): ThemeType => {
-		const PAGE_MARGIN_TOP = width / 20;
-		const PAGE_MARGIN_BOTTOM = width / 20;
-		const PAGE_MARGIN_LEFT = width / 20;
-		const PAGE_MARGIN_RIGHT = width / 20;
-		const PAGE_CONTENT_HEIGHT = height - PAGE_MARGIN_TOP - PAGE_MARGIN_BOTTOM;
-		const PAGE_CONTENT_WIDTH = width - PAGE_MARGIN_RIGHT - PAGE_MARGIN_LEFT;
-		const PAGE_BASELINE = isVideoSize({width, height}, 'widescreen_16x9')
-			? PAGE_CONTENT_HEIGHT / 50
-			: PAGE_CONTENT_WIDTH / 50;
-
-		const page = {
-			marginTop: PAGE_MARGIN_TOP,
-			marginBottom: PAGE_MARGIN_BOTTOM,
-			marginLeft: PAGE_MARGIN_LEFT,
-			marginRight: PAGE_MARGIN_RIGHT,
-			contentWidth: PAGE_CONTENT_WIDTH,
-			contentHeight: PAGE_CONTENT_HEIGHT,
-			baseline: PAGE_BASELINE,
-		};
-
 		return {
-			page,
 			global: {
 				backgroundColor: palette.background.main, // TODO deprecate take from palette
 				platteColor: palette.background.soft,

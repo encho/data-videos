@@ -10,7 +10,7 @@ import {
 	getKeyFramesInterpolator,
 } from '../../Keyframes/Keyframes/keyframes';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
-import {LorenzoBertoliniLogoNoAnimation} from '../SimplePage/ThemePage';
+import {LorenzoBertoliniLogoNoAnimation} from '../SimplePage/NewPage';
 
 export function useLastLogoPageContentKeyframes() {
 	const {durationInFrames, fps} = useVideoConfig();
