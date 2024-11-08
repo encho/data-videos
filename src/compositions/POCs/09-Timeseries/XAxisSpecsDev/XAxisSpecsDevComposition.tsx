@@ -7,7 +7,8 @@ import {
 import {z} from 'zod';
 import {useEffect, useState} from 'react';
 
-import {Page} from '../../03-Page/SimplePage/ThemePage';
+import {PageContext} from '../../../../acetti-components/PageContext';
+import {Page} from '../../03-Page/SimplePage/NewPage';
 // import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 // import {TitleAndSubtitle} from '../../../../acetti-components/TitleAndSubtitle';
 // import {Position} from '../../../../acetti-ts-base/Position';
@@ -33,7 +34,7 @@ export const XAxisSpecsDevComposition: React.FC<
 	z.infer<typeof xAxisSpecsDevCompositionSchema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
-	// const {height, width} = useVideoConfig();
+	const {height, width} = useVideoConfig();
 
 	const today = new Date();
 	const endDate = today.toISOString();
@@ -76,13 +77,27 @@ export const XAxisSpecsDevComposition: React.FC<
 		date: new Date(it.index),
 	}));
 
-	const platteWidth = theme.page.contentWidth;
-	const platteHeight = theme.page.contentHeight;
-
 	return (
 		<GlobalVideoContextWrapper>
-			<Page theme={theme} show>
-				{/* <TitleAndSubtitle
+			<PageContext
+				width={width}
+				// height={height * 0.7}
+				height={height}
+				margin={40}
+				nrBaselines={40}
+			>
+				<Page theme={theme} show>
+					{({contentWidth, contentHeight}) => {
+						return (
+							<TimeseriesAnimation
+								width={contentWidth}
+								height={contentHeight}
+								timeSeries={timeSeries}
+								theme={theme}
+							/>
+						);
+					}}
+					{/* <TitleAndSubtitle
 						title={'XAxisSpecDev TODO here showcase all xaxis specs'}
 						titleColor={theme.typography.title.color}
 						titleFontFamily={theme.typography.title.fontFamily}
@@ -92,13 +107,8 @@ export const XAxisSpecsDevComposition: React.FC<
 						subTitleFontFamily={theme.typography.subTitle.fontFamily}
 						subTitleFontSize={40}
 					/> */}
-				<TimeseriesAnimation
-					width={platteWidth}
-					height={platteHeight}
-					timeSeries={timeSeries}
-					theme={theme}
-				/>
-			</Page>
+				</Page>
+			</PageContext>
 		</GlobalVideoContextWrapper>
 	);
 };

@@ -6,7 +6,6 @@ import {
 
 // TODO make xaxis height dependant on theme and baseline
 const chartRowsRailSpec: TGridRailSpec = [
-	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis'},
@@ -16,15 +15,12 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 55, name: 'xAxis_monthStarts'},
 	{type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_quarterStarts'},
-	{type: 'pixel', value: 40, name: 'space'},
 ];
 
 const chartColsRailSpec: TGridRailSpec = [
-	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 40, name: 'space'},
 	{type: 'pixel', value: 135, name: 'yAxis'},
-	{type: 'pixel', value: 50, name: 'space'},
 ];
 
 const chartGridLayoutSpec = {
