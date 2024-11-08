@@ -63,6 +63,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
+		xAxis_days: TGridLayoutArea;
 		xAxis_monthStarts: TGridLayoutArea;
 		xAxis_quarterStarts: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
@@ -97,6 +98,10 @@ export const LineChart_XAxisShowcase: React.FC<{
 	// ***************************
 	// the different x-axis specs:
 	// ***************************
+
+	// 1. days
+	const xAxisSpec_days_from = getDaysAxisSpec(currentPeriodsScale);
+	const xAxisSpec_days_to = getDaysAxisSpec(currentPeriodsScale);
 
 	// 2. month starts
 	const xAxisSpec_monthStarts_from =
@@ -172,6 +177,23 @@ export const LineChart_XAxisShowcase: React.FC<{
 					toAxisSpec={axisSpecTo}
 					theme={theme.xAxis}
 					area={layoutAreas.xAxis}
+					periodsScale={currentPeriodsScale}
+					currentSliceInfo={currentSliceInfo}
+				/>
+			</Position>
+
+			{/* days x axis */}
+			<Position
+				position={{
+					left: layoutAreas.xAxis_days.x1,
+					top: layoutAreas.xAxis_days.y1,
+				}}
+			>
+				<XAxis_Transition
+					fromAxisSpec={xAxisSpec_days_from}
+					toAxisSpec={xAxisSpec_days_to}
+					theme={theme.xAxis}
+					area={layoutAreas.xAxis_days}
 					periodsScale={currentPeriodsScale}
 					currentSliceInfo={currentSliceInfo}
 				/>

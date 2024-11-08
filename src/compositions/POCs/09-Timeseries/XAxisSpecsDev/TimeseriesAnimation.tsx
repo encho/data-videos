@@ -178,6 +178,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									plot: chartLayout.areas.plot,
 									xAxis: chartLayout.areas.xAxis,
 									yAxis: chartLayout.areas.yAxis,
+									xAxis_days: chartLayout.areas.xAxis_days,
 									xAxis_monthStarts: chartLayout.areas.xAxis_monthStarts,
 									xAxis_quarterStarts: chartLayout.areas.xAxis_quarterStarts,
 								}}

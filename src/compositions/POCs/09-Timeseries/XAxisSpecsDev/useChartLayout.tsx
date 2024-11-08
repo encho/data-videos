@@ -4,6 +4,7 @@ import {
 	useGridLayout,
 } from '../../../../acetti-layout';
 
+// TODO make xaxis height dependant on theme and baseline
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 50, name: 'space'},
 	{type: 'fr', value: 1, name: 'plot'},

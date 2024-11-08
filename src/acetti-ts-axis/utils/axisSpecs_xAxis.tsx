@@ -63,6 +63,7 @@ export function getIndicesAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 // TODO pass more info, e.g. area width?
 export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 	const visibleDomainIndices = periodsScale.getRoundedVisibleDomainIndices();
+
 	const tickIndices = rangeBetween(visibleDomainIndices);
 
 	const ticks = tickIndices.map((tickIndex) => {
@@ -72,24 +73,23 @@ export function getDaysAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	const labels = tickIndices.map((tickIndex) => {
-		const date = periodsScale.getDateFromIndex(tickIndex);
+	const allVisibleDates = periodsScale.getAllVisibleDates();
+
+	const labels = allVisibleDates.map((date) => {
 		const dayNumberString = getDayNumber(date);
 		return {
-			id: `daysTick-label-${tickIndex + 0.5}`,
+			id: `daysTick-label-${date.toISOString()}`,
 			textAnchor: 'middle' as const,
 			label: dayNumberString,
-			periodFloatIndex: tickIndex + 0.5,
+			periodFloatIndex: periodsScale.getIndexFromDate(date) + 0.5,
 		};
 	});
 
-	const visibleDates = periodsScale.getAllVisibleDates();
-
-	const firstDatesOfMonths = getFirstDateOfEachMonth(visibleDates);
+	const visibleDomainDates = periodsScale.getVisibleDomainDates();
+	const firstDatesOfMonths = getFirstDateOfEachMonth(visibleDomainDates);
 
 	const secondaryLabels = firstDatesOfMonths.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
-
 		return {
 			id: `secondaryLabel-month-${d.toISOString()}}`,
 			textAnchor: 'start' as const,

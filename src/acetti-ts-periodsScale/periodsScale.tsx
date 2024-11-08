@@ -164,7 +164,8 @@ export const periodsScale = ({
 		}
 
 		// Extract the slice
-		const slicedDates: Date[] = dates.slice(startIndex, endIndex + 1);
+		// const slicedDates: Date[] = dates.slice(startIndex, endIndex + 1);
+		const slicedDates: Date[] = dates.slice(startIndex, endIndex);
 
 		return slicedDates;
 	};
@@ -185,6 +186,8 @@ export const periodsScale = ({
 			visibleDomainIndices
 		);
 	};
+
+	// console.log({dates});
 
 	return {
 		// TODO getPeriodFromIndex
