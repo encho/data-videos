@@ -1,5 +1,6 @@
 import {ReactNode} from 'react';
 
+import chroma from 'chroma-js';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
@@ -28,6 +29,9 @@ export function Page({
 }) {
 	const page = usePage();
 
+	const devLineColor = '#00ddaa';
+	const devCornerColor = chroma(devLineColor).alpha(0.35).css(); // 50% transparency
+
 	return (
 		<div
 			style={{
@@ -47,7 +51,7 @@ export function Page({
 								left: 0,
 								width: page.marginLeft,
 								height: page.marginTop,
-								backgroundColor: 'rgba(255,0,255,0.3)',
+								backgroundColor: devCornerColor,
 							}}
 						/>
 						<div
@@ -57,7 +61,7 @@ export function Page({
 								left: 0,
 								width: page.marginLeft,
 								height: page.marginBottom,
-								backgroundColor: 'rgba(255,0,255,0.3)',
+								backgroundColor: devCornerColor,
 							}}
 						/>
 						<div
@@ -67,7 +71,7 @@ export function Page({
 								right: 0,
 								width: page.marginRight,
 								height: page.marginTop,
-								backgroundColor: 'rgba(255,0,255,0.3)',
+								backgroundColor: devCornerColor,
 							}}
 						/>
 						<div
@@ -77,7 +81,7 @@ export function Page({
 								right: 0,
 								width: page.marginRight,
 								height: page.marginBottom,
-								backgroundColor: 'rgba(255,0,255,0.3)',
+								backgroundColor: devCornerColor,
 							}}
 						/>
 					</>
@@ -95,7 +99,7 @@ export function Page({
 							width: page.contentWidth,
 							height: page.contentHeight,
 							position: 'relative',
-							border: show ? '2px solid magenta' : 'transparent',
+							border: show ? `2px solid ${devLineColor}` : 'transparent',
 						}}
 					>
 						{typeof children === 'function' ? children(page) : children}

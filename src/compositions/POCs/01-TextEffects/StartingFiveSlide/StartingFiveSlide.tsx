@@ -11,6 +11,7 @@ import {
 import {range} from 'lodash';
 import invariant from 'tiny-invariant';
 
+import {usePage} from '../../../../acetti-components/PageContext';
 import {SeededRandom} from '../../../../acetti-utils/seededRandom';
 import {zodThemeType} from '../../../../acetti-themes/themeTypes';
 
@@ -51,8 +52,11 @@ export const StartingFiveSlide: React.FC<
 	video,
 }) => {
 	const fontFamily = theme.typography.textStyles.h1.fontFamily;
-	const fontSize = theme.page.baseline * fontSizeInBaselines;
-	const lineHeight = theme.page.baseline * lineHeightInBaselines;
+
+	const page = usePage();
+
+	const fontSize = page.baseline * fontSizeInBaselines;
+	const lineHeight = page.baseline * lineHeightInBaselines;
 	const videoSrc = videoSources[video];
 	invariant(videoSrc);
 

@@ -408,8 +408,8 @@ export const RemotionRoot: React.FC = () => {
 						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
 							themeEnum: 'LORENZOBERTOLINI' as const,
-							fontSizeInBaselines: 4,
-							lineHeightInBaselines: 4,
+							fontSizeInBaselines: 3,
+							lineHeightInBaselines: 3,
 							numberOfWordRows: 29,
 							word: 'GOLD.',
 							video: 'GOLD' as const,

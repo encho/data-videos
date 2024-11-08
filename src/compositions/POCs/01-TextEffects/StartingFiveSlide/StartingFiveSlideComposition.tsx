@@ -1,12 +1,14 @@
 import {z} from 'zod';
 import React from 'react';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {zSquareVideoSrcEnum} from './StartingFiveSlide';
 import {StartingFiveSlide} from './StartingFiveSlide';
+import {useVideoConfig} from 'remotion';
 
 export const startingFiveSlideCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -28,15 +30,18 @@ export const StartingFiveSlideComposition: React.FC<
 	video,
 }) => {
 	const theme = useThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
 
 	return (
-		<StartingFiveSlide
-			theme={theme}
-			fontSizeInBaselines={fontSizeInBaselines}
-			lineHeightInBaselines={lineHeightInBaselines}
-			numberOfWordRows={numberOfWordRows}
-			word={word}
-			video={video}
-		/>
+		<PageContext margin={0} nrBaselines={40} width={width} height={height}>
+			<StartingFiveSlide
+				theme={theme}
+				fontSizeInBaselines={fontSizeInBaselines}
+				lineHeightInBaselines={lineHeightInBaselines}
+				numberOfWordRows={numberOfWordRows}
+				word={word}
+				video={video}
+			/>
+		</PageContext>
 	);
 };

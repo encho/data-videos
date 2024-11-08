@@ -1,6 +1,8 @@
 import {z} from 'zod';
-import {Sequence} from 'remotion';
+import {Sequence, useVideoConfig} from 'remotion';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
+import {Page} from '../../03-Page/SimplePage/NewPage';
 import {TextAnimationSubtle} from './TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
@@ -25,55 +27,51 @@ export const TextAnimationsComposition: React.FC<
 	z.infer<typeof textAnimationsCompositionSchema>
 > = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
 	const theme = getThemeFromEnum(themeEnum as any);
+	const {width, height} = useVideoConfig();
 
 	// load fonts
 	// ********************************************************
 	useFontFamiliesLoader(theme);
 
 	return (
-		<div
-			style={{
-				backgroundColor: theme.global.backgroundColor,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-			}}
-		>
-			<Position position={{top: 100, left: 100}}>
-				<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
-					<Sequence layout="none">
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.h2}
-							baseline={24}
-							marginBottom={2}
-						>
-							{/* <FadeInAndOutText>Fade In And Out Text</FadeInAndOutText> */}
-							<FadeInAndOutText>Fade In/Out</FadeInAndOutText>
-						</TypographyStyle>
-					</Sequence>
-					<Sequence layout="none">
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.h2}
-							baseline={24}
-							marginBottom={2}
-						>
-							<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>
-						</TypographyStyle>
-					</Sequence>
-					<Sequence layout="none">
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.h2}
-							baseline={24}
-							marginBottom={2}
-						>
-							<TextAnimationSubtle translateY={theme.page.baseline * 1.25}>
-								Text Animation Subtle
-							</TextAnimationSubtle>
-						</TypographyStyle>
-					</Sequence>
-				</div>
-			</Position>
-			<LorenzoBertoliniLogo color={theme.typography.textColor} />
-		</div>
+		<PageContext width={width} height={height} margin={40} nrBaselines={40}>
+			<Page theme={theme} show>
+				<Position position={{top: 100, left: 100}}>
+					<div style={{display: 'flex', flexDirection: 'column', gap: 80}}>
+						<Sequence layout="none">
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.h2}
+								baseline={24}
+								marginBottom={2}
+							>
+								{/* <FadeInAndOutText>Fade In And Out Text</FadeInAndOutText> */}
+								<FadeInAndOutText>Fade In/Out</FadeInAndOutText>
+							</TypographyStyle>
+						</Sequence>
+						<Sequence layout="none">
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.h2}
+								baseline={24}
+								marginBottom={2}
+							>
+								<WaterfallTextEffect>Waterfall Text Effect</WaterfallTextEffect>
+							</TypographyStyle>
+						</Sequence>
+						<Sequence layout="none">
+							<TypographyStyle
+								typographyStyle={theme.typography.textStyles.h2}
+								baseline={24}
+								marginBottom={2}
+							>
+								<TextAnimationSubtle translateY={theme.page.baseline * 1.25}>
+									Text Animation Subtle
+								</TextAnimationSubtle>
+							</TypographyStyle>
+						</Sequence>
+					</div>
+				</Position>
+				<LorenzoBertoliniLogo color={theme.typography.textColor} />
+			</Page>
+		</PageContext>
 	);
 };

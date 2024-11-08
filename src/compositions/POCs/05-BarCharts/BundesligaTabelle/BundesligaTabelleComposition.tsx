@@ -1,14 +1,14 @@
 import {z} from 'zod';
 import {useVideoConfig, Img, Sequence} from 'remotion';
-import chroma from 'chroma-js';
 
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {useBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/useBarChartKeyframes';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../03-Page/SimplePage/ThemePage';
+} from '../../03-Page/SimplePage/NewPage';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {
@@ -49,7 +49,7 @@ export const bundesligaTabelleCompositionSchema = z.object({
 export const BundesligaTabelleComposition: React.FC<
 	z.infer<typeof bundesligaTabelleCompositionSchema>
 > = ({themeEnum, data, title, subtitle, dataSource}) => {
-	const {fps, durationInFrames} = useVideoConfig();
+	const {fps, durationInFrames, width, height} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 
 	const startingFiveSlideDurationInFrames = Math.floor(fps * 3.5);
@@ -67,7 +67,7 @@ export const BundesligaTabelleComposition: React.FC<
 	const lastSlideFrom = barChartFrom + barChartDurationInFrames;
 
 	return (
-		<>
+		<PageContext width={width} height={height} margin={40} nrBaselines={40}>
 			<Sequence
 				layout="none"
 				from={fps * 0}
@@ -110,7 +110,7 @@ export const BundesligaTabelleComposition: React.FC<
 			<Sequence layout="none" from={lastSlideFrom}>
 				<LastLogoPage theme={theme} />
 			</Sequence>
-		</>
+		</PageContext>
 	);
 };
 
@@ -140,7 +140,7 @@ export const BundesligaBarChartsPage: React.FC<{
 	const barChartDelayInSeconds = 0.7;
 
 	return (
-		<Page theme={theme}>
+		<Page theme={theme} show>
 			<div
 				style={{
 					display: 'flex',

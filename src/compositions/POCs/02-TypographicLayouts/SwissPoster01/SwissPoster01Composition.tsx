@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import {useVideoConfig, Sequence, staticFile, Video} from 'remotion';
+import {useVideoConfig, Sequence, Video} from 'remotion';
 
 import {
 	getThemeFromEnum,
