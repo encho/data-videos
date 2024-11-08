@@ -28,7 +28,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 }) => {
-	const {durationInFrames} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -38,11 +38,12 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_HEIGHT,
 	});
 
-	const td_buildup = 90 * 4;
-	const td_periodsAreaEnter = 90 * 3;
-	const td_periodsAreaZoomIn = 90 * 1;
-	const td_periodsAreaZoomed = 90 * 2;
-	const td_periodsAreaZoomOut = 90 * 1;
+	// TODO use keyframes
+	const td_buildup = Math.floor(durationInFrames * 0.25);
+	const td_periodsAreaEnter = Math.floor(durationInFrames * 0.1);
+	const td_periodsAreaZoomIn = Math.floor(durationInFrames * 0.1);
+	const td_periodsAreaZoomed = Math.floor(durationInFrames * 0.1);
+	const td_periodsAreaZoomOut = Math.floor(durationInFrames * 0.1);
 	const td_periodsAreaExit =
 		durationInFrames -
 		td_buildup -
@@ -51,16 +52,12 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		td_periodsAreaZoomed -
 		td_periodsAreaZoomOut;
 
-	// const transitionDurationInFrames_0_1 = durationInFrames - 90 * 3 - 90 * 3;
-	// const transitionDurationInFrames_1_2 = 90 * 3;
-	// const transitionDurationInFrames_2_3 = 90 * 3;
-
+	// TODO also allow for dates as indices eventually
 	// // TODO fix with [0,0] !!!!!!!!!
 	// const visibleDomainIndices_0 = [0, 1] as [number, number];
 	// const visibleDomainIndices_1 = [0, timeSeries.length] as [number, number];
 	// const visibleDomainIndices_2 = [0, timeSeries.length] as [number, number];
 	// const visibleDomainIndices_3 = [220, 420] as [number, number];
-
 	const view_start = [0, 1] as [number, number];
 	const view_buildup = [0, timeSeries.length] as [number, number];
 	const view_periodsAreaEnter = [0, timeSeries.length] as [number, number];
@@ -157,7 +154,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
 					return (
 						<div>
-							<Sequence from={td_buildup}>
+							{/* <Sequence from={td_buildup}>
 								<HighlightPeriods3
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
@@ -170,7 +167,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									label="Interesting Period"
 									theme={theme.timeseriesComponents.HighlightPeriodsArea}
 								/>
-							</Sequence>
+							</Sequence> */}
 
 							<LineChart_XAxisShowcase
 								timeSeries={timeSeries}
