@@ -92,31 +92,37 @@ export const LineChart_XAxisShowcase: React.FC<{
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
 
-	const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
-	const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
+	// const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
+	// const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
+	const axisSpecFrom = getAxisSpec(fromPeriodScale, fromSpecType);
+	const axisSpecTo = getAxisSpec(toPeriodScale, toSpecType);
 
 	// ***************************
 	// the different x-axis specs:
 	// ***************************
 
 	// 1. days
-	const xAxisSpec_days_from = getDaysAxisSpec(currentPeriodsScale);
-	const xAxisSpec_days_to = getDaysAxisSpec(currentPeriodsScale);
+	// const xAxisSpec_days_from = getDaysAxisSpec(currentPeriodsScale);
+	// const xAxisSpec_days_to = getDaysAxisSpec(currentPeriodsScale);
+	const xAxisSpec_days_from = getDaysAxisSpec(fromPeriodScale);
+	const xAxisSpec_days_to = getDaysAxisSpec(toPeriodScale);
 
 	// 2. month starts
-	const xAxisSpec_monthStarts_from =
-		getMonthStartsAxisSpec(currentPeriodsScale);
-	const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(currentPeriodsScale);
+	// const xAxisSpec_monthStarts_from =
+	// 	getMonthStartsAxisSpec(currentPeriodsScale);
+	// const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(currentPeriodsScale);
+	const xAxisSpec_monthStarts_from = getMonthStartsAxisSpec(fromPeriodScale);
+	const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(toPeriodScale);
 
 	// 3. quarter starts
+	// const xAxisSpec_quarterStarts_from =
+	// 	getQuarterStartsAxisSpec(currentPeriodsScale);
+	// const xAxisSpec_quarterStarts_to =
+	// 	getQuarterStartsAxisSpec(currentPeriodsScale);
 	const xAxisSpec_quarterStarts_from =
-		getQuarterStartsAxisSpec(currentPeriodsScale);
-	const xAxisSpec_quarterStarts_to =
-		getQuarterStartsAxisSpec(currentPeriodsScale);
+		getQuarterStartsAxisSpec(fromPeriodScale);
+	const xAxisSpec_quarterStarts_to = getQuarterStartsAxisSpec(toPeriodScale);
 
-	// days: getDaysAxisSpec,
-	// monthStarts: getMonthStartsAxisSpec,
-	// quarterStarts: getQuarterStartsAxisSpec,
 	// ***************************
 
 	const Y_RANGE_FIXED = yScale.range();
@@ -139,6 +145,12 @@ export const LineChart_XAxisShowcase: React.FC<{
 
 	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
 	const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
+
+	const xAxisDebugColors = {
+		debugEnterColor: 'lime',
+		debugUpdateColor: 'blue',
+		debugExitColor: 'red',
+	};
 
 	return (
 		<>
@@ -179,6 +191,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 					area={layoutAreas.xAxis}
 					periodsScale={currentPeriodsScale}
 					currentSliceInfo={currentSliceInfo}
+					// {...xAxisDebugColors}
 				/>
 			</Position>
 

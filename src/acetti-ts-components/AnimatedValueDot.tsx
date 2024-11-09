@@ -16,7 +16,16 @@ export const AnimatedValueDot: React.FC<{
 	yScale: ScaleLinear<number, number>;
 	timeSeries: {value: number; date: Date}[];
 	radius?: number;
-}> = ({dotColor, area, yScale, periodsScale, timeSeries, radius = 20}) => {
+	showLeftDot?: boolean;
+}> = ({
+	dotColor,
+	area,
+	yScale,
+	periodsScale,
+	timeSeries,
+	radius = 20,
+	showLeftDot = false,
+}) => {
 	const {x: xLeft, y: yLeft} = getXYLeftClamped({
 		periodsScale,
 		timeSeries,
@@ -37,7 +46,7 @@ export const AnimatedValueDot: React.FC<{
 			</defs> */}
 			<g>
 				{/* ensures that the dot is not displayed, if out of bounds vertically */}
-				{yLeft && yLeft >= 0 && yLeft <= area.height ? (
+				{showLeftDot && yLeft && yLeft >= 0 && yLeft <= area.height ? (
 					<g>
 						<Dot cx={xLeft} cy={yLeft} r={radius} fill={dotColor} />
 					</g>

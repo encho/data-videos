@@ -1103,16 +1103,18 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="XAxisSpecs-Dev"
 						component={XAxisSpecsDevComposition}
-						durationInFrames={90 * 9}
-						fps={90}
+						durationInFrames={30 * 9}
+						fps={30}
 						// {...videoSizes.linkedInTall}
 						{...videoSizes.widescreen_16x9}
+						// width={videoSizes.widescreen_16x9.width}
+						// height={videoSizes.widescreen_16x9.height * 2}
 						schema={xAxisSpecsDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
-							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						}}
 					/>
 					<Composition

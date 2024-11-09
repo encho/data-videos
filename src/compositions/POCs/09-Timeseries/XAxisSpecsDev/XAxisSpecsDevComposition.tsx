@@ -43,6 +43,7 @@ export const XAxisSpecsDevComposition: React.FC<
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
 	const theme = useThemeFromEnum(themeEnum as any);
+	// const theme2 = useThemeFromEnum('LORENZOBERTOLINI' as any);
 
 	// useFontFamiliesLoader(theme);
 
@@ -79,36 +80,66 @@ export const XAxisSpecsDevComposition: React.FC<
 
 	return (
 		<GlobalVideoContextWrapper>
-			<PageContext
-				width={width}
-				// height={height * 0.7}
-				height={height}
-				margin={40}
-				nrBaselines={40}
-			>
-				<Page theme={theme} show>
-					{({contentWidth, contentHeight}) => {
-						return (
-							<TimeseriesAnimation
-								width={contentWidth}
-								height={contentHeight}
-								timeSeries={timeSeries}
-								theme={theme}
-							/>
-						);
-					}}
-					{/* <TitleAndSubtitle
-						title={'XAxisSpecDev TODO here showcase all xaxis specs'}
-						titleColor={theme.typography.title.color}
-						titleFontFamily={theme.typography.title.fontFamily}
-						titleFontSize={60}
-						subTitle={apiResult.tickerMetadata.name + apiResult.timePeriod}
-						subTitleColor={theme.typography.subTitle.color}
-						subTitleFontFamily={theme.typography.subTitle.fontFamily}
-						subTitleFontSize={40}
-					/> */}
-				</Page>
-			</PageContext>
+			<div>
+				<div>
+					<PageContext
+						width={width}
+						// height={height * 0.7}
+						height={height}
+						margin={40}
+						nrBaselines={40}
+					>
+						<Page
+							theme={theme}
+							// show
+						>
+							{({contentWidth, contentHeight}) => {
+								return (
+									<TimeseriesAnimation
+										width={contentWidth}
+										height={contentHeight}
+										timeSeries={timeSeries}
+										theme={theme}
+									/>
+								);
+							}}
+						</Page>
+					</PageContext>
+				</div>
+				{/* <div>
+					<PageContext
+						width={width}
+						// height={height * 0.7}
+						height={height / 2}
+						margin={40}
+						nrBaselines={40}
+					>
+						<Page theme={theme2} show>
+							{({contentWidth, contentHeight}) => {
+								return (
+									<TimeseriesAnimation
+										width={contentWidth}
+										height={contentHeight}
+										timeSeries={timeSeries}
+										theme={theme2}
+									/>
+								);
+							}}
+						</Page>
+					</PageContext>
+				</div> */}
+			</div>
 		</GlobalVideoContextWrapper>
 	);
 };
+
+// {/* <TitleAndSubtitle
+// 	title={'XAxisSpecDev TODO here showcase all xaxis specs'}
+// 	titleColor={theme.typography.title.color}
+// 	titleFontFamily={theme.typography.title.fontFamily}
+// 	titleFontSize={60}
+// 	subTitle={apiResult.tickerMetadata.name + apiResult.timePeriod}
+// 	subTitleColor={theme.typography.subTitle.color}
+// 	subTitleFontFamily={theme.typography.subTitle.fontFamily}
+// 	subTitleFontSize={40}
+// /> */}

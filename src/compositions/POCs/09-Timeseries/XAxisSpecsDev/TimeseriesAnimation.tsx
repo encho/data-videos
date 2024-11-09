@@ -69,7 +69,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				<DisplayGridLayout
 					stroke={'rgba(255,0,255,0.4)'}
 					fill="transparent"
-					// hide={true}
+					hide={true}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -114,37 +114,39 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						durationInFrames: td_buildup,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// easingFunction: Easing.linear, // TODO why linear is broken??
-						numberOfSlices: 20,
+						// TODO:
+						// numberOfSlices: getDurationInSeconds(keyframes, "START_BUILDUP", "END_BUILDUP") / 2
+						numberOfSlices: 5,
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaEnter,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						numberOfSlices: 1,
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomIn,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 5,
+						numberOfSlices: 1,
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomed,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 5,
+						numberOfSlices: 1,
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomOut,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 20,
+						numberOfSlices: 1,
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaExit,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 40,
+						numberOfSlices: 1,
 						transitionType: 'ZOOM',
 					},
 				]}

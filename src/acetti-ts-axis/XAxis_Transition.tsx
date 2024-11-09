@@ -8,6 +8,7 @@ import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
+import {Performance_01} from '../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
@@ -36,6 +37,9 @@ export const XAxis_Transition: React.FC<{
 	theme: TTheme_XAxis;
 	periodsScale: TPeriodsScale;
 	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	debugEnterColor?: string;
+	debugUpdateColor?: string;
+	debugExitColor?: string;
 }> = ({
 	area,
 	theme,
@@ -43,13 +47,55 @@ export const XAxis_Transition: React.FC<{
 	toAxisSpec,
 	periodsScale,
 	currentSliceInfo,
+	debugEnterColor,
+	debugUpdateColor,
+	debugExitColor,
 }) => {
+	// TODO from Theme
+	// sizes and distances
+	// ------------------------------------------------------------
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
+	// colors
+	// ------------------------------------------------------------
+	// TODO in the theme we need lineColor, tickColor, tickLabelColor, secondaryTickLabelColor, evtl. labelColor
+	const tickColorEnter = debugEnterColor || theme.tickColor;
+	const tickColorUpdate = debugUpdateColor || theme.tickColor;
+	const tickColorExit = debugExitColor || theme.tickColor;
+
+	const tickLabelColorEnter = debugEnterColor || theme.color;
+	const tickLabelColorUpdate = debugUpdateColor || theme.color;
+	const tickLabelColorExit = debugExitColor || theme.color;
+
+	const secondaryTickLabelColorEnter = debugEnterColor || theme.color;
+	const secondaryTickLabelColorUpdate = debugUpdateColor || theme.color;
+	const secondaryTickLabelColorExit = debugExitColor || theme.color;
+
 	const relativeFrame = currentSliceInfo.relativeFrame;
 	const {fps} = useVideoConfig();
+
+	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
+	const visibleDomainIndicesRange =
+		visibleDomainIndices[1] - visibleDomainIndices[0];
+
+	const getOpacityNearVisibleBoundary = (domainIndex: number) => {
+		return interpolate(
+			domainIndex,
+			[
+				visibleDomainIndices[0] - 0.01 * visibleDomainIndicesRange,
+				visibleDomainIndices[0],
+				visibleDomainIndices[1],
+				visibleDomainIndices[1] + 0.01 * visibleDomainIndicesRange,
+			],
+			[0.1, 1, 1, 0.1],
+			{
+				// extrapolateLeft: 'clamp',
+				// extrapolateRight: 'clamp'
+			}
+		);
+	};
 
 	// const FADE_IN_OUT_DURATION = fps * 3;
 	const FADE_IN_OUT_DURATION = Math.min(
@@ -91,7 +137,11 @@ export const XAxis_Transition: React.FC<{
 		const currentPeriodFloatIndex = startTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
 
-		return {id: tickId, value};
+		return {
+			id: tickId,
+			value,
+			opacity: getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+		};
 	});
 
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
@@ -110,20 +160,12 @@ export const XAxis_Transition: React.FC<{
 		const currentPeriodFloatIndex = endTick.periodFloatIndex;
 		const value = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
 
-		// const interpolatedValue = interpolate(
-		// 	relativeFrame,
-		// 	[0, FADE_IN_OUT_DURATION],
-		// 	[0, value],
-		// 	{
-		// 		extrapolateLeft: 'clamp',
-		// 		extrapolateRight: 'clamp',
-		// 	}
-		// );
-
 		return {
 			id: tickId,
 			value: value,
-			opacity: interpolatedOpacity,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
 		};
 	});
 
@@ -146,7 +188,9 @@ export const XAxis_Transition: React.FC<{
 		return {
 			id: tickId,
 			value,
-			opacity: interpolatedOpacity,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
 		};
 	});
 
@@ -154,27 +198,20 @@ export const XAxis_Transition: React.FC<{
 		const startLabel = getLabel(fromAxisSpec, labelId);
 		const endLabel = getLabel(toAxisSpec, labelId);
 
-		const startX = periodsScale.mapFloatIndexToRange(
-			startLabel.periodFloatIndex
-		);
-		const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
-
-		// TODO evtl. refine
-		// TODO take info about animationPercentage from passed currentTransitionSlice object!
-		const animationPercentage = 0;
-		const currentX =
-			(1 - animationPercentage) * startX + animationPercentage * endX;
-
-		// TODO take info about animationPercentage from passed currentTransitionSlice object!
-		const marginLeft = interpolate(
-			animationPercentage,
+		const interpolatedPeriodFloatIndex = interpolate(
+			currentSliceInfo.framesPercentage, // TODO use easingPercentage
 			[0, 1],
-			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
-			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
-				extrapolateLeft: 'clamp',
-				extrapolateRight: 'clamp',
-			}
+			[startLabel.periodFloatIndex, endLabel.periodFloatIndex]
+		);
+
+		const currentX = periodsScale.mapFloatIndexToRange(
+			interpolatedPeriodFloatIndex
+		);
+
+		const marginLeft = interpolate(
+			currentSliceInfo.framesPercentage, // TODO use easingPercentage
+			[0, 1],
+			[startLabel.marginLeft || 0, endLabel.marginLeft || 0]
 		);
 
 		return {
@@ -183,7 +220,7 @@ export const XAxis_Transition: React.FC<{
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
-			// opacity: 1,
+			opacity: getOpacityNearVisibleBoundary(interpolatedPeriodFloatIndex),
 		};
 	});
 
@@ -206,10 +243,13 @@ export const XAxis_Transition: React.FC<{
 		return {
 			id: labelId,
 			value: endX,
-			opacity: interpolatedOpacity,
+			// opacity: interpolatedOpacity,
 			label: endLabel.label,
 			textAnchor: endLabel.textAnchor,
 			marginLeft,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(endLabel.periodFloatIndex),
 		};
 	});
 
@@ -235,10 +275,13 @@ export const XAxis_Transition: React.FC<{
 		return {
 			id: labelId,
 			value: startX,
-			opacity: interpolatedOpacity,
+			// opacity: interpolatedOpacity,
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(startLabel.periodFloatIndex),
 		};
 	});
 
@@ -249,26 +292,21 @@ export const XAxis_Transition: React.FC<{
 			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
 			const endLabel = getSecondaryLabel(toAxisSpec, labelId);
 
-			const startX = periodsScale.mapFloatIndexToRange(
-				startLabel.periodFloatIndex
+			// TODO not take framesPercentage insed easingPercentage
+			const currentPeriodFloatIndex =
+				currentSliceInfo.framesPercentage * startLabel.periodFloatIndex +
+				(1 - currentSliceInfo.framesPercentage) * endLabel.periodFloatIndex;
+
+			const currentX = periodsScale.mapFloatIndexToRange(
+				currentPeriodFloatIndex
 			);
-			const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
 
-			// TODO evtl. refine
-			// TODO take info about animationPercentage from passed currentTransitionSlice object!
-			const animationPercentage = 0;
-			const currentX =
-				(1 - animationPercentage) * startX + animationPercentage * endX;
-
-			// const currentX = endX;
-
-			// TODO take info about animationPercentage from passed currentTransitionSlice object!
+			// TODO easingPercentage not framesPercentage
 			const marginLeft = interpolate(
-				animationPercentage,
+				currentSliceInfo.framesPercentage,
 				[0, 1],
 				[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
 				{
-					// easing: Easing.bezier(0.25, 1, 0.5, 1),
 					extrapolateLeft: 'clamp',
 					extrapolateRight: 'clamp',
 				}
@@ -280,6 +318,7 @@ export const XAxis_Transition: React.FC<{
 				label: startLabel.label,
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
+				opacity: getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
 			};
 		}
 	);
@@ -287,7 +326,10 @@ export const XAxis_Transition: React.FC<{
 	const enterSecondaryLabels = secondaryLabelsEnterUpdateExits.enter.map(
 		(labelId) => {
 			const endLabel = getSecondaryLabel(toAxisSpec, labelId);
-			const endX = periodsScale.mapFloatIndexToRange(endLabel.periodFloatIndex);
+
+			const currentPeriodFloatIndex = endLabel.periodFloatIndex;
+
+			const endX = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
 
 			const interpolatedOpacity = interpolate(
 				relativeFrame,
@@ -304,10 +346,14 @@ export const XAxis_Transition: React.FC<{
 			return {
 				id: labelId,
 				value: endX,
-				opacity: interpolatedOpacity,
+				// opacity: interpolatedOpacity,
+
 				label: endLabel.label,
 				textAnchor: endLabel.textAnchor,
 				marginLeft,
+				opacity:
+					interpolatedOpacity *
+					getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
 			};
 		}
 	);
@@ -316,9 +362,9 @@ export const XAxis_Transition: React.FC<{
 		(labelId) => {
 			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
 
-			const startX = periodsScale.mapFloatIndexToRange(
-				startLabel.periodFloatIndex
-			);
+			const currentPeriodFloatIndex = startLabel.periodFloatIndex;
+
+			const startX = periodsScale.mapFloatIndexToRange(currentPeriodFloatIndex);
 
 			const interpolatedOpacity = interpolate(
 				relativeFrame,
@@ -335,10 +381,13 @@ export const XAxis_Transition: React.FC<{
 			return {
 				id: labelId,
 				value: startX,
-				opacity: interpolatedOpacity,
+				// opacity: interpolatedOpacity,
 				label: startLabel.label,
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
+				opacity:
+					interpolatedOpacity *
+					getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
 			};
 		}
 	);
@@ -365,7 +414,7 @@ export const XAxis_Transition: React.FC<{
 					>
 						<text
 							textAnchor={it.textAnchor}
-							fill={theme.color}
+							fill={tickLabelColorEnter}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
 							alignmentBaseline="baseline"
@@ -391,7 +440,9 @@ export const XAxis_Transition: React.FC<{
 					>
 						<text
 							textAnchor={it.textAnchor}
-							fill={theme.color}
+							// fill={theme.color} // TODO get a grip on the colors
+							// fill={it.color}
+							fill={tickLabelColorUpdate}
 							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
@@ -415,7 +466,8 @@ export const XAxis_Transition: React.FC<{
 						<text
 							textAnchor={it.textAnchor}
 							alignmentBaseline="baseline"
-							fill={theme.color}
+							// fill={theme.color}
+							fill={tickLabelColorExit}
 							// fontFamily={fontFamilyXTicklabels}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
@@ -440,7 +492,8 @@ export const XAxis_Transition: React.FC<{
 					>
 						<text
 							textAnchor={it.textAnchor}
-							fill={theme.color}
+							// fill={theme.color}
+							fill={secondaryTickLabelColorUpdate}
 							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
@@ -464,7 +517,8 @@ export const XAxis_Transition: React.FC<{
 					>
 						<text
 							textAnchor={it.textAnchor}
-							fill={theme.color}
+							// fill={theme.color}
+							fill={secondaryTickLabelColorEnter}
 							// fontFamily={fontFamilyXTicklabels}
 							// fontSize={styling.xTickValuesFontSize}
 							alignmentBaseline="baseline"
@@ -492,7 +546,8 @@ export const XAxis_Transition: React.FC<{
 						<text
 							textAnchor={it.textAnchor}
 							alignmentBaseline="baseline"
-							fill={theme.color}
+							// fill={theme.color}
+							fill={secondaryTickLabelColorExit}
 							// fontFamily={fontFamilyXTicklabels}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
@@ -519,7 +574,8 @@ export const XAxis_Transition: React.FC<{
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							// stroke={theme.tickColor}
+							stroke={tickColorEnter}
 							strokeWidth={4}
 							opacity={it.opacity}
 						/>
@@ -540,7 +596,9 @@ export const XAxis_Transition: React.FC<{
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							// stroke={theme.tickColor}
+							// stroke={it.color}
+							stroke={tickColorExit}
 							strokeWidth={4}
 							opacity={it.opacity}
 							// opacity={1}
@@ -557,7 +615,8 @@ export const XAxis_Transition: React.FC<{
 							x2={xTick.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							// stroke={theme.tickColor}
+							stroke={tickColorUpdate}
 							strokeWidth={4}
 						/>
 					</g>
