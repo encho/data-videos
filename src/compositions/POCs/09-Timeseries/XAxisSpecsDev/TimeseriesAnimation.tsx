@@ -1,4 +1,5 @@
 import {useVideoConfig, Easing} from 'remotion';
+import {ReactNode} from 'react';
 
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
@@ -26,10 +27,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 }) => {
-	const {
-		durationInFrames,
-		// fps
-	} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const CHART_WIDTH = width;
 	const CHART_HEIGHT = height;
@@ -152,8 +150,130 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				]}
 			>
 				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
+					const Row = ({children}: {children: ReactNode}) => {
+						return (
+							<div
+								style={{
+									display: 'flex',
+									gap: 5,
+									backgroundColor: 'rgba(0,0,0,0.3)',
+									color: '#00aa99',
+									padding: 5,
+									fontWeight: 800,
+								}}
+							>
+								{children}
+							</div>
+						);
+					};
+
+					const Value = ({children}: {children: ReactNode}) => {
+						return <div style={{color: '#00ffaa'}}>{children}</div>;
+					};
+
+					const listItems = [
+						{
+							key: 'Object.keys():',
+							value: JSON.stringify(
+								Object.keys(currentSliceInfo),
+								undefined,
+								2
+							),
+						},
+						{key: 'index', value: JSON.stringify(currentSliceInfo.index)},
+						{
+							key: 'frameRange',
+							value: JSON.stringify(currentSliceInfo.frameRange),
+						},
+						{
+							key: 'durationInFrames',
+							value: JSON.stringify(currentSliceInfo.durationInFrames),
+						},
+						{
+							key: 'relativeFrame',
+							value: JSON.stringify(currentSliceInfo.relativeFrame),
+						},
+						{
+							key: 'framesPercentage',
+							value: JSON.stringify(currentSliceInfo.framesPercentage),
+						},
+						{
+							key: 'frameRangeLinearPercentage',
+							value: JSON.stringify(
+								currentSliceInfo.frameRangeLinearPercentage
+							),
+						},
+						{
+							key: 'frameRangeEasingPercentage',
+							value: JSON.stringify(
+								currentSliceInfo.frameRangeEasingPercentage
+							),
+						},
+						{
+							key: 'visibleDomainIndicesFrom',
+							value: JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom),
+						},
+						{
+							key: 'visibleDomainIndicesTo',
+							value: JSON.stringify(currentSliceInfo.visibleDomainIndicesTo),
+						},
+					];
+
 					return (
 						<div>
+							<div
+								style={{
+									position: 'absolute',
+									zIndex: 500,
+									backgroundColor: 'rgba(0,0,0,0.5)',
+									// filter: `blur(5px)`,
+									padding: 20,
+									fontSize: 20,
+								}}
+							>
+								<div style={{fontSize: 50}}>
+									<div style={{fontWeight: 700}}>currentSliceInfo</div>
+								</div>
+								<div
+									style={{
+										backgroundColor: 'rgba(0,0,0,0.2)',
+										padding: 20,
+										fontSize: 20,
+									}}
+								>
+									<div
+										style={{display: 'flex', flexDirection: 'column', gap: 5}}
+									>
+										{listItems.map((it) => {
+											return (
+												<Row>
+													<div>{it.key}</div>
+													<Value>{it.value}</Value>
+												</Row>
+											);
+										})}
+										{/* &&&&&&&& */}
+										<Row>
+											<div style={{}}>
+												OWN DomainIndices Change Distance (amount, left +
+												right):
+											</div>
+											<div style={{color: 'red'}}>
+												TODO implement calculation
+											</div>
+										</Row>
+										{/* ********* */}
+										<Row>
+											<div style={{}}>
+												OWN DomainIndices Change Velocity (???, left + right):
+											</div>
+											<div style={{color: 'red'}}>
+												TODO implement calculation
+											</div>
+										</Row>
+									</div>
+								</div>
+							</div>
 							{/* <Sequence from={td_buildup}>
 								<HighlightPeriods3
 									timeSeries={timeSeries}
