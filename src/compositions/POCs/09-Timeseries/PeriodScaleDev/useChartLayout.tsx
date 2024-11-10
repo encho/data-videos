@@ -6,8 +6,8 @@ import {
 
 // TODO make xaxis height dependant on theme and baseline
 const chartRowsRailSpec: TGridRailSpec = [
-	{type: 'fr', value: 1, name: 'plot'},
-	{type: 'pixel', value: 20, name: 'space'},
+	// {type: 'fr', value: 1, name: 'plot'},
+	// {type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis'},
 	{type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_days'},
@@ -17,11 +17,7 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 55, name: 'xAxis_quarterStarts'},
 ];
 
-const chartColsRailSpec: TGridRailSpec = [
-	{type: 'fr', value: 1, name: 'plot'},
-	{type: 'pixel', value: 40, name: 'space'},
-	{type: 'pixel', value: 135, name: 'yAxis'},
-];
+const chartColsRailSpec: TGridRailSpec = [{type: 'fr', value: 1, name: 'plot'}];
 
 const chartGridLayoutSpec = {
 	padding: 0,
@@ -54,18 +50,18 @@ const chartGridLayoutSpec = {
 			{name: 'xAxis_quarterStarts'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
-		yAxis: [
-			{name: 'plot'},
-			{name: 'yAxis'},
-			{name: 'plot'},
-			{name: 'yAxis'},
-		] as TGridLayoutAreaSpec,
-		plot: [
-			{name: 'plot'},
-			{name: 'plot'},
-			{name: 'plot'},
-			{name: 'plot'},
-		] as TGridLayoutAreaSpec,
+		// yAxis: [
+		// 	{name: 'plot'},
+		// 	{name: 'yAxis'},
+		// 	{name: 'plot'},
+		// 	{name: 'yAxis'},
+		// ] as TGridLayoutAreaSpec,
+		// plot: [
+		// 	{name: 'plot'},
+		// 	{name: 'plot'},
+		// 	{name: 'plot'},
+		// 	{name: 'plot'},
+		// ] as TGridLayoutAreaSpec,
 	},
 };
 

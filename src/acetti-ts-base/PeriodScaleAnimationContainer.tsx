@@ -14,7 +14,7 @@ import {
 
 export type TPeriodScaleAnimationContext = {
 	periodsScale: TPeriodsScale;
-	yScale: ScaleLinear<number, number>;
+	// yScale: ScaleLinear<number, number>;
 	frame: number;
 	// new API...
 	currentTransitionInfo: {
@@ -374,7 +374,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		<Sequence from={0} durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
-				yScale,
+				// yScale,
 				frame,
 				currentTransitionInfo,
 				currentSliceInfo,

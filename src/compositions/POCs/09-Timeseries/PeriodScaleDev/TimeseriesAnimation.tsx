@@ -76,31 +76,31 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				timeSeries={timeSeries}
 				viewSpecs={[
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_start,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.plot,
+						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 				]}
@@ -150,7 +150,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 			>
 				{({
 					periodsScale,
-					yScale,
+					// yScale,
 					frame,
 					currentSliceInfo,
 					currentTransitionInfo,
@@ -182,9 +182,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 												<LineChart_XAxisShowcase
 													timeSeries={timeSeries}
 													layoutAreas={{
-														plot: chartLayout.areas.plot,
+														// plot: chartLayout.areas.plot,
 														xAxis: chartLayout.areas.xAxis,
-														yAxis: chartLayout.areas.yAxis,
+														// yAxis: chartLayout.areas.yAxis,
 														xAxis_days: chartLayout.areas.xAxis_days,
 														xAxis_monthStarts:
 															chartLayout.areas.xAxis_monthStarts,
@@ -193,7 +193,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													}}
 													yDomainType={Y_DOMAIN_TYPE}
 													theme={theme}
-													yScale={yScale}
+													// yScale={yScale}
 													periodScale={periodsScale}
 													// TODO deprecate as we are passing the whole sliceInfo
 													fromPeriodScale={currentSliceInfo.periodsScaleFrom}
@@ -217,7 +217,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									<LineChartAnimationContextDebugger
 										frame={frame}
 										periodsScale={periodsScale}
-										yScale={yScale}
+										// yScale={yScale}
 										currentSliceInfo={currentSliceInfo}
 										currentTransitionInfo={currentTransitionInfo}
 										{...rest}
