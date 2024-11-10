@@ -14,22 +14,23 @@ import {
 
 export type TPeriodScaleAnimationContext = {
 	periodsScale: TPeriodsScale;
-	// yScale: ScaleLinear<number, number>;
 	frame: number;
-	// new API...
 	currentTransitionInfo: {
 		index: number;
 		frameRange: TFrameRange;
 		durationInFrames: number;
-		relativeFrame: number;
-		// TODO rename to linearPercentage (also for currentSlice object)
+		relativeFrame: number; // TODO rename to linearPercentage (also for currentSlice object)
 		framesPercentage: number;
 		easingPercentage: number;
+		fromViewSpec: TViewSpec;
+		toViewSpec: TViewSpec;
 	};
 	currentSliceInfo: {
 		index: number;
 		frameRange: TFrameRange;
+		// *************************************************
 		// TODO evtl. deprecate the following 2:
+		// *************************************************
 		frameRangeLinearPercentage: {startFrame: number; endFrame: number};
 		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
 		// *************************************************
@@ -41,9 +42,6 @@ export type TPeriodScaleAnimationContext = {
 		visibleDomainIndicesTo: [number, number];
 		periodsScaleFrom: TPeriodsScale;
 		periodsScaleTo: TPeriodsScale;
-		// TODO::::
-		// yScaleTo: TYAxis;
-		// yScaleFrom: TYAxis;
 	};
 };
 
@@ -102,10 +100,9 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const EASING_FUNCTION = currentTransition.easingFunction;
 
 	const currentAnimationPercentage =
-		// (currentTransitionFrame + 1) / currentTransition.durationInFrames;
 		currentTransitionFrame / (currentTransition.durationInFrames - 1);
 
-	const currentEasingPercentage = interpolate(
+	const currentTransition_easingPercentage = interpolate(
 		currentAnimationPercentage,
 		[0, 1],
 		[0, 1],
@@ -130,7 +127,10 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		relativeFrame: frame - currentFrameRange.startFrame,
 		//
 		framesPercentage: currentAnimationPercentage,
-		easingPercentage: currentEasingPercentage,
+		easingPercentage: currentTransition_easingPercentage,
+		//
+		fromViewSpec: fromViewSpec,
+		toViewSpec: toViewSpec,
 	};
 
 	// ******** current Slice information calculation *************************************************
@@ -232,21 +232,18 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	// determine slice easingPercentage
 	const currentSliceEasingPercentage_maxValue = interpolate(
 		currentTransitionSliceFrameRange.endFrame,
-		// currentTransitionSliceFrameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
 		[
 			currentTransitionInfo.frameRange.startFrame,
-			// currentTransitionInfo.frameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
 			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
 		{easing: EASING_FUNCTION}
 	);
+
 	const currentSliceEasingPercentage_minValue = interpolate(
 		currentTransitionSliceFrameRange.startFrame,
 		[
 			currentTransitionInfo.frameRange.startFrame,
-			// QUICK-FIX, take "-1" away once last frame range is fixed
-			// currentTransitionInfo.frameRange.endFrame - 1,
 			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
@@ -254,7 +251,6 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	);
 
 	const currentSliceEasingPercentage_currentValue = interpolate(
-		// currentTransitionInfo.relativeFrame,
 		frame,
 		[
 			currentTransitionInfo.frameRange.startFrame,
@@ -280,15 +276,11 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		durationInFrames: sliceDurationInFrames,
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
-		//
 		easingPercentage: currentSliceEasingPercentage,
-		//
 		frameRangeLinearPercentage,
 		frameRangeEasingPercentage,
-		//
 		visibleDomainIndicesFrom,
 		visibleDomainIndicesTo,
-		//
 		periodsScaleFrom: slicePeriodsScaleFrom,
 		periodsScaleTo: slicePeriodsScaleTo,
 	};
@@ -296,13 +288,13 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	// *********************************************************
 
 	const animatedVisibleDomainIndexStart = interpolate(
-		currentEasingPercentage,
+		currentTransitionInfo.easingPercentage,
 		[0, 1],
 		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
 	);
 
 	const animatedVisibleDomainIndexEnd = interpolate(
-		currentEasingPercentage,
+		currentTransitionInfo.easingPercentage,
 		[0, 1],
 		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
 	);
@@ -346,12 +338,12 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		);
 
 		const animatedYDomain_0 = interpolate(
-			currentEasingPercentage,
+			currentTransitionInfo.easingPercentage,
 			[0, 1],
 			[yDomainFrom[0], yDomainTo[0]]
 		);
 		const animatedYDomain_1 = interpolate(
-			currentEasingPercentage,
+			currentTransitionInfo.easingPercentage,
 			[0, 1],
 			[yDomainFrom[1], yDomainTo[1]]
 		);

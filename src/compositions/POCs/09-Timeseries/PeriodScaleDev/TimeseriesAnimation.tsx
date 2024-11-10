@@ -246,7 +246,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 const LineChartAnimationContextDebugger: React.FC<
 	TPeriodScaleAnimationContext
-> = ({frame, currentSliceInfo, currentTransitionInfo}) => {
+> = ({frame, currentSliceInfo, currentTransitionInfo, periodsScale}) => {
 	const {theme} = usePage();
 
 	const Row = ({children}: {children: ReactNode}) => {
@@ -274,6 +274,14 @@ const LineChartAnimationContextDebugger: React.FC<
 		{
 			key: 'Object.keys():',
 			value: JSON.stringify(Object.keys(currentTransitionInfo), undefined, 2),
+		},
+		{
+			key: 'fromViewSpec',
+			value: JSON.stringify(currentTransitionInfo.fromViewSpec),
+		},
+		{
+			key: 'toViewSpec',
+			value: JSON.stringify(currentTransitionInfo.toViewSpec),
 		},
 		{
 			key: 'index',
@@ -346,8 +354,12 @@ const LineChartAnimationContextDebugger: React.FC<
 
 	return (
 		<div style={{position: 'absolute', zIndex: 500}}>
-			<div style={{fontSize: 40, color: theme.typography.textStyles.h1.color}}>
+			<div style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}>
 				frame: {frame}
+			</div>
+			<div style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}>
+				periodsScale.getVisibleDomainIndices():{' '}
+				{JSON.stringify(periodsScale.getVisibleDomainIndices())}
 			</div>
 			<div
 				style={{
