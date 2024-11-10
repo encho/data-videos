@@ -358,8 +358,12 @@ const LineChartAnimationContextDebugger: React.FC<
 				frame: {frame}
 			</div>
 			<div style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}>
-				periodsScale.getVisibleDomainIndices():{' '}
-				{JSON.stringify(periodsScale.getVisibleDomainIndices())}
+				periodsScale.visibleDomainIndices:{' '}
+				{JSON.stringify(periodsScale.visibleDomainIndices)}
+			</div>
+			<div style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}>
+				periodsScale.fullPeriodDomainIndices:{' '}
+				{JSON.stringify(periodsScale.fullPeriodDomainIndices)}
 			</div>
 			<div
 				style={{

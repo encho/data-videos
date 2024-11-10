@@ -29,6 +29,8 @@ export type TPeriodsScale = {
 	getAllVisibleDates: () => Date[];
 	//
 	getTimeSeriesInterpolatedExtent: (x: TTimeSeries) => [number, number];
+	// new stuff for periodsScale Animation Container..
+	fullPeriodDomainIndices: [number, number];
 };
 
 export const periodsScale = ({
@@ -206,6 +208,8 @@ export const periodsScale = ({
 		getAllVisibleDates,
 		//
 		getTimeSeriesInterpolatedExtent,
+		//
+		fullPeriodDomainIndices: [0, dates.length],
 	};
 };
 
