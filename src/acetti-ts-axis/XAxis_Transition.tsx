@@ -90,17 +90,14 @@ export const XAxis_Transition: React.FC<{
 				visibleDomainIndices[1] + 0.01 * visibleDomainIndicesRange,
 			],
 			[0.1, 1, 1, 0.1],
-			{
-				// extrapolateLeft: 'clamp',
-				// extrapolateRight: 'clamp'
-			}
+			{}
 		);
 	};
 
-	// const FADE_IN_OUT_DURATION = fps * 3;
-	const FADE_IN_OUT_DURATION = Math.min(
+	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		fps * 0.8
+		// fps * 0.8
+		fps * 1
 	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -149,7 +146,7 @@ export const XAxis_Transition: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
-			[0, FADE_IN_OUT_DURATION],
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 			[0, 1],
 			{
 				extrapolateLeft: 'clamp',
@@ -174,7 +171,7 @@ export const XAxis_Transition: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
-			[0, FADE_IN_OUT_DURATION],
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 			[1, 0],
 			{
 				extrapolateLeft: 'clamp',
@@ -199,7 +196,7 @@ export const XAxis_Transition: React.FC<{
 		const endLabel = getLabel(toAxisSpec, labelId);
 
 		const interpolatedPeriodFloatIndex = interpolate(
-			currentSliceInfo.framesPercentage, // TODO use easingPercentage
+			currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startLabel.periodFloatIndex, endLabel.periodFloatIndex]
 		);
@@ -209,7 +206,7 @@ export const XAxis_Transition: React.FC<{
 		);
 
 		const marginLeft = interpolate(
-			currentSliceInfo.framesPercentage, // TODO use easingPercentage
+			currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startLabel.marginLeft || 0, endLabel.marginLeft || 0]
 		);
@@ -230,7 +227,7 @@ export const XAxis_Transition: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
-			[0, FADE_IN_OUT_DURATION],
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 			[0, 1],
 			{
 				extrapolateLeft: 'clamp',
@@ -262,7 +259,7 @@ export const XAxis_Transition: React.FC<{
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
-			[0, FADE_IN_OUT_DURATION],
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 			[1, 0],
 			{
 				extrapolateLeft: 'clamp',
@@ -292,18 +289,16 @@ export const XAxis_Transition: React.FC<{
 			const startLabel = getSecondaryLabel(fromAxisSpec, labelId);
 			const endLabel = getSecondaryLabel(toAxisSpec, labelId);
 
-			// TODO not take framesPercentage insed easingPercentage
 			const currentPeriodFloatIndex =
-				currentSliceInfo.framesPercentage * startLabel.periodFloatIndex +
-				(1 - currentSliceInfo.framesPercentage) * endLabel.periodFloatIndex;
+				currentSliceInfo.easingPercentage * startLabel.periodFloatIndex +
+				(1 - currentSliceInfo.easingPercentage) * endLabel.periodFloatIndex;
 
 			const currentX = periodsScale.mapFloatIndexToRange(
 				currentPeriodFloatIndex
 			);
 
-			// TODO easingPercentage not framesPercentage
 			const marginLeft = interpolate(
-				currentSliceInfo.framesPercentage,
+				currentSliceInfo.easingPercentage,
 				[0, 1],
 				[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
 				{
@@ -333,7 +328,7 @@ export const XAxis_Transition: React.FC<{
 
 			const interpolatedOpacity = interpolate(
 				relativeFrame,
-				[0, FADE_IN_OUT_DURATION],
+				[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 				[0, 1],
 				{
 					extrapolateLeft: 'clamp',
@@ -368,7 +363,7 @@ export const XAxis_Transition: React.FC<{
 
 			const interpolatedOpacity = interpolate(
 				relativeFrame,
-				[0, FADE_IN_OUT_DURATION],
+				[0, FADE_IN_OUT_DURATION_IN_FRAMES],
 				[1, 0],
 				{
 					extrapolateLeft: 'clamp',

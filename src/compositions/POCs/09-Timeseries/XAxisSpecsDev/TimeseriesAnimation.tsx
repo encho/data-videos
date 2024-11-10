@@ -66,13 +66,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
-	const view_start = [0, 1] as [number, number];
-	const view_buildup = [0, timeSeries.length] as [number, number];
-	const view_periodsAreaEnter = [0, timeSeries.length] as [number, number];
-	const view_periodsAreaZoomIn = [220, 420] as [number, number];
-	const view_periodsAreaZoomed = [220, 420] as [number, number];
-	const view_periodsAreaZoomOut = [0, timeSeries.length] as [number, number];
-	const view_periodsAreaExit = [0, timeSeries.length] as [number, number];
+	const view_series_start = [0, 1] as [number, number];
+	const view_series_full = [0, timeSeries.length] as [number, number];
+	const view_series_zoom_1 = [220, 420] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -81,31 +77,31 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				viewSpecs={[
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_start,
+						visibleDomainIndices: view_series_start,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_buildup,
+						visibleDomainIndices: view_series_full,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_periodsAreaEnter,
+						visibleDomainIndices: view_series_full,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_periodsAreaZoomIn,
+						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_periodsAreaZoomed,
+						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_periodsAreaZoomOut,
+						visibleDomainIndices: view_series_full,
 					},
 					{
 						area: chartLayout.areas.plot,
-						visibleDomainIndices: view_periodsAreaExit,
+						visibleDomainIndices: view_series_full,
 					},
 				]}
 				transitionSpecs={[

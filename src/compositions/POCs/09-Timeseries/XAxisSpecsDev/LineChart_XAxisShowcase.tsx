@@ -191,7 +191,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 					area={layoutAreas.xAxis}
 					periodsScale={currentPeriodsScale}
 					currentSliceInfo={currentSliceInfo}
-					// {...xAxisDebugColors}
+					{...xAxisDebugColors}
 				/>
 			</Position>
 
