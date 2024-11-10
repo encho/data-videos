@@ -288,6 +288,10 @@ const LineChartAnimationContextDebugger: React.FC<
 			value: JSON.stringify(currentTransitionInfo.frameRange),
 		},
 		{
+			key: 'durationInFrames',
+			value: JSON.stringify(currentTransitionInfo.durationInFrames),
+		},
+		{
 			key: 'relativeFrame',
 			value: JSON.stringify(currentTransitionInfo.relativeFrame),
 		},

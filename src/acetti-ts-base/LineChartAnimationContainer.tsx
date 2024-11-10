@@ -102,7 +102,8 @@ export const LineChartAnimationContainer: React.FC<{
 	const EASING_FUNCTION = currentTransition.easingFunction;
 
 	const currentAnimationPercentage =
-		(currentTransitionFrame + 1) / currentTransition.durationInFrames;
+		// (currentTransitionFrame + 1) / currentTransition.durationInFrames;
+		currentTransitionFrame / (currentTransition.durationInFrames - 1);
 
 	const currentEasingPercentage = interpolate(
 		currentAnimationPercentage,
@@ -153,10 +154,11 @@ export const LineChartAnimationContainer: React.FC<{
 
 	const sliceDurationInFrames =
 		currentTransitionSliceFrameRange.endFrame -
-		currentTransitionSliceFrameRange.startFrame;
+		currentTransitionSliceFrameRange.startFrame +
+		1;
 
 	const sliceFramesPercentage =
-		(sliceRelativeFrame + 1) / sliceDurationInFrames;
+		sliceRelativeFrame / (sliceDurationInFrames - 1);
 
 	const frameRangeLinearPercentage = {
 		startFrame:
@@ -229,10 +231,12 @@ export const LineChartAnimationContainer: React.FC<{
 
 	// determine slice easingPercentage
 	const currentSliceEasingPercentage_maxValue = interpolate(
-		currentTransitionSliceFrameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
+		currentTransitionSliceFrameRange.endFrame,
+		// currentTransitionSliceFrameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
 		[
 			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
+			// currentTransitionInfo.frameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
+			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
 		{easing: EASING_FUNCTION}
@@ -241,8 +245,10 @@ export const LineChartAnimationContainer: React.FC<{
 		currentTransitionSliceFrameRange.startFrame,
 		[
 			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame - 1,
-		], // QUICK-FIX, take "-1" away once last frame range is fixed
+			// QUICK-FIX, take "-1" away once last frame range is fixed
+			// currentTransitionInfo.frameRange.endFrame - 1,
+			currentTransitionInfo.frameRange.endFrame,
+		],
 		[0, 1],
 		{easing: EASING_FUNCTION}
 	);
@@ -252,8 +258,8 @@ export const LineChartAnimationContainer: React.FC<{
 		frame,
 		[
 			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame - 1,
-		], // QUICK-FIX, take "-1" away once last frame range is fixed
+			currentTransitionInfo.frameRange.endFrame,
+		],
 		[0, 1],
 		{easing: EASING_FUNCTION}
 	);
@@ -388,11 +394,11 @@ const calculateFrameRanges = (transitions: TTransitionSpec[]) => {
 		(acc, transition, index) => {
 			if (index === 0) {
 				// For the first element, the start frame is 0
-				acc.push({startFrame: 0, endFrame: transition.durationInFrames});
+				acc.push({startFrame: 0, endFrame: transition.durationInFrames - 1});
 			} else {
 				// Calculate the start frame based on the end frame of the last item
-				const startFrame = acc[index - 1].endFrame;
-				const endFrame = startFrame + transition.durationInFrames;
+				const startFrame = acc[index - 1].endFrame + 1;
+				const endFrame = startFrame + transition.durationInFrames - 1;
 				acc.push({startFrame, endFrame});
 			}
 			return acc;
@@ -411,7 +417,7 @@ function findFrameRangeIndex(
 	for (let i = 0; i < ranges.length; i++) {
 		if (
 			currentFrame >= ranges[i].startFrame &&
-			currentFrame < ranges[i].endFrame
+			currentFrame <= ranges[i].endFrame
 		) {
 			return i;
 		}
@@ -419,59 +425,34 @@ function findFrameRangeIndex(
 	return -1; // Return -1 if no matching range is found
 }
 
-// Example FrameRanges and a test case
-// const frameRanges: TFrameRange[] = [
-// 	{startFrame: 0, endFrame: 30},
-// 	{startFrame: 30, endFrame: 75},
-// 	{startFrame: 75, endFrame: 135},
-// ];
-
-// console.log(findFrameRangeIndex(25, frameRanges)); // Output: 0
-// console.log(findFrameRangeIndex(30, frameRanges)); // Output: 1
-// console.log(findFrameRangeIndex(50, frameRanges)); // Output: 1
-// console.log(findFrameRangeIndex(135, frameRanges)); // Output: -1 (since it's exactly the end frame of last range)
-// console.log(findFrameRangeIndex(140, frameRanges)); // Output: -1
-
-// interface FrameRange {
-//   startFrame: number;
-//   endFrame: number;
-// }
-
 function divideFrameRange(
 	range: TFrameRange,
 	numberOfFragments: number
 ): TFrameRange[] {
 	const {startFrame, endFrame} = range;
-	const totalFrames = endFrame - startFrame;
-	const fragmentSize = totalFrames / numberOfFragments;
+	const totalFrames = endFrame - startFrame + 1; // Include the start and end frames in the count
+	const fragmentLength = Math.floor(totalFrames / numberOfFragments);
+	const remainder = totalFrames % numberOfFragments;
 
-	const fragments: TFrameRange[] = [];
-
-	let previousEnd = startFrame;
+	const fragments = [];
+	let currentStart = startFrame;
 
 	for (let i = 0; i < numberOfFragments; i++) {
-		const fragmentStart = previousEnd;
-		let fragmentEnd;
-
-		if (i === numberOfFragments - 1) {
-			fragmentEnd = endFrame;
-		} else {
-			fragmentEnd = Math.round(fragmentStart + fragmentSize);
-		}
-
-		fragments.push({startFrame: fragmentStart, endFrame: fragmentEnd});
-		previousEnd = fragmentEnd;
+		const currentEnd =
+			currentStart + fragmentLength - 1 + (i < remainder ? 1 : 0);
+		fragments.push({startFrame: currentStart, endFrame: currentEnd});
+		currentStart = currentEnd + 1;
 	}
 
 	return fragments;
 }
-// // Example usage:
+
+// Example usage:
 // const range: TFrameRange = {startFrame: 100, endFrame: 120};
-// const numberOfFragments = 3;
-// const fragments = divideFrameRange(range, numberOfFragments);
+// const fragments = divideFrameRange(range, 3);
 // console.log(fragments);
 // [
-//   { startFrame: 100, endFrame: 107 },
-//   { startFrame: 107, endFrame: 114 },
+//   { startFrame: 100, endFrame: 106 },
+//   { startFrame: 107, endFrame: 113 },
 //   { startFrame: 114, endFrame: 120 }
 // ]
