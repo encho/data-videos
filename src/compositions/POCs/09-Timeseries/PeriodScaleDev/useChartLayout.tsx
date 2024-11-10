@@ -4,16 +4,16 @@ import {
 	useGridLayout,
 } from '../../../../acetti-layout';
 
+const ROW_SPACE_IN_PIXEL = 50;
+
 // TODO make xaxis height dependant on theme and baseline
 const chartRowsRailSpec: TGridRailSpec = [
-	// {type: 'fr', value: 1, name: 'plot'},
-	// {type: 'pixel', value: 20, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis'},
-	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_days'},
-	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_monthStarts'},
-	{type: 'pixel', value: 20, name: 'space'},
+	{type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_quarterStarts'},
 ];
 

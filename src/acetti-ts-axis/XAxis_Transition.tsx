@@ -73,6 +73,8 @@ export const XAxis_Transition: React.FC<{
 	const secondaryTickLabelColorUpdate = debugUpdateColor || theme.color;
 	const secondaryTickLabelColorExit = debugExitColor || theme.color;
 
+	const axisLineColor = debugUpdateColor || theme.color;
+
 	const relativeFrame = currentSliceInfo.relativeFrame;
 	const {fps} = useVideoConfig();
 
@@ -617,6 +619,18 @@ export const XAxis_Transition: React.FC<{
 					</g>
 				);
 			})}
+
+			{/* axis line */}
+			<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+				<line
+					x1={area.x1}
+					x2={area.x2}
+					y1={0}
+					y2={0}
+					stroke={axisLineColor}
+					strokeWidth={4}
+				/>
+			</g>
 		</svg>
 	);
 };
