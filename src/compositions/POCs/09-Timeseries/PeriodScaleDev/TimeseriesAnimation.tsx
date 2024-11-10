@@ -1,4 +1,4 @@
-import {useVideoConfig, Easing} from 'remotion';
+import {useVideoConfig, Easing, interpolate} from 'remotion';
 import {ReactNode} from 'react';
 
 import {DisplayGridLayout} from '../../../../acetti-layout';
@@ -249,7 +249,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 const LineChartAnimationContextDebugger: React.FC<
 	TPeriodScaleAnimationContext
 > = ({frame, currentSliceInfo, currentTransitionInfo, periodsScale}) => {
-	const {theme} = usePage();
+	const {theme, contentWidth} = usePage();
 
 	const Row = ({children}: {children: ReactNode}) => {
 		return (
@@ -367,6 +367,15 @@ const LineChartAnimationContextDebugger: React.FC<
 				periodsScale.fullPeriodDomainIndices:{' '}
 				{JSON.stringify(periodsScale.fullPeriodDomainIndices)}
 			</div>
+			<PeriodScaleZoomVisualizer
+				visibleDomainIndices={periodsScale.visibleDomainIndices}
+				fullDomainIndices={periodsScale.fullPeriodDomainIndices}
+				fromDomainIndices={
+					currentSliceInfo.periodsScaleFrom.visibleDomainIndices
+				}
+				toDomainIndices={currentSliceInfo.periodsScaleTo.visibleDomainIndices}
+				width={contentWidth}
+			/>
 			<div
 				style={{
 					// position: 'absolute',
@@ -469,6 +478,74 @@ const LineChartAnimationContextDebugger: React.FC<
 						</Row>
 					</div>
 				</div>
+			</div>
+		</div>
+	);
+};
+
+const PeriodScaleZoomVisualizer: React.FC<{
+	visibleDomainIndices: [number, number];
+	fullDomainIndices: [number, number];
+	fromDomainIndices: [number, number];
+	toDomainIndices: [number, number];
+	width: number;
+}> = ({
+	visibleDomainIndices,
+	fullDomainIndices,
+	fromDomainIndices,
+	toDomainIndices,
+	width,
+}) => {
+	const {theme} = usePage();
+
+	const mapToX = (x: number) => {
+		return interpolate(x, fullDomainIndices, [0, width]);
+	};
+
+	return (
+		<div style={{color: theme.typography.colors.title.main, fontSize: 30}}>
+			<div>{JSON.stringify(visibleDomainIndices)}</div>
+			<div>{JSON.stringify(fullDomainIndices)}</div>
+			<div
+				style={{
+					backgroundColor: 'gray',
+					width: mapToX(fullDomainIndices[1] - fullDomainIndices[0]),
+					height: 50,
+					position: 'relative',
+				}}
+			>
+				<div
+					style={{
+						position: 'absolute',
+						height: 30,
+						width: mapToX(visibleDomainIndices[1] - visibleDomainIndices[0]),
+						top: 10,
+						left: mapToX(visibleDomainIndices[0]),
+						backgroundColor: 'white',
+					}}
+				></div>
+				{/* from: red */}
+				<div
+					style={{
+						position: 'absolute',
+						height: 10,
+						width: mapToX(fromDomainIndices[1] - fromDomainIndices[0]),
+						top: 0,
+						left: mapToX(fromDomainIndices[0]),
+						backgroundColor: 'red',
+					}}
+				></div>
+				{/* to: green */}
+				<div
+					style={{
+						position: 'absolute',
+						height: 10,
+						width: mapToX(toDomainIndices[1] - toDomainIndices[0]),
+						top: 40,
+						left: mapToX(toDomainIndices[0]),
+						backgroundColor: 'green',
+					}}
+				></div>
 			</div>
 		</div>
 	);
