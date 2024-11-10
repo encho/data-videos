@@ -34,6 +34,7 @@ export type TLineChartAnimationContext = {
 		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
 		durationInFrames: number;
 		relativeFrame: number;
+		easingPercentage: number;
 		framesPercentage: number;
 		visibleDomainIndicesFrom: [number, number];
 		visibleDomainIndicesTo: [number, number];
@@ -222,6 +223,8 @@ export const MultiLineChartAnimationContainer: React.FC<{
 		durationInFrames: sliceDurationInFrames,
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
+		//
+		easingPercentage: 99999, // TODO address
 		//
 		frameRangeLinearPercentage,
 		frameRangeEasingPercentage,

@@ -86,7 +86,7 @@ export const XAxisSpecsDevComposition: React.FC<
 						width={width}
 						// height={height * 0.7}
 						height={height}
-						margin={40}
+						margin={0}
 						nrBaselines={40}
 					>
 						<Page

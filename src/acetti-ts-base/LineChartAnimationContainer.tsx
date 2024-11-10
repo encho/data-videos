@@ -15,10 +15,13 @@ import {
 export type TLineChartAnimationContext = {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
+	frame: number;
 	// new API...
 	currentTransitionInfo: {
+		index: number;
 		frameRange: TFrameRange;
 		durationInFrames: number;
+		relativeFrame: number;
 		// TODO rename to linearPercentage (also for currentSlice object)
 		framesPercentage: number;
 		easingPercentage: number;
@@ -26,11 +29,14 @@ export type TLineChartAnimationContext = {
 	currentSliceInfo: {
 		index: number;
 		frameRange: TFrameRange;
+		// TODO evtl. deprecate the following 2:
 		frameRangeLinearPercentage: {startFrame: number; endFrame: number};
 		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
+		// *************************************************
 		durationInFrames: number;
 		relativeFrame: number;
-		framesPercentage: number;
+		framesPercentage: number; // TODO rename evtl. to linearPercentage
+		easingPercentage: number;
 		visibleDomainIndicesFrom: [number, number];
 		visibleDomainIndicesTo: [number, number];
 		periodsScaleFrom: TPeriodsScale;
@@ -117,8 +123,11 @@ export const LineChartAnimationContainer: React.FC<{
 
 	// ******** current transition information *************************************************
 	const currentTransitionInfo = {
+		index: currentTransitionIndex,
 		frameRange: currentFrameRange,
 		durationInFrames: currentTransition.durationInFrames,
+		relativeFrame: frame - currentFrameRange.startFrame,
+		//
 		framesPercentage: currentAnimationPercentage,
 		easingPercentage: currentEasingPercentage,
 	};
@@ -218,12 +227,55 @@ export const LineChartAnimationContainer: React.FC<{
 		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
 	});
 
+	// determine slice easingPercentage
+	const currentSliceEasingPercentage_maxValue = interpolate(
+		currentTransitionSliceFrameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame - 1, // QUICK-FIX, take "-1" away once last frame range is fixed
+		],
+		[0, 1],
+		{easing: EASING_FUNCTION}
+	);
+	const currentSliceEasingPercentage_minValue = interpolate(
+		currentTransitionSliceFrameRange.startFrame,
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame - 1,
+		], // QUICK-FIX, take "-1" away once last frame range is fixed
+		[0, 1],
+		{easing: EASING_FUNCTION}
+	);
+
+	const currentSliceEasingPercentage_currentValue = interpolate(
+		// currentTransitionInfo.relativeFrame,
+		frame,
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame - 1,
+		], // QUICK-FIX, take "-1" away once last frame range is fixed
+		[0, 1],
+		{easing: EASING_FUNCTION}
+	);
+
+	const currentSliceEasingPercentage = interpolate(
+		currentSliceEasingPercentage_currentValue,
+		[
+			currentSliceEasingPercentage_minValue,
+			currentSliceEasingPercentage_maxValue,
+		],
+		[0, 1],
+		{}
+	);
+
 	const currentSliceInfo = {
 		index: currentTransitionSlice,
 		frameRange: currentTransitionSliceFrameRange,
 		durationInFrames: sliceDurationInFrames,
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
+		//
+		easingPercentage: currentSliceEasingPercentage,
 		//
 		frameRangeLinearPercentage,
 		frameRangeEasingPercentage,
@@ -317,6 +369,7 @@ export const LineChartAnimationContainer: React.FC<{
 			{children({
 				periodsScale: currentPeriodsScale,
 				yScale,
+				frame,
 				currentTransitionInfo,
 				currentSliceInfo,
 			})}

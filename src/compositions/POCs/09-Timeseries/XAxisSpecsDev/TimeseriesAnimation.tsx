@@ -4,11 +4,14 @@ import {ReactNode} from 'react';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {PageContext} from '../../../../acetti-components/PageContext';
+import {Page} from '../../../../acetti-components/Page';
 import {
 	LineChartAnimationContainer,
 	TLineChartAnimationContext,
 } from '../../../../acetti-ts-base/LineChartAnimationContainer';
 import {LineChart_XAxisShowcase} from './LineChart_XAxisShowcase';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -27,14 +30,25 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 }) => {
-	const {durationInFrames, fps} = useVideoConfig();
+	const {
+		durationInFrames,
+		// fps
+		// width,
+		// height
+	} = useVideoConfig();
 
-	const CHART_WIDTH = width;
-	const CHART_HEIGHT = height;
+	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI' as any);
+
+	const CHART_PAGE_MARGIN = 60;
+
+	const CHART_PAGE_WIDTH = width;
+	const CHART_PAGE_HEIGHT = height * 0.5;
+	const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
+	const CHART_CONTENT_HEIGHT = CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN;
 
 	const chartLayout = useChartLayout({
-		width: CHART_WIDTH,
-		height: CHART_HEIGHT,
+		width: CHART_CONTENT_WIDTH,
+		height: CHART_CONTENT_HEIGHT,
 	});
 
 	// TODO use keyframes
@@ -63,17 +77,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	return (
 		<div style={{position: 'relative'}}>
-			<div style={{position: 'absolute'}}>
-				<DisplayGridLayout
-					stroke={'rgba(255,0,255,0.4)'}
-					fill="transparent"
-					hide={true}
-					areas={chartLayout.areas}
-					width={width}
-					height={height}
-				/>
-			</div>
-
 			<LineChartAnimationContainer
 				timeSeries={timeSeries}
 				viewSpecs={[
@@ -110,8 +113,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					{
 						// durationInFrames: getDurationInFrames(keyframes, "START_BUILDUP", "END_BUILDUP"),
 						durationInFrames: td_buildup,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						// easingFunction: Easing.linear, // TODO why linear is broken??
+						// easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+						// easingFunction: Easing.bezier(0.16, 1, 0.3, 1),
+						easingFunction: Easing.linear, // TODO why linear is broken??
 						// TODO:
 						// numberOfSlices: getDurationInSeconds(keyframes, "START_BUILDUP", "END_BUILDUP") / 2
 						numberOfSlices: 5,
@@ -149,7 +153,13 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					},
 				]}
 			>
-				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
+				{({
+					periodsScale,
+					yScale,
+					frame: globalTimeseriesAnimationFrame,
+					currentSliceInfo,
+					currentTransitionInfo,
+				}) => {
 					const Row = ({children}: {children: ReactNode}) => {
 						return (
 							<div
@@ -171,7 +181,38 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						return <div style={{color: '#00ffaa'}}>{children}</div>;
 					};
 
-					const listItems = [
+					const currentTransitionInfoListItems = [
+						{
+							key: 'Object.keys():',
+							value: JSON.stringify(
+								Object.keys(currentTransitionInfo),
+								undefined,
+								2
+							),
+						},
+						{
+							key: 'index',
+							value: JSON.stringify(currentTransitionInfo.index),
+						},
+						{
+							key: 'frameRange',
+							value: JSON.stringify(currentTransitionInfo.frameRange),
+						},
+						{
+							key: 'relativeFrame',
+							value: JSON.stringify(currentTransitionInfo.relativeFrame),
+						},
+						{
+							key: 'framesPercentage',
+							value: JSON.stringify(currentTransitionInfo.framesPercentage),
+						},
+						{
+							key: 'easingPercentage',
+							value: JSON.stringify(currentTransitionInfo.easingPercentage),
+						},
+					];
+
+					const currentSliceInfoListItems = [
 						{
 							key: 'Object.keys():',
 							value: JSON.stringify(
@@ -198,6 +239,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							value: JSON.stringify(currentSliceInfo.framesPercentage),
 						},
 						{
+							key: 'easingPercentage',
+							value: JSON.stringify(currentSliceInfo.easingPercentage),
+						},
+						{
 							key: 'frameRangeLinearPercentage',
 							value: JSON.stringify(
 								currentSliceInfo.frameRangeLinearPercentage
@@ -221,60 +266,163 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 					return (
 						<div>
-							<div
-								style={{
-									position: 'absolute',
-									zIndex: 500,
-									backgroundColor: 'rgba(0,0,0,0.5)',
-									// filter: `blur(5px)`,
-									padding: 20,
-									fontSize: 20,
-								}}
+							<PageContext
+								width={CHART_PAGE_WIDTH}
+								height={CHART_PAGE_HEIGHT}
+								margin={CHART_PAGE_MARGIN}
+								nrBaselines={40}
 							>
-								<div style={{fontSize: 50}}>
-									<div style={{fontWeight: 700}}>currentSliceInfo</div>
-								</div>
-								<div
-									style={{
-										backgroundColor: 'rgba(0,0,0,0.2)',
-										padding: 20,
-										fontSize: 20,
+								<Page theme={theme} show>
+									{({contentHeight, contentWidth}) => {
+										return (
+											<>
+												<div style={{position: 'absolute'}}>
+													<DisplayGridLayout
+														stroke={'rgba(255,0,255,0.4)'}
+														fill="transparent"
+														// hide={true}
+														areas={chartLayout.areas}
+														width={width}
+														height={height}
+													/>
+												</div>
+												<LineChart_XAxisShowcase
+													timeSeries={timeSeries}
+													layoutAreas={{
+														plot: chartLayout.areas.plot,
+														xAxis: chartLayout.areas.xAxis,
+														yAxis: chartLayout.areas.yAxis,
+														xAxis_days: chartLayout.areas.xAxis_days,
+														xAxis_monthStarts:
+															chartLayout.areas.xAxis_monthStarts,
+														xAxis_quarterStarts:
+															chartLayout.areas.xAxis_quarterStarts,
+													}}
+													yDomainType={Y_DOMAIN_TYPE}
+													theme={theme}
+													yScale={yScale}
+													periodScale={periodsScale}
+													// TODO deprecate as we are passing the whole sliceInfo
+													fromPeriodScale={currentSliceInfo.periodsScaleFrom}
+													toPeriodScale={currentSliceInfo.periodsScaleTo}
+													//
+													currentSliceInfo={currentSliceInfo}
+												/>
+											</>
+										);
 									}}
-								>
-									<div
-										style={{display: 'flex', flexDirection: 'column', gap: 5}}
-									>
-										{listItems.map((it) => {
-											return (
-												<Row>
-													<div>{it.key}</div>
-													<Value>{it.value}</Value>
-												</Row>
-											);
-										})}
-										{/* &&&&&&&& */}
-										<Row>
-											<div style={{}}>
-												OWN DomainIndices Change Distance (amount, left +
-												right):
+								</Page>
+							</PageContext>
+
+							<PageContext
+								width={CHART_PAGE_WIDTH}
+								height={CHART_PAGE_HEIGHT}
+								margin={CHART_PAGE_MARGIN}
+								nrBaselines={40}
+							>
+								<Page theme={debugTheme} show>
+									<div style={{position: 'absolute', zIndex: 500}}>
+										<div style={{fontSize: 40}}>
+											frame: {globalTimeseriesAnimationFrame}
+										</div>
+										<div
+											style={{
+												// position: 'absolute',
+												// zIndex: 500,
+												backgroundColor: 'rgba(0,0,0,0.5)',
+												padding: 20,
+												fontSize: 20,
+											}}
+										>
+											<div style={{fontSize: 50}}>
+												<div style={{fontWeight: 700}}>
+													currentTransitionInfo
+												</div>
 											</div>
-											<div style={{color: 'red'}}>
-												TODO implement calculation
+											<div
+												style={{
+													backgroundColor: 'rgba(0,0,0,0.2)',
+													padding: 20,
+													fontSize: 20,
+												}}
+											>
+												<div
+													style={{
+														display: 'flex',
+														flexDirection: 'column',
+														gap: 5,
+													}}
+												>
+													{currentTransitionInfoListItems.map((it) => {
+														return (
+															<Row>
+																<div>{it.key}</div>
+																<Value>{it.value}</Value>
+															</Row>
+														);
+													})}
+												</div>
 											</div>
-										</Row>
-										{/* ********* */}
-										<Row>
-											<div style={{}}>
-												OWN DomainIndices Change Velocity (???, left + right):
+										</div>
+
+										<div
+											style={{
+												// position: 'absolute',
+												// zIndex: 500,
+												backgroundColor: 'rgba(0,0,0,0.5)',
+												padding: 20,
+												fontSize: 20,
+											}}
+										>
+											<div style={{fontSize: 50}}>
+												<div style={{fontWeight: 700}}>currentSliceInfo</div>
 											</div>
-											<div style={{color: 'red'}}>
-												TODO implement calculation
+											<div
+												style={{
+													backgroundColor: 'rgba(0,0,0,0.2)',
+													padding: 20,
+													fontSize: 20,
+												}}
+											>
+												<div
+													style={{
+														display: 'flex',
+														flexDirection: 'column',
+														gap: 5,
+													}}
+												>
+													{currentSliceInfoListItems.map((it) => {
+														return (
+															<Row>
+																<div>{it.key}</div>
+																<Value>{it.value}</Value>
+															</Row>
+														);
+													})}
+													{/* &&&&&&&& */}
+													<Row>
+														<div style={{}}>
+															OWN DomainIndices Change Distance (amount, left +
+															right):
+														</div>
+														<div style={{color: 'red'}}>
+															TODO implement calculation
+														</div>
+													</Row>
+													{/* ********* */}
+													<Row>
+														<div style={{}}>
+															OWN DomainIndices Change Velocity (???, left +
+															right):
+														</div>
+														<div style={{color: 'red'}}>
+															TODO implement calculation
+														</div>
+													</Row>
+												</div>
 											</div>
-										</Row>
-									</div>
-								</div>
-							</div>
-							{/* <Sequence from={td_buildup}>
+										</div>
+										{/* <Sequence from={td_buildup}>
 								<HighlightPeriods3
 									timeSeries={timeSeries}
 									area={chartLayout.areas.plot}
@@ -288,27 +436,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									theme={theme.timeseriesComponents.HighlightPeriodsArea}
 								/>
 							</Sequence> */}
-
-							<LineChart_XAxisShowcase
-								timeSeries={timeSeries}
-								layoutAreas={{
-									plot: chartLayout.areas.plot,
-									xAxis: chartLayout.areas.xAxis,
-									yAxis: chartLayout.areas.yAxis,
-									xAxis_days: chartLayout.areas.xAxis_days,
-									xAxis_monthStarts: chartLayout.areas.xAxis_monthStarts,
-									xAxis_quarterStarts: chartLayout.areas.xAxis_quarterStarts,
-								}}
-								yDomainType={Y_DOMAIN_TYPE}
-								theme={theme}
-								yScale={yScale}
-								periodScale={periodsScale}
-								// TODO deprecate as we are passing the whole sliceInfo
-								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
-								toPeriodScale={currentSliceInfo.periodsScaleTo}
-								//
-								currentSliceInfo={currentSliceInfo}
-							/>
+									</div>
+								</Page>
+							</PageContext>
 
 							{/* <AbsoluteFill>
 								<LineChartAnimationContextDebugger
