@@ -4,7 +4,7 @@ import {ReactNode} from 'react';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {PageContext} from '../../../../acetti-components/PageContext';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {
 	LineChartAnimationContainer,
@@ -40,7 +40,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI' as any);
 
 	const CHART_PAGE_MARGIN = 60;
-
 	const CHART_PAGE_WIDTH = width;
 	const CHART_PAGE_HEIGHT = height * 0.5;
 	const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
@@ -156,114 +155,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				{({
 					periodsScale,
 					yScale,
-					frame: globalTimeseriesAnimationFrame,
+					frame,
 					currentSliceInfo,
 					currentTransitionInfo,
+					...rest
 				}) => {
-					const Row = ({children}: {children: ReactNode}) => {
-						return (
-							<div
-								style={{
-									display: 'flex',
-									gap: 5,
-									backgroundColor: 'rgba(0,0,0,0.3)',
-									color: '#00aa99',
-									padding: 5,
-									fontWeight: 800,
-								}}
-							>
-								{children}
-							</div>
-						);
-					};
-
-					const Value = ({children}: {children: ReactNode}) => {
-						return <div style={{color: '#00ffaa'}}>{children}</div>;
-					};
-
-					const currentTransitionInfoListItems = [
-						{
-							key: 'Object.keys():',
-							value: JSON.stringify(
-								Object.keys(currentTransitionInfo),
-								undefined,
-								2
-							),
-						},
-						{
-							key: 'index',
-							value: JSON.stringify(currentTransitionInfo.index),
-						},
-						{
-							key: 'frameRange',
-							value: JSON.stringify(currentTransitionInfo.frameRange),
-						},
-						{
-							key: 'relativeFrame',
-							value: JSON.stringify(currentTransitionInfo.relativeFrame),
-						},
-						{
-							key: 'framesPercentage',
-							value: JSON.stringify(currentTransitionInfo.framesPercentage),
-						},
-						{
-							key: 'easingPercentage',
-							value: JSON.stringify(currentTransitionInfo.easingPercentage),
-						},
-					];
-
-					const currentSliceInfoListItems = [
-						{
-							key: 'Object.keys():',
-							value: JSON.stringify(
-								Object.keys(currentSliceInfo),
-								undefined,
-								2
-							),
-						},
-						{key: 'index', value: JSON.stringify(currentSliceInfo.index)},
-						{
-							key: 'frameRange',
-							value: JSON.stringify(currentSliceInfo.frameRange),
-						},
-						{
-							key: 'durationInFrames',
-							value: JSON.stringify(currentSliceInfo.durationInFrames),
-						},
-						{
-							key: 'relativeFrame',
-							value: JSON.stringify(currentSliceInfo.relativeFrame),
-						},
-						{
-							key: 'framesPercentage',
-							value: JSON.stringify(currentSliceInfo.framesPercentage),
-						},
-						{
-							key: 'easingPercentage',
-							value: JSON.stringify(currentSliceInfo.easingPercentage),
-						},
-						{
-							key: 'frameRangeLinearPercentage',
-							value: JSON.stringify(
-								currentSliceInfo.frameRangeLinearPercentage
-							),
-						},
-						{
-							key: 'frameRangeEasingPercentage',
-							value: JSON.stringify(
-								currentSliceInfo.frameRangeEasingPercentage
-							),
-						},
-						{
-							key: 'visibleDomainIndicesFrom',
-							value: JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom),
-						},
-						{
-							key: 'visibleDomainIndicesTo',
-							value: JSON.stringify(currentSliceInfo.visibleDomainIndicesTo),
-						},
-					];
-
 					return (
 						<div>
 							<PageContext
@@ -271,9 +167,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								height={CHART_PAGE_HEIGHT}
 								margin={CHART_PAGE_MARGIN}
 								nrBaselines={40}
+								theme={theme}
 							>
-								<Page theme={theme} show>
-									{({contentHeight, contentWidth}) => {
+								<Page show>
+									{() => {
 										return (
 											<>
 												<div style={{position: 'absolute'}}>
@@ -313,142 +210,24 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									}}
 								</Page>
 							</PageContext>
-
 							<PageContext
 								width={CHART_PAGE_WIDTH}
 								height={CHART_PAGE_HEIGHT}
 								margin={CHART_PAGE_MARGIN}
 								nrBaselines={40}
+								theme={debugTheme}
 							>
-								<Page theme={debugTheme} show>
-									<div style={{position: 'absolute', zIndex: 500}}>
-										<div style={{fontSize: 40}}>
-											frame: {globalTimeseriesAnimationFrame}
-										</div>
-										<div
-											style={{
-												// position: 'absolute',
-												// zIndex: 500,
-												backgroundColor: 'rgba(0,0,0,0.5)',
-												padding: 20,
-												fontSize: 20,
-											}}
-										>
-											<div style={{fontSize: 50}}>
-												<div style={{fontWeight: 700}}>
-													currentTransitionInfo
-												</div>
-											</div>
-											<div
-												style={{
-													backgroundColor: 'rgba(0,0,0,0.2)',
-													padding: 20,
-													fontSize: 20,
-												}}
-											>
-												<div
-													style={{
-														display: 'flex',
-														flexDirection: 'column',
-														gap: 5,
-													}}
-												>
-													{currentTransitionInfoListItems.map((it) => {
-														return (
-															<Row>
-																<div>{it.key}</div>
-																<Value>{it.value}</Value>
-															</Row>
-														);
-													})}
-												</div>
-											</div>
-										</div>
-
-										<div
-											style={{
-												// position: 'absolute',
-												// zIndex: 500,
-												backgroundColor: 'rgba(0,0,0,0.5)',
-												padding: 20,
-												fontSize: 20,
-											}}
-										>
-											<div style={{fontSize: 50}}>
-												<div style={{fontWeight: 700}}>currentSliceInfo</div>
-											</div>
-											<div
-												style={{
-													backgroundColor: 'rgba(0,0,0,0.2)',
-													padding: 20,
-													fontSize: 20,
-												}}
-											>
-												<div
-													style={{
-														display: 'flex',
-														flexDirection: 'column',
-														gap: 5,
-													}}
-												>
-													{currentSliceInfoListItems.map((it) => {
-														return (
-															<Row>
-																<div>{it.key}</div>
-																<Value>{it.value}</Value>
-															</Row>
-														);
-													})}
-													{/* &&&&&&&& */}
-													<Row>
-														<div style={{}}>
-															OWN DomainIndices Change Distance (amount, left +
-															right):
-														</div>
-														<div style={{color: 'red'}}>
-															TODO implement calculation
-														</div>
-													</Row>
-													{/* ********* */}
-													<Row>
-														<div style={{}}>
-															OWN DomainIndices Change Velocity (???, left +
-															right):
-														</div>
-														<div style={{color: 'red'}}>
-															TODO implement calculation
-														</div>
-													</Row>
-												</div>
-											</div>
-										</div>
-										{/* <Sequence from={td_buildup}>
-								<HighlightPeriods3
-									timeSeries={timeSeries}
-									area={chartLayout.areas.plot}
-									periodsScale={periodsScale}
-									domainIndices={[220, 420] as [number, number]}
-									currentFrame={22}
-									durationInFrames={200}
-									fadeInDurationInFrames={90}
-									yScaleCurrent={yScale}
-									label="Interesting Period"
-									theme={theme.timeseriesComponents.HighlightPeriodsArea}
-								/>
-							</Sequence> */}
-									</div>
+								<Page show>
+									<LineChartAnimationContextDebugger
+										frame={frame}
+										periodsScale={periodsScale}
+										yScale={yScale}
+										currentSliceInfo={currentSliceInfo}
+										currentTransitionInfo={currentTransitionInfo}
+										{...rest}
+									/>
 								</Page>
 							</PageContext>
-
-							{/* <AbsoluteFill>
-								<LineChartAnimationContextDebugger
-									theme={theme}
-									periodsScale={periodsScale}
-									yScale={yScale}
-									currentSliceInfo={currentSliceInfo}
-									currentTransitionInfo={currentTransitionInfo}
-								/>
-							</AbsoluteFill> */}
 						</div>
 					);
 				}}
@@ -457,106 +236,221 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	);
 };
 
-type TLineChartAnimationContextDebugger = TLineChartAnimationContext & {
-	theme: ThemeType;
-};
+// type TLineChartAnimationContextDebugger = TLineChartAnimationContext & {
+// theme: ThemeType;
+// };
 
-function roundToTwoDecimals(num: number): number {
-	return parseFloat(num.toFixed(2));
-}
+// function roundToTwoDecimals(num: number): number {
+// 	return parseFloat(num.toFixed(2));
+// }
 // // Example usage:
 // const input: number = 123.456789;
 // const output: number = roundToTwoDecimals(input);
 // console.log(output); // Output: 123.46
 
-export const LineChartAnimationContextDebugger: React.FC<
-	TLineChartAnimationContextDebugger
-> = ({
-	currentSliceInfo,
-	currentTransitionInfo,
-	periodsScale,
-	yScale,
-	theme,
-}) => {
+const LineChartAnimationContextDebugger: React.FC<
+	TLineChartAnimationContext
+> = ({frame, currentSliceInfo, currentTransitionInfo}) => {
+	const {theme} = usePage();
+
+	const Row = ({children}: {children: ReactNode}) => {
+		return (
+			<div
+				style={{
+					display: 'flex',
+					gap: 5,
+					backgroundColor: 'rgba(0,0,0,0.3)',
+					color: '#00aa99',
+					padding: 5,
+					fontWeight: 800,
+				}}
+			>
+				{children}
+			</div>
+		);
+	};
+
+	const Value = ({children}: {children: ReactNode}) => {
+		return <div style={{color: '#00ffaa'}}>{children}</div>;
+	};
+
+	const currentTransitionInfoListItems = [
+		{
+			key: 'Object.keys():',
+			value: JSON.stringify(Object.keys(currentTransitionInfo), undefined, 2),
+		},
+		{
+			key: 'index',
+			value: JSON.stringify(currentTransitionInfo.index),
+		},
+		{
+			key: 'frameRange',
+			value: JSON.stringify(currentTransitionInfo.frameRange),
+		},
+		{
+			key: 'relativeFrame',
+			value: JSON.stringify(currentTransitionInfo.relativeFrame),
+		},
+		{
+			key: 'framesPercentage',
+			value: JSON.stringify(currentTransitionInfo.framesPercentage),
+		},
+		{
+			key: 'easingPercentage',
+			value: JSON.stringify(currentTransitionInfo.easingPercentage),
+		},
+	];
+	const currentSliceInfoListItems = [
+		{
+			key: 'Object.keys():',
+			value: JSON.stringify(Object.keys(currentSliceInfo), undefined, 2),
+		},
+		{key: 'index', value: JSON.stringify(currentSliceInfo.index)},
+		{
+			key: 'frameRange',
+			value: JSON.stringify(currentSliceInfo.frameRange),
+		},
+		{
+			key: 'durationInFrames',
+			value: JSON.stringify(currentSliceInfo.durationInFrames),
+		},
+		{
+			key: 'relativeFrame',
+			value: JSON.stringify(currentSliceInfo.relativeFrame),
+		},
+		{
+			key: 'framesPercentage',
+			value: JSON.stringify(currentSliceInfo.framesPercentage),
+		},
+		{
+			key: 'easingPercentage',
+			value: JSON.stringify(currentSliceInfo.easingPercentage),
+		},
+		{
+			key: 'frameRangeLinearPercentage',
+			value: JSON.stringify(currentSliceInfo.frameRangeLinearPercentage),
+		},
+		{
+			key: 'frameRangeEasingPercentage',
+			value: JSON.stringify(currentSliceInfo.frameRangeEasingPercentage),
+		},
+		{
+			key: 'visibleDomainIndicesFrom',
+			value: JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom),
+		},
+		{
+			key: 'visibleDomainIndicesTo',
+			value: JSON.stringify(currentSliceInfo.visibleDomainIndicesTo),
+		},
+	];
+
 	return (
-		<div style={{marginTop: -200}}>
-			<div style={{color: theme.dataColors[2].BASE, fontSize: 20}}>
-				<h1 style={{fontWeight: 'bold'}}>Current Transition Info</h1>
-				<h1>frameRange: {JSON.stringify(currentTransitionInfo.frameRange)}</h1>
-				<h1>durationInFrames: {currentTransitionInfo.durationInFrames}</h1>
-				<h1>
-					framesPercentage:{' '}
-					{roundToTwoDecimals(currentTransitionInfo.framesPercentage)}
-				</h1>
-				<h1>
-					easingPercentage:{' '}
-					{roundToTwoDecimals(currentTransitionInfo.easingPercentage)}
-				</h1>
+		<div style={{position: 'absolute', zIndex: 500}}>
+			<div style={{fontSize: 40, color: theme.typography.textStyles.h1.color}}>
+				frame: {frame}
 			</div>
 			<div
-				style={{color: theme.dataColors[3].BASE, fontSize: 20, marginTop: 10}}
+				style={{
+					// position: 'absolute',
+					// zIndex: 500,
+					backgroundColor: 'rgba(0,0,0,0.5)',
+					padding: 20,
+					fontSize: 20,
+				}}
 			>
-				<h1 style={{fontWeight: 'bold'}}>Current Transition Slice Info</h1>
-				<h1>index: {currentSliceInfo.index}</h1>
-				<h1>frameRange: {JSON.stringify(currentSliceInfo.frameRange)}</h1>
-				<h1>
-					frameRangeLinearPercentage:{' '}
-					{JSON.stringify(
-						(() => {
-							const obj = currentSliceInfo.frameRangeLinearPercentage;
-							return {
-								startFrame: roundToTwoDecimals(obj.startFrame),
-								endFrame: roundToTwoDecimals(obj.endFrame),
-							};
-						})()
-					)}
-				</h1>
-				<h1>
-					frameRangeEasingPercentage:{' '}
-					{JSON.stringify(
-						(() => {
-							const obj = currentSliceInfo.frameRangeEasingPercentage;
-							return {
-								startFrame: roundToTwoDecimals(obj.startFrame),
-								endFrame: roundToTwoDecimals(obj.endFrame),
-							};
-						})()
-					)}
-				</h1>
-				<h1>durationInFrames: {currentSliceInfo.durationInFrames}</h1>
-				<h1>relativeFrame: {currentSliceInfo.relativeFrame}</h1>
-				<h1>
-					framesPercentage:{' '}
-					{roundToTwoDecimals(currentSliceInfo.framesPercentage)}
-				</h1>
-				<h1>
-					visibleDomainIndicesFrom:{' '}
-					{JSON.stringify(
-						(() => {
-							const arr = currentSliceInfo.visibleDomainIndicesFrom;
-							return arr.map((it) => roundToTwoDecimals(it));
-						})()
-					)}
-				</h1>
-				<h1>
-					visibleDomainIndicesTo:{' '}
-					{JSON.stringify(
-						(() => {
-							const arr = currentSliceInfo.visibleDomainIndicesTo;
-							return arr.map((it) => roundToTwoDecimals(it));
-						})()
-					)}
-				</h1>
-				<h1>periodsScaleFrom: {'<obj>'}</h1>
-				<h1>periodsScaleTo: {'<obj>'}</h1>
-				{/* <h1>
-		currentSliceInfo.periodsScaleFrom:{' '}
-		{JSON.stringify(currentSliceInfo.periodsScaleFrom)}
-	</h1> */}
-				{/* <h1>
-		currentSliceInfo.periodsScaleTo:{' '}
-		{JSON.stringify(currentSliceInfo.periodsScaleTo)}
-	</h1> */}
+				<div style={{fontSize: 50}}>
+					<div
+						style={{
+							fontWeight: 700,
+							color: theme.typography.textStyles.h1.color,
+						}}
+					>
+						currentTransitionInfo
+					</div>
+				</div>
+				<div
+					style={{
+						backgroundColor: 'rgba(0,0,0,0.2)',
+						padding: 20,
+						fontSize: 20,
+					}}
+				>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 5,
+						}}
+					>
+						{currentTransitionInfoListItems.map((it) => {
+							return (
+								<Row>
+									<div>{it.key}</div>
+									<Value>{it.value}</Value>
+								</Row>
+							);
+						})}
+					</div>
+				</div>
+			</div>
+
+			<div
+				style={{
+					// position: 'absolute',
+					// zIndex: 500,
+					backgroundColor: 'rgba(0,0,0,0.5)',
+					padding: 20,
+					fontSize: 20,
+				}}
+			>
+				<div style={{fontSize: 50}}>
+					<div
+						style={{
+							fontWeight: 700,
+							color: theme.typography.textStyles.h1.color,
+						}}
+					>
+						currentSliceInfo
+					</div>
+				</div>
+				<div
+					style={{
+						backgroundColor: 'rgba(0,0,0,0.2)',
+						padding: 20,
+						fontSize: 20,
+					}}
+				>
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 5,
+						}}
+					>
+						{currentSliceInfoListItems.map((it) => {
+							return (
+								<Row>
+									<div>{it.key}</div>
+									<Value>{it.value}</Value>
+								</Row>
+							);
+						})}
+						{/* &&&&&&&& */}
+						<Row>
+							<div style={{}}>
+								OWN DomainIndices Change Distance (amount, left + right):
+							</div>
+							<div style={{color: 'red'}}>TODO implement calculation</div>
+						</Row>
+						{/* ********* */}
+						<Row>
+							<div style={{}}>
+								OWN DomainIndices Change Velocity (???, left + right):
+							</div>
+							<div style={{color: 'red'}}>TODO implement calculation</div>
+						</Row>
+					</div>
+				</div>
 			</div>
 		</div>
 	);

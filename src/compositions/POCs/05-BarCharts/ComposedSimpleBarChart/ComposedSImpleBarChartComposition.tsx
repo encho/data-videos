@@ -41,7 +41,13 @@ export const ComposedSimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<ComposedSimpleBarChartFlic
 				theme={theme}
 				leftData={leftData}

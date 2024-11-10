@@ -33,7 +33,13 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	const {width, height} = useVideoConfig();
 	const theme = useThemeFromEnum(themeEnum as any);
 	return (
-		<PageContext margin={50} nrBaselines={50} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={50}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<BarChartRace_CustomLabel_Flic theme={theme} />
 		</PageContext>
 	);
@@ -76,7 +82,7 @@ export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
 	});
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

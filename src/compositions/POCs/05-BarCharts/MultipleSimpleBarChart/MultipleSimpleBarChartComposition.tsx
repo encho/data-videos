@@ -39,7 +39,13 @@ export const MultipleSimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<PageContext margin={50} nrBaselines={60} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={60}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<MultipleSimpleBarChartFlic
 				theme={theme}
 				upperData={upperBarChartData}

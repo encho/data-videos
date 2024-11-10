@@ -32,7 +32,13 @@ export const SimpleBarChartTransitionComposition: React.FC<
 
 	// TODO pass data sets from here to the Flic
 	return (
-		<PageContext margin={50} nrBaselines={50} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={50}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<SimpleBarChartTransitionFlic theme={theme} />
 		</PageContext>
 	);
@@ -97,7 +103,7 @@ export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
 	const chartGap = page.baseline * 2;
 
 	return (
-		<Page show theme={theme}>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

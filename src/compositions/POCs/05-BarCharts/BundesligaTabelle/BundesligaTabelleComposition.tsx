@@ -67,7 +67,13 @@ export const BundesligaTabelleComposition: React.FC<
 	const lastSlideFrom = barChartFrom + barChartDurationInFrames;
 
 	return (
-		<PageContext width={width} height={height} margin={50} nrBaselines={60}>
+		<PageContext
+			width={width}
+			height={height}
+			margin={50}
+			nrBaselines={60}
+			theme={theme}
+		>
 			<Sequence
 				layout="none"
 				from={fps * 0}
@@ -89,7 +95,7 @@ export const BundesligaTabelleComposition: React.FC<
 				from={startingFiveSlideDurationInFrames}
 				durationInFrames={whiteSpaceSlideDurationInFrames}
 			>
-				<Page theme={theme}>
+				<Page={theme}>
 					<></>
 				</Page>
 			</Sequence> */}
@@ -142,7 +148,7 @@ export const BundesligaBarChartsPage: React.FC<{
 	const page = usePage();
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

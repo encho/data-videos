@@ -535,7 +535,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={30 * 8}
 						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
 						fps={30}
-						{...videoSizes.square}
+						{...videoSizes.linkedInTall}
 						schema={simplePageCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
@@ -1153,7 +1153,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.square}
 						schema={threeD_BarChartCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
 				<Folder name="Path-Animation-Experiments">

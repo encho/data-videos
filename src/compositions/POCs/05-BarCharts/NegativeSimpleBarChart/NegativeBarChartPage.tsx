@@ -26,7 +26,7 @@ export const NegativeBarChartPage: React.FC<{
 	const {ref, dimensions} = useElementDimensions();
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			{({baseline}) => {
 				return (
 					<>

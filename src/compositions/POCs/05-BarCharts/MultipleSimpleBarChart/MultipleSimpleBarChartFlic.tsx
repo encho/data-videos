@@ -143,7 +143,7 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 	const sharedValueDomain = [0, Math.max(...allValues)] as [number, number];
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

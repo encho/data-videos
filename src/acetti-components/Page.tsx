@@ -19,17 +19,20 @@ type PageChildFunctionArgs = {
 type PageChildren = ReactNode | ((props: PageChildFunctionArgs) => ReactNode);
 
 export function Page({
-	theme,
 	children,
 	show = false,
 }: {
 	children: PageChildren;
-	theme: ThemeType;
 	show?: boolean;
 }) {
 	const page = usePage();
 
-	const devLineColor = '#00ddaa';
+	const theme = page.theme;
+
+	// const devLineColor = '#00ddaa';
+	// const devCornerColor = chroma(devLineColor).alpha(0.35).css(); // 50% transparency
+
+	const devLineColor = theme.typography.textStyles.h1.color; // QUICK-FIX
 	const devCornerColor = chroma(devLineColor).alpha(0.35).css(); // 50% transparency
 
 	return (

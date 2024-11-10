@@ -30,7 +30,13 @@ export const NegativeSimpleBarChartComposition: React.FC<
 	}));
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<NegativeBarChartPage
 				title="Negative Bar Chart"
 				theme={theme}

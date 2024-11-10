@@ -28,8 +28,14 @@ export const TitleWithSubtitleDevComposition: React.FC<
 	const INNER_DELAY_SECONDS = 1;
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
-			<Page theme={theme} show>
+		<PageContext
+			margin={50}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
+			<Page show>
 				{({baseline}) => {
 					return (
 						<>

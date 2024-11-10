@@ -44,6 +44,7 @@ export const MultipleSimpleSparklineComposition: React.FC<
 			height={height}
 			margin={80}
 			nrBaselines={50}
+			theme={theme}
 		>
 			<MultipleSimpleSparklineFlic theme={theme} />
 		</PageContext>
@@ -137,7 +138,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 	const commonDomain = [min, max] as [number, number];
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

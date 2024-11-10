@@ -33,7 +33,13 @@ export const StartingFiveSlideComposition: React.FC<
 	const {width, height} = useVideoConfig();
 
 	return (
-		<PageContext margin={0} nrBaselines={40} width={width} height={height}>
+		<PageContext
+			margin={0}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<StartingFiveSlide
 				theme={theme}
 				fontSizeInBaselines={fontSizeInBaselines}

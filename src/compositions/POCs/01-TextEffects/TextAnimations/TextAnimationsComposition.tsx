@@ -34,8 +34,14 @@ export const TextAnimationsComposition: React.FC<
 	useFontFamiliesLoader(theme);
 
 	return (
-		<PageContext width={width} height={height} margin={40} nrBaselines={40}>
-			<Page theme={theme} show>
+		<PageContext
+			width={width}
+			height={height}
+			margin={40}
+			nrBaselines={40}
+			theme={theme}
+		>
+			<Page show>
 				{({baseline}) => {
 					return (
 						<>

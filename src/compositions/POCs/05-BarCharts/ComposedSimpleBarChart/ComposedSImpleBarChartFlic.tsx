@@ -56,7 +56,7 @@ export const ComposedSimpleBarChartFlic: React.FC<{
 	});
 
 	return (
-		<Page show theme={theme}>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

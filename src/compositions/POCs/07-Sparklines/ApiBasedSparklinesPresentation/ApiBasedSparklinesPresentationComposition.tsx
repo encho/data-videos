@@ -96,7 +96,13 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 	const {width, height} = useVideoConfig();
 
 	return (
-		<PageContext width={width} height={height} margin={60} nrBaselines={50}>
+		<PageContext
+			width={width}
+			height={height}
+			margin={60}
+			nrBaselines={50}
+			theme={theme}
+		>
 			<ApiBasedSparklinesPresentationFlic
 				theme={theme}
 				data={data}
@@ -226,7 +232,7 @@ export const SingleSparklineSlide: React.FC<{
 	const domain = extent(data, (it) => it.value);
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					display: 'flex',

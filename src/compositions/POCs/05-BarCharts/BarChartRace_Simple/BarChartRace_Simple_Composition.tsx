@@ -27,7 +27,13 @@ export const BarChartRace_Simple_Composition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
+		<PageContext
+			margin={50}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
 			<BarChartRace_Simple_Flic theme={theme} />
 		</PageContext>
 	);
@@ -79,7 +85,7 @@ export const BarChartRace_Simple_Flic: React.FC<{theme: ThemeType}> = ({
 	});
 
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					position: 'absolute',

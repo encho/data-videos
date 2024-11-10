@@ -9,9 +9,6 @@ import {useEffect, useState} from 'react';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
-// import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
-// import {TitleAndSubtitle} from '../../../../acetti-components/TitleAndSubtitle';
-// import {Position} from '../../../../acetti-ts-base/Position';
 import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
@@ -19,8 +16,6 @@ import {
 import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
-// import {HighlightPeriods_01} from '../../../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
-// import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
 
 export const xAxisSpecsDevCompositionSchema = z.object({
@@ -43,9 +38,6 @@ export const XAxisSpecsDevComposition: React.FC<
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
 	const theme = useThemeFromEnum(themeEnum as any);
-	// const theme2 = useThemeFromEnum('LORENZOBERTOLINI' as any);
-
-	// useFontFamiliesLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
@@ -80,55 +72,26 @@ export const XAxisSpecsDevComposition: React.FC<
 
 	return (
 		<GlobalVideoContextWrapper>
-			<div>
-				<div>
-					<PageContext
-						width={width}
-						// height={height * 0.7}
-						height={height}
-						margin={0}
-						nrBaselines={40}
-					>
-						<Page
-							theme={theme}
-							// show
-						>
-							{({contentWidth, contentHeight}) => {
-								return (
-									<TimeseriesAnimation
-										width={contentWidth}
-										height={contentHeight}
-										timeSeries={timeSeries}
-										theme={theme}
-									/>
-								);
-							}}
-						</Page>
-					</PageContext>
-				</div>
-				{/* <div>
-					<PageContext
-						width={width}
-						// height={height * 0.7}
-						height={height / 2}
-						margin={40}
-						nrBaselines={40}
-					>
-						<Page theme={theme2} show>
-							{({contentWidth, contentHeight}) => {
-								return (
-									<TimeseriesAnimation
-										width={contentWidth}
-										height={contentHeight}
-										timeSeries={timeSeries}
-										theme={theme2}
-									/>
-								);
-							}}
-						</Page>
-					</PageContext>
-				</div> */}
-			</div>
+			<PageContext
+				width={width}
+				height={height}
+				margin={0}
+				nrBaselines={40}
+				theme={theme}
+			>
+				<Page>
+					{({contentWidth, contentHeight}) => {
+						return (
+							<TimeseriesAnimation
+								width={contentWidth}
+								height={contentHeight}
+								timeSeries={timeSeries}
+								theme={theme}
+							/>
+						);
+					}}
+				</Page>
+			</PageContext>
 		</GlobalVideoContextWrapper>
 	);
 };

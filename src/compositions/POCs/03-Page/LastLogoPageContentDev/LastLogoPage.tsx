@@ -155,7 +155,7 @@ export const LastLogoPage: React.FC<{
 	const page = usePage();
 	const baseline = baselineProp || page.baseline * 2;
 	return (
-		<Page theme={theme} show>
+		<Page show>
 			<div
 				style={{
 					width: '100%',

@@ -25,8 +25,14 @@ export const LastLogoPageContentDevComposition: React.FC<
 	const {width, height} = useVideoConfig();
 
 	return (
-		<PageContext margin={50} nrBaselines={40} width={width} height={height}>
-			<Page theme={theme} show>
+		<PageContext
+			margin={50}
+			nrBaselines={40}
+			width={width}
+			height={height}
+			theme={theme}
+		>
+			<Page show>
 				{({baseline, contentWidth, contentHeight}) => {
 					return (
 						<>

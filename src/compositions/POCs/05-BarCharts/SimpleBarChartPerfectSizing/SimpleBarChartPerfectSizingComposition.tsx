@@ -39,8 +39,14 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 	}));
 
 	return (
-		<PageContext margin={50} nrBaselines={60} width={width} height={height}>
-			<Page show theme={theme}>
+		<PageContext
+			margin={50}
+			nrBaselines={60}
+			width={width}
+			height={height}
+			theme={theme}
+		>
+			<Page show>
 				{({baseline}) => {
 					return (
 						<>
