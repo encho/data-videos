@@ -1,15 +1,15 @@
 import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {TGridLayoutArea} from '../acetti-layout';
-import {ThemeType} from '../acetti-themes/themeTypes';
-import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
+import {TGridLayoutArea} from '../../../../acetti-layout';
+import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
 
-import {TXAxisSpec} from './utils/axisSpecs_xAxis';
-import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
+import {TXAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 // import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
 // import {Performance_01} from '../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
-import {TPeriodScaleAnimationContext} from '../acetti-ts-base/PeriodScaleAnimationContainer';
+import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 

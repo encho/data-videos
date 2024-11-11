@@ -250,6 +250,11 @@ import {
 	periodScaleDevCompositionSchema,
 } from './compositions/POCs/09-Timeseries/PeriodScaleDev/PeriodScaleDevComposition';
 
+import {
+	yScaleContextDevCompositionSchema,
+	YScaleContextDevComposition,
+} from './compositions/POCs/09-Timeseries/YScaleContextDev/YScaleContextDevComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -1127,14 +1132,14 @@ export const RemotionRoot: React.FC = () => {
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="YScaleContext-Dev"
-						component={PeriodScaleDevComposition}
+						component={YScaleContextDevComposition}
 						durationInFrames={30 * 9}
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
 						width={videoSizes.widescreen_16x9.width}
 						height={videoSizes.widescreen_16x9.height * 2}
-						schema={periodScaleDevCompositionSchema}
+						schema={yScaleContextDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
 							timePeriod: '2Y' as const,
