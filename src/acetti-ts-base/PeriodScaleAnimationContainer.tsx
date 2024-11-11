@@ -34,8 +34,8 @@ export type TPeriodScaleAnimationContext = {
 		// *************************************************
 		// TODO evtl. deprecate the following 2:
 		// *************************************************
-		frameRangeLinearPercentage: {startFrame: number; endFrame: number};
-		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
+		// frameRangeLinearPercentage: {startFrame: number; endFrame: number};
+		// frameRangeEasingPercentage: {startFrame: number; endFrame: number};
 		// *************************************************
 		durationInFrames: number;
 		durationInSeconds: number;
@@ -170,15 +170,57 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const sliceFramesPercentage =
 		sliceRelativeFrame / (sliceDurationInFrames - 1);
 
+	// determine slice easingPercentage
+	// ******************************************************
+	const currentSliceEasingPercentage_maxValue = interpolate(
+		currentTransitionSliceFrameRange.endFrame,
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame,
+		],
+		[0, 1],
+		{easing: currentTransitionSpec.easingFunction}
+	);
+
+	const currentSliceEasingPercentage_minValue = interpolate(
+		currentTransitionSliceFrameRange.startFrame,
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame,
+		],
+		[0, 1],
+		{easing: currentTransitionSpec.easingFunction}
+	);
+
+	const currentSliceEasingPercentage_currentValue = interpolate(
+		frame,
+		[
+			currentTransitionInfo.frameRange.startFrame,
+			currentTransitionInfo.frameRange.endFrame,
+		],
+		[0, 1],
+		{easing: currentTransitionSpec.easingFunction}
+	);
+
+	const currentSliceEasingPercentage = interpolate(
+		currentSliceEasingPercentage_currentValue,
+		[
+			currentSliceEasingPercentage_minValue,
+			currentSliceEasingPercentage_maxValue,
+		],
+		[0, 1],
+		{}
+	);
+
 	const frameRangeLinearPercentage = {
 		startFrame:
 			(currentTransitionSliceFrameRange.startFrame -
 				currentTransitionInfo.frameRange.startFrame) /
-			currentTransitionInfo.durationInFrames,
+			(currentTransitionInfo.durationInFrames - 1),
 		endFrame:
 			(currentTransitionSliceFrameRange.endFrame -
 				currentTransitionInfo.frameRange.startFrame) /
-			currentTransitionInfo.durationInFrames,
+			(currentTransitionInfo.durationInFrames - 1),
 	};
 
 	const frameRangeEasingPercentage = {
@@ -239,47 +281,6 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		visibleRange: [0, area.width],
 	});
 
-	// determine slice easingPercentage
-	const currentSliceEasingPercentage_maxValue = interpolate(
-		currentTransitionSliceFrameRange.endFrame,
-		[
-			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame,
-		],
-		[0, 1],
-		{easing: currentTransitionSpec.easingFunction}
-	);
-
-	const currentSliceEasingPercentage_minValue = interpolate(
-		currentTransitionSliceFrameRange.startFrame,
-		[
-			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame,
-		],
-		[0, 1],
-		{easing: currentTransitionSpec.easingFunction}
-	);
-
-	const currentSliceEasingPercentage_currentValue = interpolate(
-		frame,
-		[
-			currentTransitionInfo.frameRange.startFrame,
-			currentTransitionInfo.frameRange.endFrame,
-		],
-		[0, 1],
-		{easing: currentTransitionSpec.easingFunction}
-	);
-
-	const currentSliceEasingPercentage = interpolate(
-		currentSliceEasingPercentage_currentValue,
-		[
-			currentSliceEasingPercentage_minValue,
-			currentSliceEasingPercentage_maxValue,
-		],
-		[0, 1],
-		{}
-	);
-
 	const currentSliceInfo = {
 		index: currentTransitionSlice,
 		frameRange: currentTransitionSliceFrameRange,
@@ -288,8 +289,8 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
 		easingPercentage: currentSliceEasingPercentage,
-		frameRangeLinearPercentage,
-		frameRangeEasingPercentage,
+		// frameRangeLinearPercentage,
+		// frameRangeEasingPercentage,
 		visibleDomainIndicesFrom,
 		visibleDomainIndicesTo,
 		periodsScaleFrom: slicePeriodsScaleFrom,

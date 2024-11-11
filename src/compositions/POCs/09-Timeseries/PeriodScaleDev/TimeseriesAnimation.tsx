@@ -295,14 +295,6 @@ const LineChartAnimationContextDebugger: React.FC<
 			),
 		},
 		{
-			key: 'frameRangeLinearPercentage',
-			value: JSON.stringify(currentSliceInfo.frameRangeLinearPercentage),
-		},
-		{
-			key: 'frameRangeEasingPercentage',
-			value: JSON.stringify(currentSliceInfo.frameRangeEasingPercentage),
-		},
-		{
 			key: 'visibleDomainIndicesFrom',
 			value: JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom),
 		},
