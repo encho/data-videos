@@ -16,7 +16,7 @@ import {
 import {YScaleAnimationContainer} from './YScaleAnimationContainer';
 
 // type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
-const Y_DOMAIN_TYPE = 'FULL';
+// const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
 
 type TAnimatedLineChart2Props = {
@@ -174,13 +174,12 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													<DisplayGridLayout
 														stroke={'rgba(255,0,255,0.4)'}
 														fill="transparent"
-														// hide={true}
+														hide={true}
 														areas={chartLayout.areas}
 														width={width}
 														height={height}
 													/>
 												</div>
-												{/* TODO pass Y_DOMAIN_TYPE */}
 												{/* TODO pass topPaddingPerc, bottomPaddingPerc */}
 												<YScaleAnimationContainer
 													periodScaleAnimationContext={
@@ -188,6 +187,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													}
 													timeSeries={timeSeries}
 													area={chartLayout.areas.yAxis}
+													domainType="VISIBLE"
 												>
 													{(yScaleAnimationContext) => {
 														return (

@@ -20,8 +20,15 @@ export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	area: TGridLayoutArea;
 	timeSeries: TimeSeries;
+	domainType: 'ZERO' | 'VISIBLE';
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-}> = ({periodScaleAnimationContext, area, timeSeries, children}) => {
+}> = ({
+	periodScaleAnimationContext,
+	domainType,
+	area,
+	timeSeries,
+	children,
+}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const currentTransitionType =
@@ -45,7 +52,7 @@ export const YScaleAnimationContainer: React.FC<{
 
 	if (currentTransitionType === 'DEFAULT') {
 		// TODO yDomainType is not addressed here!
-		const yDomain =
+		const yDomainData =
 			yDomainProp ||
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 				timeSeries,
@@ -56,22 +63,40 @@ export const YScaleAnimationContainer: React.FC<{
 				Y_SCALE_PADDING_PERC
 			);
 
+		const yDomain =
+			domainType === 'VISIBLE'
+				? yDomainData
+				: ([0, yDomainData[1]] as [number, number]);
+
 		yScale = scaleLinear()
 			.domain(yDomain)
 			// TODO domain zero to be added via yDomainType
 			// .domain(yDomainZero)
 			.range([area.height, 0]);
 	} else if (currentTransitionType === 'ZOOM') {
-		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-			timeSeries,
-			fromDomainIndices,
-			Y_SCALE_PADDING_PERC
-		);
-		const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-			timeSeries,
-			toDomainIndices,
-			Y_SCALE_PADDING_PERC
-		);
+		const yDomainFromData =
+			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+				timeSeries,
+				fromDomainIndices,
+				Y_SCALE_PADDING_PERC
+			);
+
+		const yDomainFrom =
+			domainType === 'VISIBLE'
+				? yDomainFromData
+				: ([0, yDomainFromData[1]] as [number, number]);
+
+		const yDomainToData =
+			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+				timeSeries,
+				toDomainIndices,
+				Y_SCALE_PADDING_PERC
+			);
+
+		const yDomainTo =
+			domainType === 'VISIBLE'
+				? yDomainToData
+				: ([0, yDomainToData[1]] as [number, number]);
 
 		const animatedYDomain_0 = interpolate(
 			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
@@ -98,19 +123,27 @@ export const YScaleAnimationContainer: React.FC<{
 		throw Error('Unknown transitionType');
 	}
 
-	const yDomainFrom =
+	const yDomainFromData =
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
 			timeSeries,
 			Y_SCALE_PADDING_PERC
 		);
 
-	const yDomainTo =
+	const yDomainToData =
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
 			timeSeries,
 			Y_SCALE_PADDING_PERC
 		);
 
-	// const RANGE = yScale.range();
+	const yDomainFrom =
+		domainType === 'VISIBLE'
+			? yDomainFromData
+			: ([0, yDomainFromData[1]] as [number, number]);
+
+	const yDomainTo =
+		domainType === 'VISIBLE'
+			? yDomainToData
+			: ([0, yDomainToData[1]] as [number, number]);
 
 	// range is not needed as we only calculate domainValues for labels and ticks,
 	// then the current yScale is used to compute the mappings
