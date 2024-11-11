@@ -39,12 +39,11 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={'magenta'}
+					lineColor={'black'}
 					periodsScale={periodScaleAnimationContext.periodsScale}
 					yScale={yScaleAnimationContext.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-					// TODO theme
 				/>
 			</Position>
 			<Position

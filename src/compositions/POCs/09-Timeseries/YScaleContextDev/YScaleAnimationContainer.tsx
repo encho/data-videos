@@ -6,7 +6,7 @@ import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownia
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 
-export const Y_SCALE_PADDING_PERC = 0.1;
+// export const Y_SCALE_PADDING_PERC = 0.1;
 
 export type TYScaleAnimationContext = {
 	yScale: ScaleLinear<number, number>;
@@ -21,12 +21,14 @@ export const YScaleAnimationContainer: React.FC<{
 	area: TGridLayoutArea;
 	timeSeries: TimeSeries;
 	domainType: 'ZERO' | 'VISIBLE';
+	paddingPerc?: number;
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 }> = ({
 	periodScaleAnimationContext,
 	domainType,
 	area,
 	timeSeries,
+	paddingPerc = 0.1,
 	children,
 }) => {
 	const {durationInFrames} = useVideoConfig();
@@ -51,7 +53,6 @@ export const YScaleAnimationContainer: React.FC<{
 	const yDomainProp = undefined;
 
 	if (currentTransitionType === 'DEFAULT') {
-		// TODO yDomainType is not addressed here!
 		const yDomainData =
 			yDomainProp ||
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
@@ -60,7 +61,7 @@ export const YScaleAnimationContainer: React.FC<{
 					number,
 					number
 				],
-				Y_SCALE_PADDING_PERC
+				paddingPerc
 			);
 
 		const yDomain =
@@ -68,17 +69,13 @@ export const YScaleAnimationContainer: React.FC<{
 				? yDomainData
 				: ([0, yDomainData[1]] as [number, number]);
 
-		yScale = scaleLinear()
-			.domain(yDomain)
-			// TODO domain zero to be added via yDomainType
-			// .domain(yDomainZero)
-			.range([area.height, 0]);
+		yScale = scaleLinear().domain(yDomain).range([area.height, 0]);
 	} else if (currentTransitionType === 'ZOOM') {
 		const yDomainFromData =
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 				timeSeries,
 				fromDomainIndices,
-				Y_SCALE_PADDING_PERC
+				paddingPerc
 			);
 
 		const yDomainFrom =
@@ -90,7 +87,7 @@ export const YScaleAnimationContainer: React.FC<{
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 				timeSeries,
 				toDomainIndices,
-				Y_SCALE_PADDING_PERC
+				paddingPerc
 			);
 
 		const yDomainTo =
@@ -116,8 +113,6 @@ export const YScaleAnimationContainer: React.FC<{
 
 		yScale = scaleLinear()
 			.domain(zoomingCurrentYDomain)
-			// TODO domain zero to be added via yDomainType
-			// .domain(yDomainZero)
 			.range([area.height, 0]);
 	} else {
 		throw Error('Unknown transitionType');
@@ -126,13 +121,13 @@ export const YScaleAnimationContainer: React.FC<{
 	const yDomainFromData =
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
 			timeSeries,
-			Y_SCALE_PADDING_PERC
+			paddingPerc
 		);
 
 	const yDomainToData =
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
 			timeSeries,
-			Y_SCALE_PADDING_PERC
+			paddingPerc
 		);
 
 	const yDomainFrom =

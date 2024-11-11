@@ -129,7 +129,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							durationInFrames: td_buildup_again,
 							easingFunction: Easing.linear,
 							// numberOfSlices: 5,
-							numberOfSlices: 1,
+							// numberOfSlices: 1,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -140,7 +140,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							durationInFrames: td_tear_down,
 							easingFunction: Easing.linear,
 							// numberOfSlices: 5,
-							numberOfSlices: 4,
+							// numberOfSlices: 4,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -180,7 +180,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														height={height}
 													/>
 												</div>
-												{/* TODO pass topPaddingPerc, bottomPaddingPerc */}
 												<YScaleAnimationContainer
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
@@ -188,6 +187,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													timeSeries={timeSeries}
 													area={chartLayout.areas.yAxis}
 													domainType="VISIBLE"
+													paddingPerc={0.1}
 												>
 													{(yScaleAnimationContext) => {
 														return (
