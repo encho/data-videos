@@ -1,6 +1,5 @@
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {
 	getIndicesAxisSpec,
@@ -8,13 +7,8 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-// TODO use only this "NEW" XAxis_Transition down the line
-import {XAxis_Transition} from '../XAxisSpecsDev/XAxis_TransitionNEW';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-// import {TLineChartAnimationContext} from '../../../../acetti-ts-base/LineChartAnimationContainer';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-
-type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+import {Animated_XAxis} from '../YScaleContextDev/Animated_XAxis';
 
 const AXIS_SPEC_FUNCTIONS = {
 	indices: getIndicesAxisSpec,
@@ -43,39 +37,22 @@ const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
 };
 
 export const LineChart_XAxisShowcase: React.FC<{
-	timeSeries: TimeSeries;
+	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	layoutAreas: {
-		// plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		xAxis_days: TGridLayoutArea;
 		xAxis_monthStarts: TGridLayoutArea;
 		xAxis_quarterStarts: TGridLayoutArea;
-		// yAxis: TGridLayoutArea;
 	};
-	yDomainType: TYDomainType;
-	theme: ThemeType;
-	// yScale: ScaleLinear<number, number>;
-	periodScale: TPeriodsScale;
-	fromPeriodScale: TPeriodsScale;
-	toPeriodScale: TPeriodsScale;
-	//
-	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
-}> = ({
-	layoutAreas,
-	timeSeries,
-	theme,
-	// yScale,
-	periodScale: currentPeriodsScale,
-	fromPeriodScale,
-	toPeriodScale,
-	//
-	currentSliceInfo,
-}) => {
+}> = ({periodScaleAnimationContext, layoutAreas}) => {
+	const fromPeriodScale =
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom;
+	const toPeriodScale =
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo;
+
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
 
-	// const axisSpecFrom = getAxisSpec(currentPeriodsScale, fromSpecType);
-	// const axisSpecTo = getAxisSpec(currentPeriodsScale, toSpecType);
 	const axisSpecFrom = getAxisSpec(fromPeriodScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(toPeriodScale, toSpecType);
 
@@ -84,49 +61,17 @@ export const LineChart_XAxisShowcase: React.FC<{
 	// ***************************
 
 	// 1. days
-	// const xAxisSpec_days_from = getDaysAxisSpec(currentPeriodsScale);
-	// const xAxisSpec_days_to = getDaysAxisSpec(currentPeriodsScale);
 	const xAxisSpec_days_from = getDaysAxisSpec(fromPeriodScale);
 	const xAxisSpec_days_to = getDaysAxisSpec(toPeriodScale);
 
 	// 2. month starts
-	// const xAxisSpec_monthStarts_from =
-	// 	getMonthStartsAxisSpec(currentPeriodsScale);
-	// const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(currentPeriodsScale);
 	const xAxisSpec_monthStarts_from = getMonthStartsAxisSpec(fromPeriodScale);
 	const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(toPeriodScale);
 
 	// 3. quarter starts
-	// const xAxisSpec_quarterStarts_from =
-	// 	getQuarterStartsAxisSpec(currentPeriodsScale);
-	// const xAxisSpec_quarterStarts_to =
-	// 	getQuarterStartsAxisSpec(currentPeriodsScale);
 	const xAxisSpec_quarterStarts_from =
 		getQuarterStartsAxisSpec(fromPeriodScale);
 	const xAxisSpec_quarterStarts_to = getQuarterStartsAxisSpec(toPeriodScale);
-
-	// ***************************
-
-	// const Y_RANGE_FIXED = yScale.range();
-
-	// const yDomainFrom =
-	// 	currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-	// 		timeSeries
-	// 	);
-
-	// const yDomainTo =
-	// 	currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(timeSeries);
-
-	// const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomainFrom)
-	// 	.range([Y_RANGE_FIXED[0], 0]);
-
-	// const yScaleTo: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomainTo)
-	// 	.range([Y_RANGE_FIXED[0], 0]);
-
-	// const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
-	// const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
 
 	const xAxisDebugColors = {
 		debugEnterColor: 'lime',
@@ -139,13 +84,11 @@ export const LineChart_XAxisShowcase: React.FC<{
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
-				<XAxis_Transition
-					fromAxisSpec={axisSpecFrom}
-					toAxisSpec={axisSpecTo}
-					theme={theme.xAxis}
+				<Animated_XAxis
+					periodsScaleAnimationContext={periodScaleAnimationContext}
+					axisSpecFrom={axisSpecFrom}
+					axisSpecTo={axisSpecTo}
 					area={layoutAreas.xAxis}
-					periodsScale={currentPeriodsScale}
-					currentSliceInfo={currentSliceInfo}
 					{...xAxisDebugColors}
 				/>
 			</Position>
@@ -157,13 +100,12 @@ export const LineChart_XAxisShowcase: React.FC<{
 					top: layoutAreas.xAxis_days.y1,
 				}}
 			>
-				<XAxis_Transition
-					fromAxisSpec={xAxisSpec_days_from}
-					toAxisSpec={xAxisSpec_days_to}
-					theme={theme.xAxis}
-					area={layoutAreas.xAxis_days}
-					periodsScale={currentPeriodsScale}
-					currentSliceInfo={currentSliceInfo}
+				<Animated_XAxis
+					periodsScaleAnimationContext={periodScaleAnimationContext}
+					axisSpecFrom={xAxisSpec_days_from}
+					axisSpecTo={xAxisSpec_days_to}
+					area={layoutAreas.xAxis}
+					{...xAxisDebugColors}
 				/>
 			</Position>
 
@@ -174,13 +116,12 @@ export const LineChart_XAxisShowcase: React.FC<{
 					top: layoutAreas.xAxis_monthStarts.y1,
 				}}
 			>
-				<XAxis_Transition
-					fromAxisSpec={xAxisSpec_monthStarts_from}
-					toAxisSpec={xAxisSpec_monthStarts_to}
-					theme={theme.xAxis}
-					area={layoutAreas.xAxis_monthStarts}
-					periodsScale={currentPeriodsScale}
-					currentSliceInfo={currentSliceInfo}
+				<Animated_XAxis
+					periodsScaleAnimationContext={periodScaleAnimationContext}
+					axisSpecFrom={xAxisSpec_monthStarts_from}
+					axisSpecTo={xAxisSpec_monthStarts_to}
+					area={layoutAreas.xAxis}
+					{...xAxisDebugColors}
 				/>
 			</Position>
 
@@ -191,13 +132,12 @@ export const LineChart_XAxisShowcase: React.FC<{
 					top: layoutAreas.xAxis_quarterStarts.y1,
 				}}
 			>
-				<XAxis_Transition
-					fromAxisSpec={xAxisSpec_quarterStarts_from}
-					toAxisSpec={xAxisSpec_quarterStarts_to}
-					theme={theme.xAxis}
-					area={layoutAreas.xAxis_quarterStarts}
-					periodsScale={currentPeriodsScale}
-					currentSliceInfo={currentSliceInfo}
+				<Animated_XAxis
+					periodsScaleAnimationContext={periodScaleAnimationContext}
+					axisSpecFrom={xAxisSpec_quarterStarts_from}
+					axisSpecTo={xAxisSpec_quarterStarts_to}
+					area={layoutAreas.xAxis}
+					{...xAxisDebugColors}
 				/>
 			</Position>
 		</>

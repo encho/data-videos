@@ -146,13 +146,15 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					},
 				]}
 			>
-				{({
-					periodsScale,
-					frame,
-					currentSliceInfo,
-					currentTransitionInfo,
-					...rest
-				}) => {
+				{(periodScaleAnimationContext) => {
+					const {
+						periodsScale,
+						frame,
+						currentSliceInfo,
+						currentTransitionInfo,
+						...rest
+					} = periodScaleAnimationContext;
+
 					return (
 						<div>
 							<PageContext
@@ -179,7 +181,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													/>
 												</div>
 												<LineChart_XAxisShowcase
-													timeSeries={timeSeries}
+													periodScaleAnimationContext={
+														periodScaleAnimationContext
+													}
 													layoutAreas={{
 														xAxis: chartLayout.areas.xAxis,
 														xAxis_days: chartLayout.areas.xAxis_days,
@@ -188,14 +192,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														xAxis_quarterStarts:
 															chartLayout.areas.xAxis_quarterStarts,
 													}}
-													yDomainType={Y_DOMAIN_TYPE}
-													theme={theme}
-													periodScale={periodsScale}
-													// TODO deprecate as we are passing the whole sliceInfo
-													fromPeriodScale={currentSliceInfo.periodsScaleFrom}
-													toPeriodScale={currentSliceInfo.periodsScaleTo}
-													//
-													currentSliceInfo={currentSliceInfo}
 												/>
 											</>
 										);

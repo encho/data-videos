@@ -6,12 +6,14 @@ import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
-import {LineChart_XAxisShowcase} from './LineChart_XAxisShowcase';
+import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {
 	PeriodScaleAnimationContainer,
 	TPeriodScaleAnimationContext,
 } from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+
+import {YScaleAnimationContainer} from './YScaleAnimationContainer';
 
 const Y_DOMAIN_TYPE = 'FULL';
 // const Y_DOMAIN_TYPE = 'VISIBLE';
@@ -177,19 +179,30 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														height={height}
 													/>
 												</div>
-												<LineChart_XAxisShowcase
+												<YScaleAnimationContainer
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
 													}
-													timeSeries={timeSeries}
-													layoutAreas={{
-														xAxis: chartLayout.areas.xAxis,
-														plot: chartLayout.areas.plot,
-														yAxis: chartLayout.areas.yAxis,
+												>
+													{({test}) => {
+														console.log({test});
+														return (
+															<LineChart_YAxisShowcase
+																periodScaleAnimationContext={
+																	periodScaleAnimationContext
+																}
+																timeSeries={timeSeries}
+																layoutAreas={{
+																	xAxis: chartLayout.areas.xAxis,
+																	plot: chartLayout.areas.plot,
+																	yAxis: chartLayout.areas.yAxis,
+																}}
+																yDomainType={Y_DOMAIN_TYPE}
+																theme={theme}
+															/>
+														);
 													}}
-													yDomainType={Y_DOMAIN_TYPE}
-													theme={theme}
-												/>
+												</YScaleAnimationContainer>
 											</>
 										);
 									}}

@@ -10,7 +10,7 @@ import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodSca
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
 // TODO rename to LineChart_YAxisShowcase
-export const LineChart_XAxisShowcase: React.FC<{
+export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	timeSeries: TimeSeries;
 	layoutAreas: {
@@ -52,6 +52,28 @@ export const LineChart_XAxisShowcase: React.FC<{
 
 	return (
 		<>
+			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
+			>
+				<div
+					style={{
+						backgroundColor: 'gray',
+						width: layoutAreas.plot.width,
+						height: layoutAreas.plot.height,
+					}}
+				></div>
+			</Position>
+			<Position
+				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
+			>
+				<div
+					style={{
+						backgroundColor: 'gray',
+						width: layoutAreas.yAxis.width,
+						height: layoutAreas.yAxis.height,
+					}}
+				></div>
+			</Position>
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
