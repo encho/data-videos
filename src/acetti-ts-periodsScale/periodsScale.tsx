@@ -28,7 +28,10 @@ export type TPeriodsScale = {
 	// TODO shoud return TPeriod[]
 	getAllVisibleDates: () => Date[];
 	//
-	getTimeSeriesInterpolatedExtent: (x: TTimeSeries) => [number, number];
+	getTimeSeriesInterpolatedExtent: (
+		x: TTimeSeries,
+		paddingPerc?: number
+	) => [number, number];
 	// new stuff for periodsScale Animation Container..
 	fullPeriodDomainIndices: [number, number];
 	allYearStartDates: Date[];
@@ -184,15 +187,15 @@ export const periodsScale = ({
 	};
 
 	const getTimeSeriesInterpolatedExtent = (
-		timeSeries: {value: number; date: Date}[]
+		timeSeries: {value: number; date: Date}[],
+		paddingPerc?: number
 	) => {
 		return getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			visibleDomainIndices
+			visibleDomainIndices,
+			paddingPerc
 		);
 	};
-
-	// console.log({dates});
 
 	return {
 		// TODO getPeriodFromIndex
@@ -218,7 +221,6 @@ export const periodsScale = ({
 };
 
 type TGetTimeSeriesInterpolatedValueArgs = {
-	// periodsScale: TPeriodsScale;
 	timeSeries: {value: number; date: Date}[];
 	domainIndex: number;
 };
@@ -295,7 +297,8 @@ export const getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 
 export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 	timeSeries: {value: number; date: Date}[],
-	visibleDomainIndices: [number, number]
+	visibleDomainIndices: [number, number],
+	paddingPerc: number = 0
 ) => {
 	const [leftVisibleDomainIndex, rightVisibleDomainIndex] =
 		visibleDomainIndices;
@@ -342,7 +345,25 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 	const min = Math.min(...maybeValues, timeSeriesExtent[0]);
 	const max = Math.max(...maybeValues, timeSeriesExtent[1]);
 
-	return [min, max] as [number, number];
+	// const the_extent = [min, max] as [number, number];
+
+	const extentRange = max - min;
+
+	// const BOTTOM_PADDING_PERC = 0.1;
+	// const TOP_PADDING_PERC = 0.1;
+	// const BOTTOM_PADDING_PERC = 0.1;
+	// const TOP_PADDING_PERC = 0.05;
+	const BOTTOM_PADDING_PERC = paddingPerc;
+	const TOP_PADDING_PERC = paddingPerc;
+
+	console.log({BOTTOM_PADDING_PERC, TOP_PADDING_PERC});
+
+	const paddedExtent = [
+		min - BOTTOM_PADDING_PERC * extentRange,
+		max + TOP_PADDING_PERC * extentRange,
+	];
+
+	return paddedExtent as [number, number];
 };
 
 // TODO rename getFirstPeriodOfEachYear or so...

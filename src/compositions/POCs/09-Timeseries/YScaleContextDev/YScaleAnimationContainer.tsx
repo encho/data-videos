@@ -1,80 +1,27 @@
-import {Sequence, useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
+import {Sequence, interpolate, useVideoConfig} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-import {
-	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
-	periodsScale,
-	TPeriodsScale,
-} from '../../../../acetti-ts-periodsScale/periodsScale';
+import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+
+export const Y_SCALE_PADDING_PERC = 0.1;
 
 export type TYScaleAnimationContext = {
 	test: string;
 	yScale: ScaleLinear<number, number>;
-	// periodsScale: TPeriodsScale;
-	// frame: number;
-	// currentTransitionInfo: {
-	// 	index: number;
-	// 	frameRange: TFrameRange;
-	// 	durationInFrames: number;
-	// 	durationInSeconds: number;
-	// 	relativeFrame: number;
-	// 	framesPercentage: number;
-	// 	easingPercentage: number;
-	// 	fromDomainIndices: [number, number];
-	// 	toDomainIndices: [number, number];
-	// 	numberOfSlices: number;
-	// 	transitionType: 'ZOOM' | 'DEFAULT';
-	// };
-	// currentSliceInfo: {
-	// 	index: number;
-	// 	frameRange: TFrameRange;
-	// 	durationInFrames: number;
-	// 	durationInSeconds: number;
-	// 	relativeFrame: number;
-	// 	framesPercentage: number;
-	// 	easingPercentage: number;
-	// 	domainIndicesTo: [number, number];
-	// 	domainIndicesFrom: [number, number];
-	// 	periodsScaleFrom: TPeriodsScale;
-	// 	periodsScaleTo: TPeriodsScale;
-	// };
 };
 
 type TChildrenFuncArgs = TYScaleAnimationContext;
-
-type TTransitionSpec = {
-	durationInFrames: number;
-	easingFunction: (t: number) => number;
-	numberOfSlices?: number;
-	transitionType: 'DEFAULT' | 'ZOOM';
-};
-
-// type TTransitionsItem = {
-// 	fromDomainIndices: [number, number];
-// 	toDomainIndices: [number, number];
-// 	transitionSpec: TTransitionSpec;
-// };
 
 export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	area: TGridLayoutArea;
 	timeSeries: TimeSeries;
-	// transitionType: 'DEFAULT' | 'ZOOM';
-	// transitions: TTransitionsItem[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-}> = ({
-	// transitions,
-	periodScaleAnimationContext,
-	area,
-	timeSeries, // TODO array of periods is enough!
-	children,
-}) => {
-	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+}> = ({periodScaleAnimationContext, area, timeSeries, children}) => {
+	const {durationInFrames} = useVideoConfig();
 
 	const currentTransitionType =
 		periodScaleAnimationContext.currentTransitionInfo.transitionType;
@@ -102,10 +49,14 @@ export const YScaleAnimationContainer: React.FC<{
 		// TODO yDomainType is not addressed here!
 		const yDomain =
 			yDomainProp ||
-			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(timeSeries, [
-				animatedVisibleDomainIndexStart,
-				animatedVisibleDomainIndexEnd,
-			] as [number, number]);
+			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+				timeSeries,
+				[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
+					number,
+					number
+				],
+				Y_SCALE_PADDING_PERC
+			);
 
 		yScale = scaleLinear()
 			.domain(yDomain)
@@ -116,11 +67,13 @@ export const YScaleAnimationContainer: React.FC<{
 	} else if (currentTransitionType === 'ZOOM') {
 		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			fromDomainIndices
+			fromDomainIndices,
+			Y_SCALE_PADDING_PERC
 		);
 		const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			toDomainIndices
+			toDomainIndices,
+			Y_SCALE_PADDING_PERC
 		);
 
 		const animatedYDomain_0 = interpolate(

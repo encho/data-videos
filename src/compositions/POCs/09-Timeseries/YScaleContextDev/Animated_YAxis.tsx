@@ -11,6 +11,7 @@ import {
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {getYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {usePage} from '../../../../acetti-components/PageContext';
+import {Y_SCALE_PADDING_PERC} from './YScaleAnimationContainer';
 
 // TODO: export use because of passed parametrization
 // e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
@@ -51,6 +52,8 @@ export const Animated_YAxis: React.FC<{
 	debugExitColor,
 	debugUpdateColor,
 }) => {
+	// TODO acutally some of  this has to be handled by yScale context!!!!!!!!!!!!
+
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
@@ -85,37 +88,40 @@ export const Animated_YAxis: React.FC<{
 
 	// calculate axisSpecFrom and axisSpecTo
 	// *************************************
-	const Y_RANGE_FIXED = yScale.range();
-
 	const yDomainFrom =
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-			timeSeries
+			timeSeries,
+			Y_SCALE_PADDING_PERC
 		);
 
 	const yDomainTo =
-		currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(timeSeries);
+		currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
+			timeSeries,
+			Y_SCALE_PADDING_PERC
+		);
 
-	const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
-		.domain(yDomainFrom)
-		.range([Y_RANGE_FIXED[0], 0]);
+	// range is not needed as we only calculate domainValues for labels and ticks,
+	// then the current yScale is used to compute the mappings
+	const yScaleFrom: ScaleLinear<number, number> =
+		scaleLinear().domain(yDomainFrom);
 
-	const yScaleTo: ScaleLinear<number, number> = scaleLinear()
-		.domain(yDomainTo)
-		.range([Y_RANGE_FIXED[0], 0]);
+	// range is not needed as we only calculate domainValues for labels and ticks,
+	// then the current yScale is used to compute the mappings
+	const yScaleTo: ScaleLinear<number, number> = scaleLinear().domain(yDomainTo);
 
-	const fromAxisSpec = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
-	const toAxisSpec = getYAxisSpec(yScaleTo, 5, currencyFormatter);
+	const axisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
+	const axisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
 
 	// ***************************
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
-		fromAxisSpec.ticks.map((it) => it.id),
-		toAxisSpec.ticks.map((it) => it.id)
+		axisSpecFrom.ticks.map((it) => it.id),
+		axisSpecTo.ticks.map((it) => it.id)
 	);
 
 	const labelsEnterUpdateExits = getEnterUpdateExits(
-		fromAxisSpec.labels.map((it) => it.id),
-		toAxisSpec.labels.map((it) => it.id)
+		axisSpecFrom.labels.map((it) => it.id),
+		axisSpecTo.labels.map((it) => it.id)
 	);
 
 	// ***************************
@@ -124,9 +130,9 @@ export const Animated_YAxis: React.FC<{
 	// ***************************
 	// ***************************
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
-		const startTick = getTick(fromAxisSpec, tickId);
+		const startTick = getTick(axisSpecFrom, tickId);
 		// TODO bring back mixing both
-		// const endTick = getTick(toAxisSpec, tickId);
+		// const endTick = getTick(axisSpecTo, tickId);
 
 		// TODO linear animation percentage here is fine, normally floatIndices are identical anyway!!!
 		// const currentPeriodFloatIndex = interpolate(
@@ -146,7 +152,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
-		const endTick = getTick(toAxisSpec, tickId);
+		const endTick = getTick(axisSpecTo, tickId);
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -169,7 +175,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
-		const startTick = getTick(fromAxisSpec, tickId);
+		const startTick = getTick(axisSpecFrom, tickId);
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -192,8 +198,8 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
-		const startLabel = getLabel(fromAxisSpec, labelId);
-		const endLabel = getLabel(toAxisSpec, labelId);
+		const startLabel = getLabel(axisSpecFrom, labelId);
+		const endLabel = getLabel(axisSpecTo, labelId);
 
 		const startY = yScale(startLabel.domainValue);
 		const endY = yScale(endLabel.domainValue);
@@ -226,7 +232,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
-		const endLabel = getLabel(toAxisSpec, labelId);
+		const endLabel = getLabel(axisSpecTo, labelId);
 		const endY = yScale(endLabel.domainValue);
 
 		const interpolatedOpacity = interpolate(
@@ -252,7 +258,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
-		const startLabel = getLabel(fromAxisSpec, labelId);
+		const startLabel = getLabel(axisSpecFrom, labelId);
 
 		const endY = yScale(startLabel.domainValue);
 

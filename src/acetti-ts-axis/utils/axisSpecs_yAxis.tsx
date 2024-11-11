@@ -47,13 +47,9 @@ export function getYAxisSpec(
 	});
 
 	const labels = tickValues.map((tickValue) => {
-		// const id = date.getTime().toString();
 		return {
 			id: `yTickLabel-id-${tickValue}`,
 			domainValue: tickValue,
-			// type: 'DOMAIN_VALUE' as const,
-			// label: num.toString(),
-			// label: formatter ? formatter(num) : num.toString(),
 			label: formatter(tickValue),
 			textAnchor: 'middle' as const,
 		};
@@ -61,7 +57,6 @@ export function getYAxisSpec(
 
 	return {
 		ticks,
-		// labels: [],
 		labels,
 	};
 }
