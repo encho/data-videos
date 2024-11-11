@@ -1126,6 +1126,26 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
+						id="YScaleContext-Dev"
+						component={PeriodScaleDevComposition}
+						durationInFrames={30 * 9}
+						fps={30}
+						// {...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
+						width={videoSizes.widescreen_16x9.width}
+						height={videoSizes.widescreen_16x9.height * 2}
+						schema={periodScaleDevCompositionSchema}
+						defaultProps={{
+							ticker: 'TESLA' as const,
+							timePeriod: '2Y' as const,
+							nerdyFinanceEnv: 'PROD' as const,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+						}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
 						id="XAxisSpecs-Dev"
 						component={XAxisSpecsDevComposition}
 						durationInFrames={30 * 9}
