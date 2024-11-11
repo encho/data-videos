@@ -279,6 +279,10 @@ const LineChartAnimationContextDebugger: React.FC<
 			value: JSON.stringify(currentTransitionInfo.index),
 		},
 		{
+			key: 'numberOfSlices',
+			value: JSON.stringify(currentTransitionInfo.numberOfSlices),
+		},
+		{
 			key: 'frameRange',
 			value: JSON.stringify(currentTransitionInfo.frameRange),
 		},
@@ -344,12 +348,12 @@ const LineChartAnimationContextDebugger: React.FC<
 			),
 		},
 		{
-			key: 'fromDomainIndices',
-			value: JSON.stringify(currentSliceInfo.fromDomainIndices),
+			key: 'domainIndicesFrom',
+			value: JSON.stringify(currentSliceInfo.domainIndicesFrom),
 		},
 		{
-			key: 'toDomainIndices',
-			value: JSON.stringify(currentSliceInfo.toDomainIndices),
+			key: 'domainIndicesTo',
+			value: JSON.stringify(currentSliceInfo.domainIndicesTo),
 		},
 	];
 
