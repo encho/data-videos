@@ -183,8 +183,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
 													}
+													timeSeries={timeSeries}
+													area={chartLayout.areas.yAxis}
 												>
-													{({test}) => {
+													{({test, yScale}) => {
 														console.log({test});
 														return (
 															<LineChart_YAxisShowcase
@@ -192,6 +194,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																	periodScaleAnimationContext
 																}
 																timeSeries={timeSeries}
+																yScale={yScale}
 																layoutAreas={{
 																	xAxis: chartLayout.areas.xAxis,
 																	plot: chartLayout.areas.plot,

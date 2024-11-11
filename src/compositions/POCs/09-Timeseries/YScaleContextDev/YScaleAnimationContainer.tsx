@@ -13,6 +13,7 @@ import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodSca
 
 export type TYScaleAnimationContext = {
 	test: string;
+	yScale: ScaleLinear<number, number>;
 	// periodsScale: TPeriodsScale;
 	// frame: number;
 	// currentTransitionInfo: {
@@ -60,99 +61,99 @@ type TTransitionSpec = {
 
 export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
-	// timeSeries: TimeSeries;
-	// area: TGridLayoutArea;
+	area: TGridLayoutArea;
+	timeSeries: TimeSeries;
+	// transitionType: 'DEFAULT' | 'ZOOM';
 	// transitions: TTransitionsItem[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 }> = ({
-	// timeSeries, // TODO array of periods is enough!
-	// area,
 	// transitions,
 	periodScaleAnimationContext,
+	area,
+	timeSeries, // TODO array of periods is enough!
 	children,
 }) => {
-	// const transitionSpecs = transitions.map((it) => it.transitionSpec);
-
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
 
-	// const currentTransitionType = currentTransitionSpec.transitionType;
-	// const currentTransitionType = "ZOOM";
-	const currentTransitionType = 'DEFAULT';
+	const currentTransitionType =
+		periodScaleAnimationContext.currentTransitionInfo.transitionType;
 
 	// ***********************************
 	// TODO deprecate the y Axis stuff.....
 	// ***********************************
 
-	// let yScale: ScaleLinear<number, number>;
+	const animatedVisibleDomainIndexStart =
+		periodScaleAnimationContext.periodsScale.visibleDomainIndices[0];
+	const animatedVisibleDomainIndexEnd =
+		periodScaleAnimationContext.periodsScale.visibleDomainIndices[1];
 
-	// const yDomainProp = null;
+	const fromDomainIndices =
+		periodScaleAnimationContext.currentSliceInfo.domainIndicesFrom;
+	const toDomainIndices =
+		periodScaleAnimationContext.currentSliceInfo.domainIndicesTo;
 
-	// if (currentTransitionType === 'DEFAULT') {
-	// 	// TODO yDomainType is not addressed here!
-	// 	const yDomain =
-	// 		yDomainProp ||
-	// 		getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(timeSeries, [
-	// 			animatedVisibleDomainIndexStart,
-	// 			animatedVisibleDomainIndexEnd,
-	// 		] as [number, number]);
+	let yScale: ScaleLinear<number, number>;
 
-	// 	yScale = scaleLinear()
-	// 		.domain(yDomain)
-	// 		// TODO domain zero to be added via yDomainType
-	// 		// .domain(yDomainZero)
-	// 		.range([area.height, 0]);
-	// 	// } else if (currentTransitionType === 'ZOOM') {
-	// } else if (currentTransitionType === 'ZOOM') {
-	// 	const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-	// 		timeSeries,
-	// 		fromDomainIndices
-	// 	);
-	// 	const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-	// 		timeSeries,
-	// 		toDomainIndices
-	// 	);
+	// TODO introduce capacity of passing yDomain into the machine
+	const yDomainProp = undefined;
 
-	// 	const animatedYDomain_0 = interpolate(
-	// 		currentTransitionInfo.easingPercentage,
-	// 		[0, 1],
-	// 		[yDomainFrom[0], yDomainTo[0]]
-	// 	);
-	// 	const animatedYDomain_1 = interpolate(
-	// 		currentTransitionInfo.easingPercentage,
-	// 		[0, 1],
-	// 		[yDomainFrom[1], yDomainTo[1]]
-	// 	);
+	if (currentTransitionType === 'DEFAULT') {
+		// TODO yDomainType is not addressed here!
+		const yDomain =
+			yDomainProp ||
+			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(timeSeries, [
+				animatedVisibleDomainIndexStart,
+				animatedVisibleDomainIndexEnd,
+			] as [number, number]);
 
-	// 	const zoomingCurrentYDomain = [animatedYDomain_0, animatedYDomain_1] as [
-	// 		number,
-	// 		number
-	// 	];
+		yScale = scaleLinear()
+			.domain(yDomain)
+			// TODO domain zero to be added via yDomainType
+			// .domain(yDomainZero)
+			.range([area.height, 0]);
+		// } else if (currentTransitionType === 'ZOOM') {
+	} else if (currentTransitionType === 'ZOOM') {
+		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			timeSeries,
+			fromDomainIndices
+		);
+		const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			timeSeries,
+			toDomainIndices
+		);
 
-	// 	yScale = scaleLinear()
-	// 		.domain(zoomingCurrentYDomain)
-	// 		// TODO domain zero to be added via yDomainType
-	// 		// .domain(yDomainZero)
-	// 		.range([area.height, 0]);
-	// } else {
-	// 	throw Error('Unknown transitionType');
-	// }
+		const animatedYDomain_0 = interpolate(
+			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
+			[0, 1],
+			[yDomainFrom[0], yDomainTo[0]]
+		);
+		const animatedYDomain_1 = interpolate(
+			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
+			[0, 1],
+			[yDomainFrom[1], yDomainTo[1]]
+		);
+
+		const zoomingCurrentYDomain = [animatedYDomain_0, animatedYDomain_1] as [
+			number,
+			number
+		];
+
+		yScale = scaleLinear()
+			.domain(zoomingCurrentYDomain)
+			// TODO domain zero to be added via yDomainType
+			// .domain(yDomainZero)
+			.range([area.height, 0]);
+	} else {
+		throw Error('Unknown transitionType');
+	}
 
 	return (
 		<Sequence from={0} durationInFrames={durationInFrames} layout="none">
 			{children({
-				// periodsScale: currentPeriodsScale,
-				// yScale,
-				// frame,
-				// currentTransitionInfo,
-				// currentSliceInfo,
-				test: 'encho',
+				test: 'encho', // TODO remove
+				yScale,
 			})}
 		</Sequence>
 	);
-};
-
-type TFrameRange = {
-	startFrame: number;
-	endFrame: number;
 };

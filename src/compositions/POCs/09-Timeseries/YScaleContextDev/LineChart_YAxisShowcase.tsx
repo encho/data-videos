@@ -1,11 +1,15 @@
+import {ScaleLinear} from 'd3-scale';
+
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 // TODO use only this "NEW" Animated_XAxis down the line
+import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from './Animated_XAxis';
+import {Animated_YAxis} from './Animated_YAxis';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-// import {TLineChartAnimationContext} from '../../../../acetti-ts-base/LineChartAnimationContainer';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+import {times} from 'lodash';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -20,7 +24,16 @@ export const LineChart_YAxisShowcase: React.FC<{
 	};
 	yDomainType: TYDomainType;
 	theme: ThemeType;
-}> = ({layoutAreas, timeSeries, theme, periodScaleAnimationContext}) => {
+	yScale: ScaleLinear<number, number>;
+}> = ({
+	layoutAreas,
+	timeSeries,
+	yScale, // or yScaleAnimationContext??
+	theme,
+	periodScaleAnimationContext,
+}) => {
+	// ***************************
+	// TODO into new Animated_YAxis
 	// ***************************
 
 	// const Y_RANGE_FIXED = yScale.range();
@@ -43,6 +56,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 
 	// const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
 	// const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
+	// ***************************
 
 	const xAxisDebugColors = {
 		debugEnterColor: 'lime',
@@ -55,24 +69,24 @@ export const LineChart_YAxisShowcase: React.FC<{
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
-				<div
-					style={{
-						backgroundColor: 'gray',
-						width: layoutAreas.plot.width,
-						height: layoutAreas.plot.height,
-					}}
-				></div>
+				<AnimatedLine
+					lineColor={'magenta'}
+					periodsScale={periodScaleAnimationContext.periodsScale}
+					yScale={yScale}
+					area={layoutAreas.plot}
+					timeSeries={timeSeries}
+					// TODO theme
+				/>
 			</Position>
 			<Position
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
-				<div
-					style={{
-						backgroundColor: 'gray',
-						width: layoutAreas.yAxis.width,
-						height: layoutAreas.yAxis.height,
-					}}
-				></div>
+				<Animated_YAxis
+					yScale={yScale}
+					periodScaleAnimationContext={periodScaleAnimationContext}
+					area={layoutAreas.yAxis}
+					timeSeries={timeSeries}
+				/>
 			</Position>
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
