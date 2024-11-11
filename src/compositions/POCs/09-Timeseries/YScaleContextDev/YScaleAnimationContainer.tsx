@@ -5,11 +5,16 @@ import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+import {TYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 
 export const Y_SCALE_PADDING_PERC = 0.1;
 
 export type TYScaleAnimationContext = {
 	yScale: ScaleLinear<number, number>;
+	// TODO calculate this here too, s.t. it does not have to be calculated on
+	// the Animated_YAxis....
+	// axisSpecFrom: TYAxisSpec;
+	// axisSpecTo: TYAxisSpec;
 };
 
 type TChildrenFuncArgs = TYScaleAnimationContext;
