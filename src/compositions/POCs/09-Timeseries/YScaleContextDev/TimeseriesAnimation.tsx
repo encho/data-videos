@@ -186,8 +186,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													timeSeries={timeSeries}
 													area={chartLayout.areas.yAxis}
 												>
-													{({test, yScale}) => {
-														console.log({test});
+													{({yScale}) => {
 														return (
 															<LineChart_YAxisShowcase
 																periodScaleAnimationContext={
@@ -476,18 +475,6 @@ const LineChartAnimationContextDebugger: React.FC<
 								</Row>
 							);
 						})}
-						{/* <Row>
-							<div style={{}}>
-								OWN DomainIndices Change Distance (amount, left + right):
-							</div>
-							<div style={{color: 'red'}}>TODO implement calculation</div>
-						</Row> */}
-						{/* <Row>
-							<div style={{}}>
-								OWN DomainIndices Change Velocity (???, left + right):
-							</div>
-							<div style={{color: 'red'}}>TODO implement calculation</div>
-						</Row> */}
 					</div>
 				</div>
 			</div>

@@ -9,7 +9,6 @@ import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodSca
 export const Y_SCALE_PADDING_PERC = 0.1;
 
 export type TYScaleAnimationContext = {
-	test: string;
 	yScale: ScaleLinear<number, number>;
 };
 
@@ -104,7 +103,6 @@ export const YScaleAnimationContainer: React.FC<{
 	return (
 		<Sequence from={0} durationInFrames={durationInFrames} layout="none">
 			{children({
-				test: 'encho', // TODO remove
 				yScale,
 			})}
 		</Sequence>
