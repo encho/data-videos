@@ -42,8 +42,8 @@ export type TPeriodScaleAnimationContext = {
 		relativeFrame: number;
 		framesPercentage: number; // TODO rename evtl. to linearPercentage
 		easingPercentage: number;
-		visibleDomainIndicesFrom: [number, number];
-		visibleDomainIndicesTo: [number, number];
+		toDomainIndices: [number, number];
+		fromDomainIndices: [number, number];
 		periodsScaleFrom: TPeriodsScale;
 		periodsScaleTo: TPeriodsScale;
 	};
@@ -54,11 +54,6 @@ type TChildrenFuncArgs = TPeriodScaleAnimationContext;
 // const yDomainType: TYDomainType = 'VISIBLE';
 // const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';
-
-type TViewSpec = {
-	// area: TGridLayoutArea;
-	visibleDomainIndices: [number, number];
-};
 
 type TTransitionSpec = {
 	durationInFrames: number;
@@ -237,12 +232,12 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		}),
 	};
 
-	const visibleDomainIndicesFrom_start = interpolate(
+	const currentSlice_fromDomainIndices_start = interpolate(
 		frameRangeEasingPercentage.startFrame,
 		[0, 1],
 		[fromDomainIndices[0], toDomainIndices[0]]
 	);
-	const visibleDomainIndicesFrom_end = interpolate(
+	const currentSlice_fromDomainIndices_end = interpolate(
 		frameRangeEasingPercentage.startFrame,
 		[0, 1],
 		[fromDomainIndices[1], toDomainIndices[1]]
@@ -259,9 +254,9 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		[fromDomainIndices[1], toDomainIndices[1]]
 	);
 
-	const visibleDomainIndicesFrom = [
-		visibleDomainIndicesFrom_start,
-		visibleDomainIndicesFrom_end,
+	const currentSlice_fromDomainIndices = [
+		currentSlice_fromDomainIndices_start,
+		currentSlice_fromDomainIndices_end,
 	] as [number, number];
 
 	const visibleDomainIndicesTo = [
@@ -271,7 +266,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 
 	const slicePeriodsScaleFrom = periodsScale({
 		dates,
-		visibleDomainIndices: visibleDomainIndicesFrom,
+		visibleDomainIndices: currentSlice_fromDomainIndices,
 		visibleRange: [0, area.width],
 	});
 
@@ -289,10 +284,8 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
 		easingPercentage: currentSliceEasingPercentage,
-		// frameRangeLinearPercentage,
-		// frameRangeEasingPercentage,
-		visibleDomainIndicesFrom,
-		visibleDomainIndicesTo,
+		fromDomainIndices: currentSlice_fromDomainIndices,
+		toDomainIndices: visibleDomainIndicesTo,
 		periodsScaleFrom: slicePeriodsScaleFrom,
 		periodsScaleTo: slicePeriodsScaleTo,
 	};

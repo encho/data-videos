@@ -47,15 +47,32 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	});
 
 	// TODO use keyframes perhaps
-	const td_buildup = Math.floor(durationInFrames * 0.33);
-	const td_zoom = Math.floor(durationInFrames * 0.33);
-	const td_buildup_again = durationInFrames - td_buildup - td_zoom;
+	const td_buildup = Math.floor(durationInFrames * 0.2);
+	const td_wait_1 = Math.floor(durationInFrames * 0.1);
+	const td_zoom = Math.floor(durationInFrames * 0.2);
+	const td_wait_2 = Math.floor(durationInFrames * 0.1);
+	const td_buildup_again = Math.floor(durationInFrames * 0.2);
+	const td_tear_down =
+		durationInFrames -
+		td_buildup -
+		td_wait_1 -
+		td_zoom -
+		td_wait_2 -
+		td_buildup_again;
 
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
-	const view_series_start = [0, 1] as [number, number];
-	const view_series_full = [0, timeSeries.length] as [number, number];
-	const view_series_zoom_1 = [220, 420] as [number, number];
+	const tsDomainIndices = {
+		start: [0, 10] as [number, number],
+		full: [0, timeSeries.length] as [number, number],
+		zoom: [
+			Math.floor(timeSeries.length * 0.25),
+			Math.floor(timeSeries.length * 0.75),
+		] as [number, number],
+	};
+	// const view_series_start = [0, 10] as [number, number];
+	// const view_series_full = [0, timeSeries.length] as [number, number];
+	// const view_series_zoom_1 = [220, 420] as [number, number];
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -64,8 +81,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				area={chartLayout.areas.xAxis}
 				transitions={[
 					{
-						fromDomainIndices: view_series_start, // if omitted & index===0, fill with [0,1]
-						toDomainIndices: view_series_full,
+						fromDomainIndices: tsDomainIndices.start, // if omitted & index===0, fill with [0,1]
+						toDomainIndices: tsDomainIndices.full,
 						transitionSpec: {
 							durationInFrames: td_buildup,
 							easingFunction: Easing.linear,
@@ -74,8 +91,18 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						},
 					},
 					{
-						fromDomainIndices: view_series_full, // if omitted, fill with previous fromDomainIndices
-						toDomainIndices: view_series_zoom_1,
+						fromDomainIndices: tsDomainIndices.full, // if omitted & index===0, fill with [0,1]
+						toDomainIndices: tsDomainIndices.full,
+						transitionSpec: {
+							durationInFrames: td_wait_1,
+							easingFunction: Easing.linear,
+							numberOfSlices: 5,
+							transitionType: 'DEFAULT',
+						},
+					},
+					{
+						fromDomainIndices: tsDomainIndices.full, // if omitted, fill with previous fromDomainIndices
+						toDomainIndices: tsDomainIndices.zoom,
 						transitionSpec: {
 							durationInFrames: td_zoom,
 							easingFunction: Easing.linear,
@@ -85,13 +112,35 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						},
 					},
 					{
-						fromDomainIndices: view_series_zoom_1, // TODO if omitted, fill with previous fromDomainIndices
-						toDomainIndices: view_series_full,
+						fromDomainIndices: tsDomainIndices.zoom, // if omitted, fill with previous fromDomainIndices
+						toDomainIndices: tsDomainIndices.zoom,
+						transitionSpec: {
+							durationInFrames: td_wait_2,
+							easingFunction: Easing.linear,
+							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
+							numberOfSlices: 1,
+							transitionType: 'DEFAULT',
+						},
+					},
+					{
+						fromDomainIndices: tsDomainIndices.zoom, // TODO if omitted, fill with previous fromDomainIndices
+						toDomainIndices: tsDomainIndices.full,
 						transitionSpec: {
 							durationInFrames: td_buildup_again,
 							easingFunction: Easing.linear,
 							// numberOfSlices: 5,
 							numberOfSlices: 1,
+							transitionType: 'DEFAULT',
+						},
+					},
+					{
+						fromDomainIndices: tsDomainIndices.full, // TODO if omitted, fill with previous fromDomainIndices
+						toDomainIndices: tsDomainIndices.start,
+						transitionSpec: {
+							durationInFrames: td_tear_down,
+							easingFunction: Easing.linear,
+							// numberOfSlices: 5,
+							numberOfSlices: 4,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -295,12 +344,12 @@ const LineChartAnimationContextDebugger: React.FC<
 			),
 		},
 		{
-			key: 'visibleDomainIndicesFrom',
-			value: JSON.stringify(currentSliceInfo.visibleDomainIndicesFrom),
+			key: 'fromDomainIndices',
+			value: JSON.stringify(currentSliceInfo.fromDomainIndices),
 		},
 		{
-			key: 'visibleDomainIndicesTo',
-			value: JSON.stringify(currentSliceInfo.visibleDomainIndicesTo),
+			key: 'toDomainIndices',
+			value: JSON.stringify(currentSliceInfo.toDomainIndices),
 		},
 	];
 
@@ -373,8 +422,6 @@ const LineChartAnimationContextDebugger: React.FC<
 
 			<div
 				style={{
-					// position: 'absolute',
-					// zIndex: 500,
 					backgroundColor: 'rgba(0,0,0,0.5)',
 					padding: 20,
 					fontSize: 20,
@@ -412,20 +459,18 @@ const LineChartAnimationContextDebugger: React.FC<
 								</Row>
 							);
 						})}
-						{/* &&&&&&&& */}
-						<Row>
+						{/* <Row>
 							<div style={{}}>
 								OWN DomainIndices Change Distance (amount, left + right):
 							</div>
 							<div style={{color: 'red'}}>TODO implement calculation</div>
-						</Row>
-						{/* ********* */}
-						<Row>
+						</Row> */}
+						{/* <Row>
 							<div style={{}}>
 								OWN DomainIndices Change Velocity (???, left + right):
 							</div>
 							<div style={{color: 'red'}}>TODO implement calculation</div>
-						</Row>
+						</Row> */}
 					</div>
 				</div>
 			</div>

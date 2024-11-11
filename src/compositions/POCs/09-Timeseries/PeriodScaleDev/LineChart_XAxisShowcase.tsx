@@ -1,5 +1,3 @@
-import {ScaleLinear} from 'd3-scale';
-
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -10,9 +8,11 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-import {XAxis_Transition} from '../../../../acetti-ts-axis/XAxis_Transition';
+// TODO use only this "NEW" XAxis_Transition down the line
+import {XAxis_Transition} from '../../../../acetti-ts-axis/XAxis_TransitionNEW';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {TLineChartAnimationContext} from '../../../../acetti-ts-base/LineChartAnimationContainer';
+// import {TLineChartAnimationContext} from '../../../../acetti-ts-base/LineChartAnimationContainer';
+import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -59,7 +59,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
 	//
-	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
 }> = ({
 	layoutAreas,
 	timeSeries,
