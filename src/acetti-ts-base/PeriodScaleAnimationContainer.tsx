@@ -1,4 +1,4 @@
-import {Sequence, useCurrentFrame, interpolate} from 'remotion';
+import {Sequence, useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 
@@ -19,6 +19,7 @@ export type TPeriodScaleAnimationContext = {
 		index: number;
 		frameRange: TFrameRange;
 		durationInFrames: number;
+		durationInSeconds: number;
 		relativeFrame: number; // TODO rename to linearPercentage (also for currentSlice object)
 		framesPercentage: number;
 		easingPercentage: number;
@@ -35,6 +36,7 @@ export type TPeriodScaleAnimationContext = {
 		frameRangeEasingPercentage: {startFrame: number; endFrame: number};
 		// *************************************************
 		durationInFrames: number;
+		durationInSeconds: number;
 		relativeFrame: number;
 		framesPercentage: number; // TODO rename evtl. to linearPercentage
 		easingPercentage: number;
@@ -52,7 +54,7 @@ type TChildrenFuncArgs = TPeriodScaleAnimationContext;
 // const yDomainType: TYDomainType = 'ZERO_FULL';
 
 type TViewSpec = {
-	area: TGridLayoutArea;
+	// area: TGridLayoutArea;
 	visibleDomainIndices: [number, number];
 };
 
@@ -65,12 +67,14 @@ type TTransitionSpec = {
 
 export const PeriodScaleAnimationContainer: React.FC<{
 	timeSeries: TimeSeries;
+	area: TGridLayoutArea;
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 	yDomain?: [number, number];
 }> = ({
-	timeSeries,
+	timeSeries, // TODO array of periods is enough!
+	area,
 	viewSpecs,
 	transitionSpecs,
 	children,
@@ -83,6 +87,10 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	);
 
 	const frame = useCurrentFrame();
+	const {
+		fps,
+		// durationInFrames
+	} = useVideoConfig();
 
 	const dates = timeSeries.map((it) => it.date);
 
@@ -117,13 +125,15 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const fromViewSpec = viewSpecs[currentTransitionIndex];
 	const toViewSpec = viewSpecs[currentTransitionIndex + 1];
 
-	const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
+	// const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
+	const AREA_SHOULD_BE_ANIMATED = area;
 
 	// ******** current transition information *************************************************
 	const currentTransitionInfo = {
 		index: currentTransitionIndex,
 		frameRange: currentFrameRange,
 		durationInFrames: currentTransition.durationInFrames,
+		durationInSeconds: currentTransition.durationInFrames / fps,
 		relativeFrame: frame - currentFrameRange.startFrame,
 		//
 		framesPercentage: currentAnimationPercentage,
@@ -274,6 +284,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		index: currentTransitionSlice,
 		frameRange: currentTransitionSliceFrameRange,
 		durationInFrames: sliceDurationInFrames,
+		durationInSeconds: sliceDurationInFrames / fps,
 		relativeFrame: sliceRelativeFrame,
 		framesPercentage: sliceFramesPercentage,
 		easingPercentage: currentSliceEasingPercentage,

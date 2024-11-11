@@ -76,33 +76,49 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<PeriodScaleAnimationContainer
 				timeSeries={timeSeries}
+				area={chartLayout.areas.xAxis}
+				// transitionSpecsNew={[
+				// 	{
+				// 		fromDomainIndices: view_series_start, // if omitted & index===0, fill with [0,1]
+				// 		toDomainIndices: view_series_full,
+				// 		transition: {
+				// 			durationInFrames: td_buildup,
+				// 			easingFunction: Easing.linear,
+				// 			numberOfSlices: 5,
+				// 			transitionsType: 'DEFAULT',
+				// 		},
+				// 	},
+				// 	{
+				// 		// fromDomainIndices: view_series_start, // if omitted, fill with previous fromDomainIndices
+				// 		toDomainIndices: view_series_full,
+				// 		transition: {
+				// 			durationInFrames: td_buildup,
+				// 			easingFunction: Easing.linear,
+				// 			numberOfSlices: 5,
+				// 			transitionsType: 'DEFAULT',
+				// 		},
+				// 	},
+				// ]}
 				viewSpecs={[
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_start,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_zoom_1,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 					{
-						area: chartLayout.areas.xAxis,
 						visibleDomainIndices: view_series_full,
 					},
 				]}
@@ -298,6 +314,10 @@ const LineChartAnimationContextDebugger: React.FC<
 			value: JSON.stringify(currentTransitionInfo.durationInFrames),
 		},
 		{
+			key: 'durationInSeconds',
+			value: JSON.stringify(currentTransitionInfo.durationInSeconds),
+		},
+		{
 			key: 'relativeFrame',
 			value: JSON.stringify(currentTransitionInfo.relativeFrame),
 		},
@@ -323,6 +343,10 @@ const LineChartAnimationContextDebugger: React.FC<
 		{
 			key: 'durationInFrames',
 			value: JSON.stringify(currentSliceInfo.durationInFrames),
+		},
+		{
+			key: 'durationInSeconds',
+			value: JSON.stringify(currentSliceInfo.durationInSeconds),
 		},
 		{
 			key: 'relativeFrame',
