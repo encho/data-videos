@@ -4,7 +4,7 @@ import {
 	useGridLayout,
 } from '../../../../acetti-layout';
 
-const ROW_SPACE_IN_PIXEL = 50;
+const ROW_SPACE_IN_PIXEL = 70;
 
 // TODO make xaxis height dependant on theme and baseline
 const chartRowsRailSpec: TGridRailSpec = [
@@ -50,18 +50,6 @@ const chartGridLayoutSpec = {
 			{name: 'xAxis_quarterStarts'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
-		// yAxis: [
-		// 	{name: 'plot'},
-		// 	{name: 'yAxis'},
-		// 	{name: 'plot'},
-		// 	{name: 'yAxis'},
-		// ] as TGridLayoutAreaSpec,
-		// plot: [
-		// 	{name: 'plot'},
-		// 	{name: 'plot'},
-		// 	{name: 'plot'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
 	},
 };
 

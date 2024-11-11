@@ -23,19 +23,13 @@ type TAnimatedLineChart2Props = {
 	theme: ThemeType;
 };
 
-// TODO this shoud be in acetti-ts-scenes or so
 export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	width,
 	height,
 	timeSeries,
 	theme,
 }) => {
-	const {
-		durationInFrames,
-		// fps
-		// width,
-		// height
-	} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI' as any);
 
@@ -52,19 +46,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		height: CHART_CONTENT_HEIGHT,
 	});
 
-	// TODO use keyframes
-	const td_buildup = Math.floor(durationInFrames * 0.25);
-	const td_periodsAreaEnter = Math.floor(durationInFrames * 0.1);
-	const td_periodsAreaZoomIn = Math.floor(durationInFrames * 0.1);
-	const td_periodsAreaZoomed = Math.floor(durationInFrames * 0.1);
-	const td_periodsAreaZoomOut = Math.floor(durationInFrames * 0.1);
-	const td_periodsAreaExit =
-		durationInFrames -
-		td_buildup -
-		td_periodsAreaEnter -
-		td_periodsAreaZoomIn -
-		td_periodsAreaZoomed -
-		td_periodsAreaZoomOut;
+	// TODO use keyframes perhaps
+	const td_buildup = Math.floor(durationInFrames * 0.33);
+	const td_zoom = Math.floor(durationInFrames * 0.33);
+	const td_buildup_again = durationInFrames - td_buildup - td_zoom;
 
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
@@ -77,98 +62,43 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 			<PeriodScaleAnimationContainer
 				timeSeries={timeSeries}
 				area={chartLayout.areas.xAxis}
-				// transitionSpecsNew={[
-				// 	{
-				// 		fromDomainIndices: view_series_start, // if omitted & index===0, fill with [0,1]
-				// 		toDomainIndices: view_series_full,
-				// 		transition: {
-				// 			durationInFrames: td_buildup,
-				// 			easingFunction: Easing.linear,
-				// 			numberOfSlices: 5,
-				// 			transitionsType: 'DEFAULT',
-				// 		},
-				// 	},
-				// 	{
-				// 		// fromDomainIndices: view_series_start, // if omitted, fill with previous fromDomainIndices
-				// 		toDomainIndices: view_series_full,
-				// 		transition: {
-				// 			durationInFrames: td_buildup,
-				// 			easingFunction: Easing.linear,
-				// 			numberOfSlices: 5,
-				// 			transitionsType: 'DEFAULT',
-				// 		},
-				// 	},
-				// ]}
-				viewSpecs={[
+				transitions={[
 					{
-						visibleDomainIndices: view_series_start,
+						fromDomainIndices: view_series_start, // if omitted & index===0, fill with [0,1]
+						toDomainIndices: view_series_full,
+						transitionSpec: {
+							durationInFrames: td_buildup,
+							easingFunction: Easing.linear,
+							numberOfSlices: 5,
+							transitionType: 'DEFAULT',
+						},
 					},
 					{
-						visibleDomainIndices: view_series_full,
+						fromDomainIndices: view_series_full, // if omitted, fill with previous fromDomainIndices
+						toDomainIndices: view_series_zoom_1,
+						transitionSpec: {
+							durationInFrames: td_zoom,
+							easingFunction: Easing.linear,
+							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
+							numberOfSlices: 1,
+							transitionType: 'DEFAULT',
+						},
 					},
 					{
-						visibleDomainIndices: view_series_full,
-					},
-					{
-						visibleDomainIndices: view_series_zoom_1,
-					},
-					{
-						visibleDomainIndices: view_series_zoom_1,
-					},
-					{
-						visibleDomainIndices: view_series_full,
-					},
-					{
-						visibleDomainIndices: view_series_full,
-					},
-				]}
-				transitionSpecs={[
-					{
-						// durationInFrames: getDurationInFrames(keyframes, "START_BUILDUP", "END_BUILDUP"),
-						durationInFrames: td_buildup,
-						// easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						// easingFunction: Easing.bezier(0.16, 1, 0.3, 1),
-						easingFunction: Easing.linear, // TODO why linear is broken??
-						// TODO:
-						// numberOfSlices: getDurationInSeconds(keyframes, "START_BUILDUP", "END_BUILDUP") / 2
-						numberOfSlices: 5,
-						transitionType: 'DEFAULT',
-					},
-					{
-						durationInFrames: td_periodsAreaEnter,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 1,
-						transitionType: 'DEFAULT',
-					},
-					{
-						durationInFrames: td_periodsAreaZoomIn,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 1,
-						transitionType: 'ZOOM',
-					},
-					{
-						durationInFrames: td_periodsAreaZoomed,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 1,
-						transitionType: 'ZOOM',
-					},
-					{
-						durationInFrames: td_periodsAreaZoomOut,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 1,
-						transitionType: 'ZOOM',
-					},
-					{
-						durationInFrames: td_periodsAreaExit,
-						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-						numberOfSlices: 1,
-						transitionType: 'ZOOM',
+						fromDomainIndices: view_series_zoom_1, // TODO if omitted, fill with previous fromDomainIndices
+						toDomainIndices: view_series_full,
+						transitionSpec: {
+							durationInFrames: td_buildup_again,
+							easingFunction: Easing.linear,
+							// numberOfSlices: 5,
+							numberOfSlices: 1,
+							transitionType: 'DEFAULT',
+						},
 					},
 				]}
 			>
 				{({
 					periodsScale,
-					// yScale,
 					frame,
 					currentSliceInfo,
 					currentTransitionInfo,
@@ -183,7 +113,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								nrBaselines={40}
 								theme={theme}
 							>
-								<Page show>
+								<Page
+								// show
+								>
 									{() => {
 										return (
 											<>
@@ -191,7 +123,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													<DisplayGridLayout
 														stroke={'rgba(255,0,255,0.4)'}
 														fill="transparent"
-														// hide={true}
+														hide={true}
 														areas={chartLayout.areas}
 														width={width}
 														height={height}
@@ -200,9 +132,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 												<LineChart_XAxisShowcase
 													timeSeries={timeSeries}
 													layoutAreas={{
-														// plot: chartLayout.areas.plot,
 														xAxis: chartLayout.areas.xAxis,
-														// yAxis: chartLayout.areas.yAxis,
 														xAxis_days: chartLayout.areas.xAxis_days,
 														xAxis_monthStarts:
 															chartLayout.areas.xAxis_monthStarts,
@@ -211,7 +141,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													}}
 													yDomainType={Y_DOMAIN_TYPE}
 													theme={theme}
-													// yScale={yScale}
 													periodScale={periodsScale}
 													// TODO deprecate as we are passing the whole sliceInfo
 													fromPeriodScale={currentSliceInfo.periodsScaleFrom}
@@ -235,7 +164,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									<LineChartAnimationContextDebugger
 										frame={frame}
 										periodsScale={periodsScale}
-										// yScale={yScale}
 										currentSliceInfo={currentSliceInfo}
 										currentTransitionInfo={currentTransitionInfo}
 										{...rest}
@@ -250,13 +178,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	);
 };
 
-// type TLineChartAnimationContextDebugger = TLineChartAnimationContext & {
-// theme: ThemeType;
-// };
-
-// function roundToTwoDecimals(num: number): number {
-// 	return parseFloat(num.toFixed(2));
-// }
+function roundToTwoDecimals(num: number): number {
+	return parseFloat(num.toFixed(2));
+}
 // // Example usage:
 // const input: number = 123.456789;
 // const output: number = roundToTwoDecimals(input);
@@ -294,12 +218,12 @@ const LineChartAnimationContextDebugger: React.FC<
 			value: JSON.stringify(Object.keys(currentTransitionInfo), undefined, 2),
 		},
 		{
-			key: 'fromViewSpec',
-			value: JSON.stringify(currentTransitionInfo.fromViewSpec),
+			key: 'fromDomainIndices',
+			value: JSON.stringify(currentTransitionInfo.fromDomainIndices),
 		},
 		{
-			key: 'toViewSpec',
-			value: JSON.stringify(currentTransitionInfo.toViewSpec),
+			key: 'toDomainIndices',
+			value: JSON.stringify(currentTransitionInfo.toDomainIndices),
 		},
 		{
 			key: 'index',
@@ -315,7 +239,9 @@ const LineChartAnimationContextDebugger: React.FC<
 		},
 		{
 			key: 'durationInSeconds',
-			value: JSON.stringify(currentTransitionInfo.durationInSeconds),
+			value: JSON.stringify(
+				roundToTwoDecimals(currentTransitionInfo.durationInSeconds)
+			),
 		},
 		{
 			key: 'relativeFrame',
@@ -323,11 +249,15 @@ const LineChartAnimationContextDebugger: React.FC<
 		},
 		{
 			key: 'framesPercentage',
-			value: JSON.stringify(currentTransitionInfo.framesPercentage),
+			value: JSON.stringify(
+				roundToTwoDecimals(currentTransitionInfo.framesPercentage)
+			),
 		},
 		{
 			key: 'easingPercentage',
-			value: JSON.stringify(currentTransitionInfo.easingPercentage),
+			value: JSON.stringify(
+				roundToTwoDecimals(currentTransitionInfo.easingPercentage)
+			),
 		},
 	];
 	const currentSliceInfoListItems = [
@@ -354,11 +284,15 @@ const LineChartAnimationContextDebugger: React.FC<
 		},
 		{
 			key: 'framesPercentage',
-			value: JSON.stringify(currentSliceInfo.framesPercentage),
+			value: JSON.stringify(
+				roundToTwoDecimals(currentSliceInfo.framesPercentage)
+			),
 		},
 		{
 			key: 'easingPercentage',
-			value: JSON.stringify(currentSliceInfo.easingPercentage),
+			value: JSON.stringify(
+				roundToTwoDecimals(currentSliceInfo.easingPercentage)
+			),
 		},
 		{
 			key: 'frameRangeLinearPercentage',

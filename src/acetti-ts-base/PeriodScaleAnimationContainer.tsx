@@ -23,8 +23,10 @@ export type TPeriodScaleAnimationContext = {
 		relativeFrame: number; // TODO rename to linearPercentage (also for currentSlice object)
 		framesPercentage: number;
 		easingPercentage: number;
-		fromViewSpec: TViewSpec;
-		toViewSpec: TViewSpec;
+		// fromViewSpec: TViewSpec;
+		// toViewSpec: TViewSpec;
+		fromDomainIndices: [number, number];
+		toDomainIndices: [number, number];
 	};
 	currentSliceInfo: {
 		index: number;
@@ -65,88 +67,86 @@ type TTransitionSpec = {
 	transitionType: 'DEFAULT' | 'ZOOM';
 };
 
+type TTransitionsItem = {
+	fromDomainIndices: [number, number];
+	toDomainIndices: [number, number];
+	transitionSpec: TTransitionSpec; // TODO change name of type
+};
+
 export const PeriodScaleAnimationContainer: React.FC<{
 	timeSeries: TimeSeries;
 	area: TGridLayoutArea;
-	viewSpecs: TViewSpec[];
-	transitionSpecs: TTransitionSpec[];
+	transitions: TTransitionsItem[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 	yDomain?: [number, number];
 }> = ({
 	timeSeries, // TODO array of periods is enough!
 	area,
-	viewSpecs,
-	transitionSpecs,
+	transitions,
 	children,
 	yDomain: yDomainProp,
 }) => {
-	// ensure the length of the passed props are as expected
-	invariant(
-		transitionSpecs.length === viewSpecs.length - 1,
-		'length of transitionSpecs and viewSpecs is not matching! there should be exactly one less transitionSpec than viewSpec!'
-	);
+	const transitionSpecs = transitions.map((it) => it.transitionSpec);
 
 	const frame = useCurrentFrame();
-	const {
-		fps,
-		// durationInFrames
-	} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 
 	const dates = timeSeries.map((it) => it.date);
 
-	const frameRanges = calculateFrameRanges(transitionSpecs); // {startFrame, endFrame}[]
-	const totalDuration = frameRanges[frameRanges.length - 1].endFrame;
+	// compute array of frameRanges with shape {startFrame: number; endFrame: number}[]
+	const frameRanges = calculateFrameRanges(transitionSpecs);
+
+	const totalDuration = frameRanges[frameRanges.length - 1].endFrame + 1;
+
+	invariant(
+		totalDuration === durationInFrames,
+		'the total duration of the transitions has to equal the durationInFrames of the Sequence.'
+	);
 
 	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
-	const currentFrameRange = frameRanges[currentTransitionIndex];
 
-	// TODO rename to currentTransitionSpec
-	const currentTransition = transitionSpecs[currentTransitionIndex];
+	const currentTransitionFrameRange = frameRanges[currentTransitionIndex];
 
-	const currentTransitionFrame = frame - currentFrameRange.startFrame;
-
-	const EASING_FUNCTION = currentTransition.easingFunction;
+	const currentTransitionSpec = transitionSpecs[currentTransitionIndex];
+	const currentTransitionFrame = frame - currentTransitionFrameRange.startFrame;
 
 	const currentAnimationPercentage =
-		currentTransitionFrame / (currentTransition.durationInFrames - 1);
+		currentTransitionFrame / (currentTransitionSpec.durationInFrames - 1);
 
 	const currentTransition_easingPercentage = interpolate(
 		currentAnimationPercentage,
 		[0, 1],
 		[0, 1],
 		{
-			easing: EASING_FUNCTION,
+			easing: currentTransitionSpec.easingFunction,
 			// in this case should not be necessary
 			extrapolateLeft: 'clamp',
 			extrapolateRight: 'clamp',
 		}
 	);
 
-	const fromViewSpec = viewSpecs[currentTransitionIndex];
-	const toViewSpec = viewSpecs[currentTransitionIndex + 1];
-
-	// const AREA_SHOULD_BE_ANIMATED = fromViewSpec.area;
-	const AREA_SHOULD_BE_ANIMATED = area;
+	const fromDomainIndices =
+		transitions[currentTransitionIndex].fromDomainIndices;
+	const toDomainIndices = transitions[currentTransitionIndex].toDomainIndices;
 
 	// ******** current transition information *************************************************
 	const currentTransitionInfo = {
 		index: currentTransitionIndex,
-		frameRange: currentFrameRange,
-		durationInFrames: currentTransition.durationInFrames,
-		durationInSeconds: currentTransition.durationInFrames / fps,
-		relativeFrame: frame - currentFrameRange.startFrame,
-		//
+		frameRange: currentTransitionFrameRange,
+		relativeFrame: frame - currentTransitionFrameRange.startFrame,
 		framesPercentage: currentAnimationPercentage,
 		easingPercentage: currentTransition_easingPercentage,
-		//
-		fromViewSpec: fromViewSpec,
-		toViewSpec: toViewSpec,
+		fromDomainIndices,
+		toDomainIndices,
+		// related to currentTransitionSpec
+		durationInFrames: currentTransitionSpec.durationInFrames,
+		durationInSeconds: currentTransitionSpec.durationInFrames / fps,
 	};
 
 	// ******** current Slice information calculation *************************************************
 	const currentTransitionSlicesFrameRanges = divideFrameRange(
-		currentFrameRange,
-		currentTransition.numberOfSlices
+		currentTransitionFrameRange,
+		currentTransitionSpec.numberOfSlices
 	);
 
 	// TODO clean up naming
@@ -187,34 +187,34 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			[0, 1],
 			[0, 1],
 			{
-				easing: EASING_FUNCTION,
+				easing: currentTransitionSpec.easingFunction,
 			}
 		),
 		endFrame: interpolate(frameRangeLinearPercentage.endFrame, [0, 1], [0, 1], {
-			easing: EASING_FUNCTION,
+			easing: currentTransitionSpec.easingFunction,
 		}),
 	};
 
 	const visibleDomainIndicesFrom_start = interpolate(
 		frameRangeEasingPercentage.startFrame,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
+		[fromDomainIndices[0], toDomainIndices[0]]
 	);
 	const visibleDomainIndicesFrom_end = interpolate(
 		frameRangeEasingPercentage.startFrame,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
+		[fromDomainIndices[1], toDomainIndices[1]]
 	);
 
 	const visibleDomainIndicesTo_start = interpolate(
 		frameRangeEasingPercentage.endFrame,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
+		[fromDomainIndices[0], toDomainIndices[0]]
 	);
 	const visibleDomainIndicesTo_end = interpolate(
 		frameRangeEasingPercentage.endFrame,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
+		[fromDomainIndices[1], toDomainIndices[1]]
 	);
 
 	const visibleDomainIndicesFrom = [
@@ -230,13 +230,13 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const slicePeriodsScaleFrom = periodsScale({
 		dates,
 		visibleDomainIndices: visibleDomainIndicesFrom,
-		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+		visibleRange: [0, area.width],
 	});
 
 	const slicePeriodsScaleTo = periodsScale({
 		dates,
 		visibleDomainIndices: visibleDomainIndicesTo,
-		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+		visibleRange: [0, area.width],
 	});
 
 	// determine slice easingPercentage
@@ -247,7 +247,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
-		{easing: EASING_FUNCTION}
+		{easing: currentTransitionSpec.easingFunction}
 	);
 
 	const currentSliceEasingPercentage_minValue = interpolate(
@@ -257,7 +257,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
-		{easing: EASING_FUNCTION}
+		{easing: currentTransitionSpec.easingFunction}
 	);
 
 	const currentSliceEasingPercentage_currentValue = interpolate(
@@ -267,7 +267,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			currentTransitionInfo.frameRange.endFrame,
 		],
 		[0, 1],
-		{easing: EASING_FUNCTION}
+		{easing: currentTransitionSpec.easingFunction}
 	);
 
 	const currentSliceEasingPercentage = interpolate(
@@ -301,13 +301,13 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const animatedVisibleDomainIndexStart = interpolate(
 		currentTransitionInfo.easingPercentage,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[0], toViewSpec.visibleDomainIndices[0]]
+		[fromDomainIndices[0], toDomainIndices[0]]
 	);
 
 	const animatedVisibleDomainIndexEnd = interpolate(
 		currentTransitionInfo.easingPercentage,
 		[0, 1],
-		[fromViewSpec.visibleDomainIndices[1], toViewSpec.visibleDomainIndices[1]]
+		[fromDomainIndices[1], toDomainIndices[1]]
 	);
 
 	const currentPeriodsScale = periodsScale({
@@ -316,10 +316,10 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			animatedVisibleDomainIndexStart,
 			animatedVisibleDomainIndexEnd,
 		],
-		visibleRange: [0, AREA_SHOULD_BE_ANIMATED.width],
+		visibleRange: [0, area.width],
 	});
 
-	const currentTransitionType = currentTransition.transitionType;
+	const currentTransitionType = currentTransitionSpec.transitionType;
 
 	let yScale: ScaleLinear<number, number>;
 
@@ -336,16 +336,16 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			.domain(yDomain)
 			// TODO domain zero to be added via yDomainType
 			// .domain(yDomainZero)
-			.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+			.range([area.height, 0]);
 		// } else if (currentTransitionType === 'ZOOM') {
 	} else if (currentTransitionType === 'ZOOM') {
 		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			fromViewSpec.visibleDomainIndices
+			fromDomainIndices
 		);
 		const yDomainTo = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
-			toViewSpec.visibleDomainIndices
+			toDomainIndices
 		);
 
 		const animatedYDomain_0 = interpolate(
@@ -368,7 +368,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			.domain(zoomingCurrentYDomain)
 			// TODO domain zero to be added via yDomainType
 			// .domain(yDomainZero)
-			.range([AREA_SHOULD_BE_ANIMATED.height, 0]);
+			.range([area.height, 0]);
 	} else {
 		throw Error('Unknown transitionType');
 	}
@@ -391,9 +391,9 @@ type TFrameRange = {
 	endFrame: number;
 };
 
-const calculateFrameRanges = (transitions: TTransitionSpec[]) => {
+const calculateFrameRanges = (transitionSpecs: TTransitionSpec[]) => {
 	// Calculate frame ranges
-	const frameRanges: TFrameRange[] = transitions.reduce(
+	const frameRanges: TFrameRange[] = transitionSpecs.reduce(
 		(acc, transition, index) => {
 			if (index === 0) {
 				// For the first element, the start frame is 0
