@@ -5,16 +5,13 @@ import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-import {TYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 
 export const Y_SCALE_PADDING_PERC = 0.1;
 
 export type TYScaleAnimationContext = {
 	yScale: ScaleLinear<number, number>;
-	// TODO calculate this here too, s.t. it does not have to be calculated on
-	// the Animated_YAxis....
-	// axisSpecFrom: TYAxisSpec;
-	// axisSpecTo: TYAxisSpec;
+	yScaleFrom: ScaleLinear<number, number>;
+	yScaleTo: ScaleLinear<number, number>;
 };
 
 type TChildrenFuncArgs = TYScaleAnimationContext;
@@ -30,10 +27,6 @@ export const YScaleAnimationContainer: React.FC<{
 	const currentTransitionType =
 		periodScaleAnimationContext.currentTransitionInfo.transitionType;
 
-	// ***********************************
-	// TODO deprecate the y Axis stuff.....
-	// ***********************************
-
 	const animatedVisibleDomainIndexStart =
 		periodScaleAnimationContext.periodsScale.visibleDomainIndices[0];
 	const animatedVisibleDomainIndexEnd =
@@ -47,6 +40,7 @@ export const YScaleAnimationContainer: React.FC<{
 	let yScale: ScaleLinear<number, number>;
 
 	// TODO introduce capacity of passing yDomain into the machine
+	// OR: do not ship this functionality?
 	const yDomainProp = undefined;
 
 	if (currentTransitionType === 'DEFAULT') {
@@ -67,7 +61,6 @@ export const YScaleAnimationContainer: React.FC<{
 			// TODO domain zero to be added via yDomainType
 			// .domain(yDomainZero)
 			.range([area.height, 0]);
-		// } else if (currentTransitionType === 'ZOOM') {
 	} else if (currentTransitionType === 'ZOOM') {
 		const yDomainFrom = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 			timeSeries,
@@ -105,10 +98,35 @@ export const YScaleAnimationContainer: React.FC<{
 		throw Error('Unknown transitionType');
 	}
 
+	const yDomainFrom =
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
+			timeSeries,
+			Y_SCALE_PADDING_PERC
+		);
+
+	const yDomainTo =
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
+			timeSeries,
+			Y_SCALE_PADDING_PERC
+		);
+
+	// const RANGE = yScale.range();
+
+	// range is not needed as we only calculate domainValues for labels and ticks,
+	// then the current yScale is used to compute the mappings
+	const yScaleFrom: ScaleLinear<number, number> =
+		scaleLinear().domain(yDomainFrom);
+
+	// range is not needed as we only calculate domainValues for labels and ticks,
+	// then the current yScale is used to compute the mappings
+	const yScaleTo: ScaleLinear<number, number> = scaleLinear().domain(yDomainTo);
+
 	return (
 		<Sequence from={0} durationInFrames={durationInFrames} layout="none">
 			{children({
 				yScale,
+				yScaleFrom,
+				yScaleTo,
 			})}
 		</Sequence>
 	);

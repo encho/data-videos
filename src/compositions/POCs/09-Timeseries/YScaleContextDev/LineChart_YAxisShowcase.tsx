@@ -1,36 +1,31 @@
-import {ScaleLinear} from 'd3-scale';
+// import {ScaleLinear} from 'd3-scale';
 
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-// TODO use only this "NEW" Animated_XAxis down the line
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from './Animated_XAxis';
 import {Animated_YAxis} from './Animated_YAxis';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-import {times} from 'lodash';
+import {TYScaleAnimationContext} from './YScaleAnimationContainer';
 
-type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+// type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
 // TODO rename to LineChart_YAxisShowcase
 export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	yScaleAnimationContext: TYScaleAnimationContext;
 	timeSeries: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
-	yDomainType: TYDomainType;
-	theme: ThemeType;
-	yScale: ScaleLinear<number, number>;
 }> = ({
 	layoutAreas,
 	timeSeries,
-	yScale, // or yScaleAnimationContext??
-	theme,
 	periodScaleAnimationContext,
+	yScaleAnimationContext,
 }) => {
 	const axisDebugColors = {
 		debugEnterColor: 'lime',
@@ -46,7 +41,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 				<AnimatedLine
 					lineColor={'magenta'}
 					periodsScale={periodScaleAnimationContext.periodsScale}
-					yScale={yScale}
+					yScale={yScaleAnimationContext.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
 					// TODO theme
@@ -56,10 +51,13 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<Animated_YAxis
-					yScale={yScale}
 					periodScaleAnimationContext={periodScaleAnimationContext}
+					yScale={yScaleAnimationContext.yScale}
+					yScaleFrom={yScaleAnimationContext.yScaleFrom}
+					yScaleTo={yScaleAnimationContext.yScaleTo}
 					area={layoutAreas.yAxis}
-					timeSeries={timeSeries}
+					nrTicks={6}
+					tickFormatter={currencyFormatter}
 					{...axisDebugColors}
 				/>
 			</Position>
@@ -74,4 +72,14 @@ export const LineChart_YAxisShowcase: React.FC<{
 			</Position>
 		</>
 	);
+};
+
+// TODO: export use because of passed parametrization
+// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
+const currencyFormatter = (x: number) => {
+	const formatter = new Intl.NumberFormat('en-GB', {
+		maximumFractionDigits: 0, // Ensures no decimal places
+		minimumFractionDigits: 0, // Ensures no decimal places
+	});
+	return '$ ' + formatter.format(x);
 };

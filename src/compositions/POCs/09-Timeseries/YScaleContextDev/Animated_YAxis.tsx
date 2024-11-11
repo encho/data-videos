@@ -1,6 +1,6 @@
 import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+// import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
@@ -11,17 +11,6 @@ import {
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {getYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {usePage} from '../../../../acetti-components/PageContext';
-import {Y_SCALE_PADDING_PERC} from './YScaleAnimationContainer';
-
-// TODO: export use because of passed parametrization
-// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
-const currencyFormatter = (x: number) => {
-	const formatter = new Intl.NumberFormat('en-GB', {
-		maximumFractionDigits: 0, // Ensures no decimal places
-		minimumFractionDigits: 0, // Ensures no decimal places
-	});
-	return '$ ' + formatter.format(x);
-};
 
 const getTick = (axisSpec: TYAxisSpec, tickId: string) => {
 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);
@@ -38,16 +27,22 @@ const getLabel = (axisSpec: TYAxisSpec, labelId: string) => {
 export const Animated_YAxis: React.FC<{
 	area: TGridLayoutArea;
 	yScale: TYAxisScale;
+	yScaleFrom: TYAxisScale;
+	yScaleTo: TYAxisScale;
+	nrTicks?: number;
+	tickFormatter: (x: number) => string;
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
-	timeSeries: {date: Date; value: number}[];
 	debugEnterColor?: string;
 	debugUpdateColor?: string;
 	debugExitColor?: string;
 }> = ({
 	periodScaleAnimationContext,
 	area,
-	timeSeries,
 	yScale,
+	yScaleFrom,
+	yScaleTo,
+	nrTicks = 5,
+	tickFormatter,
 	debugEnterColor,
 	debugExitColor,
 	debugUpdateColor,
@@ -86,31 +81,9 @@ export const Animated_YAxis: React.FC<{
 	const axisLineColor = debugUpdateColor || theme.color;
 	// ------------------------------------------------------------
 
-	// calculate axisSpecFrom and axisSpecTo
-	// *************************************
-	const yDomainFrom =
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-			timeSeries,
-			Y_SCALE_PADDING_PERC
-		);
-
-	const yDomainTo =
-		currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
-			timeSeries,
-			Y_SCALE_PADDING_PERC
-		);
-
-	// range is not needed as we only calculate domainValues for labels and ticks,
-	// then the current yScale is used to compute the mappings
-	const yScaleFrom: ScaleLinear<number, number> =
-		scaleLinear().domain(yDomainFrom);
-
-	// range is not needed as we only calculate domainValues for labels and ticks,
-	// then the current yScale is used to compute the mappings
-	const yScaleTo: ScaleLinear<number, number> = scaleLinear().domain(yDomainTo);
-
-	const axisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
-	const axisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
+	// calculate here and potentially get as prop (as in x axis)
+	const axisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
+	const axisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
 	// ***************************
 
