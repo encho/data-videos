@@ -60,13 +60,11 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	area: TGridLayoutArea;
 	transitions: TTransitionsItem[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
-	yDomain?: [number, number];
 }> = ({
 	timeSeries, // TODO array of periods is enough!
 	area,
 	transitions,
 	children,
-	yDomain: yDomainProp,
 }) => {
 	const transitionSpecs = transitions.map((it) => it.transitionSpec);
 
@@ -295,7 +293,13 @@ export const PeriodScaleAnimationContainer: React.FC<{
 
 	const currentTransitionType = currentTransitionSpec.transitionType;
 
+	// ***********************************
+	// TODO deprecate the y Axis stuff.....
+	// ***********************************
+
 	let yScale: ScaleLinear<number, number>;
+
+	const yDomainProp = null;
 
 	if (currentTransitionType === 'DEFAULT') {
 		// TODO yDomainType is not addressed here!
