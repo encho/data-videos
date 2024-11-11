@@ -1,4 +1,5 @@
 import {getYear, format, parseISO} from 'date-fns';
+import {keysIn} from 'lodash';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
 type TTickSpec = {
@@ -263,12 +264,18 @@ export function getMonthStartsAxisSpec(
 		};
 	});
 
-	const firstDatesOfYears = getFirstDateOfEachYear(visibleDates);
-	const firstDatesOfYears_justJanuary = firstDatesOfYears.filter(
-		(date) => date.getMonth() === 0
-	); // January is 0
+	const visibleDomainDates = periodsScale.getVisibleDomainDates();
 
-	const secondaryLabels = firstDatesOfYears_justJanuary.map((d) => {
+	const visibleFirstJanuaryDates = periodsScale.allYearStartDates.filter(
+		(date) => {
+			const isBiggerEqThanLeft = date >= visibleDomainDates[0];
+			const isSmallerEqThanRight = date <= visibleDomainDates[1];
+			const isJanuary = date.getMonth() === 0;
+			return isBiggerEqThanLeft && isSmallerEqThanRight && isJanuary;
+		}
+	);
+
+	const secondaryLabels = visibleFirstJanuaryDates.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
 		return {
@@ -281,47 +288,6 @@ export function getMonthStartsAxisSpec(
 
 	return {ticks, labels, secondaryLabels};
 }
-
-function getFirstDateOfEachYear(dates: Date[]): Date[] {
-	if (dates.length === 0) {
-		return [];
-	}
-
-	const result: Date[] = [];
-	let currentYear = dates[0].getFullYear();
-
-	// Add the first date to the result array
-	result.push(dates[0]);
-
-	for (let i = 1; i < dates.length; i++) {
-		const date = dates[i];
-		const year = date.getFullYear();
-
-		// Check if the year has changed
-		if (year !== currentYear) {
-			result.push(date);
-			currentYear = year;
-		}
-	}
-
-	return result;
-}
-// // Example usage:
-// const dates = [
-// 	new Date('2024-12-01'),
-// 	new Date('2024-12-05'),
-// 	new Date('2024-12-10'),
-// 	new Date('2025-01-01'),
-// 	new Date('2025-01-15'),
-// 	new Date('2026-02-01')
-// ];
-// const firstDatesOfEachYear = getFirstDateOfEachYear(dates);
-// console.log(firstDatesOfEachYear);
-// // Output: [
-// //   2024-12-01T00:00:00.000Z,
-// //   2025-01-01T00:00:00.000Z,
-// //   2026-02-01T00:00:00.000Z
-// // ]
 
 export function getQuarterStartsAxisSpec(
 	periodsScale: TPeriodsScale
@@ -351,12 +317,18 @@ export function getQuarterStartsAxisSpec(
 		};
 	});
 
-	const firstDatesOfYears = getFirstDateOfEachYear(visibleDates);
-	const firstDatesOfYears_justJanuary = firstDatesOfYears.filter(
-		(date) => date.getMonth() === 0
-	); // January is 0
+	const visibleDomainDates = periodsScale.getVisibleDomainDates();
 
-	const secondaryLabels = firstDatesOfYears_justJanuary.map((d) => {
+	const visibleFirstJanuaryDates = periodsScale.allYearStartDates.filter(
+		(date) => {
+			const isBiggerEqThanLeft = date >= visibleDomainDates[0];
+			const isSmallerEqThanRight = date <= visibleDomainDates[1];
+			const isJanuary = date.getMonth() === 0;
+			return isBiggerEqThanLeft && isSmallerEqThanRight && isJanuary;
+		}
+	);
+
+	const secondaryLabels = visibleFirstJanuaryDates.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
 		return {

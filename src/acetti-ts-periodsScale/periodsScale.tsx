@@ -31,6 +31,7 @@ export type TPeriodsScale = {
 	getTimeSeriesInterpolatedExtent: (x: TTimeSeries) => [number, number];
 	// new stuff for periodsScale Animation Container..
 	fullPeriodDomainIndices: [number, number];
+	allYearStartDates: Date[];
 };
 
 export const periodsScale = ({
@@ -93,6 +94,8 @@ export const periodsScale = ({
 		// 	index: i,
 		// });
 	});
+
+	const allYearStartDates = getFirstDateOfEachYear(dates);
 
 	const createBandFromIntegerIndex = (i: number) => {
 		const x1 = i * bandWidth - shiftLeft;
@@ -210,6 +213,7 @@ export const periodsScale = ({
 		getTimeSeriesInterpolatedExtent,
 		//
 		fullPeriodDomainIndices: [0, dates.length],
+		allYearStartDates,
 	};
 };
 
@@ -340,3 +344,29 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 
 	return [min, max] as [number, number];
 };
+
+// TODO rename getFirstPeriodOfEachYear or so...
+function getFirstDateOfEachYear(dates: Date[]): Date[] {
+	if (dates.length === 0) {
+		return [];
+	}
+
+	const result: Date[] = [];
+	let currentYear = dates[0].getFullYear();
+
+	// Add the first date to the result array
+	result.push(dates[0]);
+
+	for (let i = 1; i < dates.length; i++) {
+		const date = dates[i];
+		const year = date.getFullYear();
+
+		// Check if the year has changed
+		if (year !== currentYear) {
+			result.push(date);
+			currentYear = year;
+		}
+	}
+
+	return result;
+}
