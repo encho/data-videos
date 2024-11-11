@@ -24,6 +24,7 @@ export type TPeriodScaleAnimationContext = {
 		fromDomainIndices: [number, number];
 		toDomainIndices: [number, number];
 		numberOfSlices: number;
+		transitionType: 'ZOOM' | 'DEFAULT';
 	};
 	currentSliceInfo: {
 		index: number;
@@ -45,7 +46,7 @@ type TChildrenFuncArgs = TPeriodScaleAnimationContext;
 type TTransitionSpec = {
 	durationInFrames: number;
 	easingFunction: (t: number) => number;
-	numberOfSlices: number;
+	numberOfSlices?: number;
 	transitionType: 'DEFAULT' | 'ZOOM';
 };
 
@@ -107,7 +108,18 @@ export const PeriodScaleAnimationContainer: React.FC<{
 
 	const fromDomainIndices =
 		transitions[currentTransitionIndex].fromDomainIndices;
+
 	const toDomainIndices = transitions[currentTransitionIndex].toDomainIndices;
+
+	// determine number of slices if they are not passed, s.t. a slice lasts around IDEAL_SLICE_DURATION_IN_SECONDS seconds
+	const IDEAL_SLICE_DURATION_IN_SECONDS = 0.6;
+
+	const transition_durationInSeconds =
+		currentTransitionSpec.durationInFrames / fps;
+
+	const transition_numberOfSlices =
+		currentTransitionSpec.numberOfSlices ||
+		Math.floor(transition_durationInSeconds / IDEAL_SLICE_DURATION_IN_SECONDS);
 
 	// ******** current transition information *************************************************
 	const currentTransitionInfo = {
@@ -120,7 +132,8 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		toDomainIndices,
 		durationInFrames: currentTransitionSpec.durationInFrames,
 		durationInSeconds: currentTransitionSpec.durationInFrames / fps,
-		numberOfSlices: currentTransitionSpec.numberOfSlices,
+		numberOfSlices: transition_numberOfSlices,
+		transitionType: currentTransitionSpec.transitionType,
 	};
 
 	// ******** current slice information calculation *************************************************
@@ -291,7 +304,9 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		visibleRange: [0, area.width],
 	});
 
-	const currentTransitionType = currentTransitionSpec.transitionType;
+	// const currentTransitionType = currentTransitionSpec.transitionType;
+	// const currentTransitionType = "ZOOM";
+	const currentTransitionType = 'DEFAULT';
 
 	// ***********************************
 	// TODO deprecate the y Axis stuff.....

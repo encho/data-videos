@@ -86,7 +86,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_buildup,
 							easingFunction: Easing.linear,
-							numberOfSlices: 5,
+							// numberOfSlices: 5,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -96,7 +96,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_wait_1,
 							easingFunction: Easing.linear,
-							numberOfSlices: 5,
+							// numberOfSlices: 5,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -107,7 +107,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							durationInFrames: td_zoom,
 							easingFunction: Easing.linear,
 							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
-							numberOfSlices: 1,
+							// numberOfSlices: 1,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -118,7 +118,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							durationInFrames: td_wait_2,
 							easingFunction: Easing.linear,
 							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
-							numberOfSlices: 1,
+							// numberOfSlices: 1,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -248,7 +248,7 @@ const LineChartAnimationContextDebugger: React.FC<
 					gap: 5,
 					backgroundColor: 'rgba(0,0,0,0.3)',
 					color: '#00aa99',
-					padding: 5,
+					padding: 0,
 					fontWeight: 800,
 				}}
 			>
@@ -262,10 +262,10 @@ const LineChartAnimationContextDebugger: React.FC<
 	};
 
 	const currentTransitionInfoListItems = [
-		{
-			key: 'Object.keys():',
-			value: JSON.stringify(Object.keys(currentTransitionInfo), undefined, 2),
-		},
+		// {
+		// 	key: 'Object.keys():',
+		// 	value: JSON.stringify(Object.keys(currentTransitionInfo), undefined, 2),
+		// },
 		{
 			key: 'fromDomainIndices',
 			value: JSON.stringify(currentTransitionInfo.fromDomainIndices),
@@ -312,12 +312,16 @@ const LineChartAnimationContextDebugger: React.FC<
 				roundToTwoDecimals(currentTransitionInfo.easingPercentage)
 			),
 		},
+		{
+			key: 'transitionType',
+			value: JSON.stringify(currentTransitionInfo.transitionType),
+		},
 	];
 	const currentSliceInfoListItems = [
-		{
-			key: 'Object.keys():',
-			value: JSON.stringify(Object.keys(currentSliceInfo), undefined, 2),
-		},
+		// {
+		// 	key: 'Object.keys():',
+		// 	value: JSON.stringify(Object.keys(currentSliceInfo), undefined, 2),
+		// },
 		{key: 'index', value: JSON.stringify(currentSliceInfo.index)},
 		{
 			key: 'frameRange',
