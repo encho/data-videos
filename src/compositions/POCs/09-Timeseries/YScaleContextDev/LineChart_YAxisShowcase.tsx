@@ -32,6 +32,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 		debugUpdateColor: 'blue',
 		debugExitColor: 'red',
 	};
+	// const axisDebugColors = {};
 
 	return (
 		<>

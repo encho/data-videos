@@ -1133,7 +1133,8 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="YScaleContext-Dev"
 						component={YScaleContextDevComposition}
-						durationInFrames={30 * 9}
+						// durationInFrames={30 * 9}
+						durationInFrames={30 * 30}
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
