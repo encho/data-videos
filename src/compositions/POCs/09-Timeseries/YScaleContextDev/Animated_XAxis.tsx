@@ -245,7 +245,6 @@ export const Animated_XAxis: React.FC<{
 		return {
 			id: labelId,
 			value: endX,
-			// opacity: interpolatedOpacity,
 			label: endLabel.label,
 			textAnchor: endLabel.textAnchor,
 			marginLeft,

@@ -32,33 +32,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 	theme,
 	periodScaleAnimationContext,
 }) => {
-	// ***************************
-	// TODO into new Animated_YAxis
-	// ***************************
-
-	// const Y_RANGE_FIXED = yScale.range();
-
-	// const yDomainFrom =
-	// 	currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-	// 		timeSeries
-	// 	);
-
-	// const yDomainTo =
-	// 	currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(timeSeries);
-
-	// const yScaleFrom: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomainFrom)
-	// 	.range([Y_RANGE_FIXED[0], 0]);
-
-	// const yScaleTo: ScaleLinear<number, number> = scaleLinear()
-	// 	.domain(yDomainTo)
-	// 	.range([Y_RANGE_FIXED[0], 0]);
-
-	// const yAxisSpecFrom = getYAxisSpec(yScaleFrom, 5, currencyFormatter);
-	// const yAxisSpecTo = getYAxisSpec(yScaleTo, 5, currencyFormatter);
-	// ***************************
-
-	const xAxisDebugColors = {
+	const axisDebugColors = {
 		debugEnterColor: 'lime',
 		debugUpdateColor: 'blue',
 		debugExitColor: 'red',
@@ -86,6 +60,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 					periodScaleAnimationContext={periodScaleAnimationContext}
 					area={layoutAreas.yAxis}
 					timeSeries={timeSeries}
+					{...axisDebugColors}
 				/>
 			</Position>
 			<Position
@@ -94,7 +69,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 				<Animated_XAxis
 					periodsScaleAnimationContext={periodScaleAnimationContext}
 					area={layoutAreas.xAxis}
-					{...xAxisDebugColors}
+					{...axisDebugColors}
 				/>
 			</Position>
 		</>

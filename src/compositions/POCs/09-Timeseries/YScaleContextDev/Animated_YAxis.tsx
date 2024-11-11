@@ -39,7 +39,18 @@ export const Animated_YAxis: React.FC<{
 	yScale: TYAxisScale;
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	timeSeries: {date: Date; value: number}[];
-}> = ({periodScaleAnimationContext, area, timeSeries, yScale}) => {
+	debugEnterColor?: string;
+	debugUpdateColor?: string;
+	debugExitColor?: string;
+}> = ({
+	periodScaleAnimationContext,
+	area,
+	timeSeries,
+	yScale,
+	debugEnterColor,
+	debugExitColor,
+	debugUpdateColor,
+}) => {
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
@@ -57,6 +68,20 @@ export const Animated_YAxis: React.FC<{
 		// fps * 0.8
 		fps * 1
 	);
+
+	// colors
+	// ------------------------------------------------------------
+	// TODO in the theme we need lineColor, tickColor, tickLabelColor, secondaryTickLabelColor, evtl. labelColor
+	const tickColorEnter = debugEnterColor || theme.tickColor;
+	const tickColorUpdate = debugUpdateColor || theme.tickColor;
+	const tickColorExit = debugExitColor || theme.tickColor;
+
+	const tickLabelColorEnter = debugEnterColor || theme.color;
+	const tickLabelColorUpdate = debugUpdateColor || theme.color;
+	const tickLabelColorExit = debugExitColor || theme.color;
+
+	const axisLineColor = debugUpdateColor || theme.color;
+	// ------------------------------------------------------------
 
 	// calculate axisSpecFrom and axisSpecTo
 	// *************************************
@@ -272,7 +297,7 @@ export const Animated_YAxis: React.FC<{
 						<text
 							textAnchor="start"
 							alignmentBaseline="middle"
-							fill={theme.color}
+							fill={tickLabelColorEnter}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={it.value}
@@ -293,7 +318,7 @@ export const Animated_YAxis: React.FC<{
 							// textAnchor={it.textAnchor} // TODO use?
 							textAnchor="start"
 							alignmentBaseline="middle"
-							fill={theme.color}
+							fill={tickLabelColorUpdate}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={it.value}
@@ -312,7 +337,7 @@ export const Animated_YAxis: React.FC<{
 						<text
 							textAnchor="start"
 							alignmentBaseline="middle"
-							fill={theme.color}
+							fill={tickLabelColorExit}
 							fontSize={TICK_TEXT_FONT_SIZE}
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={it.value}
@@ -334,7 +359,7 @@ export const Animated_YAxis: React.FC<{
 							y2={it.value}
 							x1={0}
 							x2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							stroke={tickColorEnter}
 							strokeWidth={4}
 							opacity={it.opacity}
 						/>
@@ -351,10 +376,9 @@ export const Animated_YAxis: React.FC<{
 							y2={it.value}
 							x1={0}
 							x2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							stroke={tickColorExit}
 							strokeWidth={4}
 							opacity={it.opacity}
-							// opacity={1}
 						/>
 					</g>
 				);
@@ -368,12 +392,27 @@ export const Animated_YAxis: React.FC<{
 							y2={it.value}
 							x1={0}
 							x2={TICK_LINE_SIZE}
-							stroke={theme.tickColor}
+							stroke={tickColorUpdate}
 							strokeWidth={4}
 						/>
 					</g>
 				);
 			})}
+
+			{/* axis line */}
+			<g
+				// clipPath="url(#areaClipPath)"
+				transform="translate(0,0)"
+			>
+				<line
+					x1={0}
+					x2={0}
+					y1={area.y1}
+					y2={area.y2}
+					stroke={axisLineColor}
+					strokeWidth={4}
+				/>
+			</g>
 		</svg>
 	);
 };
