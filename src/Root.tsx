@@ -1117,6 +1117,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
+						// width={videoSizes.widescreen_16x9.width}
 						width={videoSizes.widescreen_16x9.width}
 						height={videoSizes.widescreen_16x9.height * 2}
 						schema={periodScaleDevCompositionSchema}
@@ -1138,7 +1139,7 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
-						width={videoSizes.widescreen_16x9.width}
+						width={videoSizes.widescreen_16x9.width * 1.5}
 						height={videoSizes.widescreen_16x9.height * 2}
 						schema={yScaleContextDevCompositionSchema}
 						defaultProps={{

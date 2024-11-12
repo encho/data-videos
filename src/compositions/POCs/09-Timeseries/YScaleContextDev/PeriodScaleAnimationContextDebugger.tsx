@@ -247,6 +247,18 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 															{JSON.stringify(sliceInfo.frameRange)}
 														</Value>
 													</Row>
+													<Row>
+														<div>{'domainIndicesFrom'}</div>
+														<Value>
+															{JSON.stringify(sliceInfo.domainIndicesFrom)}
+														</Value>
+													</Row>
+													<Row>
+														<div>{'domainIndicesTo'}</div>
+														<Value>
+															{JSON.stringify(sliceInfo.domainIndicesTo)}
+														</Value>
+													</Row>
 												</div>
 											);
 										})}

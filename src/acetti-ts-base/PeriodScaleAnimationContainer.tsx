@@ -49,16 +49,10 @@ export type TPeriodScaleAnimationContext = {
 		slices: {
 			sliceIndex: number;
 			frameRange: {startFrame: number; endFrame: number};
+			domainIndicesFrom: [number, number];
+			domainIndicesTo: [number, number];
 		}[];
 	}[];
-	// allSlicesInfo: {
-	// 	index: number;
-	// 	transitionIndex: number;
-	// 	transitionSliceIndex: number;
-	// 	frameRange: {startFrame: number; endFrame: number};
-	// 	domainIndicesFrom: [number, number];
-	// 	domainIndicesTo: [number, number];
-	// };
 };
 
 type TChildrenFuncArgs = TPeriodScaleAnimationContext;
@@ -107,10 +101,11 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		[transitionSpecs]
 	);
 
-	// console.log({frameRanges});
 	const allTransitionsAndSlicesOverview = useMemo(() => {
-		return frameRanges.map((frameRange, transitionIndex) => {
-			const currentTransition = transitions[transitionIndex];
+		console.log('calculating a lot of stuff....');
+		return frameRanges.map((transitionFrameRange, transitionIndex) => {
+			const currentTransition: TTransitionsItem = transitions[transitionIndex];
+			invariant(currentTransition);
 			const currentTransitionSpec = currentTransition.transitionSpec;
 			const durationInSeconds = currentTransitionSpec.durationInFrames / fps;
 			const numberOfSlices =
@@ -118,22 +113,72 @@ export const PeriodScaleAnimationContainer: React.FC<{
 				Math.floor(durationInSeconds / IDEAL_SLICE_DURATION_IN_SECONDS);
 
 			const currentTransitionSlicesFrameRanges = divideFrameRange(
-				frameRange,
+				transitionFrameRange,
 				numberOfSlices
 			);
 
 			return {
 				transitionIndex,
-				frameRange,
+				frameRange: transitionFrameRange,
 				// TODO change info in transitions to domainIndicesFrom and domainIndicesTo naming
 				domainIndicesFrom: currentTransition.fromDomainIndices,
 				domainIndicesTo: currentTransition.toDomainIndices,
 				numberOfSlices,
 				slices: currentTransitionSlicesFrameRanges.map(
 					(sliceFrameRange, sliceIndex) => {
+						const sliceDomainIndicesFrom_0 = interpolate(
+							sliceFrameRange.startFrame,
+							[transitionFrameRange.startFrame, transitionFrameRange.endFrame],
+							[
+								currentTransition.fromDomainIndices[0],
+								currentTransition.toDomainIndices[0],
+							],
+							{easing: currentTransitionSpec.easingFunction}
+						);
+						const sliceDomainIndicesFrom_1 = interpolate(
+							sliceFrameRange.startFrame,
+							[transitionFrameRange.startFrame, transitionFrameRange.endFrame],
+							[
+								currentTransition.fromDomainIndices[1],
+								currentTransition.toDomainIndices[1],
+							],
+							{easing: currentTransitionSpec.easingFunction}
+						);
+
+						const sliceDomainIndicesFrom = [
+							sliceDomainIndicesFrom_0,
+							sliceDomainIndicesFrom_1,
+						] as [number, number];
+
+						const sliceDomainIndicesTo_0 = interpolate(
+							sliceFrameRange.endFrame,
+							[transitionFrameRange.startFrame, transitionFrameRange.endFrame],
+							[
+								currentTransition.fromDomainIndices[0],
+								currentTransition.toDomainIndices[0],
+							],
+							{easing: currentTransitionSpec.easingFunction}
+						);
+						const sliceDomainIndicesTo_1 = interpolate(
+							sliceFrameRange.endFrame,
+							[transitionFrameRange.startFrame, transitionFrameRange.endFrame],
+							[
+								currentTransition.fromDomainIndices[1],
+								currentTransition.toDomainIndices[1],
+							],
+							{easing: currentTransitionSpec.easingFunction}
+						);
+
+						const sliceDomainIndicesTo = [
+							sliceDomainIndicesTo_0,
+							sliceDomainIndicesTo_1,
+						] as [number, number];
+
 						return {
 							sliceIndex,
 							frameRange: sliceFrameRange,
+							domainIndicesTo: sliceDomainIndicesTo,
+							domainIndicesFrom: sliceDomainIndicesFrom,
 						};
 					}
 				),
