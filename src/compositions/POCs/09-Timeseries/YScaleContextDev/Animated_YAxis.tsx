@@ -232,6 +232,8 @@ export const Animated_YAxis: React.FC<{
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
+			opacity: 1,
+			color: tickLabelColorUpdate,
 		};
 	});
 
@@ -259,6 +261,7 @@ export const Animated_YAxis: React.FC<{
 			textAnchor: endLabel.textAnchor,
 			marginLeft,
 			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
+			color: tickLabelColorEnter,
 		};
 	});
 
@@ -286,6 +289,7 @@ export const Animated_YAxis: React.FC<{
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
 			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
+			color: tickLabelColorExit,
 		};
 	});
 
@@ -305,7 +309,8 @@ export const Animated_YAxis: React.FC<{
 				}}
 			>
 				{/* enterLabels labels  */}
-				{enterLabels.map((it, i) => {
+				{/* {enterLabels.map((it, i) => { */}
+				{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
 					return (
 						<div
 							key={i}
@@ -313,6 +318,7 @@ export const Animated_YAxis: React.FC<{
 								position: 'absolute',
 								top: it.value - tickLabelCapHeight / 2,
 								left: TICK_LINE_SIZE + it.marginLeft,
+								// backgroundColor: 'blue',
 							}}
 						>
 							<TypographyStyle
@@ -321,7 +327,7 @@ export const Animated_YAxis: React.FC<{
 							>
 								<div
 									style={{
-										color: tickColorEnter,
+										color: it.color,
 										opacity: it.opacity,
 									}}
 								>
@@ -332,6 +338,7 @@ export const Animated_YAxis: React.FC<{
 					);
 				})}
 			</div>
+
 			<svg
 				style={{
 					overflow: 'visible',
@@ -367,7 +374,7 @@ export const Animated_YAxis: React.FC<{
 				})} */}
 
 				{/* update labels  */}
-				{updateLabels.map((it, i) => {
+				{/* {updateLabels.map((it, i) => {
 					return (
 						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 							<text
@@ -384,10 +391,10 @@ export const Animated_YAxis: React.FC<{
 							</text>
 						</g>
 					);
-				})}
+				})} */}
 
 				{/* exit labels  */}
-				{exitLabels.map((it, i) => {
+				{/* {exitLabels.map((it, i) => {
 					return (
 						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
 							<text
@@ -404,7 +411,7 @@ export const Animated_YAxis: React.FC<{
 							</text>
 						</g>
 					);
-				})}
+				})} */}
 
 				{/* enter ticks  */}
 				{enterTicks.map((it, i) => {
