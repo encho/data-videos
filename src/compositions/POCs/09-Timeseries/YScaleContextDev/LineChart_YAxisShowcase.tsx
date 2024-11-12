@@ -16,6 +16,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	yScaleAnimationContext: TYScaleAnimationContext;
 	timeSeries: TimeSeries;
+	timeSeries2: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
@@ -24,6 +25,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 }> = ({
 	layoutAreas,
 	timeSeries,
+	timeSeries2,
 	periodScaleAnimationContext,
 	yScaleAnimationContext,
 }) => {
@@ -45,6 +47,17 @@ export const LineChart_YAxisShowcase: React.FC<{
 					yScale={yScaleAnimationContext.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
+				/>
+			</Position>
+			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
+			>
+				<AnimatedLine
+					lineColor={'orange'}
+					periodsScale={periodScaleAnimationContext.periodsScale}
+					yScale={yScaleAnimationContext.yScale}
+					area={layoutAreas.plot}
+					timeSeries={timeSeries2}
 				/>
 			</Position>
 			<Position

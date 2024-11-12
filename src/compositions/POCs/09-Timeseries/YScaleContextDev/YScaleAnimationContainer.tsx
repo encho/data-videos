@@ -19,7 +19,7 @@ type TChildrenFuncArgs = TYScaleAnimationContext;
 export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	area: TGridLayoutArea;
-	timeSeries: TimeSeries;
+	timeSeriesArray: TimeSeries[];
 	domainType: 'ZERO' | 'VISIBLE';
 	paddingPerc?: number;
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
@@ -27,7 +27,7 @@ export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext,
 	domainType,
 	area,
-	timeSeries,
+	timeSeriesArray,
 	paddingPerc = 0.1,
 	children,
 }) => {
@@ -53,16 +53,29 @@ export const YScaleAnimationContainer: React.FC<{
 	const yDomainProp = undefined;
 
 	if (currentTransitionType === 'DEFAULT') {
-		const yDomainData =
-			yDomainProp ||
+		const yDomains = timeSeriesArray.map((ts) =>
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				timeSeries,
+				ts,
 				[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
 					number,
 					number
 				],
 				paddingPerc
-			);
+			)
+		);
+
+		const yDomainDataMin = Math.min(...yDomains.map((it) => it[0]));
+		const yDomainDataMax = Math.max(...yDomains.map((it) => it[1]));
+		const yDomainData = [yDomainDataMin, yDomainDataMax] as [number, number];
+
+		// const yDomainData = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+		// 	timeSeries,
+		// 	[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
+		// 		number,
+		// 		number
+		// 	],
+		// 	paddingPerc
+		// );
 
 		const yDomain =
 			domainType === 'VISIBLE'
@@ -71,24 +84,54 @@ export const YScaleAnimationContainer: React.FC<{
 
 		yScale = scaleLinear().domain(yDomain).range([area.height, 0]);
 	} else if (currentTransitionType === 'ZOOM') {
-		const yDomainFromData =
+		// const yDomainFromData =
+		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+		// 		timeSeries,
+		// 		fromDomainIndices,
+		// 		paddingPerc
+		// 	);
+
+		const yDomainsFrom = timeSeriesArray.map((ts) =>
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				timeSeries,
+				ts,
 				fromDomainIndices,
 				paddingPerc
-			);
+			)
+		);
+
+		const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
+		const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
+		const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
+			number,
+			number
+		];
 
 		const yDomainFrom =
 			domainType === 'VISIBLE'
 				? yDomainFromData
 				: ([0, yDomainFromData[1]] as [number, number]);
 
-		const yDomainToData =
+		// const yDomainToData =
+		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+		// 		timeSeries,
+		// 		toDomainIndices,
+		// 		paddingPerc
+		// 	);
+
+		const yDomainsTo = timeSeriesArray.map((ts) =>
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				timeSeries,
+				ts,
 				toDomainIndices,
 				paddingPerc
-			);
+			)
+		);
+
+		const yDomainToDataMin = Math.min(...yDomainsTo.map((it) => it[0]));
+		const yDomainToDataMax = Math.max(...yDomainsTo.map((it) => it[1]));
+		const yDomainToData = [yDomainToDataMin, yDomainToDataMax] as [
+			number,
+			number
+		];
 
 		const yDomainTo =
 			domainType === 'VISIBLE'
@@ -118,22 +161,50 @@ export const YScaleAnimationContainer: React.FC<{
 		throw Error('Unknown transitionType');
 	}
 
-	const yDomainFromData =
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-			timeSeries,
-			paddingPerc
-		);
+	// const yDomainFromData =
+	// 	periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
+	// 		timeSeries,
+	// 		paddingPerc
+	// 	);
 
-	const yDomainToData =
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
-			timeSeries,
+	const yDomainsFrom = timeSeriesArray.map((ts) =>
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
+			ts,
 			paddingPerc
-		);
+		)
+	);
+
+	const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
+	const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
+	const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
+		number,
+		number
+	];
 
 	const yDomainFrom =
 		domainType === 'VISIBLE'
 			? yDomainFromData
 			: ([0, yDomainFromData[1]] as [number, number]);
+
+	const yDomainsTo = timeSeriesArray.map((ts) =>
+		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
+			ts,
+			paddingPerc
+		)
+	);
+
+	const yDomainToDataMin = Math.min(...yDomainsTo.map((it) => it[0]));
+	const yDomainToDataMax = Math.max(...yDomainsTo.map((it) => it[1]));
+	const yDomainToData = [yDomainToDataMin, yDomainToDataMax] as [
+		number,
+		number
+	];
+
+	// const yDomainToData =
+	// 	periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
+	// 		timeSeries,
+	// 		paddingPerc
+	// 	);
 
 	const yDomainTo =
 		domainType === 'VISIBLE'

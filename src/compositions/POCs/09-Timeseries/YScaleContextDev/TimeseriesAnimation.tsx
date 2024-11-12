@@ -1,5 +1,5 @@
 import {useVideoConfig, Easing, interpolate} from 'remotion';
-import {ReactNode} from 'react';
+import {ReactNode, useMemo} from 'react';
 
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
@@ -73,6 +73,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 			Math.floor(timeSeries.length * 0.75),
 		] as [number, number],
 	};
+
+	const timeSeries2 = useMemo(() => {
+		return timeSeries.map((it) => ({...it, value: it.value * 2}));
+	}, []);
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -184,11 +188,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
 													}
-													timeSeries={timeSeries}
+													timeSeriesArray={[timeSeries, timeSeries2]}
 													area={chartLayout.areas.yAxis}
 													// domainType="VISIBLE"
 													domainType="ZERO"
-													paddingPerc={0.1}
+													paddingPerc={0.2}
 												>
 													{(yScaleAnimationContext) => {
 														return (
@@ -198,6 +202,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																}
 																yScaleAnimationContext={yScaleAnimationContext}
 																timeSeries={timeSeries}
+																timeSeries2={timeSeries2}
 																layoutAreas={{
 																	xAxis: chartLayout.areas.xAxis,
 																	plot: chartLayout.areas.plot,
