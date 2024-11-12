@@ -35,9 +35,9 @@ export const Animated_XAxis: React.FC<{
 	// TODO from Theme
 	// sizes and distances
 	// ------------------------------------------------------------
-	const TICK_LINE_SIZE = 24;
-	const TICK_TEXT_FONT_SIZE = 24;
-	const TICK_TEXT_FONT_WEIGHT = 500;
+	const TICK_LINE_SIZE = 24; // TODO into theme
+	const TICK_LINE_WIDTH = 4; // TODO into theme
+	const AXIS_LINE_WIDTH = 4; // TODO into theme
 
 	const {theme: fullTheme, baseline: pageBaseline} = usePage();
 
@@ -144,6 +144,7 @@ export const Animated_XAxis: React.FC<{
 			id: tickId,
 			value,
 			opacity: 1,
+			color: tickColorUpdate,
 		};
 	});
 
@@ -169,6 +170,7 @@ export const Animated_XAxis: React.FC<{
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+			color: tickColorEnter,
 		};
 	});
 
@@ -194,6 +196,7 @@ export const Animated_XAxis: React.FC<{
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+			color: tickColorExit,
 		};
 	});
 
@@ -490,8 +493,8 @@ export const Animated_XAxis: React.FC<{
 					</clipPath>
 				</defs>
 
-				{/* enter ticks  */}
-				{enterTicks.map((it, i) => {
+				{/* all ticks  */}
+				{[...updateTicks, ...enterTicks, ...exitTicks].map((it, i) => {
 					return (
 						<g
 							key={i}
@@ -503,51 +506,9 @@ export const Animated_XAxis: React.FC<{
 								x2={it.value}
 								y1={0}
 								y2={TICK_LINE_SIZE}
-								// stroke={theme.tickColor}
-								stroke={tickColorEnter}
-								strokeWidth={4}
+								stroke={it.color}
+								strokeWidth={TICK_LINE_WIDTH}
 								opacity={it.opacity}
-							/>
-						</g>
-					);
-				})}
-
-				{/* exit ticks  */}
-				{exitTicks.map((it, i) => {
-					return (
-						<g
-							key={i}
-							clipPath="url(#xAxisAreaClipPath)"
-							transform="translate(0,0)"
-						>
-							<line
-								x1={it.value}
-								x2={it.value}
-								y1={0}
-								y2={TICK_LINE_SIZE}
-								// stroke={theme.tickColor}
-								// stroke={it.color}
-								stroke={tickColorExit}
-								strokeWidth={4}
-								opacity={it.opacity}
-								// opacity={1}
-							/>
-						</g>
-					);
-				})}
-
-				{updateTicks.map((xTick) => {
-					return (
-						<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-							<line
-								x1={xTick.value}
-								x2={xTick.value}
-								y1={0}
-								y2={TICK_LINE_SIZE}
-								// stroke={theme.tickColor}
-								stroke={tickColorUpdate}
-								strokeWidth={4}
-								opacity={xTick.opacity}
 							/>
 						</g>
 					);
@@ -561,7 +522,7 @@ export const Animated_XAxis: React.FC<{
 						y1={0}
 						y2={0}
 						stroke={axisLineColor}
-						strokeWidth={4}
+						strokeWidth={AXIS_LINE_WIDTH}
 					/>
 				</g>
 			</svg>
@@ -572,8 +533,6 @@ export const Animated_XAxis: React.FC<{
 // *******************************************
 // TODO factor these funcitionalities out
 // *******************************************
-
-// type TTheme_XAxis = ThemeType['xAxis'];
 
 const getTick = (axisSpec: TXAxisSpec, tickId: string) => {
 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);
