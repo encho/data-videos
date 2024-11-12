@@ -46,6 +46,10 @@ export type TPeriodScaleAnimationContext = {
 		numberOfSlices: number;
 		domainIndicesFrom: [number, number];
 		domainIndicesTo: [number, number];
+		slices: {
+			sliceIndex: number;
+			frameRange: {startFrame: number; endFrame: number};
+		}[];
 	}[];
 	// allSlicesInfo: {
 	// 	index: number;
@@ -108,12 +112,15 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		return frameRanges.map((frameRange, transitionIndex) => {
 			const currentTransition = transitions[transitionIndex];
 			const currentTransitionSpec = currentTransition.transitionSpec;
-
 			const durationInSeconds = currentTransitionSpec.durationInFrames / fps;
-
 			const numberOfSlices =
 				currentTransitionSpec.numberOfSlices ||
 				Math.floor(durationInSeconds / IDEAL_SLICE_DURATION_IN_SECONDS);
+
+			const currentTransitionSlicesFrameRanges = divideFrameRange(
+				frameRange,
+				numberOfSlices
+			);
 
 			return {
 				transitionIndex,
@@ -122,6 +129,14 @@ export const PeriodScaleAnimationContainer: React.FC<{
 				domainIndicesFrom: currentTransition.fromDomainIndices,
 				domainIndicesTo: currentTransition.toDomainIndices,
 				numberOfSlices,
+				slices: currentTransitionSlicesFrameRanges.map(
+					(sliceFrameRange, sliceIndex) => {
+						return {
+							sliceIndex,
+							frameRange: sliceFrameRange,
+						};
+					}
+				),
 			};
 		});
 	}, [frameRanges, transitions]);

@@ -190,11 +190,13 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 					{allTransitionsAndSlicesOverview.map((it) => {
 						const isActive = it.transitionIndex === currentTransitionInfo.index;
 
+						if (!isActive) return null;
+
 						return (
 							<div
 								style={{
 									margin: 5,
-									border: isActive ? '2px yellow solid' : undefined,
+									border: isActive ? '3px yellow solid' : undefined,
 								}}
 							>
 								<Row>
@@ -216,6 +218,40 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 								<Row>
 									<div>{'domainIndicesTo'}</div>
 									<Value>{JSON.stringify(it.domainIndicesTo)}</Value>
+								</Row>
+								<Row>
+									<div>{'slices'}</div>
+									<Value>
+										{it.slices.map((sliceInfo) => {
+											const isActiveSlice =
+												sliceInfo.sliceIndex === currentSliceInfo.index;
+											return (
+												<div
+													style={{
+														margin: 5,
+
+														border: isActiveSlice
+															? '3px yellow solid'
+															: undefined,
+													}}
+												>
+													<Row>
+														<div>{'sliceIndex'}</div>
+														<Value>
+															{JSON.stringify(sliceInfo.sliceIndex)}
+														</Value>
+													</Row>
+													<Row>
+														<div>{'frameRange'}</div>
+														<Value>
+															{JSON.stringify(sliceInfo.frameRange)}
+														</Value>
+													</Row>
+												</div>
+											);
+										})}
+										{/* {JSON.stringify(it.slices)} */}
+									</Value>
 								</Row>
 							</div>
 						);
