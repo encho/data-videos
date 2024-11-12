@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
-
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {TXAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
@@ -39,7 +39,9 @@ export const Animated_XAxis: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	const {theme: fullTheme} = usePage();
+	const {theme: fullTheme, baseline: pageBaseline} = usePage();
+
+	const THE_BASELINE = pageBaseline;
 
 	// TODO rename to xAxisTheme e.g.
 	const theme = fullTheme.xAxis;
@@ -101,8 +103,7 @@ export const Animated_XAxis: React.FC<{
 
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		// fps * 0.8
-		fps * 1
+		fps * 1 // TODO this duration setting into theme
 	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -223,6 +224,7 @@ export const Animated_XAxis: React.FC<{
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
 			opacity: 1,
+			color: tickLabelColorUpdate,
 		};
 	});
 
@@ -251,6 +253,7 @@ export const Animated_XAxis: React.FC<{
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(endLabel.periodFloatIndex),
+			color: tickLabelColorEnter,
 		};
 	});
 
@@ -282,6 +285,7 @@ export const Animated_XAxis: React.FC<{
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(startLabel.periodFloatIndex),
+			color: tickLabelColorExit,
 		};
 	});
 
@@ -387,252 +391,222 @@ export const Animated_XAxis: React.FC<{
 		}
 	);
 
+	// typography
+	const tickLabelStyle = fullTheme.typography.textStyles.datavizTickLabel;
+	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * THE_BASELINE;
+
 	return (
-		<svg
-			style={{
-				overflow: 'visible',
-			}}
-		>
-			<defs>
-				<clipPath id="xAxisAreaClipPath_____xxxxxxx">
-					<rect x={0} y={0} width={area.width} height={area.height} />
-				</clipPath>
-			</defs>
-
-			{/* enterLabels labels  */}
-			{enterLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
-						<text
-							textAnchor={it.textAnchor}
-							fill={tickLabelColorEnter}
-							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							alignmentBaseline="baseline"
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
-							opacity={it.opacity}
+		<div style={{position: 'relative'}}>
+			<div
+				style={{
+					overflow: 'visible',
+					position: 'relative',
+					width: area.width,
+					height: area.height,
+					backgroundColor: 'lightgray',
+				}}
+			>
+				{/* update labels */}
+				{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
+					return (
+						// TODO: how to address textAnchor??
+						<div
+							key={i}
+							style={{
+								position: 'absolute',
+								top: tickLabelCapHeight, // ???
+								left: it.value + it.marginLeft,
+							}}
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<TypographyStyle
+								typographyStyle={tickLabelStyle}
+								baseline={THE_BASELINE}
+							>
+								<div
+									style={{
+										color: it.color,
+										opacity: it.opacity,
+									}}
+								>
+									{it.label}
+								</div>
+							</TypographyStyle>
+						</div>
+					);
+				})}
+			</div>
 
-			{/* update labels  */}
-			{updateLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
-						<text
-							textAnchor={it.textAnchor}
-							// fill={theme.color} // TODO get a grip on the colors
-							// fill={it.color}
-							opacity={it.opacity}
-							fill={tickLabelColorUpdate}
-							alignmentBaseline="baseline"
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
+			<svg
+				style={{
+					position: 'absolute',
+					overflow: 'visible',
+					top: 0,
+					left: 0,
+				}}
+			>
+				<defs>
+					<clipPath id="xAxisAreaClipPath_____xxxxxxx">
+						<rect x={0} y={0} width={area.width} height={area.height} />
+					</clipPath>
+				</defs>
+
+				{/* update secondary labels  */}
+				{updateSecondaryLabels.map((it, i) => {
+					return (
+						<g
+							key={i}
+							clipPath="url(#xAxisAreaClipPath)"
+							// transform="translate(0,40)"
+							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<text
+								textAnchor={it.textAnchor}
+								// fill={theme.color}
+								fill={secondaryTickLabelColorUpdate}
+								alignmentBaseline="baseline"
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={TICK_TEXT_FONT_SIZE}
+								x={it.value + it.marginLeft}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
 
-			{/* exit labels  */}
-			{exitLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
-						<text
-							textAnchor={it.textAnchor}
-							alignmentBaseline="baseline"
-							// fill={theme.color}
-							fill={tickLabelColorExit}
-							// fontFamily={fontFamilyXTicklabels}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
-							opacity={it.opacity}
+				{/* enter secondary labels  */}
+				{enterSecondaryLabels.map((it, i) => {
+					return (
+						<g
+							key={i}
+							clipPath="url(#xAxisAreaClipPath)"
+							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
+							// transform="translate(0,40)"
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<text
+								textAnchor={it.textAnchor}
+								// fill={theme.color}
+								fill={secondaryTickLabelColorEnter}
+								// fontFamily={fontFamilyXTicklabels}
+								// fontSize={styling.xTickValuesFontSize}
+								alignmentBaseline="baseline"
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={TICK_TEXT_FONT_SIZE}
+								x={it.value + it.marginLeft}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
 
-			{/* update secondary labels  */}
-			{updateSecondaryLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						// transform="translate(0,40)"
-						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-					>
-						<text
-							textAnchor={it.textAnchor}
-							// fill={theme.color}
-							fill={secondaryTickLabelColorUpdate}
-							alignmentBaseline="baseline"
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
-							opacity={it.opacity}
+				{/* exit secondary labels  */}
+				{exitSecondaryLabels.map((it, i) => {
+					return (
+						<g
+							key={i}
+							clipPath="url(#xAxisAreaClipPath)"
+							// transform="translate(0,40)"
+							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<text
+								textAnchor={it.textAnchor}
+								alignmentBaseline="baseline"
+								// fill={theme.color}
+								fill={secondaryTickLabelColorExit}
+								// fontFamily={fontFamilyXTicklabels}
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={TICK_TEXT_FONT_SIZE}
+								x={it.value + it.marginLeft}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
 
-			{/* enter secondary labels  */}
-			{enterSecondaryLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-						// transform="translate(0,40)"
-					>
-						<text
-							textAnchor={it.textAnchor}
-							// fill={theme.color}
-							fill={secondaryTickLabelColorEnter}
-							// fontFamily={fontFamilyXTicklabels}
-							// fontSize={styling.xTickValuesFontSize}
-							alignmentBaseline="baseline"
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
-							opacity={it.opacity}
+				{/* enter ticks  */}
+				{enterTicks.map((it, i) => {
+					return (
+						<g
+							key={i}
+							clipPath="url(#xAxisAreaClipPath)"
+							transform="translate(0,0)"
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<line
+								x1={it.value}
+								x2={it.value}
+								y1={0}
+								y2={TICK_LINE_SIZE}
+								// stroke={theme.tickColor}
+								stroke={tickColorEnter}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
 
-			{/* exit secondary labels  */}
-			{exitSecondaryLabels.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						// transform="translate(0,40)"
-						transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-					>
-						<text
-							textAnchor={it.textAnchor}
-							alignmentBaseline="baseline"
-							// fill={theme.color}
-							fill={secondaryTickLabelColorExit}
-							// fontFamily={fontFamilyXTicklabels}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={TICK_TEXT_FONT_SIZE}
-							x={it.value + it.marginLeft}
-							opacity={it.opacity}
+				{/* exit ticks  */}
+				{exitTicks.map((it, i) => {
+					return (
+						<g
+							key={i}
+							clipPath="url(#xAxisAreaClipPath)"
+							transform="translate(0,0)"
 						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
+							<line
+								x1={it.value}
+								x2={it.value}
+								y1={0}
+								y2={TICK_LINE_SIZE}
+								// stroke={theme.tickColor}
+								// stroke={it.color}
+								stroke={tickColorExit}
+								strokeWidth={4}
+								opacity={it.opacity}
+								// opacity={1}
+							/>
+						</g>
+					);
+				})}
 
-			{/* enter ticks  */}
-			{enterTicks.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
-						<line
-							x1={it.value}
-							x2={it.value}
-							y1={0}
-							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
-							stroke={tickColorEnter}
-							strokeWidth={4}
-							opacity={it.opacity}
-						/>
-					</g>
-				);
-			})}
+				{updateTicks.map((xTick) => {
+					return (
+						<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+							<line
+								x1={xTick.value}
+								x2={xTick.value}
+								y1={0}
+								y2={TICK_LINE_SIZE}
+								// stroke={theme.tickColor}
+								stroke={tickColorUpdate}
+								strokeWidth={4}
+								opacity={xTick.opacity}
+							/>
+						</g>
+					);
+				})}
 
-			{/* exit ticks  */}
-			{exitTicks.map((it, i) => {
-				return (
-					<g
-						key={i}
-						clipPath="url(#xAxisAreaClipPath)"
-						transform="translate(0,0)"
-					>
-						<line
-							x1={it.value}
-							x2={it.value}
-							y1={0}
-							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
-							// stroke={it.color}
-							stroke={tickColorExit}
-							strokeWidth={4}
-							opacity={it.opacity}
-							// opacity={1}
-						/>
-					</g>
-				);
-			})}
-
-			{updateTicks.map((xTick) => {
-				return (
-					<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-						<line
-							x1={xTick.value}
-							x2={xTick.value}
-							y1={0}
-							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
-							stroke={tickColorUpdate}
-							strokeWidth={4}
-							opacity={xTick.opacity}
-						/>
-					</g>
-				);
-			})}
-
-			{/* axis line */}
-			<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
-				<line
-					x1={area.x1}
-					x2={area.x2}
-					y1={0}
-					y2={0}
-					stroke={axisLineColor}
-					strokeWidth={4}
-				/>
-			</g>
-		</svg>
+				{/* axis line */}
+				<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+					<line
+						x1={area.x1}
+						x2={area.x2}
+						y1={0}
+						y2={0}
+						stroke={axisLineColor}
+						strokeWidth={4}
+					/>
+				</g>
+			</svg>
+		</div>
 	);
 };
 

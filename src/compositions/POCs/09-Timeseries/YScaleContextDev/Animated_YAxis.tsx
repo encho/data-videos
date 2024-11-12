@@ -141,9 +141,6 @@ export const Animated_YAxis: React.FC<{
 			[startTick.domainValue, endTick.domainValue]
 		);
 
-		// TODO perhaps not needed to interpolate currentDomainValue after all
-		// const domainValue = startTick.domainValue;
-		// const value = yScale(domainValue);
 		const value = yScale(currentDomainValue);
 
 		return {
@@ -212,7 +209,6 @@ export const Animated_YAxis: React.FC<{
 			[startLabel.domainValue, endLabel.domainValue]
 		);
 
-		// TODO take info about animationPercentage from passed currentTransitionSlice object!
 		const marginLeft = interpolate(
 			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
 			[0, 1],
@@ -300,7 +296,6 @@ export const Animated_YAxis: React.FC<{
 				style={{
 					overflow: 'visible',
 					position: 'relative',
-					// backgroundColor: 'lightcoral',
 					width: area.width,
 					height: area.height,
 				}}
@@ -314,7 +309,6 @@ export const Animated_YAxis: React.FC<{
 								position: 'absolute',
 								top: it.value - tickLabelCapHeight / 2,
 								left: TICK_LINE_SIZE + it.marginLeft,
-								// backgroundColor: 'blue',
 							}}
 						>
 							<TypographyStyle
@@ -343,20 +337,10 @@ export const Animated_YAxis: React.FC<{
 					left: 0,
 				}}
 			>
-				{/* <defs>
-					<clipPath id="areaClipPath">
-						<rect x={0} y={0} width={area.width} height={area.height} />
-					</clipPath>
-				</defs> */}
-
 				{/* all ticks  */}
 				{[...enterTicks, ...updateTicks, ...exitTicks].map((it, i) => {
 					return (
-						<g
-							key={i}
-							// clipPath="url(#areaClipPath)"
-							transform="translate(0,0)"
-						>
+						<g key={i} transform="translate(0,0)">
 							<line
 								y1={it.value}
 								y2={it.value}
@@ -371,10 +355,7 @@ export const Animated_YAxis: React.FC<{
 				})}
 
 				{/* axis line */}
-				<g
-					// clipPath="url(#areaClipPath)"
-					transform="translate(0,0)"
-				>
+				<g transform="translate(0,0)">
 					<line
 						x1={0}
 						x2={0}
