@@ -58,7 +58,9 @@ export const Animated_YAxis: React.FC<{
 	// TODO from Theme
 	// sizes and distances
 	// ------------------------------------------------------------
-	const TICK_LINE_SIZE = 24;
+	const TICK_LINE_SIZE = 24; // TODO into theme
+	const TICK_LINE_WIDTH = 4; // TODO into theme
+	const AXIS_LINE_WIDTH = 4; // TODO into theme
 
 	const {theme: fullTheme, baseline: pageBaseline} = usePage();
 	const theme = fullTheme.yAxis;
@@ -361,7 +363,7 @@ export const Animated_YAxis: React.FC<{
 								x1={0}
 								x2={TICK_LINE_SIZE}
 								stroke={it.color}
-								strokeWidth={4}
+								strokeWidth={TICK_LINE_WIDTH}
 								opacity={it.opacity}
 							/>
 						</g>
@@ -379,7 +381,7 @@ export const Animated_YAxis: React.FC<{
 						y1={area.y1}
 						y2={area.y2}
 						stroke={axisLineColor}
-						strokeWidth={4}
+						strokeWidth={AXIS_LINE_WIDTH}
 					/>
 				</g>
 			</svg>
