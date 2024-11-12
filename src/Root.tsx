@@ -1140,7 +1140,7 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.linkedInTall}
 						// {...videoSizes.widescreen_16x9}
 						width={videoSizes.widescreen_16x9.width * 1.5}
-						height={videoSizes.widescreen_16x9.height * 2}
+						height={videoSizes.widescreen_16x9.height * 3}
 						schema={yScaleContextDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
