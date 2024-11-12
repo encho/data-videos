@@ -1,6 +1,7 @@
 import {Sequence, useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
+import {useMemo} from 'react';
 
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -39,6 +40,21 @@ export type TPeriodScaleAnimationContext = {
 		periodsScaleFrom: TPeriodsScale;
 		periodsScaleTo: TPeriodsScale;
 	};
+	allTransitionsAndSlicesOverview: {
+		transitionIndex: number;
+		frameRange: {startFrame: number; endFrame: number};
+		numberOfSlices: number;
+		domainIndicesFrom: [number, number];
+		domainIndicesTo: [number, number];
+	}[];
+	// allSlicesInfo: {
+	// 	index: number;
+	// 	transitionIndex: number;
+	// 	transitionSliceIndex: number;
+	// 	frameRange: {startFrame: number; endFrame: number};
+	// 	domainIndicesFrom: [number, number];
+	// 	domainIndicesTo: [number, number];
+	// };
 };
 
 type TChildrenFuncArgs = TPeriodScaleAnimationContext;
@@ -67,15 +83,48 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	transitions,
 	children,
 }) => {
-	const transitionSpecs = transitions.map((it) => it.transitionSpec);
+	// TODO from theme
+	// determine number of slices if they are not passed, s.t. a slice lasts around IDEAL_SLICE_DURATION_IN_SECONDS seconds
+	const IDEAL_SLICE_DURATION_IN_SECONDS = 0.6;
+
+	const transitionSpecs = useMemo(
+		() => transitions.map((it) => it.transitionSpec),
+		[transitions]
+	);
 
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
 
-	const dates = timeSeries.map((it) => it.date);
+	const dates = useMemo(() => timeSeries.map((it) => it.date), [timeSeries]);
 
 	// calculating array of frameRanges with shape {startFrame: number; endFrame: number}[]
-	const frameRanges = calculateFrameRanges(transitionSpecs);
+	const frameRanges = useMemo(
+		() => calculateFrameRanges(transitionSpecs),
+		[transitionSpecs]
+	);
+
+	// console.log({frameRanges});
+	const allTransitionsAndSlicesOverview = useMemo(() => {
+		return frameRanges.map((frameRange, transitionIndex) => {
+			const currentTransition = transitions[transitionIndex];
+			const currentTransitionSpec = currentTransition.transitionSpec;
+
+			const durationInSeconds = currentTransitionSpec.durationInFrames / fps;
+
+			const numberOfSlices =
+				currentTransitionSpec.numberOfSlices ||
+				Math.floor(durationInSeconds / IDEAL_SLICE_DURATION_IN_SECONDS);
+
+			return {
+				transitionIndex,
+				frameRange,
+				// TODO change info in transitions to domainIndicesFrom and domainIndicesTo naming
+				domainIndicesFrom: currentTransition.fromDomainIndices,
+				domainIndicesTo: currentTransition.toDomainIndices,
+				numberOfSlices,
+			};
+		});
+	}, [frameRanges, transitions]);
 
 	const totalDuration = frameRanges[frameRanges.length - 1].endFrame + 1;
 
@@ -110,9 +159,6 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		transitions[currentTransitionIndex].fromDomainIndices;
 
 	const toDomainIndices = transitions[currentTransitionIndex].toDomainIndices;
-
-	// determine number of slices if they are not passed, s.t. a slice lasts around IDEAL_SLICE_DURATION_IN_SECONDS seconds
-	const IDEAL_SLICE_DURATION_IN_SECONDS = 0.6;
 
 	const transition_durationInSeconds =
 		currentTransitionSpec.durationInFrames / fps;
@@ -370,10 +416,10 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		<Sequence from={0} durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
-				// yScale,
 				frame,
 				currentTransitionInfo,
 				currentSliceInfo,
+				allTransitionsAndSlicesOverview,
 			})}
 		</Sequence>
 	);

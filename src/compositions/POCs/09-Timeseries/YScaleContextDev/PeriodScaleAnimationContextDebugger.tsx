@@ -14,7 +14,13 @@ function roundToTwoDecimals(num: number): number {
 
 export const PeriodScaleAnimationContextDebugger: React.FC<
 	TPeriodScaleAnimationContext
-> = ({frame, currentSliceInfo, currentTransitionInfo, periodsScale}) => {
+> = ({
+	frame,
+	currentSliceInfo,
+	currentTransitionInfo,
+	periodsScale,
+	allTransitionsAndSlicesOverview,
+}) => {
 	const {theme, contentWidth} = usePage();
 
 	const Row = ({children}: {children: ReactNode}) => {
@@ -161,67 +167,11 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 				}
 			}
 		>
-			<div
-				id="periodscale-animation-context-debugger__topLevel"
-				style={{
-					backgroundColor: 'rgba(0,100,200,0.5)',
-					padding: 20,
-					fontSize: 20,
-				}}
-			>
-				<div style={{fontSize: 50}}>
-					<div
-						style={{
-							fontWeight: 700,
-							color: theme.typography.textStyles.h1.color,
-						}}
-					>
-						topLevel
-					</div>
-				</div>
-				<div
-					style={{
-						backgroundColor: 'rgba(0,0,0,0.2)',
-						padding: 20,
-						fontSize: 20,
-					}}
-				>
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							gap: 5,
-						}}
-					>
-						{topLevelListItems.map((it) => {
-							return (
-								<Row>
-									<div>{it.key}</div>
-									<Value>{it.value}</Value>
-								</Row>
-							);
-						})}
-					</div>
-
-					<PeriodScaleZoomVisualizer
-						visibleDomainIndices={periodsScale.visibleDomainIndices}
-						fullDomainIndices={periodsScale.fullPeriodDomainIndices}
-						fromDomainIndices={
-							currentSliceInfo.periodsScaleFrom.visibleDomainIndices
-						}
-						toDomainIndices={
-							currentSliceInfo.periodsScaleTo.visibleDomainIndices
-						}
-						width={contentWidth}
-					/>
-				</div>
-			</div>
-
 			<div style={{display: 'flex', flexDirection: 'row'}}>
 				<div
-					id="periodscale-animation-context-debugger__currentTransitionInfo"
+					id="periodscale-animation-context-debugger__allTransitionsAndSlicesOverview"
 					style={{
-						backgroundColor: 'rgba(0,0,200,0.5)',
+						backgroundColor: 'rgba(0,100,200,0.5)',
 						padding: 20,
 						fontSize: 20,
 					}}
@@ -233,75 +183,187 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 								color: theme.typography.textStyles.h1.color,
 							}}
 						>
-							currentTransitionInfo
+							allTransitionsAndSlicesOverview
 						</div>
 					</div>
-					<div
-						style={{
-							backgroundColor: 'rgba(0,0,0,0.2)',
-							padding: 20,
-							fontSize: 20,
-						}}
-					>
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 5,
-							}}
-						>
-							{currentTransitionInfoListItems.map((it) => {
-								return (
-									<Row>
-										<div>{it.key}</div>
-										<Value>{it.value}</Value>
-									</Row>
-								);
-							})}
-						</div>
-					</div>
-				</div>
 
-				<div
-					id="periodscale-animation-context-debugger__currentSliceInfo"
-					style={{
-						backgroundColor: 'rgba(200,0,0,0.5)',
-						padding: 20,
-						fontSize: 20,
-					}}
-				>
-					<div style={{fontSize: 50}}>
-						<div
-							style={{
-								fontWeight: 700,
-								color: theme.typography.textStyles.h1.color,
-							}}
-						>
-							currentSliceInfo
-						</div>
-					</div>
+					{allTransitionsAndSlicesOverview.map((it) => {
+						const isActive = it.transitionIndex === currentTransitionInfo.index;
+
+						return (
+							<div
+								style={{
+									margin: 5,
+									border: isActive ? '2px yellow solid' : undefined,
+								}}
+							>
+								<Row>
+									<div>{'transitionIndex'}</div>
+									<Value>{it.transitionIndex}</Value>
+								</Row>
+								<Row>
+									<div>{'frameRange'}</div>
+									<Value>{JSON.stringify(it.frameRange)}</Value>
+								</Row>
+								<Row>
+									<div>{'numberOfSlices'}</div>
+									<Value>{JSON.stringify(it.numberOfSlices)}</Value>
+								</Row>
+								<Row>
+									<div>{'domainIndicesFrom'}</div>
+									<Value>{JSON.stringify(it.domainIndicesFrom)}</Value>
+								</Row>
+								<Row>
+									<div>{'domainIndicesTo'}</div>
+									<Value>{JSON.stringify(it.domainIndicesTo)}</Value>
+								</Row>
+							</div>
+						);
+					})}
+				</div>
+				<div id="left-panel">
 					<div
+						id="periodscale-animation-context-debugger__topLevel"
 						style={{
-							backgroundColor: 'rgba(0,0,0,0.2)',
+							backgroundColor: 'rgba(0,100,200,0.5)',
 							padding: 20,
 							fontSize: 20,
 						}}
 					>
+						<div style={{fontSize: 50}}>
+							<div
+								style={{
+									fontWeight: 700,
+									color: theme.typography.textStyles.h1.color,
+								}}
+							>
+								topLevel
+							</div>
+						</div>
 						<div
 							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								gap: 5,
+								backgroundColor: 'rgba(0,0,0,0.2)',
+								padding: 20,
+								fontSize: 20,
 							}}
 						>
-							{currentSliceInfoListItems.map((it) => {
-								return (
-									<Row>
-										<div>{it.key}</div>
-										<Value>{it.value}</Value>
-									</Row>
-								);
-							})}
+							<div
+								style={{
+									display: 'flex',
+									flexDirection: 'column',
+									gap: 5,
+								}}
+							>
+								{topLevelListItems.map((it) => {
+									return (
+										<Row>
+											<div>{it.key}</div>
+											<Value>{it.value}</Value>
+										</Row>
+									);
+								})}
+							</div>
+
+							<PeriodScaleZoomVisualizer
+								visibleDomainIndices={periodsScale.visibleDomainIndices}
+								fullDomainIndices={periodsScale.fullPeriodDomainIndices}
+								fromDomainIndices={
+									currentSliceInfo.periodsScaleFrom.visibleDomainIndices
+								}
+								toDomainIndices={
+									currentSliceInfo.periodsScaleTo.visibleDomainIndices
+								}
+								width={contentWidth / 2}
+							/>
+						</div>
+					</div>
+					<div style={{display: 'flex', flexDirection: 'row'}}>
+						<div
+							id="periodscale-animation-context-debugger__currentTransitionInfo"
+							style={{
+								backgroundColor: 'rgba(0,0,200,0.5)',
+								padding: 20,
+								fontSize: 20,
+							}}
+						>
+							<div style={{fontSize: 50}}>
+								<div
+									style={{
+										fontWeight: 700,
+										color: theme.typography.textStyles.h1.color,
+									}}
+								>
+									currentTransitionInfo
+								</div>
+							</div>
+							<div
+								style={{
+									backgroundColor: 'rgba(0,0,0,0.2)',
+									padding: 20,
+									fontSize: 20,
+								}}
+							>
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: 5,
+									}}
+								>
+									{currentTransitionInfoListItems.map((it) => {
+										return (
+											<Row>
+												<div>{it.key}</div>
+												<Value>{it.value}</Value>
+											</Row>
+										);
+									})}
+								</div>
+							</div>
+						</div>
+
+						<div
+							id="periodscale-animation-context-debugger__currentSliceInfo"
+							style={{
+								backgroundColor: 'rgba(200,0,0,0.5)',
+								padding: 20,
+								fontSize: 20,
+							}}
+						>
+							<div style={{fontSize: 50}}>
+								<div
+									style={{
+										fontWeight: 700,
+										color: theme.typography.textStyles.h1.color,
+									}}
+								>
+									currentSliceInfo
+								</div>
+							</div>
+							<div
+								style={{
+									backgroundColor: 'rgba(0,0,0,0.2)',
+									padding: 20,
+									fontSize: 20,
+								}}
+							>
+								<div
+									style={{
+										display: 'flex',
+										flexDirection: 'column',
+										gap: 5,
+									}}
+								>
+									{currentSliceInfoListItems.map((it) => {
+										return (
+											<Row>
+												<div>{it.key}</div>
+												<Value>{it.value}</Value>
+											</Row>
+										);
+									})}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

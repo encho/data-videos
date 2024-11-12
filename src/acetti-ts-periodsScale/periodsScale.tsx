@@ -349,14 +349,8 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 
 	const extentRange = max - min;
 
-	// const BOTTOM_PADDING_PERC = 0.1;
-	// const TOP_PADDING_PERC = 0.1;
-	// const BOTTOM_PADDING_PERC = 0.1;
-	// const TOP_PADDING_PERC = 0.05;
 	const BOTTOM_PADDING_PERC = paddingPerc;
 	const TOP_PADDING_PERC = paddingPerc;
-
-	console.log({BOTTOM_PADDING_PERC, TOP_PADDING_PERC});
 
 	const paddedExtent = [
 		min - BOTTOM_PADDING_PERC * extentRange,
