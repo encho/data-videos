@@ -2,6 +2,8 @@ import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 // import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+// import {usePage} from '../../../../acetti-components/PageContext';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
 import {
@@ -60,8 +62,11 @@ export const Animated_YAxis: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	const {theme: fullTheme} = usePage();
+	const {theme: fullTheme, baseline: pageBaseline} = usePage();
 	const theme = fullTheme.yAxis;
+
+	// TODO also accept optinally from props
+	const THE_BASELINE = pageBaseline;
 
 	const currentSliceInfo = periodScaleAnimationContext.currentSliceInfo;
 
@@ -73,6 +78,9 @@ export const Animated_YAxis: React.FC<{
 		// fps * 0.8
 		fps * 1
 	);
+
+	const datavizTickLabelStyle =
+		fullTheme.typography.textStyles.datavizTickLabel;
 
 	// colors
 	// ------------------------------------------------------------
@@ -281,142 +289,188 @@ export const Animated_YAxis: React.FC<{
 		};
 	});
 
+	// typography
+	const tickLabelStyle = fullTheme.typography.textStyles.datavizTickLabel;
+	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * THE_BASELINE;
+
 	return (
-		<svg
-			style={{
-				overflow: 'visible',
-			}}
-		>
-			<defs>
-				<clipPath id="areaClipPath_____xxxxxx">
-					<rect x={0} y={0} width={area.width} height={area.height} />
-				</clipPath>
-			</defs>
-
-			{/* enterLabels labels  */}
-			{enterLabels.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<text
-							textAnchor="start"
-							alignmentBaseline="middle"
-							fill={tickLabelColorEnter}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={it.value}
-							x={TICK_LINE_SIZE + it.marginLeft}
-							opacity={it.opacity}
-						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
-
-			{/* update labels  */}
-			{updateLabels.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<text
-							// textAnchor={it.textAnchor} // TODO use?
-							textAnchor="start"
-							alignmentBaseline="middle"
-							fill={tickLabelColorUpdate}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={it.value}
-							x={TICK_LINE_SIZE + it.marginLeft}
-						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
-
-			{/* exit labels  */}
-			{exitLabels.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<text
-							textAnchor="start"
-							alignmentBaseline="middle"
-							fill={tickLabelColorExit}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={it.value}
-							x={TICK_LINE_SIZE + it.marginLeft}
-							opacity={it.opacity}
-						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})}
-
-			{/* enter ticks  */}
-			{enterTicks.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<line
-							y1={it.value}
-							y2={it.value}
-							x1={0}
-							x2={TICK_LINE_SIZE}
-							stroke={tickColorEnter}
-							strokeWidth={4}
-							opacity={it.opacity}
-						/>
-					</g>
-				);
-			})}
-
-			{/* exit ticks  */}
-			{exitTicks.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<line
-							y1={it.value}
-							y2={it.value}
-							x1={0}
-							x2={TICK_LINE_SIZE}
-							stroke={tickColorExit}
-							strokeWidth={4}
-							opacity={it.opacity}
-						/>
-					</g>
-				);
-			})}
-
-			{updateTicks.map((it, i) => {
-				return (
-					<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-						<line
-							y1={it.value}
-							y2={it.value}
-							x1={0}
-							x2={TICK_LINE_SIZE}
-							stroke={tickColorUpdate}
-							strokeWidth={4}
-							opacity={it.opacity}
-						/>
-					</g>
-				);
-			})}
-
-			{/* axis line */}
-			<g
-				// clipPath="url(#areaClipPath)"
-				transform="translate(0,0)"
+		<div style={{position: 'relative'}}>
+			<div
+				style={{
+					overflow: 'visible',
+					position: 'relative',
+					// backgroundColor: 'lightcoral',
+					width: area.width,
+					height: area.height,
+				}}
 			>
-				<line
-					x1={0}
-					x2={0}
-					y1={area.y1}
-					y2={area.y2}
-					stroke={axisLineColor}
-					strokeWidth={4}
-				/>
-			</g>
-		</svg>
+				{/* enterLabels labels  */}
+				{enterLabels.map((it, i) => {
+					return (
+						<div
+							key={i}
+							style={{
+								position: 'absolute',
+								top: it.value - tickLabelCapHeight / 2,
+								left: TICK_LINE_SIZE + it.marginLeft,
+							}}
+						>
+							<TypographyStyle
+								typographyStyle={tickLabelStyle}
+								baseline={THE_BASELINE}
+							>
+								<div
+									style={{
+										color: tickColorEnter,
+										opacity: it.opacity,
+									}}
+								>
+									{it.label}
+								</div>
+							</TypographyStyle>
+						</div>
+					);
+				})}
+			</div>
+			<svg
+				style={{
+					overflow: 'visible',
+					position: 'absolute',
+					top: 0,
+					left: 0,
+				}}
+			>
+				<defs>
+					<clipPath id="areaClipPath_____xxxxxx">
+						<rect x={0} y={0} width={area.width} height={area.height} />
+					</clipPath>
+				</defs>
+
+				{/* enterLabels labels  */}
+				{/* {enterLabels.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<text
+								textAnchor="start"
+								alignmentBaseline="middle"
+								fill={tickLabelColorEnter}
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={it.value}
+								x={TICK_LINE_SIZE + it.marginLeft}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})} */}
+
+				{/* update labels  */}
+				{updateLabels.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<text
+								// textAnchor={it.textAnchor} // TODO use?
+								textAnchor="start"
+								alignmentBaseline="middle"
+								fill={tickLabelColorUpdate}
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={it.value}
+								x={TICK_LINE_SIZE + it.marginLeft}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
+
+				{/* exit labels  */}
+				{exitLabels.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<text
+								textAnchor="start"
+								alignmentBaseline="middle"
+								fill={tickLabelColorExit}
+								fontSize={TICK_TEXT_FONT_SIZE}
+								fontWeight={TICK_TEXT_FONT_WEIGHT}
+								y={it.value}
+								x={TICK_LINE_SIZE + it.marginLeft}
+								opacity={it.opacity}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
+
+				{/* enter ticks  */}
+				{enterTicks.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<line
+								y1={it.value}
+								y2={it.value}
+								x1={0}
+								x2={TICK_LINE_SIZE}
+								stroke={tickColorEnter}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+
+				{/* exit ticks  */}
+				{exitTicks.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<line
+								y1={it.value}
+								y2={it.value}
+								x1={0}
+								x2={TICK_LINE_SIZE}
+								stroke={tickColorExit}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+
+				{updateTicks.map((it, i) => {
+					return (
+						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+							<line
+								y1={it.value}
+								y2={it.value}
+								x1={0}
+								x2={TICK_LINE_SIZE}
+								stroke={tickColorUpdate}
+								strokeWidth={4}
+								opacity={it.opacity}
+							/>
+						</g>
+					);
+				})}
+
+				{/* axis line */}
+				<g
+					// clipPath="url(#areaClipPath)"
+					transform="translate(0,0)"
+				>
+					<line
+						x1={0}
+						x2={0}
+						y1={area.y1}
+						y2={area.y2}
+						stroke={axisLineColor}
+						strokeWidth={4}
+					/>
+				</g>
+			</svg>
+		</div>
 	);
 };

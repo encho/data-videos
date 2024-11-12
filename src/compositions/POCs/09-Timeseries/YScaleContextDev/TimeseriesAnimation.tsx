@@ -165,7 +165,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								width={CHART_PAGE_WIDTH}
 								height={CHART_PAGE_HEIGHT}
 								margin={CHART_PAGE_MARGIN}
-								nrBaselines={40}
+								nrBaselines={30}
 								theme={theme}
 							>
 								<Page
