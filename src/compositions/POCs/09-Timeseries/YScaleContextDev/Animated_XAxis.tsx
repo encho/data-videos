@@ -321,6 +321,7 @@ export const Animated_XAxis: React.FC<{
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
 				opacity: 1,
+				color: secondaryTickLabelColorUpdate,
 			};
 		}
 	);
@@ -354,6 +355,7 @@ export const Animated_XAxis: React.FC<{
 				opacity:
 					interpolatedOpacity *
 					getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+				color: secondaryTickLabelColorEnter,
 			};
 		}
 	);
@@ -387,6 +389,7 @@ export const Animated_XAxis: React.FC<{
 				opacity:
 					interpolatedOpacity *
 					getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+				color: secondaryTickLabelColorExit,
 			};
 		}
 	);
@@ -451,7 +454,11 @@ export const Animated_XAxis: React.FC<{
 				</defs>
 
 				{/* update secondary labels  */}
-				{updateSecondaryLabels.map((it, i) => {
+				{[
+					...enterSecondaryLabels,
+					...updateSecondaryLabels,
+					...exitSecondaryLabels,
+				].map((it, i) => {
 					return (
 						<g
 							key={i}
@@ -462,63 +469,8 @@ export const Animated_XAxis: React.FC<{
 							<text
 								textAnchor={it.textAnchor}
 								// fill={theme.color}
-								fill={secondaryTickLabelColorUpdate}
+								fill={it.color}
 								alignmentBaseline="baseline"
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={TICK_TEXT_FONT_SIZE}
-								x={it.value + it.marginLeft}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
-
-				{/* enter secondary labels  */}
-				{enterSecondaryLabels.map((it, i) => {
-					return (
-						<g
-							key={i}
-							clipPath="url(#xAxisAreaClipPath)"
-							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-							// transform="translate(0,40)"
-						>
-							<text
-								textAnchor={it.textAnchor}
-								// fill={theme.color}
-								fill={secondaryTickLabelColorEnter}
-								// fontFamily={fontFamilyXTicklabels}
-								// fontSize={styling.xTickValuesFontSize}
-								alignmentBaseline="baseline"
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={TICK_TEXT_FONT_SIZE}
-								x={it.value + it.marginLeft}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
-
-				{/* exit secondary labels  */}
-				{exitSecondaryLabels.map((it, i) => {
-					return (
-						<g
-							key={i}
-							clipPath="url(#xAxisAreaClipPath)"
-							// transform="translate(0,40)"
-							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-						>
-							<text
-								textAnchor={it.textAnchor}
-								alignmentBaseline="baseline"
-								// fill={theme.color}
-								fill={secondaryTickLabelColorExit}
-								// fontFamily={fontFamilyXTicklabels}
 								fontSize={TICK_TEXT_FONT_SIZE}
 								fontWeight={TICK_TEXT_FONT_WEIGHT}
 								y={TICK_TEXT_FONT_SIZE}
