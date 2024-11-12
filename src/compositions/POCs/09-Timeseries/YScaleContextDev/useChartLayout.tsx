@@ -10,7 +10,8 @@ import {
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 30, name: 'space'},
-	{type: 'pixel', value: 55, name: 'xAxis'},
+	{type: 'pixel', value: 60, name: 'xAxis'},
+	// {type: 'pixel', value: 55, name: 'xAxis'},
 	// {type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	// {type: 'pixel', value: 55, name: 'xAxis_days'},
 	// {type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},

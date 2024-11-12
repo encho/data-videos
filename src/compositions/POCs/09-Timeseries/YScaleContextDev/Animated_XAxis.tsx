@@ -410,33 +410,70 @@ export const Animated_XAxis: React.FC<{
 				}}
 			>
 				{/* update labels */}
-				{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
-					return (
-						// TODO: how to address textAnchor??
-						<div
-							key={i}
-							style={{
-								position: 'absolute',
-								top: tickLabelCapHeight, // ???
-								left: it.value + it.marginLeft,
-							}}
-						>
-							<TypographyStyle
-								typographyStyle={tickLabelStyle}
-								baseline={THE_BASELINE}
+
+				<div id="x-axis-labels">
+					{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
+						return (
+							// TODO: how to address textAnchor??
+							<div
+								key={i}
+								style={{
+									position: 'absolute',
+									top: tickLabelCapHeight, // ???
+									left: it.value + it.marginLeft,
+								}}
 							>
-								<div
-									style={{
-										color: it.color,
-										opacity: it.opacity,
-									}}
+								<TypographyStyle
+									typographyStyle={tickLabelStyle}
+									baseline={THE_BASELINE}
 								>
-									{it.label}
-								</div>
-							</TypographyStyle>
-						</div>
-					);
-				})}
+									<div
+										style={{
+											color: it.color,
+											opacity: it.opacity,
+										}}
+									>
+										{it.label}
+									</div>
+								</TypographyStyle>
+							</div>
+						);
+					})}
+				</div>
+
+				<div id="x-axis-secondary-labels">
+					{[
+						...enterSecondaryLabels,
+						...updateSecondaryLabels,
+						...exitSecondaryLabels,
+					].map((it, i) => {
+						return (
+							<div
+								key={i}
+								style={{
+									position: 'absolute',
+									bottom: 0,
+									left: it.value + it.marginLeft,
+								}}
+							>
+								{/* // TODO: how to deal with textAnchor */}
+								<TypographyStyle
+									typographyStyle={tickLabelStyle} // TODO secondaryTickLabelStyle
+									baseline={THE_BASELINE}
+								>
+									<div
+										style={{
+											color: it.color,
+											opacity: it.opacity,
+										}}
+									>
+										{it.label}
+									</div>
+								</TypographyStyle>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 
 			<svg
@@ -452,36 +489,6 @@ export const Animated_XAxis: React.FC<{
 						<rect x={0} y={0} width={area.width} height={area.height} />
 					</clipPath>
 				</defs>
-
-				{/* update secondary labels  */}
-				{[
-					...enterSecondaryLabels,
-					...updateSecondaryLabels,
-					...exitSecondaryLabels,
-				].map((it, i) => {
-					return (
-						<g
-							key={i}
-							clipPath="url(#xAxisAreaClipPath)"
-							// transform="translate(0,40)"
-							transform={`translate(0,${area.height - TICK_TEXT_FONT_SIZE})`}
-						>
-							<text
-								textAnchor={it.textAnchor}
-								// fill={theme.color}
-								fill={it.color}
-								alignmentBaseline="baseline"
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={TICK_TEXT_FONT_SIZE}
-								x={it.value + it.marginLeft}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
 
 				{/* enter ticks  */}
 				{enterTicks.map((it, i) => {
