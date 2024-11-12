@@ -172,9 +172,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 											<>
 												<div style={{position: 'absolute'}}>
 													<DisplayGridLayout
-														stroke={'rgba(255,0,255,0.4)'}
+														stroke={'rgba(255,0,255,0.5)'}
 														fill="transparent"
-														hide={true}
+														// hide={true}
 														areas={chartLayout.areas}
 														width={width}
 														height={height}
@@ -186,7 +186,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													}
 													timeSeries={timeSeries}
 													area={chartLayout.areas.yAxis}
-													domainType="VISIBLE"
+													// domainType="VISIBLE"
+													domainType="ZERO"
 													paddingPerc={0.1}
 												>
 													{(yScaleAnimationContext) => {

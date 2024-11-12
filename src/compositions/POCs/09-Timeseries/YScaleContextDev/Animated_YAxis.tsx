@@ -35,6 +35,9 @@ export const Animated_YAxis: React.FC<{
 	debugEnterColor?: string;
 	debugUpdateColor?: string;
 	debugExitColor?: string;
+	// TODO perhaps:
+	// axisSpecFrom?: TXAxisSpec;
+	// axisSpecTo?: TXAxisSpec;
 }> = ({
 	periodScaleAnimationContext,
 	area,
@@ -46,9 +49,13 @@ export const Animated_YAxis: React.FC<{
 	debugEnterColor,
 	debugExitColor,
 	debugUpdateColor,
+	// TODO perhaps:
+	// axisSpecFrom: axisSpecFromProp,
+	// axisSpecTo: axisSpecToProp,
 }) => {
-	// TODO acutally some of  this has to be handled by yScale context!!!!!!!!!!!!
-
+	// TODO from Theme
+	// sizes and distances
+	// ------------------------------------------------------------
 	const TICK_LINE_SIZE = 24;
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
@@ -85,6 +92,24 @@ export const Animated_YAxis: React.FC<{
 	const axisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
 	const axisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
+	// TODO how/if to implement in yScale context:
+	// *******************************************
+	const yDomain = yScale.domain();
+	const yDomainSpan = yDomain[1] - yDomain[0];
+	const getOpacityNearVisibleBoundary = (yDomainValue: number) => {
+		return interpolate(
+			yDomainValue,
+			[
+				yDomain[0] - 0.02 * yDomainSpan,
+				yDomain[0] + 0.15 * yDomainSpan,
+				yDomain[1] - 0.15 * yDomainSpan,
+				yDomain[1] + 0.02 * yDomainSpan,
+			],
+			[0, 1, 1, 0],
+			{}
+		);
+	};
+
 	// ***************************
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -104,24 +129,25 @@ export const Animated_YAxis: React.FC<{
 	// ***************************
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const startTick = getTick(axisSpecFrom, tickId);
-		// TODO bring back mixing both
-		// const endTick = getTick(axisSpecTo, tickId);
+		const endTick = getTick(axisSpecTo, tickId);
 
-		// TODO linear animation percentage here is fine, normally floatIndices are identical anyway!!!
-		// const currentPeriodFloatIndex = interpolate(
-		// 	animationPercentage,
-		// 	[0, 1],
-		// 	[startTick.periodFloatIndex, endTick.periodFloatIndex],
-		// 	{
-		// 		extrapolateLeft: 'clamp',
-		// 		extrapolateRight: 'clamp',
-		// 	}
-		// );
+		const currentDomainValue = interpolate(
+			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
+			[0, 1],
+			[startTick.domainValue, endTick.domainValue]
+		);
 
-		const domainValue = startTick.domainValue;
-		const value = yScale(domainValue);
+		// TODO perhaps not needed to interpolate currentDomainValue after all
+		// const domainValue = startTick.domainValue;
+		// const value = yScale(domainValue);
+		const value = yScale(currentDomainValue);
 
-		return {id: tickId, value};
+		return {
+			id: tickId,
+			value,
+			// opacity: getOpacityNearVisibleBoundary(currentDomainValue),
+			opacity: 1,
+		};
 	});
 
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
@@ -143,7 +169,7 @@ export const Animated_YAxis: React.FC<{
 		return {
 			id: tickId,
 			value,
-			opacity: interpolatedOpacity,
+			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
 		};
 	});
 
@@ -166,7 +192,7 @@ export const Animated_YAxis: React.FC<{
 		return {
 			id: tickId,
 			value,
-			opacity: interpolatedOpacity,
+			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
 		};
 	});
 
@@ -174,18 +200,15 @@ export const Animated_YAxis: React.FC<{
 		const startLabel = getLabel(axisSpecFrom, labelId);
 		const endLabel = getLabel(axisSpecTo, labelId);
 
-		const startY = yScale(startLabel.domainValue);
-		const endY = yScale(endLabel.domainValue);
-
-		// TODO evtl. refine
-		// TODO take info about animationPercentage from passed currentTransitionSlice object!
-		const animationPercentage = 0;
-		const currentY =
-			(1 - animationPercentage) * startY + animationPercentage * endY;
+		const currentDomainValue = interpolate(
+			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
+			[0, 1],
+			[startLabel.domainValue, endLabel.domainValue]
+		);
 
 		// TODO take info about animationPercentage from passed currentTransitionSlice object!
 		const marginLeft = interpolate(
-			animationPercentage,
+			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
 			{
@@ -197,7 +220,7 @@ export const Animated_YAxis: React.FC<{
 
 		return {
 			id: labelId,
-			value: currentY,
+			value: yScale(currentDomainValue),
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
@@ -206,7 +229,8 @@ export const Animated_YAxis: React.FC<{
 
 	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
 		const endLabel = getLabel(axisSpecTo, labelId);
-		const endY = yScale(endLabel.domainValue);
+
+		const domainValue = endLabel.domainValue;
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -222,18 +246,18 @@ export const Animated_YAxis: React.FC<{
 
 		return {
 			id: labelId,
-			value: endY,
-			opacity: interpolatedOpacity,
+			value: yScale(domainValue),
 			label: endLabel.label,
 			textAnchor: endLabel.textAnchor,
 			marginLeft,
+			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
 		};
 	});
 
 	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
 		const startLabel = getLabel(axisSpecFrom, labelId);
 
-		const endY = yScale(startLabel.domainValue);
+		const domainValue = startLabel.domainValue;
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -249,11 +273,11 @@ export const Animated_YAxis: React.FC<{
 
 		return {
 			id: labelId,
-			value: endY,
-			opacity: interpolatedOpacity,
+			value: yScale(domainValue),
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
+			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
 		};
 	});
 
@@ -264,7 +288,7 @@ export const Animated_YAxis: React.FC<{
 			}}
 		>
 			<defs>
-				<clipPath id="areaClipPath">
+				<clipPath id="areaClipPath_____xxxxxx">
 					<rect x={0} y={0} width={area.width} height={area.height} />
 				</clipPath>
 			</defs>
@@ -373,6 +397,7 @@ export const Animated_YAxis: React.FC<{
 							x2={TICK_LINE_SIZE}
 							stroke={tickColorUpdate}
 							strokeWidth={4}
+							opacity={it.opacity}
 						/>
 					</g>
 				);

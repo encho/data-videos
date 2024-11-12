@@ -32,6 +32,13 @@ export const Animated_XAxis: React.FC<{
 	debugUpdateColor,
 	debugExitColor,
 }) => {
+	// TODO from Theme
+	// sizes and distances
+	// ------------------------------------------------------------
+	const TICK_LINE_SIZE = 24;
+	const TICK_TEXT_FONT_SIZE = 24;
+	const TICK_TEXT_FONT_WEIGHT = 500;
+
 	const {theme: fullTheme} = usePage();
 
 	// TODO rename to xAxisTheme e.g.
@@ -53,13 +60,6 @@ export const Animated_XAxis: React.FC<{
 	const axisSpecTo =
 		axisSpecToProp ||
 		getAxisSpec(periodScaleTo, getAxisSpecType(periodScaleTo));
-
-	// TODO from Theme
-	// sizes and distances
-	// ------------------------------------------------------------
-	const TICK_LINE_SIZE = 24;
-	const TICK_TEXT_FONT_SIZE = 24;
-	const TICK_TEXT_FONT_WEIGHT = 500;
 
 	// colors
 	// ------------------------------------------------------------
@@ -89,12 +89,12 @@ export const Animated_XAxis: React.FC<{
 		return interpolate(
 			domainIndex,
 			[
-				visibleDomainIndices[0] - 0.01 * visibleDomainIndicesRange,
-				visibleDomainIndices[0],
-				visibleDomainIndices[1],
-				visibleDomainIndices[1] + 0.01 * visibleDomainIndicesRange,
+				visibleDomainIndices[0] - 0.02 * visibleDomainIndicesRange,
+				visibleDomainIndices[0] + 0.15 * visibleDomainIndicesRange,
+				visibleDomainIndices[1] - 0.15 * visibleDomainIndicesRange,
+				visibleDomainIndices[1] + 0.02 * visibleDomainIndicesRange,
 			],
-			[0.1, 1, 1, 0.1],
+			[0, 1, 1, 0],
 			{}
 		);
 	};
@@ -142,7 +142,7 @@ export const Animated_XAxis: React.FC<{
 		return {
 			id: tickId,
 			value,
-			opacity: getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+			opacity: 1,
 		};
 	});
 
@@ -222,7 +222,7 @@ export const Animated_XAxis: React.FC<{
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
-			opacity: getOpacityNearVisibleBoundary(interpolatedPeriodFloatIndex),
+			opacity: 1,
 		};
 	});
 
@@ -276,7 +276,6 @@ export const Animated_XAxis: React.FC<{
 		return {
 			id: labelId,
 			value: startX,
-			// opacity: interpolatedOpacity,
 			label: startLabel.label,
 			textAnchor: startLabel.textAnchor,
 			marginLeft,
@@ -317,7 +316,7 @@ export const Animated_XAxis: React.FC<{
 				label: startLabel.label,
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
-				opacity: getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
+				opacity: 1,
 			};
 		}
 	);
@@ -345,8 +344,6 @@ export const Animated_XAxis: React.FC<{
 			return {
 				id: labelId,
 				value: endX,
-				// opacity: interpolatedOpacity,
-
 				label: endLabel.label,
 				textAnchor: endLabel.textAnchor,
 				marginLeft,
@@ -380,7 +377,6 @@ export const Animated_XAxis: React.FC<{
 			return {
 				id: labelId,
 				value: startX,
-				// opacity: interpolatedOpacity,
 				label: startLabel.label,
 				textAnchor: startLabel.textAnchor,
 				marginLeft,
@@ -441,6 +437,7 @@ export const Animated_XAxis: React.FC<{
 							textAnchor={it.textAnchor}
 							// fill={theme.color} // TODO get a grip on the colors
 							// fill={it.color}
+							opacity={it.opacity}
 							fill={tickLabelColorUpdate}
 							alignmentBaseline="baseline"
 							fontSize={TICK_TEXT_FONT_SIZE}
@@ -498,6 +495,7 @@ export const Animated_XAxis: React.FC<{
 							fontWeight={TICK_TEXT_FONT_WEIGHT}
 							y={TICK_TEXT_FONT_SIZE}
 							x={it.value + it.marginLeft}
+							opacity={it.opacity}
 						>
 							{it.label}
 						</text>
@@ -617,6 +615,7 @@ export const Animated_XAxis: React.FC<{
 							// stroke={theme.tickColor}
 							stroke={tickColorUpdate}
 							strokeWidth={4}
+							opacity={xTick.opacity}
 						/>
 					</g>
 				);
