@@ -68,6 +68,10 @@ export const zThemePalette_Typography = z.object({
 		main: zColor(),
 		soft: zColor(),
 	}),
+	axisSecondaryTickLabel: z.object({
+		main: zColor(),
+		soft: zColor(),
+	}),
 	axisTick: z.object({
 		main: zColor(),
 		soft: zColor(),
@@ -166,6 +170,12 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 						capHeightInBaselines: 0.8,
 						lineGapInBaselines: 1,
 						color: palette.typography.axisTickLabel.main,
+					},
+					datavizSecondaryTickLabel: {
+						fontFamily: 'Inter-Bold',
+						capHeightInBaselines: 0.8,
+						lineGapInBaselines: 1,
+						color: palette.typography.axisSecondaryTickLabel.main,
 					},
 					dataSource: {
 						fontFamily: 'Inter-Regular',

@@ -401,6 +401,9 @@ export const Animated_XAxis: React.FC<{
 	const tickLabelStyle = fullTheme.typography.textStyles.datavizTickLabel;
 	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * THE_BASELINE;
 
+	const secondaryTickLabelStyle =
+		fullTheme.typography.textStyles.datavizSecondaryTickLabel;
+
 	return (
 		<div style={{position: 'relative'}}>
 			<div
@@ -409,11 +412,9 @@ export const Animated_XAxis: React.FC<{
 					position: 'relative',
 					width: area.width,
 					height: area.height,
-					backgroundColor: 'lightgray',
 				}}
 			>
-				{/* update labels */}
-
+				{/* all labels */}
 				<div id="x-axis-labels">
 					{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
 						return (
@@ -422,7 +423,8 @@ export const Animated_XAxis: React.FC<{
 								key={i}
 								style={{
 									position: 'absolute',
-									top: tickLabelCapHeight, // ???
+									// top: tickLabelCapHeight, // TODO from theme setting or so
+									top: TICK_LINE_SIZE - tickLabelCapHeight, // TODO from theme setting or so
 									left: it.value + it.marginLeft,
 								}}
 							>
@@ -461,7 +463,7 @@ export const Animated_XAxis: React.FC<{
 							>
 								{/* // TODO: how to deal with textAnchor */}
 								<TypographyStyle
-									typographyStyle={tickLabelStyle} // TODO secondaryTickLabelStyle
+									typographyStyle={secondaryTickLabelStyle} // TODO secondaryTickLabelStyle
 									baseline={THE_BASELINE}
 								>
 									<div
@@ -487,12 +489,6 @@ export const Animated_XAxis: React.FC<{
 					left: 0,
 				}}
 			>
-				<defs>
-					<clipPath id="xAxisAreaClipPath_____xxxxxxx">
-						<rect x={0} y={0} width={area.width} height={area.height} />
-					</clipPath>
-				</defs>
-
 				{/* all ticks  */}
 				{[...updateTicks, ...enterTicks, ...exitTicks].map((it, i) => {
 					return (
@@ -515,7 +511,7 @@ export const Animated_XAxis: React.FC<{
 				})}
 
 				{/* axis line */}
-				<g clipPath="url(#xAxisAreaClipPath)" transform="translate(0,0)">
+				<g transform="translate(0,0)">
 					<line
 						x1={area.x1}
 						x2={area.x2}

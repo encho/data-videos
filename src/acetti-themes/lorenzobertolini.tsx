@@ -46,6 +46,10 @@ const palette: ThemePalette = {
 			main: GRAYS['500'],
 			soft: GRAYS['400'],
 		},
+		axisSecondaryTickLabel: {
+			main: GRAYS['500'],
+			soft: GRAYS['400'],
+		},
 		axisTick: {
 			main: GRAYS['500'],
 			soft: GRAYS['400'],
