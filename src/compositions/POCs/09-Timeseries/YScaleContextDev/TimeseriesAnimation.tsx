@@ -78,6 +78,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		return timeSeries.map((it) => ({...it, value: it.value * 2}));
 	}, []);
 
+	const timeSeries3 = useMemo(() => {
+		return timeSeries.map((it) => ({...it, value: it.value * 4}));
+	}, []);
+
 	return (
 		<div style={{position: 'relative'}}>
 			<PeriodScaleAnimationContainer
@@ -165,7 +169,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								width={CHART_PAGE_WIDTH}
 								height={CHART_PAGE_HEIGHT}
 								margin={CHART_PAGE_MARGIN}
-								nrBaselines={30}
+								nrBaselines={36}
 								theme={theme}
 							>
 								<Page
@@ -188,7 +192,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
 													}
-													timeSeriesArray={[timeSeries, timeSeries2]}
+													timeSeriesArray={[
+														timeSeries,
+														timeSeries2,
+														timeSeries3,
+													]}
 													area={chartLayout.areas.yAxis}
 													// domainType="VISIBLE"
 													domainType="ZERO"
@@ -203,6 +211,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																yScaleAnimationContext={yScaleAnimationContext}
 																timeSeries={timeSeries}
 																timeSeries2={timeSeries2}
+																timeSeries3={timeSeries3}
 																layoutAreas={{
 																	xAxis: chartLayout.areas.xAxis,
 																	plot: chartLayout.areas.plot,

@@ -59,8 +59,6 @@ export const Animated_YAxis: React.FC<{
 	// sizes and distances
 	// ------------------------------------------------------------
 	const TICK_LINE_SIZE = 24;
-	const TICK_TEXT_FONT_SIZE = 24;
-	const TICK_TEXT_FONT_WEIGHT = 500;
 
 	const {theme: fullTheme, baseline: pageBaseline} = usePage();
 	const theme = fullTheme.yAxis;
@@ -75,12 +73,8 @@ export const Animated_YAxis: React.FC<{
 
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		// fps * 0.8
-		fps * 1
+		fps * 1 // TODO this duration setting into theme
 	);
-
-	const datavizTickLabelStyle =
-		fullTheme.typography.textStyles.datavizTickLabel;
 
 	// colors
 	// ------------------------------------------------------------
@@ -153,8 +147,8 @@ export const Animated_YAxis: React.FC<{
 		return {
 			id: tickId,
 			value,
-			// opacity: getOpacityNearVisibleBoundary(currentDomainValue),
 			opacity: 1,
+			color: tickColorUpdate,
 		};
 	});
 
@@ -178,6 +172,7 @@ export const Animated_YAxis: React.FC<{
 			id: tickId,
 			value,
 			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
+			color: tickColorEnter,
 		};
 	});
 
@@ -201,6 +196,7 @@ export const Animated_YAxis: React.FC<{
 			id: tickId,
 			value,
 			opacity: interpolatedOpacity * getOpacityNearVisibleBoundary(domainValue),
+			color: tickColorExit,
 		};
 	});
 
@@ -220,7 +216,6 @@ export const Animated_YAxis: React.FC<{
 			[0, 1],
 			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
 			{
-				// easing: Easing.bezier(0.25, 1, 0.5, 1),
 				extrapolateLeft: 'clamp',
 				extrapolateRight: 'clamp',
 			}
@@ -308,8 +303,7 @@ export const Animated_YAxis: React.FC<{
 					height: area.height,
 				}}
 			>
-				{/* enterLabels labels  */}
-				{/* {enterLabels.map((it, i) => { */}
+				{/* all labels  */}
 				{[...enterLabels, ...updateLabels, ...exitLabels].map((it, i) => {
 					return (
 						<div
@@ -347,115 +341,26 @@ export const Animated_YAxis: React.FC<{
 					left: 0,
 				}}
 			>
-				<defs>
-					<clipPath id="areaClipPath_____xxxxxx">
+				{/* <defs>
+					<clipPath id="areaClipPath">
 						<rect x={0} y={0} width={area.width} height={area.height} />
 					</clipPath>
-				</defs>
+				</defs> */}
 
-				{/* enterLabels labels  */}
-				{/* {enterLabels.map((it, i) => {
+				{/* all ticks  */}
+				{[...enterTicks, ...updateTicks, ...exitTicks].map((it, i) => {
 					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-							<text
-								textAnchor="start"
-								alignmentBaseline="middle"
-								fill={tickLabelColorEnter}
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={it.value}
-								x={TICK_LINE_SIZE + it.marginLeft}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})} */}
-
-				{/* update labels  */}
-				{/* {updateLabels.map((it, i) => {
-					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-							<text
-								// textAnchor={it.textAnchor} // TODO use?
-								textAnchor="start"
-								alignmentBaseline="middle"
-								fill={tickLabelColorUpdate}
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={it.value}
-								x={TICK_LINE_SIZE + it.marginLeft}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})} */}
-
-				{/* exit labels  */}
-				{/* {exitLabels.map((it, i) => {
-					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-							<text
-								textAnchor="start"
-								alignmentBaseline="middle"
-								fill={tickLabelColorExit}
-								fontSize={TICK_TEXT_FONT_SIZE}
-								fontWeight={TICK_TEXT_FONT_WEIGHT}
-								y={it.value}
-								x={TICK_LINE_SIZE + it.marginLeft}
-								opacity={it.opacity}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})} */}
-
-				{/* enter ticks  */}
-				{enterTicks.map((it, i) => {
-					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
+						<g
+							key={i}
+							// clipPath="url(#areaClipPath)"
+							transform="translate(0,0)"
+						>
 							<line
 								y1={it.value}
 								y2={it.value}
 								x1={0}
 								x2={TICK_LINE_SIZE}
-								stroke={tickColorEnter}
-								strokeWidth={4}
-								opacity={it.opacity}
-							/>
-						</g>
-					);
-				})}
-
-				{/* exit ticks  */}
-				{exitTicks.map((it, i) => {
-					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-							<line
-								y1={it.value}
-								y2={it.value}
-								x1={0}
-								x2={TICK_LINE_SIZE}
-								stroke={tickColorExit}
-								strokeWidth={4}
-								opacity={it.opacity}
-							/>
-						</g>
-					);
-				})}
-
-				{updateTicks.map((it, i) => {
-					return (
-						<g key={i} clipPath="url(#areaClipPath)" transform="translate(0,0)">
-							<line
-								y1={it.value}
-								y2={it.value}
-								x1={0}
-								x2={TICK_LINE_SIZE}
-								stroke={tickColorUpdate}
+								stroke={it.color}
 								strokeWidth={4}
 								opacity={it.opacity}
 							/>
