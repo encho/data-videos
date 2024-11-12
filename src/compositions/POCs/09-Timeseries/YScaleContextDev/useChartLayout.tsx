@@ -10,7 +10,7 @@ import {
 const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'fr', value: 1, name: 'plot'},
 	{type: 'pixel', value: 30, name: 'space'},
-	{type: 'pixel', value: 50, name: 'xAxis'},
+	{type: 'pixel', value: 55, name: 'xAxis'},
 	// {type: 'pixel', value: 55, name: 'xAxis'},
 	// {type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	// {type: 'pixel', value: 55, name: 'xAxis_days'},
@@ -51,24 +51,6 @@ const chartGridLayoutSpec = {
 			{name: 'xAxis'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
-		// xAxis_days: [
-		// 	{name: 'xAxis_days'},
-		// 	{name: 'plot'},
-		// 	{name: 'xAxis_days'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
-		// xAxis_monthStarts: [
-		// 	{name: 'xAxis_monthStarts'},
-		// 	{name: 'plot'},
-		// 	{name: 'xAxis_monthStarts'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
-		// xAxis_quarterStarts: [
-		// 	{name: 'xAxis_quarterStarts'},
-		// 	{name: 'plot'},
-		// 	{name: 'xAxis_quarterStarts'},
-		// 	{name: 'plot'},
-		// ] as TGridLayoutAreaSpec,
 	},
 };
 
