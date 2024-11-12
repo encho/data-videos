@@ -212,6 +212,10 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 									<Value>{JSON.stringify(it.numberOfSlices)}</Value>
 								</Row>
 								<Row>
+									<div>{'durationInSeconds'}</div>
+									<Value>{JSON.stringify(it.durationInSeconds)}</Value>
+								</Row>
+								<Row>
 									<div>{'domainIndicesFrom'}</div>
 									<Value>{JSON.stringify(it.domainIndicesFrom)}</Value>
 								</Row>

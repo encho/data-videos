@@ -46,6 +46,7 @@ export type TPeriodScaleAnimationContext = {
 		numberOfSlices: number;
 		domainIndicesFrom: [number, number];
 		domainIndicesTo: [number, number];
+		durationInSeconds: number;
 		slices: {
 			sliceIndex: number;
 			frameRange: {startFrame: number; endFrame: number};
@@ -102,7 +103,6 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	);
 
 	const allTransitionsAndSlicesOverview = useMemo(() => {
-		console.log('calculating a lot of stuff....');
 		return frameRanges.map((transitionFrameRange, transitionIndex) => {
 			const currentTransition: TTransitionsItem = transitions[transitionIndex];
 			invariant(currentTransition);
@@ -124,6 +124,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 				domainIndicesFrom: currentTransition.fromDomainIndices,
 				domainIndicesTo: currentTransition.toDomainIndices,
 				numberOfSlices,
+				durationInSeconds,
 				slices: currentTransitionSlicesFrameRanges.map(
 					(sliceFrameRange, sliceIndex) => {
 						const sliceDomainIndicesFrom_0 = interpolate(
@@ -195,7 +196,8 @@ export const PeriodScaleAnimationContainer: React.FC<{
 
 	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
 
-	const currentTransitionFrameRange = frameRanges[currentTransitionIndex];
+	const currentTransitionFrameRange =
+		allTransitionsAndSlicesOverview[currentTransitionIndex].frameRange;
 
 	const currentTransitionSpec = transitionSpecs[currentTransitionIndex];
 	const currentTransitionFrame = frame - currentTransitionFrameRange.startFrame;
@@ -215,17 +217,21 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		}
 	);
 
+	// TODO rename to domainIndicesFrom
 	const fromDomainIndices =
-		transitions[currentTransitionIndex].fromDomainIndices;
+		allTransitionsAndSlicesOverview[currentTransitionIndex].domainIndicesFrom;
 
-	const toDomainIndices = transitions[currentTransitionIndex].toDomainIndices;
+	// TODO rename to domainIndicesTo
+	const toDomainIndices =
+		allTransitionsAndSlicesOverview[currentTransitionIndex].domainIndicesTo;
 
+	// TODO rename to ???
 	const transition_durationInSeconds =
-		currentTransitionSpec.durationInFrames / fps;
+		allTransitionsAndSlicesOverview[currentTransitionIndex].durationInSeconds;
 
+	// TODO rename to ???
 	const transition_numberOfSlices =
-		currentTransitionSpec.numberOfSlices ||
-		Math.floor(transition_durationInSeconds / IDEAL_SLICE_DURATION_IN_SECONDS);
+		allTransitionsAndSlicesOverview[currentTransitionIndex].numberOfSlices;
 
 	// ******** current transition information *************************************************
 	const currentTransitionInfo = {
@@ -237,7 +243,7 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		fromDomainIndices,
 		toDomainIndices,
 		durationInFrames: currentTransitionSpec.durationInFrames,
-		durationInSeconds: currentTransitionSpec.durationInFrames / fps,
+		durationInSeconds: transition_durationInSeconds,
 		numberOfSlices: transition_numberOfSlices,
 		transitionType: currentTransitionSpec.transitionType,
 	};
@@ -253,7 +259,11 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		currentTransitionSlicesFrameRanges
 	);
 
-	const slice_frameRange = currentTransitionSlicesFrameRanges[slice_index];
+	const currentSliceOverview =
+		allTransitionsAndSlicesOverview[currentTransitionIndex].slices[slice_index];
+
+	// const slice_frameRange = currentTransitionSlicesFrameRanges[slice_index];
+	const slice_frameRange = currentSliceOverview.frameRange;
 
 	const slice_relativeFrame = frame - slice_frameRange.startFrame;
 
@@ -305,62 +315,8 @@ export const PeriodScaleAnimationContainer: React.FC<{
 		{}
 	);
 
-	const frameRangeLinearPercentage = {
-		startFrame:
-			(slice_frameRange.startFrame -
-				currentTransitionInfo.frameRange.startFrame) /
-			(currentTransitionInfo.durationInFrames - 1),
-		endFrame:
-			(slice_frameRange.endFrame -
-				currentTransitionInfo.frameRange.startFrame) /
-			(currentTransitionInfo.durationInFrames - 1),
-	};
-
-	const frameRangeEasingPercentage = {
-		startFrame: interpolate(
-			frameRangeLinearPercentage.startFrame,
-			[0, 1],
-			[0, 1],
-			{
-				easing: currentTransitionSpec.easingFunction,
-			}
-		),
-		endFrame: interpolate(frameRangeLinearPercentage.endFrame, [0, 1], [0, 1], {
-			easing: currentTransitionSpec.easingFunction,
-		}),
-	};
-
-	const slice_domainIndicesFrom_start = interpolate(
-		frameRangeEasingPercentage.startFrame,
-		[0, 1],
-		[fromDomainIndices[0], toDomainIndices[0]]
-	);
-	const slice_domainIndicesFrom_end = interpolate(
-		frameRangeEasingPercentage.startFrame,
-		[0, 1],
-		[fromDomainIndices[1], toDomainIndices[1]]
-	);
-
-	const slice_domainIndicesTo_start = interpolate(
-		frameRangeEasingPercentage.endFrame,
-		[0, 1],
-		[fromDomainIndices[0], toDomainIndices[0]]
-	);
-	const slice_domainIndicesTo_end = interpolate(
-		frameRangeEasingPercentage.endFrame,
-		[0, 1],
-		[fromDomainIndices[1], toDomainIndices[1]]
-	);
-
-	const slice_domainIndicesFrom = [
-		slice_domainIndicesFrom_start,
-		slice_domainIndicesFrom_end,
-	] as [number, number];
-
-	const slice_domainIndicesTo = [
-		slice_domainIndicesTo_start,
-		slice_domainIndicesTo_end,
-	] as [number, number];
+	const slice_domainIndicesFrom = currentSliceOverview.domainIndicesFrom;
+	const slice_domainIndicesTo = currentSliceOverview.domainIndicesTo;
 
 	const slice_periodsScaleFrom = periodsScale({
 		dates,
