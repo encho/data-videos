@@ -38,6 +38,21 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 		return <div style={{color: '#00ffaa'}}>{children}</div>;
 	};
 
+	const topLevelListItems = [
+		{
+			key: 'frame',
+			value: JSON.stringify(frame),
+		},
+		{
+			key: 'periodsScale.visibleDomainIndices',
+			value: JSON.stringify(periodsScale.visibleDomainIndices),
+		},
+		{
+			key: 'periodsScale.fullPeriodDomainIndices',
+			value: JSON.stringify(periodsScale.fullPeriodDomainIndices),
+		},
+	];
+
 	const currentTransitionInfoListItems = [
 		// {
 		// 	key: 'Object.keys():',
@@ -146,34 +161,62 @@ export const PeriodScaleAnimationContextDebugger: React.FC<
 				}
 			}
 		>
-			<div id="periodscale-animation-context-debugger__topLevel">
-				<div
-					style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}
-				>
-					frame: {frame}
+			<div
+				id="periodscale-animation-context-debugger__topLevel"
+				style={{
+					backgroundColor: 'rgba(0,100,200,0.5)',
+					padding: 20,
+					fontSize: 20,
+				}}
+			>
+				<div style={{fontSize: 50}}>
+					<div
+						style={{
+							fontWeight: 700,
+							color: theme.typography.textStyles.h1.color,
+						}}
+					>
+						topLevel
+					</div>
 				</div>
 				<div
-					style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}
+					style={{
+						backgroundColor: 'rgba(0,0,0,0.2)',
+						padding: 20,
+						fontSize: 20,
+					}}
 				>
-					periodsScale.visibleDomainIndices:{' '}
-					{JSON.stringify(periodsScale.visibleDomainIndices)}
+					<div
+						style={{
+							display: 'flex',
+							flexDirection: 'column',
+							gap: 5,
+						}}
+					>
+						{topLevelListItems.map((it) => {
+							return (
+								<Row>
+									<div>{it.key}</div>
+									<Value>{it.value}</Value>
+								</Row>
+							);
+						})}
+					</div>
+
+					<PeriodScaleZoomVisualizer
+						visibleDomainIndices={periodsScale.visibleDomainIndices}
+						fullDomainIndices={periodsScale.fullPeriodDomainIndices}
+						fromDomainIndices={
+							currentSliceInfo.periodsScaleFrom.visibleDomainIndices
+						}
+						toDomainIndices={
+							currentSliceInfo.periodsScaleTo.visibleDomainIndices
+						}
+						width={contentWidth}
+					/>
 				</div>
-				<div
-					style={{fontSize: 32, color: theme.typography.textStyles.h1.color}}
-				>
-					periodsScale.fullPeriodDomainIndices:{' '}
-					{JSON.stringify(periodsScale.fullPeriodDomainIndices)}
-				</div>
-				<PeriodScaleZoomVisualizer
-					visibleDomainIndices={periodsScale.visibleDomainIndices}
-					fullDomainIndices={periodsScale.fullPeriodDomainIndices}
-					fromDomainIndices={
-						currentSliceInfo.periodsScaleFrom.visibleDomainIndices
-					}
-					toDomainIndices={currentSliceInfo.periodsScaleTo.visibleDomainIndices}
-					width={contentWidth}
-				/>
 			</div>
+
 			<div style={{display: 'flex', flexDirection: 'row'}}>
 				<div
 					id="periodscale-animation-context-debugger__currentTransitionInfo"
@@ -288,8 +331,6 @@ const PeriodScaleZoomVisualizer: React.FC<{
 
 	return (
 		<div style={{color: theme.typography.colors.title.main, fontSize: 30}}>
-			<div>{JSON.stringify(visibleDomainIndices)}</div>
-			<div>{JSON.stringify(fullDomainIndices)}</div>
 			<div
 				style={{
 					backgroundColor: 'gray',
