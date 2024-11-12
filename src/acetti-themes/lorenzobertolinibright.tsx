@@ -55,6 +55,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		axisLine: {
+			// main: 'red',
 			main: GRAYS['500'],
 			soft: GRAYS['400'],
 		},
