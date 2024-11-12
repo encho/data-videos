@@ -38,9 +38,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	const CHART_PAGE_MARGIN = 60;
 	const CHART_PAGE_WIDTH = width;
-	const CHART_PAGE_HEIGHT = height * 0.4;
+	const CHART_PAGE_HEIGHT = height * 0.5;
 	const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
-	const CHART_CONTENT_HEIGHT = CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN;
+	const CHART_CONTENT_HEIGHT = (CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN) / 2;
 
 	const DEBUG_PAGE_HEIGHT = height - CHART_PAGE_HEIGHT;
 
@@ -94,7 +94,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_buildup,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -104,7 +103,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_wait_1,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5,
 							transitionType: 'DEFAULT',
 						},
 					},
@@ -114,9 +112,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_zoom,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
-							// numberOfSlices: 1,
-							transitionType: 'DEFAULT',
+							transitionType: 'ZOOM',
 						},
 					},
 					{
@@ -125,9 +121,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_wait_2,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5, why does the year behave so weidly with 5 and not with 1 here?
-							// numberOfSlices: 1,
-							transitionType: 'DEFAULT',
+							transitionType: 'ZOOM',
 						},
 					},
 					{
@@ -136,9 +130,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_buildup_again,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5,
-							// numberOfSlices: 1,
-							transitionType: 'DEFAULT',
+							transitionType: 'ZOOM',
 						},
 					},
 					{
@@ -147,29 +139,19 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						transitionSpec: {
 							durationInFrames: td_tear_down,
 							easingFunction: Easing.linear,
-							// numberOfSlices: 5,
-							// numberOfSlices: 4,
 							transitionType: 'DEFAULT',
 						},
 					},
 				]}
 			>
 				{(periodScaleAnimationContext) => {
-					const {
-						periodsScale,
-						frame,
-						currentSliceInfo,
-						currentTransitionInfo,
-						...rest
-					} = periodScaleAnimationContext;
-
 					return (
 						<div>
 							<PageContext
 								width={CHART_PAGE_WIDTH}
 								height={CHART_PAGE_HEIGHT}
 								margin={CHART_PAGE_MARGIN}
-								nrBaselines={36}
+								nrBaselines={48}
 								theme={theme}
 							>
 								<Page
@@ -204,20 +186,52 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 												>
 													{(yScaleAnimationContext) => {
 														return (
-															<LineChart_YAxisShowcase
-																periodScaleAnimationContext={
-																	periodScaleAnimationContext
-																}
-																yScaleAnimationContext={yScaleAnimationContext}
-																timeSeries={timeSeries}
-																timeSeries2={timeSeries2}
-																timeSeries3={timeSeries3}
-																layoutAreas={{
-																	xAxis: chartLayout.areas.xAxis,
-																	plot: chartLayout.areas.plot,
-																	yAxis: chartLayout.areas.yAxis,
-																}}
-															/>
+															<div>
+																<LineChart_YAxisShowcase
+																	periodScaleAnimationContext={
+																		periodScaleAnimationContext
+																	}
+																	yScaleAnimationContext={
+																		yScaleAnimationContext
+																	}
+																	timeSeries={timeSeries}
+																	timeSeries2={timeSeries2}
+																	timeSeries3={timeSeries3}
+																	layoutAreas={{
+																		chart: chartLayout.areas.chart,
+																		xAxis: chartLayout.areas.xAxis,
+																		plot: chartLayout.areas.plot,
+																		yAxis: chartLayout.areas.yAxis,
+																	}}
+																/>
+																<LineChart_YAxisShowcase
+																	periodScaleAnimationContext={
+																		periodScaleAnimationContext
+																	}
+																	yScaleAnimationContext={
+																		yScaleAnimationContext
+																	}
+																	timeSeries={timeSeries}
+																	timeSeries2={timeSeries2}
+																	timeSeries3={timeSeries2}
+																	layoutAreas={{
+																		chart: chartLayout.areas.chart,
+																		xAxis: chartLayout.areas.xAxis,
+																		plot: chartLayout.areas.plot,
+																		yAxis: chartLayout.areas.yAxis,
+																	}}
+																/>
+																<div
+																	style={{
+																		backgroundColor: 'cyan',
+																		fontSize: 50,
+																	}}
+																>
+																	hello hello hello hello hello hello hello
+																	hello hello hello hello hello hello hello
+																	hello hello hello hello hello hello
+																</div>
+															</div>
 														);
 													}}
 												</YScaleAnimationContainer>
@@ -235,11 +249,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							>
 								<Page show>
 									<LineChartAnimationContextDebugger
-										frame={frame}
-										periodsScale={periodsScale}
-										currentSliceInfo={currentSliceInfo}
-										currentTransitionInfo={currentTransitionInfo}
-										{...rest}
+										{...periodScaleAnimationContext}
 									/>
 								</Page>
 							</PageContext>

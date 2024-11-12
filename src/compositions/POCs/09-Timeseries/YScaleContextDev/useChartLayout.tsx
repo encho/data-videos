@@ -33,6 +33,12 @@ const chartGridLayoutSpec = {
 	rows: chartRowsRailSpec,
 	columns: chartColsRailSpec,
 	areas: {
+		chart: [
+			{name: 'plot'},
+			{name: 'plot'},
+			{name: 'xAxis'},
+			{name: 'yAxis'},
+		] as TGridLayoutAreaSpec,
 		yAxis: [
 			{name: 'plot'},
 			{name: 'yAxis'},

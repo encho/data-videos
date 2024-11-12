@@ -19,6 +19,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 	timeSeries2: TimeSeries;
 	timeSeries3: TimeSeries;
 	layoutAreas: {
+		chart: TGridLayoutArea;
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
@@ -39,7 +40,13 @@ export const LineChart_YAxisShowcase: React.FC<{
 	// const axisDebugColors = {};
 
 	return (
-		<>
+		<div
+			style={{
+				position: 'relative',
+				width: layoutAreas.chart.width,
+				height: layoutAreas.chart.height,
+			}}
+		>
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
@@ -96,7 +103,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 					{...axisDebugColors}
 				/>
 			</Position>
-		</>
+		</div>
 	);
 };
 
