@@ -1,6 +1,7 @@
 import {useVideoConfig, Easing} from 'remotion';
 import {useMemo} from 'react';
 
+import {useYScaleAnimation} from './useYScaleAnimation';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -10,7 +11,7 @@ import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {PeriodScaleAnimationContainer} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {PeriodScaleAnimationContextDebugger} from './PeriodScaleAnimationContextDebugger';
-
+import {DisplayGridLayout} from '../../../../acetti-layout';
 import {YScaleAnimationContainer} from './YScaleAnimationContainer';
 
 type TAnimatedLineChart2Props = {
@@ -147,20 +148,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								// show
 								>
 									{() => {
-										// TODO
-										// const upperYScaleContext = useYScaleAnimationContext(
-										// 	{periodScaleAnimationContext,
-										// 		timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
-										// 		tickFormatter: (tick) => `${tick} EUR`,
-										// 		yScalesInitialHeight: 300,
-										// 		domainType: "ZERO",
-										// 		paddingPerc: 0.2,
-										// 	}
-										// );
-
-										// TODO
-										// const lowerYScaleContext = useYScaleAnimationContext...
-
 										return (
 											<>
 												<YScaleAnimationContainer
@@ -180,25 +167,66 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													{(yScaleAnimationContext) => {
 														const {contentWidth, contentHeight} = usePage();
 
+														const yScaleAnimationUpper = useYScaleAnimation({
+															periodScaleAnimationContext,
+															timeSeriesArray: [
+																timeSeries,
+																timeSeries2,
+																timeSeries3,
+															],
+															tickFormatter: (tick) => `${tick} EUR`,
+															yScalesInitialHeight: 200,
+															domainType: 'ZERO',
+															paddingPerc: 0.3,
+														});
+
+														const yScaleAnimationLower = useYScaleAnimation({
+															periodScaleAnimationContext,
+															timeSeriesArray: [timeSeries, timeSeries2],
+															tickFormatter: (tick) => `${tick} EUR`,
+															yScalesInitialHeight: 200,
+															domainType: 'VISIBLE',
+															paddingPerc: 0,
+															nrTicks: 2,
+														});
+
+														const yAxisWidth = Math.max(
+															yScaleAnimationUpper.maxLabelComponentWidth,
+															yScaleAnimationLower.maxLabelComponentWidth
+														);
+
 														const chartLayout = useChartLayout({
 															width: contentWidth,
 															height: contentHeight,
+															yAxisWidth,
 														});
 
 														return (
-															<div>
+															<div
+																style={{
+																	position: 'relative',
+																}}
+															>
+																<div style={{position: 'absolute'}}>
+																	<DisplayGridLayout
+																		stroke={'rgba(255,0,255,0.5)'}
+																		fill="transparent"
+																		// hide={true}
+																		areas={chartLayout.areas}
+																		width={contentWidth}
+																		height={contentHeight}
+																	/>
+																</div>
+
 																<LineChart_YAxisShowcase
 																	periodScaleAnimationContext={
 																		periodScaleAnimationContext
 																	}
-																	yScaleAnimationContext={
-																		yScaleAnimationContext
-																	}
+																	yScaleAnimationContext={yScaleAnimationUpper}
 																	timeSeries={timeSeries}
 																	timeSeries2={timeSeries2}
 																	timeSeries3={timeSeries3}
 																	layoutAreas={{
-																		// chart: chartLayout.areas.chart,
 																		xAxis: chartLayout.areas.xAxis,
 																		plot: chartLayout.areas.plot,
 																		yAxis: chartLayout.areas.yAxis,
@@ -208,14 +236,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																	periodScaleAnimationContext={
 																		periodScaleAnimationContext
 																	}
-																	yScaleAnimationContext={
-																		yScaleAnimationContext
-																	}
+																	yScaleAnimationContext={yScaleAnimationLower}
 																	timeSeries={timeSeries}
 																	timeSeries2={timeSeries2}
 																	timeSeries3={timeSeries2}
 																	layoutAreas={{
-																		// chart: chartLayout.areas.chart,
 																		xAxis: chartLayout.areas.xAxis2,
 																		plot: chartLayout.areas.plot2,
 																		yAxis: chartLayout.areas.yAxis2,
