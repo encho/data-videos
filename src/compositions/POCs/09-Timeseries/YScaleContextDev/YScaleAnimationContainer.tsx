@@ -1,10 +1,9 @@
 import {Sequence, interpolate, useVideoConfig} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
-import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
@@ -21,6 +20,7 @@ export type TYScaleAnimationContext = {
 	yAxisSpecTo: TYAxisSpec;
 	//
 	maxLabelComponentWidth: number;
+	setYScalesHeight: (x: number) => void;
 };
 
 type TChildrenFuncArgs = TYScaleAnimationContext;
@@ -29,7 +29,8 @@ export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	nrTicks?: number;
 	tickFormatter: (x: number) => string; // TODO evtl. TickComponent better, more flexible
-	area: TGridLayoutArea;
+	// area: TGridLayoutArea;
+	yScalesInitialHeight?: number;
 	timeSeriesArray: TimeSeries[];
 	domainType: 'ZERO' | 'VISIBLE';
 	paddingPerc?: number;
@@ -39,13 +40,18 @@ export const YScaleAnimationContainer: React.FC<{
 	nrTicks = 5,
 	tickFormatter,
 	domainType,
-	area,
+	yScalesInitialHeight = 500,
 	timeSeriesArray,
 	paddingPerc = 0.1,
 	children,
 }) => {
 	const {durationInFrames} = useVideoConfig();
 	const {theme, baseline} = usePage();
+
+	const [yScalesHeight, setYScalesHeight] =
+		useState<number>(yScalesInitialHeight);
+
+	const yScalesRange = [yScalesHeight, 0] as [number, number];
 
 	const currentTransitionType =
 		periodScaleAnimationContext.currentTransitionInfo.transitionType;
@@ -87,7 +93,7 @@ export const YScaleAnimationContainer: React.FC<{
 				? yDomainData
 				: ([0, yDomainData[1]] as [number, number]);
 
-		yScale = scaleLinear().domain(yDomain).range([area.height, 0]);
+		yScale = scaleLinear().domain(yDomain).range(yScalesRange);
 	} else if (currentTransitionType === 'ZOOM') {
 		// const yDomainFromData =
 		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
@@ -152,9 +158,7 @@ export const YScaleAnimationContainer: React.FC<{
 			number
 		];
 
-		yScale = scaleLinear()
-			.domain(zoomingCurrentYDomain)
-			.range([area.height, 0]);
+		yScale = scaleLinear().domain(zoomingCurrentYDomain).range(yScalesRange);
 	} else {
 		throw Error('Unknown transitionType');
 	}
@@ -258,6 +262,7 @@ export const YScaleAnimationContainer: React.FC<{
 				yAxisSpecFrom,
 				yAxisSpecTo,
 				maxLabelComponentWidth,
+				setYScalesHeight,
 			})}
 		</Sequence>
 	);

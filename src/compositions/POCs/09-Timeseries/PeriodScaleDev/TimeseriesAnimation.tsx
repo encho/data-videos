@@ -78,7 +78,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<PeriodScaleAnimationContainer
 				timeSeries={timeSeries}
-				area={chartLayout.areas.xAxis}
+				periodScalesInitialWidth={chartLayout.areas.xAxis.width}
 				transitions={[
 					{
 						fromDomainIndices: tsDomainIndices.start, // if omitted & index===0, fill with [0,1]

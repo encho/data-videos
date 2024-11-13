@@ -1,24 +1,16 @@
-import {useVideoConfig, Easing, interpolate} from 'remotion';
-import {ReactNode, useMemo} from 'react';
+import {useVideoConfig, Easing} from 'remotion';
+import {useMemo} from 'react';
 
-import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {PageContext, usePage} from '../../../../acetti-components/PageContext';
+import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {
-	PeriodScaleAnimationContainer,
-	TPeriodScaleAnimationContext,
-} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+import {PeriodScaleAnimationContainer} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {PeriodScaleAnimationContextDebugger} from './PeriodScaleAnimationContextDebugger';
 
 import {YScaleAnimationContainer} from './YScaleAnimationContainer';
-
-// type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
-// const Y_DOMAIN_TYPE = 'FULL';
-// const Y_DOMAIN_TYPE = 'VISIBLE';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -87,7 +79,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<PeriodScaleAnimationContainer
 				timeSeries={timeSeries}
-				area={chartLayout.areas.xAxis}
+				periodScalesInitialWidth={500} // TODO in this case leave empty
 				transitions={[
 					{
 						fromDomainIndices: tsDomainIndices.start, // if omitted & index===0, fill with [0,1]
@@ -161,16 +153,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									{() => {
 										return (
 											<>
-												<div style={{position: 'absolute'}}>
-													<DisplayGridLayout
-														stroke={'rgba(255,0,255,0.5)'}
-														fill="transparent"
-														// hide={true}
-														areas={chartLayout.areas}
-														width={width}
-														height={height}
-													/>
-												</div>
 												<YScaleAnimationContainer
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
@@ -181,7 +163,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														timeSeries3,
 													]}
 													tickFormatter={(tick) => `${tick} EUR`}
-													area={chartLayout.areas.yAxis}
+													// area={chartLayout.areas.yAxis}
+													yScalesInitialHeight={chartLayout.areas.yAxis.height}
 													// domainType="VISIBLE"
 													domainType="ZERO"
 													paddingPerc={0.2}

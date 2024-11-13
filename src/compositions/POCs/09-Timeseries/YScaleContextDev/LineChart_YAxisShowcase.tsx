@@ -1,3 +1,5 @@
+import {useEffect} from 'react';
+
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -6,6 +8,7 @@ import {Animated_XAxis} from './Animated_XAxis';
 import {Animated_YAxis} from './Animated_YAxis';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {TYScaleAnimationContext} from './YScaleAnimationContainer';
+import {DisplayGridLayout} from '../../../../acetti-layout';
 
 export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
@@ -34,6 +37,11 @@ export const LineChart_YAxisShowcase: React.FC<{
 	};
 	// const axisDebugColors = {};
 
+	useEffect(() => {
+		periodScaleAnimationContext.setPeriodScalesWidth(layoutAreas.plot.width);
+		// yScaleAnimationContext.setYScalesHeight(200);
+	}, [layoutAreas.plot.width]);
+
 	return (
 		<div
 			style={{
@@ -42,6 +50,17 @@ export const LineChart_YAxisShowcase: React.FC<{
 				height: layoutAreas.chart.height,
 			}}
 		>
+			<div style={{position: 'absolute'}}>
+				<DisplayGridLayout
+					stroke={'rgba(255,0,255,0.5)'}
+					fill="transparent"
+					// hide={true}
+					areas={layoutAreas}
+					width={layoutAreas.chart.width}
+					height={layoutAreas.chart.height}
+				/>
+			</div>
+
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>

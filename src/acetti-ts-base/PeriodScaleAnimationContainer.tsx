@@ -1,6 +1,6 @@
 import {Sequence, useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
 import invariant from 'tiny-invariant';
-import {useMemo} from 'react';
+import {useMemo, useState} from 'react';
 
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -11,6 +11,7 @@ import {
 
 export type TPeriodScaleAnimationContext = {
 	periodsScale: TPeriodsScale;
+	setPeriodScalesWidth: (x: number) => void;
 	frame: number;
 	currentTransitionInfo: {
 		index: number;
@@ -71,18 +72,25 @@ type TTransitionsItem = {
 
 export const PeriodScaleAnimationContainer: React.FC<{
 	timeSeries: TimeSeries;
-	area: TGridLayoutArea;
+	// area: TGridLayoutArea;
+	periodScalesInitialWidth?: number;
 	transitions: TTransitionsItem[];
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 }> = ({
 	timeSeries, // TODO array of periods is enough!
-	area,
+	periodScalesInitialWidth = 500,
 	transitions,
 	children,
 }) => {
 	// TODO from theme
 	// determine number of slices if they are not passed, s.t. a slice lasts around IDEAL_SLICE_DURATION_IN_SECONDS seconds
 	const IDEAL_SLICE_DURATION_IN_SECONDS = 0.6;
+
+	const [periodScalesWidth, setPeriodScalesWidth] = useState<number>(
+		periodScalesInitialWidth
+	);
+
+	const visibleRange = [0, periodScalesWidth] as [number, number];
 
 	const transitionSpecs = useMemo(
 		() => transitions.map((it) => it.transitionSpec),
@@ -323,13 +331,15 @@ export const PeriodScaleAnimationContainer: React.FC<{
 	const slice_periodsScaleFrom = periodsScale({
 		dates,
 		visibleDomainIndices: slice_domainIndicesFrom,
-		visibleRange: [0, area.width],
+		// visibleRange: [0, area.width],
+		visibleRange,
 	});
 
 	const slice_periodsScaleTo = periodsScale({
 		dates,
 		visibleDomainIndices: slice_domainIndicesTo,
-		visibleRange: [0, area.width],
+		// visibleRange: [0, area.width],
+		visibleRange,
 	});
 
 	const currentSliceInfo = {
@@ -365,13 +375,14 @@ export const PeriodScaleAnimationContainer: React.FC<{
 			animatedVisibleDomainIndexStart,
 			animatedVisibleDomainIndexEnd,
 		],
-		visibleRange: [0, area.width],
+		visibleRange,
 	});
 
 	return (
 		<Sequence from={0} durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
+				setPeriodScalesWidth,
 				frame,
 				currentTransitionInfo,
 				currentSliceInfo,
