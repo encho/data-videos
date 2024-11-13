@@ -144,113 +144,86 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								nrBaselines={48}
 								theme={theme}
 							>
-								<Page
-								// show
-								>
+								<Page show>
 									{() => {
+										const {contentWidth, contentHeight} = usePage();
+
+										const yScaleAnimationUpper = useYScaleAnimation({
+											periodScaleAnimationContext,
+											timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
+											tickFormatter: (tick) => `${tick} EUR`,
+											yScalesInitialHeight: 200,
+											domainType: 'ZERO',
+											paddingPerc: 0.3,
+										});
+
+										const yScaleAnimationLower = useYScaleAnimation({
+											periodScaleAnimationContext,
+											timeSeriesArray: [timeSeries, timeSeries2],
+											tickFormatter: (tick) => `${tick} EUR`,
+											yScalesInitialHeight: 200,
+											domainType: 'VISIBLE',
+											paddingPerc: 0,
+											nrTicks: 2,
+										});
+
+										const yAxisWidth = Math.max(
+											yScaleAnimationUpper.maxLabelComponentWidth,
+											yScaleAnimationLower.maxLabelComponentWidth
+										);
+
+										const chartLayout = useChartLayout({
+											width: contentWidth,
+											height: contentHeight,
+											yAxisWidth,
+										});
+
 										return (
-											<>
-												<YScaleAnimationContainer
+											<div
+												style={{
+													position: 'relative',
+												}}
+											>
+												<div style={{position: 'absolute'}}>
+													<DisplayGridLayout
+														stroke={'rgba(255,0,255,0.5)'}
+														fill="transparent"
+														// hide={true}
+														areas={chartLayout.areas}
+														width={contentWidth}
+														height={contentHeight}
+													/>
+												</div>
+
+												<LineChart_YAxisShowcase
 													periodScaleAnimationContext={
 														periodScaleAnimationContext
 													}
-													timeSeriesArray={[
-														timeSeries,
-														timeSeries2,
-														timeSeries3,
-													]}
-													tickFormatter={(tick) => `${tick} EUR`}
-													yScalesInitialHeight={300}
-													domainType="ZERO"
-													paddingPerc={0.2}
-												>
-													{(yScaleAnimationContext) => {
-														const {contentWidth, contentHeight} = usePage();
-
-														const yScaleAnimationUpper = useYScaleAnimation({
-															periodScaleAnimationContext,
-															timeSeriesArray: [
-																timeSeries,
-																timeSeries2,
-																timeSeries3,
-															],
-															tickFormatter: (tick) => `${tick} EUR`,
-															yScalesInitialHeight: 200,
-															domainType: 'ZERO',
-															paddingPerc: 0.3,
-														});
-
-														const yScaleAnimationLower = useYScaleAnimation({
-															periodScaleAnimationContext,
-															timeSeriesArray: [timeSeries, timeSeries2],
-															tickFormatter: (tick) => `${tick} EUR`,
-															yScalesInitialHeight: 200,
-															domainType: 'VISIBLE',
-															paddingPerc: 0,
-															nrTicks: 2,
-														});
-
-														const yAxisWidth = Math.max(
-															yScaleAnimationUpper.maxLabelComponentWidth,
-															yScaleAnimationLower.maxLabelComponentWidth
-														);
-
-														const chartLayout = useChartLayout({
-															width: contentWidth,
-															height: contentHeight,
-															yAxisWidth,
-														});
-
-														return (
-															<div
-																style={{
-																	position: 'relative',
-																}}
-															>
-																<div style={{position: 'absolute'}}>
-																	<DisplayGridLayout
-																		stroke={'rgba(255,0,255,0.5)'}
-																		fill="transparent"
-																		// hide={true}
-																		areas={chartLayout.areas}
-																		width={contentWidth}
-																		height={contentHeight}
-																	/>
-																</div>
-
-																<LineChart_YAxisShowcase
-																	periodScaleAnimationContext={
-																		periodScaleAnimationContext
-																	}
-																	yScaleAnimationContext={yScaleAnimationUpper}
-																	timeSeries={timeSeries}
-																	timeSeries2={timeSeries2}
-																	timeSeries3={timeSeries3}
-																	layoutAreas={{
-																		xAxis: chartLayout.areas.xAxis,
-																		plot: chartLayout.areas.plot,
-																		yAxis: chartLayout.areas.yAxis,
-																	}}
-																/>
-																<LineChart_YAxisShowcase
-																	periodScaleAnimationContext={
-																		periodScaleAnimationContext
-																	}
-																	yScaleAnimationContext={yScaleAnimationLower}
-																	timeSeries={timeSeries}
-																	timeSeries2={timeSeries2}
-																	timeSeries3={timeSeries2}
-																	layoutAreas={{
-																		xAxis: chartLayout.areas.xAxis2,
-																		plot: chartLayout.areas.plot2,
-																		yAxis: chartLayout.areas.yAxis2,
-																	}}
-																/>
-															</div>
-														);
+													yScaleAnimationContext={yScaleAnimationUpper}
+													timeSeries={timeSeries}
+													timeSeries2={timeSeries2}
+													timeSeries3={timeSeries3}
+													layoutAreas={{
+														xAxis: chartLayout.areas.xAxis,
+														plot: chartLayout.areas.plot,
+														yAxis: chartLayout.areas.yAxis,
 													}}
-												</YScaleAnimationContainer>
-											</>
+												/>
+												<LineChart_YAxisShowcase
+													periodScaleAnimationContext={
+														periodScaleAnimationContext
+													}
+													yScaleAnimationContext={yScaleAnimationLower}
+													timeSeries={timeSeries}
+													timeSeries2={timeSeries2}
+													timeSeries3={timeSeries2}
+													layoutAreas={{
+														xAxis: chartLayout.areas.xAxis2,
+														plot: chartLayout.areas.plot2,
+														yAxis: chartLayout.areas.yAxis2,
+													}}
+												/>
+											</div>
 										);
 									}}
 								</Page>
