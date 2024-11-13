@@ -180,6 +180,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														timeSeries2,
 														timeSeries3,
 													]}
+													tickFormatter={(tick) => `${tick} EUR`}
 													area={chartLayout.areas.yAxis}
 													// domainType="VISIBLE"
 													domainType="ZERO"

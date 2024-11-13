@@ -28,32 +28,32 @@ const getLabel = (axisSpec: TYAxisSpec, labelId: string) => {
 
 export const Animated_YAxis: React.FC<{
 	area: TGridLayoutArea;
+	// TODO better yScaleAnimationContext with all that info!
 	yScale: TYAxisScale;
 	yScaleFrom: TYAxisScale;
 	yScaleTo: TYAxisScale;
-	nrTicks?: number;
-	tickFormatter: (x: number) => string;
+	yAxisSpecFrom: TYAxisSpec;
+	yAxisSpecTo: TYAxisSpec;
+	// nrTicks?: number; // TODO deprecate as in container
+	// tickFormatter: (x: number) => string; // TODO deprecate as in container
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	// TODO better debugColors object {update, enter, exit}
 	debugEnterColor?: string;
 	debugUpdateColor?: string;
 	debugExitColor?: string;
-	// TODO perhaps:
-	// axisSpecFrom?: TXAxisSpec;
-	// axisSpecTo?: TXAxisSpec;
 }> = ({
 	periodScaleAnimationContext,
 	area,
 	yScale,
 	yScaleFrom,
 	yScaleTo,
-	nrTicks = 5,
-	tickFormatter,
+	yAxisSpecFrom,
+	yAxisSpecTo,
+	// nrTicks = 5,
+	// tickFormatter,
 	debugEnterColor,
 	debugExitColor,
 	debugUpdateColor,
-	// TODO perhaps:
-	// axisSpecFrom: axisSpecFromProp,
-	// axisSpecTo: axisSpecToProp,
 }) => {
 	// TODO from Theme
 	// sizes and distances
@@ -93,8 +93,8 @@ export const Animated_YAxis: React.FC<{
 	// ------------------------------------------------------------
 
 	// calculate here and potentially get as prop (as in x axis)
-	const axisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
-	const axisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
+	// const yAxisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
+	// const yAxisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
 	// TODO how/if to implement in yScale context:
 	// *******************************************
@@ -117,13 +117,13 @@ export const Animated_YAxis: React.FC<{
 	// ***************************
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
-		axisSpecFrom.ticks.map((it) => it.id),
-		axisSpecTo.ticks.map((it) => it.id)
+		yAxisSpecFrom.ticks.map((it) => it.id),
+		yAxisSpecTo.ticks.map((it) => it.id)
 	);
 
 	const labelsEnterUpdateExits = getEnterUpdateExits(
-		axisSpecFrom.labels.map((it) => it.id),
-		axisSpecTo.labels.map((it) => it.id)
+		yAxisSpecFrom.labels.map((it) => it.id),
+		yAxisSpecTo.labels.map((it) => it.id)
 	);
 
 	// ***************************
@@ -132,8 +132,8 @@ export const Animated_YAxis: React.FC<{
 	// ***************************
 	// ***************************
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
-		const startTick = getTick(axisSpecFrom, tickId);
-		const endTick = getTick(axisSpecTo, tickId);
+		const startTick = getTick(yAxisSpecFrom, tickId);
+		const endTick = getTick(yAxisSpecTo, tickId);
 
 		const currentDomainValue = interpolate(
 			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
@@ -152,7 +152,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
-		const endTick = getTick(axisSpecTo, tickId);
+		const endTick = getTick(yAxisSpecTo, tickId);
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -176,7 +176,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
-		const startTick = getTick(axisSpecFrom, tickId);
+		const startTick = getTick(yAxisSpecFrom, tickId);
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -200,8 +200,8 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
-		const startLabel = getLabel(axisSpecFrom, labelId);
-		const endLabel = getLabel(axisSpecTo, labelId);
+		const startLabel = getLabel(yAxisSpecFrom, labelId);
+		const endLabel = getLabel(yAxisSpecTo, labelId);
 
 		const currentDomainValue = interpolate(
 			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
@@ -231,7 +231,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
-		const endLabel = getLabel(axisSpecTo, labelId);
+		const endLabel = getLabel(yAxisSpecTo, labelId);
 
 		const domainValue = endLabel.domainValue;
 
@@ -259,7 +259,7 @@ export const Animated_YAxis: React.FC<{
 	});
 
 	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
-		const startLabel = getLabel(axisSpecFrom, labelId);
+		const startLabel = getLabel(yAxisSpecFrom, labelId);
 
 		const domainValue = startLabel.domainValue;
 

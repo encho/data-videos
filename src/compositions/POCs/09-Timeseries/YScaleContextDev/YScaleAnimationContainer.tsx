@@ -1,23 +1,34 @@
 import {Sequence, interpolate, useVideoConfig} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {useMemo} from 'react';
 
+import {usePage} from '../../../../acetti-components/PageContext';
+import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-
-// export const Y_SCALE_PADDING_PERC = 0.1;
+import {
+	getYAxisSpec,
+	TYAxisSpec,
+} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 
 export type TYScaleAnimationContext = {
 	yScale: ScaleLinear<number, number>;
 	yScaleFrom: ScaleLinear<number, number>;
 	yScaleTo: ScaleLinear<number, number>;
+	yAxisSpecFrom: TYAxisSpec;
+	yAxisSpecTo: TYAxisSpec;
+	//
+	maxLabelComponentWidth: number;
 };
 
 type TChildrenFuncArgs = TYScaleAnimationContext;
 
 export const YScaleAnimationContainer: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	nrTicks?: number;
+	tickFormatter: (x: number) => string; // TODO evtl. TickComponent better, more flexible
 	area: TGridLayoutArea;
 	timeSeriesArray: TimeSeries[];
 	domainType: 'ZERO' | 'VISIBLE';
@@ -25,6 +36,8 @@ export const YScaleAnimationContainer: React.FC<{
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 }> = ({
 	periodScaleAnimationContext,
+	nrTicks = 5,
+	tickFormatter,
 	domainType,
 	area,
 	timeSeriesArray,
@@ -32,6 +45,7 @@ export const YScaleAnimationContainer: React.FC<{
 	children,
 }) => {
 	const {durationInFrames} = useVideoConfig();
+	const {theme, baseline} = usePage();
 
 	const currentTransitionType =
 		periodScaleAnimationContext.currentTransitionInfo.transitionType;
@@ -50,7 +64,7 @@ export const YScaleAnimationContainer: React.FC<{
 
 	// TODO introduce capacity of passing yDomain into the machine
 	// OR: do not ship this functionality?
-	const yDomainProp = undefined;
+	// const yDomainProp = undefined;
 
 	if (currentTransitionType === 'DEFAULT') {
 		const yDomains = timeSeriesArray.map((ts) =>
@@ -67,15 +81,6 @@ export const YScaleAnimationContainer: React.FC<{
 		const yDomainDataMin = Math.min(...yDomains.map((it) => it[0]));
 		const yDomainDataMax = Math.max(...yDomains.map((it) => it[1]));
 		const yDomainData = [yDomainDataMin, yDomainDataMax] as [number, number];
-
-		// const yDomainData = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-		// 	timeSeries,
-		// 	[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
-		// 		number,
-		// 		number
-		// 	],
-		// 	paddingPerc
-		// );
 
 		const yDomain =
 			domainType === 'VISIBLE'
@@ -110,13 +115,6 @@ export const YScaleAnimationContainer: React.FC<{
 			domainType === 'VISIBLE'
 				? yDomainFromData
 				: ([0, yDomainFromData[1]] as [number, number]);
-
-		// const yDomainToData =
-		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-		// 		timeSeries,
-		// 		toDomainIndices,
-		// 		paddingPerc
-		// 	);
 
 		const yDomainsTo = timeSeriesArray.map((ts) =>
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
@@ -220,13 +218,46 @@ export const YScaleAnimationContainer: React.FC<{
 	// then the current yScale is used to compute the mappings
 	const yScaleTo: ScaleLinear<number, number> = scaleLinear().domain(yDomainTo);
 
+	const yAxisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
+	const yAxisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
+
+	// TODO here determine all ever displayed labels... from allTransitionsAndSLicesOverview
+	const allEverDisplayedLabels = useMemo(
+		() => ['1000 EUR', '1200 EUR'],
+		[periodScaleAnimationContext.allTransitionsAndSlicesOverview]
+	);
+
+	// TODO useMemo
+	const allLabelsWidths = allEverDisplayedLabels.map(
+		(text) =>
+			getTextDimensions({
+				theme,
+				baseline,
+				text,
+				key: 'datavizTickLabel',
+			}).width
+	);
+
+	// TODO useMemo
+	const maxLabelWidth = Math.max(...allLabelsWidths);
+
+	// TODO from theme, this is also used identically by Animated_YAxis...
+	const TICK_LINE_SIZE = 24; // TODO into theme
+	const MARGIN_LEFT = 0;
+
+	const maxLabelComponentWidth = maxLabelWidth + TICK_LINE_SIZE + MARGIN_LEFT;
+
+	// console.log({yAxisSpecFrom, yAxisSpecTo});
+
 	return (
 		<Sequence from={0} durationInFrames={durationInFrames} layout="none">
 			{children({
 				yScale,
 				yScaleFrom,
 				yScaleTo,
-				// hello: 999,
+				yAxisSpecFrom,
+				yAxisSpecTo,
+				maxLabelComponentWidth,
 			})}
 		</Sequence>
 	);

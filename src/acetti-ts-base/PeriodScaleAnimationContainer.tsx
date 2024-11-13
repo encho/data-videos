@@ -1,12 +1,10 @@
 import {Sequence, useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
 import invariant from 'tiny-invariant';
 import {useMemo} from 'react';
 
 import {TGridLayoutArea} from '../acetti-layout';
 import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {
-	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices,
 	periodsScale,
 	TPeriodsScale,
 } from '../acetti-ts-periodsScale/periodsScale';

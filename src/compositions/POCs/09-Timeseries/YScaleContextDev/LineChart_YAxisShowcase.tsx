@@ -1,5 +1,3 @@
-// import {ScaleLinear} from 'd3-scale';
-
 import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -9,9 +7,6 @@ import {Animated_YAxis} from './Animated_YAxis';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {TYScaleAnimationContext} from './YScaleAnimationContainer';
 
-// type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
-
-// TODO rename to LineChart_YAxisShowcase
 export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
 	yScaleAnimationContext: TYScaleAnimationContext;
@@ -88,9 +83,9 @@ export const LineChart_YAxisShowcase: React.FC<{
 					yScale={yScaleAnimationContext.yScale}
 					yScaleFrom={yScaleAnimationContext.yScaleFrom}
 					yScaleTo={yScaleAnimationContext.yScaleTo}
+					yAxisSpecFrom={yScaleAnimationContext.yAxisSpecFrom}
+					yAxisSpecTo={yScaleAnimationContext.yAxisSpecTo}
 					area={layoutAreas.yAxis}
-					nrTicks={6}
-					tickFormatter={currencyFormatter}
 					{...axisDebugColors}
 				/>
 			</Position>
@@ -105,14 +100,4 @@ export const LineChart_YAxisShowcase: React.FC<{
 			</Position>
 		</div>
 	);
-};
-
-// TODO: export use because of passed parametrization
-// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
-const currencyFormatter = (x: number) => {
-	const formatter = new Intl.NumberFormat('en-GB', {
-		maximumFractionDigits: 0, // Ensures no decimal places
-		minimumFractionDigits: 0, // Ensures no decimal places
-	});
-	return '$ ' + formatter.format(x);
 };
