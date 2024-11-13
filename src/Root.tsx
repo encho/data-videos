@@ -245,6 +245,11 @@ import {
 	YScaleAnimationDevComposition,
 } from './compositions/POCs/09-Timeseries/YScaleAnimationDev/YScaleAnimationDevComposition';
 
+import {
+	PerformanceCompareComposition,
+	performanceCompareCompositionSchema,
+} from './compositions/POCs/09-Timeseries/PerformanceCompare/PerformanceCompareComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -1134,6 +1139,27 @@ export const RemotionRoot: React.FC = () => {
 						schema={yScaleAnimationDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
+							timePeriod: '2Y' as const,
+							nerdyFinanceEnv: 'PROD' as const,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+						}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="PerformanceCompare"
+						component={PerformanceCompareComposition}
+						// durationInFrames={30 * 9}
+						durationInFrames={30 * 30}
+						fps={30}
+						// {...videoSizes.linkedInTall}
+						// {...videoSizes.widescreen_16x9}
+						width={videoSizes.widescreen_16x9.width * 1.5}
+						height={videoSizes.widescreen_16x9.height * 3}
+						schema={performanceCompareCompositionSchema}
+						defaultProps={{
+							ticker: 'ETH-USD' as const,
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
