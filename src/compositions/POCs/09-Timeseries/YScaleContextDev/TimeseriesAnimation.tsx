@@ -33,8 +33,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	const CHART_PAGE_MARGIN = 60;
 	const CHART_PAGE_WIDTH = width;
 	const CHART_PAGE_HEIGHT = height * 0.4;
-	// const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
-	// const CHART_CONTENT_HEIGHT = (CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN) / 2;
 
 	const DEBUG_PAGE_HEIGHT = height - CHART_PAGE_HEIGHT;
 
