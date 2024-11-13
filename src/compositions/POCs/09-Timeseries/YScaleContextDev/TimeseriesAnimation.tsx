@@ -12,7 +12,6 @@ import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {PeriodScaleAnimationContainer} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {PeriodScaleAnimationContextDebugger} from './PeriodScaleAnimationContextDebugger';
 import {DisplayGridLayout} from '../../../../acetti-layout';
-import {YScaleAnimationContainer} from './YScaleAnimationContainer';
 
 type TAnimatedLineChart2Props = {
 	width: number;

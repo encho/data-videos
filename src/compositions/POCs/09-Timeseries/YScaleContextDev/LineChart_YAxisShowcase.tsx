@@ -7,8 +7,7 @@ import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from './Animated_XAxis';
 import {Animated_YAxis} from './Animated_YAxis';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-import {TYScaleAnimationContext} from './YScaleAnimationContainer';
-import {DisplayGridLayout} from '../../../../acetti-layout';
+import {TYScaleAnimationContext} from './useYScaleAnimation';
 
 export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimationContext: TPeriodScaleAnimationContext;
