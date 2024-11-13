@@ -79,7 +79,7 @@ export const YScaleContextDevComposition: React.FC<
 				nrBaselines={40}
 				theme={theme}
 			>
-				<Page>
+				<Page show>
 					{({contentWidth, contentHeight}) => {
 						return (
 							<TimeseriesAnimation
