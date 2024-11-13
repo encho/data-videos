@@ -43,11 +43,36 @@ export function useYScaleAnimation({
 }: Args): TYScaleAnimationContext {
 	const {theme, baseline} = usePage();
 
-	const yScalesHeight = 400;
-	const setYScalesHeight = (x: number) => {};
+	const [yScalesHeight, setYScalesHeight] =
+		useState<number>(yScalesInitialHeight);
 
-	// const [yScalesHeight, setYScalesHeight] =
-	// 	useState<number>(yScalesInitialHeight);
+	const getYDomain = useCallback(
+		(domainIndices: [number, number]) => {
+			const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) =>
+				getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+					ts,
+					domainIndices,
+					paddingPerc
+				)
+			);
+
+			const yDomainDataMin = Math.min(
+				...yDomainsForEachTimeSeries.map((it) => it[0])
+			);
+			const yDomainDataMax = Math.max(
+				...yDomainsForEachTimeSeries.map((it) => it[1])
+			);
+			const yDomainData = [yDomainDataMin, yDomainDataMax] as [number, number];
+
+			const yDomain =
+				domainType === 'VISIBLE'
+					? yDomainData
+					: ([0, yDomainData[1]] as [number, number]);
+
+			return yDomain;
+		},
+		[timeSeriesArray, paddingPerc, domainType]
+	);
 
 	const yScalesRange = [yScalesHeight, 0] as [number, number];
 
@@ -59,10 +84,13 @@ export function useYScaleAnimation({
 	const animatedVisibleDomainIndexEnd =
 		periodScaleAnimationContext.periodsScale.visibleDomainIndices[1];
 
-	const fromDomainIndices =
+	const domainIndicesFrom =
 		periodScaleAnimationContext.currentSliceInfo.domainIndicesFrom;
-	const toDomainIndices =
+	const domainIndicesTo =
 		periodScaleAnimationContext.currentSliceInfo.domainIndicesTo;
+
+	const yDomainFrom = getYDomain(domainIndicesFrom);
+	const yDomainTo = getYDomain(domainIndicesTo);
 
 	let yScale: ScaleLinear<number, number>;
 
@@ -71,108 +99,13 @@ export function useYScaleAnimation({
 	// const yDomainProp = undefined;
 
 	if (currentTransitionType === 'DEFAULT') {
-		const yDomains = timeSeriesArray.map((ts) =>
-			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				ts,
-				[animatedVisibleDomainIndexStart, animatedVisibleDomainIndexEnd] as [
-					number,
-					number
-				],
-				paddingPerc
-			)
-		);
-
-		const yDomainDataMin = Math.min(...yDomains.map((it) => it[0]));
-		const yDomainDataMax = Math.max(...yDomains.map((it) => it[1]));
-		const yDomainData = [yDomainDataMin, yDomainDataMax] as [number, number];
-
-		const yDomain =
-			domainType === 'VISIBLE'
-				? yDomainData
-				: ([0, yDomainData[1]] as [number, number]);
+		const yDomain = getYDomain([
+			animatedVisibleDomainIndexStart,
+			animatedVisibleDomainIndexEnd,
+		] as [number, number]);
 
 		yScale = scaleLinear().domain(yDomain).range(yScalesRange);
 	} else if (currentTransitionType === 'ZOOM') {
-		// const yDomainFromData =
-		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-		// 		timeSeries,
-		// 		fromDomainIndices,
-		// 		paddingPerc
-		// 	);
-
-		const getYDomain = useCallback(
-			(domainIndices: [number, number]) => {
-				const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) =>
-					getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-						ts,
-						domainIndices,
-						paddingPerc
-					)
-				);
-
-				const yDomainDataMin = Math.min(
-					...yDomainsForEachTimeSeries.map((it) => it[0])
-				);
-				const yDomainDataMax = Math.max(
-					...yDomainsForEachTimeSeries.map((it) => it[1])
-				);
-				const yDomainData = [yDomainDataMin, yDomainDataMax] as [
-					number,
-					number
-				];
-
-				const yDomain =
-					domainType === 'VISIBLE'
-						? yDomainData
-						: ([0, yDomainData[1]] as [number, number]);
-
-				return yDomain;
-			},
-			[timeSeriesArray, paddingPerc, domainType]
-		);
-
-		// const yDomainsFrom = timeSeriesArray.map((ts) =>
-		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-		// 		ts,
-		// 		fromDomainIndices,
-		// 		paddingPerc
-		// 	)
-		// );
-
-		// const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
-		// const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
-		// const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
-		// 	number,
-		// 	number
-		// ];
-
-		// const yDomainFrom =
-		// 	domainType === 'VISIBLE'
-		// 		? yDomainFromData
-		// 		: ([0, yDomainFromData[1]] as [number, number]);
-
-		const yDomainFrom = getYDomain(fromDomainIndices);
-
-		const yDomainsTo = timeSeriesArray.map((ts) =>
-			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				ts,
-				toDomainIndices,
-				paddingPerc
-			)
-		);
-
-		const yDomainToDataMin = Math.min(...yDomainsTo.map((it) => it[0]));
-		const yDomainToDataMax = Math.max(...yDomainsTo.map((it) => it[1]));
-		const yDomainToData = [yDomainToDataMin, yDomainToDataMax] as [
-			number,
-			number
-		];
-
-		const yDomainTo =
-			domainType === 'VISIBLE'
-				? yDomainToData
-				: ([0, yDomainToData[1]] as [number, number]);
-
 		const animatedYDomain_0 = interpolate(
 			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
 			[0, 1],
@@ -194,50 +127,6 @@ export function useYScaleAnimation({
 		throw Error('Unknown transitionType');
 	}
 
-	const yDomainsFrom = timeSeriesArray.map((ts) =>
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-			ts,
-			paddingPerc
-		)
-	);
-
-	const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
-	const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
-	const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
-		number,
-		number
-	];
-
-	const yDomainFrom =
-		domainType === 'VISIBLE'
-			? yDomainFromData
-			: ([0, yDomainFromData[1]] as [number, number]);
-
-	const yDomainsTo = timeSeriesArray.map((ts) =>
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
-			ts,
-			paddingPerc
-		)
-	);
-
-	const yDomainToDataMin = Math.min(...yDomainsTo.map((it) => it[0]));
-	const yDomainToDataMax = Math.max(...yDomainsTo.map((it) => it[1]));
-	const yDomainToData = [yDomainToDataMin, yDomainToDataMax] as [
-		number,
-		number
-	];
-
-	// const yDomainToData =
-	// 	periodScaleAnimationContext.currentSliceInfo.periodsScaleTo.getTimeSeriesInterpolatedExtent(
-	// 		timeSeries,
-	// 		paddingPerc
-	// 	);
-
-	const yDomainTo =
-		domainType === 'VISIBLE'
-			? yDomainToData
-			: ([0, yDomainToData[1]] as [number, number]);
-
 	// range is not needed as we only calculate domainValues for labels and ticks,
 	// then the current yScale is used to compute the mappings
 	const yScaleFrom: ScaleLinear<number, number> =
@@ -257,36 +146,66 @@ export function useYScaleAnimation({
 				(transition) => {
 					const slicesLabels = transition.slices.map(
 						({domainIndicesFrom, domainIndicesTo}) => {
-							return ['1000 EUREUR', '1200 EUREUR'];
+							const yDomainFrom = getYDomain(domainIndicesFrom);
+							const yDomainTo = getYDomain(domainIndicesTo);
+
+							const yScaleFrom: ScaleLinear<number, number> =
+								scaleLinear().domain(yDomainFrom);
+
+							const yScaleTo: ScaleLinear<number, number> =
+								scaleLinear().domain(yDomainTo);
+
+							const yAxisSpecFrom = getYAxisSpec(
+								yScaleFrom,
+								nrTicks,
+								tickFormatter
+							);
+							const yAxisSpecTo = getYAxisSpec(
+								yScaleTo,
+								nrTicks,
+								tickFormatter
+							);
+
+							const tickLabelsFrom = yAxisSpecFrom.labels.map((it) => it.label);
+							const tickLabelsTo = yAxisSpecTo.labels.map((it) => it.label);
+
+							return [...tickLabelsFrom, ...tickLabelsTo];
 						}
 					);
 					return slicesLabels.flat();
 				}
 			);
 		return periodsLabels.flat();
-	}, [periodScaleAnimationContext.allTransitionsAndSlicesOverview]);
+	}, [
+		periodScaleAnimationContext.allTransitionsAndSlicesOverview,
+		nrTicks,
+		tickFormatter,
+	]);
 
-	// TODO useMemo
-	const allLabelsWidths = allEverDisplayedLabels.map(
-		(text) =>
-			getTextDimensions({
-				theme,
-				baseline,
-				text,
-				key: 'datavizTickLabel',
-			}).width
+	const allLabelsWidths = useMemo(
+		() =>
+			allEverDisplayedLabels.map(
+				(text) =>
+					getTextDimensions({
+						theme,
+						baseline,
+						text,
+						key: 'datavizTickLabel',
+					}).width
+			),
+		[allEverDisplayedLabels]
 	);
 
-	// TODO useMemo
-	const maxLabelWidth = Math.max(...allLabelsWidths);
+	const maxLabelWidth = useMemo(
+		() => Math.max(...allLabelsWidths),
+		[allLabelsWidths]
+	);
 
 	// TODO from theme, this is also used identically by Animated_YAxis...
 	const TICK_LINE_SIZE = 24; // TODO into theme
 	const MARGIN_LEFT = 0;
 
 	const maxLabelComponentWidth = maxLabelWidth + TICK_LINE_SIZE + MARGIN_LEFT;
-
-	// console.log({yAxisSpecFrom, yAxisSpecTo});
 
 	return {
 		yScale,

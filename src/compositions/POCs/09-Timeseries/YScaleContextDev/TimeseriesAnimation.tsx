@@ -147,7 +147,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							const yScaleAnimationUpper = useYScaleAnimation({
 								periodScaleAnimationContext: periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
-								tickFormatter: (tick) => `${tick} EUREUR`,
+								tickFormatter: (tick) => `${tick} $`,
 								yScalesInitialHeight: 200,
 								domainType: 'ZERO',
 								paddingPerc: 0.3,
@@ -157,7 +157,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								// TODO rename to periodScaleAnimation
 								periodScaleAnimationContext: periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2],
-								tickFormatter: (tick) => `${tick} EUR`,
+								tickFormatter: (tick) => `${tick} $$$`,
 								yScalesInitialHeight: 200,
 								domainType: 'VISIBLE',
 								paddingPerc: 0,
