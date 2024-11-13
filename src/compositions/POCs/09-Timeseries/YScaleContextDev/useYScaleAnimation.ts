@@ -23,7 +23,7 @@ export type TYScaleAnimationContext = {
 };
 
 type Args = {
-	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	periodScaleAnimation: TPeriodScaleAnimationContext;
 	nrTicks?: number;
 	tickFormatter: (x: number) => string; // TODO evtl. TickComponent better, more flexible
 	yScalesInitialHeight?: number;
@@ -33,7 +33,7 @@ type Args = {
 };
 
 export function useYScaleAnimation({
-	periodScaleAnimationContext,
+	periodScaleAnimation,
 	nrTicks = 5,
 	tickFormatter,
 	domainType,
@@ -77,17 +77,16 @@ export function useYScaleAnimation({
 	const yScalesRange = [yScalesHeight, 0] as [number, number];
 
 	const currentTransitionType =
-		periodScaleAnimationContext.currentTransitionInfo.transitionType;
+		periodScaleAnimation.currentTransitionInfo.transitionType;
 
 	const animatedVisibleDomainIndexStart =
-		periodScaleAnimationContext.periodsScale.visibleDomainIndices[0];
+		periodScaleAnimation.periodsScale.visibleDomainIndices[0];
 	const animatedVisibleDomainIndexEnd =
-		periodScaleAnimationContext.periodsScale.visibleDomainIndices[1];
+		periodScaleAnimation.periodsScale.visibleDomainIndices[1];
 
 	const domainIndicesFrom =
-		periodScaleAnimationContext.currentSliceInfo.domainIndicesFrom;
-	const domainIndicesTo =
-		periodScaleAnimationContext.currentSliceInfo.domainIndicesTo;
+		periodScaleAnimation.currentSliceInfo.domainIndicesFrom;
+	const domainIndicesTo = periodScaleAnimation.currentSliceInfo.domainIndicesTo;
 
 	const yDomainFrom = getYDomain(domainIndicesFrom);
 	const yDomainTo = getYDomain(domainIndicesTo);
@@ -107,12 +106,12 @@ export function useYScaleAnimation({
 		yScale = scaleLinear().domain(yDomain).range(yScalesRange);
 	} else if (currentTransitionType === 'ZOOM') {
 		const animatedYDomain_0 = interpolate(
-			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
+			periodScaleAnimation.currentTransitionInfo.easingPercentage,
 			[0, 1],
 			[yDomainFrom[0], yDomainTo[0]]
 		);
 		const animatedYDomain_1 = interpolate(
-			periodScaleAnimationContext.currentTransitionInfo.easingPercentage,
+			periodScaleAnimation.currentTransitionInfo.easingPercentage,
 			[0, 1],
 			[yDomainFrom[1], yDomainTo[1]]
 		);
@@ -142,42 +141,36 @@ export function useYScaleAnimation({
 	// TODO here determine all ever displayed labels... from allTransitionsAndSLicesOverview
 	const allEverDisplayedLabels = useMemo(() => {
 		const periodsLabels =
-			periodScaleAnimationContext.allTransitionsAndSlicesOverview.map(
-				(transition) => {
-					const slicesLabels = transition.slices.map(
-						({domainIndicesFrom, domainIndicesTo}) => {
-							const yDomainFrom = getYDomain(domainIndicesFrom);
-							const yDomainTo = getYDomain(domainIndicesTo);
+			periodScaleAnimation.allTransitionsAndSlicesOverview.map((transition) => {
+				const slicesLabels = transition.slices.map(
+					({domainIndicesFrom, domainIndicesTo}) => {
+						const yDomainFrom = getYDomain(domainIndicesFrom);
+						const yDomainTo = getYDomain(domainIndicesTo);
 
-							const yScaleFrom: ScaleLinear<number, number> =
-								scaleLinear().domain(yDomainFrom);
+						const yScaleFrom: ScaleLinear<number, number> =
+							scaleLinear().domain(yDomainFrom);
 
-							const yScaleTo: ScaleLinear<number, number> =
-								scaleLinear().domain(yDomainTo);
+						const yScaleTo: ScaleLinear<number, number> =
+							scaleLinear().domain(yDomainTo);
 
-							const yAxisSpecFrom = getYAxisSpec(
-								yScaleFrom,
-								nrTicks,
-								tickFormatter
-							);
-							const yAxisSpecTo = getYAxisSpec(
-								yScaleTo,
-								nrTicks,
-								tickFormatter
-							);
+						const yAxisSpecFrom = getYAxisSpec(
+							yScaleFrom,
+							nrTicks,
+							tickFormatter
+						);
+						const yAxisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
-							const tickLabelsFrom = yAxisSpecFrom.labels.map((it) => it.label);
-							const tickLabelsTo = yAxisSpecTo.labels.map((it) => it.label);
+						const tickLabelsFrom = yAxisSpecFrom.labels.map((it) => it.label);
+						const tickLabelsTo = yAxisSpecTo.labels.map((it) => it.label);
 
-							return [...tickLabelsFrom, ...tickLabelsTo];
-						}
-					);
-					return slicesLabels.flat();
-				}
-			);
+						return [...tickLabelsFrom, ...tickLabelsTo];
+					}
+				);
+				return slicesLabels.flat();
+			});
 		return periodsLabels.flat();
 	}, [
-		periodScaleAnimationContext.allTransitionsAndSlicesOverview,
+		periodScaleAnimation.allTransitionsAndSlicesOverview,
 		nrTicks,
 		tickFormatter,
 	]);

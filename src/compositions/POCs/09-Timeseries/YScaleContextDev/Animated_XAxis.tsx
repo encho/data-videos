@@ -16,7 +16,7 @@ import {
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 
 export const Animated_XAxis: React.FC<{
-	periodsScaleAnimationContext: TPeriodScaleAnimationContext;
+	periodsScaleAnimation: TPeriodScaleAnimationContext;
 	area: TGridLayoutArea;
 	axisSpecFrom?: TXAxisSpec;
 	axisSpecTo?: TXAxisSpec;
@@ -24,7 +24,7 @@ export const Animated_XAxis: React.FC<{
 	debugUpdateColor?: string;
 	debugExitColor?: string;
 }> = ({
-	periodsScaleAnimationContext,
+	periodsScaleAnimation,
 	area,
 	axisSpecFrom: axisSpecFromProp,
 	axisSpecTo: axisSpecToProp,
@@ -46,14 +46,13 @@ export const Animated_XAxis: React.FC<{
 	// TODO rename to xAxisTheme e.g.
 	const theme = fullTheme.xAxis;
 
-	const periodsScale = periodsScaleAnimationContext.periodsScale;
-	const currentSliceInfo = periodsScaleAnimationContext.currentSliceInfo;
+	const periodsScale = periodsScaleAnimation.periodsScale;
+	const currentSliceInfo = periodsScaleAnimation.currentSliceInfo;
 
 	const periodScaleFrom =
-		periodsScaleAnimationContext.currentSliceInfo.periodsScaleFrom;
+		periodsScaleAnimation.currentSliceInfo.periodsScaleFrom;
 
-	const periodScaleTo =
-		periodsScaleAnimationContext.currentSliceInfo.periodsScaleTo;
+	const periodScaleTo = periodsScaleAnimation.currentSliceInfo.periodsScaleTo;
 
 	const axisSpecFrom =
 		axisSpecFromProp ||

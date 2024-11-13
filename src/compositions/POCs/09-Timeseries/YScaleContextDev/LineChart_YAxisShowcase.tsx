@@ -10,13 +10,12 @@ import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodSca
 import {TYScaleAnimationContext} from './useYScaleAnimation';
 
 export const LineChart_YAxisShowcase: React.FC<{
-	periodScaleAnimationContext: TPeriodScaleAnimationContext;
-	yScaleAnimationContext: TYScaleAnimationContext;
+	periodScaleAnimation: TPeriodScaleAnimationContext;
+	yScaleAnimation: TYScaleAnimationContext;
 	timeSeries: TimeSeries;
 	timeSeries2: TimeSeries;
 	timeSeries3: TimeSeries;
 	layoutAreas: {
-		// chart: TGridLayoutArea;
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
@@ -26,8 +25,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 	timeSeries,
 	timeSeries2,
 	timeSeries3,
-	periodScaleAnimationContext,
-	yScaleAnimationContext,
+	periodScaleAnimation,
+	yScaleAnimation,
 }) => {
 	const axisDebugColors = {
 		debugEnterColor: 'lime',
@@ -37,8 +36,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 	// const axisDebugColors = {};
 
 	useEffect(() => {
-		periodScaleAnimationContext.setPeriodScalesWidth(layoutAreas.plot.width);
-		yScaleAnimationContext.setYScalesHeight(layoutAreas.plot.height);
+		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
+		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
 	}, [layoutAreas.plot.width]);
 
 	return (
@@ -65,8 +64,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 			>
 				<AnimatedLine
 					lineColor={'black'}
-					periodsScale={periodScaleAnimationContext.periodsScale}
-					yScale={yScaleAnimationContext.yScale}
+					periodsScale={periodScaleAnimation.periodsScale}
+					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
 				/>
@@ -76,8 +75,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 			>
 				<AnimatedLine
 					lineColor={'orange'}
-					periodsScale={periodScaleAnimationContext.periodsScale}
-					yScale={yScaleAnimationContext.yScale}
+					periodsScale={periodScaleAnimation.periodsScale}
+					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries2}
 				/>
@@ -86,9 +85,12 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
+					// TODO
+					// periodScaleAnimation={periodScaleAnimation}
+					// yScaleAnimation={yScaleAnimation}
 					lineColor={'#00aadd'}
-					periodsScale={periodScaleAnimationContext.periodsScale}
-					yScale={yScaleAnimationContext.yScale}
+					periodsScale={periodScaleAnimation.periodsScale}
+					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries3}
 				/>
@@ -97,12 +99,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
 				<Animated_YAxis
-					periodScaleAnimationContext={periodScaleAnimationContext}
-					yScale={yScaleAnimationContext.yScale}
-					yScaleFrom={yScaleAnimationContext.yScaleFrom}
-					yScaleTo={yScaleAnimationContext.yScaleTo}
-					yAxisSpecFrom={yScaleAnimationContext.yAxisSpecFrom}
-					yAxisSpecTo={yScaleAnimationContext.yAxisSpecTo}
+					periodScaleAnimation={periodScaleAnimation}
+					yScaleAnimation={yScaleAnimation}
 					area={layoutAreas.yAxis}
 					{...axisDebugColors}
 				/>
@@ -111,7 +109,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimationContext={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimation}
 					area={layoutAreas.xAxis}
 					{...axisDebugColors}
 				/>

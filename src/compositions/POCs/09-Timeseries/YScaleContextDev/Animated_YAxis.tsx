@@ -1,17 +1,12 @@
 import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
-// import {scaleLinear, ScaleLinear} from 'd3-scale';
 
+import {TYScaleAnimationContext} from './useYScaleAnimation';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-// import {usePage} from '../../../../acetti-components/PageContext';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
-import {
-	TYAxisSpec,
-	TYAxisScale,
-} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
+import {TYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-import {getYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {usePage} from '../../../../acetti-components/PageContext';
 
 const getTick = (axisSpec: TYAxisSpec, tickId: string) => {
@@ -28,29 +23,18 @@ const getLabel = (axisSpec: TYAxisSpec, labelId: string) => {
 
 export const Animated_YAxis: React.FC<{
 	area: TGridLayoutArea;
-	// TODO better yScaleAnimationContext with all that info!
-	yScale: TYAxisScale;
-	yScaleFrom: TYAxisScale;
-	yScaleTo: TYAxisScale;
-	yAxisSpecFrom: TYAxisSpec;
-	yAxisSpecTo: TYAxisSpec;
-	// nrTicks?: number; // TODO deprecate as in container
-	// tickFormatter: (x: number) => string; // TODO deprecate as in container
-	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	periodScaleAnimation: TPeriodScaleAnimationContext;
+	yScaleAnimation: TYScaleAnimationContext;
+	// yAxisSpecFrom: TYAxisSpec; // evtl. as optional prop?
+	// yAxisSpecTo: TYAxisSpec; // evtl. as optional prop?
 	// TODO better debugColors object {update, enter, exit}
 	debugEnterColor?: string;
 	debugUpdateColor?: string;
 	debugExitColor?: string;
 }> = ({
-	periodScaleAnimationContext,
+	periodScaleAnimation,
+	yScaleAnimation,
 	area,
-	yScale,
-	yScaleFrom,
-	yScaleTo,
-	yAxisSpecFrom,
-	yAxisSpecTo,
-	// nrTicks = 5,
-	// tickFormatter,
 	debugEnterColor,
 	debugExitColor,
 	debugUpdateColor,
@@ -68,7 +52,9 @@ export const Animated_YAxis: React.FC<{
 	// TODO also accept optinally from props
 	const THE_BASELINE = pageBaseline;
 
-	const currentSliceInfo = periodScaleAnimationContext.currentSliceInfo;
+	const {yScale, yAxisSpecFrom, yAxisSpecTo} = yScaleAnimation;
+
+	const currentSliceInfo = periodScaleAnimation.currentSliceInfo;
 
 	const relativeFrame = currentSliceInfo.relativeFrame;
 	const {fps} = useVideoConfig();
@@ -91,10 +77,6 @@ export const Animated_YAxis: React.FC<{
 
 	const axisLineColor = debugUpdateColor || theme.color;
 	// ------------------------------------------------------------
-
-	// calculate here and potentially get as prop (as in x axis)
-	// const yAxisSpecFrom = getYAxisSpec(yScaleFrom, nrTicks, tickFormatter);
-	// const yAxisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
 	// TODO how/if to implement in yScale context:
 	// *******************************************
@@ -136,7 +118,7 @@ export const Animated_YAxis: React.FC<{
 		const endTick = getTick(yAxisSpecTo, tickId);
 
 		const currentDomainValue = interpolate(
-			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
+			periodScaleAnimation.currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startTick.domainValue, endTick.domainValue]
 		);
@@ -204,13 +186,13 @@ export const Animated_YAxis: React.FC<{
 		const endLabel = getLabel(yAxisSpecTo, labelId);
 
 		const currentDomainValue = interpolate(
-			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
+			periodScaleAnimation.currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startLabel.domainValue, endLabel.domainValue]
 		);
 
 		const marginLeft = interpolate(
-			periodScaleAnimationContext.currentSliceInfo.easingPercentage,
+			periodScaleAnimation.currentSliceInfo.easingPercentage,
 			[0, 1],
 			[startLabel.marginLeft || 0, endLabel.marginLeft || 0],
 			{

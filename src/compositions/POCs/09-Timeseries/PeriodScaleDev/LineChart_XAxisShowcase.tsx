@@ -85,7 +85,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimationContext={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimationContext}
 					axisSpecFrom={axisSpecFrom}
 					axisSpecTo={axisSpecTo}
 					area={layoutAreas.xAxis}
@@ -101,7 +101,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimationContext={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimationContext}
 					axisSpecFrom={xAxisSpec_days_from}
 					axisSpecTo={xAxisSpec_days_to}
 					area={layoutAreas.xAxis}
@@ -117,7 +117,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimationContext={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimationContext}
 					axisSpecFrom={xAxisSpec_monthStarts_from}
 					axisSpecTo={xAxisSpec_monthStarts_to}
 					area={layoutAreas.xAxis}
@@ -133,7 +133,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimationContext={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimationContext}
 					axisSpecFrom={xAxisSpec_quarterStarts_from}
 					axisSpecTo={xAxisSpec_quarterStarts_to}
 					area={layoutAreas.xAxis}

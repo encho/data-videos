@@ -145,7 +145,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							const {contentWidth, contentHeight} = usePage();
 
 							const yScaleAnimationUpper = useYScaleAnimation({
-								periodScaleAnimationContext: periodScaleAnimation,
+								periodScaleAnimation: periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
 								tickFormatter: (tick) => `${tick} $`,
 								yScalesInitialHeight: 200,
@@ -154,8 +154,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							});
 
 							const yScaleAnimationLower = useYScaleAnimation({
-								// TODO rename to periodScaleAnimation
-								periodScaleAnimationContext: periodScaleAnimation,
+								periodScaleAnimation: periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2],
 								tickFormatter: (tick) => `${tick} $$$`,
 								yScalesInitialHeight: 200,
@@ -193,10 +192,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									</div>
 
 									<LineChart_YAxisShowcase
-										// TODO rename to periodScaleAnimation
-										periodScaleAnimationContext={periodScaleAnimation}
-										// TODO rename to yScaleAnimation
-										yScaleAnimationContext={yScaleAnimationUpper}
+										periodScaleAnimation={periodScaleAnimation}
+										yScaleAnimation={yScaleAnimationUpper}
 										timeSeries={timeSeries}
 										timeSeries2={timeSeries2}
 										timeSeries3={timeSeries3}
@@ -207,8 +204,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										}}
 									/>
 									<LineChart_YAxisShowcase
-										periodScaleAnimationContext={periodScaleAnimation}
-										yScaleAnimationContext={yScaleAnimationLower}
+										periodScaleAnimation={periodScaleAnimation}
+										yScaleAnimation={yScaleAnimationLower}
 										timeSeries={timeSeries}
 										timeSeries2={timeSeries2}
 										timeSeries3={timeSeries2}
