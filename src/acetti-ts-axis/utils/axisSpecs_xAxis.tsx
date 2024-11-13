@@ -332,7 +332,7 @@ export function getQuarterStartsAxisSpec(
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
 		return {
-			id: `secondaryLabel-year-xx-${year}}`,
+			id: `secondaryLabel-year-${year}}`,
 			textAnchor: 'start' as const,
 			label: `${year}`,
 			periodFloatIndex: index,
