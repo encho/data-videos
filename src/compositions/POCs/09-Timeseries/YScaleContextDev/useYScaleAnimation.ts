@@ -1,6 +1,6 @@
 import {interpolate} from 'remotion';
 import {scaleLinear, ScaleLinear} from 'd3-scale';
-import {useMemo, useState} from 'react';
+import {useMemo, useState, useCallback} from 'react';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
@@ -43,8 +43,11 @@ export function useYScaleAnimation({
 }: Args): TYScaleAnimationContext {
 	const {theme, baseline} = usePage();
 
-	const [yScalesHeight, setYScalesHeight] =
-		useState<number>(yScalesInitialHeight);
+	const yScalesHeight = 400;
+	const setYScalesHeight = (x: number) => {};
+
+	// const [yScalesHeight, setYScalesHeight] =
+	// 	useState<number>(yScalesInitialHeight);
 
 	const yScalesRange = [yScalesHeight, 0] as [number, number];
 
@@ -97,25 +100,58 @@ export function useYScaleAnimation({
 		// 		paddingPerc
 		// 	);
 
-		const yDomainsFrom = timeSeriesArray.map((ts) =>
-			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
-				ts,
-				fromDomainIndices,
-				paddingPerc
-			)
+		const getYDomain = useCallback(
+			(domainIndices: [number, number]) => {
+				const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) =>
+					getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+						ts,
+						domainIndices,
+						paddingPerc
+					)
+				);
+
+				const yDomainDataMin = Math.min(
+					...yDomainsForEachTimeSeries.map((it) => it[0])
+				);
+				const yDomainDataMax = Math.max(
+					...yDomainsForEachTimeSeries.map((it) => it[1])
+				);
+				const yDomainData = [yDomainDataMin, yDomainDataMax] as [
+					number,
+					number
+				];
+
+				const yDomain =
+					domainType === 'VISIBLE'
+						? yDomainData
+						: ([0, yDomainData[1]] as [number, number]);
+
+				return yDomain;
+			},
+			[timeSeriesArray, paddingPerc, domainType]
 		);
 
-		const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
-		const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
-		const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
-			number,
-			number
-		];
+		// const yDomainsFrom = timeSeriesArray.map((ts) =>
+		// 	getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+		// 		ts,
+		// 		fromDomainIndices,
+		// 		paddingPerc
+		// 	)
+		// );
 
-		const yDomainFrom =
-			domainType === 'VISIBLE'
-				? yDomainFromData
-				: ([0, yDomainFromData[1]] as [number, number]);
+		// const yDomainFromDataMin = Math.min(...yDomainsFrom.map((it) => it[0]));
+		// const yDomainFromDataMax = Math.max(...yDomainsFrom.map((it) => it[1]));
+		// const yDomainFromData = [yDomainFromDataMin, yDomainFromDataMax] as [
+		// 	number,
+		// 	number
+		// ];
+
+		// const yDomainFrom =
+		// 	domainType === 'VISIBLE'
+		// 		? yDomainFromData
+		// 		: ([0, yDomainFromData[1]] as [number, number]);
+
+		const yDomainFrom = getYDomain(fromDomainIndices);
 
 		const yDomainsTo = timeSeriesArray.map((ts) =>
 			getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
@@ -157,12 +193,6 @@ export function useYScaleAnimation({
 	} else {
 		throw Error('Unknown transitionType');
 	}
-
-	// const yDomainFromData =
-	// 	periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
-	// 		timeSeries,
-	// 		paddingPerc
-	// 	);
 
 	const yDomainsFrom = timeSeriesArray.map((ts) =>
 		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom.getTimeSeriesInterpolatedExtent(
@@ -221,10 +251,20 @@ export function useYScaleAnimation({
 	const yAxisSpecTo = getYAxisSpec(yScaleTo, nrTicks, tickFormatter);
 
 	// TODO here determine all ever displayed labels... from allTransitionsAndSLicesOverview
-	const allEverDisplayedLabels = useMemo(
-		() => ['1000 EUR', '1200 EUR'],
-		[periodScaleAnimationContext.allTransitionsAndSlicesOverview]
-	);
+	const allEverDisplayedLabels = useMemo(() => {
+		const periodsLabels =
+			periodScaleAnimationContext.allTransitionsAndSlicesOverview.map(
+				(transition) => {
+					const slicesLabels = transition.slices.map(
+						({domainIndicesFrom, domainIndicesTo}) => {
+							return ['1000 EUREUR', '1200 EUREUR'];
+						}
+					);
+					return slicesLabels.flat();
+				}
+			);
+		return periodsLabels.flat();
+	}, [periodScaleAnimationContext.allTransitionsAndSlicesOverview]);
 
 	// TODO useMemo
 	const allLabelsWidths = allEverDisplayedLabels.map(
