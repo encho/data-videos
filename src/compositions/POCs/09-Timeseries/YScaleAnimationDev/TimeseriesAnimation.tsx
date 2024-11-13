@@ -12,6 +12,7 @@ import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {PeriodScaleAnimationInspector} from '../utils/PeriodScaleAnimationInspector';
 import {DisplayGridLayout} from '../../../../acetti-layout';
+import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -137,12 +138,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					width={CHART_PAGE_WIDTH}
 					height={CHART_PAGE_HEIGHT}
 					margin={CHART_PAGE_MARGIN}
-					nrBaselines={48}
+					nrBaselines={40}
 					theme={theme}
 				>
 					<Page show>
 						{() => {
 							const {contentWidth, contentHeight} = usePage();
+
+							const xAxisHeight = useXAxisAreaHeight();
 
 							const yScaleAnimationUpper = useYScaleAnimation({
 								periodScaleAnimation: periodScaleAnimation,
@@ -172,6 +175,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								width: contentWidth,
 								height: contentHeight,
 								yAxisWidth,
+								xAxisHeight,
 							});
 
 							return (

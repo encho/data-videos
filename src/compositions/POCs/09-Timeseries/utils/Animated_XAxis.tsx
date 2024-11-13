@@ -15,6 +15,42 @@ import {
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
+// TODO from Theme
+// sizes and distances
+// ------------------------------------------------------------
+// const TICK_LINE_SIZE = 24; // TODO into theme
+const TICK_LINE_WIDTH = 4; // TODO into theme
+const AXIS_LINE_WIDTH = 4; // TODO into theme
+
+const TICKLABEL_MARGIN_TOP_IN_BASELINES = 0.6;
+const SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES = 0.8;
+
+export function useXAxisAreaHeight(baselineProp?: number) {
+	const {theme, baseline: themeBaseline} = usePage();
+
+	const baseline = baselineProp || themeBaseline;
+
+	const tickLabelStyle = theme.typography.textStyles.datavizTickLabel;
+	const secondaryTickLabelStyle =
+		theme.typography.textStyles.datavizSecondaryTickLabel;
+
+	const tickLabelHeight = tickLabelStyle.capHeightInBaselines * baseline;
+	const secondaryTickLabelHeight =
+		secondaryTickLabelStyle.capHeightInBaselines * baseline;
+
+	const tickLabelMarginTop = TICKLABEL_MARGIN_TOP_IN_BASELINES * baseline;
+	const secondaryTickLabelMarginTop =
+		SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES * baseline;
+
+	const xAxisAreaHeight =
+		tickLabelMarginTop +
+		tickLabelHeight +
+		secondaryTickLabelMarginTop +
+		secondaryTickLabelHeight;
+
+	return xAxisAreaHeight;
+}
+
 export const Animated_XAxis: React.FC<{
 	periodsScaleAnimation: TPeriodScaleAnimationContext;
 	area: TGridLayoutArea;
@@ -32,16 +68,18 @@ export const Animated_XAxis: React.FC<{
 	debugUpdateColor,
 	debugExitColor,
 }) => {
-	// TODO from Theme
-	// sizes and distances
-	// ------------------------------------------------------------
-	const TICK_LINE_SIZE = 24; // TODO into theme
-	const TICK_LINE_WIDTH = 4; // TODO into theme
-	const AXIS_LINE_WIDTH = 4; // TODO into theme
-
 	const {theme: fullTheme, baseline: pageBaseline} = usePage();
 
 	const THE_BASELINE = pageBaseline;
+
+	const TICK_LINE_SIZE_IN_BASELINES =
+		fullTheme.typography.textStyles.datavizTickLabel.capHeightInBaselines +
+		TICKLABEL_MARGIN_TOP_IN_BASELINES;
+
+	const TICK_LINE_SIZE = THE_BASELINE * TICK_LINE_SIZE_IN_BASELINES;
+
+	const SECONDARY_TICKLABEL_TOP_Y =
+		TICK_LINE_SIZE + THE_BASELINE * SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES;
 
 	// TODO rename to xAxisTheme e.g.
 	const theme = fullTheme.xAxis;
@@ -458,7 +496,7 @@ export const Animated_XAxis: React.FC<{
 								key={i}
 								style={{
 									position: 'absolute',
-									bottom: 0,
+									top: SECONDARY_TICKLABEL_TOP_Y,
 									left: it.value + it.marginLeft,
 								}}
 							>

@@ -11,20 +11,22 @@ export function useChartLayout({
 	width,
 	height,
 	yAxisWidth,
+	xAxisHeight,
 }: {
 	width: number;
 	height: number;
 	yAxisWidth: number;
+	xAxisHeight: number;
 }) {
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},
 		{type: 'pixel', value: 30, name: 'space'},
-		{type: 'pixel', value: 55, name: 'xAxis'},
+		{type: 'pixel', value: xAxisHeight, name: 'xAxis'},
 
 		{type: 'pixel', value: 30, name: 'space'},
 		{type: 'fr', value: 0.33, name: 'plot2'},
 		{type: 'pixel', value: 30, name: 'space'},
-		{type: 'pixel', value: 55, name: 'xAxis2'},
+		{type: 'pixel', value: xAxisHeight, name: 'xAxis2'},
 	];
 
 	const chartColsRailSpec: TGridRailSpec = [
