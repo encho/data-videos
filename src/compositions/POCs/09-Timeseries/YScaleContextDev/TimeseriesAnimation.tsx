@@ -1,6 +1,7 @@
 import {useVideoConfig, Easing} from 'remotion';
 import {useMemo} from 'react';
 
+import {usePeriodScaleAnimation} from './usePeriodScaleAnimation';
 import {useYScaleAnimation} from './useYScaleAnimation';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {useChartLayout} from './useChartLayout';
@@ -69,6 +70,67 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		return timeSeries.map((it) => ({...it, value: it.value * 4}));
 	}, []);
 
+	const periodScaleAnimation = usePeriodScaleAnimation({
+		timeSeries,
+		periodScalesInitialWidth: 500,
+		transitions: [
+			{
+				fromDomainIndices: tsDomainIndices.start, // if omitted & index===0, fill with [0,1]
+				toDomainIndices: tsDomainIndices.full,
+				transitionSpec: {
+					durationInFrames: td_buildup,
+					easingFunction: Easing.linear,
+					transitionType: 'DEFAULT',
+				},
+			},
+			{
+				fromDomainIndices: tsDomainIndices.full, // if omitted & index===0, fill with [0,1]
+				toDomainIndices: tsDomainIndices.full,
+				transitionSpec: {
+					durationInFrames: td_wait_1,
+					easingFunction: Easing.linear,
+					transitionType: 'DEFAULT',
+				},
+			},
+			{
+				fromDomainIndices: tsDomainIndices.full, // if omitted, fill with previous fromDomainIndices
+				toDomainIndices: tsDomainIndices.zoom,
+				transitionSpec: {
+					durationInFrames: td_zoom,
+					easingFunction: Easing.linear,
+					transitionType: 'ZOOM',
+				},
+			},
+			{
+				fromDomainIndices: tsDomainIndices.zoom, // if omitted, fill with previous fromDomainIndices
+				toDomainIndices: tsDomainIndices.zoom,
+				transitionSpec: {
+					durationInFrames: td_wait_2,
+					easingFunction: Easing.linear,
+					transitionType: 'ZOOM',
+				},
+			},
+			{
+				fromDomainIndices: tsDomainIndices.zoom, // TODO if omitted, fill with previous fromDomainIndices
+				toDomainIndices: tsDomainIndices.full,
+				transitionSpec: {
+					durationInFrames: td_buildup_again,
+					easingFunction: Easing.linear,
+					transitionType: 'ZOOM',
+				},
+			},
+			{
+				fromDomainIndices: tsDomainIndices.full, // TODO if omitted, fill with previous fromDomainIndices
+				toDomainIndices: tsDomainIndices.start,
+				transitionSpec: {
+					durationInFrames: td_tear_down,
+					easingFunction: Easing.linear,
+					transitionType: 'DEFAULT',
+				},
+			},
+		],
+	});
+
 	return (
 		<div style={{position: 'relative'}}>
 			<PeriodScaleAnimationContainer
@@ -131,7 +193,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					},
 				]}
 			>
-				{(periodScaleAnimationContext) => {
+				{(periodScaleAnimationContext22222j) => {
 					return (
 						<div>
 							<PageContext
@@ -146,7 +208,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										const {contentWidth, contentHeight} = usePage();
 
 										const yScaleAnimationUpper = useYScaleAnimation({
-											periodScaleAnimationContext,
+											periodScaleAnimationContext: periodScaleAnimation,
 											timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
 											tickFormatter: (tick) => `${tick} EUR`,
 											yScalesInitialHeight: 200,
@@ -155,7 +217,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										});
 
 										const yScaleAnimationLower = useYScaleAnimation({
-											periodScaleAnimationContext,
+											// TODO rename to periodScaleAnimation
+											periodScaleAnimationContext: periodScaleAnimation,
 											timeSeriesArray: [timeSeries, timeSeries2],
 											tickFormatter: (tick) => `${tick} EUR`,
 											yScalesInitialHeight: 200,
@@ -193,9 +256,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 												</div>
 
 												<LineChart_YAxisShowcase
-													periodScaleAnimationContext={
-														periodScaleAnimationContext
-													}
+													// TODO rename to periodScaleAnimation
+													periodScaleAnimationContext={periodScaleAnimation}
+													// TODO rename to yScaleAnimation
 													yScaleAnimationContext={yScaleAnimationUpper}
 													timeSeries={timeSeries}
 													timeSeries2={timeSeries2}
@@ -207,9 +270,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													}}
 												/>
 												<LineChart_YAxisShowcase
-													periodScaleAnimationContext={
-														periodScaleAnimationContext
-													}
+													periodScaleAnimationContext={periodScaleAnimation}
 													yScaleAnimationContext={yScaleAnimationLower}
 													timeSeries={timeSeries}
 													timeSeries2={timeSeries2}
@@ -234,7 +295,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							>
 								<Page show>
 									<PeriodScaleAnimationContextDebugger
-										{...periodScaleAnimationContext}
+										{...periodScaleAnimation}
 									/>
 								</Page>
 							</PageContext>
