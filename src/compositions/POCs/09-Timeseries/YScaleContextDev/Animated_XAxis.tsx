@@ -7,13 +7,13 @@ import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStyles
 import {usePage} from '../../../../acetti-components/PageContext';
 import {TXAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
-import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {
 	getIndicesAxisSpec,
 	getDaysAxisSpec,
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
 export const Animated_XAxis: React.FC<{
 	periodsScaleAnimation: TPeriodScaleAnimationContext;

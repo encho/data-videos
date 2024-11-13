@@ -7,8 +7,8 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {Animated_XAxis} from '../YScaleContextDev/Animated_XAxis';
+import {TPeriodScaleAnimationContext} from '../YScaleContextDev/usePeriodScaleAnimation';
 
 const AXIS_SPEC_FUNCTIONS = {
 	indices: getIndicesAxisSpec,

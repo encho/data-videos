@@ -6,8 +6,8 @@ import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStyles
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
 import {TYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
-import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
 import {usePage} from '../../../../acetti-components/PageContext';
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
 const getTick = (axisSpec: TYAxisSpec, tickId: string) => {
 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);

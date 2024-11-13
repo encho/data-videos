@@ -6,7 +6,7 @@ import {usePage} from '../../../../acetti-components/PageContext';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
-import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 import {
 	getYAxisSpec,
 	TYAxisSpec,

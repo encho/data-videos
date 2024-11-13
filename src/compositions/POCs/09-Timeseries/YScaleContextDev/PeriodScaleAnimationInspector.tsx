@@ -2,15 +2,7 @@ import {interpolate} from 'remotion';
 import {ReactNode} from 'react';
 
 import {usePage} from '../../../../acetti-components/PageContext';
-import {TPeriodScaleAnimationContext} from '../../../../acetti-ts-base/PeriodScaleAnimationContainer';
-
-function roundToTwoDecimals(num: number): number {
-	return parseFloat(num.toFixed(2));
-}
-// // Example usage:
-// const input: number = 123.456789;
-// const output: number = roundToTwoDecimals(input);
-// console.log(output); // Output: 123.46
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
 export const PeriodScaleAnimationInspector: React.FC<
 	TPeriodScaleAnimationContext
@@ -489,3 +481,11 @@ const PeriodScaleZoomVisualizer: React.FC<{
 		</div>
 	);
 };
+
+function roundToTwoDecimals(num: number): number {
+	return parseFloat(num.toFixed(2));
+}
+// // Example usage:
+// const input: number = 123.456789;
+// const output: number = roundToTwoDecimals(input);
+// console.log(output); // Output: 123.46
