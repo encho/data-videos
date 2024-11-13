@@ -12,7 +12,7 @@ function roundToTwoDecimals(num: number): number {
 // const output: number = roundToTwoDecimals(input);
 // console.log(output); // Output: 123.46
 
-export const PeriodScaleAnimationContextDebugger: React.FC<
+export const PeriodScaleAnimationInspector: React.FC<
 	TPeriodScaleAnimationContext
 > = ({
 	frame,

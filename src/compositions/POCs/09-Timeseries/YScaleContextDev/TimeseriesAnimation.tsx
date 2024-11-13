@@ -10,7 +10,7 @@ import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {PeriodScaleAnimationContextDebugger} from './PeriodScaleAnimationContextDebugger';
+import {PeriodScaleAnimationInspector} from './PeriodScaleAnimationInspector';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 
 type TAnimatedLineChart2Props = {
@@ -228,7 +228,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					theme={debugTheme}
 				>
 					<Page show>
-						<PeriodScaleAnimationContextDebugger {...periodScaleAnimation} />
+						<PeriodScaleAnimationInspector {...periodScaleAnimation} />
 					</Page>
 				</PageContext>
 			</div>
