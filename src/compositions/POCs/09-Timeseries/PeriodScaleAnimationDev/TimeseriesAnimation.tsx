@@ -1,6 +1,6 @@
 import {useVideoConfig, Easing} from 'remotion';
 
-import {usePeriodScaleAnimation} from '../YScaleContextDev/usePeriodScaleAnimation';
+import {usePeriodScaleAnimation} from '../YScaleAnimationDev/usePeriodScaleAnimation';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -8,7 +8,7 @@ import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {LineChart_XAxisShowcase} from './LineChart_XAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {PeriodScaleAnimationInspector} from '../YScaleContextDev/PeriodScaleAnimationInspector';
+import {PeriodScaleAnimationInspector} from '../YScaleAnimationDev/PeriodScaleAnimationInspector';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -160,7 +160,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 									/>
 								</div>
 								<LineChart_XAxisShowcase
-									periodScaleAnimationContext={periodScaleAnimation}
+									periodScaleAnimation={periodScaleAnimation}
 									layoutAreas={{
 										xAxis: chartLayout.areas.xAxis,
 										xAxis_days: chartLayout.areas.xAxis_days,

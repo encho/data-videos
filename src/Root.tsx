@@ -236,24 +236,14 @@ import {
 } from './compositions/POCs/3D-Experiments/3D-BarChart/3D-BarChartComposition';
 
 import {
-	SingleTimeseriesBuildupComposition,
-	singleTimeseriesBuildupCompositionSchema,
-} from './compositions/POCs/09-Timeseries/SingleTimeseriesBuildup/SingleTimeseriesBuildupComposition';
+	PeriodScaleAnimationDevComposition,
+	periodScaleAnimationDevCompositionSchema,
+} from './compositions/POCs/09-Timeseries/PeriodScaleAnimationDev/PeriodScaleAnimationDevComposition';
 
 import {
-	xAxisSpecsDevCompositionSchema,
-	XAxisSpecsDevComposition,
-} from './compositions/POCs/09-Timeseries/XAxisSpecsDev/XAxisSpecsDevComposition';
-
-import {
-	PeriodScaleDevComposition,
-	periodScaleDevCompositionSchema,
-} from './compositions/POCs/09-Timeseries/PeriodScaleDev/PeriodScaleDevComposition';
-
-import {
-	yScaleContextDevCompositionSchema,
-	YScaleContextDevComposition,
-} from './compositions/POCs/09-Timeseries/YScaleContextDev/YScaleContextDevComposition';
+	yScaleAnimationDevCompositionSchema,
+	YScaleAnimationDevComposition,
+} from './compositions/POCs/09-Timeseries/YScaleAnimationDev/YScaleAnimationDevComposition';
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
@@ -1111,8 +1101,8 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="PeriodScale-Dev"
-						component={PeriodScaleDevComposition}
+						id="PeriodScaleAnimation-Dev"
+						component={PeriodScaleAnimationDevComposition}
 						durationInFrames={30 * 9}
 						fps={30}
 						// {...videoSizes.linkedInTall}
@@ -1120,7 +1110,7 @@ export const RemotionRoot: React.FC = () => {
 						// width={videoSizes.widescreen_16x9.width}
 						width={videoSizes.widescreen_16x9.width}
 						height={videoSizes.widescreen_16x9.height * 2}
-						schema={periodScaleDevCompositionSchema}
+						schema={periodScaleAnimationDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
 							timePeriod: '2Y' as const,
@@ -1132,8 +1122,8 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="YScaleContext-Dev"
-						component={YScaleContextDevComposition}
+						id="YScaleAnimation-Dev"
+						component={YScaleAnimationDevComposition}
 						// durationInFrames={30 * 9}
 						durationInFrames={30 * 30}
 						fps={30}
@@ -1141,44 +1131,13 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.widescreen_16x9}
 						width={videoSizes.widescreen_16x9.width * 1.5}
 						height={videoSizes.widescreen_16x9.height * 3}
-						schema={yScaleContextDevCompositionSchema}
+						schema={yScaleAnimationDevCompositionSchema}
 						defaultProps={{
 							ticker: 'TESLA' as const,
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="XAxisSpecs-Dev"
-						component={XAxisSpecsDevComposition}
-						durationInFrames={30 * 9}
-						fps={30}
-						// {...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						width={videoSizes.widescreen_16x9.width}
-						height={videoSizes.widescreen_16x9.height * 2}
-						schema={xAxisSpecsDevCompositionSchema}
-						defaultProps={{
-							ticker: 'TESLA' as const,
-							timePeriod: '2Y' as const,
-							nerdyFinanceEnv: 'PROD' as const,
-							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
-						}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SingleTimeseries-Buildup"
-						component={SingleTimeseriesBuildupComposition}
-						durationInFrames={90 * 9}
-						fps={90}
-						{...videoSizes.linkedInTall}
-						schema={singleTimeseriesBuildupCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 

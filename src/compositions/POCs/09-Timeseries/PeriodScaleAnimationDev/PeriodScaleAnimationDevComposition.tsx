@@ -18,15 +18,15 @@ import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
 
-export const periodScaleDevCompositionSchema = z.object({
+export const periodScaleAnimationDevCompositionSchema = z.object({
 	ticker: zNerdyTickers,
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
-export const PeriodScaleDevComposition: React.FC<
-	z.infer<typeof periodScaleDevCompositionSchema>
+export const PeriodScaleAnimationDevComposition: React.FC<
+	z.infer<typeof periodScaleAnimationDevCompositionSchema>
 > = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {height, width} = useVideoConfig();

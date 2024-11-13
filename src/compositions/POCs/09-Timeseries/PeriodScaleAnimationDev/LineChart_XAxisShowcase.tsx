@@ -7,8 +7,8 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-import {Animated_XAxis} from '../YScaleContextDev/Animated_XAxis';
-import {TPeriodScaleAnimationContext} from '../YScaleContextDev/usePeriodScaleAnimation';
+import {Animated_XAxis} from '../YScaleAnimationDev/Animated_XAxis';
+import {TPeriodScaleAnimationContext} from '../YScaleAnimationDev/usePeriodScaleAnimation';
 
 const AXIS_SPEC_FUNCTIONS = {
 	indices: getIndicesAxisSpec,
@@ -37,18 +37,17 @@ const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
 };
 
 export const LineChart_XAxisShowcase: React.FC<{
-	periodScaleAnimationContext: TPeriodScaleAnimationContext;
+	periodScaleAnimation: TPeriodScaleAnimationContext;
 	layoutAreas: {
 		xAxis: TGridLayoutArea;
 		xAxis_days: TGridLayoutArea;
 		xAxis_monthStarts: TGridLayoutArea;
 		xAxis_quarterStarts: TGridLayoutArea;
 	};
-}> = ({periodScaleAnimationContext, layoutAreas}) => {
+}> = ({periodScaleAnimation, layoutAreas}) => {
 	const fromPeriodScale =
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleFrom;
-	const toPeriodScale =
-		periodScaleAnimationContext.currentSliceInfo.periodsScaleTo;
+		periodScaleAnimation.currentSliceInfo.periodsScaleFrom;
+	const toPeriodScale = periodScaleAnimation.currentSliceInfo.periodsScaleTo;
 
 	const fromSpecType = getAxisSpecType(fromPeriodScale);
 	const toSpecType = getAxisSpecType(toPeriodScale);
@@ -85,7 +84,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimation={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={axisSpecFrom}
 					axisSpecTo={axisSpecTo}
 					area={layoutAreas.xAxis}
@@ -101,7 +100,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimation={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_days_from}
 					axisSpecTo={xAxisSpec_days_to}
 					area={layoutAreas.xAxis}
@@ -117,7 +116,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimation={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_monthStarts_from}
 					axisSpecTo={xAxisSpec_monthStarts_to}
 					area={layoutAreas.xAxis}
@@ -133,7 +132,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 				}}
 			>
 				<Animated_XAxis
-					periodsScaleAnimation={periodScaleAnimationContext}
+					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_quarterStarts_from}
 					axisSpecTo={xAxisSpec_quarterStarts_to}
 					area={layoutAreas.xAxis}
