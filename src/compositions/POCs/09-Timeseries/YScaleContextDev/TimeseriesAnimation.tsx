@@ -1,6 +1,7 @@
 import {useVideoConfig, Easing} from 'remotion';
 import {useMemo} from 'react';
 
+import {usePage} from '../../../../acetti-components/PageContext';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {PageContext} from '../../../../acetti-components/PageContext';
@@ -31,16 +32,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	const CHART_PAGE_MARGIN = 60;
 	const CHART_PAGE_WIDTH = width;
-	const CHART_PAGE_HEIGHT = height * 0.5;
-	const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
-	const CHART_CONTENT_HEIGHT = (CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN) / 2;
+	const CHART_PAGE_HEIGHT = height * 0.4;
+	// const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
+	// const CHART_CONTENT_HEIGHT = (CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN) / 2;
 
 	const DEBUG_PAGE_HEIGHT = height - CHART_PAGE_HEIGHT;
-
-	const chartLayout = useChartLayout({
-		width: CHART_CONTENT_WIDTH,
-		height: CHART_CONTENT_HEIGHT,
-	});
 
 	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.2);
@@ -163,13 +159,22 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 														timeSeries3,
 													]}
 													tickFormatter={(tick) => `${tick} EUR`}
-													// area={chartLayout.areas.yAxis}
-													yScalesInitialHeight={chartLayout.areas.yAxis.height}
-													// domainType="VISIBLE"
+													yScalesInitialHeight={300}
 													domainType="ZERO"
 													paddingPerc={0.2}
 												>
 													{(yScaleAnimationContext) => {
+														const {contentWidth, contentHeight} = usePage();
+
+														// const chartLayout = useChartLayout({
+														// 	width: CHART_CONTENT_WIDTH,
+														// 	height: CHART_CONTENT_HEIGHT,
+														// });
+														const chartLayout = useChartLayout({
+															width: contentWidth,
+															height: contentHeight,
+														});
+
 														return (
 															<div>
 																<LineChart_YAxisShowcase
@@ -183,7 +188,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																	timeSeries2={timeSeries2}
 																	timeSeries3={timeSeries3}
 																	layoutAreas={{
-																		chart: chartLayout.areas.chart,
+																		// chart: chartLayout.areas.chart,
 																		xAxis: chartLayout.areas.xAxis,
 																		plot: chartLayout.areas.plot,
 																		yAxis: chartLayout.areas.yAxis,
@@ -200,24 +205,12 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 																	timeSeries2={timeSeries2}
 																	timeSeries3={timeSeries2}
 																	layoutAreas={{
-																		chart: chartLayout.areas.chart,
-																		xAxis: chartLayout.areas.xAxis,
-																		plot: chartLayout.areas.plot,
-																		yAxis: chartLayout.areas.yAxis,
+																		// chart: chartLayout.areas.chart,
+																		xAxis: chartLayout.areas.xAxis2,
+																		plot: chartLayout.areas.plot2,
+																		yAxis: chartLayout.areas.yAxis2,
 																	}}
 																/>
-																<div
-																	style={{
-																		backgroundColor: 'cyan',
-																		fontSize: 50,
-																	}}
-																>
-																	{JSON.stringify(
-																		yScaleAnimationContext,
-																		undefined,
-																		2
-																	)}
-																</div>
 															</div>
 														);
 													}}

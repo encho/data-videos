@@ -359,8 +359,8 @@ export const Animated_YAxis: React.FC<{
 					<line
 						x1={0}
 						x2={0}
-						y1={area.y1}
-						y2={area.y2}
+						y1={0}
+						y2={area.height}
 						stroke={axisLineColor}
 						strokeWidth={AXIS_LINE_WIDTH}
 					/>

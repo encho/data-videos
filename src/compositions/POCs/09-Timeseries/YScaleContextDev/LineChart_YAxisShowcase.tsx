@@ -17,7 +17,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 	timeSeries2: TimeSeries;
 	timeSeries3: TimeSeries;
 	layoutAreas: {
-		chart: TGridLayoutArea;
+		// chart: TGridLayoutArea;
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
@@ -39,18 +39,18 @@ export const LineChart_YAxisShowcase: React.FC<{
 
 	useEffect(() => {
 		periodScaleAnimationContext.setPeriodScalesWidth(layoutAreas.plot.width);
-		// yScaleAnimationContext.setYScalesHeight(200);
+		yScaleAnimationContext.setYScalesHeight(layoutAreas.plot.height);
 	}, [layoutAreas.plot.width]);
 
 	return (
 		<div
 			style={{
 				position: 'relative',
-				width: layoutAreas.chart.width,
-				height: layoutAreas.chart.height,
+				// width: layoutAreas.chart.width,
+				// height: layoutAreas.chart.height,
 			}}
 		>
-			<div style={{position: 'absolute'}}>
+			{/* <div style={{position: 'absolute'}}>
 				<DisplayGridLayout
 					stroke={'rgba(255,0,255,0.5)'}
 					fill="transparent"
@@ -59,7 +59,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 					width={layoutAreas.chart.width}
 					height={layoutAreas.chart.height}
 				/>
-			</div>
+			</div> */}
 
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
