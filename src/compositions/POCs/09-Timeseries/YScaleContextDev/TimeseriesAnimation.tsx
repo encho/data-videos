@@ -147,6 +147,20 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								// show
 								>
 									{() => {
+										// TODO
+										// const upperYScaleContext = useYScaleAnimationContext(
+										// 	{periodScaleAnimationContext,
+										// 		timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
+										// 		tickFormatter: (tick) => `${tick} EUR`,
+										// 		yScalesInitialHeight: 300,
+										// 		domainType: "ZERO",
+										// 		paddingPerc: 0.2,
+										// 	}
+										// );
+
+										// TODO
+										// const lowerYScaleContext = useYScaleAnimationContext...
+
 										return (
 											<>
 												<YScaleAnimationContainer
@@ -166,10 +180,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 													{(yScaleAnimationContext) => {
 														const {contentWidth, contentHeight} = usePage();
 
-														// const chartLayout = useChartLayout({
-														// 	width: CHART_CONTENT_WIDTH,
-														// 	height: CHART_CONTENT_HEIGHT,
-														// });
 														const chartLayout = useChartLayout({
 															width: contentWidth,
 															height: contentHeight,
