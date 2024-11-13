@@ -167,7 +167,8 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 					},
 					datavizTickLabel: {
 						fontFamily: 'Inter-Regular',
-						capHeightInBaselines: 0.8,
+						capHeightInBaselines: 1,
+						// capHeightInBaselines: 2,
 						// capHeightInBaselines: 1,
 						lineGapInBaselines: 1,
 						color: palette.typography.axisTickLabel.main,
