@@ -4,10 +4,10 @@ import {Position} from '../../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
-import {Animated_XAxis} from './Animated_XAxis';
-import {Animated_YAxis} from './Animated_YAxis';
-import {TYScaleAnimationContext} from './useYScaleAnimation';
-import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
+import {Animated_XAxis} from '../utils/Animated_XAxis';
+import {Animated_YAxis} from '../utils/Animated_YAxis';
+import {TYScaleAnimationContext} from '../utils/useYScaleAnimation';
+import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
 export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimation: TPeriodScaleAnimationContext;

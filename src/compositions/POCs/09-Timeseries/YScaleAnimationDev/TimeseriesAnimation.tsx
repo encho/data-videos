@@ -1,8 +1,8 @@
 import {useVideoConfig, Easing} from 'remotion';
 import {useMemo} from 'react';
 
-import {usePeriodScaleAnimation} from './usePeriodScaleAnimation';
-import {useYScaleAnimation} from './useYScaleAnimation';
+import {usePeriodScaleAnimation} from '../utils/usePeriodScaleAnimation';
+import {useYScaleAnimation} from '../utils/useYScaleAnimation';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -10,7 +10,7 @@ import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {PeriodScaleAnimationInspector} from './PeriodScaleAnimationInspector';
+import {PeriodScaleAnimationInspector} from '../utils/PeriodScaleAnimationInspector';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 
 type TAnimatedLineChart2Props = {
