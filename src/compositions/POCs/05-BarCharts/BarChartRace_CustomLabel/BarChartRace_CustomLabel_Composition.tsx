@@ -91,10 +91,7 @@ export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageHeader>
 					<TitleWithSubtitle
 						title="Bar Chart Race"
 						subtitle="Based on Mock Chat-GPT generated data"
@@ -124,10 +121,7 @@ export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
 					) : null}
 				</div>
 
-				<PageFooter
-					theme={theme}
-					// showArea
-				>
+				<PageFooter>
 					<div
 						style={{
 							display: 'flex',
@@ -153,7 +147,7 @@ export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
 				</PageFooter>
 			</div>
 
-			<PageLogo theme={theme} />
+			<PageLogo />
 		</Page>
 	);
 };

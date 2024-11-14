@@ -147,10 +147,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageHeader>
 					<TitleWithSubtitle
 						title={props.title}
 						subtitle={props.subtitle}
@@ -177,7 +174,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 									stroke="transparent"
 								/>
 								<HtmlArea area={area_1}>
-									<Sequence  layout="none">
+									<Sequence layout="none">
 										<TypographyStyle
 											typographyStyle={theme.typography.textStyles.body}
 											baseline={baseline}
@@ -307,10 +304,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageFooter>
 					<div
 						style={{
 							display: 'flex',
@@ -332,7 +326,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 							</TypographyStyle>
 						</div>
 					</div>
-					<PageLogo theme={theme} />
+					<PageLogo />
 				</PageFooter>
 			</div>
 		</Page>

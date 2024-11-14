@@ -42,11 +42,14 @@ export const LineChart_YAxisShowcase: React.FC<{
 
 	return (
 		<div
-			style={{
-				position: 'relative',
-				// width: layoutAreas.chart.width,
-				// height: layoutAreas.chart.height,
-			}}
+			style={
+				{
+					// height,
+					// position: 'relative',
+					// width: layoutAreas.chart.width,
+					// height: layoutAreas.chart.height,
+				}
+			}
 		>
 			{/* <div style={{position: 'absolute'}}>
 				<DisplayGridLayout

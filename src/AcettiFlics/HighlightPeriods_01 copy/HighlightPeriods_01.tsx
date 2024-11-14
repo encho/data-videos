@@ -14,14 +14,11 @@ import {
 	fetchNerdyFinancePriceChartData,
 	TNerdyFinancePriceChartDataResult,
 } from '../../acetti-http/nerdy-finance/fetchPriceChartData';
-import {lorenzobertolinibrightTheme} from '../../acetti-themes/lorenzobertolinibright';
-import {lorenzobertoliniTheme} from '../../acetti-themes/lorenzobertolini';
-import {nerdyTheme} from '../../acetti-themes/nerdy';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
 import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
-import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
+import {useThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -39,21 +36,13 @@ export const HighlightPeriods_01_Example: React.FC<
 		width,
 	} = useVideoConfig();
 
+	const theme = useThemeFromEnum(themeEnum);
+
 	const today = new Date();
 	const endDate = today.toISOString();
 
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
-
-	const theme =
-		themeEnum === 'NERDY'
-			? nerdyTheme
-			: themeEnum === 'LORENZOBERTOLINI'
-			? lorenzobertoliniTheme
-			: lorenzobertolinibrightTheme;
-
-	// TODO generalize and factor out // bring into wrapper component?
-	useThemeFontsLoader(theme);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');

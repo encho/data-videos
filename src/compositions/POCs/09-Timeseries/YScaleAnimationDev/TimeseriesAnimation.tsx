@@ -27,15 +27,41 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 }) => {
+	const CHART_PAGE_WIDTH = width;
+
+	return (
+		<div style={{position: 'relative'}}>
+			<div>
+				<PageContext
+					width={CHART_PAGE_WIDTH}
+					// height={CHART_PAGE_HEIGHT}
+					height={height}
+					// margin={CHART_PAGE_MARGIN}
+					margin={100}
+					nrBaselines={60}
+					// theme={theme}
+					theme={theme}
+				>
+					<Page show>
+						<TimeseriesAnimationInside timeSeries={timeSeries} />
+					</Page>
+				</PageContext>
+			</div>
+		</div>
+	);
+};
+
+export const TimeseriesAnimationInside: React.FC<{
+	timeSeries: {date: Date; value: number}[];
+}> = ({
+	// width,
+	// height,
+	timeSeries,
+	// theme,
+}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI');
-
-	const CHART_PAGE_MARGIN = 0;
-	const CHART_PAGE_WIDTH = width;
-	const CHART_PAGE_HEIGHT = height * 0.4;
-
-	const DEBUG_PAGE_HEIGHT = height - CHART_PAGE_HEIGHT;
 
 	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.2);
@@ -64,11 +90,11 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	const timeSeries2 = useMemo(() => {
 		return timeSeries.map((it) => ({...it, value: it.value * 2}));
-	}, []);
+	}, [timeSeries]);
 
 	const timeSeries3 = useMemo(() => {
 		return timeSeries.map((it) => ({...it, value: it.value * 4}));
-	}, []);
+	}, [timeSeries]);
 
 	const periodScaleAnimation = usePeriodScaleAnimation({
 		timeSeries,
@@ -131,111 +157,98 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 		],
 	});
 
+	const {contentWidth, contentHeight} = usePage();
+
+	const CHART_HEIGHT = contentHeight * 0.5;
+
+	const xAxisHeight = useXAxisAreaHeight();
+
+	const yScaleAnimationUpper = useYScaleAnimation({
+		periodScaleAnimation,
+		timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
+		tickFormatter: (tick) => `${tick} $`,
+		yScalesInitialHeight: 200,
+		domainType: 'ZERO',
+		paddingPerc: 0.3,
+	});
+
+	const yScaleAnimationLower = useYScaleAnimation({
+		periodScaleAnimation,
+		timeSeriesArray: [timeSeries, timeSeries2],
+		tickFormatter: (tick) => `${tick} $$$`,
+		yScalesInitialHeight: 200,
+		domainType: 'VISIBLE',
+		paddingPerc: 0,
+		nrTicks: 2,
+	});
+
+	const yAxisWidth = Math.max(
+		yScaleAnimationUpper.maxLabelComponentWidth,
+		yScaleAnimationLower.maxLabelComponentWidth
+	);
+
+	const chartLayout = useChartLayout({
+		width: contentWidth,
+		height: CHART_HEIGHT,
+		yAxisWidth,
+		xAxisHeight,
+	});
+
 	return (
-		<div style={{position: 'relative'}}>
-			<div>
-				<PageContext
-					width={CHART_PAGE_WIDTH}
-					height={CHART_PAGE_HEIGHT}
-					margin={CHART_PAGE_MARGIN}
-					nrBaselines={40}
-					theme={theme}
-				>
-					<Page show>
-						{() => {
-							const {contentWidth, contentHeight} = usePage();
-
-							const xAxisHeight = useXAxisAreaHeight();
-
-							const yScaleAnimationUpper = useYScaleAnimation({
-								periodScaleAnimation,
-								timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
-								tickFormatter: (tick) => `${tick} $`,
-								yScalesInitialHeight: 200,
-								domainType: 'ZERO',
-								paddingPerc: 0.3,
-							});
-
-							const yScaleAnimationLower = useYScaleAnimation({
-								periodScaleAnimation,
-								timeSeriesArray: [timeSeries, timeSeries2],
-								tickFormatter: (tick) => `${tick} $$$`,
-								yScalesInitialHeight: 200,
-								domainType: 'VISIBLE',
-								paddingPerc: 0,
-								nrTicks: 2,
-							});
-
-							const yAxisWidth = Math.max(
-								yScaleAnimationUpper.maxLabelComponentWidth,
-								yScaleAnimationLower.maxLabelComponentWidth
-							);
-
-							const chartLayout = useChartLayout({
-								width: contentWidth,
-								height: contentHeight,
-								yAxisWidth,
-								xAxisHeight,
-							});
-
-							return (
-								<div
-									style={{
-										position: 'relative',
-									}}
-								>
-									<div style={{position: 'absolute'}}>
-										<DisplayGridLayout
-											stroke="rgba(255,0,255,0.5)"
-											fill="transparent"
-											// hide={true}
-											areas={chartLayout.areas}
-											width={contentWidth}
-											height={contentHeight}
-										/>
-									</div>
-
-									<LineChart_YAxisShowcase
-										periodScaleAnimation={periodScaleAnimation}
-										yScaleAnimation={yScaleAnimationUpper}
-										timeSeries={timeSeries}
-										timeSeries2={timeSeries2}
-										timeSeries3={timeSeries3}
-										layoutAreas={{
-											xAxis: chartLayout.areas.xAxis,
-											plot: chartLayout.areas.plot,
-											yAxis: chartLayout.areas.yAxis,
-										}}
-									/>
-									<LineChart_YAxisShowcase
-										periodScaleAnimation={periodScaleAnimation}
-										yScaleAnimation={yScaleAnimationLower}
-										timeSeries={timeSeries}
-										timeSeries2={timeSeries2}
-										timeSeries3={timeSeries2}
-										layoutAreas={{
-											xAxis: chartLayout.areas.xAxis2,
-											plot: chartLayout.areas.plot2,
-											yAxis: chartLayout.areas.yAxis2,
-										}}
-									/>
-								</div>
-							);
-						}}
-					</Page>
-				</PageContext>
-				<PageContext
-					width={CHART_PAGE_WIDTH}
-					height={DEBUG_PAGE_HEIGHT}
-					margin={CHART_PAGE_MARGIN}
-					nrBaselines={40}
-					theme={debugTheme}
-				>
-					<Page show>
-						<PeriodScaleAnimationInspector {...periodScaleAnimation} />
-					</Page>
-				</PageContext>
+		<div style={{}}>
+			<div style={{position: 'absolute'}}>
+				<DisplayGridLayout
+					// hide
+					stroke="rgba(255,0,255,1)"
+					fill="transparent"
+					// hide={true}
+					areas={chartLayout.areas}
+					width={contentWidth}
+					height={contentHeight}
+				/>
 			</div>
+			<div
+				style={{
+					height: chartLayout.height,
+				}}
+			>
+				<LineChart_YAxisShowcase
+					periodScaleAnimation={periodScaleAnimation}
+					yScaleAnimation={yScaleAnimationUpper}
+					timeSeries={timeSeries}
+					timeSeries2={timeSeries2}
+					timeSeries3={timeSeries3}
+					layoutAreas={{
+						xAxis: chartLayout.areas.xAxis,
+						plot: chartLayout.areas.plot,
+						yAxis: chartLayout.areas.yAxis,
+					}}
+				/>
+				<LineChart_YAxisShowcase
+					periodScaleAnimation={periodScaleAnimation}
+					yScaleAnimation={yScaleAnimationLower}
+					timeSeries={timeSeries}
+					timeSeries2={timeSeries2}
+					timeSeries3={timeSeries2}
+					layoutAreas={{
+						xAxis: chartLayout.areas.xAxis2,
+						plot: chartLayout.areas.plot2,
+						yAxis: chartLayout.areas.yAxis2,
+					}}
+				/>
+			</div>
+
+			<PageContext
+				width={contentWidth}
+				height={contentHeight - CHART_HEIGHT}
+				margin={0}
+				nrBaselines={40}
+				theme={debugTheme}
+			>
+				<Page show>
+					<PeriodScaleAnimationInspector {...periodScaleAnimation} />
+				</Page>
+			</PageContext>
 		</div>
 	);
 };

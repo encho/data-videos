@@ -58,10 +58,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 									position: 'relative',
 								}}
 							>
-								<PageHeader
-									theme={theme}
-									// showArea={showAreas}
-								>
+								<PageHeader>
 									<TitleWithSubtitle
 										title="AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern"
 										subtitle="Wahlergebnisse Brandenburg 2024"
@@ -92,10 +89,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 								</div>
 
 								{/* TODO introduce evtl. also absolute positioned footer */}
-								<PageFooter
-									theme={theme}
-									// showArea={showAreas}
-								>
+								<PageFooter>
 									<div
 										style={{
 											display: 'flex',
@@ -115,7 +109,7 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 									</div>
 								</PageFooter>
 							</div>
-							<PageLogo theme={theme} />
+							<PageLogo />
 						</>
 					);
 				}}

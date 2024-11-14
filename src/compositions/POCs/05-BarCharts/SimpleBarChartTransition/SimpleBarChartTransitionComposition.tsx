@@ -112,7 +112,7 @@ export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
 					position: 'relative',
 				}}
 			>
-				<PageHeader theme={theme}>
+				<PageHeader>
 					<TitleWithSubtitle
 						title="Transitioning a Bar Chart"
 						subtitle="Good for sorting data, for Example:"
@@ -131,7 +131,7 @@ export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
 						// TODO start after title and subtitle are in (using their keyframes...)
 						<Sequence from={Math.floor(fps * 2.75)} layout="none">
 							<div style={{}}>
-								<Sequence  durationInFrames={fps * 7} layout="none">
+								<Sequence durationInFrames={fps * 7} layout="none">
 									<div
 										style={{
 											display: 'flex',
@@ -241,7 +241,7 @@ export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter theme={theme}>
+				<PageFooter>
 					<div
 						style={{
 							display: 'flex',
@@ -266,7 +266,7 @@ export const SimpleBarChartTransitionFlic: React.FC<{theme: ThemeType}> = ({
 					</div>
 				</PageFooter>
 			</div>
-			<PageLogo theme={theme} />
+			<PageLogo />
 		</Page>
 	);
 };
