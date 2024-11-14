@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-	AbsoluteFill,
-	interpolate,
-	spring,
-	useCurrentFrame,
-	useVideoConfig,
-} from 'remotion';
+import {interpolate, spring, useCurrentFrame, useVideoConfig} from 'remotion';
 
 // export const transitionDuration = 15;
 

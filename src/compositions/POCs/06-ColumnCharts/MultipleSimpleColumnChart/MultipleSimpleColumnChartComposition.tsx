@@ -3,13 +3,12 @@ import {Sequence} from 'remotion';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 
 export const multipleSimpleColumnChartCompositionSchema = z.object({
@@ -35,11 +34,7 @@ const timeSeries2 = [
 export const MultipleSimpleColumnChartComposition: React.FC<
 	z.infer<typeof multipleSimpleColumnChartCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const baseline = 20;
 

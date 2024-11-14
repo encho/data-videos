@@ -2,7 +2,7 @@ import {z} from 'zod';
 
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {ElementsLogo} from './ElementsLogo';
@@ -264,10 +264,28 @@ const G_LETTER = {
 	],
 };
 
+const letters = {
+	E: E_LETTER,
+	L: L_LETTER,
+	M: M_LETTER,
+	N: N_LETTER,
+	T: T_LETTER,
+	S: S_LETTER,
+	O: O_LETTER,
+	F: F_LETTER,
+	D: D_LETTER,
+	A: A_LETTER,
+	R: R_LETTER,
+	Y: Y_LETTER,
+	I: I_LETTER,
+};
+
+console.log({letters});
+
 export const SilkscreenFontComposition: React.FC<
 	z.infer<typeof silkscreenFontCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	// const LETTER = E_LETTER;
 	// const LETTER = L_LETTER;

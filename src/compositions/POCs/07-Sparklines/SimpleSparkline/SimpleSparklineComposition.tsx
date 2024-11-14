@@ -7,9 +7,8 @@ import {
 	useCurrentFrame,
 } from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
@@ -44,11 +43,7 @@ export const simpleSparklineCompositionSchema = z.object({
 export const SimpleSparklineComposition: React.FC<
 	z.infer<typeof simpleSparklineCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();

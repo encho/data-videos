@@ -1,12 +1,11 @@
 import {z} from 'zod';
 
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleBarChart} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SimpleBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChartKeyframes';
 // import {SimpleBarChart2} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
@@ -45,14 +44,10 @@ const wahlergebnis2024: {
 export const SimpleBarChartDevComposition: React.FC<
 	z.infer<typeof simpleBarChartDevCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const CHART_WIDTH = 400;
 	const BASELINE = 18;
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
 
 	const barChartData = wahlergebnis2024.map((it) => ({
 		label: it.parteiName,

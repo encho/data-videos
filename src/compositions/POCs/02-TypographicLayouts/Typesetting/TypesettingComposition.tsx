@@ -7,9 +7,8 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {TypographyStyle} from '../TextStyles/TextStylesComposition';
@@ -28,11 +27,7 @@ export const typesettingCompositionSchema = z.object({
 export const TypesettingComposition: React.FC<
 	z.infer<typeof typesettingCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {width} = useVideoConfig();
 
@@ -72,7 +67,7 @@ export const TypesettingComposition: React.FC<
 					{/* <DisplayGridRails {...matrixLayout} stroke={'#444'} strokeWidth={1} /> */}
 
 					<HtmlArea area={area_1}>
-						<Sequence  layout="none">
+						<Sequence layout="none">
 							<div>
 								<BaselineGrid
 									width={area_1.width}

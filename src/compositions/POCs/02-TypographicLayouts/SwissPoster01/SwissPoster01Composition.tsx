@@ -2,14 +2,13 @@ import {z} from 'zod';
 import {useVideoConfig, Sequence, Video} from 'remotion';
 
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {HtmlArea} from '../../../../acetti-layout';
 import {useChartLayout} from './useChartLayout';
 import {getTextDimensionsFromTextStyle} from '../../../../acetti-typography/CapSizeTextNew';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {TypographyStyle} from '../TextStyles/TextStylesComposition';
 
@@ -20,10 +19,8 @@ export const swissPoster01CompositionSchema = z.object({
 export const SwissPoster01Composition: React.FC<
 	z.infer<typeof swissPoster01CompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-	const {fps, width, height} = useVideoConfig();
-
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
+	const {width, height} = useVideoConfig();
 
 	// horizontal layout sizes
 	const horizontalMarginInBaselines = 2;

@@ -1,14 +1,13 @@
 import {z} from 'zod';
 
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SimpleColumnChart} from '../../../../acetti-flics/SimpleColumnChart/SimpleColumnChart';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 
 export const simpleColumnChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -25,11 +24,7 @@ const timeSeries = [
 export const SimpleColumnChartComposition: React.FC<
 	z.infer<typeof simpleColumnChartCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const columnChartData = timeSeries.map((it) => ({
 		label: `${it.date.getFullYear()}`,
