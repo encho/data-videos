@@ -49,7 +49,7 @@ export const AnimatedCandlesticks: React.FC<{
 	ohlcSeries,
 	periodsScale,
 	yScale,
-	displayDots = false,
+	// displayDots = false,
 	theme = candlesticksDefaultTheme,
 }) => {
 	// const linePath = line<{date: Date; value: number}>()
@@ -67,7 +67,7 @@ export const AnimatedCandlesticks: React.FC<{
 			</defs>
 
 			<g clipPath="url(#plotAreaClipPath)">
-				{ohlcSeries.map((ohlcItem, i) => {
+				{ohlcSeries.map((ohlcItem) => {
 					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(ohlcItem.date);
 					const {x1} = band;

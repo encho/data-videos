@@ -2,6 +2,7 @@
 import React from 'react';
 
 type AsProp<C extends React.ElementType> = {
+	// eslint-disable-next-line
 	as?: C;
 };
 

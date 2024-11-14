@@ -78,12 +78,11 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
+					hide
 					stroke="magenta"
 					fill="transparent"
 					width={width}
 					height={height}
-					hide
-					// hide={false}
 					areas={chartLayout.areas}
 				/>
 			</div>
@@ -130,47 +129,52 @@ export const PerformanceCompare_01: React.FC<TAnimatedLineChart2Props> = ({
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// easingFunction: Easing.linear, // TODO why linear is broken??
 						// numberOfSlices: 20,
-						numberOfSlices: Math.floor(td_buildup / (Number(fps))),
+						numberOfSlices: Math.floor(td_buildup / Number(fps)),
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaEnter,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// numberOfSlices: 40,
-						numberOfSlices: Math.floor(td_periodsAreaEnter / (Number(fps))),
+						numberOfSlices: Math.floor(td_periodsAreaEnter / Number(fps)),
 						transitionType: 'DEFAULT',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomIn,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// numberOfSlices: 5,
-						numberOfSlices: Math.floor(td_periodsAreaZoomIn / (Number(fps))),
+						numberOfSlices: Math.floor(td_periodsAreaZoomIn / Number(fps)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomed,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// numberOfSlices: 5,
-						numberOfSlices: Math.floor(td_periodsAreaZoomed / (Number(fps))),
+						numberOfSlices: Math.floor(td_periodsAreaZoomed / Number(fps)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaZoomOut,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// numberOfSlices: 20,
-						numberOfSlices: Math.floor(td_periodsAreaZoomOut / (Number(fps))),
+						numberOfSlices: Math.floor(td_periodsAreaZoomOut / Number(fps)),
 						transitionType: 'ZOOM',
 					},
 					{
 						durationInFrames: td_periodsAreaExit,
 						easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
 						// numberOfSlices: 40,
-						numberOfSlices: Math.floor(td_periodsAreaExit / (Number(fps))),
+						numberOfSlices: Math.floor(td_periodsAreaExit / Number(fps)),
 						transitionType: 'ZOOM',
 					},
 				]}
 			>
-				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
+				{({
+					periodsScale,
+					yScale,
+					currentSliceInfo,
+					// currentTransitionInfo
+				}) => {
 					return (
 						<div>
 							<Sequence from={td_buildup}>
@@ -242,8 +246,8 @@ export const LineChartAnimationContextDebugger: React.FC<
 > = ({
 	currentSliceInfo,
 	currentTransitionInfo,
-	periodsScale,
-	yScale,
+	// periodsScale,
+	// yScale,
 	theme,
 }) => {
 	return (

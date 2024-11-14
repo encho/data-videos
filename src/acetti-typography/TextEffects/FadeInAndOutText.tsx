@@ -101,21 +101,15 @@ const FadeInCharacter: React.FC<{
 	children: string;
 	fadeInDurationInFrames?: number;
 	delay: number;
-}> = ({children, delay, fadeInDurationInFrames = 90}) => {
+}> = ({children, delay}) => {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
-	const opacity = interpolate(
-		frame,
-		// [delay, delay + fadeInDurationInFrames],
-		[delay, durationInFrames],
-		[0, 1],
-		{
-			easing: Easing.cubic,
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
+	const opacity = interpolate(frame, [delay, durationInFrames], [0, 1], {
+		easing: Easing.cubic,
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+	});
 
 	return <span style={{opacity}}>{children}</span>;
 };
@@ -124,22 +118,15 @@ const FadeOutCharacter: React.FC<{
 	children: string;
 	fadeOutDurationInFrames?: number;
 	delay: number;
-}> = ({children, delay, fadeOutDurationInFrames = 60}) => {
+}> = ({children, delay = 60}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
-	const opacity = interpolate(
-		frame,
-		// [delay, delay + fadeOutDurationInFrames],
-		// [delay, durationInFrames],
-		[delay, durationInFrames],
-		[1, 0],
-		{
-			easing: Easing.cubic,
-			extrapolateLeft: 'clamp',
-			extrapolateRight: 'clamp',
-		}
-	);
+	const opacity = interpolate(frame, [delay, durationInFrames], [1, 0], {
+		easing: Easing.cubic,
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+	});
 
 	return <span style={{opacity}}>{children}</span>;
 };

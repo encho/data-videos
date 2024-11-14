@@ -77,10 +77,10 @@ export function findNearestDataPoints(
 		}
 	}
 
-	if (before == null && after !== null) {
+	if (before === null && after !== null) {
 		before = after;
 	}
-	if (after == null && before !== null) {
+	if (after === null && before !== null) {
 		after = before;
 	}
 
@@ -165,10 +165,14 @@ export const getYDomain = (
 		const yDomainMin = min(timeSeries.map((it) => it.value));
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [yDomainMin, yDomainMax] as [number, number];
-	} if (yDomainType === 'ZERO_FULL') {
+	}
+
+	if (yDomainType === 'ZERO_FULL') {
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [0, yDomainMax] as [number, number];
-	} if (yDomainType === 'VISIBLE') {
+	}
+
+	if (yDomainType === 'VISIBLE') {
 		// const visibleTimeSeriesSlice =
 		// 	getFullyVisibleTimeSeriesSliceFromFloatIndices(
 		// 		timeSeries,

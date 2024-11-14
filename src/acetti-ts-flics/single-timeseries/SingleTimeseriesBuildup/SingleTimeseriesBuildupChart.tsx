@@ -1,20 +1,13 @@
 import {useVideoConfig} from 'remotion';
-import {scaleLinear, ScaleLinear} from 'd3-scale';
+import {ScaleLinear} from 'd3-scale';
 
 import {TextAnimationSubtle} from '../../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Position} from '../../../acetti-ts-base/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-import {
-	periodsScale,
-	TPeriodsScale,
-} from '../../../acetti-ts-periodsScale/periodsScale';
-import {
-	AnimatedSparklineStartDot,
-	BuildingAnimatedLine,
-} from '../../../acetti-ts-components/BuildingAnimatedLine';
-import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
+import {BuildingAnimatedLine} from '../../../acetti-ts-components/BuildingAnimatedLine';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 // import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
@@ -23,8 +16,6 @@ import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
 import {getTextStyleCapHeight} from '../../../acetti-typography/CapSizeTextNew';
-import {XAxis_Transition} from '../../../acetti-ts-axis/XAxis_Transition';
-import {XAxis_SpecBased} from '../../../acetti-ts-axis/XAxis_SpecBased';
 import {XAxis_EntryTransition} from '../../../acetti-ts-axis/XAxis_EntryTransition';
 import {
 	getIndicesAxisSpec,
@@ -32,16 +23,6 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 } from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-
-// TODO: export use because of passed parametrization
-// e.g. formatter: {type: "currency", currency: "USD", digits: 0, locale: "en-GB"}
-const currencyFormatter = (x: number) => {
-	const formatter = new Intl.NumberFormat('en-GB', {
-		maximumFractionDigits: 0, // Ensures no decimal places
-		minimumFractionDigits: 0, // Ensures no decimal places
-	});
-	return '$ ' + formatter.format(x);
-};
 
 const AXIS_SPEC_FUNCTIONS = {
 	indices: getIndicesAxisSpec,
@@ -99,7 +80,6 @@ export const SingleTimeseriesBuildupChart: React.FC<{
 	leftValueLabel,
 	rightValueLabel,
 	lineColor,
-	xAxisFormatString,
 	currentSliceInfo,
 	// TODO currentSliceInfo try to extract from and to period scales here?
 }) => {
@@ -115,11 +95,11 @@ export const SingleTimeseriesBuildupChart: React.FC<{
 	// 	'X_AXIS_ENTER_END'
 	// );
 
-	const LEFT_VALUE_EXIT_DURATION = getExclusiveSequenceDuration(
-		keyframes,
-		'LEFT_VALUE_EXIT_START',
-		'LEFT_VALUE_EXIT_END'
-	);
+	// const LEFT_VALUE_EXIT_DURATION = getExclusiveSequenceDuration(
+	// 	keyframes,
+	// 	'LEFT_VALUE_EXIT_START',
+	// 	'LEFT_VALUE_EXIT_END'
+	// );
 
 	const SPARKLINE_FADE_IN_DURATION = getExclusiveSequenceDuration(
 		keyframes,
