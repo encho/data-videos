@@ -60,7 +60,11 @@ export const bundesligaTop10BarChartSchema = z.object({
 
 export const BundesligaTop10BarChart: React.FC<
 	z.infer<typeof bundesligaTop10BarChartSchema>
-> = ({apiData, dateString, year}) => {
+> = ({
+	apiData,
+	dateString,
+	// year
+}) => {
 	// TODO use tiny-invariant
 	if (apiData === null) {
 		throw new Error('Data was not fetched');

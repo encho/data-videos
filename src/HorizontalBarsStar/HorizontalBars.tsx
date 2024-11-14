@@ -71,7 +71,7 @@ export const HorizontalBars: React.FC<z.infer<typeof horizontalBarsSchema>> = ({
 						<Sequence from={(i + 1) * 5}>
 							<HorizontalBar
 								key={it.label}
-								isActive
+								// isActive
 								height={bandwidth}
 								width={valuesScaleLinear(it.value)}
 								label={it.label}
@@ -89,7 +89,7 @@ export const HorizontalBars: React.FC<z.infer<typeof horizontalBarsSchema>> = ({
 };
 
 type THorizontalBarProps = {
-	isActive: boolean;
+	// isActive: boolean;
 	width: number;
 	height: number;
 	top: number;
@@ -138,7 +138,7 @@ const HorizontalBar = ({
 				borderRadius: 4,
 			}}
 		>
-			<Sequence >
+			<Sequence>
 				<BarDescription
 					textColor={colors.text}
 					label={label}
@@ -224,16 +224,16 @@ function easeInOutExpo(x: number): number {
 		: x === 1
 		? 1
 		: x < 0.5
-		? 2**(20 * x - 10) / 2
-		: (2 - 2**(-20 * x + 10)) / 2;
+		? 2 ** (20 * x - 10) / 2
+		: (2 - 2 ** (-20 * x + 10)) / 2;
 }
 
 function easeInCirc(x: number): number {
-	return 1 - Math.sqrt(1 - x**2);
+	return 1 - Math.sqrt(1 - x ** 2);
 }
 
 function easeOutQuint(x: number): number {
-	return 1 - (1 - x)**5;
+	return 1 - (1 - x) ** 5;
 }
 
 const easings = {

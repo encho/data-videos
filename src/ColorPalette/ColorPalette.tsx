@@ -26,7 +26,7 @@ const colorBrewerKeys = Object.keys(chroma.brewer);
 
 const colorsLists = colorBrewerKeys.map((colorBrewerKey) => {
 	const colors = chroma.scale(colorBrewerKey).colors(11);
-	const colorsList = colors.map((it, i) => {
+	const colorsList = colors.map((it) => {
 		return {label: colorBrewerKey, color: it};
 	});
 	return {name: colorBrewerKey, colorsList};
@@ -47,7 +47,6 @@ export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 	return (
 		<AbsoluteFill style={{backgroundColor: theme.global.backgroundColor}}>
 			<TransitionSeries>
-				{/* @ts-ignore */}
 				<TransitionSeries.Sequence durationInFrames={titleSlideDuration}>
 					<Position
 						position={{top: paddingHorizontal, left: paddingHorizontal}}
@@ -67,7 +66,6 @@ export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 					presentation={slide({direction: 'from-right'})}
 					timing={linearTiming({durationInFrames: 30})}
 				/>
-				{/* @ts-ignore */}
 				<TransitionSeries.Sequence
 					durationInFrames={durationInFrames - 30 - titleSlideDuration}
 				>

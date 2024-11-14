@@ -9,7 +9,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {TypographyStyle} from '../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {WaterfallTextEffect} from '../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
+import {HtmlArea} from '../../acetti-layout';
 import {useVerticalColumnLayout} from './useVerticalColumnLayout';
 import {getTextStyleCapHeight} from '../../acetti-typography/CapSizeTextNew';
 import {

@@ -3,7 +3,7 @@ import {useCallback} from 'react';
 import invariant from 'tiny-invariant';
 import {isNumber} from 'lodash';
 
-import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
+import {HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {useStillBarChartLayout} from './useStillBarChartLayout';
 import {getBarChartBaseline} from './useBarChartLayout';

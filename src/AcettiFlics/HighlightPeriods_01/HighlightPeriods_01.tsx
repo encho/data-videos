@@ -15,12 +15,9 @@ import {
 	TNerdyFinancePriceChartDataResult,
 } from '../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {zNerdyTickers} from '../../acetti-http/zNerdyTickers';
-import {getThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
-// import {ObliquePlatte} from '../../acetti-components/ObliquePlatte';
+import {useThemeFromEnum} from '../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../acetti-components/GlobalVideoContext';
 import {HighlightPeriods_01} from '../../acetti-ts-flics/single-timeseries/HighlightPeriods_01/HighlightPeriods_01';
-// import {useThemeFontsLoader} from '../../acetti-themes/useThemeTypograpyLoader';
-import {useFontFamiliesLoader} from '../../acetti-typography/useFontFamiliesLoader';
 
 export const highlightPeriods_01_example_schema = z.object({
 	ticker: zNerdyTickers,
@@ -44,9 +41,7 @@ export const HighlightPeriods_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');
