@@ -20,20 +20,9 @@ export const zNerdyFinancePriceChartDataResult = z.object({
 	),
 });
 
-export type TNerdyFinancePriceChartDataResult = {
-	title: string;
-	subtitle: string;
-	ticker: string;
-	tickerMetadata: {
-		ticker: string;
-		quote: string;
-		name: string;
-		type: string;
-	};
-	percentageChange: number;
-	timePeriod: string;
-	data: {value: number; index: Date}[];
-};
+export type TNerdyFinancePriceChartDataResult = z.infer<
+	typeof zNerdyFinancePriceChartDataResult
+>;
 
 type NerdyFinancePriceChartsArgs = {
 	ticker: string;

@@ -100,8 +100,6 @@ export const Animated_XAxis: React.FC<{
 		axisSpecToProp ||
 		getAxisSpec(periodScaleTo, getAxisSpecType(periodScaleTo));
 
-	console.log({axisSpecFrom, axisSpecTo});
-
 	// colors
 	// ------------------------------------------------------------
 	// TODO in the theme we need lineColor, tickColor, tickLabelColor, secondaryTickLabelColor, evtl. labelColor

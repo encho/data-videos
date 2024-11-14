@@ -1,18 +1,9 @@
-import {
-	delayRender,
-	continueRender,
-	AbsoluteFill,
-	useVideoConfig,
-} from 'remotion';
+import {AbsoluteFill, useVideoConfig} from 'remotion';
 import {z} from 'zod';
-import {useEffect, useState} from 'react';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
-import {
-	fetchNerdyFinancePriceChartData,
-	TNerdyFinancePriceChartDataResult,
-} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
+import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
@@ -23,49 +14,22 @@ export const performanceCompareCompositionSchema = z.object({
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	apiPriceData: zNerdyFinancePriceChartDataResult.optional(),
 });
 
 export const PerformanceCompareComposition: React.FC<
 	z.infer<typeof performanceCompareCompositionSchema>
-> = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
+> = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum, apiPriceData}) => {
 	// TODO actually get height and with as props
 	const {height, width} = useVideoConfig();
 
-	const today = new Date();
-	const endDate = today.toISOString();
-
-	const [apiResult, setApiResult] =
-		useState<null | TNerdyFinancePriceChartDataResult>(null);
-
 	const theme = useThemeFromEnum(themeEnum as any);
 
-	useEffect(() => {
-		const handle = delayRender('FETCH_API_DATA');
-		async function fetchAndSetData() {
-			try {
-				const response = await fetchNerdyFinancePriceChartData(
-					{
-						ticker,
-						endDate,
-						timePeriod,
-					},
-					nerdyFinanceEnv
-				);
-				setApiResult(response);
-				continueRender(handle);
-			} catch (error) {
-				// Handle any errors
-			}
-		}
-		fetchAndSetData();
-		// }, [ticker, timePeriod, endDate, nerdyFinanceEnv]);
-	}, []);
-
-	if (!apiResult) {
+	if (!apiPriceData) {
 		return <AbsoluteFill />;
 	}
 
-	const timeSeries = apiResult.data.map((it) => ({
+	const timeSeries = apiPriceData.data.map((it) => ({
 		value: it.value,
 		date: new Date(it.index),
 	}));

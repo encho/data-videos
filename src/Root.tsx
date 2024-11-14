@@ -1150,7 +1150,6 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="PerformanceCompare"
 						component={PerformanceCompareComposition}
-						// durationInFrames={30 * 9}
 						durationInFrames={30 * 30}
 						fps={30}
 						// {...videoSizes.linkedInTall}
@@ -1159,10 +1158,29 @@ export const RemotionRoot: React.FC = () => {
 						height={videoSizes.widescreen_16x9.height * 3}
 						schema={performanceCompareCompositionSchema}
 						defaultProps={{
-							ticker: 'ETH-USD' as const,
+							ticker: 'SPX_INDEX' as const,
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+						}}
+						calculateMetadata={async ({props}) => {
+							const {nerdyFinanceEnv, ticker, timePeriod} = props;
+
+							const apiPriceData = await fetchNerdyFinancePriceChartData(
+								{
+									ticker,
+									endDate: new Date(),
+									timePeriod,
+								},
+								nerdyFinanceEnv
+							);
+
+							return {
+								props: {
+									...props,
+									apiPriceData,
+								},
+							};
 						}}
 					/>
 				</Folder>
