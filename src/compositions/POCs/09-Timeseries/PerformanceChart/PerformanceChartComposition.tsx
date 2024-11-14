@@ -50,12 +50,12 @@ export const PerformanceChartComposition: React.FC<
 	chartTheme: chartThemeEnum,
 	apiPriceData,
 }) => {
+	const theme = useThemeFromEnum(themeEnum as any);
 	// TODO actually get height and with as props
 	// const {height, width} = useVideoConfig();
 	const {fps, width, height} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 
-	const theme = useThemeFromEnum(themeEnum as any);
 	const chartTheme = useThemeFromEnum(chartThemeEnum as any);
 
 	if (!apiPriceData) {
