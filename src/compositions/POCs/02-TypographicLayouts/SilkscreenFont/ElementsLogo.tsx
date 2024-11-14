@@ -1,4 +1,5 @@
 import {AbsoluteFill} from 'remotion';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 import {SilkscreenLetter} from './SilkscreenLetter';
 
@@ -255,16 +256,11 @@ const G_LETTER = {
 
 export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 	// const cell_size = 16;
-	const space = 2 * cell_size;
 	const small_cell_size = cell_size / 1.6;
 
-	const first_line_height = 5 * cell_size;
-	const second_line_height = 5 * small_cell_size;
-
-	// TODO pass total logo height as prop
-	const logo_height = first_line_height + space + second_line_height;
-
 	const FONT_COLOR = '#707070';
+
+	const theme = useThemeFromEnum('LORENZOBERTOLINI');
 
 	return (
 		<AbsoluteFill>
@@ -283,48 +279,56 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								{...E_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...L_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...E_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...M_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...E_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...N_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...T_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...S_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 						</div>
 						<div style={{display: 'flex', gap: 2 * cell_size}}>
@@ -333,12 +337,14 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								{...O_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={cell_size}
 								{...F_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 						</div>
 					</div>
@@ -350,24 +356,28 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								{...D_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...A_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...A_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 						</div>
 						<div style={{display: 'flex', gap: 2 * small_cell_size}}>
@@ -376,72 +386,84 @@ export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 								{...S_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...O_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...R_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...Y_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...T_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...E_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...L_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...L_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...I_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...N_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 							<SilkscreenLetter
 								cellSize={small_cell_size}
 								{...G_LETTER}
 								showGrid={false}
 								color={FONT_COLOR}
+								theme={theme}
 							/>
 						</div>
 					</div>

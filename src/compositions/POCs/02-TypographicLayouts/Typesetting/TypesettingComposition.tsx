@@ -6,7 +6,6 @@ import {Sequence, useVideoConfig} from 'remotion';
 
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
