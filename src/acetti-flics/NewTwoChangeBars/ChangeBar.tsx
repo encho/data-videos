@@ -139,7 +139,7 @@ export const ChangeBar: React.FC<{
 							barColor={barColor}
 							valueTextColor={valueTextColor}
 						/>
-						<g></g>
+						<g />
 					</Area>
 				</Sequence>
 			</svg>
@@ -193,7 +193,7 @@ const AnimatedSvgBar = ({
 	valueFormatter: (x: number) => string;
 	area: TGridLayoutArea;
 	valueLabelArea: TGridLayoutArea;
-	//TODO enter and exits should be fixtures
+	// TODO enter and exits should be fixtures
 	enterDurationInFrames: number;
 	exitDurationInFrames: number;
 	isTrimmed: boolean;

@@ -346,7 +346,7 @@ export const MultiLineChartAnimationContainer: React.FC<{
 	}
 
 	return (
-		<Sequence from={0} durationInFrames={totalDuration} layout="none">
+		<Sequence  durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
 				yScale,

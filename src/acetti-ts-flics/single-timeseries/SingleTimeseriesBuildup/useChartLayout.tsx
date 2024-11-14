@@ -19,9 +19,9 @@ export function useChartLayout({
 }) {
 	// TODO define in ibcs theme
 	// *************************************
-	const SPACE_ABOVE_XAXIS = baseline * 1;
+	const SPACE_ABOVE_XAXIS = Number(baseline);
 	const SPACE_FOR_XAXIS = baseline * 1.5;
-	const VERTICAL_SPACE = baseline * 1;
+	const VERTICAL_SPACE = Number(baseline);
 
 	const chartRowsRailSpec: TGridRailSpec = [
 		{type: 'fr', value: 1, name: 'plot'},

@@ -48,9 +48,9 @@ export function getTickValue(axisSpec: TAxisSpec, tickId: string): Date {
 
 	if (tick.type === 'DOMAIN_VALUE') {
 		return tick.value;
-	} else {
+	} 
 		return axisSpec.scale.invert(tick.value);
-	}
+	
 }
 
 export function getTickMappedValue(
@@ -62,9 +62,9 @@ export function getTickMappedValue(
 
 	if (tick.type === 'DOMAIN_VALUE') {
 		return axisSpec.scale(tick.value);
-	} else {
+	} 
 		return tick.value;
-	}
+	
 }
 
 export function getLabelValue(axisSpec: TAxisSpec, labelId: string): Date {
@@ -73,9 +73,9 @@ export function getLabelValue(axisSpec: TAxisSpec, labelId: string): Date {
 
 	if (label.type === 'DOMAIN_VALUE') {
 		return label.value;
-	} else {
+	} 
 		return axisSpec.scale.invert(label.value);
-	}
+	
 }
 
 export function getLabelMappedValue(
@@ -87,7 +87,7 @@ export function getLabelMappedValue(
 
 	if (label.type === 'DOMAIN_VALUE') {
 		return axisSpec.scale(label.value);
-	} else {
+	} 
 		return label.value;
-	}
+	
 }

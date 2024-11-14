@@ -29,8 +29,8 @@ export function useChartLayout({
 }) {
 	// TODO define in ibcs theme
 	// *************************************
-	const MARGIN_BOTTOM = baseline * 1;
-	const MARGIN_TOP = baseline * 1;
+	const MARGIN_BOTTOM = Number(baseline);
+	const MARGIN_TOP = Number(baseline);
 	const MARGIN_LEFT = baseline * horizontalMarginInBaselines;
 	const MARGIN_RIGHT = baseline * horizontalMarginInBaselines;
 

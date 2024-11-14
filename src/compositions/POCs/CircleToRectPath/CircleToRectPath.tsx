@@ -89,9 +89,9 @@ export const CircleToRectPath: React.FC<
 			</div>
 
 			<svg style={{backgroundColor: 'cyan', width: 500, height: 500}}>
-				<path opacity={0.3} d={rectPath} fill={'black'} />
-				<path opacity={0.3} d={circlePath} fill={'black'} />
-				<path d={flubberInterpolatedPath} fill={'orange'} />
+				<path opacity={0.3} d={rectPath} fill="black" />
+				<path opacity={0.3} d={circlePath} fill="black" />
+				<path d={flubberInterpolatedPath} fill="orange" />
 			</svg>
 			<LorenzoBertoliniLogo color={theme.typography.textColor} />
 		</div>

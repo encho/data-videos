@@ -93,17 +93,17 @@ export const SvgMaskComposition: React.FC<
 
 	paper.setup([videoWidth, videoHeight]);
 
-	let paperCircle = new paper.Path.Circle(
+	const paperCircle = new paper.Path.Circle(
 		[videoWidth / 2, videoHeight / 2],
 		bigRadius
 	);
 
-	let paperCircle2 = new paper.Path.Circle(
+	const paperCircle2 = new paper.Path.Circle(
 		[videoWidth / 2, videoHeight / 3],
 		videoWidth / 7
 	);
 
-	let textPath = new paper.Path(svgPath || '');
+	const textPath = new paper.Path(svgPath || '');
 
 	// exclude, subtract, unite, intersect, divide
 	// const result = paperCircle2.exclude(paperCircle);
@@ -147,7 +147,7 @@ export const SvgMaskComposition: React.FC<
 									y="0"
 									width={videoWidth}
 									height={videoHeight}
-								></rect>
+								 />
 								<path
 									d={resultingPath}
 									fill={`rgba(255,255,255,${1 - opacity})`}
@@ -165,14 +165,14 @@ export const SvgMaskComposition: React.FC<
 								<text
 									x={videoWidth / 2}
 									y={videoHeight * 0.997}
-									fontFamily={'Inter-Bold'}
+									fontFamily="Inter-Bold"
 									fontSize={videoHeight / 5}
 									fontWeight={700}
 									fill={`rgba(255,255,255,${1 - opacity})`}
 									textAnchor="middle"
 									alignmentBaseline="baseline"
 								>
-									{'encho.'}
+									encho.
 								</text>
 							</mask>
 						</defs>

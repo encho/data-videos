@@ -63,7 +63,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={'black'}
+					lineColor="black"
 					periodsScale={periodScaleAnimation.periodsScale}
 					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
@@ -74,7 +74,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={'orange'}
+					lineColor="orange"
 					periodsScale={periodScaleAnimation.periodsScale}
 					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
@@ -88,7 +88,7 @@ export const LineChart_YAxisShowcase: React.FC<{
 					// TODO
 					// periodScaleAnimation={periodScaleAnimation}
 					// yScaleAnimation={yScaleAnimation}
-					lineColor={'#00aadd'}
+					lineColor="#00aadd"
 					periodsScale={periodScaleAnimation.periodsScale}
 					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}

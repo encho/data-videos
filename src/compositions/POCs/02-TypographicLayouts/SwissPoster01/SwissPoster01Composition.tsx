@@ -69,7 +69,7 @@ export const SwissPoster01Composition: React.FC<
 		width,
 		height,
 		baseline,
-		horizontalMarginInBaselines: horizontalMarginInBaselines,
+		horizontalMarginInBaselines,
 		// titleWidthInPixel: posterTitleDimensions.width * 1.1,
 		titleWidthInPixel: posterTitleDimensions.width,
 		titleUpperSegmentInBaselines,
@@ -96,8 +96,8 @@ export const SwissPoster01Composition: React.FC<
 				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
 						style={{
-							width: width,
-							height: height,
+							width,
+							height,
 							position: 'relative',
 						}}
 					>
@@ -161,7 +161,7 @@ export const SwissPoster01Composition: React.FC<
 				</div>
 			</Sequence>
 
-			<LorenzoBertoliniLogo2 theme={theme} color={'white'} />
+			<LorenzoBertoliniLogo2 theme={theme} color="white" />
 		</div>
 	);
 };

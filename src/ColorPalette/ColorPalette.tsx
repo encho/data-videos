@@ -159,9 +159,9 @@ export const ColorsSequenceContent: React.FC<{
 									</h1>
 									<ColorsList
 										key={i}
+										noLabel
 										colorsList={colorsList.colorsList}
 										width={contentWidthInner}
-										noLabel
 										textColorMain={theme.typography.textColor}
 										textColorContrast={theme.global.backgroundColor}
 									/>

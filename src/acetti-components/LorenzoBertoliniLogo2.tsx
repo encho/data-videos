@@ -14,7 +14,7 @@ export const LorenzoBertoliniLogo2 = ({
 	const color = colorProp || theme.typography.logoColor;
 	const fontSize = 32; // TODO from theme or pageContext or typographyContext or so
 
-	const entryDurationInFrames = fps * 1;
+	const entryDurationInFrames = Number(fps);
 
 	const percentageProgress = frame / entryDurationInFrames;
 	// const percentageProgress = 1;
@@ -71,16 +71,16 @@ function easeInOutExpo(x: number): number {
 		: x === 1
 		? 1
 		: x < 0.5
-		? Math.pow(2, 20 * x - 10) / 2
-		: (2 - Math.pow(2, -20 * x + 10)) / 2;
+		? 2**(20 * x - 10) / 2
+		: (2 - 2**(-20 * x + 10)) / 2;
 }
 
 function easeInCirc(x: number): number {
-	return 1 - Math.sqrt(1 - Math.pow(x, 2));
+	return 1 - Math.sqrt(1 - x**2);
 }
 
 function easeOutQuint(x: number): number {
-	return 1 - Math.pow(1 - x, 5);
+	return 1 - (1 - x)**5;
 }
 
 const easings = {

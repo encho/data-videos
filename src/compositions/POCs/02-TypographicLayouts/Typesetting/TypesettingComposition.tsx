@@ -72,14 +72,14 @@ export const TypesettingComposition: React.FC<
 					{/* <DisplayGridRails {...matrixLayout} stroke={'#444'} strokeWidth={1} /> */}
 
 					<HtmlArea area={area_1}>
-						<Sequence from={0} layout="none">
+						<Sequence  layout="none">
 							<div>
 								<BaselineGrid
 									width={area_1.width}
 									height={area_1.height}
 									baseline={baseline}
 									{...theme.TypographicLayouts.baselineGrid}
-									lineColor={'#999'}
+									lineColor="#999"
 									strokeWidth={1}
 								/>
 

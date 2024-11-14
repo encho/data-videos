@@ -96,8 +96,8 @@ export const BarChartRace_CustomLabel_Flic: React.FC<{theme: ThemeType}> = ({
 					// showArea={showAreas}
 				>
 					<TitleWithSubtitle
-						title={'Bar Chart Race'}
-						subtitle={'Based on Mock Chat-GPT generated data'}
+						title="Bar Chart Race"
+						subtitle="Based on Mock Chat-GPT generated data"
 						theme={theme}
 						innerDelayInSeconds={1}
 					/>

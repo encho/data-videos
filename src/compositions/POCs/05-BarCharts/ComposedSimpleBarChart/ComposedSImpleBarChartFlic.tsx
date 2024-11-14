@@ -87,7 +87,7 @@ export const ComposedSimpleBarChartFlic: React.FC<{
 							<DisplayGridRails
 								{...matrixLayout}
 								// stroke={'#252525'}
-								stroke={'transparent'}
+								stroke="transparent"
 							/>
 
 							<HtmlArea area={leftArea}>

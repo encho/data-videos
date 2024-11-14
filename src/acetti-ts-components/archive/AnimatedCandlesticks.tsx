@@ -70,8 +70,8 @@ export const AnimatedCandlesticks: React.FC<{
 				{ohlcSeries.map((ohlcItem, i) => {
 					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(ohlcItem.date);
-					const x1 = band.x1;
-					const width = band.width;
+					const {x1} = band;
+					const {width} = band;
 
 					// TODO add padding funcitonality to scale!
 					const paddedWidth = width * 0.8;

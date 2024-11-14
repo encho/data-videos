@@ -47,7 +47,7 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 	const nrRows = 1;
 
 	// TODO define IBCS-style chart sizes in terms of baseline on a theme level
-	const COLUMN_SPACE = baseline * 1;
+	const COLUMN_SPACE = Number(baseline);
 	const COLUMN_WIDTH = baseline * 4;
 
 	const labelHeight = getTextStyleCapHeight({
@@ -177,15 +177,15 @@ export const VerticalColumn: React.FC<{
 	const verticalColumnLayout = useVerticalColumnLayout({
 		width,
 		height,
-		valueLabelHeight: valueLabelHeight,
-		labelHeight: labelHeight,
+		valueLabelHeight,
+		labelHeight,
 		spaceHeight: 20, // TODO as prop
 	});
 
 	// // TODO as props
 	const columnEntryDelayInFrames = fps * 0.6;
 	const columnEnterDurationInFrames = fps * 0.6;
-	const columnExitDurationInFrames = fps * 1;
+	const columnExitDurationInFrames = Number(fps);
 
 	const valueLabelDelayInFrames =
 		columnEntryDelayInFrames +
@@ -240,7 +240,7 @@ export const VerticalColumn: React.FC<{
 		>
 			{false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
-					<DisplayGridRails {...verticalColumnLayout} stroke={'cyan'} />
+					<DisplayGridRails {...verticalColumnLayout} stroke="cyan" />
 				</div>
 			) : null}
 

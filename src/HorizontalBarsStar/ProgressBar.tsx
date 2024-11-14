@@ -19,16 +19,16 @@ function easeInOutExpo(x: number): number {
 		: x === 1
 		? 1
 		: x < 0.5
-		? Math.pow(2, 20 * x - 10) / 2
-		: (2 - Math.pow(2, -20 * x + 10)) / 2;
+		? 2**(20 * x - 10) / 2
+		: (2 - 2**(-20 * x + 10)) / 2;
 }
 
 function easeInCirc(x: number): number {
-	return 1 - Math.sqrt(1 - Math.pow(x, 2));
+	return 1 - Math.sqrt(1 - x**2);
 }
 
 function easeOutQuint(x: number): number {
-	return 1 - Math.pow(1 - x, 5);
+	return 1 - (1 - x)**5;
 }
 
 const easings = {
@@ -87,7 +87,7 @@ export const ProgressBar: React.FC<z.infer<typeof progressBarSchema>> = ({
 							fillRule="nonzero"
 							fill={color}
 							d="M1541.11 0c-93.982 586.279-172.953 934.796-389.635 1151.48-216.681 216.682-565.198 295.653-1151.48 389.635 586.279 93.982 934.796 172.953 1151.48 390.287 216.682 216.681 295.653 565.198 389.635 1151.93 93.982-586.736 172.953-935.253 389.634-1152.59 217.334-216.681 565.851-295.652 1152.59-389.634-586.736-93.982-935.253-172.953-1151.93-389.635C1714.07 934.792 1635.099 586.275 1541.117-.007z"
-						></path>
+						 />
 					</svg>
 					);
 				</g>

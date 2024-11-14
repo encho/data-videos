@@ -48,7 +48,7 @@ export const XAxis_EntryTransition: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	const relativeFrame = currentSliceInfo.relativeFrame;
+	const {relativeFrame} = currentSliceInfo;
 	const {fps} = useVideoConfig();
 
 	// const FADE_IN_OUT_DURATION = fps * 3;

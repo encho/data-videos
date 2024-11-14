@@ -19,14 +19,14 @@ export const ComposedSimpleBarChartComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
-	const positiveColor = theme.positiveNegativeColors.positiveColor;
-	const negativeColor = theme.positiveNegativeColors.negativeColor;
+	const {positiveColor} = theme.positiveNegativeColors;
+	const {negativeColor} = theme.positiveNegativeColors;
 
 	const leftData = wahlergebnis2024.map((it) => ({
 		id: it.id,
 		label: it.parteiName,
 		value: it.prozent,
-		barColor: colorPalettes['Slate']['500'], // TODO from theme
+		barColor: colorPalettes.Slate['500'], // TODO from theme
 		// barColor: it.farbe,
 		valueLabel: formatPercentage(it.prozent),
 	}));

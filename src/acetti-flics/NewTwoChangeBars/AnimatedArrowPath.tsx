@@ -219,7 +219,7 @@ export const AnimatedArrowPath: React.FC<ArrowTypeSequenceType> = ({
 					/>
 				</g>
 
-				<g></g>
+				<g />
 			</svg>
 		</div>
 	);

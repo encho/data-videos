@@ -82,7 +82,7 @@ export const SilkscreenLetter: React.FC<{
 											})}
 											fill={color}
 										>
-											<g></g>
+											<g />
 										</Area>
 									);
 								})}

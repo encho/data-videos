@@ -46,8 +46,8 @@ export const HighlightPeriodsMulti: React.FC<{
 
 	const frame = useCurrentFrame();
 
-	const x1 = periodsScale.getBandFromIndex(domainIndices[0]).x1;
-	const x2 = periodsScale.getBandFromIndex(domainIndices[1]).x2;
+	const {x1} = periodsScale.getBandFromIndex(domainIndices[0]);
+	const {x2} = periodsScale.getBandFromIndex(domainIndices[1]);
 	const width = x2 - x1;
 
 	// const extent = getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(

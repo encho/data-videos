@@ -36,7 +36,7 @@ export const useFontFamiliesLoader = (theme: ThemeType) => {
 
 export function useFontsLoader(fontSpecsToLoad: TFontSpec[]) {
 	useEffect(() => {
-		for (let fontSpec of fontSpecsToLoad) {
+		for (const fontSpec of fontSpecsToLoad) {
 			loadFont(fontSpec);
 		}
 	}, []);

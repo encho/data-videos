@@ -4,7 +4,7 @@ import {max, min} from 'd3-array';
 import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
-//TODO  TIMESERIES NAMESPACE
+// TODO  TIMESERIES NAMESPACE
 // *********************
 export function getFirstNItems(timeSeries: TimeSeries, n: number): TimeSeries {
 	return timeSeries.slice(0, n);
@@ -165,10 +165,10 @@ export const getYDomain = (
 		const yDomainMin = min(timeSeries.map((it) => it.value));
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [yDomainMin, yDomainMax] as [number, number];
-	} else if (yDomainType === 'ZERO_FULL') {
+	} if (yDomainType === 'ZERO_FULL') {
 		const yDomainMax = max(timeSeries.map((it) => it.value));
 		return [0, yDomainMax] as [number, number];
-	} else if (yDomainType === 'VISIBLE') {
+	} if (yDomainType === 'VISIBLE') {
 		// const visibleTimeSeriesSlice =
 		// 	getFullyVisibleTimeSeriesSliceFromFloatIndices(
 		// 		timeSeries,

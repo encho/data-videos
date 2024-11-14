@@ -45,7 +45,7 @@ export const SimpleMatrixLayoutComposition: React.FC<
 				<SlideTitle theme={theme}>The Matrix Layout</SlideTitle>
 			</Sequence>
 			<Sequence
-				from={Math.floor(fps * 1)}
+				from={Math.floor(Number(fps))}
 				// durationInFrames={fps * 3}
 				layout="none"
 			>
@@ -111,7 +111,7 @@ const StandardMatrixLayoutExample: React.FC<{theme: ThemeType}> = ({theme}) => {
 										})}
 										fill={theme.TypographicLayouts.gridLayout.activeAreaFill}
 									>
-										<g></g>
+										<g />
 									</Area>
 									<Area
 										area={getMatrixLayoutCellArea({
@@ -122,7 +122,7 @@ const StandardMatrixLayoutExample: React.FC<{theme: ThemeType}> = ({theme}) => {
 										})}
 										fill={theme.TypographicLayouts.gridLayout.activeAreaFill}
 									>
-										<g></g>
+										<g />
 									</Area>
 								</svg>
 							</div>

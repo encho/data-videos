@@ -174,10 +174,10 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 									{...matrixLayout}
 									// stroke={theme.TypographicLayouts.gridLayout.lineColor}
 									// stroke={'#292929'}
-									stroke={'transparent'}
+									stroke="transparent"
 								/>
 								<HtmlArea area={area_1}>
-									<Sequence from={0} layout="none">
+									<Sequence  layout="none">
 										<TypographyStyle
 											typographyStyle={theme.typography.textStyles.body}
 											baseline={baseline}
@@ -191,7 +191,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
-												id={'001'}
+												id="001"
 												data={props.sparklines[0].timeseries}
 												width={area_1.width}
 												height={
@@ -222,7 +222,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
-												id={'002'}
+												id="002"
 												data={props.sparklines[1].timeseries}
 												width={area_2.width}
 												height={
@@ -253,7 +253,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
-												id={'003'}
+												id="003"
 												data={props.sparklines[2].timeseries}
 												width={area_3.width}
 												height={
@@ -284,7 +284,7 @@ export const MultipleSimpleSparklineFlic: React.FC<{theme: ThemeType}> = ({
 										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
-												id={'004'}
+												id="004"
 												data={props.sparklines[3].timeseries}
 												width={area_4.width}
 												height={

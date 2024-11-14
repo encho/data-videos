@@ -28,7 +28,7 @@ export default function DisplayGridLayout({
 		<div style={{position: 'relative'}}>
 			<Svg width={width} height={height} stroke={stroke} fill={fill}>
 				{toPairs(areas).map(([name, area]) => (
-					<Area key={name} area={area} show fill={fill} stroke={stroke}>
+					<Area key={name} show area={area} fill={fill} stroke={stroke}>
 						<Title area={area} text={name} />
 					</Area>
 				))}

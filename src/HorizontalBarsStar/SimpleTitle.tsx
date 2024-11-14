@@ -48,16 +48,16 @@ function easeInOutExpo(x: number): number {
 		: x === 1
 		? 1
 		: x < 0.5
-		? Math.pow(2, 20 * x - 10) / 2
-		: (2 - Math.pow(2, -20 * x + 10)) / 2;
+		? 2**(20 * x - 10) / 2
+		: (2 - 2**(-20 * x + 10)) / 2;
 }
 
 function easeInCirc(x: number): number {
-	return 1 - Math.sqrt(1 - Math.pow(x, 2));
+	return 1 - Math.sqrt(1 - x**2);
 }
 
 function easeOutQuint(x: number): number {
-	return 1 - Math.pow(1 - x, 5);
+	return 1 - (1 - x)**5;
 }
 
 const easings = {

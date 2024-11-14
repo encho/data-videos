@@ -139,7 +139,7 @@ export const SingleTimeseriesBuildup: React.FC<TProps> = ({
 								/> */}
 								{/* <div style={{transform: `translateY(100) scale(0.5)`}}> */}
 								<SingleTimeseriesBuildupChart
-									id={'2903'}
+									id="2903"
 									baseline={baseline}
 									timeSeries={data}
 									layoutAreas={{

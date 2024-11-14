@@ -91,7 +91,7 @@ export const SilkscreenLetter: React.FC<{
 												theme.TypographicLayouts.gridLayout.activeAreaFill
 											}
 										>
-											<g></g>
+											<g />
 										</Area>
 									);
 								})}

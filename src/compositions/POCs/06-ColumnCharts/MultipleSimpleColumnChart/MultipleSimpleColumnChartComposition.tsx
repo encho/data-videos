@@ -67,8 +67,8 @@ export const MultipleSimpleColumnChartComposition: React.FC<
 			}}
 		>
 			<TitleWithSubtitle
-				title={'Multiple Simple Column Chart'}
-				subtitle={'Display Multiple Categorical Data Horizontally'}
+				title="Multiple Simple Column Chart"
+				subtitle="Display Multiple Categorical Data Horizontally"
 				theme={theme}
 				baseline={20}
 			/>

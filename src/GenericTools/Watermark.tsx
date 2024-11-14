@@ -36,9 +36,7 @@ export const Watermark: React.FC<{
 							objectFit: 'cover',
 						}}
 						// src={theme.Watermark.image}
-						src={
-							'https://s3.eu-central-1.amazonaws.com/dataflics.com/lorenzo-brown-wall.JPG'
-						}
+						src="https://s3.eu-central-1.amazonaws.com/dataflics.com/lorenzo-brown-wall.JPG"
 						alt=""
 					/>
 					<div
@@ -50,7 +48,7 @@ export const Watermark: React.FC<{
 						}}
 					>
 						{/* {theme.Watermark.text} */}
-						{'Hello Watermark'}
+						Hello Watermark
 					</div>
 				</div>
 			) : null}

@@ -92,14 +92,14 @@ export const BuildingAnimatedLine: React.FC<{
 
 	const {x, y} = getXY({
 		periodsScale,
-		yScale: yScale,
+		yScale,
 		timeSeries,
 		domainIndex: currentAnchorDomainIndex,
 	});
 
 	const {x: lastX, y: lastY} = getXY({
 		periodsScale,
-		yScale: yScale,
+		yScale,
 		timeSeries,
 		domainIndex: visibleDomainIndices[1],
 	});
@@ -216,7 +216,7 @@ export const AnimatedSparklineStartDot: React.FC<{
 
 	const {x, y} = getXY({
 		periodsScale,
-		yScale: yScale,
+		yScale,
 		timeSeries,
 		domainIndex: visibleDomainIndices[0],
 	});

@@ -149,7 +149,7 @@ type TSparklineProps = {
 export const data: TSparklineProps = {
 	title: slideTitle,
 	subtitle: slideSubtitle,
-	dataSource: dataSource,
-	sparklines: sparklines,
+	dataSource,
+	sparklines,
 	formatString: '$ 0.00',
 };

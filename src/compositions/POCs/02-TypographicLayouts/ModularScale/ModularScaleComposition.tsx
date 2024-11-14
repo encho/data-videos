@@ -60,7 +60,7 @@ export const ModularScaleComposition: React.FC<
 			}}
 		>
 			<SlideTitle theme={theme}>The Modular Scale</SlideTitle>
-			<Sequence layout="none" from={fps * 1}>
+			<Sequence layout="none" from={Number(fps)}>
 				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
 						style={{

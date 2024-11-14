@@ -28,13 +28,13 @@ export function BaselineGrid({
 				{range(baseline, height, baseline).map((yPosition, i) => {
 					return (
 						<line
+							key={i}
 							y1={yPosition}
 							y2={yPosition}
 							x1={0}
 							x2={width}
 							stroke={baselineColor}
 							strokeWidth={2}
-							key={i}
 						/>
 					);
 				})}

@@ -28,7 +28,7 @@ export default function DisplayGridRails({
 							width={width}
 							stroke={stroke}
 							strokeWidth={strokeWidth}
-							fill={'transparent'}
+							fill="transparent"
 						/>
 					);
 				})}
@@ -41,7 +41,7 @@ export default function DisplayGridRails({
 							width={column.end - column.start}
 							stroke={stroke}
 							strokeWidth={strokeWidth}
-							fill={'transparent'}
+							fill="transparent"
 						/>
 					);
 				})}

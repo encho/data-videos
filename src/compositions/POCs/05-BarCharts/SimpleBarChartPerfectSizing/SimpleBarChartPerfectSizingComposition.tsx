@@ -63,10 +63,8 @@ export const SimpleBarChartPerfectSizingComposition: React.FC<
 									// showArea={showAreas}
 								>
 									<TitleWithSubtitle
-										title={
-											'AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern'
-										}
-										subtitle={'Wahlergebnisse Brandenburg 2024'}
+										title="AfD: Vormarsch in Brandenburg mit eigenen Feuerwerkskoerpern"
+										subtitle="Wahlergebnisse Brandenburg 2024"
 										theme={theme}
 									/>
 								</PageHeader>

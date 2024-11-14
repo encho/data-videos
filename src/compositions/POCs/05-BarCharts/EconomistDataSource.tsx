@@ -14,7 +14,7 @@ export const EconomistDataSource = ({
 	const fontSize = 32; // TODO should come from theme or global page context or so
 	const color = theme.EconomistDataSource.textColor;
 
-	const entryDurationInFrames = fps * 1;
+	const entryDurationInFrames = Number(fps);
 
 	const percentageProgress = frame / entryDurationInFrames;
 
@@ -42,7 +42,7 @@ export const EconomistDataSource = ({
 };
 
 function easeOutQuint(x: number): number {
-	return 1 - Math.pow(1 - x, 5);
+	return 1 - (1 - x)**5;
 }
 
 const easings = {
