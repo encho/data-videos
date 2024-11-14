@@ -56,10 +56,7 @@ export const SimpleBarChartComposition: React.FC<
 									position: 'relative',
 								}}
 							>
-								<PageHeader
-									theme={theme}
-									// showArea={showAreas}
-								>
+								<PageHeader>
 									<TitleWithSubtitle
 										title={'AfD: Vormarsch in Brandenburg'}
 										subtitle={'Wahlergebnisse Brandenburg 2024'}
@@ -81,18 +78,14 @@ export const SimpleBarChartComposition: React.FC<
 												data={barChartData}
 												width={dimensions.width}
 												height={dimensions.height}
-												// baseline={BASELINE}
-												theme={theme}
+												theme={theme} // TODO deprecate
 											/>
 										</Sequence>
 									) : null}
 								</div>
 
 								{/* TODO introduce evtl. also absolute positioned footer */}
-								<PageFooter
-									theme={theme}
-									// showArea={showAreas}
-								>
+								<PageFooter>
 									<div
 										style={{
 											display: 'flex',
@@ -112,7 +105,7 @@ export const SimpleBarChartComposition: React.FC<
 									</div>
 								</PageFooter>
 							</div>
-							<PageLogo theme={theme} />
+							<PageLogo />
 						</>
 					);
 				}}

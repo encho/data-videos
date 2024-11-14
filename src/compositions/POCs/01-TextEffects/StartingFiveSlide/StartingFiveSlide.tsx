@@ -51,7 +51,7 @@ export const StartingFiveSlide: React.FC<
 	word,
 	video,
 }) => {
-	const fontFamily = theme.typography.textStyles.h1.fontFamily;
+	const {fontFamily} = theme.typography.textStyles.h1;
 
 	const page = usePage();
 
@@ -66,8 +66,8 @@ export const StartingFiveSlide: React.FC<
 	const maxZoomScale = 30;
 
 	const zoomInDelayInFrames = Math.floor(fps * 0);
-	const zoomInDurationInFrames = fps * 1;
-	const zoomOutDurationInFrames = fps * 1;
+	const zoomInDurationInFrames = fps;
+	const zoomOutDurationInFrames = fps;
 
 	const shiftDurationInFrames =
 		durationInFrames -
@@ -131,7 +131,7 @@ export const StartingFiveSlide: React.FC<
 				height: '100%',
 			}}
 		>
-			<Sequence from={0} layout="none">
+			<Sequence layout="none">
 				{/* here, we set the size in pixels (width, height) */}
 				<div style={{display: 'flex', justifyContent: 'center'}}>
 					<div
@@ -157,14 +157,12 @@ export const StartingFiveSlide: React.FC<
 										})`}
 									>
 										<rect
-											// fill={`rgba(255,255,255,${revealVideoOpacity})`}
 											fill={`rgba(0,0,0,${1})`} // like this, we never reveal video in background
-											// fill={`rgba(255,255,255,${0})`}
 											x="0"
 											y="0"
 											width={videoWidth}
 											height={videoHeight}
-										></rect>
+										/>
 
 										{range(numberOfWordRows).map((it, i) => {
 											const centerIndex = (numberOfWordRows - 1) / 2;
@@ -184,7 +182,6 @@ export const StartingFiveSlide: React.FC<
 											return (
 												<WordRow
 													shiftDirection={shiftDirection}
-													dx={2}
 													zoomInDurationInFrames={zoomInDurationInFrames}
 													shiftDurationInFrames={shiftDurationInFrames}
 													generateRandomCharacterEntryDuration={
@@ -242,7 +239,6 @@ export const StartingFiveSlide: React.FC<
 export const WordRow: React.FC<{
 	shiftDirection: 'right' | 'left';
 	children: string;
-	dx: number;
 	centerX: number;
 	centerY: number;
 	fontFamily: string;
@@ -254,7 +250,6 @@ export const WordRow: React.FC<{
 	generateRandomCharacterEntryDuration: () => number;
 }> = ({
 	children,
-	dx,
 	centerX,
 	centerY,
 	fontFamily,
@@ -298,18 +293,16 @@ export const WordRow: React.FC<{
 				y={centerY}
 				fontFamily={fontFamily}
 				fontSize={fontSize}
-				// fill={`rgba(255,255,255,${1 - opacity})`}
 				fill={fill}
 				textAnchor="middle"
-				// alignmentBaseline="center"
-				dominantBaseline={'middle'}
+				dominantBaseline="middle"
 			>
 				{range(numberOfWords).map((it, i) => {
 					const isCenterWord = i === (numberOfWords - 1) / 2;
 					return (
 						<>
 							{/* en-space */}
-							{i !== 0 ? '\u2002' : undefined}
+							{i > 0 ? '\u2002' : undefined}
 							<TSpanWord
 								randomCharacterAppear={!isCenterWord || !isCenterRow}
 								randomCharacterAppearAfterFrames={zoomInDurationInFrames}

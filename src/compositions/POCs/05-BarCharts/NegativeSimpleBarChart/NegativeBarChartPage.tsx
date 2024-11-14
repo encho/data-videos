@@ -38,10 +38,7 @@ export const NegativeBarChartPage: React.FC<{
 								position: 'relative',
 							}}
 						>
-							<PageHeader
-								theme={theme}
-								// showArea={showAreas}
-							>
+							<PageHeader>
 								<TitleWithSubtitle
 									title={title}
 									subtitle={subtitle}
@@ -71,10 +68,7 @@ export const NegativeBarChartPage: React.FC<{
 							</div>
 
 							{/* TODO introduce evtl. also absolute positioned footer */}
-							<PageFooter
-								theme={theme}
-								// showArea={showAreas}
-							>
+							<PageFooter>
 								<div
 									style={{
 										display: 'flex',
@@ -93,7 +87,7 @@ export const NegativeBarChartPage: React.FC<{
 								</div>
 							</PageFooter>
 						</div>
-						<PageLogo theme={theme} />
+						<PageLogo />
 					</>
 				);
 			}}

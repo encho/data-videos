@@ -44,7 +44,7 @@ export const SimplePageComposition: React.FC<
 				{({contentWidth, contentHeight, baseline}) => {
 					return (
 						<>
-							<PageLogo theme={theme} />
+							<PageLogo />
 							{showGrid ? (
 								<>
 									<BaselineGrid
@@ -74,7 +74,7 @@ export const SimplePageComposition: React.FC<
 									position: 'relative',
 								}}
 							>
-								<PageHeader theme={theme} showArea={showAreas}>
+								<PageHeader showArea={showAreas}>
 									<TitleWithSubtitle
 										title={
 											'Simple Page Composition. This will be great stuff...'
@@ -106,7 +106,7 @@ export const SimplePageComposition: React.FC<
 								</div>
 
 								{/* TODO introduce evtl. also absolute positioned footer */}
-								<PageFooter theme={theme} showArea={showAreas}>
+								<PageFooter showArea={showAreas}>
 									<div
 										style={{
 											display: 'flex',

@@ -407,12 +407,12 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.linkedInTall}
 						schema={startingFiveSlideCompositionSchema}
 						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI' as const,
-							fontSizeInBaselines: 3,
-							lineHeightInBaselines: 3,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+							fontSizeInBaselines: 2.5,
+							lineHeightInBaselines: 2.75,
 							numberOfWordRows: 29,
-							word: 'GOLD.',
-							video: 'GOLD' as const,
+							word: 'S&P 500.',
+							video: 'STOCK_MARKET' as const,
 						}}
 					/>
 					<Composition
