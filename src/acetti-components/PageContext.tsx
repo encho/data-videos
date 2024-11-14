@@ -1,5 +1,6 @@
-import {createContext, useContext} from 'react';
+import {createContext, useContext, useMemo} from 'react';
 import {ThemeType} from '../acetti-themes/themeTypes';
+import {Theme_sizes} from '../acetti-themes/makeThemeGenerator';
 import {theme as lorenzobertolinibright} from '../acetti-themes/lorenzobertolinibright';
 
 type TPageContext = {
@@ -13,6 +14,7 @@ type TPageContext = {
 	contentHeight: number;
 	baseline: number;
 	theme: ThemeType;
+	sizes: Theme_sizes;
 };
 
 export const pageContext = createContext<TPageContext>({
@@ -27,6 +29,7 @@ export const pageContext = createContext<TPageContext>({
 	baseline: 0,
 	// TODO deprecate width and height into theme
 	theme: lorenzobertolinibright({width: 0, height: 0}),
+	sizes: {lineWidths: {small: 0, medium: 0, large: 0}},
 });
 
 export const PageContext: React.FC<{
@@ -45,6 +48,18 @@ export const PageContext: React.FC<{
 	const contentWidth = width - marginRight - marginLeft;
 	const baseline = contentHeight / nrBaselines;
 
+	// TODO useMemo
+	const sizes = useMemo(
+		() => ({
+			lineWidths: {
+				small: theme.sizes.lineWidths.small * baseline,
+				medium: theme.sizes.lineWidths.medium * baseline,
+				large: theme.sizes.lineWidths.large * baseline,
+			},
+		}),
+		[theme, baseline]
+	);
+
 	return (
 		<pageContext.Provider
 			value={{
@@ -58,6 +73,7 @@ export const PageContext: React.FC<{
 				contentHeight,
 				baseline,
 				theme,
+				sizes,
 			}}
 		>
 			{children}

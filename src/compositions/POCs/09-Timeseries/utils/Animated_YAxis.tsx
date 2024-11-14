@@ -39,15 +39,12 @@ export const Animated_YAxis: React.FC<{
 	debugExitColor,
 	debugUpdateColor,
 }) => {
-	// TODO from Theme
-	// sizes and distances
-	// ------------------------------------------------------------
-	const TICK_LINE_SIZE = 24; // TODO into theme
-	const TICK_LINE_WIDTH = 4; // TODO into theme
-	const AXIS_LINE_WIDTH = 4; // TODO into theme
-
-	const {theme: fullTheme, baseline: pageBaseline} = usePage();
+	const {theme: fullTheme, baseline: pageBaseline, sizes} = usePage();
 	const theme = fullTheme.yAxis;
+
+	const TICK_LINE_SIZE = 24; // TODO into theme
+	const TICK_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
+	const AXIS_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
 
 	// TODO also accept optinally from props
 	const THE_BASELINE = pageBaseline;

@@ -19,8 +19,8 @@ import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 // sizes and distances
 // ------------------------------------------------------------
 // const TICK_LINE_SIZE = 24; // TODO into theme
-const TICK_LINE_WIDTH = 4; // TODO into theme
-const AXIS_LINE_WIDTH = 4; // TODO into theme
+// const TICK_LINE_WIDTH = 4; // TODO into theme
+// const AXIS_LINE_WIDTH = 4; // TODO into theme
 
 const TICKLABEL_MARGIN_TOP_IN_BASELINES = 0.6;
 const SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES = 0.8;
@@ -68,7 +68,7 @@ export const Animated_XAxis: React.FC<{
 	debugUpdateColor,
 	debugExitColor,
 }) => {
-	const {theme: fullTheme, baseline: pageBaseline} = usePage();
+	const {theme: fullTheme, baseline: pageBaseline, sizes} = usePage();
 
 	const THE_BASELINE = pageBaseline;
 
@@ -77,6 +77,9 @@ export const Animated_XAxis: React.FC<{
 		TICKLABEL_MARGIN_TOP_IN_BASELINES;
 
 	const TICK_LINE_SIZE = THE_BASELINE * TICK_LINE_SIZE_IN_BASELINES;
+
+	const TICK_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
+	const AXIS_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
 
 	const SECONDARY_TICKLABEL_TOP_Y =
 		TICK_LINE_SIZE + THE_BASELINE * SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES;

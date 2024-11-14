@@ -3,8 +3,20 @@ import {z} from 'zod';
 import {zColor} from '@remotion/zod-types';
 
 import {ThemeType} from './themeTypes';
-import {isVideoSize} from '../Root';
+// import {isVideoSize} from '../Root';
 import {colorPalettes} from './tailwindPalettes';
+
+const zTheme_sizes_lineWidths = z.object({
+	small: z.number(),
+	medium: z.number(),
+	large: z.number(),
+});
+
+export const zTheme_sizes = z.object({
+	lineWidths: zTheme_sizes_lineWidths,
+});
+
+export type Theme_sizes = z.infer<typeof zTheme_sizes>;
 
 export const zThemePalette_Background = z.object({
 	main: zColor(),
@@ -101,6 +113,13 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 		height: number;
 	}): ThemeType => {
 		return {
+			sizes: {
+				lineWidths: {
+					small: 0.1,
+					medium: 0.2,
+					large: 0.4,
+				},
+			},
 			global: {
 				backgroundColor: palette.background.main, // TODO deprecate take from palette
 				platteColor: palette.background.soft,

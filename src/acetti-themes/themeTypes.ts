@@ -4,6 +4,7 @@ import {zAvailableFontFamiliesEnum} from '../acetti-typography/fontMetricsLibrar
 import {
 	zThemePalette_Data,
 	zThemePalette_Typography,
+	zTheme_sizes,
 } from './makeThemeGenerator';
 
 const zTextStyle = z.object({
@@ -16,6 +17,7 @@ const zTextStyle = z.object({
 export type ThemeTextStyle = z.infer<typeof zTextStyle>;
 
 export const zodThemeType = z.object({
+	sizes: zTheme_sizes,
 	data: zThemePalette_Data,
 	global: z.object({
 		backgroundColor: zColor(),

@@ -34,6 +34,7 @@ export const PerformanceChart: React.FC<{
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
+				{/* TODO port to Animated_Line */}
 				<AnimatedLine
 					lineColor={'#f05122'}
 					periodsScale={periodScaleAnimation.periodsScale}
