@@ -1,10 +1,9 @@
 import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../../acetti-themes/getThemeFromEnum';
 import {DisplayGridRails, Area} from '../../../../../acetti-layout';
@@ -26,11 +25,9 @@ const LAYOUT_HEIGHT = 600;
 export const SimpleMatrixLayoutComposition: React.FC<
 	z.infer<typeof simpleMatrixLayoutCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {fps} = useVideoConfig();
-
-	useFontFamiliesLoader(theme);
 
 	return (
 		<div

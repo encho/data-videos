@@ -10,6 +10,7 @@ type PropsToOmit<C extends React.ElementType, P> = keyof (AsProp<C> & P);
 
 type PolymorphicComponentProps<
 	C extends React.ElementType,
+	// eslint-disable-next-line
 	Props = {}
 > = React.PropsWithChildren<Props & AsProp<C>> &
 	Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
@@ -18,6 +19,7 @@ type PolymorphicRef<C extends React.ElementType> =
 	React.ComponentPropsWithRef<C>['ref'];
 
 type FlexibleComponentProps<C extends React.ElementType> =
+	// eslint-disable-next-line
 	PolymorphicComponentProps<C, {}>;
 
 export const FlexibleElement = React.forwardRef(

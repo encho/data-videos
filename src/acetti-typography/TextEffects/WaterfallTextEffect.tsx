@@ -182,8 +182,8 @@ const ExitCharacter: React.FC<{
 	children: string;
 	fadeOutDurationInFrames: number;
 	delay: number;
-	translateY: number;
-}> = ({children, delay, fadeOutDurationInFrames, translateY}) => {
+	translateY: number; // TODO deprecate?
+}> = ({children, delay, fadeOutDurationInFrames}) => {
 	const frame = useCurrentFrame();
 
 	const opacity = interpolate(

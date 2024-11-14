@@ -11,10 +11,9 @@ import invariant from 'tiny-invariant';
 import * as paper from 'paper';
 import opentype from 'opentype.js';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
@@ -31,11 +30,7 @@ export const SvgMaskComposition: React.FC<
 > = ({themeEnum}) => {
 	const [svgPath, setSvgPath] = useState<string | null>(null);
 
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
@@ -147,7 +142,7 @@ export const SvgMaskComposition: React.FC<
 									y="0"
 									width={videoWidth}
 									height={videoHeight}
-								 />
+								/>
 								<path
 									d={resultingPath}
 									fill={`rgba(255,255,255,${1 - opacity})`}
@@ -178,6 +173,8 @@ export const SvgMaskComposition: React.FC<
 						</defs>
 					</svg>
 
+					{/* TODO use Video from remotion!! */}
+					{/* eslint-disable-next-line */}
 					<video
 						playsInline
 						autoPlay

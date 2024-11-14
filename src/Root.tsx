@@ -347,10 +347,6 @@ export const RemotionRoot: React.FC = () => {
 							schema={textAnimationsCompositionSchema}
 							defaultProps={{
 								themeEnum: 'LORENZOBERTOLINI' as const,
-								kpiValue: 0.015,
-								kpiValueFormatString: '+0.00%',
-								kpiLabel: 'Net Profit ',
-								fontSize: 120,
 							}}
 						/>
 						<Composition

@@ -1,9 +1,8 @@
 import {z} from 'zod';
 import {interpolate, useCurrentFrame, Easing, AbsoluteFill} from 'remotion';
 import {JustLorenzoLogo} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
@@ -30,11 +29,7 @@ export const frameAnimationCompositionSchema = z.object({
 export const FrameAnimationComposition: React.FC<
 	z.infer<typeof frameAnimationCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	return (
 		<AbsoluteFill

@@ -25,7 +25,7 @@ type TProps = {
 };
 
 export const SingleTimeseriesBuildup: React.FC<TProps> = ({
-	id,
+	// id,
 	theme,
 	baseline,
 	data,

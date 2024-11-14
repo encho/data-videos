@@ -1,10 +1,9 @@
 import {z} from 'zod';
 import {useVideoConfig, Sequence} from 'remotion';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
@@ -19,10 +18,8 @@ export const modularScaleCompositionSchema = z.object({
 export const ModularScaleComposition: React.FC<
 	z.infer<typeof modularScaleCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {fps} = useVideoConfig();
-
-	useFontFamiliesLoader(theme);
 
 	const baseline = 14; // TODO funciton of width
 

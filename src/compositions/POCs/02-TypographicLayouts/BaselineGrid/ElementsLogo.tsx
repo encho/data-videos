@@ -255,14 +255,8 @@ const G_LETTER = {
 
 export const ElementsLogo: React.FC<{cell_size: number}> = ({cell_size}) => {
 	// const cell_size = 16;
-	const space = 2 * cell_size;
+	// const space = 2 * cell_size;
 	const small_cell_size = cell_size / 1.6;
-
-	const first_line_height = 5 * cell_size;
-	const second_line_height = 5 * small_cell_size;
-
-	// TODO pass total logo height as prop
-	const logo_height = first_line_height + space + second_line_height;
 
 	const FONT_COLOR = '#707070';
 

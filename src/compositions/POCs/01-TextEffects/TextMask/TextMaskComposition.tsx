@@ -1,10 +1,9 @@
 import {z} from 'zod';
 import React from 'react';
 
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
@@ -17,11 +16,7 @@ export const textMaskCompositionSchema = z.object({
 export const TextMaskComposition: React.FC<
 	z.infer<typeof textMaskCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	return (
 		<div
@@ -71,6 +66,7 @@ const MaskedText: React.FC<MaskedTextProps> = ({imageSrc, text, fontSize}) => {
 	const textStyle: React.CSSProperties = {
 		fontSize,
 		fontWeight: 'bold',
+		// eslint-disable-next-line
 		backgroundImage: `url(${imageSrc})`,
 		backgroundRepeat: 'no-repeat',
 		backgroundSize: '150%',

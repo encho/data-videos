@@ -6,7 +6,7 @@ import {generateCirclePath} from './generateCirclePath';
 import {generateRectPath} from './generateRectPath';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 
@@ -17,10 +17,10 @@ export const circleToRectPathSchema = z.object({
 export const CircleToRectPath: React.FC<
 	z.infer<typeof circleToRectPathSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const progress = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
 		easing: Easing.cubic,

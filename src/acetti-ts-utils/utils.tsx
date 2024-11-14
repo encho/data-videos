@@ -37,10 +37,10 @@ export function getEnterUpdateExits(
 
 	// Find ids present only in the second array (enter)
 	for (const id of arr2) {
-		if (!arr1.includes(id)) {
-			enter.push(id);
-		} else {
+		if (arr1.includes(id)) {
 			update.push(id);
+		} else {
+			enter.push(id);
 		}
 	}
 

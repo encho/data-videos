@@ -5,9 +5,8 @@ import {Sequence, useVideoConfig} from 'remotion';
 // TODO deprecate/ replace BaselineGrid in typography package
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {BaselineGrid} from './BaselineGrid';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 // import {ElementsLogo} from './ElementsLogo';
@@ -33,11 +32,7 @@ export const baselineGridCompositionSchema = z.object({
 export const BaselineGridComposition: React.FC<
 	z.infer<typeof baselineGridCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {fps} = useVideoConfig();
 

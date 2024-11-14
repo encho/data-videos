@@ -5,33 +5,24 @@ import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {TextAnimationSubtle} from './TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {Position} from '../../../../acetti-ts-base/Position';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 
 export const textAnimationsCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
-	kpiValue: z.number(),
-	kpiValueFormatString: z.string(),
-	kpiLabel: z.string(),
-	fontSize: z.number(),
 });
 
 export const TextAnimationsComposition: React.FC<
 	z.infer<typeof textAnimationsCompositionSchema>
-> = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, fontSize}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+> = ({themeEnum}) => {
+	const theme = useThemeFromEnum(themeEnum as any);
 	const {width, height} = useVideoConfig();
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
 
 	return (
 		<PageContext
