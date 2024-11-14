@@ -88,7 +88,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								tickFormatter: (tick) => `${tick} $`,
 								yScalesInitialHeight: 200,
 								domainType: 'VISIBLE',
-								paddingPerc: 0.3,
+								paddingPerc: 0.1,
 							});
 
 							const yAxisWidth = yScaleAnimationUpper.maxLabelComponentWidth;

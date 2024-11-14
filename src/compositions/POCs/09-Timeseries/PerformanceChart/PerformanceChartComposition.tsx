@@ -114,8 +114,6 @@ export const PerformanceChartComposition: React.FC<
 										<TitleWithSubtitle
 											title={apiPriceData.tickerMetadata.name}
 											subtitle={getSubtitle(apiPriceData)}
-											// title={'AfD: Vormarsch in Brandenburg'}
-											// subtitle={'Wahlergebnisse Brandenburg 2024'}
 											theme={theme}
 											innerDelayInSeconds={0.5}
 										/>
@@ -154,18 +152,19 @@ export const PerformanceChartComposition: React.FC<
 											}}
 										>
 											<div style={{maxWidth: '62%'}}>
-												<Sequence from={Math.floor(fps * 2.5)} layout="none">
-													<TypographyStyle
-														typographyStyle={
-															theme.typography.textStyles.dataSource
-														}
-														baseline={baseline}
+												<TypographyStyle
+													typographyStyle={
+														theme.typography.textStyles.dataSource
+													}
+													baseline={baseline}
+												>
+													<TextAnimationSubtle
+														translateY={baseline * 0.5}
+														innerDelayInSeconds={2.5}
 													>
-														<TextAnimationSubtle translateY={baseline * 0.5}>
-															Data Source: Yahoo Finance API
-														</TextAnimationSubtle>
-													</TypographyStyle>
-												</Sequence>
+														Data Source: Yahoo Finance API
+													</TextAnimationSubtle>
+												</TypographyStyle>
 											</div>
 										</div>
 									</PageFooter>
