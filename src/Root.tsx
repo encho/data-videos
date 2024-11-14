@@ -1150,7 +1150,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="PerformanceChart"
 						component={PerformanceChartComposition}
-						durationInFrames={30 * 30}
+						durationInFrames={30 * 15}
 						fps={30}
 						{...videoSizes.square}
 						schema={performanceChartCompositionSchema}

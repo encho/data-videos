@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+	Easing,
 	AbsoluteFill,
 	interpolate,
 	spring,
@@ -60,5 +61,37 @@ export const SlideOut: React.FC<{children: React.ReactNode}> = ({children}) => {
 		>
 			{children}
 		</AbsoluteFill>
+	);
+};
+
+export const OpacifyInAndOut: React.FC<{children: React.ReactNode}> = ({
+	children,
+}) => {
+	const {fps, durationInFrames} = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const nrEntryFrames = fps * 0.4;
+	const nrExitFrames = fps * 0.6;
+
+	const opacity = interpolate(
+		frame,
+		[
+			0,
+			nrEntryFrames - 1,
+			durationInFrames - nrExitFrames,
+			durationInFrames - 1,
+		],
+		[0, 1, 1, 0],
+		{easing: Easing.ease}
+	);
+
+	return (
+		<div
+			style={{
+				opacity,
+			}}
+		>
+			{children}
+		</div>
 	);
 };

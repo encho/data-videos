@@ -127,10 +127,10 @@ export function Page({
 
 export const PageFooter: React.FC<{
 	children: React.ReactNode;
-	theme: ThemeType;
 	showArea?: boolean;
-}> = ({children, theme, showArea = false}) => {
+}> = ({children, showArea = false}) => {
 	const page = usePage();
+
 	const baseline = page.baseline;
 	const paddingTopInBaselines = 5;
 
@@ -148,9 +148,8 @@ export const PageFooter: React.FC<{
 
 export const PageHeader: React.FC<{
 	children: React.ReactNode;
-	theme: ThemeType;
 	showArea?: boolean;
-}> = ({children, theme, showArea = false}) => {
+}> = ({children, showArea = false}) => {
 	const page = usePage();
 	const baseline = page.baseline;
 	const paddingBottomInBaselines = 3;
@@ -167,7 +166,7 @@ export const PageHeader: React.FC<{
 	);
 };
 
-export function PageLogo({theme}: {theme: ThemeType}) {
+export function PageLogo() {
 	const page = usePage();
 
 	return (
@@ -181,7 +180,7 @@ export function PageLogo({theme}: {theme: ThemeType}) {
 			<LorenzoBertoliniLogo
 				baseline={page.baseline}
 				capHeightInBaselines={1.5}
-				theme={theme}
+				theme={page.theme}
 			/>
 		</div>
 	);

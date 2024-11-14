@@ -16,7 +16,7 @@ export const NegativeSimpleBarChartComposition: React.FC<
 	z.infer<typeof negativeSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum as any);
-	const {fps, width, height} = useVideoConfig();
+	const {width, height} = useVideoConfig();
 
 	const positiveColor = theme.positiveNegativeColors.positiveColor;
 	const negativeColor = theme.positiveNegativeColors.negativeColor;

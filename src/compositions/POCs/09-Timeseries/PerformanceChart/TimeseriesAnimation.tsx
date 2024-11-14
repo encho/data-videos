@@ -12,6 +12,7 @@ import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {Position} from '../../../../acetti-ts-base/Position';
 import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
+import {OpacifyInAndOut} from '../../../../SlideIn';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -33,7 +34,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	const CHART_PAGE_HEIGHT = height;
 
 	// TODO use keyframes perhaps
-	const td_buildup = Math.floor(durationInFrames * 0.75);
+	const td_buildup = Math.floor(durationInFrames * 0.5);
 	const td_freeze = durationInFrames - td_buildup;
 
 	const percentageChange_enter_start_keyframe = td_buildup;
@@ -80,79 +81,81 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					nrBaselines={30}
 					theme={theme}
 				>
-					<Page borderRadius={5} boxShadow>
-						{() => {
-							const {contentWidth, contentHeight} = usePage();
+					<OpacifyInAndOut>
+						<Page borderRadius={5} boxShadow>
+							{() => {
+								const {contentWidth, contentHeight} = usePage();
 
-							const xAxisHeight = useXAxisAreaHeight();
+								const xAxisHeight = useXAxisAreaHeight();
 
-							const yScaleAnimationUpper = useYScaleAnimation({
-								periodScaleAnimation: periodScaleAnimation,
-								timeSeriesArray: [timeSeries],
-								tickFormatter: (tick) => `${tick} $`,
-								yScalesInitialHeight: 200,
-								domainType: 'VISIBLE',
-								paddingPerc: 0.1,
-							});
+								const yScaleAnimationUpper = useYScaleAnimation({
+									periodScaleAnimation: periodScaleAnimation,
+									timeSeriesArray: [timeSeries],
+									tickFormatter: (tick) => `${tick} $`,
+									yScalesInitialHeight: 200,
+									domainType: 'VISIBLE',
+									paddingPerc: 0.1,
+								});
 
-							const yAxisWidth = yScaleAnimationUpper.maxLabelComponentWidth;
+								const yAxisWidth = yScaleAnimationUpper.maxLabelComponentWidth;
 
-							const chartLayout = useChartLayout({
-								width: contentWidth,
-								height: contentHeight,
-								yAxisWidth,
-								xAxisHeight,
-							});
+								const chartLayout = useChartLayout({
+									width: contentWidth,
+									height: contentHeight,
+									yAxisWidth,
+									xAxisHeight,
+								});
 
-							return (
-								<div
-									style={{
-										position: 'relative',
-									}}
-								>
-									<PerformanceChart
-										periodScaleAnimation={periodScaleAnimation}
-										yScaleAnimation={yScaleAnimationUpper}
-										timeSeries={timeSeries}
-										layoutAreas={{
-											xAxis: chartLayout.areas.xAxis,
-											plot: chartLayout.areas.plot,
-											yAxis: chartLayout.areas.yAxis,
+								return (
+									<div
+										style={{
+											position: 'relative',
 										}}
-									/>
-									<Sequence from={percentageChange_enter_start_keyframe}>
-										<Position
-											position={{
-												left: chartLayout.areas.plot.x1,
-												top: chartLayout.areas.plot.y1,
+									>
+										<PerformanceChart
+											periodScaleAnimation={periodScaleAnimation}
+											yScaleAnimation={yScaleAnimationUpper}
+											timeSeries={timeSeries}
+											layoutAreas={{
+												xAxis: chartLayout.areas.xAxis,
+												plot: chartLayout.areas.plot,
+												yAxis: chartLayout.areas.yAxis,
 											}}
-										>
-											{/* TODO port to Animated_Line */}
-											<Animated_PercentageChangeArea
-												// periodsScale={periodScaleAnimation.periodsScale}
-												yScale={yScaleAnimationUpper.yScale}
-												//
-												area={chartLayout.areas.plot}
-												firstValue={timeSeries[0].value}
-												lastValue={timeSeries[timeSeries.length - 1].value}
-											/>
-										</Position>
-									</Sequence>
-
-									<div style={{position: 'absolute', top: 0, left: 0}}>
-										<DisplayGridLayout
-											stroke={'rgba(255,0,255,0.8)'}
-											fill="transparent"
-											hide={true}
-											areas={chartLayout.areas}
-											width={contentWidth}
-											height={contentHeight}
 										/>
+										<Sequence from={percentageChange_enter_start_keyframe}>
+											<Position
+												position={{
+													left: chartLayout.areas.plot.x1,
+													top: chartLayout.areas.plot.y1,
+												}}
+											>
+												{/* TODO port to Animated_Line */}
+												<Animated_PercentageChangeArea
+													// periodsScale={periodScaleAnimation.periodsScale}
+													yScale={yScaleAnimationUpper.yScale}
+													//
+													area={chartLayout.areas.plot}
+													firstValue={timeSeries[0].value}
+													lastValue={timeSeries[timeSeries.length - 1].value}
+												/>
+											</Position>
+										</Sequence>
+
+										<div style={{position: 'absolute', top: 0, left: 0}}>
+											<DisplayGridLayout
+												stroke={'rgba(255,0,255,0.8)'}
+												fill="transparent"
+												hide={true}
+												areas={chartLayout.areas}
+												width={contentWidth}
+												height={contentHeight}
+											/>
+										</div>
 									</div>
-								</div>
-							);
-						}}
-					</Page>
+								);
+							}}
+						</Page>
+					</OpacifyInAndOut>
 				</PageContext>
 			</div>
 		</div>

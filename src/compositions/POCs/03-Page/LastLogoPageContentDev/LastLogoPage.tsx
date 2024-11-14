@@ -124,7 +124,8 @@ export const LastLogoPageContent: React.FC<{
 			>
 				{/* www.linkedin.com/in/lorenzobertolini */}
 				{/* FINANCE & SPORTS DATA VISUALIZATION NERD */}
-				DATA VISUALIZATION & DESIGN NERD
+				{/* DATA VISUALIZATION & DESIGN NERD */}
+				FINTECH DATA-DRIVEN CONTENT DESIGNER
 			</TypographyStyle>
 		</div>
 	);
@@ -155,7 +156,7 @@ export const LastLogoPage: React.FC<{
 	const page = usePage();
 	const baseline = baselineProp || page.baseline * 2;
 	return (
-		<Page show>
+		<Page>
 			<div
 				style={{
 					width: '100%',
