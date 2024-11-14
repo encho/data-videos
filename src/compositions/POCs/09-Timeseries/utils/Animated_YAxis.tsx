@@ -1,13 +1,13 @@
 import {useVideoConfig, interpolate} from 'remotion';
 import invariant from 'tiny-invariant';
 
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 import {TYScaleAnimationContext} from './useYScaleAnimation';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
 import {TYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {usePage} from '../../../../acetti-components/PageContext';
-import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
 const getTick = (axisSpec: TYAxisSpec, tickId: string) => {
 	const tickObj = axisSpec.ticks.find((item) => item.id === tickId);

@@ -6,6 +6,7 @@ import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownia
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from '../utils/Animated_XAxis';
 import {Animated_YAxis} from '../utils/Animated_YAxis';
+import {Animated_ValueDot} from '../utils/Animated_ValueDot';
 import {TYScaleAnimationContext} from '../utils/useYScaleAnimation';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
@@ -41,6 +42,20 @@ export const PerformanceChart: React.FC<{
 					timeSeries={timeSeries}
 				/>
 			</Position>
+
+			<Position
+				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
+			>
+				<Animated_ValueDot
+					periodScaleAnimation={periodScaleAnimation}
+					yScaleAnimation={yScaleAnimation}
+					area={layoutAreas.plot}
+					timeSeries={timeSeries}
+					dotColor={'#f05122'}
+					radius={8}
+				/>
+			</Position>
+
 			<Position
 				position={{left: layoutAreas.yAxis.x1, top: layoutAreas.yAxis.y1}}
 			>
