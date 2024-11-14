@@ -13,21 +13,12 @@ export const PerformanceChart: React.FC<{
 	periodScaleAnimation: TPeriodScaleAnimationContext;
 	yScaleAnimation: TYScaleAnimationContext;
 	timeSeries: TimeSeries;
-	timeSeries2: TimeSeries;
-	timeSeries3: TimeSeries;
 	layoutAreas: {
 		plot: TGridLayoutArea;
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
-}> = ({
-	layoutAreas,
-	timeSeries,
-	timeSeries2,
-	timeSeries3,
-	periodScaleAnimation,
-	yScaleAnimation,
-}) => {
+}> = ({layoutAreas, timeSeries, periodScaleAnimation, yScaleAnimation}) => {
 	useEffect(() => {
 		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
 		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
@@ -43,36 +34,11 @@ export const PerformanceChart: React.FC<{
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
 				<AnimatedLine
-					lineColor={'black'}
+					lineColor={'#f05122'}
 					periodsScale={periodScaleAnimation.periodsScale}
 					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-				/>
-			</Position>
-			<Position
-				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
-			>
-				<AnimatedLine
-					lineColor={'orange'}
-					periodsScale={periodScaleAnimation.periodsScale}
-					yScale={yScaleAnimation.yScale}
-					area={layoutAreas.plot}
-					timeSeries={timeSeries2}
-				/>
-			</Position>
-			<Position
-				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
-			>
-				<AnimatedLine
-					// TODO
-					// periodScaleAnimation={periodScaleAnimation}
-					// yScaleAnimation={yScaleAnimation}
-					lineColor={'#00aadd'}
-					periodsScale={periodScaleAnimation.periodsScale}
-					yScale={yScaleAnimation.yScale}
-					area={layoutAreas.plot}
-					timeSeries={timeSeries3}
 				/>
 			</Position>
 			<Position

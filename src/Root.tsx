@@ -1158,7 +1158,8 @@ export const RemotionRoot: React.FC = () => {
 							ticker: 'SPX_INDEX' as const,
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
-							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+							theme: 'LORENZOBERTOLINI_BRIGHT' as const,
+							chartTheme: 'LORENZOBERTOLINI' as const,
 						}}
 						calculateMetadata={async ({props}) => {
 							const {nerdyFinanceEnv, ticker, timePeriod} = props;

@@ -21,9 +21,13 @@ type PageChildren = ReactNode | ((props: PageChildFunctionArgs) => ReactNode);
 export function Page({
 	children,
 	show = false,
+	borderRadius,
+	boxShadow: boxShadowProp = false,
 }: {
 	children: PageChildren;
 	show?: boolean;
+	boxShadow?: boolean;
+	borderRadius?: number; // TODO borderRadius: "S" | "NONE" | "M" | "XL"...
 }) {
 	const page = usePage();
 
@@ -35,6 +39,12 @@ export function Page({
 	const devLineColor = theme.typography.textStyles.h1.color; // QUICK-FIX
 	const devCornerColor = chroma(devLineColor).alpha(0.35).css(); // 50% transparency
 
+	// see: https://getcssscan.com/css-box-shadow-examples
+	const boxShadow = boxShadowProp
+		? // ? 'rgb(38, 57, 77) 0px 20px 30px -10px' // # 20
+		  'rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px' // #18
+		: undefined;
+
 	return (
 		<div
 			style={{
@@ -42,6 +52,8 @@ export function Page({
 				width: page.width,
 				height: page.height,
 				position: 'relative',
+				borderRadius,
+				boxShadow,
 			}}
 		>
 			<div style={{position: 'absolute', width: '100%', height: '100%'}}>

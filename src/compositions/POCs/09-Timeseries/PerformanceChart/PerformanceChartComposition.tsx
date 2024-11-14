@@ -2,7 +2,12 @@ import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
 import {z} from 'zod';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
-import {Page, PageHeader, PageFooter} from '../../../../acetti-components/Page';
+import {
+	Page,
+	PageHeader,
+	PageFooter,
+	PageLogo,
+} from '../../../../acetti-components/Page';
 import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
@@ -11,24 +16,34 @@ import {TimeseriesAnimation} from './TimeseriesAnimation';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 export const performanceChartCompositionSchema = z.object({
 	ticker: zNerdyTickers,
 	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	theme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	chartTheme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	apiPriceData: zNerdyFinancePriceChartDataResult.optional(),
 });
 
 export const PerformanceChartComposition: React.FC<
 	z.infer<typeof performanceChartCompositionSchema>
-> = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum, apiPriceData}) => {
+> = ({
+	// ticker,
+	// timePeriod,
+	// nerdyFinanceEnv,
+	theme: themeEnum,
+	chartTheme: chartThemeEnum,
+	apiPriceData,
+}) => {
 	// TODO actually get height and with as props
 	// const {height, width} = useVideoConfig();
 	const {fps, width, height} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 
 	const theme = useThemeFromEnum(themeEnum as any);
+	const chartTheme = useThemeFromEnum(chartThemeEnum as any);
 
 	if (!apiPriceData) {
 		return <AbsoluteFill />;
@@ -51,69 +66,78 @@ export const PerformanceChartComposition: React.FC<
 				<Page>
 					{({baseline}) => {
 						return (
-							<div
-								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									height: '100%',
-									position: 'relative',
-								}}
-							>
-								<PageHeader
-									theme={theme}
-									// showArea={showAreas}
-								>
-									<TitleWithSubtitle
-										title={'AfD: Vormarsch in Brandenburg'}
-										subtitle={'Wahlergebnisse Brandenburg 2024'}
-										theme={theme}
-									/>
-								</PageHeader>
-
+							<>
 								<div
-									ref={ref}
 									style={{
-										flex: 1,
 										display: 'flex',
-										justifyContent: 'center',
+										flexDirection: 'column',
+										height: '100%',
+										position: 'relative',
 									}}
 								>
-									{dimensions ? (
-										<Sequence from={Math.floor(fps * 0.75)} layout="none">
-											<TimeseriesAnimation
-												width={dimensions.width}
-												height={dimensions.height}
-												timeSeries={timeSeries}
-												theme={theme} // TODO evtl pass second theme
-											/>
-										</Sequence>
-									) : null}
-								</div>
+									<PageHeader
+										theme={theme}
+										// showArea={showAreas}
+									>
+										<TitleWithSubtitle
+											title={'AfD: Vormarsch in Brandenburg'}
+											subtitle={'Wahlergebnisse Brandenburg 2024'}
+											theme={theme}
+											innerDelayInSeconds={0.5}
+										/>
+									</PageHeader>
 
-								{/* TODO introduce evtl. also absolute positioned footer */}
-								<PageFooter
-									theme={theme}
-									// showArea={showAreas}
-								>
 									<div
+										ref={ref}
 										style={{
+											flex: 1,
 											display: 'flex',
-											justifyContent: 'space-between',
-											alignItems: 'flex-end',
+											justifyContent: 'center',
 										}}
 									>
-										<div style={{maxWidth: '62%'}}>
-											<TypographyStyle
-												typographyStyle={theme.typography.textStyles.dataSource}
-												baseline={baseline}
-											>
-												Data Source: German Bundesbank 2024 Paper on Evolutional
-												Finance
-											</TypographyStyle>
-										</div>
+										{dimensions ? (
+											<Sequence from={Math.floor(fps * 1.75)} layout="none">
+												<TimeseriesAnimation
+													width={dimensions.width}
+													height={dimensions.height}
+													timeSeries={timeSeries}
+													theme={chartTheme}
+												/>
+											</Sequence>
+										) : null}
 									</div>
-								</PageFooter>
-							</div>
+
+									{/* TODO introduce evtl. also absolute positioned footer */}
+									<PageFooter
+										theme={theme}
+										// showArea={showAreas}
+									>
+										<div
+											style={{
+												display: 'flex',
+												justifyContent: 'space-between',
+												alignItems: 'flex-end',
+											}}
+										>
+											<div style={{maxWidth: '62%'}}>
+												<Sequence from={Math.floor(fps * 2.5)} layout="none">
+													<TypographyStyle
+														typographyStyle={
+															theme.typography.textStyles.dataSource
+														}
+														baseline={baseline}
+													>
+														<TextAnimationSubtle translateY={baseline * 0.5}>
+															Data Source: Yahoo Finance API
+														</TextAnimationSubtle>
+													</TypographyStyle>
+												</Sequence>
+											</div>
+										</div>
+									</PageFooter>
+								</div>
+								<PageLogo theme={theme} />
+							</>
 						);
 					}}
 				</Page>

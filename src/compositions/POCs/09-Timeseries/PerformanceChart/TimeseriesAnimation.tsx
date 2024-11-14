@@ -1,5 +1,4 @@
 import {useVideoConfig, Easing} from 'remotion';
-import {useMemo} from 'react';
 
 import {usePeriodScaleAnimation} from '../utils/usePeriodScaleAnimation';
 import {useYScaleAnimation} from '../utils/useYScaleAnimation';
@@ -11,7 +10,6 @@ import {Page} from '../../../../acetti-components/Page';
 import {PerformanceChart} from './PerformanceChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
-import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -24,48 +22,24 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	width,
 	height,
 	timeSeries,
-	// theme,
+	theme,
 }) => {
 	const {durationInFrames} = useVideoConfig();
-
-	const theme = useThemeFromEnum('LORENZOBERTOLINI' as any);
 
 	const CHART_PAGE_MARGIN = 40;
 	const CHART_PAGE_WIDTH = width;
 	const CHART_PAGE_HEIGHT = height;
 
 	// TODO use keyframes perhaps
-	const td_buildup = Math.floor(durationInFrames * 0.2);
-	const td_wait_1 = Math.floor(durationInFrames * 0.1);
-	const td_zoom = Math.floor(durationInFrames * 0.2);
-	const td_wait_2 = Math.floor(durationInFrames * 0.1);
-	const td_buildup_again = Math.floor(durationInFrames * 0.2);
-	const td_tear_down =
-		durationInFrames -
-		td_buildup -
-		td_wait_1 -
-		td_zoom -
-		td_wait_2 -
-		td_buildup_again;
+	const td_buildup = Math.floor(durationInFrames * 0.75);
+	const td_freeze = durationInFrames - td_buildup;
 
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
 	const tsDomainIndices = {
-		start: [0, 10] as [number, number],
+		start: [0, 1] as [number, number],
 		full: [0, timeSeries.length] as [number, number],
-		zoom: [
-			Math.floor(timeSeries.length * 0.25),
-			Math.floor(timeSeries.length * 0.75),
-		] as [number, number],
 	};
-
-	const timeSeries2 = useMemo(() => {
-		return timeSeries.map((it) => ({...it, value: it.value * 2}));
-	}, []);
-
-	const timeSeries3 = useMemo(() => {
-		return timeSeries.map((it) => ({...it, value: it.value * 4}));
-	}, []);
 
 	const periodScaleAnimation = usePeriodScaleAnimation({
 		timeSeries,
@@ -84,43 +58,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				fromDomainIndices: tsDomainIndices.full, // if omitted & index===0, fill with [0,1]
 				toDomainIndices: tsDomainIndices.full,
 				transitionSpec: {
-					durationInFrames: td_wait_1,
-					easingFunction: Easing.linear,
-					transitionType: 'DEFAULT',
-				},
-			},
-			{
-				fromDomainIndices: tsDomainIndices.full, // if omitted, fill with previous fromDomainIndices
-				toDomainIndices: tsDomainIndices.zoom,
-				transitionSpec: {
-					durationInFrames: td_zoom,
-					easingFunction: Easing.linear,
-					transitionType: 'ZOOM',
-				},
-			},
-			{
-				fromDomainIndices: tsDomainIndices.zoom, // if omitted, fill with previous fromDomainIndices
-				toDomainIndices: tsDomainIndices.zoom,
-				transitionSpec: {
-					durationInFrames: td_wait_2,
-					easingFunction: Easing.linear,
-					transitionType: 'ZOOM',
-				},
-			},
-			{
-				fromDomainIndices: tsDomainIndices.zoom, // TODO if omitted, fill with previous fromDomainIndices
-				toDomainIndices: tsDomainIndices.full,
-				transitionSpec: {
-					durationInFrames: td_buildup_again,
-					easingFunction: Easing.linear,
-					transitionType: 'ZOOM',
-				},
-			},
-			{
-				fromDomainIndices: tsDomainIndices.full, // TODO if omitted, fill with previous fromDomainIndices
-				toDomainIndices: tsDomainIndices.start,
-				transitionSpec: {
-					durationInFrames: td_tear_down,
+					durationInFrames: td_freeze,
 					easingFunction: Easing.linear,
 					transitionType: 'DEFAULT',
 				},
@@ -135,10 +73,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					width={CHART_PAGE_WIDTH}
 					height={CHART_PAGE_HEIGHT}
 					margin={CHART_PAGE_MARGIN}
-					nrBaselines={40}
+					nrBaselines={30}
 					theme={theme}
 				>
-					<Page>
+					<Page borderRadius={5} boxShadow>
 						{() => {
 							const {contentWidth, contentHeight} = usePage();
 
@@ -146,27 +84,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 							const yScaleAnimationUpper = useYScaleAnimation({
 								periodScaleAnimation: periodScaleAnimation,
-								timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
+								timeSeriesArray: [timeSeries],
 								tickFormatter: (tick) => `${tick} $`,
 								yScalesInitialHeight: 200,
-								domainType: 'ZERO',
+								domainType: 'VISIBLE',
 								paddingPerc: 0.3,
 							});
 
-							const yScaleAnimationLower = useYScaleAnimation({
-								periodScaleAnimation: periodScaleAnimation,
-								timeSeriesArray: [timeSeries, timeSeries2],
-								tickFormatter: (tick) => `${tick} $$$`,
-								yScalesInitialHeight: 200,
-								domainType: 'VISIBLE',
-								paddingPerc: 0,
-								nrTicks: 2,
-							});
-
-							const yAxisWidth = Math.max(
-								yScaleAnimationUpper.maxLabelComponentWidth,
-								yScaleAnimationLower.maxLabelComponentWidth
-							);
+							const yAxisWidth = yScaleAnimationUpper.maxLabelComponentWidth;
 
 							const chartLayout = useChartLayout({
 								width: contentWidth,
@@ -181,9 +106,19 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										position: 'relative',
 									}}
 								>
-									<div style={{position: 'absolute'}}>
+									<PerformanceChart
+										periodScaleAnimation={periodScaleAnimation}
+										yScaleAnimation={yScaleAnimationUpper}
+										timeSeries={timeSeries}
+										layoutAreas={{
+											xAxis: chartLayout.areas.xAxis,
+											plot: chartLayout.areas.plot,
+											yAxis: chartLayout.areas.yAxis,
+										}}
+									/>
+									<div style={{position: 'absolute', top: 0, left: 0}}>
 										<DisplayGridLayout
-											stroke={'rgba(255,0,255,0.5)'}
+											stroke={'rgba(255,0,255,0.8)'}
 											fill="transparent"
 											hide={true}
 											areas={chartLayout.areas}
@@ -191,19 +126,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 											height={contentHeight}
 										/>
 									</div>
-
-									<PerformanceChart
-										periodScaleAnimation={periodScaleAnimation}
-										yScaleAnimation={yScaleAnimationUpper}
-										timeSeries={timeSeries}
-										timeSeries2={timeSeries2}
-										timeSeries3={timeSeries3}
-										layoutAreas={{
-											xAxis: chartLayout.areas.xAxis,
-											plot: chartLayout.areas.plot,
-											yAxis: chartLayout.areas.yAxis,
-										}}
-									/>
 								</div>
 							);
 						}}
