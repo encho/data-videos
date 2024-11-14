@@ -3,8 +3,8 @@ import {makeThemeGenerator} from './makeThemeGenerator';
 import {ThemePalette} from './makeThemeGenerator';
 
 // const GRAYS = colorPalettes.Zinc;
-const GRAYS = colorPalettes.Stone;
-// const GRAYS = colorPalettes.Slate;
+// const GRAYS = colorPalettes.Stone;
+const GRAYS = colorPalettes.Slate;
 // const GRAYS = colorPalettes.Gray;
 // const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
@@ -52,10 +52,12 @@ const palette: ThemePalette = {
 		},
 		axisTick: {
 			main: GRAYS['500'],
+			// main: 'green',
 			soft: GRAYS['400'],
 		},
 		axisLine: {
 			// main: 'red',
+			// main: GRAYS['600'],
 			main: GRAYS['500'],
 			soft: GRAYS['400'],
 		},

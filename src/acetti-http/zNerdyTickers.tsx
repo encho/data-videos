@@ -29,3 +29,7 @@ export const zNerdyTickers = z.enum([
 	'JPM',
 	'TESLA',
 ]);
+
+export const zNerdyTimePeriod = z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']);
+
+export type TNerdyTimePeriod = z.infer<typeof zNerdyTimePeriod>;

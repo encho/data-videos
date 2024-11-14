@@ -131,7 +131,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 				textStyles: {
 					h1: {
 						fontFamily: 'Inter-28pt-Black',
-						capHeightInBaselines: 3,
+						capHeightInBaselines: 4,
 						lineGapInBaselines: 1.75,
 						color: palette.typography.title.main,
 					},

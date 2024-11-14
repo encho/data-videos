@@ -190,7 +190,7 @@ export const TitleWithSubtitle: React.FC<{
 					transform: `translateY(${titleTranslateY}px)`,
 					textWrap: 'balance',
 				}}
-				marginBottom={3}
+				marginBottom={4}
 			>
 				{title}
 			</TypographyStyle>

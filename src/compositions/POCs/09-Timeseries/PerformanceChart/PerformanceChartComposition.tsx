@@ -1,5 +1,7 @@
 import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
 import {z} from 'zod';
+import {format} from 'date-fns';
+import {enGB} from 'date-fns/locale';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {
@@ -8,8 +10,14 @@ import {
 	PageFooter,
 	PageLogo,
 } from '../../../../acetti-components/Page';
-import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
-import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
+import {
+	zNerdyFinancePriceChartDataResult,
+	TNerdyFinancePriceChartDataResult,
+} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
+import {
+	zNerdyTickers,
+	zNerdyTimePeriod,
+} from '../../../../acetti-http/zNerdyTickers';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
@@ -18,9 +26,14 @@ import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtit
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
+const formatDateCustom = (date: Date): string => {
+	// return format(date, 'd. MMM. yyyy'); // Formats to '1. Jan. 2024'
+	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
+};
+
 export const performanceChartCompositionSchema = z.object({
 	ticker: zNerdyTickers,
-	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
+	timePeriod: zNerdyTimePeriod,
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
 	theme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	chartTheme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
@@ -54,6 +67,25 @@ export const PerformanceChartComposition: React.FC<
 		date: new Date(it.index),
 	}));
 
+	console.log({apiPriceData});
+
+	const getSubtitle = (
+		nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
+	) => {
+		const startDate = nerdyPriceApiResult.data[0].index;
+		const endDate =
+			nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
+		const periodString = `(${formatDateCustom(startDate)}-${formatDateCustom(
+			endDate
+		)})`;
+
+		if (nerdyPriceApiResult.timePeriod === '2Y') {
+			return `2-Year Performance ${periodString}`;
+		}
+
+		return 'Implement subtitle for this timePeriod!!!';
+	};
+
 	return (
 		<GlobalVideoContextWrapper>
 			<PageContext
@@ -80,8 +112,10 @@ export const PerformanceChartComposition: React.FC<
 										// showArea={showAreas}
 									>
 										<TitleWithSubtitle
-											title={'AfD: Vormarsch in Brandenburg'}
-											subtitle={'Wahlergebnisse Brandenburg 2024'}
+											title={apiPriceData.tickerMetadata.name}
+											subtitle={getSubtitle(apiPriceData)}
+											// title={'AfD: Vormarsch in Brandenburg'}
+											// subtitle={'Wahlergebnisse Brandenburg 2024'}
 											theme={theme}
 											innerDelayInSeconds={0.5}
 										/>

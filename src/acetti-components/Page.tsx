@@ -132,7 +132,7 @@ export const PageFooter: React.FC<{
 }> = ({children, theme, showArea = false}) => {
 	const page = usePage();
 	const baseline = page.baseline;
-	const paddingTopInBaselines = 4;
+	const paddingTopInBaselines = 5;
 
 	return (
 		<div
@@ -153,7 +153,7 @@ export const PageHeader: React.FC<{
 }> = ({children, theme, showArea = false}) => {
 	const page = usePage();
 	const baseline = page.baseline;
-	const paddingBottomInBaselines = 4;
+	const paddingBottomInBaselines = 3;
 
 	return (
 		<div
