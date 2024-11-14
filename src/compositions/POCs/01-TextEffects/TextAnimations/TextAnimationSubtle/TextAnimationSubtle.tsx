@@ -7,22 +7,25 @@ import {
 } from '../../../Keyframes/Keyframes/keyframes';
 import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+import {usePage} from '../../../../../acetti-components/PageContext';
 
 export const TextAnimationSubtle: React.FC<{
 	children: ReactNode;
-	translateY: number;
+	translateY?: number;
 	innerDelayInSeconds?: number;
 	animateExit?: boolean;
 	animateEnter?: boolean;
 }> = ({
 	children,
-	translateY,
+	translateY: translateYProp,
 	innerDelayInSeconds = 0,
 	animateExit = true,
 	animateEnter = true,
 }) => {
-	// const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
+	const {baseline: pageBaseline} = usePage();
+
+	const translateY = translateYProp || pageBaseline * 0.5;
 
 	const {keyframes: keyFramesGroup} = useTextAnimationSubtleKeyframes({
 		innerDelayInSeconds,

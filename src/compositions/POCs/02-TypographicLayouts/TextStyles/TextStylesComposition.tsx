@@ -5,6 +5,7 @@ import {ReactNode} from 'react';
 
 // TODO compare vs BaselineGrid in typography package
 // TODO deprecate/ replace BaselineGrid in typography package
+import {usePage} from '../../../../acetti-components/PageContext';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
@@ -26,7 +27,7 @@ import {ThemeTextStyle} from '../../../../acetti-themes/themeTypes';
 // TODO put into acetti-typograpy/new
 export function TypographyStyle({
 	children,
-	baseline,
+	baseline: baselineProp,
 	color: colorProp,
 	typographyStyle,
 	marginBottom = 0,
@@ -34,7 +35,7 @@ export function TypographyStyle({
 	style,
 }: {
 	children: ReactNode;
-	baseline: number;
+	baseline?: number;
 	marginBottom?: number;
 	marginTop?: number;
 	color?: string;
@@ -43,6 +44,10 @@ export function TypographyStyle({
 }) {
 	const {fontFamily, capHeightInBaselines, lineGapInBaselines, color} =
 		typographyStyle;
+
+	const {baseline: pageBaseline} = usePage();
+
+	const baseline = baselineProp || pageBaseline;
 
 	return (
 		<CapSizeTextNew
