@@ -104,11 +104,11 @@ export const SimpleColumnChart: React.FC<TSimpleColumnChartProps> = ({
 						height: matrixLayout.height,
 					}}
 				>
-					{false ? (
+					{/* {false ? (
 						<div style={{position: 'absolute', top: 0, left: 0}}>
 							<DisplayGridRails {...matrixLayout} />
 						</div>
-					) : null}
+					) : null} */}
 					<div style={{position: 'absolute', top: 0, left: 0}}>
 						<div style={{position: 'relative'}}>
 							{data.map((it, i) => {
@@ -238,11 +238,11 @@ export const VerticalColumn: React.FC<{
 				position: 'relative',
 			}}
 		>
-			{false ? (
+			{/* {false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<DisplayGridRails {...verticalColumnLayout} stroke="cyan" />
 				</div>
-			) : null}
+			) : null} */}
 
 			<HtmlArea area={verticalColumnLayout.areas.label}>
 				<div

@@ -31,7 +31,7 @@ export const XAxis_SparklineLarge: React.FC<{
 	theme,
 	axisSpec,
 	fadeInDurationInFrames,
-	tickLabelColor,
+	// tickLabelColor,
 	lineColor,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();

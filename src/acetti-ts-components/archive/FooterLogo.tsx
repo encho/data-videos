@@ -5,13 +5,7 @@ import {Img, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 // ****************************************************************
 // <FooterLogo />
 
-export const FooterLogo: React.FC<{}> = (
-	{
-		// theme,
-		// watermark,
-		// baselines,
-	}
-) => {
+export const FooterLogo = () => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
@@ -49,16 +43,16 @@ function easeInOutExpo(x: number): number {
 		: x === 1
 		? 1
 		: x < 0.5
-		? 2**(20 * x - 10) / 2
-		: (2 - 2**(-20 * x + 10)) / 2;
+		? 2 ** (20 * x - 10) / 2
+		: (2 - 2 ** (-20 * x + 10)) / 2;
 }
 
 function easeInCirc(x: number): number {
-	return 1 - Math.sqrt(1 - x**2);
+	return 1 - Math.sqrt(1 - x ** 2);
 }
 
 function easeOutQuint(x: number): number {
-	return 1 - (1 - x)**5;
+	return 1 - (1 - x) ** 5;
 }
 
 const easings = {

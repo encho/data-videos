@@ -28,7 +28,7 @@ export const useFontFamiliesLoader = (theme: ThemeType) => {
 	const fontSpecs = useMemo(() => {
 		const uniqueFontFamilies = uniqueThings<TAvailableFontFamily>(fontFamilies);
 		return uniqueFontFamilies.map((fontFamily) => getFontSpec(fontFamily));
-	}, fontFamilies);
+	}, [fontFamilies]);
 	useFontsLoader(fontSpecs);
 
 	return fontSpecs;

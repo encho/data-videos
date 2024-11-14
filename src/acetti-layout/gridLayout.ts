@@ -85,7 +85,7 @@ function getGridRail(
 		const end = start + cellSize;
 		const positionOfType = namesObject[current.name];
 
-		namesObject[current.name] = namesObject[current.name] + 1;
+		namesObject[current.name] += 1;
 
 		return [
 			...memo,

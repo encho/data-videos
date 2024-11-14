@@ -5,7 +5,7 @@ export const Position = ({
 	zIndex,
 	children,
 	size = {},
-	fill = 'transparent',
+	// fill = 'transparent',
 	backgroundColor,
 }: {
 	zIndex?: number;
@@ -17,7 +17,7 @@ export const Position = ({
 	};
 	size?: {width?: number | string; height?: number | string};
 	children: ReactNode;
-	fill?: string;
+	// fill?: string;
 	backgroundColor?: string;
 }) => {
 	return (

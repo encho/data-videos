@@ -21,7 +21,7 @@ export const textAnimationsCompositionSchema = z.object({
 export const TextAnimationsComposition: React.FC<
 	z.infer<typeof textAnimationsCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	return (

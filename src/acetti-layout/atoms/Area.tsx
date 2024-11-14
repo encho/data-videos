@@ -8,7 +8,9 @@ type TAreaProps = {
 	area: TGridLayoutArea;
 	children?: ReactNode;
 	fill?: string;
+	// eslint-disable-next-line
 	stroke?: string;
+	// eslint-disable-next-line
 	show?: boolean;
 };
 

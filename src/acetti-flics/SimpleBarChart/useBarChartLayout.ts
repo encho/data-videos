@@ -141,8 +141,8 @@ export function useBarChartLayout({
 	};
 
 	// layout sizes contingent on whether labels are shown
-	const labelWidth = !hideLabels ? getLabelWidth() : 0;
-	const barMarginLeft = !hideLabels ? ibcsSizes.barMarginLeft : 0;
+	const labelWidth = hideLabels ? 0 : getLabelWidth();
+	const barMarginLeft = hideLabels ? 0 : ibcsSizes.barMarginLeft;
 
 	const valueLabelWidth =
 		valueLabelWidthProp ||

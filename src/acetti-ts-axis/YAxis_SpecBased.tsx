@@ -54,7 +54,7 @@ export const YAxis_SpecBased: React.FC<{
 			})}
 
 			{/* update labels  */}
-			{yAxisSpec.labels.map((it, i) => {
+			{yAxisSpec.labels.map((it) => {
 				// const labelMappedValue = yAxisSpec.scale(it.value);
 				const labelMappedValue = yScaleCurrent(it.domainValue);
 				return (

@@ -13,7 +13,7 @@ import {
 // import {getYDomain} from '../acetti-ts-utils/timeSeries/timeSeries';
 // import {TYAxis} from './components/axisSpecs_yAxis';
 
-type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
+// type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
 export type TLineChartAnimationContext = {
 	periodsScale: TPeriodsScale;
@@ -48,7 +48,7 @@ export type TLineChartAnimationContext = {
 
 type TChildrenFuncArgs = TLineChartAnimationContext;
 
-const yDomainType: TYDomainType = 'VISIBLE';
+// const yDomainType: TYDomainType = 'VISIBLE';
 // const yDomainType: TYDomainType = 'FULL';
 // const yDomainType: TYDomainType = 'ZERO_FULL';
 
@@ -69,6 +69,7 @@ export const MultiLineChartAnimationContainer: React.FC<{
 	timeSeries2: TimeSeries;
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
+	// eslint-disable-next-line
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 }> = ({timeSeries, timeSeries2, viewSpecs, transitionSpecs, children}) => {
 	// ensure the length of the passed props are as expected
@@ -346,7 +347,7 @@ export const MultiLineChartAnimationContainer: React.FC<{
 	}
 
 	return (
-		<Sequence  durationInFrames={totalDuration} layout="none">
+		<Sequence durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
 				yScale,

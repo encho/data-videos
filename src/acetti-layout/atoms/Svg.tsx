@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {ReactNode, CSSProperties} from 'react';
 
 // import {useAppTheme} from '../../../src/appTheme/useAppTheme';
 
@@ -6,7 +6,8 @@ type TSvgProps = {
 	height?: number;
 	width?: number;
 	children: ReactNode;
-	style?: Object;
+	// style?: Object;
+	style?: CSSProperties;
 	stroke?: string;
 	fill?: string;
 };

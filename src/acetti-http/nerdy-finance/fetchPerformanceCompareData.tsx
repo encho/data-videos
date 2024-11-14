@@ -39,6 +39,8 @@ export const fetchNerdyFinancePerformanceCompareData = async (
 			? 'https://coinfolio-quant-stage.onrender.com'
 			: 'https://coinfolio-quant.onrender.com';
 
+	console.log({endDate, timePeriod});
+
 	// const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDate}&timePeriod=${timePeriod}`;
 
 	// const apiUrl = `${apiBase}/analytics-tools/performance-compare?firstAsset=${ticker}&secondAsset=${ticker2}&endDate=${endDate}&timePeriod=${timePeriod}`;

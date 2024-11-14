@@ -154,7 +154,7 @@ export const HighlightPeriods_01: React.FC<TAnimatedLineChart2Props> = ({
 					},
 				]}
 			>
-				{({periodsScale, yScale, currentSliceInfo, currentTransitionInfo}) => {
+				{({periodsScale, yScale, currentSliceInfo}) => {
 					return (
 						<div>
 							<Sequence from={td_buildup}>
@@ -223,8 +223,8 @@ export const LineChartAnimationContextDebugger: React.FC<
 > = ({
 	currentSliceInfo,
 	currentTransitionInfo,
-	periodsScale,
-	yScale,
+	// periodsScale,
+	// yScale,
 	theme,
 }) => {
 	return (

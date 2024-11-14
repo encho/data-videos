@@ -31,7 +31,7 @@ const makeMatrixLayoutGridLayoutSpec = ({
 
 	const gridRowsElementSpecs: TGridRailElementSpec[] = rowSizesProp
 		? rowSizesProp.map((it) => ({...it, name: 'cell'}))
-		: Array.from({length: nrRows}).map((it) => ({
+		: Array.from({length: nrRows}).map(() => ({
 				type: 'fr' as const,
 				value: 1,
 				name: 'cell',
@@ -39,7 +39,7 @@ const makeMatrixLayoutGridLayoutSpec = ({
 
 	const gridColumnsElementSpecs: TGridRailElementSpec[] = columnSizesProp
 		? columnSizesProp.map((it) => ({...it, name: 'cell'}))
-		: Array.from({length: nrColumns}).map((it) => ({
+		: Array.from({length: nrColumns}).map(() => ({
 				type: 'fr' as const,
 				value: 1,
 				name: 'cell',

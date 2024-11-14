@@ -53,7 +53,7 @@ export const SimpleBarChartTransition: React.FC<
 	width,
 	height,
 	baseline: baselineProp,
-	showLayout = false, // TODO implement functionality
+	// showLayout = false, // TODO implement functionality
 	hideLabels = false,
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,

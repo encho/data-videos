@@ -37,7 +37,7 @@ export const AnimatedBars: React.FC<{
 			</defs>
 
 			<g clipPath="url(#plotAreaClipPath)">
-				{timeSeries.map((timeSeriesItem, i) => {
+				{timeSeries.map((timeSeriesItem) => {
 					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 					const yValue = yScale(timeSeriesItem.value);
