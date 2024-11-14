@@ -36,10 +36,7 @@ export const PercentageChangeArea: React.FC<{
 
 	// TODO address typography!
 	// TODO address multicolor requirement (green/red e.g.)
-	const lineColor = theme.lineColor;
-	const gradientColor = theme.gradientColor;
-	const textColor = theme.textColor;
-	const lineStrokeWidth = theme.lineStrokeWidth;
+	const {lineColor, gradientColor, textColor, lineStrokeWidth} = theme;
 	const fontWeight = 600;
 
 	const textBottomMargin = 12;
@@ -99,7 +96,7 @@ export const PercentageChangeArea: React.FC<{
 					y={mappedAnimatedLastValue}
 					width={plotArea.width}
 					height={mappedFirstValue - mappedAnimatedLastValue}
-					fill={'url(#greenGradient)'}
+					fill="url(#greenGradient)"
 					opacity={0.2}
 				/>
 

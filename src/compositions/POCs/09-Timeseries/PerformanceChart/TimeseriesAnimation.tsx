@@ -82,14 +82,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					theme={theme}
 				>
 					<OpacifyInAndOut>
-						<Page borderRadius={5} boxShadow>
+						<Page boxShadow borderRadius={5}>
 							{() => {
 								const {contentWidth, contentHeight} = usePage();
 
 								const xAxisHeight = useXAxisAreaHeight();
 
 								const yScaleAnimationUpper = useYScaleAnimation({
-									periodScaleAnimation: periodScaleAnimation,
+									periodScaleAnimation,
 									timeSeriesArray: [timeSeries],
 									tickFormatter: (tick) => `${tick} $`,
 									yScalesInitialHeight: 200,
@@ -143,9 +143,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 										<div style={{position: 'absolute', top: 0, left: 0}}>
 											<DisplayGridLayout
-												stroke={'rgba(255,0,255,0.8)'}
+												hide
+												stroke="rgba(255,0,255,0.8)"
 												fill="transparent"
-												hide={true}
 												areas={chartLayout.areas}
 												width={contentWidth}
 												height={contentHeight}

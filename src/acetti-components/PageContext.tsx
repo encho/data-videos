@@ -27,8 +27,7 @@ export const pageContext = createContext<TPageContext>({
 	contentWidth: 0,
 	contentHeight: 0,
 	baseline: 0,
-	// TODO deprecate width and height into theme
-	theme: lorenzobertolinibright({width: 0, height: 0}),
+	theme: lorenzobertolinibright(),
 	sizes: {lineWidths: {small: 0, medium: 0, large: 0}},
 });
 
@@ -48,7 +47,6 @@ export const PageContext: React.FC<{
 	const contentWidth = width - marginRight - marginLeft;
 	const baseline = contentHeight / nrBaselines;
 
-	// TODO useMemo
 	const sizes = useMemo(
 		() => ({
 			lineWidths: {

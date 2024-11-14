@@ -105,13 +105,7 @@ export type ThemePalette = {
 };
 
 export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
-	const themeGenerator = ({
-		width,
-		height,
-	}: {
-		width: number;
-		height: number;
-	}): ThemeType => {
+	const themeGenerator = (): ThemeType => {
 		return {
 			sizes: {
 				lineWidths: {

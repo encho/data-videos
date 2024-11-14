@@ -2,5 +2,10 @@
 	"extends": "@remotion",
 	"env": {
 		"node": true
-	}
+	},
+	"rules": {
+    "react/jsx-pascal-case": "off",
+		"camelcase": "off",
+		"react/boolean-prop-naming": "off" // TODO re-enable
+  }
 }

@@ -27,7 +27,8 @@ export const PerformanceChartComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum as any);
 	const {fps, durationInFrames, width, height} = useVideoConfig();
 
-	const chartTheme = useThemeFromEnum(chartThemeEnum as any);
+	// const chartTheme = useThemeFromEnum(chartThemeEnum as any);
+	const chartTheme = useThemeFromEnum(chartThemeEnum);
 
 	const lastSlideDurationInFrames = Math.floor(fps * 2);
 	const performanceChartDurationInFrames =

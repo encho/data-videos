@@ -1,5 +1,4 @@
-import {getYear, format, parseISO} from 'date-fns';
-import {keysIn} from 'lodash';
+import {getYear, format} from 'date-fns';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
 type TTickSpec = {
@@ -9,7 +8,6 @@ type TTickSpec = {
 
 type TLabelSpec = {
 	id: string;
-	// value: number;
 	periodFloatIndex: number;
 	label: string;
 	padding?: number;
@@ -146,94 +144,6 @@ function getFirstDateOfEachMonth(dates: Date[]): Date[] {
 // //   2025-01-01T00:00:00.000Z,
 // //   2025-02-01T00:00:00.000Z
 // // ]
-
-interface MonthInfo {
-	month: number;
-	year: number;
-	firstIndex: number;
-	lastIndex: number;
-}
-
-function getMonthYearInfo(dates: Date[]): MonthInfo[] {
-	const result: MonthInfo[] = [];
-	if (dates.length === 0) {
-		return result;
-	}
-
-	let currentMonth = dates[0].getMonth() + 1;
-	let currentYear = dates[0].getFullYear();
-	let firstIndex = 0;
-
-	for (let i = 1; i < dates.length; i++) {
-		const date = dates[i];
-		const month = date.getMonth() + 1;
-		const year = date.getFullYear();
-
-		if (month !== currentMonth || year !== currentYear) {
-			result.push({
-				month: currentMonth,
-				year: currentYear,
-				firstIndex,
-				lastIndex: i - 1,
-			});
-
-			currentMonth = month;
-			currentYear = year;
-			firstIndex = i;
-		}
-	}
-
-	// Add the last month/year info
-	result.push({
-		month: currentMonth,
-		year: currentYear,
-		firstIndex,
-		lastIndex: dates.length - 1,
-	});
-
-	return result;
-}
-// // Example usage:
-// const dates = [
-// 	new Date('2024-12-01'),
-// 	new Date('2024-12-05'),
-// 	new Date('2024-12-10'),
-// 	new Date('2025-01-01'),
-// 	new Date('2025-01-15'),
-// 	new Date('2025-02-01')
-// ];
-// const monthYearInfo = getMonthYearInfo(dates);
-// console.log(monthYearInfo);
-// // Output: [
-// //   { month: 12, year: 2024, firstIndex: 0, lastIndex: 2 },
-// //   { month: 1, year: 2025, firstIndex: 3, lastIndex: 4 },
-// //   { month: 2, year: 2025, firstIndex: 5, lastIndex: 5 }
-// // ]
-
-function averageWithPrevious(arr: number[]): number[] {
-	// Check if the array has fewer than 2 elements
-	if (arr.length < 2) {
-		// return [];
-		throw new Error('Input array must have at least 2 elements.');
-	}
-
-	// Initialize the result array
-	let result: number[] = [];
-
-	// Iterate through the array starting from the second element
-	for (let i = 1; i < arr.length; i++) {
-		// Calculate the average of the current and previous element
-		let average = (arr[i] + arr[i - 1]) / 2;
-		// Add the average to the result array
-		result.push(average);
-	}
-
-	return result;
-}
-// // Example usage:
-// const inputArray = [1, 2, 3, 5];
-// const outputArray = averageWithPrevious(inputArray);
-// console.log(outputArray); // Output: [1.5, 2.5, 4]
 
 // TODO pass more info, e.g. area width?
 export function getMonthStartsAxisSpec(
@@ -378,10 +288,10 @@ function generateQuarterStartsNearestDates(dates: Date[]): Date[] {
 			const previousDate = dates[i - 1];
 			const previousMonthNumber = previousDate.getMonth() + 1;
 			const prevDateNoQuarterStartMonth =
-				previousMonthNumber != 1 &&
-				previousMonthNumber != 4 &&
-				previousMonthNumber != 7 &&
-				previousMonthNumber != 10;
+				previousMonthNumber !== 1 &&
+				previousMonthNumber !== 4 &&
+				previousMonthNumber !== 7 &&
+				previousMonthNumber !== 10;
 
 			if (isFirstMonthOfQuarter && prevDateNoQuarterStartMonth) {
 				datesList.push(currentDate);

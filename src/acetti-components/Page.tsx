@@ -31,7 +31,7 @@ export function Page({
 }) {
 	const page = usePage();
 
-	const theme = page.theme;
+	const {theme} = page;
 
 	// const devLineColor = '#00ddaa';
 	// const devCornerColor = chroma(devLineColor).alpha(0.35).css(); // 50% transparency
@@ -131,7 +131,7 @@ export const PageFooter: React.FC<{
 }> = ({children, showArea = false}) => {
 	const page = usePage();
 
-	const baseline = page.baseline;
+	const {baseline} = page;
 	const paddingTopInBaselines = 5;
 
 	return (
@@ -151,7 +151,7 @@ export const PageHeader: React.FC<{
 	showArea?: boolean;
 }> = ({children, showArea = false}) => {
 	const page = usePage();
-	const baseline = page.baseline;
+	const {baseline} = page;
 	const paddingBottomInBaselines = 3;
 
 	return (
@@ -202,7 +202,7 @@ export const LorenzoBertoliniLogo = ({
 
 	return (
 		<CapSizeTextNew
-			fontFamily={'Inter-Regular'}
+			fontFamily="Inter-Regular"
 			capHeight={capHeight}
 			lineGap={0}
 			color={color}
@@ -231,7 +231,7 @@ export const LorenzoBertoliniLogoNoAnimation = ({
 
 	return (
 		<CapSizeTextNew
-			fontFamily={'Inter-Regular'}
+			fontFamily="Inter-Regular"
 			capHeight={capHeight}
 			lineGap={0}
 			color={color}

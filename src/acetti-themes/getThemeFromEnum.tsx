@@ -22,13 +22,10 @@ export const getThemeFromEnum = (themeEnum: ThemeEnum) => {
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
-	// return theme;
-	return theme({width: 1000, height: 1000});
+	return theme();
 };
 
 export const useThemeFromEnum = (themeEnum: ThemeEnum) => {
-	const {width, height} = useVideoConfig();
-
 	const createTheme =
 		themeEnum === ('NERDY' as any as ThemeEnum)
 			? nerdyTheme
@@ -37,7 +34,7 @@ export const useThemeFromEnum = (themeEnum: ThemeEnum) => {
 			: lorenzobertolinibrightTheme;
 
 	// return theme;
-	const theme = createTheme({width, height});
+	const theme = createTheme();
 
 	// load fonts
 	// TODO: eventually wait for docoment.fonts.ready// and/or introduce Timeout instead of in useElementDimensions

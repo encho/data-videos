@@ -75,7 +75,7 @@ export const XAxis_Transition: React.FC<{
 
 	const axisLineColor = debugUpdateColor || theme.color;
 
-	const relativeFrame = currentSliceInfo.relativeFrame;
+	const {relativeFrame} = currentSliceInfo;
 	const {fps} = useVideoConfig();
 
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
@@ -98,8 +98,7 @@ export const XAxis_Transition: React.FC<{
 
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		// fps * 0.8
-		fps * 1
+		fps
 	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -161,7 +160,7 @@ export const XAxis_Transition: React.FC<{
 
 		return {
 			id: tickId,
-			value: value,
+			value,
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),
@@ -571,7 +570,6 @@ export const XAxis_Transition: React.FC<{
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
 							stroke={tickColorEnter}
 							strokeWidth={4}
 							opacity={it.opacity}
@@ -593,12 +591,9 @@ export const XAxis_Transition: React.FC<{
 							x2={it.value}
 							y1={0}
 							y2={TICK_LINE_SIZE}
-							// stroke={theme.tickColor}
-							// stroke={it.color}
 							stroke={tickColorExit}
 							strokeWidth={4}
 							opacity={it.opacity}
-							// opacity={1}
 						/>
 					</g>
 				);
