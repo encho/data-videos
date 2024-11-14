@@ -192,31 +192,31 @@ export const PeriodScaleAnimationInspector: React.FC<
 								}}
 							>
 								<Row>
-									<div>{'transitionIndex'}</div>
+									<div>transitionIndex</div>
 									<Value>{it.transitionIndex}</Value>
 								</Row>
 								<Row>
-									<div>{'frameRange'}</div>
+									<div>frameRange</div>
 									<Value>{JSON.stringify(it.frameRange)}</Value>
 								</Row>
 								<Row>
-									<div>{'numberOfSlices'}</div>
+									<div>numberOfSlices</div>
 									<Value>{JSON.stringify(it.numberOfSlices)}</Value>
 								</Row>
 								<Row>
-									<div>{'durationInSeconds'}</div>
+									<div>durationInSeconds</div>
 									<Value>{JSON.stringify(it.durationInSeconds)}</Value>
 								</Row>
 								<Row>
-									<div>{'domainIndicesFrom'}</div>
+									<div>domainIndicesFrom</div>
 									<Value>{JSON.stringify(it.domainIndicesFrom)}</Value>
 								</Row>
 								<Row>
-									<div>{'domainIndicesTo'}</div>
+									<div>domainIndicesTo</div>
 									<Value>{JSON.stringify(it.domainIndicesTo)}</Value>
 								</Row>
 								<Row>
-									<div>{'slices'}</div>
+									<div>slices</div>
 									<Value>
 										{it.slices.map((sliceInfo) => {
 											const isActiveSlice =
@@ -232,25 +232,25 @@ export const PeriodScaleAnimationInspector: React.FC<
 													}}
 												>
 													<Row>
-														<div>{'sliceIndex'}</div>
+														<div>sliceIndex</div>
 														<Value>
 															{JSON.stringify(sliceInfo.sliceIndex)}
 														</Value>
 													</Row>
 													<Row>
-														<div>{'frameRange'}</div>
+														<div>frameRange</div>
 														<Value>
 															{JSON.stringify(sliceInfo.frameRange)}
 														</Value>
 													</Row>
 													<Row>
-														<div>{'domainIndicesFrom'}</div>
+														<div>domainIndicesFrom</div>
 														<Value>
 															{JSON.stringify(sliceInfo.domainIndicesFrom)}
 														</Value>
 													</Row>
 													<Row>
-														<div>{'domainIndicesTo'}</div>
+														<div>domainIndicesTo</div>
 														<Value>
 															{JSON.stringify(sliceInfo.domainIndicesTo)}
 														</Value>
@@ -258,7 +258,6 @@ export const PeriodScaleAnimationInspector: React.FC<
 												</div>
 											);
 										})}
-										{/* {JSON.stringify(it.slices)} */}
 									</Value>
 								</Row>
 							</div>
@@ -454,7 +453,7 @@ const PeriodScaleZoomVisualizer: React.FC<{
 						left: mapToX(visibleDomainIndices[0]),
 						backgroundColor: 'white',
 					}}
-				></div>
+				/>
 				{/* from: red */}
 				<div
 					style={{
@@ -465,7 +464,7 @@ const PeriodScaleZoomVisualizer: React.FC<{
 						left: mapToX(fromDomainIndices[0]),
 						backgroundColor: 'red',
 					}}
-				></div>
+				/>
 				{/* to: green */}
 				<div
 					style={{
@@ -476,7 +475,7 @@ const PeriodScaleZoomVisualizer: React.FC<{
 						left: mapToX(toDomainIndices[0]),
 						backgroundColor: 'green',
 					}}
-				></div>
+				/>
 			</div>
 		</div>
 	);

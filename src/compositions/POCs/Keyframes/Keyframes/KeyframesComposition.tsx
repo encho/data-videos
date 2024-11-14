@@ -4,12 +4,8 @@ import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
 import {KeyFramesInspector} from './KeyframesInspector';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
-// import {Position} from '../../../../acetti-ts-base/Position';
-// import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
-import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
@@ -24,9 +20,7 @@ export const KeyframesComposition: React.FC<
 > = ({themeEnum}) => {
 	const {durationInFrames, fps} = useVideoConfig();
 	const frame = useCurrentFrame();
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const keyFramesGroup = buildKeyFramesGroup(durationInFrames, fps, [
 		{type: 'SECOND', value: 1, id: 'TITLE_ENTER_START'},

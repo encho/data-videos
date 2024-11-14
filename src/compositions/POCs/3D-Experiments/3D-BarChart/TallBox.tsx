@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {ThreeCanvas} from '@remotion/three';
 import {Box, Environment} from '@react-three/drei';
-import {useCurrentFrame, interpolate, Easing} from 'remotion';
+import {useCurrentFrame, interpolate} from 'remotion';
 import {useThree} from '@react-three/fiber';
 
 const DynamicScene: React.FC = () => {
@@ -9,15 +9,15 @@ const DynamicScene: React.FC = () => {
 	const {camera} = useThree();
 
 	// Interpolate Z position based on the current frame
-	const xPosition = interpolate(frame, [0, 100], [0, 1], {
-		extrapolateRight: 'clamp',
-	});
-	const yPosition = interpolate(frame, [0, 100], [0, 5], {
-		extrapolateRight: 'clamp',
-	});
-	const zPosition = interpolate(frame, [0, 100], [10, 10], {
-		extrapolateRight: 'clamp',
-	});
+	// const xPosition = interpolate(frame, [0, 100], [0, 1], {
+	// 	extrapolateRight: 'clamp',
+	// });
+	// const yPosition = interpolate(frame, [0, 100], [0, 5], {
+	// 	extrapolateRight: 'clamp',
+	// });
+	// const zPosition = interpolate(frame, [0, 100], [10, 10], {
+	// 	extrapolateRight: 'clamp',
+	// });
 
 	// Interpolate the rotation angle based on the frame
 	const rotationAngle = interpolate(frame, [0, 150], [0, 2 * Math.PI]);

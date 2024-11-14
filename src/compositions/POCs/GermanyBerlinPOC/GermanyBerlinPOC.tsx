@@ -9,10 +9,9 @@ import {TitleWithSubtitle} from '../03-Page/TitleWithSubtitle/TitleWithSubtitle'
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {LorenzoBertoliniLogo2} from '../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
-import {useFontFamiliesLoader} from '../../../acetti-typography/useFontFamiliesLoader';
 
 export const germanyBerlinPOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -26,12 +25,7 @@ export interface GeoJSONData {
 export const GermanyBerlinPOC: React.FC<
 	z.infer<typeof germanyBerlinPOCSchema>
 > = ({themeEnum}) => {
-	// TODO load Inter fonts
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const [geoData, setGeoData] = useState<FeatureCollection<Geometry> | null>(
 		null
@@ -112,8 +106,8 @@ export const GermanyBerlin: React.FC<{
 			}}
 		>
 			<TitleWithSubtitle
-				title={'Hello title'}
-				subtitle={'Hello subtitle'}
+				title="Hello title"
+				subtitle="Hello subtitle"
 				theme={theme}
 				baseline={20}
 			/>
