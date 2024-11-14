@@ -65,14 +65,14 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 				type: 'pixel',
 				value: barChartTitlesCapHeightInBaselines * page.baseline,
 			}, // TODO from theme
-			{type: 'pixel', value: 1 * page.baseline}, // TODO from theme
+			{type: 'pixel', value: page.baseline}, // TODO from theme
 			{type: 'fr', value: 1},
 			{type: 'pixel', value: 4 * page.baseline}, // TODO from theme
 			{
 				type: 'pixel',
 				value: barChartTitlesCapHeightInBaselines * page.baseline,
 			}, // TODO from theme
-			{type: 'pixel', value: 1 * page.baseline}, // TODO from theme
+			{type: 'pixel', value: page.baseline}, // TODO from theme
 			{type: 'fr', value: relativeLowerBarChartHeight},
 		],
 		rowSpacePixels: 0,
@@ -152,13 +152,10 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageHeader>
 					<TitleWithSubtitle
-						title={'Multiple Bar Charts'}
-						subtitle={'Wahlergebnisse 2024 Brandenburg & Sachsen'}
+						title="Multiple Bar Charts"
+						subtitle="Wahlergebnisse 2024 Brandenburg & Sachsen"
 						theme={theme}
 					/>
 				</PageHeader>
@@ -177,7 +174,7 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 							<DisplayGridRails
 								{...matrixLayout}
 								// stroke={'#252525'}
-								stroke={'transparent'}
+								stroke="transparent"
 							/>
 
 							<HtmlArea area={upperBarChartTitleArea}>
@@ -237,10 +234,7 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageFooter>
 					<div
 						style={{
 							display: 'flex',
@@ -265,7 +259,7 @@ export const MultipleSimpleBarChartFlic: React.FC<{
 					</div>
 				</PageFooter>
 			</div>
-			<PageLogo theme={theme} />
+			<PageLogo />
 		</Page>
 	);
 };

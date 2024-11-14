@@ -149,7 +149,7 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 	return (
 		<>
 			{data.map((it, i) => {
-				const ticker = it.ticker;
+				const {ticker} = it;
 				const description = `3-Year Performance Overview`;
 				const sequence = getSequenceForIndex(i);
 
@@ -182,7 +182,7 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 					subtitle="3-Year Performance of Selected Assets in Percent"
 					theme={theme}
 					data={barChartData}
-					dataSource={'Data Source: Yahoo Finance, own calculations.'}
+					dataSource="Data Source: Yahoo Finance, own calculations."
 				/>
 			</Sequence>
 
@@ -241,10 +241,7 @@ export const SingleSparklineSlide: React.FC<{
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={DEBUG}
-				>
+				<PageHeader>
 					<TitleWithSubtitle
 						title={title}
 						subtitle={description}
@@ -270,11 +267,11 @@ export const SingleSparklineSlide: React.FC<{
 									stroke={DEBUG ? '#292929' : 'transparent'}
 								/>
 								<HtmlArea area={area_1}>
-									<Sequence from={0} layout="none">
+									<Sequence layout="none">
 										<Sequence from={Math.floor(fps * 0.0)} layout="none">
 											<SparklineLarge
 												baseline={baseline}
-												id={'001'}
+												id="001"
 												data={data}
 												width={area_1.width}
 												height={area_1.height}
@@ -283,7 +280,7 @@ export const SingleSparklineSlide: React.FC<{
 												lineColor={lineColor}
 												formatString={formatString}
 												showLayout={DEBUG}
-												xAxisFormatString={'MMM yy'}
+												xAxisFormatString="MMM yy"
 											/>
 										</Sequence>
 									</Sequence>
@@ -294,10 +291,7 @@ export const SingleSparklineSlide: React.FC<{
 				</div>
 
 				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageFooter>
 					<div
 						style={{
 							display: 'flex',
@@ -315,11 +309,11 @@ export const SingleSparklineSlide: React.FC<{
 								typographyStyle={theme.typography.textStyles.dataSource}
 								baseline={page.baseline}
 							>
-								{'Data Source: Yahoo Finance'}
+								Data Source: Yahoo Finance
 							</TypographyStyle>
 						</div>
 					</div>
-					<PageLogo theme={theme} />
+					<PageLogo />
 				</PageFooter>
 			</div>
 		</Page>

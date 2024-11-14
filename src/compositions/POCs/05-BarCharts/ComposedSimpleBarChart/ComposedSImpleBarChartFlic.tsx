@@ -65,13 +65,10 @@ export const ComposedSimpleBarChartFlic: React.FC<{
 					position: 'relative',
 				}}
 			>
-				<PageHeader
-					theme={theme}
-					// showArea={showAreas}
-				>
+				<PageHeader>
 					<TitleWithSubtitle
-						title={'Composed Simple Bar Chart'}
-						subtitle={'Wahlergebnisse Brandenburg 2024'}
+						title="Composed Simple Bar Chart"
+						subtitle="Wahlergebnisse Brandenburg 2024"
 						theme={theme}
 					/>
 				</PageHeader>
