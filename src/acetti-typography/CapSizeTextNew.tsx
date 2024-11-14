@@ -164,9 +164,9 @@ export const CapSizeTextNew: React.FC<{
 		...styleProp,
 		fontSize: parseFloat(capSizeStyles.fontSize),
 		lineHeight: capSizeStyles.lineHeight,
-		fontFamily: fontFamily,
-		fontWeight: fontWeight,
-		color: color,
+		fontFamily,
+		fontWeight,
+		color,
 		marginTop: combinedMarginTop,
 		marginBottom: combinedMarginBottom,
 	};

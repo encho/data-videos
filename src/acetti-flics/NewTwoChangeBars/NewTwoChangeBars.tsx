@@ -67,8 +67,8 @@ export const NewTwoChangeBars: React.FC<
 
 	const PERC_CHANGE_DISPLAY_AREA_HEIGHT = baseline * 2.25; // TODO from theme
 	const PERC_CHANGE_DISPLAY_PATH_STROKE_WIDTH = baseline / 10;
-	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseline * 1;
-	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseline * 1;
+	const PERC_CHANGE_DISPLAY_ARROW_SIZE = baseline;
+	const PERC_CHANGE_DISPLAY_MIN_VERTICAL_PATH_LENGTH = baseline;
 	const PERC_CHANGE_DISPLAY_PATH_COLOR_UP = 'limegreen'; // TODO from theme
 	const PERC_CHANGE_DISPLAY_PATH_COLOR_DOWN = 'red'; // TODO from theme
 	const PERC_CHANGE_DISPLAY_PATH_COLOR_NEUTRAL = 'gray'; // TODO from theme
@@ -115,10 +115,10 @@ export const NewTwoChangeBars: React.FC<
 			}}
 		>
 			<DisplayGridLayout
+				hide
 				width={chartLayout.width}
 				height={chartLayout.height}
 				areas={chartLayout.areas}
-				hide={true}
 			/>
 			<Sequence
 				name="PercChange_Display"
@@ -145,7 +145,7 @@ export const NewTwoChangeBars: React.FC<
 				/>
 			</Sequence>
 
-			<Sequence name="ChangeBar_Left" from={fps * 1} layout="none">
+			<Sequence name="ChangeBar_Left" from={fps} layout="none">
 				<ChangeBar
 					theme={theme}
 					baseline={baseline}

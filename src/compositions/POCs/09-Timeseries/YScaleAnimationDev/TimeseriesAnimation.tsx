@@ -29,7 +29,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
-	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI' as any);
+	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI');
 
 	const CHART_PAGE_MARGIN = 0;
 	const CHART_PAGE_WIDTH = width;
@@ -148,7 +148,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							const xAxisHeight = useXAxisAreaHeight();
 
 							const yScaleAnimationUpper = useYScaleAnimation({
-								periodScaleAnimation: periodScaleAnimation,
+								periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2, timeSeries3],
 								tickFormatter: (tick) => `${tick} $`,
 								yScalesInitialHeight: 200,
@@ -157,7 +157,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							});
 
 							const yScaleAnimationLower = useYScaleAnimation({
-								periodScaleAnimation: periodScaleAnimation,
+								periodScaleAnimation,
 								timeSeriesArray: [timeSeries, timeSeries2],
 								tickFormatter: (tick) => `${tick} $$$`,
 								yScalesInitialHeight: 200,
@@ -186,7 +186,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 								>
 									<div style={{position: 'absolute'}}>
 										<DisplayGridLayout
-											stroke={'rgba(255,0,255,0.5)'}
+											stroke="rgba(255,0,255,0.5)"
 											fill="transparent"
 											// hide={true}
 											areas={chartLayout.areas}

@@ -78,7 +78,7 @@ type TSimpleBarChartProps = TBaselineOrHeight & {
 	valueDomain?: [number, number];
 	showLayout?: boolean;
 	hideLabels?: boolean;
-	keyframes?: TKeyFramesGroup;
+	// keyframes?: TKeyFramesGroup;
 	animateEnter?: boolean;
 	animateExit?: boolean;
 	CustomLabelComponent?: TBarChartLabelComponent;
@@ -99,7 +99,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	valueDomain: valueDomainProp,
-	keyframes,
+	// keyframes,
 	CustomLabelComponent,
 	CustomValueLabelComponent,
 }) => {
@@ -127,35 +127,36 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 		({id, children}: {children: string; id: string}) => {
 			return (
 				<LabelComponent
-					children={children}
 					id={id}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-				/>
+				>
+					{children}
+				</LabelComponent>
 			);
 		},
-		// [baseline, theme]  // TODO ensure theme has stable ref
-		[baseline]
+		[baseline, theme, LabelComponent]
 	);
 
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
+		// eslint-disable-next-line
 		({id, children}: {children: string; id: string}) => {
 			return (
 				<ValueLabelComponent
-					children={children}
 					id={id}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-				/>
+				>
+					{children}
+				</ValueLabelComponent>
 			);
 		},
-		// [baseline, theme]  // TODO ensure theme has stable ref
-		[baseline]
+		[baseline, theme, ValueLabelComponent]
 	);
 
 	// const labelWidth = labelWidthProp || labelsDimensions?.width || 0;
@@ -320,8 +321,9 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 				</div>
 			) : null}
 
-			{!hideLabels
-				? labelKeyframes.map((labelKeyframe, i) => {
+			{hideLabels
+				? null
+				: labelKeyframes.map((labelKeyframe, i) => {
 						return (
 							<Sequence
 								from={ANIMATE_ENTER ? labelKeyframe.frame : 0}
@@ -354,8 +356,7 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 								</HtmlArea>
 							</Sequence>
 						);
-				  })
-				: null}
+				  })}
 
 			{/* TODO actually bring the label keyframes also in here, s.t. it is all together */}
 			{data.map((it, i) => {
@@ -529,7 +530,7 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 
 export const DefaultLabelComponent = React.memo(
 	({
-		id,
+		// id,
 		children,
 		animateExit,
 		animateEnter,
@@ -537,10 +538,12 @@ export const DefaultLabelComponent = React.memo(
 		theme,
 	}: {
 		children: string;
-		id: string;
+		// id: string;
 		baseline: number;
 		theme: ThemeType;
+		// eslint-disable-next-line
 		animateEnter?: boolean;
+		// eslint-disable-next-line
 		animateExit?: boolean;
 	}) => {
 		return (
@@ -563,7 +566,7 @@ export const DefaultLabelComponent = React.memo(
 
 export const DefaultValueLabelComponent = React.memo(
 	({
-		id,
+		// id,
 		children,
 		animateExit,
 		animateEnter,
@@ -571,10 +574,12 @@ export const DefaultValueLabelComponent = React.memo(
 		theme,
 	}: {
 		children: string;
-		id: string;
+		// id: string;
 		baseline: number;
 		theme: ThemeType;
+		// eslint-disable-next-line
 		animateEnter?: boolean;
+		// eslint-disable-next-line
 		animateExit?: boolean;
 	}) => {
 		return (

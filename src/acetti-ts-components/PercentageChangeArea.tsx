@@ -142,7 +142,7 @@ export const PercentageChangeArea: React.FC<{
 // TODO centralize
 function formatPercentage(value: number): string {
 	// Calculate the percentage by multiplying the value by 100
-	let percentage = value * 100;
+	const percentage = value * 100;
 	// Round to the nearest integer and format with a sign
 	// Directly use `toFixed(0)` which handles rounding
 	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';

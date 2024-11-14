@@ -23,8 +23,14 @@ export function useElementDimensions(skipFontsWaiting: boolean = false) {
 			await document.fonts.ready;
 
 			// Introduce an additional delay to ensure styles are applied
-			// await new Promise((resolve) => setTimeout(resolve, 2000));
-			await new Promise((resolve) => setTimeout(resolve, 1000));
+			const delay = (ms: number): Promise<void> => {
+				return new Promise<void>((resolve) => {
+					setTimeout(() => resolve(), ms);
+				});
+			};
+
+			// Usage
+			await delay(1000);
 		};
 
 		const measure = async () => {
@@ -49,10 +55,10 @@ export function useElementDimensions(skipFontsWaiting: boolean = false) {
 		};
 
 		// Measure after the component has mounted and rendered
-		if (!skipFontsWaiting) {
-			waitFirstTime().then(() => measure());
-		} else {
+		if (skipFontsWaiting) {
 			measure();
+		} else {
+			waitFirstTime().then(() => measure());
 		}
 
 		// measure();
@@ -64,7 +70,7 @@ export function useElementDimensions(skipFontsWaiting: boolean = false) {
 		return () => {
 			// window.removeEventListener('resize', measure);
 		};
-	}, [handle]);
+	}, [handle, skipFontsWaiting]);
 
 	return {ref, dimensions};
 }

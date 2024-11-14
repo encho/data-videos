@@ -16,7 +16,7 @@ import {getDomain} from './analytics';
 import {data, DataItem} from './data';
 import LorenzoBertoliniLogo from '../../../acetti-components/LorenzoBertoliniLogo';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../acetti-themes/getThemeFromEnum';
 
@@ -42,7 +42,6 @@ function generateBarChartData<DataItemType extends {id: string}>({
 	spec,
 	data,
 	plotAreaWidth,
-	plotAreaHeight,
 }: {
 	spec: VizTypeBarChart<DataItemType>;
 	data: Array<DataItemType>;
@@ -112,7 +111,7 @@ function generateScatterplotData<DataItemType extends {id: string}>({
 	const xScale = scaleLinear().domain(xDomain).range(xRange);
 	const yScale = scaleLinear().domain(yDomain).range(yRange);
 
-	const vizData = data.map((it, i) => {
+	const vizData = data.map((it) => {
 		const cx = xScale(it[spec.xMeasure] as number); // TODO ensure number
 		const cy = yScale(it[spec.yMeasure] as number); // TODO ensure number
 		const r = 20;
@@ -180,7 +179,7 @@ export const scatterPlotToBarChartSchema = z.object({
 export const ScatterPlotToBarChart: React.FC<
 	z.infer<typeof scatterPlotToBarChartSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const scatterPlotVizSpec: VizTypeScatterplot<DataItem> = {
 		type: 'ScatterPlot',
@@ -235,7 +234,7 @@ export const ScatterPlotToBarChart: React.FC<
 						marginLeft: 30,
 					}}
 				>
-					<Sequence from={0} durationInFrames={90 * 2} layout="none">
+					<Sequence durationInFrames={90 * 2} layout="none">
 						<AnalyticsChartTransition
 							data={data}
 							startChartSpec={scatterPlotVizSpec}
@@ -282,7 +281,7 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 	endChartSpec,
 }: TAnalyticsChartTransition<TDataItem>) {
 	const frame = useCurrentFrame();
-	const {fps, durationInFrames} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
 	const progress = interpolate(frame, [0, durationInFrames - 1], [0, 1], {
 		easing: Easing.cubic,
@@ -339,9 +338,9 @@ export function AnalyticsChartTransition<TDataItem extends {id: string}>({
 
 				return (
 					<g>
-						<path d={startDataPath} fill={'red'} opacity={0.3} />
-						<path d={endDataPath} fill={'green'} opacity={0.3} />
-						<path d={flubberInterpolatedPath} fill={'white'} />
+						<path d={startDataPath} fill="red" opacity={0.3} />
+						<path d={endDataPath} fill="green" opacity={0.3} />
+						<path d={flubberInterpolatedPath} fill="white" />
 					</g>
 				);
 			})}

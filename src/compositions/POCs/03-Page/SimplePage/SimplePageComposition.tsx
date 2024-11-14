@@ -76,10 +76,8 @@ export const SimplePageComposition: React.FC<
 							>
 								<PageHeader showArea={showAreas}>
 									<TitleWithSubtitle
-										title={
-											'Simple Page Composition. This will be great stuff...'
-										}
-										subtitle={'This is a subtitle. Lol...'}
+										title="Simple Page Composition. This will be great stuff..."
+										subtitle="This is a subtitle. Lol..."
 										theme={theme}
 									/>
 								</PageHeader>

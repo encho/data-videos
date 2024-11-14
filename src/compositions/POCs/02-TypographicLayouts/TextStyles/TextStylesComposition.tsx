@@ -9,7 +9,7 @@ import {usePage} from '../../../../acetti-components/PageContext';
 import {BaselineGrid} from '../BaselineGrid/BaselineGrid';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
 import {CapSizeTextNew} from '../../../../acetti-typography/CapSizeTextNew';
@@ -20,7 +20,6 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {HtmlArea} from '../../../../acetti-layout';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {ThemeTextStyle} from '../../../../acetti-themes/themeTypes';
 
 // TODO funciton of theme, and should get color though or id to color in theme
@@ -71,11 +70,7 @@ export const textStylesCompositionSchema = z.object({
 export const TextStylesComposition: React.FC<
 	z.infer<typeof textStylesCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {width} = useVideoConfig();
 
@@ -120,17 +115,17 @@ export const TextStylesComposition: React.FC<
 			>
 				<SlideTitle theme={theme}>Text Styles</SlideTitle>
 				<div style={{position: 'relative', marginTop: 0}}>
-					<DisplayGridRails {...matrixLayout} stroke={'#444'} strokeWidth={1} />
+					<DisplayGridRails {...matrixLayout} stroke="#444" strokeWidth={1} />
 
 					<HtmlArea area={area_1}>
-						<Sequence from={0} layout="none">
+						<Sequence layout="none">
 							<div>
 								<BaselineGrid
 									width={area_1.width}
 									height={area_1.height}
 									baseline={baselineLeft}
 									{...theme.TypographicLayouts.baselineGrid}
-									lineColor={'#888'}
+									lineColor="#888"
 									strokeWidth={1}
 								/>
 
@@ -192,14 +187,14 @@ export const TextStylesComposition: React.FC<
 					</HtmlArea>
 
 					<HtmlArea area={area_2}>
-						<Sequence from={0} layout="none">
+						<Sequence layout="none">
 							<div>
 								<BaselineGrid
 									width={area_2.width}
 									height={area_2.height}
 									baseline={baselineRight}
 									{...theme.TypographicLayouts.baselineGrid}
-									lineColor={'#888'}
+									lineColor="#888"
 									strokeWidth={1}
 								/>
 

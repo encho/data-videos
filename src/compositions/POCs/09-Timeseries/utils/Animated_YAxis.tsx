@@ -51,14 +51,14 @@ export const Animated_YAxis: React.FC<{
 
 	const {yScale, yAxisSpecFrom, yAxisSpecTo} = yScaleAnimation;
 
-	const currentSliceInfo = periodScaleAnimation.currentSliceInfo;
+	const {currentSliceInfo} = periodScaleAnimation;
 
-	const relativeFrame = currentSliceInfo.relativeFrame;
+	const {relativeFrame} = currentSliceInfo;
 	const {fps} = useVideoConfig();
 
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		fps * 1 // TODO this duration setting into theme
+		fps
 	);
 
 	// colors
@@ -143,7 +143,7 @@ export const Animated_YAxis: React.FC<{
 			}
 		);
 
-		const domainValue = endTick.domainValue;
+		const {domainValue} = endTick;
 		const value = yScale(domainValue);
 
 		return {
@@ -167,7 +167,7 @@ export const Animated_YAxis: React.FC<{
 			}
 		);
 
-		const domainValue = startTick.domainValue;
+		const {domainValue} = startTick;
 		const value = yScale(domainValue);
 
 		return {
@@ -212,7 +212,7 @@ export const Animated_YAxis: React.FC<{
 	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
 		const endLabel = getLabel(yAxisSpecTo, labelId);
 
-		const domainValue = endLabel.domainValue;
+		const {domainValue} = endLabel;
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,
@@ -240,7 +240,7 @@ export const Animated_YAxis: React.FC<{
 	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
 		const startLabel = getLabel(yAxisSpecFrom, labelId);
 
-		const domainValue = startLabel.domainValue;
+		const {domainValue} = startLabel;
 
 		const interpolatedOpacity = interpolate(
 			relativeFrame,

@@ -87,8 +87,7 @@ export const Animated_XAxis: React.FC<{
 	// TODO rename to xAxisTheme e.g.
 	const theme = fullTheme.xAxis;
 
-	const periodsScale = periodsScaleAnimation.periodsScale;
-	const currentSliceInfo = periodsScaleAnimation.currentSliceInfo;
+	const {periodsScale, currentSliceInfo} = periodsScaleAnimation;
 
 	const periodScaleFrom =
 		periodsScaleAnimation.currentSliceInfo.periodsScaleFrom;
@@ -120,7 +119,7 @@ export const Animated_XAxis: React.FC<{
 
 	const axisLineColor = debugUpdateColor || theme.color;
 
-	const relativeFrame = currentSliceInfo.relativeFrame;
+	const {relativeFrame} = currentSliceInfo;
 	const {fps} = useVideoConfig();
 
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
@@ -143,7 +142,7 @@ export const Animated_XAxis: React.FC<{
 
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		currentSliceInfo.durationInFrames,
-		fps * 1 // TODO this duration setting into theme
+		fps
 	);
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
@@ -206,7 +205,7 @@ export const Animated_XAxis: React.FC<{
 
 		return {
 			id: tickId,
-			value: value,
+			value,
 			opacity:
 				interpolatedOpacity *
 				getOpacityNearVisibleBoundary(currentPeriodFloatIndex),

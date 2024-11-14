@@ -29,10 +29,7 @@ export const Animated_PercentageChangeArea: React.FC<{
 
 	// TODO address typography!
 	// TODO address multicolor requirement (green/red e.g.)
-	const lineColor = theme.lineColor;
-	const gradientColor = theme.gradientColor;
-	const textColor = theme.textColor;
-	const lineStrokeWidth = theme.lineStrokeWidth;
+	const {lineColor, gradientColor, textColor, lineStrokeWidth} = theme;
 	const fontWeight = 600;
 
 	const textBottomMargin = 12;
@@ -92,7 +89,7 @@ export const Animated_PercentageChangeArea: React.FC<{
 					y={mappedAnimatedLastValue}
 					width={area.width}
 					height={mappedFirstValue - mappedAnimatedLastValue}
-					fill={'url(#greenGradient)'}
+					fill="url(#greenGradient)"
 					opacity={0.2}
 				/>
 
@@ -137,7 +134,7 @@ export const Animated_PercentageChangeArea: React.FC<{
 // TODO centralize
 function formatPercentage(value: number): string {
 	// Calculate the percentage by multiplying the value by 100
-	let percentage = value * 100;
+	const percentage = value * 100;
 	// Round to the nearest integer and format with a sign
 	// Directly use `toFixed(0)` which handles rounding
 	return (percentage > 0 ? '+' : '') + percentage.toFixed(0) + '%';

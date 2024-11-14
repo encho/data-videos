@@ -76,46 +76,47 @@ export const SimpleBarChartTransition: React.FC<
 	const baseline = height ? getBarChartBaseline(height, dataTo) : baselineProp;
 	invariant(baseline);
 
+	const LabelComponent = CustomLabelComponent || DefaultLabelComponent;
+
+	const ValueLabelComponent =
+		CustomValueLabelComponent || DefaultValueLabelComponent;
+
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureLabelComponent = useCallback(
 		({id, children}: {children: string; id: string}) => {
 			return (
 				<LabelComponent
-					children={children}
 					id={id}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-				/>
+				>
+					{children}
+				</LabelComponent>
 			);
 		},
-		// [baseline, theme]  // TODO ensure theme has stable ref
-		[baseline]
+		[baseline, theme, LabelComponent]
 	);
 
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
+		// eslint-disable-next-line
 		({id, children}: {children: string; id: string}) => {
 			return (
 				<ValueLabelComponent
-					children={children}
 					id={id}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-				/>
+				>
+					{children}
+				</ValueLabelComponent>
 			);
 		},
-		// [baseline, theme]  // TODO ensure theme has stable ref
-		[baseline]
+		[baseline, ValueLabelComponent, theme]
 	);
-
-	const LabelComponent = CustomLabelComponent || DefaultLabelComponent;
-
-	const ValueLabelComponent =
-		CustomValueLabelComponent || DefaultValueLabelComponent;
 
 	const labelWidth = labelWidthProp || labelsDimensions?.width;
 	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
@@ -257,11 +258,11 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 				height: barChartLayout.height,
 			}}
 		>
-			{false ? (
+			{/* {false ? (
 				<div style={{position: 'absolute', top: 0, left: 0}}>
 					<DisplayGridRails {...barChartLayout.gridLayout} stroke="#555" />
 				</div>
-			) : null}
+			) : null} */}
 
 			{dataTo.map((it, i) => {
 				const barArea = barChartLayout.getBarArea(it.id);
@@ -271,7 +272,7 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 				// TODO better colors
 				return (
 					<>
-						{!hideLabels ? (
+						{hideLabels ? null : (
 							<HtmlArea area={labelArea}>
 								<div
 									style={{
@@ -294,7 +295,7 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 									</LabelComponent>
 								</div>
 							</HtmlArea>
-						) : null}
+						)}
 						<HtmlArea area={barArea}>
 							<svg width={barArea.width} height={barArea.height}>
 								{it.value > 0 && barArea.width ? (

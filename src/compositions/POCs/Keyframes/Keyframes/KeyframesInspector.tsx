@@ -17,9 +17,9 @@ export const KeyFramesSequence: React.FC<{
 	const keyFrameFrom = getKeyFrame(keyframes, from).frame; // e.g.
 	const keyFrameTo = getKeyFrame(keyframes, to).frame;
 
-	const durationInFrames = !exclusive
-		? keyFrameTo - keyFrameFrom + 1
-		: keyFrameTo - keyFrameFrom;
+	const durationInFrames = exclusive
+		? keyFrameTo - keyFrameFrom
+		: keyFrameTo - keyFrameFrom + 1;
 
 	return (
 		<Sequence
@@ -108,7 +108,7 @@ export const KeyFramesInspector: React.FC<{
 						stroke={AXIS_LINE_COLOR}
 						strokeWidth={2}
 					/>
-					{ticks.map((tick, i) => {
+					{ticks.map((tick) => {
 						return (
 							<g>
 								<line
@@ -151,7 +151,7 @@ export const KeyFramesInspector: React.FC<{
 						stroke={AXIS_LINE_COLOR}
 						strokeWidth={2}
 					/>
-					{secondsTicks.map((tick, i) => {
+					{secondsTicks.map((tick) => {
 						return (
 							<g>
 								<line
@@ -235,7 +235,7 @@ export const KeyFramesInspector: React.FC<{
 						</text>
 					</g>
 
-					{/* The seconds axis current frame flag*/}
+					{/* The seconds axis current frame flag */}
 					<g
 						transform={`translate(${0}, ${
 							keyFrames.length * HEIGHT_PER_FRAME + 10 + 80
@@ -362,7 +362,7 @@ export const KeyFramesInspector: React.FC<{
 							/>
 
 							<text
-								fill={'#666'}
+								fill="#666"
 								fontSize={baseFontSize}
 								y={HEIGHT_PER_FRAME / 2}
 								x={frameToPixel(keyFrame.frame) + 15}

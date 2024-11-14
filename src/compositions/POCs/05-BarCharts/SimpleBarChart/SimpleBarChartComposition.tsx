@@ -58,8 +58,8 @@ export const SimpleBarChartComposition: React.FC<
 							>
 								<PageHeader>
 									<TitleWithSubtitle
-										title={'AfD: Vormarsch in Brandenburg'}
-										subtitle={'Wahlergebnisse Brandenburg 2024'}
+										title="AfD: Vormarsch in Brandenburg"
+										subtitle="Wahlergebnisse Brandenburg 2024"
 										theme={theme}
 									/>
 								</PageHeader>

@@ -7,10 +7,9 @@ import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeIn
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
 import {LorenzoBertoliniLogo2} from '../../../../acetti-components/LorenzoBertoliniLogo2';
 import {
-	getThemeFromEnum,
+	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useFontFamiliesLoader} from '../../../../acetti-typography/useFontFamiliesLoader';
 import {SlideTitle} from '../../02-TypographicLayouts/SlideTitle';
 
 export const simpleKPICompositionSchema = z.object({
@@ -24,11 +23,7 @@ export const simpleKPICompositionSchema = z.object({
 export const SimpleKPIComposition: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
 > = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseline}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
-
-	// load fonts
-	// ********************************************************
-	useFontFamiliesLoader(theme);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const {fps, durationInFrames} = useVideoConfig();
 
@@ -44,7 +39,7 @@ export const SimpleKPIComposition: React.FC<
 			<SlideTitle theme={theme}>Simple KPI's</SlideTitle>
 			<Sequence
 				layout="none"
-				durationInFrames={durationInFrames - fps * 1}
+				durationInFrames={durationInFrames - fps}
 				from={Math.floor(fps * 0.5)}
 			>
 				<div
@@ -89,7 +84,7 @@ export const SimpleKPIComposition: React.FC<
 export const SimpleKPI: React.FC<
 	z.infer<typeof simpleKPICompositionSchema>
 > = ({themeEnum, kpiValue, kpiValueFormatString, kpiLabel, baseline}) => {
-	const theme = getThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const formattedKpiValue = numeral(kpiValue).format(kpiValueFormatString);
 

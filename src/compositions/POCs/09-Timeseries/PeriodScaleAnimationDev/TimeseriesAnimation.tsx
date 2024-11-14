@@ -25,7 +25,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
-	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI' as any);
+	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI');
 
 	const CHART_PAGE_MARGIN = 60;
 	const CHART_PAGE_WIDTH = width;
@@ -151,9 +151,9 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 							<>
 								<div style={{position: 'absolute'}}>
 									<DisplayGridLayout
-										stroke={'rgba(255,0,255,0.4)'}
+										// hide
+										stroke="rgba(255,0,255,0.4)"
 										fill="transparent"
-										hide={true}
 										areas={chartLayout.areas}
 										width={width}
 										height={height}

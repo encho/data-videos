@@ -1,5 +1,3 @@
-import {useVideoConfig} from 'remotion';
-
 import {DisplayGridRails, HtmlArea} from '../../acetti-layout';
 import {ThemeType} from '../../acetti-themes/themeTypes';
 import {useBarChartLayout} from './useBarChartLayout';
@@ -32,9 +30,6 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 	labelWidth,
 	valueLabelWidth,
 }) => {
-	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
-	const {fps, durationInFrames} = useVideoConfig();
-
 	const barChartLayout = useBarChartLayout({
 		baseline,
 		theme,
@@ -60,7 +55,7 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 				</div>
 			) : null}
 
-			<HtmlArea area={zeroLineArea} fill="cyan"></HtmlArea>
+			<HtmlArea area={zeroLineArea} fill="cyan" />
 
 			{data.map((it) => {
 				const barArea = barChartLayout.getBarArea(it.id);
@@ -70,9 +65,9 @@ export const SimpleBarChartLayout: React.FC<TSimpleBarChartLayoutProps> = ({
 				// TODO better colors
 				return (
 					<>
-						<HtmlArea area={labelArea} fill="yellow"></HtmlArea>
-						<HtmlArea area={barArea} fill="magenta"></HtmlArea>
-						<HtmlArea area={valueLabelArea} fill="green"></HtmlArea>
+						<HtmlArea area={labelArea} fill="yellow" />
+						<HtmlArea area={barArea} fill="magenta" />
+						<HtmlArea area={valueLabelArea} fill="green" />
 					</>
 				);
 			})}
@@ -92,9 +87,6 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 	valueLabelWidth,
 	valueDomain,
 }) => {
-	// @ts-ignore: have to have this otherwise we have "a bug in react" error message
-	const {fps, durationInFrames} = useVideoConfig();
-
 	const barChartLayout = useAnimatedBarChartLayout({
 		baseline,
 		theme,
@@ -121,7 +113,7 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 				</div>
 			) : null}
 
-			<HtmlArea area={zeroLineArea} fill="#fff" opacity={0.2}></HtmlArea>
+			<HtmlArea area={zeroLineArea} fill="#fff" opacity={0.2} />
 
 			{data.map((it) => {
 				const barArea = barChartLayout.getBarArea(it.id);
@@ -131,13 +123,9 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 				// TODO better colors
 				return (
 					<>
-						<HtmlArea area={labelArea} fill="#fff" opacity={0.5}></HtmlArea>
-						<HtmlArea area={barArea} fill="#fff" opacity={0.5}></HtmlArea>
-						<HtmlArea
-							area={valueLabelArea}
-							fill="#fff"
-							opacity={0.5}
-						></HtmlArea>
+						<HtmlArea area={labelArea} fill="#fff" opacity={0.5} />
+						<HtmlArea area={barArea} fill="#fff" opacity={0.5} />
+						<HtmlArea area={valueLabelArea} fill="#fff" opacity={0.5} />
 					</>
 				);
 			})}
@@ -150,7 +138,7 @@ export const SimpleAnimatedBarChartLayout: React.FC<
 				}}
 				fill="#fff"
 				opacity={0.5}
-			></HtmlArea>
+			/>
 		</div>
 	);
 };

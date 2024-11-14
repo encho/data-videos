@@ -84,9 +84,8 @@ export function useYScaleAnimation({
 	const animatedVisibleDomainIndexEnd =
 		periodScaleAnimation.periodsScale.visibleDomainIndices[1];
 
-	const domainIndicesFrom =
-		periodScaleAnimation.currentSliceInfo.domainIndicesFrom;
-	const domainIndicesTo = periodScaleAnimation.currentSliceInfo.domainIndicesTo;
+	const {domainIndicesFrom, domainIndicesTo} =
+		periodScaleAnimation.currentSliceInfo;
 
 	const yDomainFrom = getYDomain(domainIndicesFrom);
 	const yDomainTo = getYDomain(domainIndicesTo);

@@ -334,7 +334,7 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 		(it) => it.value
 	) as [number, number];
 
-	let maybeValues = [];
+	const maybeValues = [];
 	if (leftInterpolatedValue) {
 		maybeValues.push(leftInterpolatedValue);
 	}

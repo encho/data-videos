@@ -1,19 +1,19 @@
 import {Easing, interpolate} from 'remotion';
 
-import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
-import {TYScaleAnimationContext} from './useYScaleAnimation';
 import {
 	getXYRightClamped,
 	getXYLeftClamped,
 } from '../../../../acetti-ts-periodsScale/getXY';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {useGlobalVideoContext} from '../../../../acetti-components/GlobalVideoContext';
+import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
+import {TYScaleAnimationContext} from './useYScaleAnimation';
 
 export const Animated_ValueDot: React.FC<{
 	area: TGridLayoutArea;
+	dotColor: string;
 	periodScaleAnimation: TPeriodScaleAnimationContext;
 	yScaleAnimation: TYScaleAnimationContext;
-	dotColor: string;
 	timeSeries: {value: number; date: Date}[];
 	radius?: number;
 	showLeftDot?: boolean;
@@ -26,8 +26,8 @@ export const Animated_ValueDot: React.FC<{
 	radius = 20,
 	showLeftDot = false,
 }) => {
-	const periodsScale = periodScaleAnimation.periodsScale;
-	const yScale = yScaleAnimation.yScale;
+	const {periodsScale} = periodScaleAnimation;
+	const {yScale} = yScaleAnimation;
 
 	const {x: xLeft, y: yLeft} = getXYLeftClamped({
 		periodsScale,

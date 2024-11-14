@@ -84,8 +84,8 @@ export const BundesligaTabelleComposition: React.FC<
 					fontSizeInBaselines={4}
 					lineHeightInBaselines={4.25}
 					numberOfWordRows={17}
-					word={'BUNDESLIGA.'}
-					video={'FOOTBALL_FIELD'}
+					word="BUNDESLIGA."
+					video="FOOTBALL_FIELD"
 				/>
 			</Sequence>
 

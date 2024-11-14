@@ -1,5 +1,4 @@
 import {z} from 'zod';
-import {useVideoConfig} from 'remotion';
 
 import {theme as lorenzobertoliniTheme} from './lorenzobertolini';
 import {theme as nerdyTheme} from './nerdy';
@@ -16,9 +15,9 @@ export type ThemeEnum = z.infer<typeof zThemeEnum>;
 
 export const getThemeFromEnum = (themeEnum: ThemeEnum) => {
 	const theme =
-		themeEnum === ('NERDY' as any as ThemeEnum)
+		themeEnum === 'NERDY'
 			? nerdyTheme
-			: themeEnum === ('LORENZOBERTOLINI' as any as ThemeEnum)
+			: themeEnum === 'LORENZOBERTOLINI'
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 
@@ -27,9 +26,9 @@ export const getThemeFromEnum = (themeEnum: ThemeEnum) => {
 
 export const useThemeFromEnum = (themeEnum: ThemeEnum) => {
 	const createTheme =
-		themeEnum === ('NERDY' as any as ThemeEnum)
+		themeEnum === 'NERDY'
 			? nerdyTheme
-			: themeEnum === ('LORENZOBERTOLINI' as any as ThemeEnum)
+			: themeEnum === 'LORENZOBERTOLINI'
 			? lorenzobertoliniTheme
 			: lorenzobertolinibrightTheme;
 

@@ -104,10 +104,10 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 						keyframes={keyframes}
 					>
 						<PeriodLabelTransition
+							animateEnter
+							animateExit={false}
 							toPeriod={dataIds[0]}
 							theme={theme}
-							animateEnter={true}
-							animateExit={false}
 						/>
 
 						<SimpleBarChart
@@ -148,7 +148,7 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 								>
 									<PeriodLabelTransition
 										toPeriod={toId}
-										fromPeriod={fromId}
+										// fromPeriod={fromId}
 										theme={theme}
 										animateEnter={false}
 										animateExit={false}
@@ -177,10 +177,10 @@ export const BarChartRace: React.FC<TBarChartRaceProps> = ({
 						keyframes={keyframes}
 					>
 						<PeriodLabelTransition
+							animateExit
+							animateEnter={false}
 							toPeriod={dataIds[dataIds.length - 1]}
 							theme={theme}
-							animateEnter={false}
-							animateExit={true}
 						/>
 
 						<SimpleBarChart
@@ -215,7 +215,7 @@ function getPairs(dataIds: string[]): [string, string][] {
 
 type TPeriodLabelTransitionProps = {
 	theme: ThemeType;
-	fromPeriod?: string; // because for the first simple bar chart this can be empty
+	// fromPeriod?: string; // because for the first simple bar chart this can be empty
 	toPeriod: string;
 	animateEnter: boolean;
 	animateExit: boolean;
@@ -224,7 +224,7 @@ type TPeriodLabelTransitionProps = {
 // TODO perhaps pass in whole data items that are transitioned...
 export const DefaultPeriodLabelTransition: React.FC<
 	TPeriodLabelTransitionProps
-> = ({theme, fromPeriod, toPeriod, animateEnter, animateExit}) => {
+> = ({theme, toPeriod, animateEnter, animateExit}) => {
 	const page = usePage();
 	return (
 		<div

@@ -41,7 +41,7 @@ export const YAxis_Transition: React.FC<{
 	const TICK_TEXT_FONT_SIZE = 24;
 	const TICK_TEXT_FONT_WEIGHT = 500;
 
-	const relativeFrame = currentSliceInfo.relativeFrame;
+	const {relativeFrame} = currentSliceInfo;
 	const {fps} = useVideoConfig();
 
 	const FADE_IN_OUT_DURATION = Math.min(
@@ -75,7 +75,7 @@ export const YAxis_Transition: React.FC<{
 		// 	}
 		// );
 
-		const domainValue = startTick.domainValue;
+		const {domainValue} = startTick;
 		const value = yScale(domainValue);
 
 		return {id: tickId, value};
@@ -94,7 +94,7 @@ export const YAxis_Transition: React.FC<{
 			}
 		);
 
-		const domainValue = endTick.domainValue;
+		const {domainValue} = endTick;
 		const value = yScale(domainValue);
 
 		return {
@@ -117,7 +117,7 @@ export const YAxis_Transition: React.FC<{
 			}
 		);
 
-		const domainValue = startTick.domainValue;
+		const {domainValue} = startTick;
 		const value = yScale(domainValue);
 
 		return {

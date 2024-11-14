@@ -54,11 +54,13 @@ export type TKeyFramesGroup = {
 export function getSign(value: number): number {
 	if (Object.is(value, -0)) {
 		return -1; // Return -1 for -0
-	} else if (Object.is(value, 0)) {
-		return 1; // Return +1 for +0
-	} else {
-		return Math.sign(value); // Use Math.sign for other numbers
 	}
+
+	if (Object.is(value, 0)) {
+		return 1; // Return +1 for +0
+	}
+
+	return Math.sign(value); // Use Math.sign for other numbers
 }
 // Examples
 // console.log(getSign(-0));   // Output: -1

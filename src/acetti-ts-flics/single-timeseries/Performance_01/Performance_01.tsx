@@ -49,9 +49,9 @@ export const Performance_01: React.FC<TAnimatedLineChart2Props> = ({
 		<div style={{position: 'relative'}}>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
-					stroke={'magenta'}
+					hide
+					stroke="magenta"
 					fill="transparent"
-					hide={true}
 					areas={chartLayout.areas}
 					width={width}
 					height={height}
@@ -162,8 +162,8 @@ export const LineChartAnimationContextDebugger: React.FC<
 > = ({
 	currentSliceInfo,
 	currentTransitionInfo,
-	periodsScale,
-	yScale,
+	// periodsScale,
+	// yScale,
 	theme,
 }) => {
 	return (

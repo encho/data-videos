@@ -69,6 +69,7 @@ export const LineChartAnimationContainer: React.FC<{
 	timeSeries: TimeSeries;
 	viewSpecs: TViewSpec[];
 	transitionSpecs: TTransitionSpec[];
+	// eslint-disable-next-line
 	children: (x: TChildrenFuncArgs) => React.ReactElement<any, any> | null;
 	yDomain?: [number, number];
 }> = ({
@@ -371,7 +372,7 @@ export const LineChartAnimationContainer: React.FC<{
 	}
 
 	return (
-		<Sequence from={0} durationInFrames={totalDuration} layout="none">
+		<Sequence durationInFrames={totalDuration} layout="none">
 			{children({
 				periodsScale: currentPeriodsScale,
 				yScale,

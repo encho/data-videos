@@ -8,7 +8,6 @@ import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
-import {Performance_01} from '../acetti-ts-flics/single-timeseries/Performance_01/Performance_01';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 

@@ -103,12 +103,12 @@ export const PerformanceCompare_01_Example: React.FC<
 				<Position position={{left: 50, top: 50}}>
 					<TitleAndSubtitle
 						// title={apiResult.tickerMetadata.name}
-						title={'Title'}
+						title="Title"
 						titleColor={theme.typography.title.color}
 						titleFontFamily={theme.typography.title.fontFamily}
 						titleFontSize={60}
 						// subTitle={apiResult.timePeriod}
-						subTitle={'Subtitle'}
+						subTitle="Subtitle"
 						subTitleColor={theme.typography.subTitle.color}
 						subTitleFontFamily={theme.typography.subTitle.fontFamily}
 						subTitleFontSize={40}
