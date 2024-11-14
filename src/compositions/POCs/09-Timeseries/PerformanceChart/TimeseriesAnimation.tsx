@@ -1,4 +1,4 @@
-import {useVideoConfig, Easing} from 'remotion';
+import {useVideoConfig, Easing, Sequence} from 'remotion';
 
 import {usePeriodScaleAnimation} from '../utils/usePeriodScaleAnimation';
 import {useYScaleAnimation} from '../utils/useYScaleAnimation';
@@ -10,6 +10,8 @@ import {Page} from '../../../../acetti-components/Page';
 import {PerformanceChart} from './PerformanceChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
+import {Position} from '../../../../acetti-ts-base/Position';
+import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -33,6 +35,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.75);
 	const td_freeze = durationInFrames - td_buildup;
+
+	const percentageChange_enter_start_keyframe = td_buildup;
 
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
@@ -116,6 +120,25 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 											yAxis: chartLayout.areas.yAxis,
 										}}
 									/>
+									<Sequence from={percentageChange_enter_start_keyframe}>
+										<Position
+											position={{
+												left: chartLayout.areas.plot.x1,
+												top: chartLayout.areas.plot.y1,
+											}}
+										>
+											{/* TODO port to Animated_Line */}
+											<Animated_PercentageChangeArea
+												// periodsScale={periodScaleAnimation.periodsScale}
+												yScale={yScaleAnimationUpper.yScale}
+												//
+												area={chartLayout.areas.plot}
+												firstValue={timeSeries[0].value}
+												lastValue={timeSeries[timeSeries.length - 1].value}
+											/>
+										</Position>
+									</Sequence>
+
 									<div style={{position: 'absolute', top: 0, left: 0}}>
 										<DisplayGridLayout
 											stroke={'rgba(255,0,255,0.8)'}

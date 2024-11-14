@@ -7,6 +7,7 @@ import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from '../utils/Animated_XAxis';
 import {Animated_YAxis} from '../utils/Animated_YAxis';
 import {Animated_ValueDot} from '../utils/Animated_ValueDot';
+import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 import {TYScaleAnimationContext} from '../utils/useYScaleAnimation';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 

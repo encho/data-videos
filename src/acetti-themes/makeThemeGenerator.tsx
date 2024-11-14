@@ -330,7 +330,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 					lineColor: '#f05122',
 					textColor: '#f05122',
 					gradientColor: '#f05122',
-					lineStrokeWidth: 0.8,
+					lineStrokeWidth: 1,
 				},
 				HighlightPeriodsArea: {
 					backgroundColor: 'magenta',
