@@ -29,7 +29,7 @@ export const StartingFiveSlideComposition: React.FC<
 	word,
 	video,
 }) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	return (

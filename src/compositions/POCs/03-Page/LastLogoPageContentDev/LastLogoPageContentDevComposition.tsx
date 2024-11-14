@@ -21,7 +21,7 @@ export const lastLogoPageContentDevCompositionSchema = z.object({
 export const LastLogoPageContentDevComposition: React.FC<
 	z.infer<typeof lastLogoPageContentDevCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	return (

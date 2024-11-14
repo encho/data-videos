@@ -25,7 +25,7 @@ export const SimpleBarChartComposition: React.FC<
 	z.infer<typeof simpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const {fps, width, height} = useVideoConfig();
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {ref, dimensions} = useElementDimensions();
 
 	const barChartData = wahlergebnis2024.map((it) => ({

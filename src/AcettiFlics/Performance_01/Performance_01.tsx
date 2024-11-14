@@ -39,7 +39,7 @@ export const Performance_01_Example: React.FC<
 	const [apiResult, setApiResult] =
 		useState<null | TNerdyFinancePriceChartDataResult>(null);
 
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	useEffect(() => {
 		const handle = delayRender('FETCH_API_DATA');

@@ -28,7 +28,7 @@ const showGrid = true;
 export const SimplePageComposition: React.FC<
 	z.infer<typeof simplePageCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {ref, dimensions} = useElementDimensions();
 	const {width, height} = useVideoConfig();
 

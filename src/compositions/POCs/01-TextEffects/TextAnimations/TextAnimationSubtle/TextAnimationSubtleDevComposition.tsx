@@ -24,7 +24,7 @@ export const textAnimationSubtleDevCompositionSchema = z.object({
 export const TextAnimationSubtleDevComposition: React.FC<
 	z.infer<typeof textAnimationSubtleDevCompositionSchema>
 > = ({themeEnum, text, innerDelayInSeconds, translateYInPageBaselines}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	return (

@@ -24,7 +24,7 @@ export const BarChartRace_Simple_Composition: React.FC<
 	z.infer<typeof barChartRaceSimpleCompositionSchema>
 > = ({themeEnum}) => {
 	const {width, height} = useVideoConfig();
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	return (
 		<PageContext

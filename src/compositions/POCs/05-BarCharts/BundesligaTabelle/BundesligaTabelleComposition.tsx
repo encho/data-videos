@@ -50,7 +50,7 @@ export const BundesligaTabelleComposition: React.FC<
 	z.infer<typeof bundesligaTabelleCompositionSchema>
 > = ({themeEnum, data, title, subtitle, dataSource}) => {
 	const {fps, durationInFrames, width, height} = useVideoConfig();
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const startingFiveSlideDurationInFrames = Math.floor(fps * 3.5);
 	const whiteSpaceSlideDurationInFrames = Math.floor(fps * 0);

@@ -15,11 +15,10 @@ export const negativeSimpleBarChartCompositionSchema = z.object({
 export const NegativeSimpleBarChartComposition: React.FC<
 	z.infer<typeof negativeSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
-	const positiveColor = theme.positiveNegativeColors.positiveColor;
-	const negativeColor = theme.positiveNegativeColors.negativeColor;
+	const {positiveColor, negativeColor} = theme.positiveNegativeColors;
 
 	const barChartData = wahlergebnis2024_percChange.map((it) => ({
 		label: it.parteiName,

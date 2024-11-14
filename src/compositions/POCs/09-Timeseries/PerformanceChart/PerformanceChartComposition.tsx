@@ -24,7 +24,7 @@ export const performanceChartCompositionSchema = z.object({
 export const PerformanceChartComposition: React.FC<
 	z.infer<typeof performanceChartCompositionSchema>
 > = ({theme: themeEnum, chartTheme: chartThemeEnum, apiPriceData}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {fps, durationInFrames, width, height} = useVideoConfig();
 
 	// const chartTheme = useThemeFromEnum(chartThemeEnum as any);

@@ -16,7 +16,7 @@ export const composedSimpleBarChartCompositionSchema = z.object({
 export const ComposedSimpleBarChartComposition: React.FC<
 	z.infer<typeof composedSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	const positiveColor = theme.positiveNegativeColors.positiveColor;

@@ -48,7 +48,7 @@ export const TwoChangeBarsWithImageComposition: React.FC<
 }) => {
 	const {width, height, durationInFrames} = useVideoConfig();
 
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const baseline = 34;
 

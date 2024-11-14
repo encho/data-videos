@@ -22,7 +22,7 @@ export const titleWithSubtitleDevCompositionSchema = z.object({
 export const TitleWithSubtitleDevComposition: React.FC<
 	z.infer<typeof titleWithSubtitleDevCompositionSchema>
 > = ({themeEnum, title, subtitle}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	const INNER_DELAY_SECONDS = 1;

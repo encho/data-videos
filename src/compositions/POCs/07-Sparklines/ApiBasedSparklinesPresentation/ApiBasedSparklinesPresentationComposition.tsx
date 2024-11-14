@@ -92,7 +92,7 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 	lastSlideDurationInSeconds,
 	barChartData,
 }) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	return (

@@ -12,7 +12,7 @@ export const zThemeEnum = z.enum([
 	'LORENZOBERTOLINI_BRIGHT',
 ]);
 
-export type ThemeEnum = typeof zThemeEnum;
+export type ThemeEnum = z.infer<typeof zThemeEnum>;
 
 export const getThemeFromEnum = (themeEnum: ThemeEnum) => {
 	const theme =

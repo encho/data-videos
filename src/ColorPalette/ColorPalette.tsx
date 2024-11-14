@@ -37,7 +37,7 @@ export const ColorPalette: React.FC<z.infer<typeof colorPaletteSchema>> = ({
 }) => {
 	const {width, durationInFrames} = useVideoConfig();
 
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 
 	const titleSlideDuration = 200;
 

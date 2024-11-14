@@ -31,7 +31,7 @@ export const BarChartRace_CustomLabel_Composition: React.FC<
 	z.infer<typeof barChartRaceCustomLabelCompositionSchema>
 > = ({themeEnum}) => {
 	const {width, height} = useVideoConfig();
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	return (
 		<PageContext
 			margin={50}

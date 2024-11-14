@@ -27,7 +27,7 @@ export const simpleBarChartTransitionCompositionSchema = z.object({
 export const SimpleBarChartTransitionComposition: React.FC<
 	z.infer<typeof simpleBarChartTransitionCompositionSchema>
 > = ({themeEnum}) => {
-	const theme = useThemeFromEnum(themeEnum as any);
+	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
 	// TODO pass data sets from here to the Flic
