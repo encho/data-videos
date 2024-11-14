@@ -66,8 +66,8 @@ export const ChangeBar: React.FC<{
 	isTrimmed,
 	backgroundColor,
 	barColor,
-	labelColor,
-	valueTextColor,
+	// labelColor,
+	// valueTextColor,
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
@@ -137,7 +137,7 @@ export const ChangeBar: React.FC<{
 							isTrimmed={isTrimmed}
 							backgroundColor={backgroundColor}
 							barColor={barColor}
-							valueTextColor={valueTextColor}
+							// valueTextColor={valueTextColor}
 						/>
 						<g />
 					</Area>
@@ -182,7 +182,7 @@ const AnimatedSvgBar = ({
 	isTrimmed,
 	backgroundColor,
 	barColor,
-	valueTextColor,
+	// valueTextColor,
 	theme,
 	baseline,
 }: {
@@ -199,13 +199,13 @@ const AnimatedSvgBar = ({
 	isTrimmed: boolean;
 	backgroundColor: string;
 	barColor: string;
-	valueTextColor: string;
+	// valueTextColor: string;
 }) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
 	const interpolateEnterOpacity = (f: number) => {
-		const barOpacity = interpolate(frame, [0, enterDurationInFrames], [0, 1], {
+		const barOpacity = interpolate(f, [0, enterDurationInFrames], [0, 1], {
 			easing: Easing.cubic,
 			extrapolateLeft: 'clamp',
 			extrapolateRight: 'clamp',
@@ -216,7 +216,7 @@ const AnimatedSvgBar = ({
 
 	const interpolateExitOpacity = (f: number) => {
 		const barOpacity = interpolate(
-			frame,
+			f,
 			[durationInFrames - exitDurationInFrames, durationInFrames],
 			[1, 0.85],
 			{
@@ -237,7 +237,7 @@ const AnimatedSvgBar = ({
 
 	const interpolateEnterBarHeight = (f: number) => {
 		const barHeight = interpolate(
-			frame,
+			f,
 			[0, enterDurationInFrames],
 			[0, fullBarHeight],
 			{
@@ -254,7 +254,7 @@ const AnimatedSvgBar = ({
 	// f is never read
 	const interpolateExitBarHeight = (f: number) => {
 		const barHeight = interpolate(
-			frame,
+			f,
 			[durationInFrames - exitDurationInFrames, durationInFrames],
 			[fullBarHeight, 0],
 			{
