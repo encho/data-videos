@@ -9,7 +9,7 @@ import {Animated_YAxis} from '../utils/Animated_YAxis';
 import {TYScaleAnimationContext} from '../utils/useYScaleAnimation';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
-export const LineChart_YAxisShowcase: React.FC<{
+export const PerformanceChart: React.FC<{
 	periodScaleAnimation: TPeriodScaleAnimationContext;
 	yScaleAnimation: TYScaleAnimationContext;
 	timeSeries: TimeSeries;
@@ -28,13 +28,6 @@ export const LineChart_YAxisShowcase: React.FC<{
 	periodScaleAnimation,
 	yScaleAnimation,
 }) => {
-	const axisDebugColors = {
-		debugEnterColor: 'lime',
-		debugUpdateColor: 'blue',
-		debugExitColor: 'red',
-	};
-	// const axisDebugColors = {};
-
 	useEffect(() => {
 		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
 		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
@@ -44,21 +37,8 @@ export const LineChart_YAxisShowcase: React.FC<{
 		<div
 			style={{
 				position: 'relative',
-				// width: layoutAreas.chart.width,
-				// height: layoutAreas.chart.height,
 			}}
 		>
-			{/* <div style={{position: 'absolute'}}>
-				<DisplayGridLayout
-					stroke={'rgba(255,0,255,0.5)'}
-					fill="transparent"
-					// hide={true}
-					areas={layoutAreas}
-					width={layoutAreas.chart.width}
-					height={layoutAreas.chart.height}
-				/>
-			</div> */}
-
 			<Position
 				position={{left: layoutAreas.plot.x1, top: layoutAreas.plot.y1}}
 			>
@@ -102,7 +82,6 @@ export const LineChart_YAxisShowcase: React.FC<{
 					periodScaleAnimation={periodScaleAnimation}
 					yScaleAnimation={yScaleAnimation}
 					area={layoutAreas.yAxis}
-					{...axisDebugColors}
 				/>
 			</Position>
 			<Position
@@ -111,7 +90,6 @@ export const LineChart_YAxisShowcase: React.FC<{
 				<Animated_XAxis
 					periodsScaleAnimation={periodScaleAnimation}
 					area={layoutAreas.xAxis}
-					{...axisDebugColors}
 				/>
 			</Position>
 		</div>

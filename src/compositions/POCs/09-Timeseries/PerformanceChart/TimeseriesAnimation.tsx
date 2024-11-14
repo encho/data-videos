@@ -8,9 +8,10 @@ import {useChartLayout} from './useChartLayout';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
-import {LineChart_YAxisShowcase} from './LineChart_YAxisShowcase';
+import {PerformanceChart} from './PerformanceChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
+import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -23,13 +24,15 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	width,
 	height,
 	timeSeries,
-	theme,
+	// theme,
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
-	const CHART_PAGE_MARGIN = 0;
+	const theme = useThemeFromEnum('LORENZOBERTOLINI' as any);
+
+	const CHART_PAGE_MARGIN = 40;
 	const CHART_PAGE_WIDTH = width;
-	const CHART_PAGE_HEIGHT = height * 0.4;
+	const CHART_PAGE_HEIGHT = height;
 
 	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.2);
@@ -135,7 +138,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					nrBaselines={40}
 					theme={theme}
 				>
-					<Page show>
+					<Page>
 						{() => {
 							const {contentWidth, contentHeight} = usePage();
 
@@ -182,14 +185,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										<DisplayGridLayout
 											stroke={'rgba(255,0,255,0.5)'}
 											fill="transparent"
-											// hide={true}
+											hide={true}
 											areas={chartLayout.areas}
 											width={contentWidth}
 											height={contentHeight}
 										/>
 									</div>
 
-									<LineChart_YAxisShowcase
+									<PerformanceChart
 										periodScaleAnimation={periodScaleAnimation}
 										yScaleAnimation={yScaleAnimationUpper}
 										timeSeries={timeSeries}
@@ -199,18 +202,6 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 											xAxis: chartLayout.areas.xAxis,
 											plot: chartLayout.areas.plot,
 											yAxis: chartLayout.areas.yAxis,
-										}}
-									/>
-									<LineChart_YAxisShowcase
-										periodScaleAnimation={periodScaleAnimation}
-										yScaleAnimation={yScaleAnimationLower}
-										timeSeries={timeSeries}
-										timeSeries2={timeSeries2}
-										timeSeries3={timeSeries2}
-										layoutAreas={{
-											xAxis: chartLayout.areas.xAxis2,
-											plot: chartLayout.areas.plot2,
-											yAxis: chartLayout.areas.yAxis2,
 										}}
 									/>
 								</div>

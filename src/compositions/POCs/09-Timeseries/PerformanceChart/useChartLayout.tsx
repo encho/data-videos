@@ -22,11 +22,6 @@ export function useChartLayout({
 		{type: 'fr', value: 1, name: 'plot'},
 		{type: 'pixel', value: 30, name: 'space'},
 		{type: 'pixel', value: xAxisHeight, name: 'xAxis'},
-
-		{type: 'pixel', value: 30, name: 'space'},
-		{type: 'fr', value: 0.33, name: 'plot2'},
-		{type: 'pixel', value: 30, name: 'space'},
-		{type: 'pixel', value: xAxisHeight, name: 'xAxis2'},
 	];
 
 	const chartColsRailSpec: TGridRailSpec = [
@@ -48,12 +43,6 @@ export function useChartLayout({
 				{name: 'plot'},
 				{name: 'yAxis'},
 			] as TGridLayoutAreaSpec,
-			yAxis2: [
-				{name: 'plot2'},
-				{name: 'yAxis'},
-				{name: 'plot2'},
-				{name: 'yAxis'},
-			] as TGridLayoutAreaSpec,
 			plot: [
 				{name: 'plot'},
 				{name: 'plot'},
@@ -64,18 +53,6 @@ export function useChartLayout({
 				{name: 'xAxis'},
 				{name: 'plot'},
 				{name: 'xAxis'},
-				{name: 'plot'},
-			] as TGridLayoutAreaSpec,
-			plot2: [
-				{name: 'plot2'},
-				{name: 'plot'},
-				{name: 'plot2'},
-				{name: 'plot'},
-			] as TGridLayoutAreaSpec,
-			xAxis2: [
-				{name: 'xAxis2'},
-				{name: 'plot'},
-				{name: 'xAxis2'},
 				{name: 'plot'},
 			] as TGridLayoutAreaSpec,
 		},

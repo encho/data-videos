@@ -246,9 +246,9 @@ import {
 } from './compositions/POCs/09-Timeseries/YScaleAnimationDev/YScaleAnimationDevComposition';
 
 import {
-	PerformanceCompareComposition,
-	performanceCompareCompositionSchema,
-} from './compositions/POCs/09-Timeseries/PerformanceCompare/PerformanceCompareComposition';
+	PerformanceChartComposition,
+	performanceChartCompositionSchema,
+} from './compositions/POCs/09-Timeseries/PerformanceChart/PerformanceChartComposition';
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
@@ -1148,15 +1148,12 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="PerformanceCompare"
-						component={PerformanceCompareComposition}
+						id="PerformanceChart"
+						component={PerformanceChartComposition}
 						durationInFrames={30 * 30}
 						fps={30}
-						// {...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						width={videoSizes.widescreen_16x9.width * 1.5}
-						height={videoSizes.widescreen_16x9.height * 3}
-						schema={performanceCompareCompositionSchema}
+						{...videoSizes.square}
+						schema={performanceChartCompositionSchema}
 						defaultProps={{
 							ticker: 'SPX_INDEX' as const,
 							timePeriod: '2Y' as const,
