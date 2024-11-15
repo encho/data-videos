@@ -13,21 +13,6 @@ import {
 	bundesligaTop10BarChartSchema,
 } from './BundesligaTop10BarChart/BundesligaTop10BarChart';
 
-import {
-	Performance_01_Example,
-	performance_01_example_schema,
-} from './AcettiFlics/Performance_01/Performance_01';
-
-import {
-	highlightPeriods_01_example_schema,
-	HighlightPeriods_01_Example,
-} from './AcettiFlics/HighlightPeriods_01/HighlightPeriods_01';
-
-import {
-	performanceCompare_01_example_schema,
-	PerformanceCompare_01_Example,
-} from './AcettiFlics/PerformanceCompare_01/PerformanceCompare_01';
-
 import {colorPaletteSchema, ColorPalette} from './ColorPalette/ColorPalette';
 
 import {
@@ -1275,68 +1260,6 @@ export const RemotionRoot: React.FC = () => {
 						defaultProps={{themeEnum: 'NERDY' as const}}
 					/>
 				</Folder>
-			</Folder>
-			<Folder name="Timeseries">
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="acetti-PerformanceCompare-01"
-					component={PerformanceCompare_01_Example}
-					// durationInFrames={90 * 3.5}
-					// durationInFrames={90 * 30}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...videoSizes.square}
-					schema={performanceCompare_01_example_schema}
-					defaultProps={{
-						ticker: 'BTC-USD' as const,
-						ticker2: 'XAU-USD' as const,
-						timePeriod: '2Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
-						themeEnum: 'LORENZOBERTOLINI' as const,
-					}}
-				/>
-
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="acetti-HighlightPeriods-01"
-					component={HighlightPeriods_01_Example}
-					// durationInFrames={90 * 3.5}
-					// durationInFrames={90 * 30}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...videoSizes.square}
-					schema={highlightPeriods_01_example_schema}
-					defaultProps={{
-						ticker: 'TESLA' as const,
-						timePeriod: '2Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
-						themeEnum: 'LORENZOBERTOLINI' as const,
-					}}
-				/>
-
-				<Composition
-					// You can take the "id" to render a video:
-					// npx remotion render src/index.ts <id> out/video.mp4
-					id="acetti-Performance-01"
-					component={Performance_01_Example}
-					// durationInFrames={90 * 3.5}
-					// durationInFrames={90 * 30}
-					durationInFrames={90 * 15}
-					// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
-					fps={90}
-					{...videoSizes.square}
-					schema={performance_01_example_schema}
-					defaultProps={{
-						ticker: 'XAU-USD' as const,
-						timePeriod: '2Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
-						themeEnum: 'LORENZOBERTOLINI' as const,
-					}}
-				/>
 			</Folder>
 
 			<Folder name="Colors">

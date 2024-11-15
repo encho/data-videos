@@ -2,6 +2,7 @@ import {useVideoConfig, Sequence} from 'remotion';
 // import {format} from 'date-fns';
 // import {enGB} from 'date-fns/locale';
 
+import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {
@@ -87,13 +88,19 @@ export const PerformanceCompareChartPage: React.FC<{
 					>
 						{dimensions ? (
 							<Sequence from={Math.floor(fps * 1.75)} layout="none">
-								<TimeseriesAnimation
+								<ObliquePlatte
 									width={dimensions.width}
 									height={dimensions.height}
-									timeSeries1={timeSeries1}
-									timeSeries2={timeSeries2}
-									theme={chartTheme}
-								/>
+									theme={chartTheme.platte}
+								>
+									<TimeseriesAnimation
+										width={dimensions.width}
+										height={dimensions.height}
+										timeSeries1={timeSeries1}
+										timeSeries2={timeSeries2}
+										theme={chartTheme}
+									/>
+								</ObliquePlatte>
 							</Sequence>
 						) : null}
 					</div>

@@ -162,7 +162,7 @@ export const TimeseriesAnimationInside: React.FC<{
 
 			<div style={{position: 'absolute', top: 0, left: 0}}>
 				<DisplayGridLayout
-					// hide
+					hide
 					stroke="rgba(255,0,255,0.8)"
 					fill="transparent"
 					areas={chartLayout.areas}
