@@ -18,7 +18,7 @@ import {XAxis_Transition} from '../../../../acetti-ts-axis/XAxis_Transition';
 // TODO deprecate TTheme
 // import {TTheme} from '../AnimatedLineChartScaleBand/theme';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {TLineChartAnimationContext} from '../../../../acetti-ts-base/LineChartAnimationContainer';
+import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
 type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 
@@ -75,7 +75,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
 	//
-	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
 }> = ({
 	layoutAreas,
 	timeSeries,
