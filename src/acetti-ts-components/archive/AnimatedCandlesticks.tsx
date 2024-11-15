@@ -2,7 +2,6 @@ import {ScaleLinear} from 'd3-scale';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-layout';
-// import {TimeSeries} from '../utils/timeSeries/generateBrownianMotionTimeSeries';
 
 type TTheme_Candlesticks_Candle = {
 	bodyColor: string;
@@ -49,15 +48,8 @@ export const AnimatedCandlesticks: React.FC<{
 	ohlcSeries,
 	periodsScale,
 	yScale,
-	// displayDots = false,
 	theme = candlesticksDefaultTheme,
 }) => {
-	// const linePath = line<{date: Date; value: number}>()
-	// 	.x((d) => periodsScale.getBandFromDate(d.date).centroid)
-	// 	.y((d) => yScale(d.value));
-
-	// const d = linePath(timeSeries) || '';
-
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
 			<defs>

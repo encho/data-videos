@@ -1,6 +1,6 @@
 import gen from 'random-seed';
 
-import {TimeSeries} from './timeSeries';
+import {TimeSeries, TimeSeriesItem} from './timeSeries';
 
 const randInt = gen.create('My Seed Value');
 
@@ -52,7 +52,7 @@ function randomNormalDistribution(): number {
 
 // Function to generate a random number from a standard normal distribution
 function createRandomCandle(
-	tsItem: {date: Date; value: number},
+	tsItem: TimeSeriesItem,
 	openValue: number
 ): TCandle {
 	const close = tsItem.value;

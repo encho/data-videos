@@ -2,6 +2,7 @@ import {useVideoConfig, Sequence} from 'remotion';
 // import {format} from 'date-fns';
 // import {enGB} from 'date-fns/locale';
 
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {usePage} from '../../../../acetti-components/PageContext';
@@ -23,9 +24,8 @@ import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnima
 
 export const PerformanceCompareChartPage: React.FC<{
 	chartTheme: ThemeType;
-	// apiPriceData: TNerdyFinancePriceChartDataResult;
-	timeSeries1: {date: Date; value: number}[];
-	timeSeries2: {date: Date; value: number}[];
+	timeSeries1: TimeSeries;
+	timeSeries2: TimeSeries;
 	// metaInfo...
 }> = ({chartTheme, timeSeries1, timeSeries2}) => {
 	const {fps} = useVideoConfig();

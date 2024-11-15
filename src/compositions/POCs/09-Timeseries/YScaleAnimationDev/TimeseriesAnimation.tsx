@@ -13,6 +13,7 @@ import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {PeriodScaleAnimationInspector} from '../utils/PeriodScaleAnimationInspector';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -52,13 +53,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 };
 
 export const TimeseriesAnimationInside: React.FC<{
-	timeSeries: {date: Date; value: number}[];
-}> = ({
-	// width,
-	// height,
-	timeSeries,
-	// theme,
-}) => {
+	timeSeries: TimeSeries;
+}> = ({timeSeries}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const debugTheme = useThemeFromEnum('LORENZOBERTOLINI');

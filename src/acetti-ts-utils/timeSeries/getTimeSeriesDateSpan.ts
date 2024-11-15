@@ -1,8 +1,8 @@
 import {max, min} from 'd3-array';
 
-export function getTimeSeriesDateSpan(
-	timeSeries: {date: Date; value: number}[]
-): [Date, Date] {
+import {TimeSeries} from './timeSeries';
+
+export function getTimeSeriesDateSpan(timeSeries: TimeSeries): [Date, Date] {
 	if (timeSeries.length === 0) {
 		throw new Error('Time series is empty');
 	}
@@ -20,7 +20,6 @@ export function getTimeSeriesDateSpan(
 
 	return [minDate, maxDate];
 }
-
 // Example usage:
 // const startDate = new Date('2024-01-01');
 // const endDate = new Date('2024-01-10');

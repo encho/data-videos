@@ -3,9 +3,9 @@ import {z} from 'zod';
 import {useMemo} from 'react';
 import invariant from 'tiny-invariant';
 
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {PerformanceCompareChartPage} from './PerformanceCompareChartPage';
 import {PageContext} from '../../../../acetti-components/PageContext';
-// import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
 	zNerdyTickers,
 	zNerdyTimePeriod,
@@ -13,10 +13,7 @@ import {
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
 import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
-import {
-	// TNerdyFinancePerformanceCompareChartDataResult,
-	zNerdyFinancePerformanceCompareChartDataResult,
-} from '../../../../acetti-http/nerdy-finance/fetchPerformanceCompareData';
+import {zNerdyFinancePerformanceCompareChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPerformanceCompareData';
 
 export const performanceCompareChartCompositionSchema = z.object({
 	ticker: zNerdyTickers,
@@ -55,8 +52,8 @@ export const PerformanceCompareChartComposition: React.FC<
 		const series1 = multiSeries.series[0];
 		const series2 = multiSeries.series[1];
 
-		const timeSeries1: {date: Date; value: number}[] = [];
-		const timeSeries2: {date: Date; value: number}[] = [];
+		const timeSeries1: TimeSeries = [];
+		const timeSeries2: TimeSeries = [];
 
 		dates.forEach((date, i) => {
 			timeSeries1.push({value: series1[i], date});

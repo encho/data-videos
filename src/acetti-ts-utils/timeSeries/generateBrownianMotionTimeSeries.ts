@@ -16,7 +16,7 @@ function generateBrownianMotionTimeSeries(
 	);
 
 	// Initialize the result array
-	const timeSeries: {date: Date; value: number}[] = [];
+	const timeSeries: TimeSeries = [];
 
 	// Initial value
 	let currentValue = 0;

@@ -3,7 +3,10 @@ import {line} from 'd3-shape';
 
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
+import {
+	TimeSeries,
+	TimeSeriesItem,
+} from '../acetti-ts-utils/timeSeries/timeSeries';
 
 export const AnimatedLine: React.FC<{
 	lineColor: string;
@@ -20,7 +23,7 @@ export const AnimatedLine: React.FC<{
 	yScale,
 	displayDots = false,
 }) => {
-	const linePath = line<{date: Date; value: number}>()
+	const linePath = line<TimeSeriesItem>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
 

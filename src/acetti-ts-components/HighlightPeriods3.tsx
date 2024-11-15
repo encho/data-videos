@@ -1,6 +1,7 @@
 import {ScaleLinear} from 'd3-scale';
 import {Easing, interpolate, useCurrentFrame} from 'remotion';
 
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../acetti-ts-periodsScale/periodsScale';
@@ -17,7 +18,7 @@ const defaultHightlightAreaTheme: TTheme_HighlightPeriodsArea = {
 };
 
 export const HighlightPeriods3: React.FC<{
-	timeSeries: {date: Date; value: number}[];
+	timeSeries: TimeSeries;
 	area: TGridLayoutArea;
 	periodsScale: TPeriodsScale;
 	domainIndices: [number, number];

@@ -1,3 +1,5 @@
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+
 // Slide Title and Data Source
 const slideTitle: string =
 	// 'Comparative Inflation Rates Across Countries (2022-2023)';
@@ -9,8 +11,6 @@ const slideSubtitle: string =
 
 const dataSource: string =
 	'Data sourced from official statistics bureaus of each country.';
-
-type Timeseries = {date: Date; value: number}[];
 
 const usInflationTimeseries: Timeseries = [
 	{date: new Date('2022-01-31'), value: 7.5},

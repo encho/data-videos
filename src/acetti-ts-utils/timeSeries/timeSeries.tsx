@@ -3,7 +3,9 @@ import {max, min} from 'd3-array';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
-export type TimeSeries = {date: Date; value: number}[];
+export type TimeSeriesItem = {date: Date; value: number};
+
+export type TimeSeries = TimeSeriesItem[];
 
 // TODO  TIMESERIES NAMESPACE
 // *********************
@@ -59,15 +61,15 @@ export function findNearestDataPoints(
 ): {
 	// before: {date: Date; value: number} | null;
 	// after: {date: Date; value: number} | null;
-	before: {date: Date; value: number};
-	after: {date: Date; value: number};
+	before: TimeSeriesItem;
+	after: TimeSeriesItem;
 } {
 	const sortedSeries = timeSeries
 		.slice()
 		.sort((a, b) => a.date.getTime() - b.date.getTime());
 
-	let before: {date: Date; value: number} | null = null;
-	let after: {date: Date; value: number} | null = null;
+	let before: TimeSeriesItem | null = null;
+	let after: TimeSeriesItem | null = null;
 
 	for (const dataPoint of sortedSeries) {
 		if (dataPoint.date <= targetDate) {
@@ -135,8 +137,8 @@ type TYDomainType = 'FULL' | 'VISIBLE' | 'ZERO_FULL' | 'ZERO_VISIBLE';
 // TODO into periodsScale namespace
 export const getYDomain = (
 	yDomainType: TYDomainType,
-	timeSeries: {date: Date; value: number}[],
-	visibleDomainIndices: [number, number],
+	timeSeries: TimeSeries,
+	_visibleDomainIndices: [number, number],
 	periodsScale: TPeriodsScale
 	// withInterpolatedEndValue?: boolean
 ) => {

@@ -1,6 +1,7 @@
 import {useVideoConfig} from 'remotion';
 import {z} from 'zod';
 
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
@@ -37,7 +38,7 @@ export const MissingDataTimeseriesComposition: React.FC<
 	);
 };
 
-const mockTimeseriesDecJan: {date: Date; value: number}[] = [
+const mockTimeseriesDecJan: TimeSeries = [
 	{date: new Date('2024-12-01'), value: 99.54},
 	{date: new Date('2024-12-02'), value: 99.67},
 	{date: new Date('2024-12-03'), value: 97.96},
