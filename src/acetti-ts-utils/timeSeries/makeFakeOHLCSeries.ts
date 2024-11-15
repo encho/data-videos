@@ -1,8 +1,8 @@
 import gen from 'random-seed';
 
-const randInt = gen.create('My Seed Value');
+import {TimeSeries} from './timeSeries';
 
-export type TimeSeries = {date: Date; value: number}[];
+const randInt = gen.create('My Seed Value');
 
 type TCandle = {
 	date: Date;
@@ -44,7 +44,7 @@ export function makeFakeOHLCSeries(timeSeries: TimeSeries): TOHLCTimeSeries {
 
 function randomNormalDistribution(): number {
 	let u = 0;
-		let v = 0;
+	let v = 0;
 	while (u === 0) u = randInt(100) / 100;
 	while (v === 0) v = randInt(100) / 100;
 	return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);

@@ -1,8 +1,9 @@
 import invariant from 'tiny-invariant';
 import {max, min} from 'd3-array';
 
-import {TimeSeries} from './generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
+
+export type TimeSeries = {date: Date; value: number}[];
 
 // TODO  TIMESERIES NAMESPACE
 // *********************

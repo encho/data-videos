@@ -2,21 +2,7 @@ import {ScaleLinear} from 'd3-scale';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-layout';
-import {TimeSeries} from '../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
-
-// USAGE EXAMPLE:
-// *********************************************************************
-// <Position
-// position={{left: layoutAreas.subPlot.x1, top: layoutAreas.subPlot.y1}}
-// >
-// <AnimatedBars
-// 	barsColor={theme.dataColors[1].BASE}
-// 	periodsScale={currentPeriodsScale}
-// 	yScale={yScaleSubPlot}
-// 	area={layoutAreas.subPlot}
-// 	timeSeries={timeSeries}
-// />
-// </Position>
+import {TimeSeries} from '../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const AnimatedBars: React.FC<{
 	barsColor: string;

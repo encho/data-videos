@@ -248,7 +248,7 @@ import {
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
-import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from './acetti-ts-utils/timeSeries/timeSeries';
 
 // TODO use this
 export const videoSizes = {

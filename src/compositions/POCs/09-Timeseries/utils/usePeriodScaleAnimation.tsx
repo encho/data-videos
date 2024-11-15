@@ -2,8 +2,7 @@ import {useCurrentFrame, interpolate, useVideoConfig} from 'remotion';
 import invariant from 'tiny-invariant';
 import {useMemo, useState} from 'react';
 
-// import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {
 	periodsScale,
 	TPeriodsScale,

@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {Animated_XAxis} from '../utils/Animated_XAxis';
 import {Animated_YAxis} from '../utils/Animated_YAxis';
@@ -23,7 +23,7 @@ export const PerformanceChart: React.FC<{
 	useEffect(() => {
 		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
 		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
-	}, [layoutAreas.plot.width]);
+	}, [layoutAreas.plot, periodScaleAnimation, yScaleAnimation]);
 
 	return (
 		<div

@@ -5,7 +5,7 @@ import {TextAnimationSubtle} from '../../../compositions/POCs/01-TextEffects/Tex
 import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Position} from '../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
-import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
 import {
 	AnimatedSparklineStartDot,

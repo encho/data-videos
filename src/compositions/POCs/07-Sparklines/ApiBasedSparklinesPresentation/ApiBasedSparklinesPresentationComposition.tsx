@@ -31,7 +31,7 @@ import {
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {
 	TSimpleBarChartData,
 	zSimpleBarChartData,

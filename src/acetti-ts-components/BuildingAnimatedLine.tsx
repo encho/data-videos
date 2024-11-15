@@ -5,7 +5,7 @@ import {useCurrentFrame, interpolate, Easing, useVideoConfig} from 'remotion';
 import {getXY} from '../acetti-ts-periodsScale/getXY';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
-import {TimeSeries} from '../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
 import {isNumber} from 'lodash';
 
 export const BuildingAnimatedLine: React.FC<{

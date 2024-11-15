@@ -4,7 +4,7 @@ import {useMemo, useState, useCallback} from 'react';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {getTextDimensions} from '../../../../acetti-typography/CapSizeTextNew';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {getTimeSeriesInterpolatedExtentFromVisibleDomainIndices} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 import {

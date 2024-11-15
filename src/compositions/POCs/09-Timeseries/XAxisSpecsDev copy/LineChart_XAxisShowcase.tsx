@@ -2,7 +2,7 @@ import {scaleLinear, ScaleLinear} from 'd3-scale';
 
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
 import {AnimatedValueDot} from '../../../../acetti-ts-components/AnimatedValueDot';
@@ -15,8 +15,6 @@ import {
 import {getYAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_yAxis';
 import {YAxis_Transition} from '../../../../acetti-ts-axis/YAxis_Transition';
 import {XAxis_Transition} from '../../../../acetti-ts-axis/XAxis_Transition';
-// TODO deprecate TTheme
-// import {TTheme} from '../AnimatedLineChartScaleBand/theme';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
