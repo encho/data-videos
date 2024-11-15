@@ -1,24 +1,77 @@
-export type TMultiSeries = {
-	meta: {ticker: string}[];
-	series: number[][];
-	index: Date[];
-};
+import {z} from 'zod';
 
-export type TNerdyFinancePerformanceCompareChartDataResult = {
-	title: string;
-	subtitle: string;
-	ticker: string;
-	tickerMetadata: {
-		ticker: string;
-		quote: string;
-		name: string;
-		type: string;
-	};
-	percentageChange: number;
-	timePeriod: string;
-	// data: {value: number; index: Date}[];
-	data: TMultiSeries;
-};
+export const zNerdyFinancePriceChartDataResult = z.object({
+	title: z.string(),
+	subtitle: z.string(),
+	ticker: z.string(),
+	tickerMetadata: z.object({
+		ticker: z.string(),
+		quote: z.string(),
+		name: z.string(),
+		type: z.string(),
+	}),
+	percentageChange: z.number(),
+	timePeriod: z.string(),
+	data: z.array(
+		z.object({
+			value: z.number(),
+			index: z.date(),
+		})
+	),
+});
+
+export const zMultiSeries = z.object({
+	meta: z.array(
+		z.object({
+			ticker: z.string(),
+		})
+	),
+	index: z.array(z.date()),
+	series: z.array(z.array(z.number())),
+});
+
+export type TMultiSeries = z.infer<typeof zMultiSeries>;
+
+// export type TMultiSeries = {
+// 	meta: {ticker: string}[];
+// 	series: number[][];
+// 	index: Date[];
+// };
+
+export const zNerdyFinancePerformanceCompareChartDataResult = z.object({
+	title: z.string(),
+	subtitle: z.string(),
+	ticker: z.string(),
+	tickerMetadata: z.object({
+		ticker: z.string(),
+		quote: z.string(),
+		name: z.string(),
+		type: z.string(),
+	}),
+	percentageChange: z.number(),
+	timePeriod: z.string(),
+	data: zMultiSeries,
+});
+
+export type TNerdyFinancePerformanceCompareChartDataResult = z.infer<
+	typeof zNerdyFinancePerformanceCompareChartDataResult
+>;
+
+// export type TNerdyFinancePerformanceCompareChartDataResult = {
+// 	title: string;
+// 	subtitle: string;
+// 	ticker: string;
+// 	tickerMetadata: {
+// 		ticker: string;
+// 		quote: string;
+// 		name: string;
+// 		type: string;
+// 	};
+// 	percentageChange: number;
+// 	timePeriod: string;
+// 	// data: {value: number; index: Date}[];
+// 	data: TMultiSeries;
+// };
 
 type NerdyFinancePerformanceCompareArgs = {
 	ticker: string;

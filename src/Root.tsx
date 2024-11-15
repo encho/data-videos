@@ -1,6 +1,7 @@
 import {Composition, Folder} from 'remotion';
 import invariant from 'tiny-invariant';
 
+import {fetchNerdyFinancePerformanceCompareData} from './acetti-http/nerdy-finance/fetchPerformanceCompareData';
 import {getThemeFromEnum} from './acetti-themes/getThemeFromEnum';
 // import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
@@ -249,6 +250,11 @@ import {
 	PerformanceChartComposition,
 	performanceChartCompositionSchema,
 } from './compositions/POCs/09-Timeseries/PerformanceChart/PerformanceChartComposition';
+
+import {
+	PerformanceCompareChartComposition,
+	performanceCompareChartCompositionSchema,
+} from './compositions/POCs/09-Timeseries/PerformanceCompareChart/PerformanceCompareChartComposition';
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
@@ -1173,6 +1179,46 @@ export const RemotionRoot: React.FC = () => {
 								props: {
 									...props,
 									apiPriceData,
+								},
+							};
+						}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="PerformanceCompareChart"
+						component={PerformanceCompareChartComposition}
+						durationInFrames={30 * 15}
+						fps={30}
+						{...videoSizes.square}
+						schema={performanceCompareChartCompositionSchema}
+						defaultProps={{
+							ticker: 'SPX_INDEX' as const,
+							ticker2: 'DJI_INDEX' as const,
+							timePeriod: '2Y' as const,
+							nerdyFinanceEnv: 'PROD' as const,
+							theme: 'LORENZOBERTOLINI_BRIGHT' as const,
+							chartTheme: 'LORENZOBERTOLINI' as const,
+						}}
+						calculateMetadata={async ({props}) => {
+							const {nerdyFinanceEnv, ticker, ticker2, timePeriod} = props;
+
+							const apiPerformanceCompareData =
+								await fetchNerdyFinancePerformanceCompareData(
+									{
+										ticker,
+										ticker2,
+										endDate: new Date().toISOString(),
+										timePeriod,
+									},
+									nerdyFinanceEnv
+								);
+
+							return {
+								props: {
+									...props,
+									apiPerformanceCompareData,
 								},
 							};
 						}}
