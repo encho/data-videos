@@ -297,8 +297,8 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 				areaOpacity: 0.2,
 			},
 			platte: {
-				backgroundColor: 'rgba(255,0,255,0.1)',
-				borderColor: 'rgba(255,0,255,0.5)',
+				backgroundColor: palette.background.main,
+				borderColor: palette.background.main,
 			},
 			TypographicLayouts: {
 				baselineGrid: {
