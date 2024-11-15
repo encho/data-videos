@@ -1,4 +1,5 @@
 import {useVideoConfig, Easing, Sequence} from 'remotion';
+import invariant from 'tiny-invariant';
 
 import {usePeriodScaleAnimation} from '../utils/usePeriodScaleAnimation';
 import {useYScaleAnimation} from '../utils/useYScaleAnimation';
@@ -118,6 +119,10 @@ export const TimeseriesAnimationInside: React.FC<{
 		xAxisHeight,
 	});
 
+	const firstValue = timeSeries[0].value;
+	const lastValue = timeSeries[timeSeries.length - 1].value;
+	invariant(firstValue && lastValue);
+
 	return (
 		<div
 			style={{
@@ -134,6 +139,7 @@ export const TimeseriesAnimationInside: React.FC<{
 					yAxis: chartLayout.areas.yAxis,
 				}}
 			/>
+
 			<Sequence from={percentageChange_enter_start_keyframe}>
 				<Position
 					position={{
@@ -147,8 +153,8 @@ export const TimeseriesAnimationInside: React.FC<{
 						yScale={yScaleAnimationUpper.yScale}
 						//
 						area={chartLayout.areas.plot}
-						firstValue={timeSeries[0].value}
-						lastValue={timeSeries[timeSeries.length - 1].value}
+						firstValue={firstValue}
+						lastValue={lastValue}
 					/>
 				</Position>
 			</Sequence>

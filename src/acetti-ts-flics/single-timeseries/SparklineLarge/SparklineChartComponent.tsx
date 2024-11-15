@@ -5,7 +5,11 @@ import {TextAnimationSubtle} from '../../../compositions/POCs/01-TextEffects/Tex
 import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Position} from '../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
-import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {
+	TimeSeries,
+	getLastNonNullValue,
+	getFirstNonNullValue,
+} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
 import {
 	AnimatedSparklineStartDot,
@@ -182,7 +186,9 @@ export const SparklineChartComponent: React.FC<{
 						<div
 							style={{
 								position: 'absolute',
-								top: yScale(timeSeries[0].value) - valueLabelCapHeight / 2,
+								top:
+									yScale(getFirstNonNullValue(timeSeries)) -
+									valueLabelCapHeight / 2,
 								width: '100%',
 								height: '100%',
 								display: 'flex',
@@ -226,7 +232,7 @@ export const SparklineChartComponent: React.FC<{
 							style={{
 								position: 'absolute',
 								top:
-									yScale(timeSeries[timeSeries.length - 1].value) -
+									yScale(getLastNonNullValue(timeSeries)) -
 									valueLabelCapHeight / 2,
 								width: '100%',
 								height: '100%',

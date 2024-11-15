@@ -1,5 +1,4 @@
 import {Composition, Folder} from 'remotion';
-import invariant from 'tiny-invariant';
 
 import {fetchNerdyFinancePerformanceCompareData} from './acetti-http/nerdy-finance/fetchPerformanceCompareData';
 import {getThemeFromEnum} from './acetti-themes/getThemeFromEnum';
@@ -248,7 +247,7 @@ import {
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
-import {TimeSeries} from './acetti-ts-utils/timeSeries/timeSeries';
+import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
 
 // TODO use this
 export const videoSizes = {
@@ -832,14 +831,6 @@ export const RemotionRoot: React.FC = () => {
 							barChartData: [],
 						}}
 						calculateMetadata={async ({props}) => {
-							const getPercentageReturn = (ts: TimeSeries) => {
-								const firstValue = ts[0].value;
-								const lastValue = ts[ts.length - 1].value;
-								const percReturn = lastValue / firstValue - 1;
-								invariant(percReturn);
-								return percReturn;
-							};
-
 							const nerdyENV = 'PROD';
 
 							const spx = await fetchNerdyFinancePriceChartData(
@@ -967,7 +958,7 @@ export const RemotionRoot: React.FC = () => {
 								theme.positiveNegativeColors;
 
 							const returnComparisonBarChartData = data.map((it) => {
-								const percReturn = getPercentageReturn(
+								const percReturn = getPercentageChange(
 									it.data.map((dataItem) => ({
 										...dataItem,
 										date: dataItem.index,

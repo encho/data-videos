@@ -4,8 +4,9 @@ import {line} from 'd3-shape';
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-layout';
 import {
+	getNumericTimeSeries,
 	TimeSeries,
-	TimeSeriesItem,
+	TimeSeriesItemNumeric,
 } from '../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const MinimapLine: React.FC<{
@@ -15,11 +16,13 @@ export const MinimapLine: React.FC<{
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
 }> = ({lineColor, area, timeSeries, periodsScale, yScale}) => {
-	const linePath = line<TimeSeriesItem>()
+	const numericTimeSeries = getNumericTimeSeries(timeSeries);
+
+	const linePath = line<TimeSeriesItemNumeric>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
 
-	const d = linePath(timeSeries) || '';
+	const d = linePath(numericTimeSeries) || '';
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>

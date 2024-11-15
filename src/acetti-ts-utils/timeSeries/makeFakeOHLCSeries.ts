@@ -1,8 +1,4 @@
-import gen from 'random-seed';
-
-import {TimeSeries, TimeSeriesItem} from './timeSeries';
-
-const randInt = gen.create('My Seed Value');
+import {TimeSeries} from './timeSeries';
 
 type TCandle = {
 	date: Date;
@@ -14,54 +10,67 @@ type TCandle = {
 
 export type TOHLCTimeSeries = TCandle[];
 
-export function makeFakeOHLCSeries(timeSeries: TimeSeries): TOHLCTimeSeries {
-	// Initialize the result array
-	const ohlcTimeSeries: TOHLCTimeSeries = [];
-
-	for (let i = 0; i <= timeSeries.length - 1; i++) {
-		const tsItem = timeSeries[i];
-		if (i === 0) {
-			const randomCandle = {
-				date: tsItem.date,
-				open: tsItem.value * 0.98,
-				high: tsItem.value * 1.1,
-				low: tsItem.value * 0.9,
-				close: tsItem.value,
-			};
-			// const randomCandle = createRandomCandle(timeSeries[i], undefined);
-			ohlcTimeSeries.push(randomCandle);
-		} else {
-			const randomCandle = createRandomCandle(
-				timeSeries[i],
-				timeSeries[i - 1].value
-			);
-			ohlcTimeSeries.push(randomCandle);
-		}
-	}
-
-	return ohlcTimeSeries;
+/**
+ * Seeded random number generator using the linear congruential generator (LCG) method.
+ */
+function seededRandom(seed: number): () => number {
+	let value = seed;
+	return () => {
+		value = (value * 16807) % 2147483647;
+		return (value - 1) / 2147483646;
+	};
 }
 
-function randomNormalDistribution(): number {
-	let u = 0;
-	let v = 0;
-	while (u === 0) u = randInt(100) / 100;
-	while (v === 0) v = randInt(100) / 100;
-	return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+/**
+ * Generates a TOHLCTimeSeries object with reproducible open, high, low, and close values.
+ *
+ * The open value for each period matches the close value of the previous period.
+ * High and low values are generated around the open and close prices using a seeded random generator.
+ *
+ * @param {TimeSeries} timeSeries - The input time series with dates.
+ * @param {number} [seed=42] - The seed for the random number generator (optional, default is 42).
+ * @returns {TOHLCTimeSeries} - A time series with open-high-low-close data.
+ */
+export function makeFakeOHLCSeries(
+	timeSeries: TimeSeries,
+	seed: number = 42
+): TOHLCTimeSeries {
+	if (timeSeries.length === 0) return [];
+
+	const random = seededRandom(seed);
+
+	const getRandomNumber = (base: number, variance: number) =>
+		base + variance * (random() - 0.5) * 2;
+
+	let previousClose = getRandomNumber(100, 20); // Initial close value for first period
+
+	const ohlcSeries: TOHLCTimeSeries = timeSeries.map(({date}) => {
+		const open = previousClose;
+		const close = getRandomNumber(open, 10);
+		const high = Math.max(open, close) + getRandomNumber(0, 5);
+		const low = Math.min(open, close) - getRandomNumber(0, 5);
+
+		previousClose = close;
+
+		return {date, open, high, low, close};
+	});
+
+	return ohlcSeries;
 }
+// const sampleTimeSeries: TimeSeries = [
+// 	{ date: new Date('2023-01-01'), value: null },
+// 	{ date: new Date('2023-01-02'), value: null },
+// 	{ date: new Date('2023-01-03'), value: null },
+// 	{ date: new Date('2023-01-04'), value: null },
+// 	{ date: new Date('2023-01-05'), value: null },
+// ];
 
-// Function to generate a random number from a standard normal distribution
-function createRandomCandle(
-	tsItem: TimeSeriesItem,
-	openValue: number
-): TCandle {
-	const close = tsItem.value;
-	const open = openValue;
+// // Using the default seed
+// const ohlcSeriesDefaultSeed = makeFakeOHLCSeries(sampleTimeSeries);
 
-	const high =
-		(1 + Math.abs(randomNormalDistribution()) / 15) * Math.max(open, close);
-	const low =
-		(1 - Math.abs(randomNormalDistribution()) / 15) * Math.min(open, close);
+// console.log('Default Seed:', ohlcSeriesDefaultSeed);
 
-	return {date: tsItem.date, open, high, low, close};
-}
+// // Using a custom seed
+// const ohlcSeriesCustomSeed = makeFakeOHLCSeries(sampleTimeSeries, 123);
+
+// console.log('Custom Seed:', ohlcSeriesCustomSeed);

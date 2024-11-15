@@ -1,4 +1,7 @@
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+import {
+	TimeSeries,
+	mapTimeSeries,
+} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 // Slide Title and Data Source
 const slideTitle: string = 'United States Leads in Reducing Inflation Rates';
@@ -104,33 +107,20 @@ const japanInflationTimeseries: TimeSeries = [
 // Sparklines Array
 const sparklines: {title: string; timeseries: TimeSeries}[] = [
 	{
-		// title: 'United States Inflation Rate',
 		title: 'United States',
-		timeseries: usInflationTimeseries.map((it) => ({
-			...it,
-			value: it.value / 100,
-		})),
+		timeseries: mapTimeSeries(usInflationTimeseries, (it) => it / 100),
 	},
 	{
 		title: 'United Kingdom',
-		timeseries: ukInflationTimeseries.map((it) => ({
-			...it,
-			value: it.value / 100,
-		})),
+		timeseries: mapTimeSeries(ukInflationTimeseries, (it) => it / 100),
 	},
 	{
 		title: 'Germany',
-		timeseries: germanyInflationTimeseries.map((it) => ({
-			...it,
-			value: it.value / 100,
-		})),
+		timeseries: mapTimeSeries(germanyInflationTimeseries, (it) => it / 100),
 	},
 	{
 		title: 'Japan',
-		timeseries: japanInflationTimeseries.map((it) => ({
-			...it,
-			value: it.value / 100,
-		})),
+		timeseries: mapTimeSeries(japanInflationTimeseries, (it) => it / 100),
 	},
 ];
 

@@ -85,11 +85,17 @@ export const TimeseriesAnimationInside: React.FC<{
 	};
 
 	const timeSeries2 = useMemo(() => {
-		return timeSeries.map((it) => ({...it, value: it.value * 2}));
+		return timeSeries.map((it) => ({
+			...it,
+			value: it.value === null ? null : it.value * 2,
+		}));
 	}, [timeSeries]);
 
 	const timeSeries3 = useMemo(() => {
-		return timeSeries.map((it) => ({...it, value: it.value * 4}));
+		return timeSeries.map((it) => ({
+			...it,
+			value: it.value === null ? null : it.value * 3,
+		}));
 	}, [timeSeries]);
 
 	const periodScaleAnimation = usePeriodScaleAnimation({

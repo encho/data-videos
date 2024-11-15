@@ -3,15 +3,177 @@ import {max, min} from 'd3-array';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
-export type TimeSeriesItem = {date: Date; value: number};
-
+export type TimeSeriesItemValue = number | null;
+export type TimeSeriesItem = {date: Date; value: TimeSeriesItemValue};
 export type TimeSeries = TimeSeriesItem[];
 
-// TODO  TIMESERIES NAMESPACE
-// *********************
 export function getFirstNItems(timeSeries: TimeSeries, n: number): TimeSeries {
 	return timeSeries.slice(0, n);
 }
+
+export type TimeSeriesNumeric = TimeSeriesItemNumeric[];
+
+export type TimeSeriesItemNumeric = {
+	date: Date;
+	value: number;
+};
+
+/**
+ * Filters out null values from a TimeSeries and returns a TimeSeries with numeric values only.
+ *
+ * @param {TimeSeries} timeSeries - The input time series.
+ * @returns {TimeSeriesNumeric} - A new time series with only numeric values.
+ */
+export function getNumericTimeSeries(
+	timeSeries: TimeSeries
+): TimeSeriesNumeric {
+	return timeSeries
+		.filter((item): item is {date: Date; value: number} => item.value !== null)
+		.map(({date, value}) => ({date, value})); // Ensures the returned type
+}
+// const sampleTimeSeries: TimeSeries = [
+// 	{ date: new Date('2023-01-01'), value: 100 },
+// 	{ date: new Date('2023-01-02'), value: null },
+// 	{ date: new Date('2023-01-03'), value: 200 },
+// 	{ date: new Date('2023-01-04'), value: null },
+// 	{ date: new Date('2023-01-05'), value: 150 },
+// ];
+// const numericTimeSeries = getNumericTimeSeries(sampleTimeSeries);
+// console.log(numericTimeSeries);
+// [
+//   { date: new Date('2023-01-01T00:00:00.000Z'), value: 100 },
+//   { date: new Date('2023-01-03T00:00:00.000Z'), value: 200 },
+//   { date: new Date('2023-01-05T00:00:00.000Z'), value: 150 }
+// ]
+
+/**
+ * Extracts all numeric values from a given time series.
+ *
+ * This function filters out any `null` values from the `value` property
+ * of each `TimeSeriesItem` and returns an array of numeric values.
+ *
+ * @param {TimeSeries} timeSeries - The time series array to filter.
+ * @returns {number[]} - An array of numeric values extracted from the time series.
+ */
+export function getAllNumericValues(timeSeries: TimeSeries) {
+	const values = timeSeries.map((it) => it.value);
+	const numericValues: number[] = values.filter(
+		(it): it is number => it !== null
+	);
+
+	return numericValues;
+}
+// // Define some sample data
+// const sampleTimeSeries: TimeSeries = [
+// 	{ date: new Date('2023-01-01'), value: 100 },
+// 	{ date: new Date('2023-01-02'), value: null },
+// 	{ date: new Date('2023-01-03'), value: 200 },
+// 	{ date: new Date('2023-01-04'), value: null },
+// 	{ date: new Date('2023-01-05'), value: 150 },
+// ];
+// // Call the function
+// const numericValues = getAllNumericValues(sampleTimeSeries);
+// console.log(numericValues); // Output: [100, 200, 150]
+
+/**
+ * Returns the first non-null value in a TimeSeries.
+ *
+ * @param {TimeSeries} timeSeries - The input time series.
+ * @returns {number} - The first non-null value.
+ */
+export function getFirstNonNullValue(timeSeries: TimeSeries): number {
+	for (const item of timeSeries) {
+		if (item.value !== null) {
+			return item.value;
+		}
+	}
+	throw Error('getFirstNonNullValue: No non-null value found!');
+	// return null; // No non-null value found
+}
+
+/**
+ * Returns the last non-null value in a TimeSeries.
+ *
+ * @param {TimeSeries} timeSeries - The input time series.
+ * @returns {number} - The first non-null value.
+ */
+export function getLastNonNullValue(timeSeries: TimeSeries): number {
+	for (let i = timeSeries.length - 1; i >= 0; i--) {
+		if (timeSeries[i].value !== null) {
+			return timeSeries[i].value!; // typescript non-null assertion here, after filtering (!)
+		}
+	}
+	throw Error('getLastNonNullValue: No non-null value found!');
+}
+
+/**
+ * Applies a given function to each value in a TimeSeries and returns a new TimeSeries.
+ *
+ * If the original value is `null`, the resulting value will also be `null`.
+ *
+ * @param {TimeSeries} timeSeries - The input time series.
+ * @param {(value: number) => number} transformFn - The function to apply to each non-null value.
+ * @returns {TimeSeries} - A new time series with transformed values.
+ */
+export function mapTimeSeries(
+	timeSeries: TimeSeries,
+	transformFn: (value: number) => number
+): TimeSeries {
+	return timeSeries.map(({date, value}) => ({
+		date,
+		value: value === null ? null : transformFn(value),
+	}));
+}
+// const sampleTimeSeries: TimeSeries = [
+// 	{ date: new Date('2023-01-01'), value: 100 },
+// 	{ date: new Date('2023-01-02'), value: null },
+// 	{ date: new Date('2023-01-03'), value: 200 },
+// 	{ date: new Date('2023-01-04'), value: null },
+// 	{ date: new Date('2023-01-05'), value: 150 },
+// ];
+// // Example transformation: multiply each value by 2
+// const transformedSeries = mapTimeSeries(sampleTimeSeries, (value) => value * 2);
+// console.log(transformedSeries);
+// [
+//   { date: new Date('2023-01-01T00:00:00.000Z'), value: 200 },
+//   { date: new Date('2023-01-02T00:00:00.000Z'), value: null },
+//   { date: new Date('2023-01-03T00:00:00.000Z'), value: 400 },
+//   { date: new Date('2023-01-04T00:00:00.000Z'), value: null },
+//   { date: new Date('2023-01-05T00:00:00.000Z'), value: 300 }
+// ]
+
+/**
+ * Calculates the percentage change between the first and last non-null values in a TimeSeries.
+ *
+ * @param {TimeSeries} timeSeries - The input time series.
+ * @returns {number} - The percentage change as a decimal (1.0 represents 100%).
+ */
+export function getPercentageChange(timeSeries: TimeSeries): number {
+	const firstValue = getFirstNonNullValue(timeSeries);
+	const lastValue = getLastNonNullValue(timeSeries);
+
+	// Ensure both first and last values are valid numbers
+	invariant(
+		firstValue !== null,
+		'The time series has no non-null values for the first element.'
+	);
+	invariant(
+		lastValue !== null,
+		'The time series has no non-null values for the last element.'
+	);
+
+	return (lastValue - firstValue) / firstValue;
+}
+// const sampleTimeSeries: TimeSeries = [
+// 	{ date: new Date('2023-01-01'), value: null },
+// 	{ date: new Date('2023-01-02'), value: 100 },
+// 	{ date: new Date('2023-01-03'), value: null },
+// 	{ date: new Date('2023-01-04'), value: 200 },
+// 	{ date: new Date('2023-01-05'), value: null },
+// ];
+// const percentageChange = getPercentageChange(sampleTimeSeries);
+// console.log('Percentage Change:', percentageChange);
+// Percentage Change: 1 // Represents 100% change from 100 to 200
 
 /**
  * Filters a time series array to include only data points with dates between
@@ -92,11 +254,6 @@ export function findNearestDataPoints(
 	return {before, after};
 }
 
-// interface DataPoint {
-// 	date: Date;
-// 	value: number;
-// }
-
 /**
  * Performs linear interpolation between two data points based on a given current date.
  * @param {TimeSeries} timeSeries - The current TimeSeries
@@ -107,7 +264,7 @@ export function findNearestDataPoints(
 export function getInterpolatedValue(
 	timeSeries: TimeSeries,
 	currentDate: Date
-): number {
+): TimeSeriesItemValue {
 	const {before: dataPoint1, after: dataPoint2} = findNearestDataPoints(
 		timeSeries,
 		currentDate
@@ -127,6 +284,10 @@ export function getInterpolatedValue(
 		return value1;
 	}
 
+	if (value1 === null || value2 === null) {
+		return null;
+	}
+
 	// Perform linear interpolation
 	const interpolatedValue = value1 + fraction * (value2 - value1);
 	return interpolatedValue;
@@ -140,75 +301,26 @@ export const getYDomain = (
 	timeSeries: TimeSeries,
 	_visibleDomainIndices: [number, number],
 	periodsScale: TPeriodsScale
-	// withInterpolatedEndValue?: boolean
 ) => {
-	// TODO implement and integrate!
-	// 	const interpolatedVisibleStartValue = getInterpolated_VisibleDomainValue_Start({
-	// 		periodsScale,
-	// 		timeSeries,
-	// 	});
-
-	// let interpolatedVisibleEndValue;
-	// if (withInterpolatedEndValue) {
-	// }
-
-	// const interpolatedVisibleEndValue = getInterpolated_VisibleDomainValue_End({
-	// 	periodsScale,
-	// 	timeSeries,
-	// });
-
-	// ====================================================================
-	// !! ENCHO CONTINUE HERE AND TRY?AIM TO DEPRECATE THE ABOVE FUNCTIONS
-	// ====================================================================
-	// TODO implement these two and respect them in the min/max calculations
-	// const interpolatedStartValue = ;
-	// const interpolatedEndValue = ;
+	const numericValues = getAllNumericValues(timeSeries);
 
 	if (yDomainType === 'FULL') {
-		const yDomainMin = min(timeSeries.map((it) => it.value));
-		const yDomainMax = max(timeSeries.map((it) => it.value));
+		const yDomainMin = min(numericValues);
+		const yDomainMax = max(numericValues);
 		return [yDomainMin, yDomainMax] as [number, number];
 	}
 
 	if (yDomainType === 'ZERO_FULL') {
-		const yDomainMax = max(timeSeries.map((it) => it.value));
+		const yDomainMax = max(numericValues);
 		return [0, yDomainMax] as [number, number];
 	}
 
 	if (yDomainType === 'VISIBLE') {
-		// const visibleTimeSeriesSlice =
-		// 	getFullyVisibleTimeSeriesSliceFromFloatIndices(
-		// 		timeSeries,
-		// 		visibleDomainIndices[0],
-		// 		visibleDomainIndices[1]
-		// 	);
-
-		// // the visible domain
-		// const fullyVisibleYDomainMin = min(
-		// 	visibleTimeSeriesSlice.map((it) => it.value)
-		// ) as number;
-
-		// const fullyVisibleYDomainMax = max(
-		// 	visibleTimeSeriesSlice.map((it) => it.value)
-		// ) as number;
-
-		// const yDomainMin = min([
-		// 	fullyVisibleYDomainMin,
-		// 	// interpolatedVisibleEndValue,
-		// ]);
-
-		// const yDomainMax = max([
-		// 	fullyVisibleYDomainMax,
-		// 	// interpolatedVisibleEndValue,
-		// ]);
-
-		// return [yDomainMin, yDomainMax] as [number, number];
-
 		return periodsScale.getTimeSeriesInterpolatedExtent(timeSeries);
 	}
 
 	// fallback to the full domain
-	const yDomainMin = min(timeSeries.map((it) => it.value));
-	const yDomainMax = max(timeSeries.map((it) => it.value));
+	const yDomainMin = min(numericValues);
+	const yDomainMax = max(numericValues);
 	return [yDomainMin, yDomainMax] as [number, number];
 };

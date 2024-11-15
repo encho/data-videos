@@ -1,11 +1,13 @@
 import {ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
+import {useMemo} from 'react';
 
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
 import {
 	TimeSeries,
-	TimeSeriesItem,
+	getNumericTimeSeries,
+	TimeSeriesItemNumeric,
 } from '../acetti-ts-utils/timeSeries/timeSeries';
 
 export const AnimatedLine: React.FC<{
@@ -23,11 +25,16 @@ export const AnimatedLine: React.FC<{
 	yScale,
 	displayDots = false,
 }) => {
-	const linePath = line<TimeSeriesItem>()
+	const linePath = line<TimeSeriesItemNumeric>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
 
-	const d = linePath(timeSeries) || '';
+	const numericTimeSeries = useMemo(
+		() => getNumericTimeSeries(timeSeries),
+		[timeSeries]
+	);
+
+	const d = linePath(numericTimeSeries) || '';
 
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
@@ -50,7 +57,7 @@ export const AnimatedLine: React.FC<{
 				{/* dots */}
 
 				{displayDots
-					? timeSeries.map((timeSeriesItem) => {
+					? numericTimeSeries.map((timeSeriesItem) => {
 							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 							const cx = band.centroid;
 							const cy = yScale(timeSeriesItem.value);

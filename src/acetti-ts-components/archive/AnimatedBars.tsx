@@ -1,8 +1,12 @@
 import {ScaleLinear} from 'd3-scale';
+import {useMemo} from 'react';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../../acetti-layout';
-import {TimeSeries} from '../../acetti-ts-utils/timeSeries/timeSeries';
+import {
+	TimeSeries,
+	getNumericTimeSeries,
+} from '../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const AnimatedBars: React.FC<{
 	barsColor: string;
@@ -14,6 +18,11 @@ export const AnimatedBars: React.FC<{
 	// const make padding part of scale ?
 	const BARS_PADDING_PERC = 0.25;
 
+	const numericTimeSeries = useMemo(
+		() => getNumericTimeSeries(timeSeries),
+		[timeSeries]
+	);
+
 	return (
 		<svg overflow="visible" width={area.width} height={area.height}>
 			<defs>
@@ -23,7 +32,7 @@ export const AnimatedBars: React.FC<{
 			</defs>
 
 			<g clipPath="url(#plotAreaClipPath)">
-				{timeSeries.map((timeSeriesItem) => {
+				{numericTimeSeries.map((timeSeriesItem) => {
 					// const band = periodsScale.getBandFromIndex(i);
 					const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 					const yValue = yScale(timeSeriesItem.value);

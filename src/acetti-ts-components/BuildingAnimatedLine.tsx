@@ -1,5 +1,6 @@
 import {ScaleLinear} from 'd3-scale';
 import {line} from 'd3-shape';
+import {useMemo} from 'react';
 import {useCurrentFrame, interpolate, Easing, useVideoConfig} from 'remotion';
 
 import {getXY} from '../acetti-ts-periodsScale/getXY';
@@ -7,7 +8,8 @@ import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
 import {TGridLayoutArea} from '../acetti-layout';
 import {
 	TimeSeries,
-	TimeSeriesItem,
+	getNumericTimeSeries,
+	TimeSeriesItemNumeric,
 } from '../acetti-ts-utils/timeSeries/timeSeries';
 import {isNumber} from 'lodash';
 
@@ -37,6 +39,11 @@ export const BuildingAnimatedLine: React.FC<{
 		// fps,
 		durationInFrames,
 	} = useVideoConfig();
+
+	const numericTimeSeries = useMemo(
+		() => getNumericTimeSeries(timeSeries),
+		[timeSeries]
+	);
 
 	// const percAnimation = interpolate(
 	// 	frame,
@@ -107,11 +114,11 @@ export const BuildingAnimatedLine: React.FC<{
 		domainIndex: visibleDomainIndices[1],
 	});
 
-	const linePath = line<TimeSeriesItem>()
+	const linePath = line<TimeSeriesItemNumeric>()
 		.x((d) => periodsScale.getBandFromDate(d.date).centroid)
 		.y((d) => yScale(d.value));
 
-	const d = linePath(timeSeries) || '';
+	const d = linePath(numericTimeSeries) || '';
 
 	const maskId = `plotAreaClipPath-${id}`;
 
@@ -140,7 +147,7 @@ export const BuildingAnimatedLine: React.FC<{
 			</g>
 			<g>
 				{displayDots
-					? timeSeries.map((timeSeriesItem) => {
+					? numericTimeSeries.map((timeSeriesItem) => {
 							const band = periodsScale.getBandFromDate(timeSeriesItem.date);
 							const cx = band.centroid;
 							const cy = yScale(timeSeriesItem.value);
