@@ -241,6 +241,11 @@ import {
 	performanceCompareChartCompositionSchema,
 } from './compositions/POCs/09-Timeseries/PerformanceCompareChart/PerformanceCompareChartComposition';
 
+import {
+	MissingDataTimeseriesComposition,
+	missingDataTimeseriesCompositionSchema,
+} from './compositions/POCs/09-Timeseries/MissingDataTimeseries/MissingDataTimeseriesComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeSeries} from './acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
@@ -1116,11 +1121,8 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="YScaleAnimation-Dev"
 						component={YScaleAnimationDevComposition}
-						// durationInFrames={30 * 9}
 						durationInFrames={30 * 30}
 						fps={30}
-						// {...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
 						width={videoSizes.widescreen_16x9.width * 1.5}
 						height={videoSizes.widescreen_16x9.height * 3}
 						schema={yScaleAnimationDevCompositionSchema}
@@ -1206,6 +1208,20 @@ export const RemotionRoot: React.FC = () => {
 									apiPerformanceCompareData,
 								},
 							};
+						}}
+					/>
+
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="MissingDataTimeseries"
+						component={MissingDataTimeseriesComposition}
+						durationInFrames={30 * 10}
+						fps={30}
+						{...videoSizes.square}
+						schema={missingDataTimeseriesCompositionSchema}
+						defaultProps={{
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						}}
 					/>
 				</Folder>
