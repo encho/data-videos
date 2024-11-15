@@ -1,10 +1,10 @@
 import {z} from 'zod';
 import {Sequence, Easing, useVideoConfig} from 'remotion';
-// import {measureText} from '@remotion/layout-utils';
 import numeral from 'numeral';
 
+import {usePeriodScaleAnimation} from '../../../compositions/POCs/09-Timeseries/utils/usePeriodScaleAnimation';
+import {useYScaleAnimation} from '../../../compositions/POCs/09-Timeseries/utils/useYScaleAnimation';
 import {zThemeEnum} from '../../../acetti-themes/getThemeFromEnum';
-import {LineChartAnimationContainer} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {useChartLayout} from './useChartLayout';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
@@ -85,6 +85,35 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 		rightValueLabelWidth,
 	});
 
+	const periodScaleAnimation = usePeriodScaleAnimation({
+		timeSeries: data,
+		periodScalesInitialWidth: chartLayout.areas.plot.width,
+		transitions: [
+			{
+				fromDomainIndices: [0.5, data.length - 0.5],
+				toDomainIndices: [0.5, data.length - 0.5],
+				transitionSpec: {
+					durationInFrames,
+					easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
+					transitionType: 'DEFAULT',
+				},
+			},
+		],
+	});
+
+	const yScaleAnimation = useYScaleAnimation({
+		periodScaleAnimation,
+		timeSeriesArray: [data],
+		tickFormatter: (tick) => `${tick} $`,
+		yScalesInitialHeight: chartLayout.areas.plot.height,
+		domainType: 'VISIBLE',
+		paddingPerc: 0.1,
+		domain,
+	});
+
+	const {periodsScale, currentSliceInfo} = periodScaleAnimation;
+	const {yScale} = yScaleAnimation;
+
 	return (
 		<div style={{position: 'relative', width}}>
 			<div style={{position: 'absolute'}}>
@@ -96,55 +125,28 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 				/>
 			</div>
 			<Sequence name="LineChartAnimationContainer">
-				<LineChartAnimationContainer
-					yDomain={domain}
+				<SparklineChartComponent
+					id={id}
+					baseline={baseline}
 					timeSeries={data}
-					viewSpecs={[
-						{
-							area: chartLayout.areas.plot,
-							visibleDomainIndices: [0.5, data.length - 0.5],
-						},
-						{
-							area: chartLayout.areas.plot,
-							visibleDomainIndices: [0.5, data.length - 0.5],
-						},
-					]}
-					transitionSpecs={[
-						{
-							durationInFrames,
-							easingFunction: Easing.bezier(0.33, 1, 0.68, 1),
-							numberOfSlices: 20,
-							transitionType: 'DEFAULT',
-						},
-					]}
-				>
-					{({periodsScale, yScale, currentSliceInfo}) => {
-						return (
-							<SparklineChartComponent
-								id={id}
-								baseline={baseline}
-								timeSeries={data}
-								layoutAreas={{
-									plot: chartLayout.areas.plot,
-									xAxis: chartLayout.areas.xAxis,
-									yAxis: chartLayout.areas.yAxis,
-									leftValueLabel: chartLayout.areas.leftValueLabel,
-									rightValueLabel: chartLayout.areas.rightValueLabel,
-								}}
-								theme={theme}
-								lineColor={lineColor}
-								yScale={yScale}
-								periodScale={periodsScale}
-								fromPeriodScale={currentSliceInfo.periodsScaleFrom}
-								toPeriodScale={currentSliceInfo.periodsScaleTo}
-								currentSliceInfo={currentSliceInfo}
-								leftValueLabel={firstValueLabel}
-								rightValueLabel={lastValueLabel}
-								xAxisFormatString={xAxisFormatString}
-							/>
-						);
+					layoutAreas={{
+						plot: chartLayout.areas.plot,
+						xAxis: chartLayout.areas.xAxis,
+						yAxis: chartLayout.areas.yAxis,
+						leftValueLabel: chartLayout.areas.leftValueLabel,
+						rightValueLabel: chartLayout.areas.rightValueLabel,
 					}}
-				</LineChartAnimationContainer>
+					theme={theme}
+					lineColor={lineColor}
+					yScale={yScale}
+					periodScale={periodsScale}
+					fromPeriodScale={currentSliceInfo.periodsScaleFrom}
+					toPeriodScale={currentSliceInfo.periodsScaleTo}
+					currentSliceInfo={currentSliceInfo}
+					leftValueLabel={firstValueLabel}
+					rightValueLabel={lastValueLabel}
+					xAxisFormatString={xAxisFormatString}
+				/>
 			</Sequence>
 		</div>
 	);

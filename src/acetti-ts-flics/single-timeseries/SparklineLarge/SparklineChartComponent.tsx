@@ -13,13 +13,14 @@ import {
 } from '../../../acetti-ts-components/BuildingAnimatedLine';
 import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
+// import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
 // import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';
 import {getTextStyleCapHeight} from '../../../acetti-typography/CapSizeTextNew';
+import {TPeriodScaleAnimationContext} from '../../../compositions/POCs/09-Timeseries/utils/usePeriodScaleAnimation';
 
 export const SparklineChartComponent: React.FC<{
 	baseline: number;
@@ -37,7 +38,7 @@ export const SparklineChartComponent: React.FC<{
 	periodScale: TPeriodsScale;
 	fromPeriodScale: TPeriodsScale;
 	toPeriodScale: TPeriodsScale;
-	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
 	leftValueLabel: string;
 	rightValueLabel: string;
 	lineColor?: string;

@@ -30,6 +30,7 @@ type Args = {
 	timeSeriesArray: TimeSeries[];
 	domainType: 'ZERO' | 'VISIBLE';
 	paddingPerc?: number;
+	domain?: [number, number];
 };
 
 export function useYScaleAnimation({
@@ -40,6 +41,7 @@ export function useYScaleAnimation({
 	yScalesInitialHeight = 500,
 	timeSeriesArray,
 	paddingPerc = 0.1,
+	domain,
 }: Args): TYScaleAnimationContext {
 	const {theme, baseline} = usePage();
 
@@ -48,6 +50,10 @@ export function useYScaleAnimation({
 
 	const getYDomain = useCallback(
 		(domainIndices: [number, number]) => {
+			if (domain) {
+				return domain;
+			}
+
 			const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) =>
 				getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 					ts,
@@ -71,7 +77,7 @@ export function useYScaleAnimation({
 
 			return yDomain;
 		},
-		[timeSeriesArray, paddingPerc, domainType]
+		[timeSeriesArray, paddingPerc, domainType, domain]
 	);
 
 	const yScalesRange = [yScalesHeight, 0] as [number, number];
