@@ -13,11 +13,12 @@ import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../../SlideIn';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	theme: ThemeType;
 };
 
@@ -53,7 +54,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 };
 
 export const TimeseriesAnimationInside: React.FC<{
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 }> = ({timeSeries}) => {
 	const {durationInFrames} = useVideoConfig();
 

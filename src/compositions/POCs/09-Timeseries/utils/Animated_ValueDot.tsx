@@ -8,13 +8,14 @@ import {TGridLayoutArea} from '../../../../acetti-layout';
 import {useGlobalVideoContext} from '../../../../acetti-components/GlobalVideoContext';
 import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 import {TYScaleAnimationContext} from './useYScaleAnimation';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const Animated_ValueDot: React.FC<{
 	area: TGridLayoutArea;
 	dotColor: string;
 	periodScaleAnimation: TPeriodScaleAnimationContext;
 	yScaleAnimation: TYScaleAnimationContext;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	radius?: number;
 	showLeftDot?: boolean;
 }> = ({

@@ -1,5 +1,7 @@
 import {extent} from 'd3-array';
 
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
+
 type TPeriodScaleBand = {
 	index: number;
 	x1: number;
@@ -7,8 +9,6 @@ type TPeriodScaleBand = {
 	centroid: number;
 	width: number;
 };
-
-type TTimeSeries = {value: number; date: Date}[];
 
 export type TPeriodsScale = {
 	// TODO should be getBandFromPeriod: (p: TPeriod) => TPeriodScaleBand;
@@ -29,7 +29,7 @@ export type TPeriodsScale = {
 	getAllVisibleDates: () => Date[];
 	//
 	getTimeSeriesInterpolatedExtent: (
-		x: TTimeSeries,
+		x: TimeSeries,
 		paddingPerc?: number
 	) => [number, number];
 	// new stuff for periodsScale Animation Container..
@@ -187,7 +187,7 @@ export const periodsScale = ({
 	};
 
 	const getTimeSeriesInterpolatedExtent = (
-		timeSeries: {value: number; date: Date}[],
+		timeSeries: TimeSeries,
 		paddingPerc?: number
 	) => {
 		return getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
@@ -221,7 +221,7 @@ export const periodsScale = ({
 };
 
 type TGetTimeSeriesInterpolatedValueArgs = {
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	domainIndex: number;
 };
 
@@ -282,7 +282,7 @@ const mergeExtents = (extents: [number, number][]) => {
 };
 
 export const getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
-	timeSeriesArray: {value: number; date: Date}[][],
+	timeSeriesArray: TimeSeries[],
 	visibleDomainIndices: [number, number]
 ) => {
 	const tsExtents = timeSeriesArray.map((ts) => {
@@ -296,7 +296,7 @@ export const getMultiTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 };
 
 export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
-	timeSeries: {value: number; date: Date}[],
+	timeSeries: TimeSeries,
 	visibleDomainIndices: [number, number],
 	paddingPerc: number = 0
 ) => {

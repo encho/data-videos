@@ -9,11 +9,7 @@ import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
-type TAnimatedLineChart2Props = {
-	timeSeries: {value: number; date: Date}[];
-};
-
-export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
+export const TimeseriesAnimation: React.FC<{timeSeries: TimeSeries}> = ({
 	timeSeries,
 }) => {
 	return (

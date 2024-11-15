@@ -9,11 +9,12 @@ import {Page} from '../../../../acetti-components/Page';
 import {LineChart_XAxisShowcase} from './LineChart_XAxisShowcase';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {PeriodScaleAnimationInspector} from '../utils/PeriodScaleAnimationInspector';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	theme: ThemeType;
 };
 

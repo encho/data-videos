@@ -32,12 +32,6 @@ export const zMultiSeries = z.object({
 
 export type TMultiSeries = z.infer<typeof zMultiSeries>;
 
-// export type TMultiSeries = {
-// 	meta: {ticker: string}[];
-// 	series: number[][];
-// 	index: Date[];
-// };
-
 export const zNerdyFinancePerformanceCompareChartDataResult = z.object({
 	title: z.string(),
 	subtitle: z.string(),
@@ -56,22 +50,6 @@ export const zNerdyFinancePerformanceCompareChartDataResult = z.object({
 export type TNerdyFinancePerformanceCompareChartDataResult = z.infer<
 	typeof zNerdyFinancePerformanceCompareChartDataResult
 >;
-
-// export type TNerdyFinancePerformanceCompareChartDataResult = {
-// 	title: string;
-// 	subtitle: string;
-// 	ticker: string;
-// 	tickerMetadata: {
-// 		ticker: string;
-// 		quote: string;
-// 		name: string;
-// 		type: string;
-// 	};
-// 	percentageChange: number;
-// 	timePeriod: string;
-// 	// data: {value: number; index: Date}[];
-// 	data: TMultiSeries;
-// };
 
 type NerdyFinancePerformanceCompareArgs = {
 	ticker: string;

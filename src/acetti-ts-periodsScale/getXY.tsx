@@ -1,11 +1,12 @@
 import {ScaleLinear} from 'd3-scale';
 
 import {TPeriodsScale} from './periodsScale';
+import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
 
 type TGetY_Kwargs = {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	domainIndex: number;
 };
 
@@ -79,7 +80,7 @@ export const getXYRight = ({
 }: {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 }) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
@@ -104,7 +105,7 @@ export const getXYRightClamped = ({
 }: {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 }) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexEnd = visibleDomainIndices[1];
@@ -139,7 +140,7 @@ export const getXYLeft = ({
 }: {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 }) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexStart = visibleDomainIndices[0];
@@ -164,7 +165,7 @@ export const getXYLeftClamped = ({
 }: {
 	periodsScale: TPeriodsScale;
 	yScale: ScaleLinear<number, number>;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 }) => {
 	const visibleDomainIndices = periodsScale.getVisibleDomainIndices();
 	const visibleDomainIndexStart = visibleDomainIndices[0];

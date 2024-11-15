@@ -12,14 +12,14 @@ import {PerformanceCompareChart} from './PerformanceCompareChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {HighlightPeriodsMulti} from '../../../../acetti-ts-components/HighlightPeriodsMulti';
-// import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../../SlideIn';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
-	timeSeries1: {value: number; date: Date}[];
-	timeSeries2: {value: number; date: Date}[];
+	timeSeries1: TimeSeries;
+	timeSeries2: TimeSeries;
 	theme: ThemeType;
 };
 
@@ -59,8 +59,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 };
 
 export const TimeseriesAnimationInside: React.FC<{
-	timeSeries1: {value: number; date: Date}[];
-	timeSeries2: {value: number; date: Date}[];
+	timeSeries1: TimeSeries;
+	timeSeries2: TimeSeries;
 }> = ({timeSeries1, timeSeries2}) => {
 	const {durationInFrames} = useVideoConfig();
 

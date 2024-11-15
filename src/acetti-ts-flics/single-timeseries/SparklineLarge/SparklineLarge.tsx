@@ -10,6 +10,7 @@ import {DisplayGridLayout} from '../../../acetti-layout';
 import {SparklineChartComponent} from './SparklineChartComponent';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {getTextDimensions} from '../../../acetti-typography/CapSizeTextNew';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const sparklinePOCSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -19,7 +20,7 @@ type TSparklineChartWrapperProps = {
 	id: string; // The id serves to uniquely define the svg mask
 	theme: ThemeType;
 	baseline: number;
-	data: {value: number; date: Date}[];
+	data: TimeSeries;
 	width: number;
 	height: number;
 	domain?: [number, number];

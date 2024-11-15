@@ -18,7 +18,7 @@ import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 type TAnimatedLineChart2Props = {
 	width: number;
 	height: number;
-	timeSeries: {value: number; date: Date}[];
+	timeSeries: TimeSeries;
 	theme: ThemeType;
 };
 
