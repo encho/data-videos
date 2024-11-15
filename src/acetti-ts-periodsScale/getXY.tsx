@@ -54,7 +54,12 @@ export const getXY = ({
 	const currentTsItem = timeSeries[currentDomainIndex];
 	const nearestTsItem = timeSeries[nearestDomainIndex];
 
-	if (currentTsItem && nearestTsItem) {
+	if (
+		currentTsItem &&
+		nearestTsItem &&
+		currentTsItem.value &&
+		nearestTsItem.value
+	) {
 		const currentTsValue = currentTsItem.value;
 		const nearestTsValue = nearestTsItem.value;
 

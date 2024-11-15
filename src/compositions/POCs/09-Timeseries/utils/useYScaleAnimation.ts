@@ -54,13 +54,13 @@ export function useYScaleAnimation({
 				return domain;
 			}
 
-			const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) =>
-				getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
+			const yDomainsForEachTimeSeries = timeSeriesArray.map((ts) => {
+				return getTimeSeriesInterpolatedExtentFromVisibleDomainIndices(
 					ts,
 					domainIndices,
 					paddingPerc
-				)
-			);
+				);
+			});
 
 			const yDomainDataMin = Math.min(
 				...yDomainsForEachTimeSeries.map((it) => it[0])
@@ -178,6 +178,7 @@ export function useYScaleAnimation({
 		periodScaleAnimation.allTransitionsAndSlicesOverview,
 		nrTicks,
 		tickFormatter,
+		getYDomain,
 	]);
 
 	const allLabelsWidths = useMemo(

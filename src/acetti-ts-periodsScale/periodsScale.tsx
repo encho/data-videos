@@ -1,6 +1,10 @@
 import {extent} from 'd3-array';
+import {isNumber} from 'lodash';
 
-import {TimeSeries} from '../acetti-ts-utils/timeSeries/timeSeries';
+import {
+	getNumericTimeSeries,
+	TimeSeries,
+} from '../acetti-ts-utils/timeSeries/timeSeries';
 
 type TPeriodScaleBand = {
 	index: number;
@@ -244,7 +248,12 @@ const getTimeSeriesInterpolatedValue = ({
 	const currentTsItem = timeSeries[currentDomainIndex];
 	const nearestTsItem = timeSeries[nearestDomainIndex];
 
-	if (currentTsItem && nearestTsItem) {
+	if (
+		currentTsItem &&
+		nearestTsItem &&
+		currentTsItem.value &&
+		nearestTsItem.value
+	) {
 		const currentTsValue = currentTsItem.value;
 		const nearestTsValue = nearestTsItem.value;
 
@@ -329,10 +338,23 @@ export const getTimeSeriesInterpolatedExtentFromVisibleDomainIndices = (
 		upperSliceIndex
 	);
 
+	// filter out null values
+	const fullyVisibleNumericTimeSeriesPiece = getNumericTimeSeries(
+		fullyVisibleTimeSeriesPiece
+	);
+
 	const timeSeriesExtent = extent(
-		fullyVisibleTimeSeriesPiece,
+		fullyVisibleNumericTimeSeriesPiece,
 		(it) => it.value
 	) as [number, number];
+
+	// QUICK-FIX, if the extent has no numbers,  set [-0.1,0.1]
+	if (!isNumber(timeSeriesExtent[0])) {
+		timeSeriesExtent[0] = -0.1;
+	}
+	if (!isNumber(timeSeriesExtent[1])) {
+		timeSeriesExtent[1] = 0.1;
+	}
 
 	const maybeValues = [];
 	if (leftInterpolatedValue) {

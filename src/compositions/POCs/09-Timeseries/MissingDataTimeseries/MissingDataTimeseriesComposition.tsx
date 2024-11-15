@@ -95,8 +95,8 @@ const mockTimeseriesDecJan: TimeSeries = [
 	{date: new Date('2025-01-23'), value: 124.96},
 	{date: new Date('2025-01-24'), value: 125.07},
 	{date: new Date('2025-01-25'), value: 126.18},
-	{date: new Date('2025-01-26'), value: 126.61},
-	{date: new Date('2025-01-27'), value: 124.77},
+	{date: new Date('2025-01-26'), value: null},
+	{date: new Date('2025-01-27'), value: null},
 	{date: new Date('2025-01-28'), value: 127.55},
 	{date: new Date('2025-01-29'), value: 129.56},
 ];
