@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 
-import {Position} from '../../../../acetti-ts-base/Position';
+import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';

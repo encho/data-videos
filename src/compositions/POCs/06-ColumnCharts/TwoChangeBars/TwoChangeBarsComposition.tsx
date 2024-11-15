@@ -2,7 +2,7 @@ import {z} from 'zod';
 import {Sequence, useVideoConfig} from 'remotion';
 
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {Position} from '../../../../acetti-ts-base/Position';
+import {Position} from '../../../../acetti-layout/atoms/Position';
 import {NewTwoChangeBars as TwoChangeBarsComponent} from '../../../../acetti-flics/NewTwoChangeBars/NewTwoChangeBars';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {EconomistDataSource} from '../../05-BarCharts/EconomistDataSource';

@@ -124,7 +124,7 @@ export const SparklineLarge: React.FC<TSparklineChartWrapperProps> = ({
 					height={height}
 				/>
 			</div>
-			<Sequence name="LineChartAnimationContainer">
+			<Sequence name="SparklineChartComponent">
 				<SparklineChartComponent
 					id={id}
 					baseline={baseline}

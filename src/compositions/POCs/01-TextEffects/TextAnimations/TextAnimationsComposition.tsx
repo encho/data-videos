@@ -7,7 +7,7 @@ import {TextAnimationSubtle} from './TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {FadeInAndOutText} from '../../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {WaterfallTextEffect} from '../../../../acetti-typography/TextEffects/WaterfallTextEffect';
-import {Position} from '../../../../acetti-ts-base/Position';
+import {Position} from '../../../../acetti-layout/atoms/Position';
 import LorenzoBertoliniLogo from '../../../../acetti-components/LorenzoBertoliniLogo';
 import {
 	useThemeFromEnum,

@@ -7,7 +7,7 @@ import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
 
 import {TXAxisSpec} from './utils/axisSpecs_xAxis';
 import {TPeriodsScale} from '../acetti-ts-periodsScale/periodsScale';
-import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
+import {TPeriodScaleAnimationContext} from '../compositions/POCs/09-Timeseries/utils/usePeriodScaleAnimation';
 
 type TTheme_XAxis = ThemeType['xAxis'];
 
@@ -35,7 +35,7 @@ export const XAxis_Transition: React.FC<{
 	toAxisSpec: TXAxisSpec;
 	theme: TTheme_XAxis;
 	periodsScale: TPeriodsScale;
-	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
 	debugEnterColor?: string;
 	debugUpdateColor?: string;
 	debugExitColor?: string;

@@ -3,7 +3,7 @@ import {useVideoConfig} from 'remotion';
 
 import {TextAnimationSubtle} from '../../../compositions/POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../compositions/POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {Position} from '../../../acetti-ts-base/Position';
+import {Position} from '../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../acetti-layout';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
 import {TPeriodsScale} from '../../../acetti-ts-periodsScale/periodsScale';
@@ -13,9 +13,7 @@ import {
 } from '../../../acetti-ts-components/BuildingAnimatedLine';
 import {getJustFirstAndLastAxisSpec} from '../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
-// import {TLineChartAnimationContext} from '../../../acetti-ts-base/LineChartAnimationContainer';
 import {XAxis_SparklineLarge} from '../../../acetti-ts-axis/XAxis_SparklineLarge';
-// import {FadeInAndOutText} from '../../../acetti-typography/TextEffects/FadeInAndOutText';
 import {getExclusiveSequenceDuration} from '../../../compositions/POCs/Keyframes/Keyframes/keyframes';
 import {KeyFramesSequence} from '../../../compositions/POCs/Keyframes/Keyframes/KeyframesInspector';
 import {getLargeSparklineKeyFrames} from './getKeyframes';

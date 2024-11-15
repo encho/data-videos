@@ -5,7 +5,7 @@ import {TGridLayoutArea} from '../acetti-layout';
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {getEnterUpdateExits} from '../acetti-ts-utils/utils';
 import {TYAxisSpec, TYAxisScale} from './utils/axisSpecs_yAxis';
-import {TLineChartAnimationContext} from '../acetti-ts-base/LineChartAnimationContainer';
+import {TPeriodScaleAnimationContext} from '../compositions/POCs/09-Timeseries/utils/usePeriodScaleAnimation';
 
 type TTheme_YAxis = ThemeType['yAxis'];
 
@@ -27,7 +27,7 @@ export const YAxis_Transition: React.FC<{
 	toAxisSpec: TYAxisSpec;
 	theme: TTheme_YAxis;
 	yScale: TYAxisScale;
-	currentSliceInfo: TLineChartAnimationContext['currentSliceInfo'];
+	currentSliceInfo: TPeriodScaleAnimationContext['currentSliceInfo'];
 }> = ({
 	area,
 	theme,

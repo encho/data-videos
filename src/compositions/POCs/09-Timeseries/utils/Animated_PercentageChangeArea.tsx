@@ -4,7 +4,7 @@ import {ScaleLinear} from 'd3-scale';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 
 import {usePage} from '../../../../acetti-components/PageContext';
-import {Position} from '../../../../acetti-ts-base/Position';
+import {Position} from '../../../../acetti-layout/atoms/Position';
 // import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 
 import {ThemeType} from '../../../../acetti-themes/themeTypes';

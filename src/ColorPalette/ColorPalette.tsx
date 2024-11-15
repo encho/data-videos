@@ -16,7 +16,7 @@ import LorenzoBertoliniLogo from '../acetti-components/LorenzoBertoliniLogo';
 import {useThemeFromEnum} from '../acetti-themes/getThemeFromEnum';
 
 // TODO into global components acetti-components
-import {Position} from '../acetti-ts-base/Position';
+import {Position} from '../acetti-layout/atoms/Position';
 
 export const colorPaletteSchema = z.object({
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
