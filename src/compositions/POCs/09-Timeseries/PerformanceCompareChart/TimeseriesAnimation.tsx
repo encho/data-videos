@@ -12,6 +12,7 @@ import {PerformanceCompareChart} from './PerformanceCompareChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {Position} from '../../../../acetti-ts-base/Position';
+import {HighlightPeriodsMulti} from '../../../../acetti-ts-components/HighlightPeriodsMulti';
 // import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../../SlideIn';
 
@@ -64,7 +65,7 @@ export const TimeseriesAnimationInside: React.FC<{
 }> = ({timeSeries1, timeSeries2}) => {
 	const {durationInFrames} = useVideoConfig();
 
-	const {contentWidth, contentHeight} = usePage();
+	const {contentWidth, contentHeight, theme} = usePage();
 
 	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.5);
@@ -143,28 +144,26 @@ export const TimeseriesAnimationInside: React.FC<{
 					yAxis: chartLayout.areas.yAxis,
 				}}
 			/>
+
 			<Sequence from={percentageChange_enter_start_keyframe}>
-				<Position
-					position={{
-						left: chartLayout.areas.plot.x1,
-						top: chartLayout.areas.plot.y1,
-					}}
-				>
-					{/* TODO port to Animated_Line */}
-					{/* <Animated_PercentageChangeArea
-						// periodsScale={periodScaleAnimation.periodsScale}
-						yScale={yScaleAnimationUpper.yScale}
-						//
-						area={chartLayout.areas.plot}
-						firstValue={timeSeries[0].value}
-						lastValue={timeSeries[timeSeries.length - 1].value}
-					/> */}
-				</Position>
+				<HighlightPeriodsMulti
+					timeSeries={timeSeries1}
+					timeSeries2={timeSeries2}
+					area={chartLayout.areas.plot}
+					periodsScale={periodScaleAnimation.periodsScale}
+					domainIndices={[220, 420] as [number, number]}
+					currentFrame={22}
+					durationInFrames={200}
+					fadeInDurationInFrames={90}
+					yScaleCurrent={yScaleAnimationUpper.yScale}
+					label="Interesting Period"
+					theme={theme.timeseriesComponents.HighlightPeriodsArea}
+				/>
 			</Sequence>
 
 			<div style={{position: 'absolute', top: 0, left: 0}}>
 				<DisplayGridLayout
-					hide
+					// hide
 					stroke="rgba(255,0,255,0.8)"
 					fill="transparent"
 					areas={chartLayout.areas}
