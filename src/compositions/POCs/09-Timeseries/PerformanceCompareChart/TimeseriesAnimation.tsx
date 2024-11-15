@@ -11,7 +11,6 @@ import {Page} from '../../../../acetti-components/Page';
 import {PerformanceCompareChart} from './PerformanceCompareChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
-import {Position} from '../../../../acetti-ts-base/Position';
 import {HighlightPeriodsMulti} from '../../../../acetti-ts-components/HighlightPeriodsMulti';
 // import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../../SlideIn';
