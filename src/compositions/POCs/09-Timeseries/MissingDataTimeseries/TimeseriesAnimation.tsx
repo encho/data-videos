@@ -24,12 +24,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 export const TimeseriesAnimationInside: React.FC<{
 	timeSeries: {date: Date; value: number}[];
-}> = ({
-	// width,
-	// height,
-	timeSeries,
-	// theme,
-}) => {
+}> = ({timeSeries}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	// TODO use keyframes perhaps
@@ -143,13 +138,12 @@ export const TimeseriesAnimationInside: React.FC<{
 	});
 
 	return (
-		<div style={{}}>
+		<div>
 			<div style={{position: 'absolute'}}>
 				<DisplayGridLayout
 					// hide
 					stroke="rgba(255,0,255,1)"
 					fill="transparent"
-					// hide={true}
 					areas={chartLayout.areas}
 					width={contentWidth}
 					height={contentHeight}
