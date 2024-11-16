@@ -245,6 +245,11 @@ import {
 	missingDataTimeseriesCompositionSchema,
 } from './compositions/POCs/09-Timeseries/MissingDataTimeseries/MissingDataTimeseriesComposition';
 
+import {
+	SvgFilterComposition,
+	svgFilterCompositionSchema,
+} from './compositions/POCs/01-TextEffects/SvgFilter/SvgFilterComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
@@ -384,6 +389,18 @@ export const RemotionRoot: React.FC = () => {
 						fps={90}
 						{...videoSizes.linkedInTall}
 						schema={svgMaskCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="SvgFilter"
+						component={SvgFilterComposition}
+						durationInFrames={30 * 4}
+						// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+						fps={30}
+						{...videoSizes.square}
+						schema={svgFilterCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
