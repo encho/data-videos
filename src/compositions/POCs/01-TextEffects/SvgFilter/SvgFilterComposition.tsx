@@ -33,7 +33,6 @@ export const SvgFilterComposition: React.FC<
 			>
 				Svg Filter
 			</TypographyStyle>
-
 			<DissolveExitFilter seedString="hehehe">
 				{({filterUrl}) => {
 					return (

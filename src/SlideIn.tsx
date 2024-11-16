@@ -1,7 +1,7 @@
 import React from 'react';
 import {
 	Easing,
-	AbsoluteFill,
+	// AbsoluteFill,
 	interpolate,
 	spring,
 	useCurrentFrame,
@@ -54,13 +54,13 @@ export const SlideOut: React.FC<{children: React.ReactNode}> = ({children}) => {
 	});
 
 	return (
-		<AbsoluteFill
+		<div
 			style={{
 				transform: `translateX(${interpolate(spr, [0, 1], [0, -width])}px)`,
 			}}
 		>
 			{children}
-		</AbsoluteFill>
+		</div>
 	);
 };
 
@@ -70,8 +70,8 @@ export const OpacifyInAndOut: React.FC<{children: React.ReactNode}> = ({
 	const {fps, durationInFrames} = useVideoConfig();
 	const frame = useCurrentFrame();
 
-	const nrEntryFrames = fps * 0.4;
-	const nrExitFrames = fps * 0.6;
+	const nrEntryFrames = fps * 0.8;
+	const nrExitFrames = fps * 0.4;
 
 	const opacity = interpolate(
 		frame,
@@ -84,6 +84,37 @@ export const OpacifyInAndOut: React.FC<{children: React.ReactNode}> = ({
 		[0, 1, 1, 0],
 		{easing: Easing.ease}
 	);
+
+	const translateX = interpolate(
+		frame,
+		[durationInFrames - nrExitFrames, durationInFrames - 1],
+		[0, -500],
+		{easing: Easing.ease}
+	);
+
+	return (
+		<div
+			style={{
+				opacity,
+				transform: `translateX(${translateX}px)`,
+			}}
+		>
+			{children}
+		</div>
+	);
+};
+
+export const OpacifyIn: React.FC<{children: React.ReactNode}> = ({
+	children,
+}) => {
+	const {fps} = useVideoConfig();
+	const frame = useCurrentFrame();
+
+	const nrEntryFrames = fps * 0.8;
+
+	const opacity = interpolate(frame, [0, nrEntryFrames - 1], [0, 1], {
+		easing: Easing.ease,
+	});
 
 	return (
 		<div

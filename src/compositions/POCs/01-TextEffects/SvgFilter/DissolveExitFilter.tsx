@@ -7,6 +7,10 @@ import {
 	random,
 } from 'remotion';
 
+// CREDIT:
+// "Mikhail Bespalov"
+// "https://codepen.io/Mikhail-Bespalov/pen/yLmpxOG"
+
 /**
  * Calculate the opacity of the image based on eased progress
  * @param easedProgress - Eased progress value between 0 and 1
@@ -43,7 +47,7 @@ export const DissolveExitFilter: React.FC<TDissolveFilterContainerProps> = ({
 
 	const easedProgress = interpolate(
 		frame,
-		[durationInFrames - fps * 0.5, durationInFrames - 1],
+		[durationInFrames - fps * 0.8, durationInFrames - 1],
 		[0, 1],
 		{
 			easing: Easing.ease,

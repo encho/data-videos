@@ -12,8 +12,10 @@ import {PerformanceCompareChart} from './PerformanceCompareChart';
 import {DisplayGridLayout} from '../../../../acetti-layout';
 import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
 import {HighlightPeriodsMulti} from '../../../../acetti-ts-components/HighlightPeriodsMulti';
-import {OpacifyInAndOut} from '../../../../SlideIn';
+import {SlideOut, SlideIn} from '../../../../SlideIn';
+import {ObliquePlatte} from '../../../../acetti-components/ObliquePlatte';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+// import {DissolveExitFilter} from '../../01-TextEffects/SvgFilter/DissolveExitFilter';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -36,24 +38,30 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	return (
 		<div style={{position: 'relative'}}>
-			<div>
-				<PageContext
-					width={CHART_PAGE_WIDTH}
-					height={CHART_PAGE_HEIGHT}
-					margin={CHART_PAGE_MARGIN}
-					nrBaselines={30}
-					theme={theme}
-				>
-					<OpacifyInAndOut>
-						<Page boxShadow borderRadius={5}>
-							<TimeseriesAnimationInside
-								timeSeries1={timeSeries1}
-								timeSeries2={timeSeries2}
-							/>
-						</Page>
-					</OpacifyInAndOut>
-				</PageContext>
-			</div>
+			<SlideIn>
+				<SlideOut>
+					<PageContext
+						width={CHART_PAGE_WIDTH}
+						height={CHART_PAGE_HEIGHT}
+						margin={CHART_PAGE_MARGIN}
+						nrBaselines={30}
+						theme={theme}
+					>
+						<ObliquePlatte
+							width={CHART_PAGE_WIDTH}
+							height={CHART_PAGE_HEIGHT}
+							theme={theme.platte}
+						>
+							<Page boxShadow borderRadius={5}>
+								<TimeseriesAnimationInside
+									timeSeries1={timeSeries1}
+									timeSeries2={timeSeries2}
+								/>
+							</Page>
+						</ObliquePlatte>
+					</PageContext>
+				</SlideOut>
+			</SlideIn>
 		</div>
 	);
 };
