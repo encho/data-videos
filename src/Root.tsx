@@ -250,11 +250,15 @@ import {
 	svgFilterCompositionSchema,
 } from './compositions/POCs/01-TextEffects/SvgFilter/SvgFilterComposition';
 
+import {
+	DynamicListComposition,
+	dynamicListCompositionSchema,
+} from './compositions/POCs/NewBarCharts/DynamicList/DynamicListComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
 
-// TODO use this
 export const videoSizes = {
 	square: {
 		width: 1080,
@@ -1282,6 +1286,20 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.square}
 						schema={scatterPlotToBarChartSchema}
 						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
+				</Folder>
+				<Folder name="New-BarCharts">
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="DynamicList"
+						component={DynamicListComposition}
+						durationInFrames={90 * 3}
+						fps={90}
+						{...videoSizes.widescreen_16x9}
+						// height={12000}
+						schema={dynamicListCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
 			</Folder>
