@@ -73,7 +73,7 @@ export const DynamicListPage: React.FC = () => {
 		column: 2,
 	});
 
-	const visibleIndicesFrom = [2, 4] as [number, number];
+	const visibleIndicesFrom = [0, 4] as [number, number];
 	const visibleIndicesTo = [0, 6] as [number, number];
 
 	const context = useDynamicListTransition({
@@ -263,6 +263,34 @@ export const AnimateAreas: React.FC<{
 					</HtmlArea>
 				);
 			})}
+
+			{/* the exits */}
+			{transitionTypes.exit.map((id) => {
+				const areaFrom = context.getListItemAreaFrom(id);
+				// const areaTo = context.getListItemAreaTo(id);
+
+				const idColor = getPredefinedColor(id);
+
+				const currentOpacity = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[1, 0],
+					{
+						// easing: xxx
+					}
+				);
+
+				return (
+					<HtmlArea area={areaFrom} fill={idColor} opacity={currentOpacity}>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.body}
+							baseline={baseline}
+						>
+							{id}
+						</TypographyStyle>
+					</HtmlArea>
+				);
+			})}
 		</div>
 	);
 };
@@ -272,6 +300,7 @@ const itemsFrom = [
 	{id: 'Id-002'},
 	{id: 'Id-003'},
 	{id: 'Id-004'},
+	{id: 'Id-011'},
 	{id: 'Id-005'},
 	{id: 'Id-006'},
 	{id: 'Id-007'},
