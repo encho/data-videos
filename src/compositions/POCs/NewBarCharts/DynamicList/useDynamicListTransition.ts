@@ -4,150 +4,16 @@ import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TDynamicListLayout} from './useDynamicListLayout';
 import {useDynamicListLayout} from './useDynamicListLayout';
 
-export function useEnterAreas(context: TDynamicListTransitionContext) {
-	const {transitionTypes, frame, durationInFrames} = context;
-
-	const areaProperties = transitionTypes.enter.map((id) => {
-		const areaTo = context.getListItemAreaTo(id);
-
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[0, 1],
-			{
-				// easing: xxx
-			}
-		);
-
-		return {id, area: areaTo, opacity: currentOpacity};
-	});
-
-	return areaProperties;
-}
-
-export function useExitAreas(context: TDynamicListTransitionContext) {
-	const {transitionTypes, frame, durationInFrames} = context;
-
-	return transitionTypes.exit.map((id) => {
-		const areaFrom = context.getListItemAreaFrom(id);
-
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[1, 0],
-			{
-				// easing: xxx
-			}
-		);
-
-		return {id, area: areaFrom, opacity: currentOpacity};
-	});
-}
-
-export function useAppearAreas(context: TDynamicListTransitionContext) {
-	return useUpdateTypeAreas(context, 'appear');
-}
-
-export function useDisappearAreas(context: TDynamicListTransitionContext) {
-	return useUpdateTypeAreas(context, 'disappear');
-}
-
-export function useUpdateAreas(context: TDynamicListTransitionContext) {
-	return useUpdateTypeAreas(context, 'update');
-}
-
-function useUpdateTypeAreas(
-	context: TDynamicListTransitionContext,
-	updateType: 'appear' | 'disappear' | 'update'
-) {
-	const {transitionTypes, frame, durationInFrames} = context;
-
-	const ids =
-		updateType === 'appear'
-			? transitionTypes.appear
-			: updateType === 'disappear'
-			? transitionTypes.disappear
-			: transitionTypes.update;
-
-	const opacityRange =
-		updateType === 'appear'
-			? [0, 1]
-			: updateType === 'disappear'
-			? [1, 0]
-			: [1, 1];
-
-	return ids.map((id) => {
-		const areaTo = context.getListItemAreaTo(id);
-		const areaFrom = context.getListItemAreaFrom(id);
-
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			opacityRange,
-			{
-				// easing: xxx
-			}
-		);
-
-		const current_y1 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.y1, areaTo.y1],
-			{
-				// easing: xxx
-			}
-		);
-
-		const current_y2 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.y2, areaTo.y2],
-			{
-				// easing: xxx
-			}
-		);
-
-		const current_x1 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.x1, areaTo.x1],
-			{
-				// easing: xxx
-			}
-		);
-
-		const current_x2 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.x2, areaTo.x2],
-			{
-				// easing: xxx
-			}
-		);
-
-		const currentArea = {
-			y1: current_y1,
-			y2: current_y2,
-			x1: current_x1,
-			x2: current_x2,
-			width: current_x2 - current_x1,
-			height: current_y2 - current_y1,
-		};
-
-		return {id, area: currentArea, opacity: currentOpacity};
-	});
-}
-
-type Item = {id: string};
+// type Item = {id: string};
 // TODO type generics with T = {id: string} & other
 
-export type TDynamicListTransitionContext = {
+export type TDynamicListTransitionContext<T extends {id: string}> = {
 	layoutFrom: TDynamicListLayout;
 	layoutTo: TDynamicListLayout;
-	itemsFrom: Item[];
-	itemsTo: Item[];
-	visibleItemsTo: Item[];
-	visibleItemsFrom: Item[];
+	itemsFrom: T[];
+	itemsTo: T[];
+	visibleItemsTo: T[];
+	visibleItemsFrom: T[];
 	visibleIndicesFrom: [number, number];
 	visibleIndicesTo: [number, number];
 	visibleIndicesRangeFrom: [number, number];
@@ -174,7 +40,7 @@ export type TDynamicListTransitionContext = {
 
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
-export function useDynamicListTransition({
+export function useDynamicListTransition<T extends {id: string}>({
 	itemsFrom,
 	itemsTo,
 	visibleIndicesFrom,
@@ -185,8 +51,8 @@ export function useDynamicListTransition({
 	frame,
 	durationInFrames,
 }: {
-	itemsFrom: Item[];
-	itemsTo: Item[];
+	itemsFrom: T[];
+	itemsTo: T[];
 	width: number;
 	height: number;
 	visibleIndicesFrom: [number, number];
@@ -195,9 +61,9 @@ export function useDynamicListTransition({
 	frame: number;
 	durationInFrames: number;
 	// TODO: baseline, to determine the sizes in the layout!!!!!!!!!!!
-}): TDynamicListTransitionContext {
-	const visibleItemsFrom = getVisibleItems(itemsFrom, visibleIndicesFrom);
-	const visibleItemsTo = getVisibleItems(itemsTo, visibleIndicesTo);
+}): TDynamicListTransitionContext<T> {
+	const visibleItemsFrom = getVisibleItems<T>(itemsFrom, visibleIndicesFrom);
+	const visibleItemsTo = getVisibleItems<T>(itemsTo, visibleIndicesTo);
 
 	const layoutFrom = useDynamicListLayout({
 		width,
@@ -289,16 +155,160 @@ export function useDynamicListTransition({
 	};
 }
 
+export function useEnterAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>
+) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	const areaProperties = transitionTypes.enter.map((id) => {
+		const areaTo = context.getListItemAreaTo(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[0, 1],
+			{
+				// easing: xxx
+			}
+		);
+
+		return {id, area: areaTo, opacity: currentOpacity};
+	});
+
+	return areaProperties;
+}
+
+export function useExitAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>
+) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	return transitionTypes.exit.map((id) => {
+		const areaFrom = context.getListItemAreaFrom(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[1, 0],
+			{
+				// easing: xxx
+			}
+		);
+
+		return {id, area: areaFrom, opacity: currentOpacity};
+	});
+}
+
+export function useAppearAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>
+) {
+	return useUpdateTypeAreas(context, 'appear');
+}
+
+export function useDisappearAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>
+) {
+	return useUpdateTypeAreas(context, 'disappear');
+}
+
+export function useUpdateAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>
+) {
+	return useUpdateTypeAreas(context, 'update');
+}
+
+function useUpdateTypeAreas<T extends {id: string}>(
+	context: TDynamicListTransitionContext<T>,
+	updateType: 'appear' | 'disappear' | 'update'
+) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	const ids =
+		updateType === 'appear'
+			? transitionTypes.appear
+			: updateType === 'disappear'
+			? transitionTypes.disappear
+			: transitionTypes.update;
+
+	const opacityRange =
+		updateType === 'appear'
+			? [0, 1]
+			: updateType === 'disappear'
+			? [1, 0]
+			: [1, 1];
+
+	return ids.map((id) => {
+		const areaTo = context.getListItemAreaTo(id);
+		const areaFrom = context.getListItemAreaFrom(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			opacityRange,
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_y1 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.y1, areaTo.y1],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_y2 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.y2, areaTo.y2],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_x1 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.x1, areaTo.x1],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_x2 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.x2, areaTo.x2],
+			{
+				// easing: xxx
+			}
+		);
+
+		const currentArea = {
+			y1: current_y1,
+			y2: current_y2,
+			x1: current_x1,
+			x2: current_x2,
+			width: current_x2 - current_x1,
+			height: current_y2 - current_y1,
+		};
+
+		return {id, area: currentArea, opacity: currentOpacity};
+	});
+}
+
 /**
  * Returns a subset of items based on the visibleIndices range.
  * @param items - Array of Item objects.
  * @param visibleIndices - A tuple [start, end] representing the inclusive start and exclusive end indices.
  * @returns A subarray of items within the specified visible range.
  */
-function getVisibleItems(
-	items: Item[],
+function getVisibleItems<T extends {id: string}>(
+	items: T[],
 	visibleIndices: [number, number]
-): Item[] {
+): T[] {
 	const [start, end] = visibleIndices;
 
 	// Validate indices: must be integers and within the array bounds

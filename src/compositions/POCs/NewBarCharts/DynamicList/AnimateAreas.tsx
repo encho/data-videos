@@ -13,7 +13,7 @@ import {
 import {HtmlArea} from '../../../../acetti-layout';
 
 export const AnimateAreas: React.FC<{
-	context: TDynamicListTransitionContext;
+	context: TDynamicListTransitionContext<{id: string}>;
 }> = ({context}) => {
 	const {theme, baseline} = usePage();
 
