@@ -199,8 +199,6 @@ function useEnterAreas(context: TDynamicListAnimationContext) {
 	const areaProperties = transitionTypes.enter.map((id) => {
 		const areaTo = context.getListItemAreaTo(id);
 
-		const idColor = getPredefinedColor(id);
-
 		const currentOpacity = interpolate(
 			frame,
 			[0, durationInFrames - 1],
@@ -210,270 +208,134 @@ function useEnterAreas(context: TDynamicListAnimationContext) {
 			}
 		);
 
-		const areaProperty = {area: areaTo, opacity: currentOpacity, id};
-
-		return areaProperty;
+		return {id, area: areaTo, opacity: currentOpacity};
 	});
 
 	return areaProperties;
+}
+
+function useExitAreas(context: TDynamicListAnimationContext) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	return transitionTypes.exit.map((id) => {
+		const areaFrom = context.getListItemAreaFrom(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[1, 0],
+			{
+				// easing: xxx
+			}
+		);
+
+		return {id, area: areaFrom, opacity: currentOpacity};
+	});
+}
+
+function useUpdateTypeAreas(
+	context: TDynamicListAnimationContext,
+	updateType: 'appear' | 'disappear' | 'update'
+) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	const ids =
+		updateType === 'appear'
+			? transitionTypes.appear
+			: updateType === 'disappear'
+			? transitionTypes.disappear
+			: transitionTypes.update;
+
+	const opacityRange =
+		updateType === 'appear'
+			? [0, 1]
+			: updateType === 'disappear'
+			? [1, 0]
+			: [1, 1];
+
+	return ids.map((id) => {
+		const areaTo = context.getListItemAreaTo(id);
+		const areaFrom = context.getListItemAreaFrom(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			opacityRange,
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_y1 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.y1, areaTo.y1],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_y2 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.y2, areaTo.y2],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_x1 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.x1, areaTo.x1],
+			{
+				// easing: xxx
+			}
+		);
+
+		const current_x2 = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[areaFrom.x2, areaTo.x2],
+			{
+				// easing: xxx
+			}
+		);
+
+		const currentArea = {
+			y1: current_y1,
+			y2: current_y2,
+			x1: current_x1,
+			x2: current_x2,
+			width: current_x2 - current_x1,
+			height: current_y2 - current_y1,
+		};
+
+		return {id, area: currentArea, opacity: currentOpacity};
+	});
 }
 
 export const AnimateAreas: React.FC<{
 	context: TDynamicListAnimationContext;
 }> = ({context}) => {
 	const {theme, baseline} = usePage();
-	const {transitionTypes, frame, durationInFrames} = context;
 
+	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
 	const enterAreas = useEnterAreas(context);
+	const exitAreas = useExitAreas(context);
+	const appearAreas = useUpdateTypeAreas(context, 'appear');
+	const disappearAreas = useUpdateTypeAreas(context, 'disappear');
+	const updateAreas = useUpdateTypeAreas(context, 'update');
 
 	return (
 		<div>
-			{/* the updates */}
-			{transitionTypes.update.map((id) => {
-				const areaFrom = context.getListItemAreaFrom(id);
-				const areaTo = context.getListItemAreaTo(id);
-
-				const idColor = getPredefinedColor(id);
-
-				const current_y1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y1, areaTo.y1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_y2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y2, areaTo.y2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x1, areaTo.x1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x2, areaTo.x2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const currentArea = {
-					y1: current_y1,
-					y2: current_y2,
-					x1: current_x1,
-					x2: current_x2,
-					width: current_x2 - current_x1,
-					height: current_y2 - current_y1,
-				};
-
-				return (
-					<HtmlArea area={currentArea} fill={idColor}>
-						{/* TODO: here instead */}
-						{/* <UpdateComponent areaFrom areaTo currentArea easingPercentage id /> */}
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.body}
-							baseline={baseline}
-						>
-							{id}
-						</TypographyStyle>
-					</HtmlArea>
-				);
-			})}
-
-			{/* the appears */}
-			{transitionTypes.appear.map((id) => {
-				const areaFrom = context.getListItemAreaFrom(id);
-				const areaTo = context.getListItemAreaTo(id);
-
-				const idColor = getPredefinedColor(id);
-
-				const current_y1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y1, areaTo.y1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_y2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y2, areaTo.y2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x1, areaTo.x1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x2, areaTo.x2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const currentOpacity = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[0, 1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const currentArea = {
-					y1: current_y1,
-					y2: current_y2,
-					x1: current_x1,
-					x2: current_x2,
-					width: current_x2 - current_x1,
-					height: current_y2 - current_y1,
-				};
-
-				return (
-					<HtmlArea area={currentArea} fill={idColor} opacity={currentOpacity}>
-						{/* TODO: here instead */}
-						{/* <UpdateComponent areaFrom areaTo currentArea easingPercentage id /> */}
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.body}
-							baseline={baseline}
-						>
-							{id}
-						</TypographyStyle>
-					</HtmlArea>
-				);
-			})}
-
-			{/* the disappears */}
-			{transitionTypes.disappear.map((id) => {
-				const areaFrom = context.getListItemAreaFrom(id);
-				const areaTo = context.getListItemAreaTo(id);
-
-				const idColor = getPredefinedColor(id);
-
-				const current_y1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y1, areaTo.y1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_y2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.y2, areaTo.y2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x1 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x1, areaTo.x1],
-					{
-						// easing: xxx
-					}
-				);
-
-				const current_x2 = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[areaFrom.x2, areaTo.x2],
-					{
-						// easing: xxx
-					}
-				);
-
-				const currentOpacity = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[1, 0],
-					{
-						// easing: xxx
-					}
-				);
-
-				const currentArea = {
-					y1: current_y1,
-					y2: current_y2,
-					x1: current_x1,
-					x2: current_x2,
-					width: current_x2 - current_x1,
-					height: current_y2 - current_y1,
-				};
-
-				return (
-					<HtmlArea area={currentArea} fill={idColor} opacity={currentOpacity}>
-						{/* TODO: here instead */}
-						{/* <UpdateComponent areaFrom areaTo currentArea easingPercentage id /> */}
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.body}
-							baseline={baseline}
-						>
-							{id}
-						</TypographyStyle>
-					</HtmlArea>
-				);
-			})}
-
-			{/* the exits */}
-			{transitionTypes.exit.map((id) => {
-				const areaFrom = context.getListItemAreaFrom(id);
-				// const areaTo = context.getListItemAreaTo(id);
-
-				const idColor = getPredefinedColor(id);
-
-				const currentOpacity = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[1, 0],
-					{
-						// easing: xxx
-					}
-				);
-
-				return (
-					<HtmlArea area={areaFrom} fill={idColor} opacity={currentOpacity}>
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.body}
-							baseline={baseline}
-						>
-							{id}
-						</TypographyStyle>
-					</HtmlArea>
-				);
-			})}
-
-			{/* the enters */}
-			{enterAreas.map((enterArea) => {
+			{[
+				...enterAreas,
+				...exitAreas,
+				...appearAreas,
+				...disappearAreas,
+				...updateAreas,
+			].map((enterArea) => {
 				return (
 					<HtmlArea
 						area={enterArea.area}
