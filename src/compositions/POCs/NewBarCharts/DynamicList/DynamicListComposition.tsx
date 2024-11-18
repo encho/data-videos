@@ -704,27 +704,73 @@ function isIdInItems(id: string, items: Item[]): boolean {
 // console.log(isIdInItems("003",items)); // true
 // console.log(isIdInItems("007",items)); // false
 
+// const idColorMap: {[key: string]: string} = {
+// 	'Id-001': '#1f77b4', // Blue
+// 	'Id-002': '#ff7f0e', // Orange
+// 	'Id-003': '#2ca02c', // Green
+// 	'Id-004': '#d62728', // Red
+// 	'Id-005': '#9467bd', // Purple
+// 	'Id-006': '#8c564b', // Brown
+// 	'Id-007': '#e377c2', // Pink
+// 	'Id-008': '#7f7f7f', // Gray
+// 	'Id-009': '#bcbd22', // Yellow-Green
+// 	'Id-010': '#17becf', // Teal
+// 	'Id-011': '#aec7e8', // Light Blue
+// 	'Id-012': '#ffbb78', // Light Orange
+// 	'Id-013': '#98df8a', // Light Green
+// 	'Id-014': '#ff9896', // Light Red
+// 	'Id-015': '#c5b0d5', // Light Purple
+// 	'Id-016': '#c49c94', // Light Brown
+// 	'Id-017': '#f7b6d2', // Light Pink
+// 	'Id-018': '#c7c7c7', // Light Gray
+// 	'Id-019': '#dbdb8d', // Light Yellow-Green
+// 	'Id-020': '#9edae5', // Light Teal
+// };
+
+// const idColorMap: {[key: string]: string} = {
+// 	'Id-001': '#00bfff', // Light Neon Blue
+// 	'Id-002': '#00b5e6', // Slightly Darker Neon Blue
+// 	'Id-003': '#00aadd', // Medium Neon Blue
+// 	'Id-004': '#009fd4', // Deeper Neon Blue
+// 	'Id-005': '#0094cc', // Neon Blue
+// 	'Id-006': '#008ac3', // Slightly Darker Neon Blue
+// 	'Id-007': '#007fb9', // Darker Neon Blue
+// 	'Id-008': '#0074b0', // Dark Neon Blue
+// 	'Id-009': '#0069a6', // Deeper Neon Blue
+// 	'Id-010': '#005e9c', // Very Dark Neon Blue
+// 	'Id-011': '#005392', // Deep Neon Blue
+// 	'Id-012': '#004888', // Deepest Neon Blue
+// 	'Id-013': '#003d7e', // Darker Neon Blue
+// 	'Id-014': '#003274', // Even Darker Neon Blue
+// 	'Id-015': '#00276a', // Near Black Neon Blue
+// 	'Id-016': '#001c60', // Very Dark Neon Blue
+// 	'Id-017': '#001156', // Darker Neon Blue
+// 	'Id-018': '#00064c', // Darkest Neon Blue
+// 	'Id-019': '#000041', // Near Black Neon Blue
+// 	'Id-020': '#000037', // Dark Neon Blue
+// };
+
 const idColorMap: {[key: string]: string} = {
-	'Id-001': '#1f77b4', // Blue
-	'Id-002': '#ff7f0e', // Orange
-	'Id-003': '#2ca02c', // Green
-	'Id-004': '#d62728', // Red
-	'Id-005': '#9467bd', // Purple
-	'Id-006': '#8c564b', // Brown
-	'Id-007': '#e377c2', // Pink
-	'Id-008': '#7f7f7f', // Gray
-	'Id-009': '#bcbd22', // Yellow-Green
-	'Id-010': '#17becf', // Teal
-	'Id-011': '#aec7e8', // Light Blue
-	'Id-012': '#ffbb78', // Light Orange
-	'Id-013': '#98df8a', // Light Green
-	'Id-014': '#ff9896', // Light Red
-	'Id-015': '#c5b0d5', // Light Purple
-	'Id-016': '#c49c94', // Light Brown
-	'Id-017': '#f7b6d2', // Light Pink
-	'Id-018': '#c7c7c7', // Light Gray
-	'Id-019': '#dbdb8d', // Light Yellow-Green
-	'Id-020': '#9edae5', // Light Teal
+	'Id-001': '#007bff', // Neon Blue
+	'Id-002': '#ff4500', // Neon Orange
+	'Id-003': '#39ff14', // Neon Green
+	'Id-004': '#ff073a', // Neon Red
+	'Id-005': '#9d00ff', // Neon Purple
+	'Id-006': '#a0522d', // Neon Brown (Slightly brighter)
+	'Id-007': '#ff00ff', // Neon Pink
+	'Id-008': '#8c8c8c', // Neon Gray
+	'Id-009': '#d4ff00', // Neon Yellow-Green
+	'Id-010': '#00ffff', // Neon Teal
+	'Id-011': '#5b9bff', // Neon Light Blue
+	'Id-012': '#ff8300', // Neon Light Orange
+	'Id-013': '#aaff66', // Neon Light Green
+	'Id-014': '#ff5e5e', // Neon Light Red
+	'Id-015': '#bf80ff', // Neon Light Purple
+	'Id-016': '#e5b98e', // Neon Light Brown
+	'Id-017': '#ff85c2', // Neon Light Pink
+	'Id-018': '#d3d3d3', // Neon Light Gray
+	'Id-019': '#eaff00', // Neon Light Yellow-Green
+	'Id-020': '#6effff', // Neon Light Teal
 };
 
 /**
