@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import React from 'react';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TDynamicListLayout} from './useDynamicListLayout';
@@ -185,47 +185,85 @@ export const DynamicListPage: React.FC = () => {
 				</HtmlArea>
 
 				<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-					<DisplayGridRails
-						{...context.layoutTo.gridLayout}
-						stroke="rgba(255,0,255,1)"
-					/>
-					{/* visibleArea */}
-					{/* <div
-						style={{
-							position: 'absolute',
-							top: context.visibleIndicesRangeTo[0],
-							left: 0,
-							width: area_2.width,
-							height: context.visibleIndicesRangeSizeTo,
-							backgroundColor: 'rgba(0,255,0,0.4)',
-						}}
-					/> */}
-					{itemsTo.map((it) => {
-						const area = context.layoutTo.getListItemPaddedArea(it.id);
-
-						// console.log({area});
-						// const idColor = getPredefinedColor(it.id);
-
-						// const isVisible = isIdInItems(it.id, context.visibleItemsTo);
-
-						return (
-							<HtmlArea
-								area={area}
-								// fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-								fill="rgba(0,0,0,0.9)"
-							>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.body}
-									baseline={baseline}
-								>
-									{it.id}
-								</TypographyStyle>
-							</HtmlArea>
-						);
-					})}
+					<AnimateAreas context={context} />
 				</HtmlArea>
 			</div>
 		</Page>
+	);
+};
+
+export const AnimateAreas: React.FC<{
+	context: TDynamicListAnimationContext;
+}> = ({context}) => {
+	const {theme, baseline} = usePage();
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	return (
+		<div>
+			{/* the updates */}
+			{transitionTypes.update.map((id) => {
+				const areaFrom = context.getListItemAreaFrom(id);
+				const areaTo = context.getListItemAreaTo(id);
+
+				const idColor = getPredefinedColor(id);
+
+				const current_y1 = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[areaFrom.y1, areaTo.y1],
+					{
+						// easing: xxx
+					}
+				);
+
+				const current_y2 = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[areaFrom.y2, areaTo.y2],
+					{
+						// easing: xxx
+					}
+				);
+
+				const current_x1 = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[areaFrom.x1, areaTo.x1],
+					{
+						// easing: xxx
+					}
+				);
+
+				const current_x2 = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[areaFrom.x2, areaTo.x2],
+					{
+						// easing: xxx
+					}
+				);
+
+				const currentArea = {
+					y1: current_y1,
+					y2: current_y2,
+					x1: current_x1,
+					x2: current_x2,
+					width: current_x2 - current_x1,
+					height: current_y2 - current_y1,
+				};
+
+				return (
+					<HtmlArea area={currentArea} fill={idColor}>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.body}
+							baseline={baseline}
+						>
+							{id}
+						</TypographyStyle>
+					</HtmlArea>
+				);
+			})}
+		</div>
 	);
 };
 
@@ -279,6 +317,7 @@ type TDynamicListAnimationContext = {
 	};
 	// TODO
 	// easing: (x:number) => number
+	// baseline
 };
 
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
@@ -303,6 +342,7 @@ function useDynamicListTransition({
 	justifyContent?: 'center' | 'start';
 	frame: number;
 	durationInFrames: number;
+	// TODO: baseline, to determine the sizes in the layout!!!!!!!!!!!
 }): TDynamicListAnimationContext {
 	const visibleItemsFrom = getVisibleItems(itemsFrom, visibleIndicesFrom);
 	const visibleItemsTo = getVisibleItems(itemsTo, visibleIndicesTo);
@@ -357,8 +397,6 @@ function useDynamicListTransition({
 		visibleFrom: visibleItemsFrom.map((it) => it.id),
 		visibleTo: visibleItemsTo.map((it) => it.id),
 	});
-
-	console.log({transitionTypes});
 
 	return {
 		frame,
