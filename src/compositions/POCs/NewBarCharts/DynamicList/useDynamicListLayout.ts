@@ -12,7 +12,7 @@ export type TDynamicListLayout = {
 	width: number;
 	height: number;
 	getListItemArea: (i: number | string) => TGridLayoutArea;
-	// getListItemPaddedArea: (i: number | string) => TGridLayoutArea;
+	getListItemPaddedArea: (i: number | string) => TGridLayoutArea;
 	getVisibleIndicesRange: (
 		visibleIndices: [number, number]
 	) => [number, number];
@@ -84,6 +84,8 @@ export function useDynamicListLayout({
 		gridLayoutSpec,
 	});
 
+	console.log({gridLayout});
+
 	const getListItemArea = (i: number | string): TGridLayoutArea => {
 		if (typeof i === 'number') {
 			const labelArea = getGridLayoutArea(gridLayout, [
@@ -112,7 +114,7 @@ export function useDynamicListLayout({
 		}
 
 		const stringToIx = items.findIndex((it) => it.id === i);
-		return getListItemArea(stringToIx);
+		return getListItemPaddedArea(stringToIx);
 	};
 
 	const getVisibleIndicesRange = (visibleIndices: [number, number]) => {
@@ -129,7 +131,7 @@ export function useDynamicListLayout({
 		width: gridLayout.width,
 		height: gridLayout.height,
 		getListItemArea,
-		// getListItemPaddedArea,
+		getListItemPaddedArea,
 		getVisibleIndicesRange,
 	};
 }
