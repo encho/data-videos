@@ -1,4 +1,5 @@
 import {interpolate} from 'remotion';
+import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TDynamicListLayout} from './useDynamicListLayout';
@@ -33,6 +34,8 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 		appear: string[];
 		disappear: string[];
 	};
+	itemHeight: number;
+	width: number;
 	// TODO
 	// easing: (x:number) => number
 	// baseline
@@ -41,6 +44,9 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicListTransition<T extends {id: string}>({
+	itemHeight = 100,
+	itemMarginTop = 0,
+	itemMarginBottom = 0,
 	itemsFrom,
 	itemsTo,
 	visibleIndicesFrom,
@@ -51,6 +57,9 @@ export function useDynamicListTransition<T extends {id: string}>({
 	frame,
 	durationInFrames,
 }: {
+	itemHeight?: number; // TODO not optional
+	itemMarginTop?: number; // TODO not optional
+	itemMarginBottom?: number; // TODO not optional
 	itemsFrom: T[];
 	itemsTo: T[];
 	width: number;
@@ -69,12 +78,18 @@ export function useDynamicListTransition<T extends {id: string}>({
 		width,
 		height,
 		items: itemsFrom,
+		itemHeight,
+		itemMarginTop,
+		itemMarginBottom,
 		// visibleIndices: visibleIndicesFrom,
 	});
 	const layoutTo = useDynamicListLayout({
 		width,
 		height,
 		items: itemsTo,
+		itemHeight,
+		itemMarginTop,
+		itemMarginBottom,
 		// visibleIndices: visibleIndicesTo,
 	});
 
@@ -120,6 +135,8 @@ export function useDynamicListTransition<T extends {id: string}>({
 		frame,
 		durationInFrames,
 		transitionTypes,
+		itemHeight,
+		width,
 		layoutFrom,
 		layoutTo,
 		itemsFrom,
@@ -172,7 +189,15 @@ export function useEnterAreas<T extends {id: string}>(
 			}
 		);
 
-		return {id, area: areaTo, opacity: currentOpacity};
+		const item = context.itemsTo.find((it) => it.id === id);
+		invariant(item);
+
+		return {
+			id,
+			area: areaTo,
+			opacity: currentOpacity,
+			item,
+		};
 	});
 
 	return areaProperties;
@@ -195,7 +220,10 @@ export function useExitAreas<T extends {id: string}>(
 			}
 		);
 
-		return {id, area: areaFrom, opacity: currentOpacity};
+		const item = context.itemsFrom.find((it) => it.id === id);
+		invariant(item);
+
+		return {id, area: areaFrom, item, opacity: currentOpacity};
 	});
 }
 
@@ -240,6 +268,11 @@ function useUpdateTypeAreas<T extends {id: string}>(
 	return ids.map((id) => {
 		const areaTo = context.getListItemAreaTo(id);
 		const areaFrom = context.getListItemAreaFrom(id);
+
+		const itemFrom = context.itemsFrom.find((it) => it.id === id);
+		const itemTo = context.itemsTo.find((it) => it.id === id);
+		invariant(itemFrom);
+		invariant(itemTo);
 
 		const currentOpacity = interpolate(
 			frame,
@@ -295,7 +328,7 @@ function useUpdateTypeAreas<T extends {id: string}>(
 			height: current_y2 - current_y1,
 		};
 
-		return {id, area: currentArea, opacity: currentOpacity};
+		return {id, area: currentArea, opacity: currentOpacity, itemFrom, itemTo};
 	});
 }
 

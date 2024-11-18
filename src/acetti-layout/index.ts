@@ -3,6 +3,7 @@
 export * from './atoms';
 export * from './hooks';
 export * from './types2';
+export {createGridLayout} from './gridLayout';
 
 export type TVizTheme = {
 	colors: {

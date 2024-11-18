@@ -22,24 +22,25 @@ export function useDynamicListLayout({
 	width,
 	height,
 	items,
+	itemHeight,
+	itemMarginTop,
+	itemMarginBottom,
 }: {
 	height: number;
 	width: number;
 	items: {id: string}[];
+	itemHeight: number;
+	itemMarginTop: number;
+	itemMarginBottom: number;
 }): TDynamicListLayout {
 	const nrRows = items.length;
-
-	const itemHeight = 60;
-	const paddingHeight = 20;
-
-	// const totalItemsHeight = (itemHeight + 2 * paddingHeight) * nrRows;
 
 	const rows: TGridRailSpec = Array.from({length: nrRows}, () => {
 		const rowItems: TGridRailElementSpec[] = [];
 
 		rowItems.push({
 			type: 'pixel',
-			value: paddingHeight,
+			value: itemMarginTop,
 			name: 'listItemPaddingUpper',
 		});
 
@@ -51,7 +52,7 @@ export function useDynamicListLayout({
 
 		rowItems.push({
 			type: 'pixel',
-			value: paddingHeight,
+			value: itemMarginBottom,
 			name: 'listItemPaddingLower',
 		});
 
