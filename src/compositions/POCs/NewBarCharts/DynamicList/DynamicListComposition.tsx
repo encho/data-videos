@@ -193,11 +193,38 @@ export const DynamicListPage: React.FC = () => {
 	);
 };
 
+function useEnterAreas(context: TDynamicListAnimationContext) {
+	const {transitionTypes, frame, durationInFrames} = context;
+
+	const areaProperties = transitionTypes.enter.map((id) => {
+		const areaTo = context.getListItemAreaTo(id);
+
+		const idColor = getPredefinedColor(id);
+
+		const currentOpacity = interpolate(
+			frame,
+			[0, durationInFrames - 1],
+			[0, 1],
+			{
+				// easing: xxx
+			}
+		);
+
+		const areaProperty = {area: areaTo, opacity: currentOpacity, id};
+
+		return areaProperty;
+	});
+
+	return areaProperties;
+}
+
 export const AnimateAreas: React.FC<{
 	context: TDynamicListAnimationContext;
 }> = ({context}) => {
 	const {theme, baseline} = usePage();
 	const {transitionTypes, frame, durationInFrames} = context;
+
+	const enterAreas = useEnterAreas(context);
 
 	return (
 		<div>
@@ -446,27 +473,18 @@ export const AnimateAreas: React.FC<{
 			})}
 
 			{/* the enters */}
-			{transitionTypes.enter.map((id) => {
-				const areaTo = context.getListItemAreaTo(id);
-
-				const idColor = getPredefinedColor(id);
-
-				const currentOpacity = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[0, 1],
-					{
-						// easing: xxx
-					}
-				);
-
+			{enterAreas.map((enterArea) => {
 				return (
-					<HtmlArea area={areaTo} fill={idColor} opacity={currentOpacity}>
+					<HtmlArea
+						area={enterArea.area}
+						fill={getPredefinedColor(enterArea.id)}
+						opacity={enterArea.opacity}
+					>
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.body}
 							baseline={baseline}
 						>
-							{id}
+							{enterArea.id}
 						</TypographyStyle>
 					</HtmlArea>
 				);
