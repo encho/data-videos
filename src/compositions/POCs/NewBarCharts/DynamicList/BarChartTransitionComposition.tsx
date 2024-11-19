@@ -86,7 +86,7 @@ export const BarChartTransitionComposition: React.FC<
 		({id, children, value}: {children: string; id: string; value: number}) => {
 			return (
 				<ValueLabelComponent
-					id={id}
+					// id={id}
 					baseline={barchartBaseline}
 					theme={theme}
 					animateEnter={false}
