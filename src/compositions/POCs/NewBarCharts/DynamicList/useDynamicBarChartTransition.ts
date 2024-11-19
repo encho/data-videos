@@ -37,10 +37,6 @@ export type TDynamicBarChartTransitionContext = {
 	// getAppearInfos: () => {area: TGridLayoutArea; id: string};
 	// getDisappearInfos: () => {area: TGridLayoutArea; id: string};
 	//
-	// yScaleFrom: LinearScale<>;
-	// yScaleTo: LinearScale<>;
-	// yScale: LinearScale<>;
-	//
 	extentFrom: [number, number];
 	extentTo: [number, number];
 	//
@@ -49,6 +45,12 @@ export type TDynamicBarChartTransitionContext = {
 	xScale: ScaleLinear<number, number>;
 	//
 	barChartItemLayout: TBarChartItemLayout;
+	// TODO
+	// barChartMotherLayoutAreas: {
+	// 	labelsArea:
+	// 	barsArea:
+	// 	valueLabelsArea:
+	// }
 };
 
 export type TBarChartItem = {

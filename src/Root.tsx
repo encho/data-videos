@@ -1313,7 +1313,7 @@ export const RemotionRoot: React.FC = () => {
 						component={BarChartTransitionComposition}
 						durationInFrames={90 * 3}
 						fps={90}
-						{...videoSizes.widescreen_16x9}
+						{...videoSizes.square}
 						// height={12000}
 						schema={barChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}

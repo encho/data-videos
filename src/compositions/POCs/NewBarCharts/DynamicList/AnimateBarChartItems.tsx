@@ -48,7 +48,7 @@ export const AnimateBarChartItems: React.FC<{
 	const {barArea, labelArea, valueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;
 
-	const DISPLAY_GRID_RAILS = true;
+	const DISPLAY_GRID_RAILS = false;
 	const GRID_RAILS_COLOR = 'magenta';
 
 	return (

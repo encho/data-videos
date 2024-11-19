@@ -194,8 +194,8 @@ const BarChartTransitionPage: React.FC<{
 
 	const matrixLayout = useMatrixLayout({
 		width: contentWidth,
-		height: contentHeight - 120,
-		nrColumns: 2,
+		height: contentHeight - 280,
+		nrColumns: 1,
 		nrRows: 1,
 		rowSpacePixels: 0,
 		columnSpacePixels: 50,
@@ -206,11 +206,6 @@ const BarChartTransitionPage: React.FC<{
 		layout: matrixLayout,
 		row: 0,
 		column: 0,
-	});
-	const area_2 = getMatrixLayoutCellArea({
-		layout: matrixLayout,
-		row: 0,
-		column: 1,
 	});
 
 	const barChartItemHeight = getBarChartItemHeight({baseline});
@@ -249,7 +244,10 @@ const BarChartTransitionPage: React.FC<{
 			</TypographyStyle>
 
 			<div style={{position: 'relative'}}>
-				<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
+				<HtmlArea
+					area={area_1}
+					// fill="rgba(255,0,255,0.15)"
+				>
 					<AnimateBarChartItems
 						context={context}
 						barChartTransitionContext={barChartTransitionContext}
@@ -258,14 +256,14 @@ const BarChartTransitionPage: React.FC<{
 					/>
 				</HtmlArea>
 
-				<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
+				{/* <HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 					<TypographyStyle
 						typographyStyle={theme.typography.textStyles.body}
 						baseline={baseline}
 					>
 						{JSON.stringify(barChartTransitionContext, undefined, 2)}
 					</TypographyStyle>
-				</HtmlArea>
+				</HtmlArea> */}
 			</div>
 		</Page>
 	);
