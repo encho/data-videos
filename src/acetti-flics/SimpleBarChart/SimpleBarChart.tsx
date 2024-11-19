@@ -521,7 +521,8 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 
 export const DefaultLabelComponent = React.memo(
 	({
-		// id,
+		// eslint-disable-next-line
+		id,
 		children,
 		animateExit,
 		animateEnter,
@@ -529,7 +530,7 @@ export const DefaultLabelComponent = React.memo(
 		theme,
 	}: {
 		children: string;
-		// id: string;
+		id: string;
 		baseline: number;
 		theme: ThemeType;
 		// eslint-disable-next-line

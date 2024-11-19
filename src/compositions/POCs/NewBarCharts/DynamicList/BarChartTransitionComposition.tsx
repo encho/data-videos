@@ -1,6 +1,7 @@
 import {z} from 'zod';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {isNumber} from 'lodash';
 
 import {AnimateBarChartItems} from './AnimateBarChartItems';
 import {getBarChartItemHeight} from './useDynamicBarChartTransition';
@@ -23,7 +24,10 @@ import {
 	TBarChartLabelComponent,
 	DefaultValueLabelComponent,
 	TBarChartValueLabelComponent,
+	MeasureLabels,
+	// MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 
 export const barChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -35,28 +39,65 @@ export const BarChartTransitionComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
-	// TODO improve on this, eventually the DynamicListContext can help with this info...
-	// const allEverDisplayedLabels =
+	const barchartBaseline = 24;
+
+	const LabelComponent = DefaultLabelComponent;
+	const ValueLabelComponent = DefaultValueLabelComponent;
+
+	const {ref: labelsRef, dimensions: labelsDimensions} =
+		useElementDimensions(true);
+
+	const MeasureLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, children}: {children: string; id: string}) => {
+			return (
+				<LabelComponent
+					id={id}
+					baseline={barchartBaseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				>
+					{children}
+				</LabelComponent>
+			);
+		},
+		[barchartBaseline, theme, LabelComponent]
+	);
 
 	return (
-		<PageContext
-			margin={50}
-			nrBaselines={40}
-			width={width}
-			height={height}
-			theme={theme}
-		>
-			<BarChartTransitionPage
-				itemsFrom={itemsFrom}
-				itemsTo={itemsTo}
-				visibleIndicesFrom={[0, 3]}
-				visibleIndicesTo={[0, 3]}
-				labelWidth={200} // TODO measure
-				valueLabelWidth={200} // TODO measure
-				LabelComponent={DefaultLabelComponent}
-				ValueLabelComponent={DefaultValueLabelComponent}
+		<>
+			{/* measure labels */}
+			<MeasureLabels
+				key="labelMeasurement"
+				ref={labelsRef}
+				data={[...itemsFrom, ...itemsTo]}
+				theme={theme}
+				baseline={barchartBaseline}
+				Component={MeasureLabelComponent}
 			/>
-		</PageContext>
+			{labelsDimensions && isNumber(labelsDimensions.width) ? (
+				<PageContext
+					margin={50}
+					nrBaselines={40}
+					width={width}
+					height={height}
+					theme={theme}
+				>
+					<BarChartTransitionPage
+						itemsFrom={itemsFrom}
+						itemsTo={itemsTo}
+						visibleIndicesFrom={[0, 3]}
+						visibleIndicesTo={[0, 3]}
+						labelWidth={labelsDimensions.width} // TODO measure
+						valueLabelWidth={200} // TODO measure
+						LabelComponent={LabelComponent}
+						ValueLabelComponent={ValueLabelComponent}
+						baseline={barchartBaseline}
+					/>
+				</PageContext>
+			) : null}
+		</>
 	);
 };
 
@@ -78,6 +119,7 @@ const BarChartTransitionPage: React.FC<{
 	valueLabelWidth: number;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
+	baseline: number;
 }> = ({
 	itemsFrom,
 	itemsTo,
@@ -87,8 +129,9 @@ const BarChartTransitionPage: React.FC<{
 	valueLabelWidth,
 	LabelComponent,
 	ValueLabelComponent,
+	baseline,
 }) => {
-	const {theme, baseline, contentWidth, contentHeight} = usePage();
+	const {theme, contentWidth, contentHeight} = usePage();
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
