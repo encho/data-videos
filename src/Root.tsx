@@ -260,6 +260,11 @@ import {
 	barChartTransitionCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/BarChartTransitionComposition';
 
+import {
+	ListAnimationComposition,
+	listAnimationCompositionSchema,
+} from './compositions/POCs/NewBarCharts/DynamicList/ListAnimationComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
@@ -1304,6 +1309,18 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						// height={12000}
 						schema={dynamicListCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="useListAnimation"
+						component={ListAnimationComposition}
+						durationInFrames={90 * 3}
+						fps={90}
+						{...videoSizes.widescreen_16x9}
+						height={2000}
+						schema={listAnimationCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
