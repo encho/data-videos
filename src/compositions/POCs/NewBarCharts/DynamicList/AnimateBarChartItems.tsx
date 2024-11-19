@@ -13,14 +13,23 @@ import {
 } from './useDynamicListTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
 import {TDynamicBarChartTransitionContext} from './useDynamicBarChartTransition';
-import {TBarChartLabelComponent} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {
+	TBarChartLabelComponent,
+	TBarChartValueLabelComponent,
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TBarChartItem} from './useDynamicBarChartTransition';
 
 export const AnimateBarChartItems: React.FC<{
 	context: TDynamicListTransitionContext<TBarChartItem>;
 	barChartTransitionContext: TDynamicBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
-}> = ({context, barChartTransitionContext, LabelComponent}) => {
+	ValueLabelComponent: TBarChartValueLabelComponent;
+}> = ({
+	context,
+	barChartTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+}) => {
 	const {theme, baseline} = usePage();
 
 	const {frame, durationInFrames} = context;
@@ -35,7 +44,8 @@ export const AnimateBarChartItems: React.FC<{
 	const disappearAreas = useDisappearAreas(context);
 	const updateAreas = useUpdateAreas(context);
 
-	const {barArea, labelArea} = barChartTransitionContext.barChartItemLayout;
+	const {barArea, labelArea, valueLabelArea} =
+		barChartTransitionContext.barChartItemLayout;
 
 	return (
 		<div>
@@ -75,12 +85,19 @@ export const AnimateBarChartItems: React.FC<{
 									width: barWidth,
 								}}
 							/>
-							{/* <TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
+						</HtmlArea>
+
+						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
+							<ValueLabelComponent
+								id={item.id}
+								animateExit={false}
+								animateEnter={false}
 								baseline={baseline}
+								theme={theme}
+								value={item.value}
 							>
-								{item.value}
-							</TypographyStyle> */}
+								{item.label}
+							</ValueLabelComponent>
 						</HtmlArea>
 					</HtmlArea>
 				);
@@ -121,12 +138,19 @@ export const AnimateBarChartItems: React.FC<{
 									width: barWidth,
 								}}
 							/>
-							{/* <TypographyStyle
-								typographyStyle={theme.typography.textStyles.body}
+						</HtmlArea>
+
+						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
+							<ValueLabelComponent
+								id={item.id}
+								animateExit={false}
+								animateEnter={false}
 								baseline={baseline}
+								theme={theme}
+								value={item.value}
 							>
-								{item.value}
-							</TypographyStyle> */}
+								{item.label}
+							</ValueLabelComponent>
 						</HtmlArea>
 					</HtmlArea>
 				);
@@ -161,8 +185,6 @@ export const AnimateBarChartItems: React.FC<{
 									animateEnter={false}
 									baseline={baseline}
 									theme={theme}
-									// TODO
-									// pass item
 								>
 									{itemTo.label}
 								</LabelComponent>
@@ -184,6 +206,22 @@ export const AnimateBarChartItems: React.FC<{
 										{currentValue}
 									</TypographyStyle>
 								</div>
+							</HtmlArea>
+
+							<HtmlArea
+								area={valueLabelArea}
+								fill={theme.global.backgroundColor}
+							>
+								<ValueLabelComponent
+									id={itemTo.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={itemTo.value}
+								>
+									{itemTo.label}
+								</ValueLabelComponent>
 							</HtmlArea>
 						</HtmlArea>
 					);

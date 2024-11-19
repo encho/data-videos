@@ -155,6 +155,7 @@ export type TBarChartItemLayout = {
 	gridLayout: TGridLayout;
 	barArea: TGridLayoutArea;
 	labelArea: TGridLayoutArea;
+	valueLabelArea: TGridLayoutArea;
 	// width: number;
 	// height: number;
 	// getListItemArea: (i: number | string) => TGridLayoutArea;
@@ -245,6 +246,12 @@ export function getBarChartItemLayout({
 				{name: 'bar'},
 				{name: 'label'},
 			] as TGridLayoutAreaSpec,
+			valueLabel: [
+				{name: 'bar'},
+				{name: 'valueLabel'},
+				{name: 'bar'},
+				{name: 'valueLabel'},
+			] as TGridLayoutAreaSpec,
 		},
 	};
 
@@ -263,6 +270,7 @@ export function getBarChartItemLayout({
 		gridLayout,
 		barArea: gridLayout.areas.bar,
 		labelArea: gridLayout.areas.label,
+		valueLabelArea: gridLayout.areas.valueLabel,
 		// width: gridLayout.width,
 		// height: gridLayout.height,
 		// getListItemArea,

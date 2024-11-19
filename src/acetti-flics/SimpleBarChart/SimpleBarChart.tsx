@@ -66,6 +66,7 @@ export type TBarChartValueLabelComponent = React.ComponentType<{
 	animateEnter?: boolean;
 	baseline: number;
 	theme: ThemeType;
+	value: number; // TODO make compulsory
 }>;
 
 type TSimpleBarChartProps = TBaselineOrHeight & {
@@ -143,7 +144,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
 		// eslint-disable-next-line
-		({id, children}: {children: string; id: string}) => {
+		({id, children, value}: {children: string; id: string; value: number}) => {
 			return (
 				<ValueLabelComponent
 					id={id}
@@ -151,6 +152,7 @@ export const SimpleBarChart: React.FC<TSimpleBarChartProps> = ({
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
+					value={value}
 				>
 					{children}
 				</ValueLabelComponent>
@@ -419,6 +421,7 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 										animateEnter={ANIMATE_ENTER}
 										baseline={baseline}
 										theme={theme}
+										value={it.value}
 									>
 										{data[i].valueLabel}
 									</ValueLabelComponent>
@@ -571,6 +574,7 @@ export const DefaultValueLabelComponent = React.memo(
 		animateEnter,
 		baseline,
 		theme,
+		value,
 	}: {
 		children: string;
 		// id: string;
@@ -580,21 +584,33 @@ export const DefaultValueLabelComponent = React.memo(
 		animateEnter?: boolean;
 		// eslint-disable-next-line
 		animateExit?: boolean;
+		value: number;
 	}) => {
 		return (
-			<TypographyStyle
-				typographyStyle={theme.typography.textStyles.datavizValueLabel}
-				baseline={baseline}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: value >= 0 ? 'flex-start' : 'flex-end',
+					alignItems: 'center',
+					height: '100%',
+					// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+					textWrap: 'nowrap',
+				}}
 			>
-				<TextAnimationSubtle
-					innerDelayInSeconds={0}
-					translateY={baseline * 1.15}
-					animateExit={animateExit}
-					animateEnter={animateEnter}
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizValueLabel}
+					baseline={baseline}
 				>
-					{children}
-				</TextAnimationSubtle>
-			</TypographyStyle>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateEnter}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+			</div>
 		);
 	}
 );
@@ -745,6 +761,7 @@ export const MeasureValueLabels = forwardRef<
 					baseline={baseline}
 					animateEnter={false}
 					animateExit={false}
+					value={it.value}
 				>
 					{it.valueLabel}
 				</Component>

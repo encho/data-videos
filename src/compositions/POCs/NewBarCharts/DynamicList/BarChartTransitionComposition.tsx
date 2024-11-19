@@ -21,6 +21,8 @@ import {useDynamicBarChartTransition} from './useDynamicBarChartTransition';
 import {
 	DefaultLabelComponent,
 	TBarChartLabelComponent,
+	DefaultValueLabelComponent,
+	TBarChartValueLabelComponent,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const barChartTransitionCompositionSchema = z.object({
@@ -52,8 +54,7 @@ export const BarChartTransitionComposition: React.FC<
 				labelWidth={200} // TODO measure
 				valueLabelWidth={200} // TODO measure
 				LabelComponent={DefaultLabelComponent}
-				// TODO:
-				// ValueLabelComponent={DefaultValueLabelComponent}
+				ValueLabelComponent={DefaultValueLabelComponent}
 			/>
 		</PageContext>
 	);
@@ -76,6 +77,7 @@ const BarChartTransitionPage: React.FC<{
 	labelWidth: number;
 	valueLabelWidth: number;
 	LabelComponent: TBarChartLabelComponent;
+	ValueLabelComponent: TBarChartValueLabelComponent;
 }> = ({
 	itemsFrom,
 	itemsTo,
@@ -84,6 +86,7 @@ const BarChartTransitionPage: React.FC<{
 	labelWidth,
 	valueLabelWidth,
 	LabelComponent,
+	ValueLabelComponent,
 }) => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
 	const frame = useCurrentFrame();
@@ -151,6 +154,7 @@ const BarChartTransitionPage: React.FC<{
 						context={context}
 						barChartTransitionContext={barChartTransitionContext}
 						LabelComponent={LabelComponent}
+						ValueLabelComponent={ValueLabelComponent}
 					/>
 				</HtmlArea>
 
