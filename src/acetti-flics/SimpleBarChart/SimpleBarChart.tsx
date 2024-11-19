@@ -626,7 +626,7 @@ interface RoundedRectProps {
 	strokeWidth?: number;
 }
 
-const RoundedRightRect: React.FC<RoundedRectProps> = ({
+export const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	x,
 	y,
 	width,
@@ -658,7 +658,7 @@ const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	);
 };
 
-const RoundedLeftRect: React.FC<RoundedRectProps> = ({
+export const RoundedLeftRect: React.FC<RoundedRectProps> = ({
 	x,
 	y,
 	width,
