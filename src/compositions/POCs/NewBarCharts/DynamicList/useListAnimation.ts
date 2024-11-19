@@ -1,7 +1,9 @@
-// import {
-// 	interpolate,
-// 	Easing, EasingFunction
-// } from 'remotion';
+import {
+	// interpolate,
+	// Easing,
+	EasingFunction,
+} from 'remotion';
+import {useMemo} from 'react';
 // import invariant from 'tiny-invariant';
 
 // import {TGridLayoutArea} from '../../../../acetti-layout';
@@ -11,8 +13,22 @@
 // type Item = {id: string};
 // TODO type generics with T = {id: string} & other
 
+type ListAnimationTransition<T> = {
+	itemsFrom: T[];
+	itemsTo: T[];
+	visibleIndicesFrom: [number, number];
+	visibleIndicesTo: [number, number];
+	easingFunction: EasingFunction;
+	durationInFrames: number;
+};
+
+type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
+	frameRange: TFrameRange;
+};
+
 export type ListAnimationContext<T extends {id: string}> = {
-	test: string;
+	numberOfTransitions: number;
+	transitions: EditedListAnimationTransition<T>[];
 	// layoutFrom: TDynamicListLayout;
 	// layoutTo: TDynamicListLayout;
 	// itemsFrom: T[];
@@ -46,16 +62,54 @@ export type ListAnimationContext<T extends {id: string}> = {
 	// baseline
 };
 
-type UseListAnimationArgs = {
-	test: string;
+type UseListAnimationArgs<T> = {
+	transitions: ListAnimationTransition<T>[];
 };
 
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListAnimation<T extends {id: string}>({
-	test,
-}: UseListAnimationArgs): ListAnimationContext<T> {
+	transitions,
+}: UseListAnimationArgs<T>): ListAnimationContext<T> {
+	const frameRanges = useMemo(() => {
+		const transitionDurations = transitions.map((it) => it.durationInFrames);
+		return calculateFrameRanges(transitionDurations);
+	}, [transitions]);
+
+	const editedTransitions = transitions.map((it, i) => ({
+		...it,
+		frameRange: frameRanges[i],
+	}));
+
 	return {
-		test,
+		numberOfTransitions: transitions.length,
+		transitions: editedTransitions,
 	};
 }
+
+type TFrameRange = {
+	startFrame: number;
+	endFrame: number;
+};
+
+// TODO replace the same named function in usePeriodScaleAnimation with this one
+const calculateFrameRanges = (frameDurations: number[]) => {
+	// Calculate frame ranges
+	const frameRanges: TFrameRange[] = frameDurations.reduce(
+		(acc, currentFrameDuration, index) => {
+			if (index === 0) {
+				// For the first element, the start frame is 0
+				acc.push({startFrame: 0, endFrame: currentFrameDuration - 1});
+			} else {
+				// Calculate the start frame based on the end frame of the last item
+				const startFrame = acc[index - 1].endFrame + 1;
+				const endFrame = startFrame + currentFrameDuration - 1;
+				acc.push({startFrame, endFrame});
+			}
+			return acc;
+		},
+		[] as TFrameRange[]
+	);
+
+	return frameRanges;
+};

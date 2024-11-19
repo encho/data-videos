@@ -1,7 +1,8 @@
 import {z} from 'zod';
 import React from 'react';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 
+import {Value, Row} from '../../09-Timeseries/utils/InspectorTools';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
@@ -88,7 +89,26 @@ export const ListAnimationPage: React.FC = () => {
 	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
 
-	const listAnimationContext = useListAnimation({test: 'hehehehehe'});
+	const listAnimationContext = useListAnimation({
+		transitions: [
+			{
+				itemsFrom,
+				itemsTo,
+				visibleIndicesFrom,
+				visibleIndicesTo,
+				easingFunction: Easing.elastic(2),
+				durationInFrames: durationInFrames / 2,
+			},
+			{
+				itemsFrom: itemsTo,
+				itemsTo: itemsFrom,
+				visibleIndicesFrom: visibleIndicesTo,
+				visibleIndicesTo: visibleIndicesFrom,
+				easingFunction: Easing.ease,
+				durationInFrames: durationInFrames / 2,
+			},
+		],
+	});
 
 	const context = useDynamicListTransition({
 		frame,
@@ -182,24 +202,15 @@ export const ListAnimationPage: React.FC = () => {
 				theme={theme}
 			>
 				<Page show>
-					<>
-						<div
-							style={{
-								fontSize: 50,
-								color: 'green',
-							}}
-						>
-							LIST ANIMATION CONTEXT
+					<div style={{fontSize: 40}}>
+						<Row>LIST ANIMATION CONTEXT</Row>
+						<div>
+							<Row>
+								<div>numberOfTransitions</div>
+								<Value>{listAnimationContext.numberOfTransitions}</Value>
+							</Row>
 						</div>
-						<div
-							style={{
-								fontSize: 50,
-								color: 'green',
-							}}
-						>
-							test: {listAnimationContext.test}
-						</div>
-					</>
+					</div>
 				</Page>
 			</PageContext>
 		</>

@@ -1,8 +1,8 @@
 import {interpolate} from 'remotion';
-import {ReactNode} from 'react';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
+import {Value, Row} from './InspectorTools';
 
 export const PeriodScaleAnimationInspector: React.FC<
 	TPeriodScaleAnimationContext
@@ -14,27 +14,6 @@ export const PeriodScaleAnimationInspector: React.FC<
 	allTransitionsAndSlicesOverview,
 }) => {
 	const {theme, contentWidth} = usePage();
-
-	const Row = ({children}: {children: ReactNode}) => {
-		return (
-			<div
-				style={{
-					display: 'flex',
-					gap: 5,
-					backgroundColor: 'rgba(0,0,0,0.3)',
-					color: '#00aa99',
-					padding: 0,
-					fontWeight: 800,
-				}}
-			>
-				{children}
-			</div>
-		);
-	};
-
-	const Value = ({children}: {children: ReactNode}) => {
-		return <div style={{color: '#00ffaa'}}>{children}</div>;
-	};
 
 	const topLevelListItems = [
 		{
