@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import React from 'react';
-import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import {useVideoConfig, Easing} from 'remotion';
 
 import {Value, Row} from '../../09-Timeseries/utils/InspectorTools';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -10,7 +10,10 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useDynamicListTransition} from './useDynamicListTransition';
+// import {
+// 	TDynamicListTransitionContext,
+// 	useDynamicListTransition,
+// } from './useDynamicListTransition';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
@@ -41,23 +44,12 @@ export const ListAnimationComposition: React.FC<
 			>
 				<ListAnimationPage />
 			</PageContext>
-			{/* TODO here debug element */}
-			{/* <PageContext
-				margin={50}
-				nrBaselines={50}
-				width={width}
-				height={height / 2}
-				theme={theme}
-			>
-				<ListAnimationPage />
-			</PageContext> */}
 		</div>
 	);
 };
 
 export const ListAnimationPage: React.FC = () => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
-	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
 
 	const matrixLayout = useMatrixLayout({
@@ -90,6 +82,8 @@ export const ListAnimationPage: React.FC = () => {
 	const visibleIndicesTo = [0, 4] as [number, number];
 
 	const listAnimationContext = useListAnimation({
+		width: area_1.width,
+		height: area_1.height,
 		transitions: [
 			{
 				itemsFrom,
@@ -110,18 +104,7 @@ export const ListAnimationPage: React.FC = () => {
 		],
 	});
 
-	const context = useDynamicListTransition({
-		frame,
-		durationInFrames,
-		itemsFrom,
-		itemsTo,
-		visibleIndicesFrom,
-		visibleIndicesTo,
-		width: area_1.width,
-		height: area_1.height,
-		justifyContent: 'start',
-		// justifyContent: 'center',
-	});
+	const {currentTransitionContext} = listAnimationContext;
 
 	return (
 		<>
@@ -136,15 +119,19 @@ export const ListAnimationPage: React.FC = () => {
 
 				<div style={{position: 'relative'}}>
 					<DisplayGridRails
-						{...context.layoutFrom.gridLayout}
+						{...currentTransitionContext.layoutFrom.gridLayout}
 						stroke="rgba(255,0,255,1)"
 					/>
 					<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
-						{itemsFrom.map((it) => {
-							const area = context.getListItemAreaFrom(it.id);
+						{currentTransitionContext.itemsFrom.map((it) => {
+							const area = currentTransitionContext.getListItemAreaFrom(it.id);
+
 							const idColor = getPredefinedColor(it.id);
 
-							const isVisible = isIdInItems(it.id, context.visibleItemsFrom);
+							const isVisible = isIdInItems(
+								it.id,
+								currentTransitionContext.visibleItemsFrom
+							);
 
 							return (
 								<HtmlArea
@@ -164,14 +151,17 @@ export const ListAnimationPage: React.FC = () => {
 
 					<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 						<DisplayGridRails
-							{...context.layoutTo.gridLayout}
+							{...currentTransitionContext.layoutTo.gridLayout}
 							stroke="rgba(255,0,255,1)"
 						/>
-						{itemsTo.map((it) => {
-							const area = context.getListItemAreaTo(it.id);
+						{currentTransitionContext.itemsTo.map((it) => {
+							const area = currentTransitionContext.getListItemAreaTo(it.id);
 							const idColor = getPredefinedColor(it.id);
 
-							const isVisible = isIdInItems(it.id, context.visibleItemsTo);
+							const isVisible = isIdInItems(
+								it.id,
+								currentTransitionContext.visibleItemsTo
+							);
 
 							return (
 								<HtmlArea
@@ -190,7 +180,7 @@ export const ListAnimationPage: React.FC = () => {
 					</HtmlArea>
 
 					<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-						<AnimateAreas context={context} />
+						<AnimateAreas context={currentTransitionContext} />
 					</HtmlArea>
 				</div>
 			</Page>
@@ -208,6 +198,54 @@ export const ListAnimationPage: React.FC = () => {
 							<Row>
 								<div>numberOfTransitions</div>
 								<Value>{listAnimationContext.numberOfTransitions}</Value>
+							</Row>
+							<Row>
+								<div>currentTransitionIndex</div>
+								<Value>{listAnimationContext.currentTransitionIndex}</Value>
+							</Row>
+							<Row>
+								<div>frame</div>
+								<Value>{listAnimationContext.frame}</Value>
+							</Row>
+							<Row>
+								<div>durationInFrames</div>
+								<Value>{listAnimationContext.durationInFrames}</Value>
+							</Row>
+							<Row>CURRENT TRANSITION CONTEXT</Row>
+							<Row>
+								<div>(relative) frame</div>
+								<Value>
+									{listAnimationContext.currentTransitionContext.frame}
+								</Value>
+							</Row>
+
+							<Row>
+								<div>transitions</div>
+
+								<div>
+									{listAnimationContext.transitions.map(
+										(editedTransition, i) => {
+											const isActive =
+												listAnimationContext.currentTransitionIndex === i;
+											return (
+												<div
+													style={{
+														margin: 10,
+														backgroundColor: '#660000',
+														border: isActive ? '2px solid orange' : '',
+													}}
+												>
+													<Row>
+														<div>frameRange</div>
+														<Value>
+															{JSON.stringify(editedTransition.frameRange)}
+														</Value>
+													</Row>
+												</div>
+											);
+										}
+									)}
+								</div>
 							</Row>
 						</div>
 					</div>

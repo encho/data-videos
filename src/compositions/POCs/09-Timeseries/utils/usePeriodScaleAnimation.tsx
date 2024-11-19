@@ -192,7 +192,7 @@ export function usePeriodScaleAnimation({
 				),
 			};
 		});
-	}, [frameRanges, transitions]);
+	}, [frameRanges, transitions, fps]);
 
 	const totalDuration = frameRanges[frameRanges.length - 1].endFrame + 1;
 
@@ -389,6 +389,7 @@ type TFrameRange = {
 	endFrame: number;
 };
 
+// TODO use the one in useListAnimation
 const calculateFrameRanges = (transitionSpecs: TTransitionSpec[]) => {
 	// Calculate frame ranges
 	const frameRanges: TFrameRange[] = transitionSpecs.reduce(
@@ -411,7 +412,7 @@ const calculateFrameRanges = (transitionSpecs: TTransitionSpec[]) => {
 };
 
 // Function to find the index of FrameRange that includes the current frame
-function findFrameRangeIndex(
+export function findFrameRangeIndex(
 	currentFrame: number,
 	ranges: TFrameRange[]
 ): number {

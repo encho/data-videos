@@ -20,7 +20,6 @@ export const AnimateAreas: React.FC<{
 	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
 	const enterAreas = useEnterAreas(context);
 	const exitAreas = useExitAreas(context);
-
 	const appearAreas = useAppearAreas(context);
 	const disappearAreas = useDisappearAreas(context);
 	const updateAreas = useUpdateAreas(context);

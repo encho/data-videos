@@ -131,8 +131,13 @@ export function createArea({
 	const endRow = find<TGridRailElement>(rows, areaSpec[2]);
 	const endColumn = find<TGridRailElement>(columns, areaSpec[3]);
 
+	// console.log({rows, columns, areaSpec});
 	if (!(startRow && startColumn && endRow && endColumn)) {
-		throw new Error('Did not find some elements in the grid rails!');
+		throw new Error(
+			`Did not find some elements in the grid rails! ${JSON.stringify(
+				areaSpec
+			)}`
+		);
 	}
 
 	return {

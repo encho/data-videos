@@ -1,4 +1,7 @@
-import {getGridLayoutArea} from '../../../../acetti-layout/gridLayout';
+import {
+	createGridLayout,
+	getGridLayoutArea,
+} from '../../../../acetti-layout/gridLayout';
 import {
 	useGridLayout,
 	TGridRailSpec,
@@ -33,31 +36,31 @@ export function useDynamicListLayout({
 	itemMarginTop: number;
 	itemMarginBottom: number;
 }): TDynamicListLayout {
-	const nrRows = items.length;
+	const rows: TGridRailSpec = items
+		.map(() => {
+			const rowItems: TGridRailElementSpec[] = [];
 
-	const rows: TGridRailSpec = Array.from({length: nrRows}, () => {
-		const rowItems: TGridRailElementSpec[] = [];
+			rowItems.push({
+				type: 'pixel',
+				value: itemMarginTop,
+				name: 'listItemPaddingUpper',
+			});
 
-		rowItems.push({
-			type: 'pixel',
-			value: itemMarginTop,
-			name: 'listItemPaddingUpper',
-		});
+			rowItems.push({
+				type: 'pixel',
+				value: itemHeight,
+				name: 'listItem',
+			});
 
-		rowItems.push({
-			type: 'pixel',
-			value: itemHeight,
-			name: 'listItem',
-		});
+			rowItems.push({
+				type: 'pixel',
+				value: itemMarginBottom,
+				name: 'listItemPaddingLower',
+			});
 
-		rowItems.push({
-			type: 'pixel',
-			value: itemMarginBottom,
-			name: 'listItemPaddingLower',
-		});
-
-		return rowItems;
-	}).flat();
+			return rowItems;
+		})
+		.flat();
 
 	const columns: TGridRailSpec = [{type: 'fr', value: 1, name: 'fullWidth'}];
 
@@ -70,13 +73,18 @@ export function useDynamicListLayout({
 		areas: {},
 	};
 
-	const gridLayout = useGridLayout({
+	// const gridLayout = useGridLayout({
+	// 	width,
+	// 	height,
+	// 	gridLayoutSpec,
+	// });
+	// TODO figure out why
+	const gridLayout = createGridLayout(gridLayoutSpec, {
 		width,
 		height,
-		gridLayoutSpec,
 	});
 
-	console.log({gridLayout});
+	// console.log({gridLayout});
 
 	const getListItemArea = (i: number | string): TGridLayoutArea => {
 		if (typeof i === 'number') {
@@ -116,7 +124,7 @@ export function useDynamicListLayout({
 		return [paddedAreaStart.y1, paddedAreaEnd.y2] as [number, number];
 	};
 
-	console.log({gridLayout});
+	// console.log({gridLayout});
 
 	return {
 		gridLayout,

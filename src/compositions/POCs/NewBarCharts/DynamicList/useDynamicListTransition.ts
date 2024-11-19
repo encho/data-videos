@@ -45,6 +45,8 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicListTransition<T extends {id: string}>({
+	width,
+	height,
 	itemHeight = 100,
 	itemMarginTop = 0,
 	itemMarginBottom = 0,
@@ -52,20 +54,18 @@ export function useDynamicListTransition<T extends {id: string}>({
 	itemsTo,
 	visibleIndicesFrom,
 	visibleIndicesTo,
-	width,
-	height,
 	justifyContent = 'center',
 	frame,
 	durationInFrames,
 	easing = Easing.linear,
 }: {
+	width: number;
+	height: number;
 	itemHeight?: number; // TODO not optional
 	itemMarginTop?: number; // TODO not optional
 	itemMarginBottom?: number; // TODO not optional
 	itemsFrom: T[];
 	itemsTo: T[];
-	width: number;
-	height: number;
 	visibleIndicesFrom: [number, number];
 	visibleIndicesTo: [number, number];
 	justifyContent?: 'center' | 'start';
@@ -93,8 +93,8 @@ export function useDynamicListTransition<T extends {id: string}>({
 		itemHeight,
 		itemMarginTop,
 		itemMarginBottom,
-		// visibleIndices: visibleIndicesFrom,
 	});
+
 	const layoutTo = useDynamicListLayout({
 		width,
 		height,
@@ -102,7 +102,6 @@ export function useDynamicListTransition<T extends {id: string}>({
 		itemHeight,
 		itemMarginTop,
 		itemMarginBottom,
-		// visibleIndices: visibleIndicesTo,
 	});
 
 	const visibleIndicesRangeFrom =
@@ -122,6 +121,7 @@ export function useDynamicListTransition<T extends {id: string}>({
 		justifyContent === 'center'
 			? (height - visibleIndicesRangeSizeFrom) / 2
 			: 0;
+
 	const yStartTo =
 		justifyContent === 'center' ? (height - visibleIndicesRangeSizeTo) / 2 : 0;
 
@@ -263,8 +263,8 @@ function useUpdateTypeAreas<T extends {id: string}>(
 			: [1, 1];
 
 	return ids.map((id) => {
-		const areaTo = context.getListItemAreaTo(id);
 		const areaFrom = context.getListItemAreaFrom(id);
+		const areaTo = context.getListItemAreaTo(id);
 
 		const itemFrom = context.itemsFrom.find((it) => it.id === id);
 		const itemTo = context.itemsTo.find((it) => it.id === id);

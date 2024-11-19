@@ -1,17 +1,12 @@
-import {
-	// interpolate,
-	// Easing,
-	EasingFunction,
-} from 'remotion';
+import {EasingFunction, useCurrentFrame, useVideoConfig} from 'remotion';
 import {useMemo} from 'react';
-// import invariant from 'tiny-invariant';
+import invariant from 'tiny-invariant';
 
-// import {TGridLayoutArea} from '../../../../acetti-layout';
-// import {TDynamicListLayout} from './useDynamicListLayout';
-// import {useDynamicListLayout} from './useDynamicListLayout';
-
-// type Item = {id: string};
-// TODO type generics with T = {id: string} & other
+import {findFrameRangeIndex} from '../../09-Timeseries/utils/usePeriodScaleAnimation';
+import {
+	TDynamicListTransitionContext,
+	useDynamicListTransition,
+} from './useDynamicListTransition';
 
 type ListAnimationTransition<T> = {
 	itemsFrom: T[];
@@ -24,65 +19,90 @@ type ListAnimationTransition<T> = {
 
 type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
 	frameRange: TFrameRange;
+	// TODO
+	// visibleItemsFrom: T[];
+	// visibleItemsTo: T[];
 };
 
 export type ListAnimationContext<T extends {id: string}> = {
+	frame: number;
+	durationInFrames: number;
 	numberOfTransitions: number;
+	currentTransitionIndex: number;
+	currentTransitionContext: TDynamicListTransitionContext<T>;
 	transitions: EditedListAnimationTransition<T>[];
-	// layoutFrom: TDynamicListLayout;
-	// layoutTo: TDynamicListLayout;
-	// itemsFrom: T[];
-	// itemsTo: T[];
-	// visibleItemsTo: T[];
-	// visibleItemsFrom: T[];
-	// visibleIndicesFrom: [number, number];
-	// visibleIndicesTo: [number, number];
-	// visibleIndicesRangeFrom: [number, number];
-	// visibleIndicesRangeTo: [number, number];
-	// visibleIndicesRangeSizeFrom: number;
-	// visibleIndicesRangeSizeTo: number;
-	// getListItemAreaFrom: (i: number | string) => TGridLayoutArea;
-	// getListItemAreaTo: (i: number | string) => TGridLayoutArea;
-	// justifyContentShiftFrom: number;
-	// justifyContentShiftTo: number;
-	// frame: number;
-	// durationInFrames: number;
-	// transitionTypes: {
-	// 	update: string[];
-	// 	enter: string[];
-	// 	exit: string[];
-	// 	appear: string[];
-	// 	disappear: string[];
-	// };
-	// itemHeight: number;
-	// width: number;
-	// easingPercentage: number;
-	// TODO
-	// easing?: (x: number) => number;
-	// baseline
 };
 
 type UseListAnimationArgs<T> = {
+	width: number;
+	height: number;
 	transitions: ListAnimationTransition<T>[];
 };
 
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListAnimation<T extends {id: string}>({
+	width,
+	height,
 	transitions,
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
+	const frame = useCurrentFrame();
+	const {
+		// fps,
+		durationInFrames,
+	} = useVideoConfig();
+
 	const frameRanges = useMemo(() => {
 		const transitionDurations = transitions.map((it) => it.durationInFrames);
 		return calculateFrameRanges(transitionDurations);
 	}, [transitions]);
 
-	const editedTransitions = transitions.map((it, i) => ({
-		...it,
-		frameRange: frameRanges[i],
-	}));
+	// TODO wrap in useMemo
+	const editedTransitions = transitions.map((it, i) => {
+		//
+		return {
+			...it,
+			frameRange: frameRanges[i],
+		};
+	});
+
+	const totalDurationInFrames =
+		frameRanges[frameRanges.length - 1].endFrame + 1;
+	invariant(
+		totalDurationInFrames === durationInFrames,
+		'useListAnimation.ts: the total duration of the transitions has to equal the durationInFrames of the Sequence.'
+	);
+
+	const currentTransitionIndex = findFrameRangeIndex(frame, frameRanges);
+	const currentRelativeFrame =
+		frame - editedTransitions[currentTransitionIndex].frameRange.startFrame;
+
+	const currentTransitionContext = useDynamicListTransition({
+		width,
+		height,
+		itemHeight: 100,
+		itemMarginTop: 20,
+		itemMarginBottom: 20,
+		itemsFrom: editedTransitions[currentTransitionIndex].itemsFrom,
+		itemsTo: editedTransitions[currentTransitionIndex].itemsTo,
+		visibleIndicesFrom:
+			editedTransitions[currentTransitionIndex].visibleIndicesFrom,
+		visibleIndicesTo:
+			editedTransitions[currentTransitionIndex].visibleIndicesTo,
+		justifyContent: 'start',
+		frame: currentRelativeFrame,
+		durationInFrames:
+			editedTransitions[currentTransitionIndex].frameRange.endFrame -
+			editedTransitions[currentTransitionIndex].frameRange.startFrame +
+			1,
+	});
 
 	return {
+		frame,
+		durationInFrames,
 		numberOfTransitions: transitions.length,
+		currentTransitionIndex,
+		currentTransitionContext,
 		transitions: editedTransitions,
 	};
 }
