@@ -73,14 +73,20 @@ export function useDynamicBarChartTransition({
 }): TDynamicBarChartTransitionContext {
 	const {visibleItemsFrom, visibleItemsTo, width, itemHeight} = context;
 
-	const extentFrom = extent(visibleItemsFrom, (it) => it.value) as [
+	const dataExtentFrom = extent(visibleItemsFrom, (it) => it.value) as [
 		number,
 		number
 	];
-	invariant(isNumber(extentFrom[0]) && isNumber(extentFrom[1]));
+	invariant(isNumber(dataExtentFrom[0]) && isNumber(dataExtentFrom[1]));
+	const extentFrom =
+		dataExtentFrom[0] > 0 ? [0, dataExtentFrom[1]] : dataExtentFrom;
 
-	const extentTo = extent(visibleItemsTo, (it) => it.value) as [number, number];
-	invariant(isNumber(extentTo[0]) && isNumber(extentTo[1]));
+	const dataExtentTo = extent(visibleItemsTo, (it) => it.value) as [
+		number,
+		number
+	];
+	invariant(isNumber(dataExtentTo[0]) && isNumber(dataExtentTo[1]));
+	const extentTo = dataExtentTo[0] > 0 ? [0, dataExtentTo[1]] : dataExtentTo;
 
 	const barChartItemLayout = getBarChartItemLayout({
 		height: itemHeight,
