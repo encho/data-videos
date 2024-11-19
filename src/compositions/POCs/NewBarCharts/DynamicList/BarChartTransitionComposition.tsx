@@ -25,7 +25,7 @@ import {
 	DefaultValueLabelComponent,
 	TBarChartValueLabelComponent,
 	MeasureLabels,
-	// MeasureValueLabels,
+	MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 
@@ -46,6 +46,12 @@ export const BarChartTransitionComposition: React.FC<
 
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
+	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+		useElementDimensions(true);
+	const {
+		ref: negativeValueLabelsRef,
+		dimensions: negativeValueLabelsDimensions,
+	} = useElementDimensions(true);
 
 	const MeasureLabelComponent = useCallback(
 		// eslint-disable-next-line
@@ -65,6 +71,35 @@ export const BarChartTransitionComposition: React.FC<
 		[barchartBaseline, theme, LabelComponent]
 	);
 
+	const labelWidthProp = undefined;
+	const valueLabelWidthProp = undefined;
+	const negativeValueLabelWidthProp = undefined;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureValueLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, children, value}: {children: string; id: string; value: number}) => {
+			return (
+				<ValueLabelComponent
+					id={id}
+					baseline={barchartBaseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+					value={value}
+				>
+					{children}
+				</ValueLabelComponent>
+			);
+		},
+		[barchartBaseline, theme, ValueLabelComponent]
+	);
+
 	return (
 		<>
 			{/* measure labels */}
@@ -76,7 +111,29 @@ export const BarChartTransitionComposition: React.FC<
 				baseline={barchartBaseline}
 				Component={MeasureLabelComponent}
 			/>
-			{labelsDimensions && isNumber(labelsDimensions.width) ? (
+
+			{/* measure positive value labels */}
+			<MeasureValueLabels
+				key="valueLabelMeasurement"
+				ref={valueLabelsRef}
+				data={[...itemsFrom, ...itemsTo].filter((it) => it.value >= 0)}
+				theme={theme}
+				baseline={barchartBaseline}
+				Component={MeasureValueLabelComponent}
+			/>
+			{/* measure negative value labels */}
+			<MeasureValueLabels
+				key="negativeValueLabelMeasurement"
+				ref={negativeValueLabelsRef}
+				data={[...itemsFrom, ...itemsTo].filter((it) => it.value < 0)}
+				theme={theme}
+				baseline={barchartBaseline}
+				Component={MeasureValueLabelComponent}
+			/>
+
+			{isNumber(labelWidth) &&
+			isNumber(valueLabelWidth) &&
+			isNumber(negativeValueLabelWidth) ? (
 				<PageContext
 					margin={50}
 					nrBaselines={40}
@@ -89,8 +146,8 @@ export const BarChartTransitionComposition: React.FC<
 						itemsTo={itemsTo}
 						visibleIndicesFrom={[0, 3]}
 						visibleIndicesTo={[0, 3]}
-						labelWidth={labelsDimensions.width} // TODO measure
-						valueLabelWidth={200} // TODO measure
+						labelWidth={labelWidth}
+						valueLabelWidth={valueLabelWidth}
 						LabelComponent={LabelComponent}
 						ValueLabelComponent={ValueLabelComponent}
 						baseline={barchartBaseline}

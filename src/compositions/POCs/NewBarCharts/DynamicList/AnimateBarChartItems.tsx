@@ -121,7 +121,7 @@ export const AnimateBarChartItems: React.FC<{
 								theme={theme}
 								value={item.value}
 							>
-								{item.label}
+								{item.valueLabel}
 							</ValueLabelComponent>
 						</HtmlArea>
 					</HtmlArea>
@@ -197,7 +197,7 @@ export const AnimateBarChartItems: React.FC<{
 								theme={theme}
 								value={item.value}
 							>
-								{item.label}
+								{item.valueLabel}
 							</ValueLabelComponent>
 						</HtmlArea>
 					</HtmlArea>
@@ -284,7 +284,7 @@ export const AnimateBarChartItems: React.FC<{
 									theme={theme}
 									value={itemTo.value}
 								>
-									{itemTo.label}
+									{itemTo.valueLabel}
 								</ValueLabelComponent>
 							</HtmlArea>
 						</HtmlArea>
