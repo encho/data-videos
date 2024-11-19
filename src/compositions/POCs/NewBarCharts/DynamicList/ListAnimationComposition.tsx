@@ -17,6 +17,7 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {AnimateAreas} from './AnimateAreas';
+import {useListAnimation} from './useListAnimation';
 
 export const listAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -86,6 +87,8 @@ export const ListAnimationPage: React.FC = () => {
 
 	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
+
+	const listAnimationContext = useListAnimation({test: 'hehehehehe'});
 
 	const context = useDynamicListTransition({
 		frame,
@@ -179,15 +182,24 @@ export const ListAnimationPage: React.FC = () => {
 				theme={theme}
 			>
 				<Page show>
-					<div
-						style={{
-							fontSize: 50,
-							color: 'green',
-							// border: '2px solid red'
-						}}
-					>
-						DEBUGGER HERE...
-					</div>
+					<>
+						<div
+							style={{
+								fontSize: 50,
+								color: 'green',
+							}}
+						>
+							LIST ANIMATION CONTEXT
+						</div>
+						<div
+							style={{
+								fontSize: 50,
+								color: 'green',
+							}}
+						>
+							test: {listAnimationContext.test}
+						</div>
+					</>
 				</Page>
 			</PageContext>
 		</>
