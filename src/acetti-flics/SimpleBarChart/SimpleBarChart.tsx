@@ -332,27 +332,15 @@ export const SimpleBarChartWithMeasurements: React.FC<{
 								<HtmlArea
 									area={animatedBarChartLayout.getLabelArea(data[i].id)}
 								>
-									{/* <HtmlArea area={barChartLayout.getLabelArea(i)}> */}
-									<div
-										style={{
-											display: 'flex',
-											justifyContent: 'flex-end',
-											alignItems: 'center',
-											height: '100%',
-											// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
-											textWrap: 'nowrap',
-										}}
+									<LabelComponent
+										id={data[i].id}
+										animateExit={ANIMATE_EXIT}
+										animateEnter={ANIMATE_ENTER}
+										baseline={baseline}
+										theme={theme}
 									>
-										<LabelComponent
-											id={data[i].id}
-											animateExit={ANIMATE_EXIT}
-											animateEnter={ANIMATE_ENTER}
-											baseline={baseline}
-											theme={theme}
-										>
-											{data[i].label}
-										</LabelComponent>
-									</div>
+										{data[i].label}
+									</LabelComponent>
 								</HtmlArea>
 							</Sequence>
 						);
@@ -547,19 +535,30 @@ export const DefaultLabelComponent = React.memo(
 		animateExit?: boolean;
 	}) => {
 		return (
-			<TypographyStyle
-				typographyStyle={theme.typography.textStyles.datavizLabel}
-				baseline={baseline}
+			<div
+				style={{
+					display: 'flex',
+					justifyContent: 'flex-end',
+					alignItems: 'center',
+					height: '100%',
+					// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+					textWrap: 'nowrap',
+				}}
 			>
-				<TextAnimationSubtle
-					innerDelayInSeconds={0}
-					translateY={baseline * 1.15}
-					animateExit={animateExit}
-					animateEnter={animateEnter}
+				<TypographyStyle
+					typographyStyle={theme.typography.textStyles.datavizLabel}
+					baseline={baseline}
 				>
-					{children}
-				</TextAnimationSubtle>
-			</TypographyStyle>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateEnter}
+					>
+						{children}
+					</TextAnimationSubtle>
+				</TypographyStyle>
+			</div>
 		);
 	}
 );

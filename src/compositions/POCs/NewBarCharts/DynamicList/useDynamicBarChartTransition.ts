@@ -51,19 +51,25 @@ export type TDynamicBarChartTransitionContext = {
 	barChartItemLayout: TBarChartItemLayout;
 };
 
+export type TBarChartItem = {
+	id: string;
+	label: string;
+	valueLabel: string;
+	value: number;
+};
+
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicBarChartTransition({
 	context,
 	baseline,
+	labelWidth,
+	valueLabelWidth,
 }: {
-	context: TDynamicListTransitionContext<{
-		id: string;
-		value: number;
-		label: string;
-		valueLabel: string;
-	}>;
+	context: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
+	labelWidth: number;
+	valueLabelWidth: number;
 }): TDynamicBarChartTransitionContext {
 	const {visibleItemsFrom, visibleItemsTo, width, itemHeight} = context;
 
@@ -80,6 +86,8 @@ export function useDynamicBarChartTransition({
 		height: itemHeight,
 		width,
 		baseline,
+		labelWidth,
+		valueLabelWidth,
 	});
 
 	const xScaleFrom: ScaleLinear<number, number> = scaleLinear()
@@ -160,10 +168,14 @@ export function getBarChartItemLayout({
 	height,
 	width,
 	baseline,
+	labelWidth,
+	valueLabelWidth,
 }: {
 	height: number;
 	width: number;
 	baseline: number;
+	labelWidth: number;
+	valueLabelWidth: number;
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 
@@ -188,7 +200,7 @@ export function getBarChartItemLayout({
 	const columns: TGridRailSpec = [
 		{
 			type: 'pixel',
-			value: 200,
+			value: labelWidth,
 			name: 'label',
 		},
 		{
@@ -208,7 +220,7 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: 100,
+			value: valueLabelWidth,
 			name: 'valueLabel',
 		},
 	];

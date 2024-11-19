@@ -72,7 +72,7 @@ export const DynamicListPage: React.FC = () => {
 		column: 2,
 	});
 
-	const visibleIndicesFrom = [0, 8] as [number, number];
+	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
 
 	const context = useDynamicListTransition({
@@ -85,6 +85,7 @@ export const DynamicListPage: React.FC = () => {
 		width: area_1.width,
 		height: area_1.height,
 		justifyContent: 'start',
+		// justifyContent: 'center',
 	});
 
 	return (

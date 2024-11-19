@@ -18,6 +18,10 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {useDynamicBarChartTransition} from './useDynamicBarChartTransition';
+import {
+	DefaultLabelComponent,
+	TBarChartLabelComponent,
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const barChartTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -29,6 +33,9 @@ export const BarChartTransitionComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
+	// TODO improve on this, eventually the DynamicListContext can help with this info...
+	// const allEverDisplayedLabels =
+
 	return (
 		<PageContext
 			margin={50}
@@ -37,12 +44,47 @@ export const BarChartTransitionComposition: React.FC<
 			height={height}
 			theme={theme}
 		>
-			<DynamicListPage />
+			<BarChartTransitionPage
+				itemsFrom={itemsFrom}
+				itemsTo={itemsTo}
+				visibleIndicesFrom={[0, 3]}
+				visibleIndicesTo={[0, 3]}
+				labelWidth={200} // TODO measure
+				valueLabelWidth={200} // TODO measure
+				LabelComponent={DefaultLabelComponent}
+				// TODO:
+				// ValueLabelComponent={DefaultValueLabelComponent}
+			/>
 		</PageContext>
 	);
 };
 
-export const DynamicListPage: React.FC = () => {
+type TBarChartItem = {
+	id: string;
+	label: string;
+	valueLabel: string;
+	value: number;
+};
+
+type TBarChartItems = TBarChartItem[];
+
+const BarChartTransitionPage: React.FC<{
+	itemsFrom: TBarChartItems;
+	itemsTo: TBarChartItems;
+	visibleIndicesFrom: [number, number];
+	visibleIndicesTo: [number, number];
+	labelWidth: number;
+	valueLabelWidth: number;
+	LabelComponent: TBarChartLabelComponent;
+}> = ({
+	itemsFrom,
+	itemsTo,
+	visibleIndicesFrom,
+	visibleIndicesTo,
+	labelWidth,
+	valueLabelWidth,
+	LabelComponent,
+}) => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();
@@ -68,9 +110,6 @@ export const DynamicListPage: React.FC = () => {
 		column: 1,
 	});
 
-	const visibleIndicesFrom = [0, 8] as [number, number];
-	const visibleIndicesTo = [0, 4] as [number, number];
-
 	const barChartItemHeight = getBarChartItemHeight({baseline});
 
 	const context = useDynamicListTransition({
@@ -92,6 +131,8 @@ export const DynamicListPage: React.FC = () => {
 	const barChartTransitionContext = useDynamicBarChartTransition({
 		context,
 		baseline,
+		labelWidth,
+		valueLabelWidth,
 	});
 
 	return (
@@ -109,6 +150,7 @@ export const DynamicListPage: React.FC = () => {
 					<AnimateBarChartItems
 						context={context}
 						barChartTransitionContext={barChartTransitionContext}
+						LabelComponent={LabelComponent}
 					/>
 				</HtmlArea>
 
