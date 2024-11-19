@@ -10,6 +10,16 @@ type TUseGridLayout = {
 	gridLayoutSpec: TGridLayoutSpec;
 };
 
+// TODO: when the gridLayoutSpec changes (and not the height or width) a problem arises:
+// for a brief amount of time the returned gridLayout is not in sync with the gridLayoutSpec
+// leading to difficult to debug errors, as the expected gridLayout is not the one which is briefly returned
+// QUICK-FIX for those cases, at the moment something like:
+// const gridLayout = useMemo(() => {
+// 	return createGridLayout(gridLayoutSpec, {
+// 		width,
+// 		height,
+// 	});
+// }, [width, height, gridLayoutSpec]);
 export default function useGridLayout({
 	width,
 	height,

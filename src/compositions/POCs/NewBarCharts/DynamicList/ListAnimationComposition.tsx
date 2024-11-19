@@ -81,6 +81,11 @@ export const ListAnimationPage: React.FC = () => {
 	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
 
+	const duration_1 = Math.floor(durationInFrames / 4);
+	const duration_2 = Math.floor(durationInFrames / 4);
+	const duration_3 = Math.floor(durationInFrames / 4);
+	const duration_4 = durationInFrames - duration_1 - duration_2 - duration_3;
+
 	const listAnimationContext = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
@@ -90,16 +95,32 @@ export const ListAnimationPage: React.FC = () => {
 				itemsTo,
 				visibleIndicesFrom,
 				visibleIndicesTo,
-				easingFunction: Easing.elastic(2),
-				durationInFrames: durationInFrames / 2,
+				easingFunction: Easing.bounce,
+				durationInFrames: duration_1,
 			},
 			{
 				itemsFrom: itemsTo,
 				itemsTo: itemsFrom,
 				visibleIndicesFrom: visibleIndicesTo,
 				visibleIndicesTo: visibleIndicesFrom,
-				easingFunction: Easing.ease,
-				durationInFrames: durationInFrames / 2,
+				easingFunction: Easing.bounce,
+				durationInFrames: duration_2,
+			},
+			{
+				itemsFrom,
+				itemsTo,
+				visibleIndicesFrom,
+				visibleIndicesTo: [0, 2],
+				easingFunction: Easing.bounce,
+				durationInFrames: duration_3,
+			},
+			{
+				itemsFrom: itemsTo,
+				itemsTo: itemsFrom,
+				visibleIndicesFrom: [0, 2],
+				visibleIndicesTo: visibleIndicesFrom,
+				easingFunction: Easing.bounce,
+				durationInFrames: duration_4,
 			},
 		],
 	});
@@ -211,16 +232,23 @@ export const ListAnimationPage: React.FC = () => {
 								<div>durationInFrames</div>
 								<Value>{listAnimationContext.durationInFrames}</Value>
 							</Row>
-							<Row>CURRENT TRANSITION CONTEXT</Row>
 							<Row>
-								<div>(relative) frame</div>
-								<Value>
-									{listAnimationContext.currentTransitionContext.frame}
-								</Value>
+								<Row>CURRENT TRANSITION CONTEXT</Row>
+								<div>
+									<Row>
+										<div>(relative) frame</div>
+										<Value>
+											{listAnimationContext.currentTransitionContext.frame}
+										</Value>
+									</Row>
+									<Row>
+										<div>[...]</div>
+									</Row>
+								</div>
 							</Row>
 
 							<Row>
-								<div>transitions</div>
+								<Row> TRANSITIONS</Row>
 
 								<div>
 									{listAnimationContext.transitions.map(
@@ -240,6 +268,9 @@ export const ListAnimationPage: React.FC = () => {
 														<Value>
 															{JSON.stringify(editedTransition.frameRange)}
 														</Value>
+													</Row>
+													<Row>
+														<div>[...]</div>
 													</Row>
 												</div>
 											);

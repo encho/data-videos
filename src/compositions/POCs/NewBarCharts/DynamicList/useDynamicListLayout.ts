@@ -1,9 +1,10 @@
+import {useMemo} from 'react';
+
 import {
 	createGridLayout,
 	getGridLayoutArea,
 } from '../../../../acetti-layout/gridLayout';
 import {
-	useGridLayout,
 	TGridRailSpec,
 	TGridRailElementSpec,
 	TGridLayoutArea,
@@ -36,55 +37,59 @@ export function useDynamicListLayout({
 	itemMarginTop: number;
 	itemMarginBottom: number;
 }): TDynamicListLayout {
-	const rows: TGridRailSpec = items
-		.map(() => {
-			const rowItems: TGridRailElementSpec[] = [];
+	const rows: TGridRailSpec = useMemo(
+		() =>
+			items
+				.map(() => {
+					const rowItems: TGridRailElementSpec[] = [];
 
-			rowItems.push({
-				type: 'pixel',
-				value: itemMarginTop,
-				name: 'listItemPaddingUpper',
-			});
+					rowItems.push({
+						type: 'pixel',
+						value: itemMarginTop,
+						name: 'listItemPaddingUpper',
+					});
 
-			rowItems.push({
-				type: 'pixel',
-				value: itemHeight,
-				name: 'listItem',
-			});
+					rowItems.push({
+						type: 'pixel',
+						value: itemHeight,
+						name: 'listItem',
+					});
 
-			rowItems.push({
-				type: 'pixel',
-				value: itemMarginBottom,
-				name: 'listItemPaddingLower',
-			});
+					rowItems.push({
+						type: 'pixel',
+						value: itemMarginBottom,
+						name: 'listItemPaddingLower',
+					});
 
-			return rowItems;
-		})
-		.flat();
+					return rowItems;
+				})
+				.flat(),
+		[items, itemHeight, itemMarginTop, itemMarginBottom]
+	);
 
-	const columns: TGridRailSpec = [{type: 'fr', value: 1, name: 'fullWidth'}];
+	const columns: TGridRailSpec = useMemo(
+		() => [{type: 'fr', value: 1, name: 'fullWidth'}],
+		[]
+	);
 
-	const gridLayoutSpec = {
-		padding: 0,
-		columnGap: 0,
-		rowGap: 0,
-		rows,
-		columns,
-		areas: {},
-	};
+	const gridLayoutSpec = useMemo(
+		() => ({
+			padding: 0,
+			columnGap: 0,
+			rowGap: 0,
+			rows,
+			columns,
+			areas: {},
+		}),
+		[rows, columns]
+	);
 
-	// const gridLayout = useGridLayout({
-	// 	width,
-	// 	height,
-	// 	gridLayoutSpec,
-	// });
-	// TODO figure out why
-	const gridLayout = createGridLayout(gridLayoutSpec, {
-		width,
-		height,
-	});
-
-	// console.log({gridLayout});
+	const gridLayout = useMemo(() => {
+		return createGridLayout(gridLayoutSpec, {
+			width,
+			height,
+		});
+	}, [width, height, gridLayoutSpec]);
 
 	const getListItemArea = (i: number | string): TGridLayoutArea => {
 		if (typeof i === 'number') {
@@ -123,8 +128,6 @@ export function useDynamicListLayout({
 
 		return [paddedAreaStart.y1, paddedAreaEnd.y2] as [number, number];
 	};
-
-	// console.log({gridLayout});
 
 	return {
 		gridLayout,

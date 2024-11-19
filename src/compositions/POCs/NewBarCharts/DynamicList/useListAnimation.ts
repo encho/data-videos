@@ -83,6 +83,7 @@ export function useListAnimation<T extends {id: string}>({
 		itemHeight: 100,
 		itemMarginTop: 20,
 		itemMarginBottom: 20,
+		easing: editedTransitions[currentTransitionIndex].easingFunction,
 		itemsFrom: editedTransitions[currentTransitionIndex].itemsFrom,
 		itemsTo: editedTransitions[currentTransitionIndex].itemsTo,
 		visibleIndicesFrom:
