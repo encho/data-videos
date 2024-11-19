@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import React, {useCallback} from 'react';
-import {useCurrentFrame, useVideoConfig} from 'remotion';
+import {Easing, useCurrentFrame, useVideoConfig} from 'remotion';
 import {isNumber} from 'lodash';
 
 import {AnimateBarChartItems} from './AnimateBarChartItems';
@@ -219,7 +219,6 @@ const BarChartTransitionPage: React.FC<{
 		itemMarginTop: baseline * 0,
 		itemMarginBottom: baseline * 0,
 		itemHeight: barChartItemHeight,
-		//
 		frame,
 		durationInFrames,
 		itemsFrom,
@@ -229,6 +228,7 @@ const BarChartTransitionPage: React.FC<{
 		width: area_1.width,
 		height: area_1.height,
 		justifyContent: 'start',
+		easing: Easing.ease,
 	});
 
 	const barChartTransitionContext = useDynamicBarChartTransition({

@@ -59,21 +59,12 @@ export function useDynamicListLayout({
 		return rowItems;
 	}).flat();
 
-	// const paddedRows: TGridRailSpec = [
-	// 	{type: 'fr', value: 1, name: 'excessSpaceTop'},
-	// 	...rows,
-	// 	{type: 'fr', value: 1, name: 'excessSpaceBottom'},
-	// ];
-
-	// console.log({rows});
-
 	const columns: TGridRailSpec = [{type: 'fr', value: 1, name: 'fullWidth'}];
 
 	const gridLayoutSpec = {
 		padding: 0,
 		columnGap: 0,
 		rowGap: 0,
-		// rows: paddedRows,
 		rows,
 		columns,
 		areas: {},

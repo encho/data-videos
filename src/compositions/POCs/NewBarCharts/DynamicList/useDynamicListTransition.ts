@@ -1,4 +1,4 @@
-import {interpolate} from 'remotion';
+import {interpolate, Easing, EasingFunction} from 'remotion';
 import invariant from 'tiny-invariant';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
@@ -36,8 +36,9 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 	};
 	itemHeight: number;
 	width: number;
+	easingPercentage: number;
 	// TODO
-	// easing: (x:number) => number
+	// easing?: (x: number) => number;
 	// baseline
 };
 
@@ -56,6 +57,7 @@ export function useDynamicListTransition<T extends {id: string}>({
 	justifyContent = 'center',
 	frame,
 	durationInFrames,
+	easing = Easing.linear,
 }: {
 	itemHeight?: number; // TODO not optional
 	itemMarginTop?: number; // TODO not optional
@@ -69,10 +71,20 @@ export function useDynamicListTransition<T extends {id: string}>({
 	justifyContent?: 'center' | 'start';
 	frame: number;
 	durationInFrames: number;
+	easing?: EasingFunction;
 	// TODO: baseline, to determine the sizes in the layout!!!!!!!!!!!
 }): TDynamicListTransitionContext<T> {
 	const visibleItemsFrom = getVisibleItems<T>(itemsFrom, visibleIndicesFrom);
 	const visibleItemsTo = getVisibleItems<T>(itemsTo, visibleIndicesTo);
+
+	const easingPercentage = interpolate(
+		frame,
+		[0, durationInFrames - 1],
+		[0, 1],
+		{
+			easing,
+		}
+	);
 
 	const layoutFrom = useDynamicListLayout({
 		width,
@@ -134,6 +146,7 @@ export function useDynamicListTransition<T extends {id: string}>({
 	return {
 		frame,
 		durationInFrames,
+		easingPercentage,
 		transitionTypes,
 		itemHeight,
 		width,
@@ -175,19 +188,12 @@ export function useDynamicListTransition<T extends {id: string}>({
 export function useEnterAreas<T extends {id: string}>(
 	context: TDynamicListTransitionContext<T>
 ) {
-	const {transitionTypes, frame, durationInFrames} = context;
+	const {transitionTypes, easingPercentage} = context;
 
 	const areaProperties = transitionTypes.enter.map((id) => {
 		const areaTo = context.getListItemAreaTo(id);
 
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[0, 1],
-			{
-				// easing: xxx
-			}
-		);
+		const currentOpacity = interpolate(easingPercentage, [0, 1], [0, 1]);
 
 		const item = context.itemsTo.find((it) => it.id === id);
 		invariant(item);
@@ -206,20 +212,11 @@ export function useEnterAreas<T extends {id: string}>(
 export function useExitAreas<T extends {id: string}>(
 	context: TDynamicListTransitionContext<T>
 ) {
-	const {transitionTypes, frame, durationInFrames} = context;
+	const {transitionTypes, easingPercentage} = context;
 
 	return transitionTypes.exit.map((id) => {
 		const areaFrom = context.getListItemAreaFrom(id);
-
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[1, 0],
-			{
-				// easing: xxx
-			}
-		);
-
+		const currentOpacity = interpolate(easingPercentage, [0, 1], [1, 0]);
 		const item = context.itemsFrom.find((it) => it.id === id);
 		invariant(item);
 
@@ -249,7 +246,7 @@ function useUpdateTypeAreas<T extends {id: string}>(
 	context: TDynamicListTransitionContext<T>,
 	updateType: 'appear' | 'disappear' | 'update'
 ) {
-	const {transitionTypes, frame, durationInFrames} = context;
+	const {transitionTypes, easingPercentage} = context;
 
 	const ids =
 		updateType === 'appear'
@@ -274,49 +271,30 @@ function useUpdateTypeAreas<T extends {id: string}>(
 		invariant(itemFrom);
 		invariant(itemTo);
 
-		const currentOpacity = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			opacityRange,
-			{
-				// easing: xxx
-			}
-		);
+		const currentOpacity = interpolate(easingPercentage, [0, 1], opacityRange);
 
 		const current_y1 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.y1, areaTo.y1],
-			{
-				// easing: xxx
-			}
+			easingPercentage,
+			[0, 1],
+			[areaFrom.y1, areaTo.y1]
 		);
 
 		const current_y2 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.y2, areaTo.y2],
-			{
-				// easing: xxx
-			}
+			easingPercentage,
+			[0, 1],
+			[areaFrom.y2, areaTo.y2]
 		);
 
 		const current_x1 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.x1, areaTo.x1],
-			{
-				// easing: xxx
-			}
+			easingPercentage,
+			[0, 1],
+			[areaFrom.x1, areaTo.x1]
 		);
 
 		const current_x2 = interpolate(
-			frame,
-			[0, durationInFrames - 1],
-			[areaFrom.x2, areaTo.x2],
-			{
-				// easing: xxx
-			}
+			easingPercentage,
+			[0, 1],
+			[areaFrom.x2, areaTo.x2]
 		);
 
 		const currentArea = {
