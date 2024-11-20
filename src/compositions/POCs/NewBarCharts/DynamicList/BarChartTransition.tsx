@@ -10,7 +10,7 @@ import {
 	useUpdateAreas,
 	useAppearAreas,
 	useDisappearAreas,
-} from './useDynamicListTransition';
+} from './useListTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
 import {TDynamicBarChartTransitionContext} from './useDynamicBarChartTransition';
 import {

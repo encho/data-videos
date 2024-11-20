@@ -9,7 +9,7 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useDynamicListTransition} from './useDynamicListTransition';
+import {useListTransition} from './useListTransition';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
@@ -79,7 +79,7 @@ export const DynamicListPage: React.FC = () => {
 	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
 
-	const context = useDynamicListTransition({
+	const context = useListTransition({
 		frame,
 		durationInFrames,
 		itemsFrom,

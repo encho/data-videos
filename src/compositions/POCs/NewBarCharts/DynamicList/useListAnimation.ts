@@ -5,8 +5,8 @@ import invariant from 'tiny-invariant';
 import {findFrameRangeIndex} from '../../09-Timeseries/utils/usePeriodScaleAnimation';
 import {
 	TDynamicListTransitionContext,
-	useDynamicListTransition,
-} from './useDynamicListTransition';
+	useListTransition,
+} from './useListTransition';
 
 export type ListAnimationTransition<T> = {
 	itemsFrom: T[];
@@ -39,7 +39,7 @@ type UseListAnimationArgs<T> = {
 	transitions: ListAnimationTransition<T>[];
 };
 
-// TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
+// TODO, this actually represents only 1 animation step. the useListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListAnimation<T extends {id: string}>({
 	width,
@@ -77,7 +77,7 @@ export function useListAnimation<T extends {id: string}>({
 	const currentRelativeFrame =
 		frame - editedTransitions[currentTransitionIndex].frameRange.startFrame;
 
-	const currentTransitionContext = useDynamicListTransition({
+	const currentTransitionContext = useListTransition({
 		width,
 		height,
 		itemHeight: 100,

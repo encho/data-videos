@@ -12,7 +12,7 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useDynamicListTransition} from './useDynamicListTransition';
+import {useListTransition} from './useListTransition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
 	getMatrixLayoutCellArea,
@@ -210,7 +210,7 @@ const BarChartTransitionPage: React.FC<{
 
 	const barChartItemHeight = getBarChartItemHeight({baseline});
 
-	const listTransitionContext = useDynamicListTransition({
+	const listTransitionContext = useListTransition({
 		itemMarginTop: baseline * 0,
 		itemMarginBottom: baseline * 0,
 		itemHeight: barChartItemHeight,

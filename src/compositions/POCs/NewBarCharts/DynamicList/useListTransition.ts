@@ -81,9 +81,9 @@ export type ListTransitionContext<T> =
 export type TDynamicListTransitionContext<T extends {id: string}> =
 	ListTransitionContext<T>;
 
-// TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
+// TODO, this actually represents only 1 animation step. the useListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
-export function useDynamicListTransition<T extends {id: string}>({
+export function useListTransition<T extends {id: string}>({
 	width,
 	height,
 	itemHeight = 100,

@@ -11,7 +11,7 @@ import {
 	TGridLayoutArea,
 } from '../../../../acetti-layout';
 
-import {TDynamicListTransitionContext} from './useDynamicListTransition';
+import {TDynamicListTransitionContext} from './useListTransition';
 import {interpolate} from 'remotion';
 
 type BarChartTransitionContext_Common = {
@@ -88,7 +88,7 @@ function getExtentAndScale({
 	return {domain, xScale};
 }
 
-// TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
+// TODO, this actually represents only 1 animation step. the useListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicBarChartTransition({
 	listTransitionContext, // TODO rename to listTransitionContext
