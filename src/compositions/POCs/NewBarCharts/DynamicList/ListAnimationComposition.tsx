@@ -86,6 +86,8 @@ export const ListAnimationPage: React.FC = () => {
 	const duration_3 = Math.floor(durationInFrames / 4);
 	const duration_4 = durationInFrames - duration_1 - duration_2 - duration_3;
 
+	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+
 	const listAnimationContext = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
@@ -95,7 +97,7 @@ export const ListAnimationPage: React.FC = () => {
 				itemsTo,
 				visibleIndicesFrom,
 				visibleIndicesTo,
-				easingFunction: Easing.bounce,
+				easingFunction,
 				durationInFrames: duration_1,
 			},
 			{
@@ -103,7 +105,7 @@ export const ListAnimationPage: React.FC = () => {
 				itemsTo: itemsFrom,
 				visibleIndicesFrom: visibleIndicesTo,
 				visibleIndicesTo: visibleIndicesFrom,
-				easingFunction: Easing.bounce,
+				easingFunction,
 				durationInFrames: duration_2,
 			},
 			{
@@ -111,7 +113,7 @@ export const ListAnimationPage: React.FC = () => {
 				itemsTo,
 				visibleIndicesFrom,
 				visibleIndicesTo: [0, 2],
-				easingFunction: Easing.bounce,
+				easingFunction,
 				durationInFrames: duration_3,
 			},
 			{
@@ -119,7 +121,7 @@ export const ListAnimationPage: React.FC = () => {
 				itemsTo: itemsFrom,
 				visibleIndicesFrom: [0, 2],
 				visibleIndicesTo: visibleIndicesFrom,
-				easingFunction: Easing.bounce,
+				easingFunction,
 				durationInFrames: duration_4,
 			},
 		],
