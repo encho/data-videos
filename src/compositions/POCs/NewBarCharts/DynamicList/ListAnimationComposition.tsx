@@ -10,17 +10,17 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-// import {
-// 	TDynamicListTransitionContext,
-// 	useDynamicListTransition,
-// } from './useDynamicListTransition';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {AnimateAreas} from './AnimateAreas';
+import {
+	ListTransitionUpdate,
+	ListTransitionEnter,
+	ListTransitionExit,
+} from './ListTransition';
 import {useListAnimation} from './useListAnimation';
 
 export const listAnimationCompositionSchema = z.object({
@@ -95,7 +95,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		transitions: [
 			{
-				itemsFrom: itemsTo,
+				itemsFrom: [],
 				itemsTo: itemsFrom,
 				visibleIndicesFrom: [0, 1],
 				visibleIndicesTo: [0, 5],
@@ -128,7 +128,7 @@ export const ListAnimationPage: React.FC = () => {
 			},
 			{
 				itemsFrom: itemsTo,
-				itemsTo: itemsFrom,
+				itemsTo: [],
 				visibleIndicesFrom: [0, 2],
 				visibleIndicesTo: visibleIndicesFrom,
 				easingFunction,
@@ -222,7 +222,13 @@ export const ListAnimationPage: React.FC = () => {
 
 					<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
 						{currentTransitionContext.transitionType === 'update' ? (
-							<AnimateAreas context={currentTransitionContext} />
+							<ListTransitionUpdate context={currentTransitionContext} />
+						) : null}
+						{currentTransitionContext.transitionType === 'enter' ? (
+							<ListTransitionEnter context={currentTransitionContext} />
+						) : null}
+						{currentTransitionContext.transitionType === 'exit' ? (
+							<ListTransitionExit context={currentTransitionContext} />
 						) : null}
 					</HtmlArea>
 				</div>

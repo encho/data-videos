@@ -13,7 +13,7 @@ type ListTransitionContext_Common = {
 	easingPercentage: number;
 };
 
-type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
+export type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
 	transitionType: 'enter';
 	to: {
 		items: T[];
@@ -27,7 +27,7 @@ type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
 	};
 };
 
-type ListTransitionContext_Exit<T> = ListTransitionContext_Common & {
+export type ListTransitionContext_Exit<T> = ListTransitionContext_Common & {
 	transitionType: 'exit';
 	from: {
 		items: T[];
@@ -259,8 +259,8 @@ export function useDynamicListTransition<T extends {id: string}>({
 	invariant(transitionType === 'exit');
 
 	const from = getTransitionStateData({
-		items: itemsTo,
-		visibleIndices: visibleIndicesTo,
+		items: itemsFrom,
+		visibleIndices: visibleIndicesFrom,
 	});
 
 	return {

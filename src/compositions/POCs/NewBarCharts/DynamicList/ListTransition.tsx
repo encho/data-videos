@@ -1,9 +1,13 @@
 import React from 'react';
+import invariant from 'tiny-invariant';
+import {interpolate} from 'remotion';
 
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {
 	ListTransitionContext_Update,
+	ListTransitionContext_Enter,
+	ListTransitionContext_Exit,
 	useEnterAreas,
 	useExitAreas,
 	useUpdateAreas,
@@ -12,7 +16,7 @@ import {
 } from './useDynamicListTransition';
 import {HtmlArea} from '../../../../acetti-layout';
 
-export const AnimateAreas: React.FC<{
+export const ListTransitionUpdate: React.FC<{
 	context: ListTransitionContext_Update<{id: string}>;
 }> = ({context}) => {
 	const {theme, baseline} = usePage();
@@ -42,7 +46,87 @@ export const AnimateAreas: React.FC<{
 							typographyStyle={theme.typography.textStyles.body}
 							baseline={baseline}
 						>
-							{id}
+							{id} (UPDATE)
+						</TypographyStyle>
+					</HtmlArea>
+				);
+			})}
+		</div>
+	);
+};
+
+export const ListTransitionEnter: React.FC<{
+	context: ListTransitionContext_Enter<{id: string}>;
+}> = ({context}) => {
+	const {theme, baseline} = usePage();
+
+	const visibleItemIds = context.to.visibleItems.map((it) => it.id);
+
+	const areasData = visibleItemIds.map((id) => {
+		const areaFrom = context.to.getListItemArea(id);
+		const currentOpacity = interpolate(
+			context.easingPercentage,
+			[0, 1],
+			[0, 1]
+		);
+		const item = context.to.items.find((it) => it.id === id);
+		invariant(item);
+		return {id, area: areaFrom, item, opacity: currentOpacity};
+	});
+
+	return (
+		<div>
+			{areasData.map((area) => {
+				const {opacity, id} = area;
+				const color = getPredefinedColor(id);
+
+				return (
+					<HtmlArea area={area.area} fill={color} opacity={opacity}>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.body}
+							baseline={baseline}
+						>
+							{id} (ENTER)
+						</TypographyStyle>
+					</HtmlArea>
+				);
+			})}
+		</div>
+	);
+};
+
+export const ListTransitionExit: React.FC<{
+	context: ListTransitionContext_Exit<{id: string}>;
+}> = ({context}) => {
+	const {theme, baseline} = usePage();
+
+	const visibleItemIds = context.from.visibleItems.map((it) => it.id);
+
+	const areasData = visibleItemIds.map((id) => {
+		const areaFrom = context.from.getListItemArea(id);
+		const currentOpacity = interpolate(
+			context.easingPercentage,
+			[0, 1],
+			[1, 0]
+		);
+		const item = context.from.items.find((it) => it.id === id);
+		invariant(item);
+		return {id, area: areaFrom, item, opacity: currentOpacity};
+	});
+
+	return (
+		<div>
+			{areasData.map((area) => {
+				const {opacity, id} = area;
+				const color = getPredefinedColor(id);
+
+				return (
+					<HtmlArea area={area.area} fill={color} opacity={opacity}>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.body}
+							baseline={baseline}
+						>
+							{id} (EXIT)
 						</TypographyStyle>
 					</HtmlArea>
 				);

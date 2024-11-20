@@ -16,7 +16,11 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {AnimateAreas} from './AnimateAreas';
+import {
+	ListTransitionUpdate,
+	ListTransitionEnter,
+	ListTransitionExit,
+} from './ListTransition';
 
 export const dynamicListCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -84,8 +88,7 @@ export const DynamicListPage: React.FC = () => {
 		visibleIndicesTo,
 		width: area_1.width,
 		height: area_1.height,
-		justifyContent: 'start',
-		// justifyContent: 'center',
+		justifyContent: 'center',
 	});
 
 	return (
@@ -159,7 +162,13 @@ export const DynamicListPage: React.FC = () => {
 
 				<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
 					{context.transitionType === 'update' ? (
-						<AnimateAreas context={context} />
+						<ListTransitionUpdate context={context} />
+					) : null}
+					{context.transitionType === 'enter' ? (
+						<ListTransitionEnter context={context} />
+					) : null}
+					{context.transitionType === 'exit' ? (
+						<ListTransitionExit context={context} />
 					) : null}
 				</HtmlArea>
 			</div>
