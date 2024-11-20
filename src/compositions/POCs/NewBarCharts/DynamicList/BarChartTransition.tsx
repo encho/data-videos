@@ -21,30 +21,30 @@ import {
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TBarChartItem} from './useDynamicBarChartTransition';
 
-export const AnimateBarChartItems: React.FC<{
-	context: ListTransitionContext_Update<TBarChartItem>;
+export const BarChartTransitionUpdate: React.FC<{
+	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;
 	barChartTransitionContext: TDynamicBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
 }> = ({
-	context,
+	listTransitionContext,
 	barChartTransitionContext,
 	LabelComponent,
 	ValueLabelComponent,
 }) => {
 	const {theme, baseline} = usePage();
 
-	const {frame, durationInFrames} = context;
+	const {frame, durationInFrames} = listTransitionContext;
 
 	const {xScale} = barChartTransitionContext;
 
 	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
-	const enterAreas = useEnterAreas(context);
-	const exitAreas = useExitAreas(context);
+	const enterAreas = useEnterAreas(listTransitionContext);
+	const exitAreas = useExitAreas(listTransitionContext);
 
-	const appearAreas = useAppearAreas(context);
-	const disappearAreas = useDisappearAreas(context);
-	const updateAreas = useUpdateAreas(context);
+	const appearAreas = useAppearAreas(listTransitionContext);
+	const disappearAreas = useDisappearAreas(listTransitionContext);
+	const updateAreas = useUpdateAreas(listTransitionContext);
 
 	const {barArea, labelArea, valueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;

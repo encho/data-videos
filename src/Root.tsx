@@ -1313,7 +1313,7 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="useListAnimation"
+						id="ListAnimation"
 						component={ListAnimationComposition}
 						durationInFrames={30 * 15}
 						fps={30}

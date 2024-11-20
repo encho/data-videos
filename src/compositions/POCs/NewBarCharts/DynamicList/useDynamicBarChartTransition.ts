@@ -28,7 +28,7 @@ type BarChartTransitionContext_Common = {
 type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
 	transitionType: 'enter';
 	to: {
-		domain: [number, number];
+		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
 	};
 };
@@ -36,7 +36,7 @@ type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
 type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
 	transitionType: 'exit';
 	from: {
-		domain: [number, number];
+		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
 	};
 };
@@ -44,11 +44,11 @@ type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
 type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
 	transitionType: 'update';
 	from: {
-		domain: [number, number];
+		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
 	};
 	to: {
-		domain: [number, number];
+		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
 	};
 };
@@ -57,45 +57,6 @@ export type TDynamicBarChartTransitionContext =
 	| BarChartTransitionContext_Enter
 	| BarChartTransitionContext_Exit
 	| BarChartTransitionContext_Update;
-
-// export type TDynamicBarChartTransitionContext = {
-// 	// getLabelAreaFrom: (i: number | string) => TGridLayoutArea;
-// 	// getBarAreaFrom: (i: number | string) => TGridLayoutArea;
-// 	// getValueLabelAreaFrom: (i: number | string) => TGridLayoutArea;
-// 	// getLabelAreaTo: (i: number | string) => TGridLayoutArea;
-// 	// getBarAreaTo: (i: number | string) => TGridLayoutArea;
-// 	// getValueLabelAreaTo: (i: number | string) => TGridLayoutArea;
-// 	//
-// 	// getUpdateInfos: () => {area: TGridLayoutArea; id: string};
-// 	// getEnterInfos: () => {area: TGridLayoutArea; id: string};
-// 	// getExitInfos: () => {area: TGridLayoutArea; id: string};
-// 	// getAppearInfos: () => {area: TGridLayoutArea; id: string};
-// 	// getDisappearInfos: () => {area: TGridLayoutArea; id: string};
-// 	//
-// 	//
-// 	// extentFrom: [number, number];
-// 	// extentTo: [number, number];
-// 	//
-// 	// xScaleFrom: ScaleLinear<number, number>;
-// 	// xScaleTo: ScaleLinear<number, number>;
-// 	xScale: ScaleLinear<number, number>;
-// 	barChartItemLayout: TBarChartItemLayout;
-// 	// TODO
-// 	// barChartMotherLayoutAreas: {
-// 	// 	labelsArea:
-// 	// 	barsArea:
-// 	// 	valueLabelsArea:
-// 	// }
-
-// 	from: {
-// 		extent: [number, number];
-// 		xScale: ScaleLinear<number, number>;
-// 	};
-// 	to: {
-// 		extent: [number, number];
-// 		xScale: ScaleLinear<number, number>;
-// 	};
-// };
 
 export type TBarChartItem = {
 	id: string;
@@ -130,17 +91,17 @@ function getExtentAndScale({
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicBarChartTransition({
-	context, // TODO rename to listTransitionContext
+	listTransitionContext, // TODO rename to listTransitionContext
 	baseline,
 	labelWidth,
 	valueLabelWidth,
 }: {
-	context: TDynamicListTransitionContext<TBarChartItem>;
+	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
 }): TDynamicBarChartTransitionContext {
-	const {width, itemHeight} = context;
+	const {width, itemHeight} = listTransitionContext;
 
 	const barChartItemLayout = getBarChartItemLayout({
 		height: itemHeight,
@@ -153,26 +114,26 @@ export function useDynamicBarChartTransition({
 	// ***********************************************************************
 	// return context for 'update' transitionType
 	// ***********************************************************************
-	if (context.transitionType === 'update') {
+	if (listTransitionContext.transitionType === 'update') {
 		const infoFrom = getExtentAndScale({
-			visibleItems: context.from.visibleItems,
+			visibleItems: listTransitionContext.from.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
 
 		const infoTo = getExtentAndScale({
-			visibleItems: context.to.visibleItems,
+			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
 
 		const interpolatedExtent_0 = interpolate(
-			context.frame,
-			[0, context.durationInFrames - 1],
+			listTransitionContext.frame,
+			[0, listTransitionContext.durationInFrames - 1],
 			[infoFrom.domain[0], infoTo.domain[0]],
 			{}
 		);
 		const interpolatedExtent_1 = interpolate(
-			context.frame,
-			[0, context.durationInFrames - 1],
+			listTransitionContext.frame,
+			[0, listTransitionContext.durationInFrames - 1],
 			[infoFrom.domain[1], infoTo.domain[1]],
 			{}
 		);
@@ -193,9 +154,9 @@ export function useDynamicBarChartTransition({
 	// ***********************************************************************
 	// return context for 'enter' transitionType
 	// ***********************************************************************
-	if (context.transitionType === 'enter') {
+	if (listTransitionContext.transitionType === 'enter') {
 		const infoTo = getExtentAndScale({
-			visibleItems: context.to.visibleItems,
+			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
 
@@ -207,9 +168,9 @@ export function useDynamicBarChartTransition({
 		};
 	}
 
-	invariant(context.transitionType === 'exit');
+	invariant(listTransitionContext.transitionType === 'exit');
 	const infoFrom = getExtentAndScale({
-		visibleItems: context.from.visibleItems,
+		visibleItems: listTransitionContext.from.visibleItems,
 		xAxisWidth: barChartItemLayout.barArea.width,
 	});
 

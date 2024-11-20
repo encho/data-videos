@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {Easing, useCurrentFrame, useVideoConfig} from 'remotion';
 import {isNumber} from 'lodash';
 
-import {AnimateBarChartItems} from './AnimateBarChartItems';
+import {BarChartTransitionUpdate} from './BarChartTransition';
 import {getBarChartItemHeight} from './useDynamicBarChartTransition';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -210,7 +210,7 @@ const BarChartTransitionPage: React.FC<{
 
 	const barChartItemHeight = getBarChartItemHeight({baseline});
 
-	const context = useDynamicListTransition({
+	const listTransitionContext = useDynamicListTransition({
 		itemMarginTop: baseline * 0,
 		itemMarginBottom: baseline * 0,
 		itemHeight: barChartItemHeight,
@@ -227,7 +227,7 @@ const BarChartTransitionPage: React.FC<{
 	});
 
 	const barChartTransitionContext = useDynamicBarChartTransition({
-		context,
+		listTransitionContext,
 		baseline,
 		labelWidth,
 		valueLabelWidth,
@@ -244,38 +244,26 @@ const BarChartTransitionPage: React.FC<{
 			</TypographyStyle>
 
 			<div style={{position: 'relative'}}>
-				<HtmlArea
-					area={area_1}
-					// fill="rgba(255,0,255,0.15)"
-				>
-					{context.transitionType === 'update' ? (
-						<AnimateBarChartItems
-							context={context}
+				<HtmlArea area={area_1}>
+					{listTransitionContext.transitionType === 'update' ? (
+						<BarChartTransitionUpdate
+							listTransitionContext={listTransitionContext}
 							barChartTransitionContext={barChartTransitionContext}
 							LabelComponent={LabelComponent}
 							ValueLabelComponent={ValueLabelComponent}
 						/>
 					) : null}
-					{context.transitionType === 'enter' ? (
+					{listTransitionContext.transitionType === 'enter' ? (
 						<div style={{backgroundColor: 'green', fontSize: 40, padding: 40}}>
 							Implement Enter!
 						</div>
 					) : null}
-					{context.transitionType === 'exit' ? (
+					{listTransitionContext.transitionType === 'exit' ? (
 						<div style={{backgroundColor: 'red', fontSize: 40, padding: 40}}>
 							Implement Exit!
 						</div>
 					) : null}
 				</HtmlArea>
-
-				{/* <HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
-					<TypographyStyle
-						typographyStyle={theme.typography.textStyles.body}
-						baseline={baseline}
-					>
-						{JSON.stringify(barChartTransitionContext, undefined, 2)}
-					</TypographyStyle>
-				</HtmlArea> */}
 			</div>
 		</Page>
 	);
