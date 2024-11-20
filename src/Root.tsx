@@ -251,9 +251,9 @@ import {
 } from './compositions/POCs/01-TextEffects/SvgFilter/SvgFilterComposition';
 
 import {
-	DynamicListComposition,
-	dynamicListCompositionSchema,
-} from './compositions/POCs/NewBarCharts/DynamicList/DynamicListComposition';
+	ListTransitionComposition,
+	listTransitionCompositionSchema,
+} from './compositions/POCs/NewBarCharts/DynamicList/ListTransitionComposition';
 
 import {
 	BarChartTransitionComposition,
@@ -1302,13 +1302,12 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="DynamicList"
-						component={DynamicListComposition}
+						id="ListTransition"
+						component={ListTransitionComposition}
 						durationInFrames={90 * 3}
 						fps={90}
 						{...videoSizes.widescreen_16x9}
-						// height={12000}
-						schema={dynamicListCompositionSchema}
+						schema={listTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition

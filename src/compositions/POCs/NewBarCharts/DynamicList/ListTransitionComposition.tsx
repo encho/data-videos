@@ -22,12 +22,12 @@ import {
 	ListTransitionExit,
 } from './ListTransition';
 
-export const dynamicListCompositionSchema = z.object({
+export const listTransitionCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
 
-export const DynamicListComposition: React.FC<
-	z.infer<typeof dynamicListCompositionSchema>
+export const ListTransitionComposition: React.FC<
+	z.infer<typeof listTransitionCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
