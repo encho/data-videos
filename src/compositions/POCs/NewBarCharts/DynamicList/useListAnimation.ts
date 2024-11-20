@@ -8,7 +8,7 @@ import {
 	useDynamicListTransition,
 } from './useDynamicListTransition';
 
-type ListAnimationTransition<T> = {
+export type ListAnimationTransition<T> = {
 	itemsFrom: T[];
 	itemsTo: T[];
 	visibleIndicesFrom: [number, number];

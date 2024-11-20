@@ -21,7 +21,7 @@ import {
 	ListTransitionEnter,
 	ListTransitionExit,
 } from './ListTransition';
-import {useListAnimation} from './useListAnimation';
+import {useListAnimation, ListAnimationTransition} from './useListAnimation';
 
 export const listAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -90,51 +90,98 @@ export const ListAnimationPage: React.FC = () => {
 
 	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 
+	// eslint-disable-next-line
+	const weirdTransitions: ListAnimationTransition<{id: string}>[] = [
+		{
+			itemsFrom: [],
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: [0, 1],
+			visibleIndicesTo: [0, 5],
+			easingFunction,
+			durationInFrames: duration_0,
+		},
+		{
+			itemsFrom,
+			itemsTo,
+			visibleIndicesFrom,
+			visibleIndicesTo,
+			easingFunction,
+			durationInFrames: duration_1,
+		},
+		{
+			itemsFrom: itemsTo,
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: visibleIndicesTo,
+			visibleIndicesTo: visibleIndicesFrom,
+			easingFunction,
+			durationInFrames: duration_2,
+		},
+		{
+			itemsFrom,
+			itemsTo,
+			visibleIndicesFrom,
+			visibleIndicesTo: [0, 2],
+			easingFunction,
+			durationInFrames: duration_3,
+		},
+		{
+			itemsFrom: itemsTo,
+			itemsTo: [],
+			visibleIndicesFrom: [0, 2],
+			visibleIndicesTo: visibleIndicesFrom,
+			easingFunction,
+			durationInFrames: duration_4,
+		},
+	];
+
+	const scrollingTransitions: ListAnimationTransition<{id: string}>[] = [
+		{
+			itemsFrom: [],
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: [0, 1],
+			visibleIndicesTo: [0, 3],
+			easingFunction,
+			durationInFrames: duration_0,
+		},
+		{
+			itemsFrom,
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: [0, 3],
+			visibleIndicesTo: [2, 5],
+			easingFunction,
+			durationInFrames: duration_1,
+		},
+		{
+			itemsFrom,
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: [2, 5],
+			visibleIndicesTo: [5, 8],
+			easingFunction,
+			durationInFrames: duration_2,
+		},
+		{
+			itemsFrom,
+			itemsTo: itemsFrom,
+			visibleIndicesFrom: [5, 8],
+			visibleIndicesTo: [0, 3],
+			easingFunction,
+			durationInFrames: duration_3,
+		},
+		{
+			itemsFrom,
+			itemsTo: [],
+			visibleIndicesFrom: [0, 3],
+			visibleIndicesTo: visibleIndicesFrom,
+			easingFunction,
+			durationInFrames: duration_4,
+		},
+	];
+
 	const listAnimationContext = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
-		transitions: [
-			{
-				itemsFrom: [],
-				itemsTo: itemsFrom,
-				visibleIndicesFrom: [0, 1],
-				visibleIndicesTo: [0, 5],
-				easingFunction,
-				durationInFrames: duration_0,
-			},
-			{
-				itemsFrom,
-				itemsTo,
-				visibleIndicesFrom,
-				visibleIndicesTo,
-				easingFunction,
-				durationInFrames: duration_1,
-			},
-			{
-				itemsFrom: itemsTo,
-				itemsTo: itemsFrom,
-				visibleIndicesFrom: visibleIndicesTo,
-				visibleIndicesTo: visibleIndicesFrom,
-				easingFunction,
-				durationInFrames: duration_2,
-			},
-			{
-				itemsFrom,
-				itemsTo,
-				visibleIndicesFrom,
-				visibleIndicesTo: [0, 2],
-				easingFunction,
-				durationInFrames: duration_3,
-			},
-			{
-				itemsFrom: itemsTo,
-				itemsTo: [],
-				visibleIndicesFrom: [0, 2],
-				visibleIndicesTo: visibleIndicesFrom,
-				easingFunction,
-				durationInFrames: duration_4,
-			},
-		],
+		// transitions: weirdTransitions,
+		transitions: scrollingTransitions,
 	});
 
 	const {currentTransitionContext} = listAnimationContext;
