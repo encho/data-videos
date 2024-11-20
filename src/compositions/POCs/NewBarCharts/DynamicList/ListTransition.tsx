@@ -13,7 +13,7 @@ import {
 	useUpdateAreas,
 	useAppearAreas,
 	useDisappearAreas,
-} from './useListTransition';
+} from './useListTransition/useListTransition';
 import {HtmlArea} from '../../../../acetti-layout';
 
 export const ListTransitionUpdate: React.FC<{

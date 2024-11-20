@@ -4,7 +4,7 @@ import {Easing, useCurrentFrame, useVideoConfig} from 'remotion';
 import {isNumber} from 'lodash';
 
 import {BarChartTransitionUpdate} from './BarChartTransition';
-import {getBarChartItemHeight} from './useDynamicBarChartTransition';
+import {getBarChartItemHeight} from './useBarChartTransition';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
@@ -12,13 +12,13 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useListTransition} from './useListTransition';
+import {useListTransition} from './useListTransition/useListTransition';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useDynamicBarChartTransition} from './useDynamicBarChartTransition';
+import {useDynamicBarChartTransition} from './useBarChartTransition';
 import {
 	DefaultLabelComponent,
 	TBarChartLabelComponent,

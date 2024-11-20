@@ -1,13 +1,13 @@
 import {
 	createGridLayout,
 	getGridLayoutArea,
-} from '../../../../acetti-layout/gridLayout';
+} from '../../../../../acetti-layout/gridLayout';
 import {
 	TGridRailSpec,
 	TGridRailElementSpec,
 	TGridLayoutArea,
 	TGridLayout,
-} from '../../../../acetti-layout';
+} from '../../../../../acetti-layout';
 
 export type TListLayout = {
 	gridLayout: TGridLayout;

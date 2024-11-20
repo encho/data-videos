@@ -6,7 +6,7 @@ import {findFrameRangeIndex} from '../../09-Timeseries/utils/usePeriodScaleAnima
 import {
 	TDynamicListTransitionContext,
 	useListTransition,
-} from './useListTransition';
+} from './useListTransition/useListTransition';
 
 export type ListAnimationTransition<T> = {
 	itemsFrom: T[];

@@ -10,16 +10,16 @@ import {
 	useUpdateAreas,
 	useAppearAreas,
 	useDisappearAreas,
-} from './useListTransition';
+} from './useListTransition/useListTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
-import {TDynamicBarChartTransitionContext} from './useDynamicBarChartTransition';
+import {TDynamicBarChartTransitionContext} from './useBarChartTransition';
 import {
 	TBarChartLabelComponent,
 	TBarChartValueLabelComponent,
 	RoundedLeftRect,
 	RoundedRightRect,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {TBarChartItem} from './useDynamicBarChartTransition';
+import {TBarChartItem} from './useBarChartTransition';
 
 export const BarChartTransitionUpdate: React.FC<{
 	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;

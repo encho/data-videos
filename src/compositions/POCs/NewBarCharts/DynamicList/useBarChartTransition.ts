@@ -11,7 +11,7 @@ import {
 	TGridLayoutArea,
 } from '../../../../acetti-layout';
 
-import {TDynamicListTransitionContext} from './useListTransition';
+import {TDynamicListTransitionContext} from './useListTransition/useListTransition';
 import {interpolate} from 'remotion';
 
 type BarChartTransitionContext_Common = {
@@ -65,33 +65,8 @@ export type TBarChartItem = {
 	value: number;
 };
 
-function getExtentAndScale({
-	visibleItems,
-	xAxisWidth,
-}: {
-	visibleItems: TBarChartItem[];
-	xAxisWidth: number;
-}): {
-	domain: [number, number]; // TODO we could dprecate domain, as it is in xScale anyway
-	xScale: ScaleLinear<number, number>;
-} {
-	const dataExtent = extent(visibleItems, (it) => it.value) as [number, number];
-
-	invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
-	const domain =
-		dataExtent[0] > 0 ? ([0, dataExtent[1]] as [number, number]) : dataExtent;
-
-	const xScale: ScaleLinear<number, number> = scaleLinear()
-		.domain(domain)
-		.range([0, xAxisWidth]);
-
-	return {domain, xScale};
-}
-
-// TODO, this actually represents only 1 animation step. the useListTransition will have to
-// deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicBarChartTransition({
-	listTransitionContext, // TODO rename to listTransitionContext
+	listTransitionContext,
 	baseline,
 	labelWidth,
 	valueLabelWidth,
@@ -183,6 +158,29 @@ export function useDynamicBarChartTransition({
 		xScale: infoFrom.xScale,
 		from: infoFrom,
 	};
+}
+
+function getExtentAndScale({
+	visibleItems,
+	xAxisWidth,
+}: {
+	visibleItems: TBarChartItem[];
+	xAxisWidth: number;
+}): {
+	domain: [number, number]; // TODO we could dprecate domain, as it is in xScale anyway
+	xScale: ScaleLinear<number, number>;
+} {
+	const dataExtent = extent(visibleItems, (it) => it.value) as [number, number];
+
+	invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
+	const domain =
+		dataExtent[0] > 0 ? ([0, dataExtent[1]] as [number, number]) : dataExtent;
+
+	const xScale: ScaleLinear<number, number> = scaleLinear()
+		.domain(domain)
+		.range([0, xAxisWidth]);
+
+	return {domain, xScale};
 }
 
 export function getIbcsSizes(baseline: number) {

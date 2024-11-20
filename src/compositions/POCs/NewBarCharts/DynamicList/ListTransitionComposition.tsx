@@ -9,7 +9,7 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {useListTransition} from './useListTransition';
+import {useListTransition} from './useListTransition/useListTransition';
 import {DisplayGridRails} from '../../../../acetti-layout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
