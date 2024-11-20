@@ -81,10 +81,12 @@ export const ListAnimationPage: React.FC = () => {
 	const visibleIndicesFrom = [0, 5] as [number, number];
 	const visibleIndicesTo = [0, 4] as [number, number];
 
-	const duration_1 = Math.floor(durationInFrames / 4);
-	const duration_2 = Math.floor(durationInFrames / 4);
-	const duration_3 = Math.floor(durationInFrames / 4);
-	const duration_4 = durationInFrames - duration_1 - duration_2 - duration_3;
+	const duration_0 = Math.floor(durationInFrames / 5);
+	const duration_1 = Math.floor(durationInFrames / 5);
+	const duration_2 = Math.floor(durationInFrames / 5);
+	const duration_3 = Math.floor(durationInFrames / 5);
+	const duration_4 =
+		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
 
 	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 
@@ -92,6 +94,14 @@ export const ListAnimationPage: React.FC = () => {
 		width: area_1.width,
 		height: area_1.height,
 		transitions: [
+			{
+				itemsFrom: itemsTo,
+				itemsTo: itemsFrom,
+				visibleIndicesFrom: [0, 1],
+				visibleIndicesTo: [0, 5],
+				easingFunction,
+				durationInFrames: duration_0,
+			},
 			{
 				itemsFrom,
 				itemsTo,
@@ -241,6 +251,15 @@ export const ListAnimationPage: React.FC = () => {
 										<div>(relative) frame</div>
 										<Value>
 											{listAnimationContext.currentTransitionContext.frame}
+										</Value>
+									</Row>
+									<Row>
+										<div>transitionType</div>
+										<Value>
+											{
+												listAnimationContext.currentTransitionContext
+													.transitionType
+											}
 										</Value>
 									</Row>
 									<Row>

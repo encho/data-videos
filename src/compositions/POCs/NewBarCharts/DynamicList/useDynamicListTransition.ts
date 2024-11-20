@@ -37,6 +37,7 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 	itemHeight: number;
 	width: number;
 	easingPercentage: number;
+	transitionType: 'enter' | 'update' | 'exit';
 	// TODO
 	// easing?: (x: number) => number;
 	// baseline
@@ -143,7 +144,22 @@ export function useDynamicListTransition<T extends {id: string}>({
 		visibleTo: visibleItemsTo.map((it) => it.id),
 	});
 
+	const isEnterTransition = visibleItemsFrom.length === 0;
+	const isExitTransition = visibleItemsTo.length === 0;
+
+	const transitionType = isEnterTransition
+		? 'enter'
+		: isExitTransition
+		? 'exit'
+		: 'update';
+
+	invariant(
+		!(isEnterTransition && isExitTransition),
+		'transition can not have empty visibleItemsFrom as well as empty visibleItemsTo!'
+	);
+
 	return {
+		transitionType,
 		frame,
 		durationInFrames,
 		easingPercentage,
@@ -322,20 +338,77 @@ function getVisibleItems<T extends {id: string}>(
 ): T[] {
 	const [start, end] = visibleIndices;
 
-	// Validate indices: must be integers and within the array bounds
+	// Validate indices: must be integers
 	if (!Number.isInteger(start) || !Number.isInteger(end)) {
 		throw new Error('Indices must be integers.');
 	}
 
-	if (start < 0 || end > items.length || start >= end) {
-		throw new Error(
-			'Invalid indices: ensure 0 <= start < end <= items.length.'
-		);
+	// Validate that start < end in the original visibleIndices
+	if (start >= end) {
+		throw new Error('Invalid indices: start must be less than end.');
 	}
 
-	// Return the subarray based on visible indices
-	return items.slice(start, end);
+	// If the items list is empty, return an empty array
+	if (items.length === 0) {
+		return [];
+	}
+
+	// Normalize indices to stay within bounds
+	const normalizedStart = Math.max(0, start);
+	const normalizedEnd = Math.min(items.length, end);
+
+	// If the normalized range is invalid, return an empty array
+	if (normalizedStart >= normalizedEnd) {
+		return [];
+	}
+
+	// Return the subarray based on normalized indices
+	return items.slice(normalizedStart, normalizedEnd);
 }
+// Example usage
+// const items: { id: string }[] = [
+//   { id: "001" },
+//   { id: "002" },
+//   { id: "003" },
+//   { id: "004" },
+//   { id: "005" }
+// ];
+// console.log(getVisibleItems(items, [0, 1])); // [{ id: "001" }]
+// console.log(getVisibleItems(items, [1, 3])); // [{ id: "002" }, { id: "003" }]
+// console.log(getVisibleItems(items, [3, 100])); // [{ id: "004" }, { id: "005" }]
+// console.log(getVisibleItems([], [0, 0]));    // []
+// console.log(getVisibleItems([], [0, 1]));    // []
+// console.log(getVisibleItems(items, [100, 200])); // []
+// Invalid cases
+// console.log(getVisibleItems(items, [2, 2])); // Throws Error: Invalid indices: start must be less than end.
+// console.log(getVisibleItems(items, [5, 3])); // Throws Error: Invalid indices: start must be less than end.
+
+// /**
+//  * Returns a subset of items based on the visibleIndices range.
+//  * @param items - Array of Item objects.
+//  * @param visibleIndices - A tuple [start, end] representing the inclusive start and exclusive end indices.
+//  * @returns A subarray of items within the specified visible range.
+//  */
+// function getVisibleItems<T extends {id: string}>(
+// 	items: T[],
+// 	visibleIndices: [number, number]
+// ): T[] {
+// 	const [start, end] = visibleIndices;
+
+// 	// Validate indices: must be integers and within the array bounds
+// 	if (!Number.isInteger(start) || !Number.isInteger(end)) {
+// 		throw new Error('Indices must be integers.');
+// 	}
+
+// 	if (start < 0 || end > items.length || start >= end) {
+// 		throw new Error(
+// 			'Invalid indices: ensure 0 <= start < end <= items.length.'
+// 		);
+// 	}
+
+// 	// Return the subarray based on visible indices
+// 	return items.slice(start, end);
+// }
 // // Example usage
 // const items: Item[] = [
 //   { id: "001" },
