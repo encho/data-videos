@@ -100,15 +100,15 @@ export const DynamicListPage: React.FC = () => {
 
 			<div style={{position: 'relative'}}>
 				<DisplayGridRails
-					{...context.layoutFrom.gridLayout}
+					{...context.from.layout.gridLayout}
 					stroke="rgba(255,0,255,1)"
 				/>
 				<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
 					{itemsFrom.map((it) => {
-						const area = context.getListItemAreaFrom(it.id);
+						const area = context.from.getListItemArea(it.id);
 						const idColor = getPredefinedColor(it.id);
 
-						const isVisible = isIdInItems(it.id, context.visibleItemsFrom);
+						const isVisible = isIdInItems(it.id, context.from.visibleItems);
 
 						return (
 							<HtmlArea
@@ -128,14 +128,14 @@ export const DynamicListPage: React.FC = () => {
 
 				<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 					<DisplayGridRails
-						{...context.layoutTo.gridLayout}
+						{...context.to.layout.gridLayout}
 						stroke="rgba(255,0,255,1)"
 					/>
 					{itemsTo.map((it) => {
-						const area = context.getListItemAreaTo(it.id);
+						const area = context.to.getListItemArea(it.id);
 						const idColor = getPredefinedColor(it.id);
 
-						const isVisible = isIdInItems(it.id, context.visibleItemsTo);
+						const isVisible = isIdInItems(it.id, context.to.visibleItems);
 
 						return (
 							<HtmlArea

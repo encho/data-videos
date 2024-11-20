@@ -152,18 +152,18 @@ export const ListAnimationPage: React.FC = () => {
 
 				<div style={{position: 'relative'}}>
 					<DisplayGridRails
-						{...currentTransitionContext.layoutFrom.gridLayout}
+						{...currentTransitionContext.from.layout.gridLayout}
 						stroke="rgba(255,0,255,1)"
 					/>
 					<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
-						{currentTransitionContext.itemsFrom.map((it) => {
-							const area = currentTransitionContext.getListItemAreaFrom(it.id);
+						{currentTransitionContext.from.items.map((it) => {
+							const area = currentTransitionContext.from.getListItemArea(it.id);
 
 							const idColor = getPredefinedColor(it.id);
 
 							const isVisible = isIdInItems(
 								it.id,
-								currentTransitionContext.visibleItemsFrom
+								currentTransitionContext.from.visibleItems
 							);
 
 							return (
@@ -184,16 +184,16 @@ export const ListAnimationPage: React.FC = () => {
 
 					<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 						<DisplayGridRails
-							{...currentTransitionContext.layoutTo.gridLayout}
+							{...currentTransitionContext.to.layout.gridLayout}
 							stroke="rgba(255,0,255,1)"
 						/>
-						{currentTransitionContext.itemsTo.map((it) => {
-							const area = currentTransitionContext.getListItemAreaTo(it.id);
+						{currentTransitionContext.to.items.map((it) => {
+							const area = currentTransitionContext.to.getListItemArea(it.id);
 							const idColor = getPredefinedColor(it.id);
 
 							const isVisible = isIdInItems(
 								it.id,
-								currentTransitionContext.visibleItemsTo
+								currentTransitionContext.to.visibleItems
 							);
 
 							return (

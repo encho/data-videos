@@ -73,19 +73,19 @@ export function useDynamicBarChartTransition({
 	labelWidth: number;
 	valueLabelWidth: number;
 }): TDynamicBarChartTransitionContext {
-	const {visibleItemsFrom, visibleItemsTo, width, itemHeight} = context;
+	const {width, itemHeight} = context;
 
-	const dataExtentFrom = extent(visibleItemsFrom, (it) => it.value) as [
-		number,
-		number
-	];
+	const dataExtentFrom = extent(
+		context.from.visibleItems,
+		(it) => it.value
+	) as [number, number];
 	invariant(isNumber(dataExtentFrom[0]) && isNumber(dataExtentFrom[1]));
 	const extentFrom =
 		dataExtentFrom[0] > 0
 			? ([0, dataExtentFrom[1]] as [number, number])
 			: dataExtentFrom;
 
-	const dataExtentTo = extent(visibleItemsTo, (it) => it.value) as [
+	const dataExtentTo = extent(context.to.visibleItems, (it) => it.value) as [
 		number,
 		number
 	];
