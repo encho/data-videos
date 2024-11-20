@@ -1,81 +1,53 @@
 import {interpolate, Easing, EasingFunction} from 'remotion';
 import invariant from 'tiny-invariant';
+import {useCallback} from 'react';
 
 import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TDynamicListLayout} from './useDynamicListLayout';
-import {useDynamicListLayout} from './useDynamicListLayout';
+import {getListLayout, TListLayout} from './getListLayout';
 
-// type ListTransitionContext_Enter<T> = {
-// 	transitionType: 'enter';
-// 	from: {
-// 		items: T[];
-// 		visibleIndices: [number, number];
-// 		visibleItems: T[];
-// 		layout: TDynamicListLayout;
-// 		visibleIndicesRange: [number, number];
-// 		visibleIndicesRangeSize: number;
-// 		justifyContentShift: number;
-// 		getListItemArea: (i: number | string) => TGridLayoutArea;
-// 	};
-// };
-
-// type ListTransitionContext_Exit<T> = {
-// 	transitionType: 'exit';
-// 	to: {
-// 		items: T[];
-// 		visibleIndices: [number, number];
-// 		visibleItems: T[];
-// 		layout: TDynamicListLayout;
-// 		visibleIndicesRange: [number, number];
-// 		visibleIndicesRangeSize: number;
-// 		justifyContentShift: number;
-// 		getListItemArea: (i: number | string) => TGridLayoutArea;
-// 	};
-// };
-
-// type ListTransitionContext_Update<T> = {
-// 	transitionType: 'update';
-// 	from: {
-// 		items: T[];
-// 		visibleIndices: [number, number];
-// 		visibleItems: T[];
-// 		layout: TDynamicListLayout;
-// 		visibleIndicesRange: [number, number];
-// 		visibleIndicesRangeSize: number;
-// 		justifyContentShift: number;
-// 		getListItemArea: (i: number | string) => TGridLayoutArea;
-// 	};
-// 	to: {
-// 		items: T[];
-// 		visibleIndices: [number, number];
-// 		visibleItems: T[];
-// 		layout: TDynamicListLayout;
-// 		visibleIndicesRange: [number, number];
-// 		visibleIndicesRangeSize: number;
-// 		justifyContentShift: number;
-// 		getListItemArea: (i: number | string) => TGridLayoutArea;
-// 	};
-// };
-
-export type TDynamicListTransitionContext<T extends {id: string}> = {
+type ListTransitionContext_Common = {
 	frame: number;
 	durationInFrames: number;
-	transitionTypes: {
-		update: string[];
-		enter: string[];
-		exit: string[];
-		appear: string[];
-		disappear: string[];
-	};
 	itemHeight: number;
 	width: number;
 	easingPercentage: number;
-	transitionType: 'enter' | 'update' | 'exit';
+};
+
+type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
+	transitionType: 'enter';
+	to: {
+		items: T[];
+		visibleIndices: [number, number];
+		visibleItems: T[];
+		layout: TListLayout;
+		visibleIndicesRange: [number, number];
+		visibleIndicesRangeSize: number;
+		justifyContentShift: number;
+		getListItemArea: (i: number | string) => TGridLayoutArea;
+	};
+};
+
+type ListTransitionContext_Exit<T> = ListTransitionContext_Common & {
+	transitionType: 'exit';
 	from: {
 		items: T[];
 		visibleIndices: [number, number];
 		visibleItems: T[];
-		layout: TDynamicListLayout;
+		layout: TListLayout;
+		visibleIndicesRange: [number, number];
+		visibleIndicesRangeSize: number;
+		justifyContentShift: number;
+		getListItemArea: (i: number | string) => TGridLayoutArea;
+	};
+};
+
+export type ListTransitionContext_Update<T> = ListTransitionContext_Common & {
+	transitionType: 'update';
+	from: {
+		items: T[];
+		visibleIndices: [number, number];
+		visibleItems: T[];
+		layout: TListLayout;
 		visibleIndicesRange: [number, number];
 		visibleIndicesRangeSize: number;
 		justifyContentShift: number;
@@ -85,13 +57,29 @@ export type TDynamicListTransitionContext<T extends {id: string}> = {
 		items: T[];
 		visibleIndices: [number, number];
 		visibleItems: T[];
-		layout: TDynamicListLayout;
+		layout: TListLayout;
 		visibleIndicesRange: [number, number];
 		visibleIndicesRangeSize: number;
 		justifyContentShift: number;
 		getListItemArea: (i: number | string) => TGridLayoutArea;
 	};
+	transitionTypes: {
+		update: string[];
+		enter: string[];
+		exit: string[];
+		appear: string[];
+		disappear: string[];
+	};
 };
+
+export type ListTransitionContext<T> =
+	| ListTransitionContext_Enter<T>
+	| ListTransitionContext_Update<T>
+	| ListTransitionContext_Exit<T>;
+
+// TODO deprecate former name and just use TListTransitionContext or so
+export type TDynamicListTransitionContext<T extends {id: string}> =
+	ListTransitionContext<T>;
 
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
@@ -149,6 +137,15 @@ export function useDynamicListTransition<T extends {id: string}>({
 		}
 	);
 
+	const common = {
+		frame,
+		durationInFrames,
+		easingPercentage,
+		// transitionTypes, // in update instead
+		itemHeight,
+		width,
+	};
+
 	const isEnterTransition = itemsFrom.length === 0;
 	const isExitTransition = itemsTo.length === 0;
 
@@ -163,129 +160,118 @@ export function useDynamicListTransition<T extends {id: string}>({
 		'transition can not have empty visibleItemsFrom as well as empty visibleItemsTo!'
 	);
 
-	// ***********************************************************************
-	// from
-	// ***********************************************************************
-	const visibleItemsFrom = getVisibleItems<T>(itemsFrom, visibleIndicesFrom);
+	const getTransitionStateData = useCallback(
+		({
+			items,
+			visibleIndices,
+		}: {
+			items: T[];
+			visibleIndices: [number, number];
+		}) => {
+			const visibleItems = getVisibleItems<T>(items, visibleIndices);
 
-	const layoutFrom = useDynamicListLayout({
-		width,
-		height,
-		items: itemsFrom,
-		itemHeight,
-		itemMarginTop,
-		itemMarginBottom,
-	});
+			const layout = getListLayout({
+				width,
+				height,
+				items,
+				itemHeight,
+				itemMarginTop,
+				itemMarginBottom,
+			});
 
-	const visibleIndicesRangeFrom =
-		layoutFrom.getVisibleIndicesRange(visibleIndicesFrom);
+			const visibleIndicesRange = layout.getVisibleIndicesRange(visibleIndices);
 
-	const visibleIndicesRangeSizeFrom =
-		visibleIndicesRangeFrom[1] - visibleIndicesRangeFrom[0];
+			const visibleIndicesRangeSize =
+				visibleIndicesRange[1] - visibleIndicesRange[0];
 
-	// justify content
-	const yStartFrom =
-		justifyContent === 'center'
-			? (height - visibleIndicesRangeSizeFrom) / 2
-			: 0;
+			// justify content
+			const yStart =
+				justifyContent === 'center'
+					? (height - visibleIndicesRangeSize) / 2
+					: 0;
 
-	const yStartUnadjustedFrom = layoutFrom.getListItemPaddedArea(
-		visibleItemsFrom[0].id
-	).y1;
+			const yStartUnadjusted = layout.getListItemPaddedArea(
+				visibleItems[0].id
+			).y1;
 
-	const justifyContentShiftFrom = yStartFrom - yStartUnadjustedFrom;
+			const justifyContentShift = yStart - yStartUnadjusted;
 
-	// ***********************************************************************
-	// to
-	// ***********************************************************************
-	const visibleItemsTo = getVisibleItems<T>(itemsTo, visibleIndicesTo);
+			return {
+				items,
+				visibleIndices,
+				visibleItems,
+				layout,
+				visibleIndicesRange,
+				visibleIndicesRangeSize,
+				justifyContentShift,
+				getListItemArea: (x: number | string) => {
+					const area = layout.getListItemArea(x);
+					const shiftedArea = {
+						...area,
+						y1: area.y1 + justifyContentShift,
+						y2: area.y2 + justifyContentShift,
+					};
+					return shiftedArea;
+				},
+			};
+		},
+		[height, itemHeight, itemMarginBottom, itemMarginTop, justifyContent, width]
+	);
 
-	const layoutTo = useDynamicListLayout({
-		width,
-		height,
+	if (transitionType === 'update') {
+		const from = getTransitionStateData({
+			items: itemsFrom,
+			visibleIndices: visibleIndicesFrom,
+		});
+		const to = getTransitionStateData({
+			items: itemsTo,
+			visibleIndices: visibleIndicesTo,
+		});
+		const transitionTypes = getTransitionTypes({
+			allFrom: from.items.map((it) => it.id),
+			allTo: to.items.map((it) => it.id),
+			visibleFrom: from.visibleItems.map((it) => it.id),
+			visibleTo: to.visibleItems.map((it) => it.id),
+		});
+
+		return {
+			transitionType,
+			...common,
+			from,
+			to,
+			transitionTypes,
+		};
+	}
+
+	if (transitionType === 'enter') {
+		const to = getTransitionStateData({
+			items: itemsTo,
+			visibleIndices: visibleIndicesTo,
+		});
+
+		return {
+			transitionType,
+			...common,
+			to,
+		};
+	}
+
+	invariant(transitionType === 'exit');
+
+	const from = getTransitionStateData({
 		items: itemsTo,
-		itemHeight,
-		itemMarginTop,
-		itemMarginBottom,
-	});
-
-	const visibleIndicesRangeTo =
-		layoutFrom.getVisibleIndicesRange(visibleIndicesTo);
-
-	const visibleIndicesRangeSizeTo =
-		visibleIndicesRangeTo[1] - visibleIndicesRangeTo[0];
-
-	// justify content
-	const yStartTo =
-		justifyContent === 'center' ? (height - visibleIndicesRangeSizeTo) / 2 : 0;
-
-	const yStartUnadjustedTo = layoutTo.getListItemPaddedArea(
-		visibleItemsTo[0].id
-	).y1;
-
-	const justifyContentShiftTo = yStartTo - yStartUnadjustedTo;
-
-	// ******** global, but after from & to determination
-
-	const transitionTypes = getTransitionTypes({
-		allFrom: itemsFrom.map((it) => it.id),
-		allTo: itemsTo.map((it) => it.id),
-		visibleFrom: visibleItemsFrom.map((it) => it.id),
-		visibleTo: visibleItemsTo.map((it) => it.id),
+		visibleIndices: visibleIndicesTo,
 	});
 
 	return {
 		transitionType,
-		frame,
-		durationInFrames,
-		easingPercentage,
-		transitionTypes,
-		itemHeight,
-		width,
-		//
-		from: {
-			items: itemsFrom,
-			visibleIndices: visibleIndicesFrom,
-			visibleItems: visibleItemsFrom,
-			layout: layoutFrom,
-			visibleIndicesRange: visibleIndicesRangeFrom,
-			visibleIndicesRangeSize: visibleIndicesRangeSizeFrom,
-			justifyContentShift: justifyContentShiftFrom,
-			// TODO could be auto generated via the above info
-			getListItemArea: (x) => {
-				const area = layoutFrom.getListItemArea(x);
-				const shiftedArea = {
-					...area,
-					y1: area.y1 + justifyContentShiftFrom,
-					y2: area.y2 + justifyContentShiftFrom,
-				};
-				return shiftedArea;
-			},
-		},
-		to: {
-			items: itemsTo,
-			visibleIndices: visibleIndicesTo,
-			visibleItems: visibleItemsTo,
-			layout: layoutTo,
-			visibleIndicesRange: visibleIndicesRangeTo,
-			visibleIndicesRangeSize: visibleIndicesRangeSizeTo,
-			justifyContentShift: justifyContentShiftTo,
-			// TODO could be auto generated via the above info
-			getListItemArea: (x) => {
-				const area = layoutTo.getListItemArea(x);
-				const shiftedArea = {
-					...area,
-					y1: area.y1 + justifyContentShiftTo,
-					y2: area.y2 + justifyContentShiftTo,
-				};
-				return shiftedArea;
-			},
-		},
+		...common,
+		from,
 	};
 }
 
 export function useEnterAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>
+	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
 
@@ -309,7 +295,7 @@ export function useEnterAreas<T extends {id: string}>(
 }
 
 export function useExitAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>
+	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
 
@@ -324,25 +310,25 @@ export function useExitAreas<T extends {id: string}>(
 }
 
 export function useAppearAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>
+	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'appear');
 }
 
 export function useDisappearAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>
+	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'disappear');
 }
 
 export function useUpdateAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>
+	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'update');
 }
 
 function useUpdateTypeAreas<T extends {id: string}>(
-	context: TDynamicListTransitionContext<T>,
+	context: ListTransitionContext_Update<T>,
 	updateType: 'appear' | 'disappear' | 'update'
 ) {
 	const {transitionTypes, easingPercentage} = context;

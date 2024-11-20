@@ -3,7 +3,8 @@ import {interpolate} from 'remotion';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {
-	TDynamicListTransitionContext,
+	// TDynamicListTransitionContext,
+	ListTransitionContext_Update,
 	useEnterAreas,
 	useExitAreas,
 	useUpdateAreas,
@@ -21,7 +22,7 @@ import {
 import {TBarChartItem} from './useDynamicBarChartTransition';
 
 export const AnimateBarChartItems: React.FC<{
-	context: TDynamicListTransitionContext<TBarChartItem>;
+	context: ListTransitionContext_Update<TBarChartItem>;
 	barChartTransitionContext: TDynamicBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;

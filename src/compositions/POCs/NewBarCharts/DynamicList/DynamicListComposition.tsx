@@ -99,62 +99,68 @@ export const DynamicListPage: React.FC = () => {
 			</TypographyStyle>
 
 			<div style={{position: 'relative'}}>
-				<DisplayGridRails
-					{...context.from.layout.gridLayout}
-					stroke="rgba(255,0,255,1)"
-				/>
-				<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
-					{itemsFrom.map((it) => {
-						const area = context.from.getListItemArea(it.id);
-						const idColor = getPredefinedColor(it.id);
+				{context.transitionType === 'update' ||
+				context.transitionType === 'exit' ? (
+					<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
+						<DisplayGridRails
+							{...context.from.layout.gridLayout}
+							stroke="rgba(255,0,255,1)"
+						/>
+						{itemsFrom.map((it) => {
+							const area = context.from.getListItemArea(it.id);
+							const idColor = getPredefinedColor(it.id);
+							const isVisible = isIdInItems(it.id, context.from.visibleItems);
 
-						const isVisible = isIdInItems(it.id, context.from.visibleItems);
-
-						return (
-							<HtmlArea
-								area={area}
-								fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-							>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.body}
-									baseline={baseline}
+							return (
+								<HtmlArea
+									area={area}
+									fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
 								>
-									{it.id}
-								</TypographyStyle>
-							</HtmlArea>
-						);
-					})}
-				</HtmlArea>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.body}
+										baseline={baseline}
+									>
+										{it.id}
+									</TypographyStyle>
+								</HtmlArea>
+							);
+						})}
+					</HtmlArea>
+				) : null}
 
-				<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
-					<DisplayGridRails
-						{...context.to.layout.gridLayout}
-						stroke="rgba(255,0,255,1)"
-					/>
-					{itemsTo.map((it) => {
-						const area = context.to.getListItemArea(it.id);
-						const idColor = getPredefinedColor(it.id);
+				{context.transitionType === 'update' ||
+				context.transitionType === 'enter' ? (
+					<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
+						<DisplayGridRails
+							{...context.to.layout.gridLayout}
+							stroke="rgba(255,0,255,1)"
+						/>
+						{itemsTo.map((it) => {
+							const area = context.to.getListItemArea(it.id);
+							const idColor = getPredefinedColor(it.id);
+							const isVisible = isIdInItems(it.id, context.to.visibleItems);
 
-						const isVisible = isIdInItems(it.id, context.to.visibleItems);
-
-						return (
-							<HtmlArea
-								area={area}
-								fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-							>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.body}
-									baseline={baseline}
+							return (
+								<HtmlArea
+									area={area}
+									fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
 								>
-									{it.id}
-								</TypographyStyle>
-							</HtmlArea>
-						);
-					})}
-				</HtmlArea>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.body}
+										baseline={baseline}
+									>
+										{it.id}
+									</TypographyStyle>
+								</HtmlArea>
+							);
+						})}
+					</HtmlArea>
+				) : null}
 
 				<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-					<AnimateAreas context={context} />
+					{context.transitionType === 'update' ? (
+						<AnimateAreas context={context} />
+					) : null}
 				</HtmlArea>
 			</div>
 		</Page>

@@ -3,7 +3,7 @@ import React from 'react';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {
-	TDynamicListTransitionContext,
+	ListTransitionContext_Update,
 	useEnterAreas,
 	useExitAreas,
 	useUpdateAreas,
@@ -13,7 +13,7 @@ import {
 import {HtmlArea} from '../../../../acetti-layout';
 
 export const AnimateAreas: React.FC<{
-	context: TDynamicListTransitionContext<{id: string}>;
+	context: ListTransitionContext_Update<{id: string}>;
 }> = ({context}) => {
 	const {theme, baseline} = usePage();
 

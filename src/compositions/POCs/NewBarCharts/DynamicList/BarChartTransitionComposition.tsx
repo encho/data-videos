@@ -248,12 +248,24 @@ const BarChartTransitionPage: React.FC<{
 					area={area_1}
 					// fill="rgba(255,0,255,0.15)"
 				>
-					<AnimateBarChartItems
-						context={context}
-						barChartTransitionContext={barChartTransitionContext}
-						LabelComponent={LabelComponent}
-						ValueLabelComponent={ValueLabelComponent}
-					/>
+					{context.transitionType === 'update' ? (
+						<AnimateBarChartItems
+							context={context}
+							barChartTransitionContext={barChartTransitionContext}
+							LabelComponent={LabelComponent}
+							ValueLabelComponent={ValueLabelComponent}
+						/>
+					) : null}
+					{context.transitionType === 'enter' ? (
+						<div style={{backgroundColor: 'green', fontSize: 40, padding: 40}}>
+							Implement Enter!
+						</div>
+					) : null}
+					{context.transitionType === 'exit' ? (
+						<div style={{backgroundColor: 'red', fontSize: 40, padding: 40}}>
+							Implement Exit!
+						</div>
+					) : null}
 				</HtmlArea>
 
 				{/* <HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">

@@ -3,47 +3,19 @@ import {isNumber} from 'lodash';
 import invariant from 'tiny-invariant';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 
-// import {getGridLayoutArea} from '../../../../acetti-layout/gridLayout';
 import {
-	// useGridLayout,
 	createGridLayout,
 	TGridRailSpec,
-	// TGridRailElementSpec,
-	// TGridLayoutArea,
 	TGridLayout,
-	// TGridAreasSpec,
 	TGridLayoutAreaSpec,
 	TGridLayoutArea,
 } from '../../../../acetti-layout';
 
-// import {TGr} from '../../../../acetti-layout';
-// import {useDynamicListLayout} from './useDynamicListLayout';
 import {TDynamicListTransitionContext} from './useDynamicListTransition';
 import {interpolate} from 'remotion';
 
-// type Item = {id: string};
-
-export type TDynamicBarChartTransitionContext = {
-	// getLabelAreaFrom: (i: number | string) => TGridLayoutArea;
-	// getBarAreaFrom: (i: number | string) => TGridLayoutArea;
-	// getValueLabelAreaFrom: (i: number | string) => TGridLayoutArea;
-	// getLabelAreaTo: (i: number | string) => TGridLayoutArea;
-	// getBarAreaTo: (i: number | string) => TGridLayoutArea;
-	// getValueLabelAreaTo: (i: number | string) => TGridLayoutArea;
-	//
-	// getUpdateInfos: () => {area: TGridLayoutArea; id: string};
-	// getEnterInfos: () => {area: TGridLayoutArea; id: string};
-	// getExitInfos: () => {area: TGridLayoutArea; id: string};
-	// getAppearInfos: () => {area: TGridLayoutArea; id: string};
-	// getDisappearInfos: () => {area: TGridLayoutArea; id: string};
-	//
-	extentFrom: [number, number];
-	extentTo: [number, number];
-	//
-	xScaleFrom: ScaleLinear<number, number>;
-	xScaleTo: ScaleLinear<number, number>;
+type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
-	//
 	barChartItemLayout: TBarChartItemLayout;
 	// TODO
 	// barChartMotherLayoutAreas: {
@@ -53,6 +25,78 @@ export type TDynamicBarChartTransitionContext = {
 	// }
 };
 
+type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
+	transitionType: 'enter';
+	to: {
+		domain: [number, number];
+		xScale: ScaleLinear<number, number>;
+	};
+};
+
+type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
+	transitionType: 'exit';
+	from: {
+		domain: [number, number];
+		xScale: ScaleLinear<number, number>;
+	};
+};
+
+type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
+	transitionType: 'update';
+	from: {
+		domain: [number, number];
+		xScale: ScaleLinear<number, number>;
+	};
+	to: {
+		domain: [number, number];
+		xScale: ScaleLinear<number, number>;
+	};
+};
+
+export type TDynamicBarChartTransitionContext =
+	| BarChartTransitionContext_Enter
+	| BarChartTransitionContext_Exit
+	| BarChartTransitionContext_Update;
+
+// export type TDynamicBarChartTransitionContext = {
+// 	// getLabelAreaFrom: (i: number | string) => TGridLayoutArea;
+// 	// getBarAreaFrom: (i: number | string) => TGridLayoutArea;
+// 	// getValueLabelAreaFrom: (i: number | string) => TGridLayoutArea;
+// 	// getLabelAreaTo: (i: number | string) => TGridLayoutArea;
+// 	// getBarAreaTo: (i: number | string) => TGridLayoutArea;
+// 	// getValueLabelAreaTo: (i: number | string) => TGridLayoutArea;
+// 	//
+// 	// getUpdateInfos: () => {area: TGridLayoutArea; id: string};
+// 	// getEnterInfos: () => {area: TGridLayoutArea; id: string};
+// 	// getExitInfos: () => {area: TGridLayoutArea; id: string};
+// 	// getAppearInfos: () => {area: TGridLayoutArea; id: string};
+// 	// getDisappearInfos: () => {area: TGridLayoutArea; id: string};
+// 	//
+// 	//
+// 	// extentFrom: [number, number];
+// 	// extentTo: [number, number];
+// 	//
+// 	// xScaleFrom: ScaleLinear<number, number>;
+// 	// xScaleTo: ScaleLinear<number, number>;
+// 	xScale: ScaleLinear<number, number>;
+// 	barChartItemLayout: TBarChartItemLayout;
+// 	// TODO
+// 	// barChartMotherLayoutAreas: {
+// 	// 	labelsArea:
+// 	// 	barsArea:
+// 	// 	valueLabelsArea:
+// 	// }
+
+// 	from: {
+// 		extent: [number, number];
+// 		xScale: ScaleLinear<number, number>;
+// 	};
+// 	to: {
+// 		extent: [number, number];
+// 		xScale: ScaleLinear<number, number>;
+// 	};
+// };
+
 export type TBarChartItem = {
 	id: string;
 	label: string;
@@ -60,10 +104,33 @@ export type TBarChartItem = {
 	value: number;
 };
 
+function getExtentAndScale({
+	visibleItems,
+	xAxisWidth,
+}: {
+	visibleItems: TBarChartItem[];
+	xAxisWidth: number;
+}): {
+	domain: [number, number]; // TODO we could dprecate domain, as it is in xScale anyway
+	xScale: ScaleLinear<number, number>;
+} {
+	const dataExtent = extent(visibleItems, (it) => it.value) as [number, number];
+
+	invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
+	const domain =
+		dataExtent[0] > 0 ? ([0, dataExtent[1]] as [number, number]) : dataExtent;
+
+	const xScale: ScaleLinear<number, number> = scaleLinear()
+		.domain(domain)
+		.range([0, xAxisWidth]);
+
+	return {domain, xScale};
+}
+
 // TODO, this actually represents only 1 animation step. the useDynamicListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useDynamicBarChartTransition({
-	context,
+	context, // TODO rename to listTransitionContext
 	baseline,
 	labelWidth,
 	valueLabelWidth,
@@ -75,26 +142,6 @@ export function useDynamicBarChartTransition({
 }): TDynamicBarChartTransitionContext {
 	const {width, itemHeight} = context;
 
-	const dataExtentFrom = extent(
-		context.from.visibleItems,
-		(it) => it.value
-	) as [number, number];
-	invariant(isNumber(dataExtentFrom[0]) && isNumber(dataExtentFrom[1]));
-	const extentFrom =
-		dataExtentFrom[0] > 0
-			? ([0, dataExtentFrom[1]] as [number, number])
-			: dataExtentFrom;
-
-	const dataExtentTo = extent(context.to.visibleItems, (it) => it.value) as [
-		number,
-		number
-	];
-	invariant(isNumber(dataExtentTo[0]) && isNumber(dataExtentTo[1]));
-	const extentTo =
-		dataExtentTo[0] > 0
-			? ([0, dataExtentTo[1]] as [number, number])
-			: dataExtentTo;
-
 	const barChartItemLayout = getBarChartItemLayout({
 		height: itemHeight,
 		width,
@@ -103,38 +150,77 @@ export function useDynamicBarChartTransition({
 		valueLabelWidth,
 	});
 
-	const xScaleFrom: ScaleLinear<number, number> = scaleLinear()
-		.domain(extentFrom)
-		.range([0, barChartItemLayout.barArea.width]);
+	// ***********************************************************************
+	// return context for 'update' transitionType
+	// ***********************************************************************
+	if (context.transitionType === 'update') {
+		const infoFrom = getExtentAndScale({
+			visibleItems: context.from.visibleItems,
+			xAxisWidth: barChartItemLayout.barArea.width,
+		});
 
-	const xScaleTo: ScaleLinear<number, number> = scaleLinear()
-		.domain(extentTo)
-		.range([0, barChartItemLayout.barArea.width]);
+		const infoTo = getExtentAndScale({
+			visibleItems: context.to.visibleItems,
+			xAxisWidth: barChartItemLayout.barArea.width,
+		});
 
-	const interpolatedExtent_0 = interpolate(
-		context.frame,
-		[0, context.durationInFrames - 1],
-		[extentFrom[0], extentTo[0]],
-		{}
-	);
-	const interpolatedExtent_1 = interpolate(
-		context.frame,
-		[0, context.durationInFrames - 1],
-		[extentFrom[1], extentTo[1]],
-		{}
-	);
+		const interpolatedExtent_0 = interpolate(
+			context.frame,
+			[0, context.durationInFrames - 1],
+			[infoFrom.domain[0], infoTo.domain[0]],
+			{}
+		);
+		const interpolatedExtent_1 = interpolate(
+			context.frame,
+			[0, context.durationInFrames - 1],
+			[infoFrom.domain[1], infoTo.domain[1]],
+			{}
+		);
 
-	const xScale: ScaleLinear<number, number> = scaleLinear()
-		.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
-		.range([0, barChartItemLayout.barArea.width]);
+		const xScale: ScaleLinear<number, number> = scaleLinear()
+			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
+			.range([0, barChartItemLayout.barArea.width]);
 
+		return {
+			transitionType: 'update',
+			barChartItemLayout,
+			xScale,
+			from: infoFrom,
+			to: infoTo,
+		};
+	}
+
+	// ***********************************************************************
+	// return context for 'enter' transitionType
+	// ***********************************************************************
+	if (context.transitionType === 'enter') {
+		const infoTo = getExtentAndScale({
+			visibleItems: context.to.visibleItems,
+			xAxisWidth: barChartItemLayout.barArea.width,
+		});
+
+		return {
+			transitionType: 'enter',
+			barChartItemLayout,
+			xScale: infoTo.xScale,
+			to: infoTo,
+		};
+	}
+
+	invariant(context.transitionType === 'exit');
+	const infoFrom = getExtentAndScale({
+		visibleItems: context.from.visibleItems,
+		xAxisWidth: barChartItemLayout.barArea.width,
+	});
+
+	// ***********************************************************************
+	// return context for 'exit' transitionType
+	// ***********************************************************************
 	return {
-		extentFrom,
-		extentTo,
-		xScaleFrom,
-		xScaleTo,
-		xScale,
+		transitionType: 'exit',
 		barChartItemLayout,
+		xScale: infoFrom.xScale,
+		from: infoFrom,
 	};
 }
 
@@ -169,13 +255,6 @@ export type TBarChartItemLayout = {
 	barArea: TGridLayoutArea;
 	labelArea: TGridLayoutArea;
 	valueLabelArea: TGridLayoutArea;
-	// width: number;
-	// height: number;
-	// getListItemArea: (i: number | string) => TGridLayoutArea;
-	// getListItemPaddedArea: (i: number | string) => TGridLayoutArea;
-	// getVisibleIndicesRange: (
-	// 	visibleIndices: [number, number]
-	// ) => [number, number];
 };
 
 export function getBarChartItemLayout({

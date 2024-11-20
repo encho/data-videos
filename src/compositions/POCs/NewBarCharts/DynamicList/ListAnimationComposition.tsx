@@ -151,69 +151,79 @@ export const ListAnimationPage: React.FC = () => {
 				</TypographyStyle>
 
 				<div style={{position: 'relative'}}>
-					<DisplayGridRails
-						{...currentTransitionContext.from.layout.gridLayout}
-						stroke="rgba(255,0,255,1)"
-					/>
-					<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
-						{currentTransitionContext.from.items.map((it) => {
-							const area = currentTransitionContext.from.getListItemArea(it.id);
+					{currentTransitionContext.transitionType === 'update' ||
+					currentTransitionContext.transitionType === 'exit' ? (
+						<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
+							<DisplayGridRails
+								{...currentTransitionContext.from.layout.gridLayout}
+								stroke="rgba(255,0,255,1)"
+							/>
+							{currentTransitionContext.from.items.map((it) => {
+								const area = currentTransitionContext.from.getListItemArea(
+									it.id
+								);
 
-							const idColor = getPredefinedColor(it.id);
+								const idColor = getPredefinedColor(it.id);
 
-							const isVisible = isIdInItems(
-								it.id,
-								currentTransitionContext.from.visibleItems
-							);
+								const isVisible = isIdInItems(
+									it.id,
+									currentTransitionContext.from.visibleItems
+								);
 
-							return (
-								<HtmlArea
-									area={area}
-									fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-								>
-									<TypographyStyle
-										typographyStyle={theme.typography.textStyles.body}
-										baseline={baseline}
+								return (
+									<HtmlArea
+										area={area}
+										fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
 									>
-										{it.id}
-									</TypographyStyle>
-								</HtmlArea>
-							);
-						})}
-					</HtmlArea>
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+										>
+											{it.id}
+										</TypographyStyle>
+									</HtmlArea>
+								);
+							})}
+						</HtmlArea>
+					) : null}
 
-					<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
-						<DisplayGridRails
-							{...currentTransitionContext.to.layout.gridLayout}
-							stroke="rgba(255,0,255,1)"
-						/>
-						{currentTransitionContext.to.items.map((it) => {
-							const area = currentTransitionContext.to.getListItemArea(it.id);
-							const idColor = getPredefinedColor(it.id);
+					{currentTransitionContext.transitionType === 'update' ||
+					currentTransitionContext.transitionType === 'enter' ? (
+						<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
+							<DisplayGridRails
+								{...currentTransitionContext.to.layout.gridLayout}
+								stroke="rgba(255,0,255,1)"
+							/>
+							{currentTransitionContext.to.items.map((it) => {
+								const area = currentTransitionContext.to.getListItemArea(it.id);
+								const idColor = getPredefinedColor(it.id);
 
-							const isVisible = isIdInItems(
-								it.id,
-								currentTransitionContext.to.visibleItems
-							);
+								const isVisible = isIdInItems(
+									it.id,
+									currentTransitionContext.to.visibleItems
+								);
 
-							return (
-								<HtmlArea
-									area={area}
-									fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-								>
-									<TypographyStyle
-										typographyStyle={theme.typography.textStyles.body}
-										baseline={baseline}
+								return (
+									<HtmlArea
+										area={area}
+										fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
 									>
-										{it.id}
-									</TypographyStyle>
-								</HtmlArea>
-							);
-						})}
-					</HtmlArea>
+										<TypographyStyle
+											typographyStyle={theme.typography.textStyles.body}
+											baseline={baseline}
+										>
+											{it.id}
+										</TypographyStyle>
+									</HtmlArea>
+								);
+							})}
+						</HtmlArea>
+					) : null}
 
 					<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-						<AnimateAreas context={currentTransitionContext} />
+						{currentTransitionContext.transitionType === 'update' ? (
+							<AnimateAreas context={currentTransitionContext} />
+						) : null}
 					</HtmlArea>
 				</div>
 			</Page>
