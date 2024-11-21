@@ -9,6 +9,7 @@ import {
 	TGridLayout,
 	TGridLayoutAreaSpec,
 	TGridLayoutArea,
+	// averageAreas,
 } from '../../../../acetti-layout';
 
 import {TDynamicListTransitionContext} from './useListTransition/useListTransition';
@@ -78,7 +79,7 @@ export function useBarChartTransition({
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
 }): TBarChartTransitionContext {
-	const {width, itemHeight} = listTransitionContext;
+	const {width, itemHeight, easingPercentage} = listTransitionContext;
 
 	// TODO we need a barChartItemLayout for from and to, and an averaged one for the 'update' case
 	// const barChartItemLayout = getBarChartItemLayout({
@@ -101,26 +102,65 @@ export function useBarChartTransition({
 			(it) => it.value < 0
 		);
 
+		// TODO will be specific to current "from" transition spec.
+		const itemHeightFrom = itemHeight;
+		const negativeValueLabelWidthFrom = hasNegativeValuesFrom
+			? negativeValueLabelWidth
+			: 0;
+		const negativeValueLabelWidthPercentageFrom =
+			negativeValueLabelWidthFrom / negativeValueLabelWidth;
+
+		// TODO will be specific to current "to" transition spec.
+		const itemHeightTo = itemHeight;
+		const negativeValueLabelWidthTo = hasNegativeValuesTo
+			? negativeValueLabelWidth
+			: 0;
+		const negativeValueLabelWidthPercentageTo =
+			negativeValueLabelWidthTo / negativeValueLabelWidth;
+
+		const currentItemHeight = interpolate(
+			easingPercentage,
+			[0, 1],
+			[itemHeightFrom, itemHeightTo]
+		);
+		const currentNegativeValueLabelWidth = interpolate(
+			easingPercentage,
+			[0, 1],
+			[negativeValueLabelWidthFrom, negativeValueLabelWidthTo]
+		);
+
+		const currentNegativeValueLabelWidthPercentage =
+			currentNegativeValueLabelWidth / negativeValueLabelWidth;
+
 		const barChartItemLayoutFrom = getBarChartItemLayout({
-			height: itemHeight, // TODO will be specific to current "from" spec.
+			height: itemHeightFrom,
 			width,
 			baseline,
 			labelWidth,
 			valueLabelWidth,
-			negativeValueLabelWidth: hasNegativeValuesFrom
-				? negativeValueLabelWidth
-				: 0,
+			negativeValueLabelWidth,
+			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageFrom,
 		});
 
 		const barChartItemLayoutTo = getBarChartItemLayout({
-			height: itemHeight, // TODO will be specific to current "from" spec.
+			height: itemHeightTo,
 			width,
 			baseline,
 			labelWidth,
 			valueLabelWidth,
-			negativeValueLabelWidth: hasNegativeValuesTo
-				? negativeValueLabelWidth
-				: 0,
+			negativeValueLabelWidth,
+			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageTo,
+		});
+
+		const barChartItemLayout = getBarChartItemLayout({
+			height: currentItemHeight,
+			width,
+			baseline,
+			labelWidth, // TODO this could also be zero!!!!
+			valueLabelWidth,
+			negativeValueLabelWidth,
+			negativeValueLabelWidthPercentage:
+				currentNegativeValueLabelWidthPercentage,
 		});
 
 		const xScaleFrom = getXScale({
@@ -145,9 +185,6 @@ export function useBarChartTransition({
 			[xScaleFrom.domain()[1], xScaleTo.domain()[1]],
 			{}
 		);
-
-		// TODO interpolateBarChartItemLayouts(from, to, easingPerc...?)
-		const barChartItemLayout = barChartItemLayoutTo;
 
 		const xScale: ScaleLinear<number, number> = scaleLinear()
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
@@ -176,9 +213,8 @@ export function useBarChartTransition({
 			baseline,
 			labelWidth,
 			valueLabelWidth,
-			negativeValueLabelWidth: hasNegativeValuesTo
-				? negativeValueLabelWidth
-				: 0,
+			negativeValueLabelWidth,
+			negativeValueLabelWidthPercentage: hasNegativeValuesTo ? 1 : 0,
 		});
 
 		const xScaleTo = getXScale({
@@ -208,9 +244,8 @@ export function useBarChartTransition({
 		baseline,
 		labelWidth,
 		valueLabelWidth,
-		negativeValueLabelWidth: hasNegativeValuesFrom
-			? negativeValueLabelWidth
-			: 0,
+		negativeValueLabelWidth,
+		negativeValueLabelWidthPercentage: hasNegativeValuesFrom ? 1 : 0,
 	});
 
 	const xScaleFrom = getXScale({
@@ -291,8 +326,9 @@ export function getBarChartItemLayout({
 	width,
 	baseline,
 	labelWidth,
-	negativeValueLabelWidth,
 	valueLabelWidth,
+	negativeValueLabelWidth,
+	negativeValueLabelWidthPercentage,
 }: {
 	height: number;
 	width: number;
@@ -300,6 +336,7 @@ export function getBarChartItemLayout({
 	labelWidth: number;
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
+	negativeValueLabelWidthPercentage: number;
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 
@@ -332,10 +369,14 @@ export function getBarChartItemLayout({
 			value: 20,
 			name: 'labelMarginRight',
 		},
-		{type: 'pixel', value: negativeValueLabelWidth, name: 'negativeValueLabel'},
 		{
 			type: 'pixel',
-			value: negativeValueLabelWidth ? 20 : 0,
+			value: negativeValueLabelWidth * negativeValueLabelWidthPercentage,
+			name: 'negativeValueLabel',
+		},
+		{
+			type: 'pixel',
+			value: 20 * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabelMarginRight',
 		},
 		{

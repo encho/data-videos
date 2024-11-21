@@ -46,7 +46,7 @@ export const BarChartAnimationComposition: React.FC<
 		<div style={{position: 'relative'}}>
 			<PageContext
 				margin={50}
-				nrBaselines={30}
+				nrBaselines={40}
 				width={width}
 				height={height / 2}
 				theme={theme}
@@ -172,8 +172,8 @@ export const ListAnimationPage: React.FC = () => {
 		{
 			itemsFrom: [],
 			itemsTo: itemsFrom,
-			visibleIndicesFrom: [0, 1],
-			visibleIndicesTo: [0, 5],
+			visibleIndicesFrom,
+			visibleIndicesTo,
 			easingFunction,
 			durationInFrames: duration_0,
 		},
@@ -402,7 +402,7 @@ export const ListAnimationPage: React.FC = () => {
 
 							<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
 								<BarsTransition
-									// showLayout
+									showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
@@ -414,88 +414,103 @@ export const ListAnimationPage: React.FC = () => {
 
 					<PageContext
 						margin={0}
-						nrBaselines={50}
+						nrBaselines={30}
 						width={contentWidth}
 						height={contentHeight}
 						theme={theme}
 					>
 						<Page show>
-							<div style={{fontSize: 40}}>
-								<Row>LIST ANIMATION CONTEXT</Row>
-								<div>
-									<Row>
-										<div>numberOfTransitions</div>
-										<Value>{listAnimationContext.numberOfTransitions}</Value>
-									</Row>
-									<Row>
-										<div>currentTransitionIndex</div>
-										<Value>{listAnimationContext.currentTransitionIndex}</Value>
-									</Row>
-									<Row>
-										<div>frame</div>
-										<Value>{listAnimationContext.frame}</Value>
-									</Row>
-									<Row>
-										<div>durationInFrames</div>
-										<Value>{listAnimationContext.durationInFrames}</Value>
-									</Row>
-									<Row>
-										<Row>CURRENT TRANSITION CONTEXT</Row>
+							{({baseline}) => {
+								const FONT_SIZE = baseline;
+								return (
+									<div style={{fontSize: FONT_SIZE}}>
+										<Row>LIST ANIMATION CONTEXT</Row>
 										<div>
 											<Row>
-												<div>(relative) frame</div>
+												<div>numberOfTransitions</div>
 												<Value>
-													{listAnimationContext.currentTransitionContext.frame}
+													{listAnimationContext.numberOfTransitions}
 												</Value>
 											</Row>
 											<Row>
-												<div>transitionType</div>
+												<div>currentTransitionIndex</div>
 												<Value>
-													{
-														listAnimationContext.currentTransitionContext
-															.transitionType
-													}
+													{listAnimationContext.currentTransitionIndex}
 												</Value>
 											</Row>
 											<Row>
-												<div>[...]</div>
+												<div>frame</div>
+												<Value>{listAnimationContext.frame}</Value>
+											</Row>
+											<Row>
+												<div>durationInFrames</div>
+												<Value>{listAnimationContext.durationInFrames}</Value>
+											</Row>
+											<Row>
+												<Row>CURRENT TRANSITION CONTEXT</Row>
+												<div>
+													<Row>
+														<div>(relative) frame</div>
+														<Value>
+															{
+																listAnimationContext.currentTransitionContext
+																	.frame
+															}
+														</Value>
+													</Row>
+													<Row>
+														<div>transitionType</div>
+														<Value>
+															{
+																listAnimationContext.currentTransitionContext
+																	.transitionType
+															}
+														</Value>
+													</Row>
+													<Row>
+														<div>[...]</div>
+													</Row>
+												</div>
+											</Row>
+
+											<Row>
+												<Row> TRANSITIONS</Row>
+
+												<div>
+													{listAnimationContext.transitions.map(
+														(editedTransition, i) => {
+															const isActive =
+																listAnimationContext.currentTransitionIndex ===
+																i;
+															return (
+																<div
+																	style={{
+																		margin: 10,
+																		backgroundColor: '#660000',
+																		border: isActive ? '2px solid orange' : '',
+																	}}
+																>
+																	<Row>
+																		<div>frameRange</div>
+																		<Value>
+																			{JSON.stringify(
+																				editedTransition.frameRange
+																			)}
+																		</Value>
+																	</Row>
+																	<Row>
+																		<div>[...]</div>
+																	</Row>
+																</div>
+															);
+														}
+													)}
+												</div>
 											</Row>
 										</div>
-									</Row>
-
-									<Row>
-										<Row> TRANSITIONS</Row>
-
-										<div>
-											{listAnimationContext.transitions.map(
-												(editedTransition, i) => {
-													const isActive =
-														listAnimationContext.currentTransitionIndex === i;
-													return (
-														<div
-															style={{
-																margin: 10,
-																backgroundColor: '#660000',
-																border: isActive ? '2px solid orange' : '',
-															}}
-														>
-															<Row>
-																<div>frameRange</div>
-																<Value>
-																	{JSON.stringify(editedTransition.frameRange)}
-																</Value>
-															</Row>
-															<Row>
-																<div>[...]</div>
-															</Row>
-														</div>
-													);
-												}
-											)}
-										</div>
-									</Row>
-								</div>
-							</div>
+									</div>
+								);
+							}}
 						</Page>
 					</PageContext>
 				</>

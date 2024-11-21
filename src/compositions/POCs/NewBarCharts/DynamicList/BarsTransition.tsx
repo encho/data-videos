@@ -479,9 +479,9 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						{/* the label */}
 						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
 							<LabelComponent
-								id={dataItem.id}
+								animateEnter
 								animateExit={false}
-								animateEnter={false}
+								id={dataItem.id}
 								baseline={baseline}
 								theme={theme}
 							>
@@ -496,9 +496,9 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 								fill={theme.global.backgroundColor}
 							>
 								<ValueLabelComponent
-									id={dataItem.id}
+									animateEnter
 									animateExit={false}
-									animateEnter={false}
+									id={dataItem.id}
 									baseline={baseline}
 									theme={theme}
 									value={dataItem.value}
@@ -544,9 +544,9 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 								fill={theme.global.backgroundColor}
 							>
 								<ValueLabelComponent
-									id={dataItem.id}
+									animateEnter
 									animateExit={false}
-									animateEnter={false}
+									id={dataItem.id}
 									baseline={baseline}
 									theme={theme}
 									value={dataItem.value}
@@ -623,9 +623,9 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						{/* the label */}
 						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
 							<LabelComponent
-								id={dataItem.id}
-								animateExit={false}
+								animateExit
 								animateEnter={false}
+								id={dataItem.id}
 								baseline={baseline}
 								theme={theme}
 							>
@@ -639,7 +639,16 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 								area={negativeValueLabelArea}
 								fill={theme.global.backgroundColor}
 							>
-								<></>
+								<ValueLabelComponent
+									animateExit
+									animateEnter={false}
+									id={dataItem.id}
+									baseline={baseline}
+									theme={theme}
+									value={dataItem.value}
+								>
+									{dataItem.valueLabel}
+								</ValueLabelComponent>
 							</HtmlArea>
 						)}
 
@@ -679,9 +688,9 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 								fill={theme.global.backgroundColor}
 							>
 								<ValueLabelComponent
-									id={dataItem.id}
-									animateExit={false}
+									animateExit
 									animateEnter={false}
+									id={dataItem.id}
 									baseline={baseline}
 									theme={theme}
 									value={dataItem.value}
