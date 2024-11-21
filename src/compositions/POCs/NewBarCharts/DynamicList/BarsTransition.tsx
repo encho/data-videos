@@ -121,216 +121,28 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const disappearAreas = useDisappearAreas(listTransitionContext);
 	const updateAreas = useUpdateAreas(listTransitionContext);
 
+	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
+	const {plotArea} = barChartTransitionContext;
+	const zeroLine_x1 = xScale(0);
+	const zeroLine_x2 = zeroLine_x1;
+	const zeroLine_y1 = 0;
+	const zeroLine_y2 = plotArea.height;
+	const zeroLine_color = 'cyan';
+
 	return (
 		<div>
-			{[...enterAreas].map((enterArea) => {
-				const {opacity, item} = enterArea;
+			<div>
+				{[...enterAreas].map((enterArea) => {
+					const {opacity, item} = enterArea;
 
-				const barWidth = xScale(item.value);
+					const barWidth = xScale(item.value);
 
-				const isPositiveBar = item.value >= 0;
-
-				return (
-					// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
-					<HtmlArea
-						area={enterArea.area}
-						// fill={color}
-						opacity={opacity}
-					>
-						{showLayout ? (
-							<div style={{position: 'absolute'}}>
-								<DisplayGridRails
-									{...barChartTransitionContext.barChartItemLayout.gridLayout}
-									stroke={GRID_RAILS_COLOR}
-								/>
-							</div>
-						) : null}
-						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
-							<LabelComponent
-								id={item.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-							>
-								{item.label}
-							</LabelComponent>
-						</HtmlArea>
-
-						{/* the negative value label */}
-						{isPositiveBar ? null : (
-							<HtmlArea
-								area={negativeValueLabelArea}
-								fill={theme.global.backgroundColor}
-							>
-								<ValueLabelComponent
-									id={item.id}
-									animateExit={false}
-									animateEnter={false}
-									baseline={baseline}
-									theme={theme}
-									value={item.value}
-								>
-									{item.valueLabel}
-								</ValueLabelComponent>
-							</HtmlArea>
-						)}
-
-						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
-							<svg width={barArea.width} height={barArea.height}>
-								{item.value > 0 && barArea.width ? (
-									<RoundedRightRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
-										// fill={it.barColor || 'magenta'}
-										fill="white"
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : item.value < 0 && barArea.width ? (
-									<RoundedLeftRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
-										// fill={it.barColor || 'magenta'}
-										fill="white"
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : null}
-							</svg>
-						</HtmlArea>
-
-						{isPositiveBar ? (
-							<HtmlArea
-								area={valueLabelArea}
-								fill={theme.global.backgroundColor}
-							>
-								<ValueLabelComponent
-									id={item.id}
-									animateExit={false}
-									animateEnter={false}
-									baseline={baseline}
-									theme={theme}
-									value={item.value}
-								>
-									{item.valueLabel}
-								</ValueLabelComponent>
-							</HtmlArea>
-						) : null}
-					</HtmlArea>
-				);
-			})}
-			{[...exitAreas].map((enterArea) => {
-				const {opacity, item} = enterArea;
-
-				const barWidth = xScale(item.value);
-
-				const isPositiveBar = item.value >= 0;
-
-				return (
-					<HtmlArea area={enterArea.area} opacity={opacity}>
-						{showLayout ? (
-							<div style={{position: 'absolute'}}>
-								<DisplayGridRails
-									{...barChartTransitionContext.barChartItemLayout.gridLayout}
-									stroke={GRID_RAILS_COLOR}
-								/>
-							</div>
-						) : null}
-
-						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
-							<LabelComponent
-								id={item.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-							>
-								{item.label}
-							</LabelComponent>
-						</HtmlArea>
-
-						{/* the negative value label */}
-						{isPositiveBar ? null : (
-							<HtmlArea
-								area={negativeValueLabelArea}
-								fill={theme.global.backgroundColor}
-							>
-								<></>
-							</HtmlArea>
-						)}
-
-						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
-							<svg width={barArea.width} height={barArea.height}>
-								{item.value > 0 && barArea.width ? (
-									<RoundedRightRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
-										// fill={it.barColor || 'magenta'}
-										fill="white"
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : item.value < 0 && barArea.width ? (
-									<RoundedLeftRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
-										// fill={it.barColor || 'magenta'}
-										fill="white"
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : null}
-							</svg>
-						</HtmlArea>
-
-						{isPositiveBar ? (
-							<HtmlArea
-								area={valueLabelArea}
-								fill={theme.global.backgroundColor}
-							>
-								<ValueLabelComponent
-									id={item.id}
-									animateExit={false}
-									animateEnter={false}
-									baseline={baseline}
-									theme={theme}
-									value={item.value}
-								>
-									{item.valueLabel}
-								</ValueLabelComponent>
-							</HtmlArea>
-						) : null}
-					</HtmlArea>
-				);
-			})}
-			{[...appearAreas, ...disappearAreas, ...updateAreas].map(
-				(currentArea) => {
-					const {opacity, itemFrom, itemTo} = currentArea;
-					// const color = getPredefinedColor(id);
-
-					const currentValue = interpolate(
-						frame,
-						[0, durationInFrames - 1],
-						[itemFrom.value, itemTo.value],
-						{}
-					);
-
-					const barWidth = xScale(currentValue);
-
-					const isPositiveBar = currentValue >= 0;
+					const isPositiveBar = item.value >= 0;
 
 					return (
+						// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
 						<HtmlArea
-							area={currentArea.area}
+							area={enterArea.area}
 							// fill={color}
 							opacity={opacity}
 						>
@@ -342,16 +154,15 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									/>
 								</div>
 							) : null}
-
 							<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
 								<LabelComponent
-									id={itemTo.id}
+									id={item.id}
 									animateExit={false}
 									animateEnter={false}
 									baseline={baseline}
 									theme={theme}
 								>
-									{itemTo.label}
+									{item.label}
 								</LabelComponent>
 							</HtmlArea>
 
@@ -361,13 +172,22 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									area={negativeValueLabelArea}
 									fill={theme.global.backgroundColor}
 								>
-									<></>
+									<ValueLabelComponent
+										id={item.id}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+										value={item.value}
+									>
+										{item.valueLabel}
+									</ValueLabelComponent>
 								</HtmlArea>
 							)}
 
 							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 								<svg width={barArea.width} height={barArea.height}>
-									{currentValue > 0 && barArea.width ? (
+									{item.value > 0 && barArea.width ? (
 										<RoundedRightRect
 											y={0}
 											x={0}
@@ -378,7 +198,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
-									) : currentValue < 0 && barArea.width ? (
+									) : item.value < 0 && barArea.width ? (
 										<RoundedLeftRect
 											y={0}
 											x={0}
@@ -399,21 +219,227 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									fill={theme.global.backgroundColor}
 								>
 									<ValueLabelComponent
-										id={itemTo.id}
+										id={item.id}
 										animateExit={false}
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-										value={itemTo.value}
+										value={item.value}
 									>
-										{itemTo.valueLabel}
+										{item.valueLabel}
 									</ValueLabelComponent>
 								</HtmlArea>
 							) : null}
 						</HtmlArea>
 					);
-				}
-			)}
+				})}
+				{[...exitAreas].map((enterArea) => {
+					const {opacity, item} = enterArea;
+
+					const barWidth = xScale(item.value);
+
+					const isPositiveBar = item.value >= 0;
+
+					return (
+						<HtmlArea area={enterArea.area} opacity={opacity}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...barChartTransitionContext.barChartItemLayout.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
+
+							<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+								<LabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+								>
+									{item.label}
+								</LabelComponent>
+							</HtmlArea>
+
+							{/* the negative value label */}
+							{isPositiveBar ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									fill={theme.global.backgroundColor}
+								>
+									<></>
+								</HtmlArea>
+							)}
+
+							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+								<svg width={barArea.width} height={barArea.height}>
+									{item.value > 0 && barArea.width ? (
+										<RoundedRightRect
+											y={0}
+											x={0}
+											height={barArea.height}
+											width={barWidth}
+											// fill={it.barColor || 'magenta'}
+											fill="white"
+											// TODO: get radius from baseline?
+											radius={5}
+										/>
+									) : item.value < 0 && barArea.width ? (
+										<RoundedLeftRect
+											y={0}
+											x={0}
+											height={barArea.height}
+											width={barWidth}
+											// fill={it.barColor || 'magenta'}
+											fill="white"
+											// TODO: get radius from baseline?
+											radius={5}
+										/>
+									) : null}
+								</svg>
+							</HtmlArea>
+
+							{isPositiveBar ? (
+								<HtmlArea
+									area={valueLabelArea}
+									fill={theme.global.backgroundColor}
+								>
+									<ValueLabelComponent
+										id={item.id}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+										value={item.value}
+									>
+										{item.valueLabel}
+									</ValueLabelComponent>
+								</HtmlArea>
+							) : null}
+						</HtmlArea>
+					);
+				})}
+				{[...appearAreas, ...disappearAreas, ...updateAreas].map(
+					(currentArea) => {
+						const {opacity, itemFrom, itemTo} = currentArea;
+						// const color = getPredefinedColor(id);
+
+						const currentValue = interpolate(
+							frame,
+							[0, durationInFrames - 1],
+							[itemFrom.value, itemTo.value],
+							{}
+						);
+
+						const barWidth = xScale(currentValue);
+
+						const isPositiveBar = currentValue >= 0;
+
+						return (
+							<HtmlArea
+								area={currentArea.area}
+								// fill={color}
+								opacity={opacity}
+							>
+								{showLayout ? (
+									<div style={{position: 'absolute'}}>
+										<DisplayGridRails
+											{...barChartTransitionContext.barChartItemLayout
+												.gridLayout}
+											stroke={GRID_RAILS_COLOR}
+										/>
+									</div>
+								) : null}
+
+								<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+									<LabelComponent
+										id={itemTo.id}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+									>
+										{itemTo.label}
+									</LabelComponent>
+								</HtmlArea>
+
+								{/* the negative value label */}
+								{isPositiveBar ? null : (
+									<HtmlArea
+										area={negativeValueLabelArea}
+										fill={theme.global.backgroundColor}
+									>
+										<></>
+									</HtmlArea>
+								)}
+
+								<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+									<svg width={barArea.width} height={barArea.height}>
+										{currentValue > 0 && barArea.width ? (
+											<RoundedRightRect
+												y={0}
+												x={0}
+												height={barArea.height}
+												width={barWidth}
+												// fill={it.barColor || 'magenta'}
+												fill="white"
+												// TODO: get radius from baseline?
+												radius={5}
+											/>
+										) : currentValue < 0 && barArea.width ? (
+											<RoundedLeftRect
+												y={0}
+												x={0}
+												height={barArea.height}
+												width={barWidth}
+												// fill={it.barColor || 'magenta'}
+												fill="white"
+												// TODO: get radius from baseline?
+												radius={5}
+											/>
+										) : null}
+									</svg>
+								</HtmlArea>
+
+								{isPositiveBar ? (
+									<HtmlArea
+										area={valueLabelArea}
+										fill={theme.global.backgroundColor}
+									>
+										<ValueLabelComponent
+											id={itemTo.id}
+											animateExit={false}
+											animateEnter={false}
+											baseline={baseline}
+											theme={theme}
+											value={itemTo.value}
+										>
+											{itemTo.valueLabel}
+										</ValueLabelComponent>
+									</HtmlArea>
+								) : null}
+							</HtmlArea>
+						);
+					}
+				)}
+			</div>
+
+			{/* the plot area */}
+			<HtmlArea area={plotArea} fill="rgba(255,255,0,0.2)">
+				<svg width={plotArea.width} height={plotArea.height}>
+					<line
+						x1={zeroLine_x1}
+						x2={zeroLine_x2}
+						y1={zeroLine_y1}
+						y2={zeroLine_y2}
+						stroke={zeroLine_color}
+						strokeWidth={baseline * 0.2} // TODO from some ibcs setting
+						// opacity={opacity}
+					/>
+				</svg>
+			</HtmlArea>
 		</div>
 	);
 };

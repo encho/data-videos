@@ -207,8 +207,8 @@ export function useBarChartTransition({
 		);
 
 		const plotAreaCurrent = {
-			x1: 0,
-			x2: barChartItemLayout.barArea.width,
+			x1: barChartItemLayout.barArea.x1,
+			x2: barChartItemLayout.barArea.width + barChartItemLayout.barArea.x1,
 			y1: 0,
 			y2: plotAreaHeightCurrent,
 			width: barChartItemLayout.barArea.width,
