@@ -109,7 +109,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const {frame, durationInFrames} = listTransitionContext;
 
 	const {xScale} = barChartTransitionContext;
-	const {barArea, labelArea, valueLabelArea} =
+	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;
 
 	const GRID_RAILS_COLOR = 'magenta';
@@ -154,6 +154,12 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								{item.label}
 							</LabelComponent>
 						</HtmlArea>
+
+						{/* the negative value label */}
+						<HtmlArea area={negativeValueLabelArea} fill="magenta">
+							<></>
+						</HtmlArea>
+
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
 								{item.value > 0 && barArea.width ? (
@@ -227,6 +233,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							>
 								{item.label}
 							</LabelComponent>
+						</HtmlArea>
+
+						{/* the negative value label */}
+						<HtmlArea area={negativeValueLabelArea} fill="magenta">
+							<></>
 						</HtmlArea>
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
@@ -313,6 +324,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								</LabelComponent>
 							</HtmlArea>
 
+							{/* the negative value label */}
+							<HtmlArea area={negativeValueLabelArea} fill="magenta">
+								<></>
+							</HtmlArea>
+
 							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 								<svg width={barArea.width} height={barArea.height}>
 									{currentValue > 0 && barArea.width ? (
@@ -387,7 +403,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 	const {xScale} = barChartTransitionContext;
 
-	const {barArea, labelArea, valueLabelArea} =
+	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;
 
 	const rowsInfo = visibleItems.map((dataItem) => {
@@ -431,6 +447,11 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							>
 								{dataItem.label}
 							</LabelComponent>
+						</HtmlArea>
+
+						{/* the negative value label */}
+						<HtmlArea area={negativeValueLabelArea} fill="magenta">
+							<></>
 						</HtmlArea>
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
@@ -504,7 +525,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 	const {xScale} = barChartTransitionContext;
 
-	const {barArea, labelArea, valueLabelArea} =
+	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;
 
 	const rowsInfo = visibleItems.map((dataItem) => {
@@ -548,6 +569,11 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							>
 								{dataItem.label}
 							</LabelComponent>
+						</HtmlArea>
+
+						{/* the negative value label */}
+						<HtmlArea area={negativeValueLabelArea} fill="magenta">
+							<></>
 						</HtmlArea>
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>

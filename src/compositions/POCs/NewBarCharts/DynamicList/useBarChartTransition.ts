@@ -219,6 +219,7 @@ export type TBarChartItemLayout = {
 	barArea: TGridLayoutArea;
 	labelArea: TGridLayoutArea;
 	valueLabelArea: TGridLayoutArea;
+	negativeValueLabelArea: TGridLayoutArea;
 };
 
 export function getBarChartItemLayout({
@@ -226,6 +227,7 @@ export function getBarChartItemLayout({
 	width,
 	baseline,
 	labelWidth,
+	negativeValueLabelWidth = 50,
 	valueLabelWidth,
 }: {
 	height: number;
@@ -233,6 +235,7 @@ export function getBarChartItemLayout({
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
+	negativeValueLabelWidth?: number; // TODO compulsory
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 
@@ -265,6 +268,12 @@ export function getBarChartItemLayout({
 			value: 20,
 			name: 'labelMarginRight',
 		},
+		{type: 'pixel', value: negativeValueLabelWidth, name: 'negativeValueLabel'},
+		{
+			type: 'pixel',
+			value: negativeValueLabelWidth ? 20 : 0,
+			name: 'negativeValueLabelMarginRight',
+		},
 		{
 			type: 'fr',
 			value: 1,
@@ -286,16 +295,9 @@ export function getBarChartItemLayout({
 		padding: 0,
 		columnGap: 0,
 		rowGap: 0,
-		// rows: paddedRows,
 		rows,
 		columns,
 		areas: {
-			// fullRow: [
-			// 	{name: 'marginTop'},
-			// 	{name: 'label'},
-			// 	{name: 'marginBottom'},
-			// 	{name: 'valueLabel'},
-			// ] as TGridLayoutAreaSpec,
 			bar: [
 				{name: 'bar'},
 				{name: 'bar'},
@@ -314,6 +316,12 @@ export function getBarChartItemLayout({
 				{name: 'bar'},
 				{name: 'valueLabel'},
 			] as TGridLayoutAreaSpec,
+			negativeValueLabel: [
+				{name: 'bar'},
+				{name: 'negativeValueLabel'},
+				{name: 'bar'},
+				{name: 'negativeValueLabel'},
+			] as TGridLayoutAreaSpec,
 		},
 	};
 
@@ -322,21 +330,11 @@ export function getBarChartItemLayout({
 		height,
 	});
 
-	// const gridLayout = useGridLayout({
-	// 	width: area.width,
-	// 	height: area.height,
-	// 	gridLayoutSpec,
-	// });
-
 	return {
 		gridLayout,
 		barArea: gridLayout.areas.bar,
 		labelArea: gridLayout.areas.label,
 		valueLabelArea: gridLayout.areas.valueLabel,
-		// width: gridLayout.width,
-		// height: gridLayout.height,
-		// getListItemArea,
-		// getListItemPaddedArea,
-		// getVisibleIndicesRange,
+		negativeValueLabelArea: gridLayout.areas.negativeValueLabel,
 	};
 }
