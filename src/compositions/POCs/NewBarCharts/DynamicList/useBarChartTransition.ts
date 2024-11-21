@@ -53,7 +53,7 @@ type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
 	};
 };
 
-export type TDynamicBarChartTransitionContext =
+export type TBarChartTransitionContext =
 	| BarChartTransitionContext_Enter
 	| BarChartTransitionContext_Exit
 	| BarChartTransitionContext_Update;
@@ -65,7 +65,7 @@ export type TBarChartItem = {
 	value: number;
 };
 
-export function useDynamicBarChartTransition({
+export function useBarChartTransition({
 	listTransitionContext,
 	baseline,
 	labelWidth,
@@ -75,9 +75,10 @@ export function useDynamicBarChartTransition({
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
-}): TDynamicBarChartTransitionContext {
+}): TBarChartTransitionContext {
 	const {width, itemHeight} = listTransitionContext;
 
+	// TODO we need a barChartItemLayout for from and to, and an averaged one for the 'update' case
 	const barChartItemLayout = getBarChartItemLayout({
 		height: itemHeight,
 		width,
@@ -209,6 +210,10 @@ export function getBarChartItemHeight({baseline}: {baseline: number}) {
 	return barChartItemHeight;
 }
 
+// export function getBarChartItemHeight({baseline}: {baseline: number}) {
+// 	const layout = getBarChartItemLayout({baseline, height});
+// }
+
 export type TBarChartItemLayout = {
 	gridLayout: TGridLayout;
 	barArea: TGridLayoutArea;
@@ -285,6 +290,12 @@ export function getBarChartItemLayout({
 		rows,
 		columns,
 		areas: {
+			// fullRow: [
+			// 	{name: 'marginTop'},
+			// 	{name: 'label'},
+			// 	{name: 'marginBottom'},
+			// 	{name: 'valueLabel'},
+			// ] as TGridLayoutAreaSpec,
 			bar: [
 				{name: 'bar'},
 				{name: 'bar'},

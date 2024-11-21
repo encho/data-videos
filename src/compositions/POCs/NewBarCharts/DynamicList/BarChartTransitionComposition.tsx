@@ -18,7 +18,7 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useDynamicBarChartTransition} from './useBarChartTransition';
+import {useBarChartTransition} from './useBarChartTransition';
 import {
 	DefaultLabelComponent,
 	TBarChartLabelComponent,
@@ -226,7 +226,7 @@ const BarChartTransitionPage: React.FC<{
 		easing: Easing.ease,
 	});
 
-	const barChartTransitionContext = useDynamicBarChartTransition({
+	const barChartTransitionContext = useBarChartTransition({
 		listTransitionContext,
 		baseline,
 		labelWidth,

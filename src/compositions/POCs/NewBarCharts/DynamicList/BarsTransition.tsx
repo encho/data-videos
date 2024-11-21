@@ -20,26 +20,37 @@ import {
 	useAppearAreas,
 	useDisappearAreas,
 } from './useListTransition/useListTransition';
-// TODO rename to useBarChartTransition
-import {useDynamicBarChartTransition} from './useBarChartTransition';
+import {TBarChartTransitionContext} from './useBarChartTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
 import {TBarChartItem} from './useBarChartTransition';
 
-export const BarsTransitionUpdate: React.FC<{
-	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;
+type TBarsTransitionCommonProps = {
+	barChartTransitionContext: TBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
-}> = ({listTransitionContext, LabelComponent, ValueLabelComponent}) => {
+};
+
+type TBarsTransitionUpdateProps = TBarsTransitionCommonProps & {
+	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;
+};
+
+type TBarsTransitionEnterProps = TBarsTransitionCommonProps & {
+	listTransitionContext: ListTransitionContext_Enter<TBarChartItem>;
+};
+
+type TBarsTransitionExitProps = TBarsTransitionCommonProps & {
+	listTransitionContext: ListTransitionContext_Exit<TBarChartItem>;
+};
+
+export const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
+	listTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	barChartTransitionContext,
+}) => {
 	const {theme, baseline} = usePage();
 
 	const {frame, durationInFrames} = listTransitionContext;
-
-	const barChartTransitionContext = useDynamicBarChartTransition({
-		listTransitionContext, // TODO rename prop
-		baseline,
-		labelWidth: 100,
-		valueLabelWidth: 100,
-	});
 
 	const {xScale} = barChartTransitionContext;
 	const {barArea, labelArea, valueLabelArea} =
@@ -299,9 +310,15 @@ export const BarsTransitionUpdate: React.FC<{
 	);
 };
 
-export const BarsTransitionEnter: React.FC<{
-	listTransitionContext: ListTransitionContext_Enter<{id: string}>;
-}> = ({listTransitionContext}) => {
+export const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
+	listTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	barChartTransitionContext,
+}) => {
+	// TODO remove this console.log
+	console.log({LabelComponent, ValueLabelComponent, barChartTransitionContext});
+
 	const {theme, baseline} = usePage();
 
 	const visibleItemIds = listTransitionContext.to.visibleItems.map(
@@ -341,9 +358,15 @@ export const BarsTransitionEnter: React.FC<{
 	);
 };
 
-export const BarsTransitionExit: React.FC<{
-	listTransitionContext: ListTransitionContext_Exit<{id: string}>;
-}> = ({listTransitionContext}) => {
+export const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
+	listTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	barChartTransitionContext,
+}) => {
+	// TODO remove this console.log
+	console.log({LabelComponent, ValueLabelComponent, barChartTransitionContext});
+
 	const {theme, baseline} = usePage();
 
 	const visibleItemIds = listTransitionContext.from.visibleItems.map(

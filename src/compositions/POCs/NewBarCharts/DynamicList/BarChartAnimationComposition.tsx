@@ -31,6 +31,10 @@ import {
 	// MeasureLabels,
 	// MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {
+	getBarChartItemHeight,
+	useBarChartTransition,
+} from './useBarChartTransition';
 
 export const barChartAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -46,7 +50,7 @@ export const BarChartAnimationComposition: React.FC<
 		<div style={{position: 'relative'}}>
 			<PageContext
 				margin={50}
-				nrBaselines={50}
+				nrBaselines={40}
 				width={width}
 				height={height / 2}
 				theme={theme}
@@ -187,15 +191,24 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
+	const itemHeightForBaseline = getBarChartItemHeight({baseline});
+
 	const listAnimationContext = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
-		// transitions: weirdTransitions,
-		transitions: scrollingTransitions,
-		itemHeight: 40,
+		transitions: weirdTransitions,
+		// transitions: scrollingTransitions,
+		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 	});
 
 	const listTransitionContext = listAnimationContext.currentTransitionContext;
+
+	const barChartTransitionContext = useBarChartTransition({
+		listTransitionContext,
+		baseline,
+		labelWidth: 200,
+		valueLabelWidth: 100,
+	});
 
 	return (
 		<>
@@ -280,6 +293,7 @@ export const ListAnimationPage: React.FC = () => {
 						{listTransitionContext.transitionType === 'update' ? (
 							<BarsTransitionUpdate
 								listTransitionContext={listTransitionContext}
+								barChartTransitionContext={barChartTransitionContext}
 								LabelComponent={DefaultLabelComponent}
 								ValueLabelComponent={DefaultValueLabelComponent}
 							/>
@@ -287,11 +301,17 @@ export const ListAnimationPage: React.FC = () => {
 						{listTransitionContext.transitionType === 'enter' ? (
 							<BarsTransitionEnter
 								listTransitionContext={listTransitionContext}
+								barChartTransitionContext={barChartTransitionContext}
+								LabelComponent={DefaultLabelComponent}
+								ValueLabelComponent={DefaultValueLabelComponent}
 							/>
 						) : null}
 						{listTransitionContext.transitionType === 'exit' ? (
 							<BarsTransitionExit
 								listTransitionContext={listTransitionContext}
+								barChartTransitionContext={barChartTransitionContext}
+								LabelComponent={DefaultLabelComponent}
+								ValueLabelComponent={DefaultValueLabelComponent}
 							/>
 						) : null}
 					</HtmlArea>

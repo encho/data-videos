@@ -54,6 +54,9 @@ export function useListAnimation<T extends {id: string}>({
 		durationInFrames,
 	} = useVideoConfig();
 
+	const ITEM_MARGIN_TOP = 0;
+	const ITEM_MARGIN_BOTTOM = 0;
+
 	const frameRanges = useMemo(() => {
 		const transitionDurations = transitions.map((it) => it.durationInFrames);
 		return calculateFrameRanges(transitionDurations);
@@ -83,8 +86,8 @@ export function useListAnimation<T extends {id: string}>({
 		width,
 		height,
 		itemHeight,
-		itemMarginTop: 20,
-		itemMarginBottom: 20,
+		itemMarginTop: ITEM_MARGIN_TOP,
+		itemMarginBottom: ITEM_MARGIN_BOTTOM,
 		easing: editedTransitions[currentTransitionIndex].easingFunction,
 		itemsFrom: editedTransitions[currentTransitionIndex].itemsFrom,
 		itemsTo: editedTransitions[currentTransitionIndex].itemsTo,

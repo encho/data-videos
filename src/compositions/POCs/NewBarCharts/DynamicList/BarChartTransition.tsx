@@ -12,7 +12,7 @@ import {
 	useDisappearAreas,
 } from './useListTransition/useListTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
-import {TDynamicBarChartTransitionContext} from './useBarChartTransition';
+import {TBarChartTransitionContext} from './useBarChartTransition';
 import {
 	TBarChartLabelComponent,
 	TBarChartValueLabelComponent,
@@ -23,7 +23,7 @@ import {TBarChartItem} from './useBarChartTransition';
 
 export const BarChartTransitionUpdate: React.FC<{
 	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;
-	barChartTransitionContext: TDynamicBarChartTransitionContext;
+	barChartTransitionContext: TBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
 }> = ({
