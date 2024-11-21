@@ -36,6 +36,7 @@ export type ListAnimationContext<T extends {id: string}> = {
 type UseListAnimationArgs<T> = {
 	width: number;
 	height: number;
+	itemHeight?: number;
 	transitions: ListAnimationTransition<T>[];
 };
 
@@ -45,6 +46,7 @@ export function useListAnimation<T extends {id: string}>({
 	width,
 	height,
 	transitions,
+	itemHeight = 100,
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
 	const {
@@ -80,7 +82,7 @@ export function useListAnimation<T extends {id: string}>({
 	const currentTransitionContext = useListTransition({
 		width,
 		height,
-		itemHeight: 100,
+		itemHeight,
 		itemMarginTop: 20,
 		itemMarginBottom: 20,
 		easing: editedTransitions[currentTransitionIndex].easingFunction,

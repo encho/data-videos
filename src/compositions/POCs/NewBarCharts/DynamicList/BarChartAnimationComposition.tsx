@@ -16,12 +16,21 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {
-	ListTransitionUpdate,
-	ListTransitionEnter,
-	ListTransitionExit,
-} from './ListTransition';
 import {useListAnimation, ListAnimationTransition} from './useListAnimation';
+import {
+	BarsTransitionUpdate,
+	BarsTransitionEnter,
+	BarsTransitionExit,
+} from './BarsTransition';
+import {TBarChartItem} from './useBarChartTransition';
+import {
+	DefaultLabelComponent,
+	// TBarChartLabelComponent,
+	DefaultValueLabelComponent,
+	// TBarChartValueLabelComponent,
+	// MeasureLabels,
+	// MeasureValueLabels,
+} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 
 export const barChartAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -91,7 +100,7 @@ export const ListAnimationPage: React.FC = () => {
 	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 
 	// eslint-disable-next-line
-	const weirdTransitions: ListAnimationTransition<{id: string}>[] = [
+	const weirdTransitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
 			itemsFrom: [],
 			itemsTo: itemsFrom,
@@ -134,7 +143,8 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
-	const scrollingTransitions: ListAnimationTransition<{id: string}>[] = [
+	// eslint-disable-next-line
+	const scrollingTransitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
 			itemsFrom: [],
 			itemsTo: itemsFrom,
@@ -182,9 +192,10 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		// transitions: weirdTransitions,
 		transitions: scrollingTransitions,
+		itemHeight: 40,
 	});
 
-	const {currentTransitionContext} = listAnimationContext;
+	const listTransitionContext = listAnimationContext.currentTransitionContext;
 
 	return (
 		<>
@@ -198,23 +209,21 @@ export const ListAnimationPage: React.FC = () => {
 				</TypographyStyle>
 
 				<div style={{position: 'relative'}}>
-					{currentTransitionContext.transitionType === 'update' ||
-					currentTransitionContext.transitionType === 'exit' ? (
+					{listTransitionContext.transitionType === 'update' ||
+					listTransitionContext.transitionType === 'exit' ? (
 						<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
 							<DisplayGridRails
-								{...currentTransitionContext.from.layout.gridLayout}
+								{...listTransitionContext.from.layout.gridLayout}
 								stroke="rgba(255,0,255,1)"
 							/>
-							{currentTransitionContext.from.items.map((it) => {
-								const area = currentTransitionContext.from.getListItemArea(
-									it.id
-								);
+							{listTransitionContext.from.items.map((it) => {
+								const area = listTransitionContext.from.getListItemArea(it.id);
 
 								const idColor = getPredefinedColor(it.id);
 
 								const isVisible = isIdInItems(
 									it.id,
-									currentTransitionContext.from.visibleItems
+									listTransitionContext.from.visibleItems
 								);
 
 								return (
@@ -234,20 +243,20 @@ export const ListAnimationPage: React.FC = () => {
 						</HtmlArea>
 					) : null}
 
-					{currentTransitionContext.transitionType === 'update' ||
-					currentTransitionContext.transitionType === 'enter' ? (
+					{listTransitionContext.transitionType === 'update' ||
+					listTransitionContext.transitionType === 'enter' ? (
 						<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 							<DisplayGridRails
-								{...currentTransitionContext.to.layout.gridLayout}
+								{...listTransitionContext.to.layout.gridLayout}
 								stroke="rgba(255,0,255,1)"
 							/>
-							{currentTransitionContext.to.items.map((it) => {
-								const area = currentTransitionContext.to.getListItemArea(it.id);
+							{listTransitionContext.to.items.map((it) => {
+								const area = listTransitionContext.to.getListItemArea(it.id);
 								const idColor = getPredefinedColor(it.id);
 
 								const isVisible = isIdInItems(
 									it.id,
-									currentTransitionContext.to.visibleItems
+									listTransitionContext.to.visibleItems
 								);
 
 								return (
@@ -268,18 +277,27 @@ export const ListAnimationPage: React.FC = () => {
 					) : null}
 
 					<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-						{currentTransitionContext.transitionType === 'update' ? (
-							<ListTransitionUpdate context={currentTransitionContext} />
+						{listTransitionContext.transitionType === 'update' ? (
+							<BarsTransitionUpdate
+								listTransitionContext={listTransitionContext}
+								LabelComponent={DefaultLabelComponent}
+								ValueLabelComponent={DefaultValueLabelComponent}
+							/>
 						) : null}
-						{currentTransitionContext.transitionType === 'enter' ? (
-							<ListTransitionEnter context={currentTransitionContext} />
+						{listTransitionContext.transitionType === 'enter' ? (
+							<BarsTransitionEnter
+								listTransitionContext={listTransitionContext}
+							/>
 						) : null}
-						{currentTransitionContext.transitionType === 'exit' ? (
-							<ListTransitionExit context={currentTransitionContext} />
+						{listTransitionContext.transitionType === 'exit' ? (
+							<BarsTransitionExit
+								listTransitionContext={listTransitionContext}
+							/>
 						) : null}
 					</HtmlArea>
 				</div>
 			</Page>
+
 			<PageContext
 				margin={0}
 				nrBaselines={50}
@@ -371,24 +389,24 @@ export const ListAnimationPage: React.FC = () => {
 };
 
 const itemsFrom = [
-	{id: 'Id-001'},
-	{id: 'Id-002'},
-	{id: 'Id-003'},
-	{id: 'Id-004'},
-	{id: 'Id-011'},
-	{id: 'Id-005'},
-	{id: 'Id-006'},
-	{id: 'Id-007'},
-	{id: 'Id-010'},
+	{id: 'Id-001', label: 'Item 001', valueLabel: '$10.00', value: 10},
+	{id: 'Id-002', label: 'Item 002', valueLabel: '$20.50', value: 20.5},
+	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
+	{id: 'Id-004', label: 'Item 004', valueLabel: '$40.25', value: 40.25},
+	{id: 'Id-011', label: 'Item 011', valueLabel: '$55.10', value: 55.1},
+	{id: 'Id-005', label: 'Item 005', valueLabel: '$25.30', value: 25.3},
+	{id: 'Id-006', label: 'Item 006', valueLabel: '$60.60', value: 60.6},
+	{id: 'Id-007', label: 'Item 007', valueLabel: '$35.80', value: 35.8},
+	{id: 'Id-010', label: 'Item 010', valueLabel: '$45.90', value: 45.9},
 ];
 
 const itemsTo = [
-	{id: 'Id-009'},
-	{id: 'Id-003'},
-	{id: 'Id-007'},
-	{id: 'Id-002'},
-	{id: 'Id-005'},
-	{id: 'Id-001'},
+	{id: 'Id-009', label: 'Item 009', valueLabel: '$70.00', value: 70},
+	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
+	{id: 'Id-007', label: 'Item 007', valueLabel: '$20.80', value: 20.8},
+	{id: 'Id-002', label: 'Item 002', valueLabel: '$20.50', value: 20.5},
+	{id: 'Id-005', label: 'Item 005', valueLabel: '$33.30', value: 33.3},
+	{id: 'Id-001', label: 'Item 001', valueLabel: '$12.00', value: 12},
 ];
 
 type Item = {id: string};
