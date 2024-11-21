@@ -42,6 +42,56 @@ type TBarsTransitionExitProps = TBarsTransitionCommonProps & {
 	listTransitionContext: ListTransitionContext_Exit<TBarChartItem>;
 };
 
+type TBarsTransitionProps = {
+	barChartTransitionContext: TBarChartTransitionContext;
+	LabelComponent: TBarChartLabelComponent;
+	ValueLabelComponent: TBarChartValueLabelComponent;
+	listTransitionContext:
+		| ListTransitionContext_Enter<TBarChartItem>
+		| ListTransitionContext_Update<TBarChartItem>
+		| ListTransitionContext_Exit<TBarChartItem>;
+};
+
+export const BarsTransition: React.FC<TBarsTransitionProps> = ({
+	listTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	barChartTransitionContext,
+}) => {
+	if (listTransitionContext.transitionType === 'update') {
+		return (
+			<BarsTransitionUpdate
+				listTransitionContext={listTransitionContext}
+				barChartTransitionContext={barChartTransitionContext}
+				LabelComponent={LabelComponent}
+				ValueLabelComponent={ValueLabelComponent}
+			/>
+		);
+	}
+
+	if (listTransitionContext.transitionType === 'enter') {
+		return (
+			<BarsTransitionEnter
+				listTransitionContext={listTransitionContext}
+				barChartTransitionContext={barChartTransitionContext}
+				LabelComponent={LabelComponent}
+				ValueLabelComponent={ValueLabelComponent}
+			/>
+		);
+	}
+
+	invariant(listTransitionContext.transitionType === 'exit');
+
+	return (
+		<BarsTransitionExit
+			listTransitionContext={listTransitionContext}
+			barChartTransitionContext={barChartTransitionContext}
+			LabelComponent={LabelComponent}
+			ValueLabelComponent={ValueLabelComponent}
+		/>
+	);
+};
+
 export const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	listTransitionContext,
 	LabelComponent,

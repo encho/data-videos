@@ -20,9 +20,10 @@ import {
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {useListAnimation, ListAnimationTransition} from './useListAnimation';
 import {
-	BarsTransitionUpdate,
-	BarsTransitionEnter,
-	BarsTransitionExit,
+	// BarsTransitionUpdate,
+	// BarsTransitionEnter,
+	// BarsTransitionExit,
+	BarsTransition,
 } from './BarsTransition';
 import {TBarChartItem} from './useBarChartTransition';
 import {
@@ -52,7 +53,7 @@ export const BarChartAnimationComposition: React.FC<
 		<div style={{position: 'relative'}}>
 			<PageContext
 				margin={50}
-				nrBaselines={40}
+				nrBaselines={30}
 				width={width}
 				height={height / 2}
 				theme={theme}
@@ -392,30 +393,12 @@ export const ListAnimationPage: React.FC = () => {
 							) : null}
 
 							<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-								{listTransitionContext.transitionType === 'update' ? (
-									<BarsTransitionUpdate
-										listTransitionContext={listTransitionContext}
-										barChartTransitionContext={barChartTransitionContext}
-										LabelComponent={DefaultLabelComponent}
-										ValueLabelComponent={DefaultValueLabelComponent}
-									/>
-								) : null}
-								{listTransitionContext.transitionType === 'enter' ? (
-									<BarsTransitionEnter
-										listTransitionContext={listTransitionContext}
-										barChartTransitionContext={barChartTransitionContext}
-										LabelComponent={DefaultLabelComponent}
-										ValueLabelComponent={DefaultValueLabelComponent}
-									/>
-								) : null}
-								{listTransitionContext.transitionType === 'exit' ? (
-									<BarsTransitionExit
-										listTransitionContext={listTransitionContext}
-										barChartTransitionContext={barChartTransitionContext}
-										LabelComponent={DefaultLabelComponent}
-										ValueLabelComponent={DefaultValueLabelComponent}
-									/>
-								) : null}
+								<BarsTransition
+									listTransitionContext={listTransitionContext}
+									barChartTransitionContext={barChartTransitionContext}
+									LabelComponent={DefaultLabelComponent}
+									ValueLabelComponent={DefaultValueLabelComponent}
+								/>
 							</HtmlArea>
 						</div>
 					</Page>
