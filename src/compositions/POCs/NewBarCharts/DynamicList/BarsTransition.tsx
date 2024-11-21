@@ -495,7 +495,15 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					{}
 				);
 
-				const barWidth = xScale(currentValue);
+				// see also useAnimatedBarChartLayout line 100 ff.
+				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+
+				const relativeBarPositions = {
+					y: 0,
+					x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
+					height: barArea.height,
+					width: currentBarWidth,
+				};
 
 				const isPositiveBar = currentValue >= 0;
 
@@ -546,23 +554,23 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							<svg width={barArea.width} height={barArea.height}>
 								{currentValue > 0 && barArea.width ? (
 									<RoundedRightRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
 										// fill={it.barColor || 'magenta'}
-										fill="white"
+										fill="magenta"
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
 								) : currentValue < 0 && barArea.width ? (
 									<RoundedLeftRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
 										// fill={it.barColor || 'magenta'}
-										fill="white"
+										fill="magenta"
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
@@ -662,7 +670,17 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					{}
 				);
 
-				const barWidth = xScale(currentValue);
+				// const barWidth = xScale(currentValue);
+
+				// see also useAnimatedBarChartLayout line 100 ff.
+				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+
+				const relativeBarPositions = {
+					y: 0,
+					x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
+					height: barArea.height,
+					width: currentBarWidth,
+				};
 
 				const isPositiveBar = currentValue >= 0;
 
@@ -713,23 +731,23 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							<svg width={barArea.width} height={barArea.height}>
 								{currentValue > 0 && barArea.width ? (
 									<RoundedRightRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
 										// fill={it.barColor || 'magenta'}
-										fill="white"
+										fill="magenta"
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
 								) : currentValue < 0 && barArea.width ? (
 									<RoundedLeftRect
-										y={0}
-										x={0}
-										height={barArea.height}
-										width={barWidth}
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
 										// fill={it.barColor || 'magenta'}
-										fill="white"
+										fill="magenta"
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
