@@ -148,6 +148,7 @@ export const BarChartTransitionComposition: React.FC<
 						visibleIndicesTo={[0, 3]}
 						labelWidth={labelWidth}
 						valueLabelWidth={valueLabelWidth}
+						negativeValueLabelWidth={negativeValueLabelWidth}
 						LabelComponent={LabelComponent}
 						ValueLabelComponent={ValueLabelComponent}
 						baseline={barchartBaseline}
@@ -174,6 +175,7 @@ const BarChartTransitionPage: React.FC<{
 	visibleIndicesTo: [number, number];
 	labelWidth: number;
 	valueLabelWidth: number;
+	negativeValueLabelWidth: number;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
 	baseline: number;
@@ -184,6 +186,7 @@ const BarChartTransitionPage: React.FC<{
 	visibleIndicesTo,
 	labelWidth,
 	valueLabelWidth,
+	negativeValueLabelWidth,
 	LabelComponent,
 	ValueLabelComponent,
 	baseline,
@@ -231,6 +234,7 @@ const BarChartTransitionPage: React.FC<{
 		baseline,
 		labelWidth,
 		valueLabelWidth,
+		negativeValueLabelWidth,
 	});
 
 	return (

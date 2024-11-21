@@ -133,6 +133,11 @@ export const ListAnimationPage: React.FC = () => {
 		columnSpacePixels: 50,
 		rowPaddingPixels: 0,
 		columnPaddingPixels: 0,
+		columnSizes: [
+			{type: 'fr', value: 1},
+			{type: 'fr', value: 1},
+			{type: 'fr', value: 2},
+		],
 	});
 	const area_1 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
@@ -252,9 +257,20 @@ export const ListAnimationPage: React.FC = () => {
 
 	const itemHeightForBaseline = getBarChartItemHeight({baseline});
 
-	const listAnimationContext = useListAnimation({
+	const listAnimationContextForDebug = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
+		transitions: weirdTransitions,
+		// transitions: scrollingTransitions,
+		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+	});
+
+	const listTransitionContextForDebug =
+		listAnimationContextForDebug.currentTransitionContext;
+
+	const listAnimationContext = useListAnimation({
+		width: area_3.width,
+		height: area_3.height,
 		transitions: weirdTransitions,
 		// transitions: scrollingTransitions,
 		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
@@ -315,23 +331,22 @@ export const ListAnimationPage: React.FC = () => {
 						</TypographyStyle>
 
 						<div style={{position: 'relative'}}>
-							{listTransitionContext.transitionType === 'update' ||
-							listTransitionContext.transitionType === 'exit' ? (
+							{listTransitionContextForDebug.transitionType === 'update' ||
+							listTransitionContextForDebug.transitionType === 'exit' ? (
 								<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
 									<DisplayGridRails
-										{...listTransitionContext.from.layout.gridLayout}
+										{...listTransitionContextForDebug.from.layout.gridLayout}
 										stroke="rgba(255,0,255,1)"
 									/>
-									{listTransitionContext.from.items.map((it) => {
-										const area = listTransitionContext.from.getListItemArea(
-											it.id
-										);
+									{listTransitionContextForDebug.from.items.map((it) => {
+										const area =
+											listTransitionContextForDebug.from.getListItemArea(it.id);
 
 										const idColor = getPredefinedColor(it.id);
 
 										const isVisible = isIdInItems(
 											it.id,
-											listTransitionContext.from.visibleItems
+											listTransitionContextForDebug.from.visibleItems
 										);
 
 										return (
@@ -351,22 +366,21 @@ export const ListAnimationPage: React.FC = () => {
 								</HtmlArea>
 							) : null}
 
-							{listTransitionContext.transitionType === 'update' ||
-							listTransitionContext.transitionType === 'enter' ? (
+							{listTransitionContextForDebug.transitionType === 'update' ||
+							listTransitionContextForDebug.transitionType === 'enter' ? (
 								<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
 									<DisplayGridRails
-										{...listTransitionContext.to.layout.gridLayout}
+										{...listTransitionContextForDebug.to.layout.gridLayout}
 										stroke="rgba(255,0,255,1)"
 									/>
-									{listTransitionContext.to.items.map((it) => {
-										const area = listTransitionContext.to.getListItemArea(
-											it.id
-										);
+									{listTransitionContextForDebug.to.items.map((it) => {
+										const area =
+											listTransitionContextForDebug.to.getListItemArea(it.id);
 										const idColor = getPredefinedColor(it.id);
 
 										const isVisible = isIdInItems(
 											it.id,
-											listTransitionContext.to.visibleItems
+											listTransitionContextForDebug.to.visibleItems
 										);
 
 										return (
