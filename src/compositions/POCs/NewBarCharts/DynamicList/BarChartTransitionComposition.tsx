@@ -71,15 +71,6 @@ export const BarChartTransitionComposition: React.FC<
 		[barchartBaseline, theme, LabelComponent]
 	);
 
-	const labelWidthProp = undefined;
-	const valueLabelWidthProp = undefined;
-	const negativeValueLabelWidthProp = undefined;
-
-	const labelWidth = labelWidthProp || labelsDimensions?.width;
-	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
-	const negativeValueLabelWidth =
-		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
-
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
 		// eslint-disable-next-line
@@ -99,6 +90,15 @@ export const BarChartTransitionComposition: React.FC<
 		},
 		[barchartBaseline, theme, ValueLabelComponent]
 	);
+
+	const labelWidthProp = undefined;
+	const valueLabelWidthProp = undefined;
+	const negativeValueLabelWidthProp = undefined;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
 
 	return (
 		<>

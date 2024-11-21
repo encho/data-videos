@@ -1,7 +1,9 @@
 import {z} from 'zod';
-import React from 'react';
+import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
+import {isNumber} from 'lodash';
 
+import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {Value, Row} from '../../09-Timeseries/utils/InspectorTools';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -28,8 +30,8 @@ import {
 	// TBarChartLabelComponent,
 	DefaultValueLabelComponent,
 	// TBarChartValueLabelComponent,
-	// MeasureLabels,
-	// MeasureValueLabels,
+	MeasureLabels,
+	MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {
 	getBarChartItemHeight,
@@ -64,6 +66,69 @@ export const BarChartAnimationComposition: React.FC<
 export const ListAnimationPage: React.FC = () => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
 	const {durationInFrames} = useVideoConfig();
+
+	const LabelComponent = DefaultLabelComponent;
+	const ValueLabelComponent = DefaultValueLabelComponent;
+
+	// TODO
+	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
+	// useBarChartElementDimensions({baseline, theme})...
+
+	const {ref: labelsRef, dimensions: labelsDimensions} =
+		useElementDimensions(true);
+	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+		useElementDimensions(true);
+	const {
+		ref: negativeValueLabelsRef,
+		dimensions: negativeValueLabelsDimensions,
+	} = useElementDimensions(true);
+
+	const MeasureLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, children}: {children: string; id: string}) => {
+			return (
+				<LabelComponent
+					id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				>
+					{children}
+				</LabelComponent>
+			);
+		},
+		[baseline, theme, LabelComponent]
+	);
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureValueLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, children, value}: {children: string; id: string; value: number}) => {
+			return (
+				<ValueLabelComponent
+					// id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+					value={value}
+				>
+					{children}
+				</ValueLabelComponent>
+			);
+		},
+		[baseline, theme, ValueLabelComponent]
+	);
+
+	const labelWidthProp = undefined;
+	const valueLabelWidthProp = undefined;
+	const negativeValueLabelWidthProp = undefined;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
 
 	const matrixLayout = useMatrixLayout({
 		width: contentWidth,
@@ -206,204 +271,243 @@ export const ListAnimationPage: React.FC = () => {
 	const barChartTransitionContext = useBarChartTransition({
 		listTransitionContext,
 		baseline,
-		labelWidth: 200,
-		valueLabelWidth: 100,
+		labelWidth: labelWidth || 0,
+		valueLabelWidth: valueLabelWidth || 0,
 	});
 
 	return (
 		<>
-			<Page>
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.h1}
-					baseline={baseline}
-					marginBottom={2}
-				>
-					Bar Chart Animation Demo
-				</TypographyStyle>
-
-				<div style={{position: 'relative'}}>
-					{listTransitionContext.transitionType === 'update' ||
-					listTransitionContext.transitionType === 'exit' ? (
-						<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
-							<DisplayGridRails
-								{...listTransitionContext.from.layout.gridLayout}
-								stroke="rgba(255,0,255,1)"
-							/>
-							{listTransitionContext.from.items.map((it) => {
-								const area = listTransitionContext.from.getListItemArea(it.id);
-
-								const idColor = getPredefinedColor(it.id);
-
-								const isVisible = isIdInItems(
-									it.id,
-									listTransitionContext.from.visibleItems
-								);
-
-								return (
-									<HtmlArea
-										area={area}
-										fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-									>
-										<TypographyStyle
-											typographyStyle={theme.typography.textStyles.body}
-											baseline={baseline}
-										>
-											{it.id}
-										</TypographyStyle>
-									</HtmlArea>
-								);
-							})}
-						</HtmlArea>
-					) : null}
-
-					{listTransitionContext.transitionType === 'update' ||
-					listTransitionContext.transitionType === 'enter' ? (
-						<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
-							<DisplayGridRails
-								{...listTransitionContext.to.layout.gridLayout}
-								stroke="rgba(255,0,255,1)"
-							/>
-							{listTransitionContext.to.items.map((it) => {
-								const area = listTransitionContext.to.getListItemArea(it.id);
-								const idColor = getPredefinedColor(it.id);
-
-								const isVisible = isIdInItems(
-									it.id,
-									listTransitionContext.to.visibleItems
-								);
-
-								return (
-									<HtmlArea
-										area={area}
-										fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
-									>
-										<TypographyStyle
-											typographyStyle={theme.typography.textStyles.body}
-											baseline={baseline}
-										>
-											{it.id}
-										</TypographyStyle>
-									</HtmlArea>
-								);
-							})}
-						</HtmlArea>
-					) : null}
-
-					<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
-						{listTransitionContext.transitionType === 'update' ? (
-							<BarsTransitionUpdate
-								listTransitionContext={listTransitionContext}
-								barChartTransitionContext={barChartTransitionContext}
-								LabelComponent={DefaultLabelComponent}
-								ValueLabelComponent={DefaultValueLabelComponent}
-							/>
-						) : null}
-						{listTransitionContext.transitionType === 'enter' ? (
-							<BarsTransitionEnter
-								listTransitionContext={listTransitionContext}
-								barChartTransitionContext={barChartTransitionContext}
-								LabelComponent={DefaultLabelComponent}
-								ValueLabelComponent={DefaultValueLabelComponent}
-							/>
-						) : null}
-						{listTransitionContext.transitionType === 'exit' ? (
-							<BarsTransitionExit
-								listTransitionContext={listTransitionContext}
-								barChartTransitionContext={barChartTransitionContext}
-								LabelComponent={DefaultLabelComponent}
-								ValueLabelComponent={DefaultValueLabelComponent}
-							/>
-						) : null}
-					</HtmlArea>
-				</div>
-			</Page>
-
-			<PageContext
-				margin={0}
-				nrBaselines={50}
-				width={contentWidth}
-				height={contentHeight}
+			{/* measure labels */}
+			<MeasureLabels
+				key="labelMeasurement"
+				ref={labelsRef}
+				data={[...itemsFrom, ...itemsTo]}
 				theme={theme}
-			>
-				<Page show>
-					<div style={{fontSize: 40}}>
-						<Row>LIST ANIMATION CONTEXT</Row>
-						<div>
-							<Row>
-								<div>numberOfTransitions</div>
-								<Value>{listAnimationContext.numberOfTransitions}</Value>
-							</Row>
-							<Row>
-								<div>currentTransitionIndex</div>
-								<Value>{listAnimationContext.currentTransitionIndex}</Value>
-							</Row>
-							<Row>
-								<div>frame</div>
-								<Value>{listAnimationContext.frame}</Value>
-							</Row>
-							<Row>
-								<div>durationInFrames</div>
-								<Value>{listAnimationContext.durationInFrames}</Value>
-							</Row>
-							<Row>
-								<Row>CURRENT TRANSITION CONTEXT</Row>
-								<div>
-									<Row>
-										<div>(relative) frame</div>
-										<Value>
-											{listAnimationContext.currentTransitionContext.frame}
-										</Value>
-									</Row>
-									<Row>
-										<div>transitionType</div>
-										<Value>
-											{
-												listAnimationContext.currentTransitionContext
-													.transitionType
-											}
-										</Value>
-									</Row>
-									<Row>
-										<div>[...]</div>
-									</Row>
-								</div>
-							</Row>
+				baseline={baseline}
+				Component={MeasureLabelComponent}
+			/>
 
-							<Row>
-								<Row> TRANSITIONS</Row>
+			{/* measure positive value labels */}
+			<MeasureValueLabels
+				key="valueLabelMeasurement"
+				ref={valueLabelsRef}
+				data={[...itemsFrom, ...itemsTo].filter((it) => it.value >= 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={MeasureValueLabelComponent}
+			/>
+			{/* measure negative value labels */}
+			<MeasureValueLabels
+				key="negativeValueLabelMeasurement"
+				ref={negativeValueLabelsRef}
+				data={[...itemsFrom, ...itemsTo].filter((it) => it.value < 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={MeasureValueLabelComponent}
+			/>
 
-								<div>
-									{listAnimationContext.transitions.map(
-										(editedTransition, i) => {
-											const isActive =
-												listAnimationContext.currentTransitionIndex === i;
-											return (
-												<div
-													style={{
-														margin: 10,
-														backgroundColor: '#660000',
-														border: isActive ? '2px solid orange' : '',
-													}}
+			{isNumber(labelWidth) &&
+			isNumber(valueLabelWidth) &&
+			isNumber(negativeValueLabelWidth) ? (
+				<>
+					<Page>
+						<TypographyStyle
+							typographyStyle={theme.typography.textStyles.h1}
+							baseline={baseline}
+							marginBottom={2}
+						>
+							Bar Chart Animation Demo
+						</TypographyStyle>
+
+						<div style={{position: 'relative'}}>
+							{listTransitionContext.transitionType === 'update' ||
+							listTransitionContext.transitionType === 'exit' ? (
+								<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
+									<DisplayGridRails
+										{...listTransitionContext.from.layout.gridLayout}
+										stroke="rgba(255,0,255,1)"
+									/>
+									{listTransitionContext.from.items.map((it) => {
+										const area = listTransitionContext.from.getListItemArea(
+											it.id
+										);
+
+										const idColor = getPredefinedColor(it.id);
+
+										const isVisible = isIdInItems(
+											it.id,
+											listTransitionContext.from.visibleItems
+										);
+
+										return (
+											<HtmlArea
+												area={area}
+												fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
+											>
+												<TypographyStyle
+													typographyStyle={theme.typography.textStyles.body}
+													baseline={baseline}
 												>
-													<Row>
-														<div>frameRange</div>
-														<Value>
-															{JSON.stringify(editedTransition.frameRange)}
-														</Value>
-													</Row>
-													<Row>
-														<div>[...]</div>
-													</Row>
-												</div>
-											);
-										}
-									)}
-								</div>
-							</Row>
+													{it.id}
+												</TypographyStyle>
+											</HtmlArea>
+										);
+									})}
+								</HtmlArea>
+							) : null}
+
+							{listTransitionContext.transitionType === 'update' ||
+							listTransitionContext.transitionType === 'enter' ? (
+								<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
+									<DisplayGridRails
+										{...listTransitionContext.to.layout.gridLayout}
+										stroke="rgba(255,0,255,1)"
+									/>
+									{listTransitionContext.to.items.map((it) => {
+										const area = listTransitionContext.to.getListItemArea(
+											it.id
+										);
+										const idColor = getPredefinedColor(it.id);
+
+										const isVisible = isIdInItems(
+											it.id,
+											listTransitionContext.to.visibleItems
+										);
+
+										return (
+											<HtmlArea
+												area={area}
+												fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
+											>
+												<TypographyStyle
+													typographyStyle={theme.typography.textStyles.body}
+													baseline={baseline}
+												>
+													{it.id}
+												</TypographyStyle>
+											</HtmlArea>
+										);
+									})}
+								</HtmlArea>
+							) : null}
+
+							<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
+								{listTransitionContext.transitionType === 'update' ? (
+									<BarsTransitionUpdate
+										listTransitionContext={listTransitionContext}
+										barChartTransitionContext={barChartTransitionContext}
+										LabelComponent={DefaultLabelComponent}
+										ValueLabelComponent={DefaultValueLabelComponent}
+									/>
+								) : null}
+								{listTransitionContext.transitionType === 'enter' ? (
+									<BarsTransitionEnter
+										listTransitionContext={listTransitionContext}
+										barChartTransitionContext={barChartTransitionContext}
+										LabelComponent={DefaultLabelComponent}
+										ValueLabelComponent={DefaultValueLabelComponent}
+									/>
+								) : null}
+								{listTransitionContext.transitionType === 'exit' ? (
+									<BarsTransitionExit
+										listTransitionContext={listTransitionContext}
+										barChartTransitionContext={barChartTransitionContext}
+										LabelComponent={DefaultLabelComponent}
+										ValueLabelComponent={DefaultValueLabelComponent}
+									/>
+								) : null}
+							</HtmlArea>
 						</div>
-					</div>
-				</Page>
-			</PageContext>
+					</Page>
+
+					<PageContext
+						margin={0}
+						nrBaselines={50}
+						width={contentWidth}
+						height={contentHeight}
+						theme={theme}
+					>
+						<Page show>
+							<div style={{fontSize: 40}}>
+								<Row>LIST ANIMATION CONTEXT</Row>
+								<div>
+									<Row>
+										<div>numberOfTransitions</div>
+										<Value>{listAnimationContext.numberOfTransitions}</Value>
+									</Row>
+									<Row>
+										<div>currentTransitionIndex</div>
+										<Value>{listAnimationContext.currentTransitionIndex}</Value>
+									</Row>
+									<Row>
+										<div>frame</div>
+										<Value>{listAnimationContext.frame}</Value>
+									</Row>
+									<Row>
+										<div>durationInFrames</div>
+										<Value>{listAnimationContext.durationInFrames}</Value>
+									</Row>
+									<Row>
+										<Row>CURRENT TRANSITION CONTEXT</Row>
+										<div>
+											<Row>
+												<div>(relative) frame</div>
+												<Value>
+													{listAnimationContext.currentTransitionContext.frame}
+												</Value>
+											</Row>
+											<Row>
+												<div>transitionType</div>
+												<Value>
+													{
+														listAnimationContext.currentTransitionContext
+															.transitionType
+													}
+												</Value>
+											</Row>
+											<Row>
+												<div>[...]</div>
+											</Row>
+										</div>
+									</Row>
+
+									<Row>
+										<Row> TRANSITIONS</Row>
+
+										<div>
+											{listAnimationContext.transitions.map(
+												(editedTransition, i) => {
+													const isActive =
+														listAnimationContext.currentTransitionIndex === i;
+													return (
+														<div
+															style={{
+																margin: 10,
+																backgroundColor: '#660000',
+																border: isActive ? '2px solid orange' : '',
+															}}
+														>
+															<Row>
+																<div>frameRange</div>
+																<Value>
+																	{JSON.stringify(editedTransition.frameRange)}
+																</Value>
+															</Row>
+															<Row>
+																<div>[...]</div>
+															</Row>
+														</div>
+													);
+												}
+											)}
+										</div>
+									</Row>
+								</div>
+							</div>
+						</Page>
+					</PageContext>
+				</>
+			) : null}
 		</>
 	);
 };
