@@ -300,11 +300,11 @@ export function useBarChartTransition({
 		listTransitionContext.itemHeight;
 
 	const plotAreaFrom = {
-		x1: xScaleFrom.domain()[0],
-		x2: xScaleFrom.domain()[1],
+		x1: xScaleFrom.range()[0] + barChartItemLayoutFrom.barArea.x1,
+		x2: xScaleFrom.range()[1] + barChartItemLayoutFrom.barArea.x1,
 		y1: 0,
 		y2: plotAreaHeightFrom,
-		width: xScaleFrom.domain()[1] - xScaleFrom.domain()[0],
+		width: xScaleFrom.range()[1] - xScaleFrom.range()[0],
 		height: plotAreaHeightFrom,
 	};
 

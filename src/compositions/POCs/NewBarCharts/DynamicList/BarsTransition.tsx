@@ -618,6 +618,14 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 	const GRID_RAILS_COLOR = 'magenta';
 
+	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
+	const {plotArea} = barChartTransitionContext;
+	const zeroLine_x1 = xScale(0);
+	const zeroLine_x2 = zeroLine_x1;
+	const zeroLine_y1 = 0;
+	const zeroLine_y2 = plotArea.height;
+	const zeroLine_color = 'cyan';
+
 	return (
 		<div>
 			{rowsInfo.map(({dataItem, area}) => {
@@ -725,6 +733,20 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					</HtmlArea>
 				);
 			})}
+			{/* the plot area */}
+			<HtmlArea area={plotArea} fill="rgba(255,255,0,0.2)">
+				<svg width={plotArea.width} height={plotArea.height}>
+					<line
+						x1={zeroLine_x1}
+						x2={zeroLine_x2}
+						y1={zeroLine_y1}
+						y2={zeroLine_y2}
+						stroke={zeroLine_color}
+						strokeWidth={baseline * 0.2} // TODO from some ibcs setting
+						// opacity={opacity}
+					/>
+				</svg>
+			</HtmlArea>
 		</div>
 	);
 };
