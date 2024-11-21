@@ -16,7 +16,7 @@ import {interpolate} from 'remotion';
 
 type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
-	barChartItemLayout: TBarChartItemLayout;
+	barChartItemLayout: TBarChartItemLayout; // TODO deprecate??? or average the from and to??
 	// TODO
 	// barChartMotherLayoutAreas: {
 	// 	labelsArea:
@@ -28,28 +28,28 @@ type BarChartTransitionContext_Common = {
 type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
 	transitionType: 'enter';
 	to: {
-		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
+		// barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
 type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
 	transitionType: 'exit';
 	from: {
-		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
+		// barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
 type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
 	transitionType: 'update';
 	from: {
-		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
+		// barChartItemLayout: TBarChartItemLayout;
 	};
 	to: {
-		domain: [number, number]; // TODO deprecate, as present in xScale
 		xScale: ScaleLinear<number, number>;
+		// barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
@@ -94,12 +94,12 @@ export function useBarChartTransition({
 	// return context for 'update' transitionType
 	// ***********************************************************************
 	if (listTransitionContext.transitionType === 'update') {
-		const infoFrom = getExtentAndScale({
+		const xScaleFrom = getXScale({
 			visibleItems: listTransitionContext.from.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
 
-		const infoTo = getExtentAndScale({
+		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
@@ -107,13 +107,13 @@ export function useBarChartTransition({
 		const interpolatedExtent_0 = interpolate(
 			listTransitionContext.frame,
 			[0, listTransitionContext.durationInFrames - 1],
-			[infoFrom.domain[0], infoTo.domain[0]],
+			[xScaleFrom.domain()[0], xScaleTo.domain()[0]],
 			{}
 		);
 		const interpolatedExtent_1 = interpolate(
 			listTransitionContext.frame,
 			[0, listTransitionContext.durationInFrames - 1],
-			[infoFrom.domain[1], infoTo.domain[1]],
+			[xScaleFrom.domain()[1], xScaleTo.domain()[1]],
 			{}
 		);
 
@@ -125,8 +125,8 @@ export function useBarChartTransition({
 			transitionType: 'update',
 			barChartItemLayout,
 			xScale,
-			from: infoFrom,
-			to: infoTo,
+			from: {xScale: xScaleFrom},
+			to: {xScale: xScaleTo},
 		};
 	}
 
@@ -134,7 +134,7 @@ export function useBarChartTransition({
 	// return context for 'enter' transitionType
 	// ***********************************************************************
 	if (listTransitionContext.transitionType === 'enter') {
-		const infoTo = getExtentAndScale({
+		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayout.barArea.width,
 		});
@@ -142,13 +142,13 @@ export function useBarChartTransition({
 		return {
 			transitionType: 'enter',
 			barChartItemLayout,
-			xScale: infoTo.xScale,
-			to: infoTo,
+			xScale: xScaleTo,
+			to: {xScale: xScaleTo},
 		};
 	}
 
 	invariant(listTransitionContext.transitionType === 'exit');
-	const infoFrom = getExtentAndScale({
+	const xScaleFrom = getXScale({
 		visibleItems: listTransitionContext.from.visibleItems,
 		xAxisWidth: barChartItemLayout.barArea.width,
 	});
@@ -159,21 +159,18 @@ export function useBarChartTransition({
 	return {
 		transitionType: 'exit',
 		barChartItemLayout,
-		xScale: infoFrom.xScale,
-		from: infoFrom,
+		xScale: xScaleFrom,
+		from: {xScale: xScaleFrom},
 	};
 }
 
-function getExtentAndScale({
+function getXScale({
 	visibleItems,
 	xAxisWidth,
 }: {
 	visibleItems: TBarChartItem[];
 	xAxisWidth: number;
-}): {
-	domain: [number, number]; // TODO we could dprecate domain, as it is in xScale anyway
-	xScale: ScaleLinear<number, number>;
-} {
+}): ScaleLinear<number, number> {
 	const dataExtent = extent(visibleItems, (it) => it.value) as [number, number];
 
 	invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
@@ -184,7 +181,9 @@ function getExtentAndScale({
 		.domain(domain)
 		.range([0, xAxisWidth]);
 
-	return {domain, xScale};
+	// return {domain, xScale};
+	// return {xScale};
+	return xScale;
 }
 
 export function getIbcsSizes(baseline: number) {
