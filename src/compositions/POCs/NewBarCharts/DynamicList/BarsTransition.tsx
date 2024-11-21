@@ -349,8 +349,6 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{}
 						);
 
-						const barWidth = xScale(currentValue);
-
 						// see also useAnimatedBarChartLayout line 100 ff.
 						const currentBarWidth = Math.abs(
 							xScale(currentValue) - zeroLine_x1
@@ -359,9 +357,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						const relativeBarPositions = {
 							y: 0,
 							x:
-								currentValue.value >= 0
-									? zeroLine_x1
-									: zeroLine_x1 - currentBarWidth,
+								currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
 							height: barArea.height,
 							width: currentBarWidth,
 						};

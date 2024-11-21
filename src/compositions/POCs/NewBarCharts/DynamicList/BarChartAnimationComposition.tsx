@@ -284,6 +284,7 @@ export const ListAnimationPage: React.FC = () => {
 		labelWidth: labelWidth || 0,
 		valueLabelWidth: valueLabelWidth || 0,
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
+		globalCustomDomain: [-100, 100],
 	});
 
 	return (

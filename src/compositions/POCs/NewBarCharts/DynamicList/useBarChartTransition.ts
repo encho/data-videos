@@ -74,12 +74,14 @@ export function useBarChartTransition({
 	labelWidth,
 	valueLabelWidth,
 	negativeValueLabelWidth,
+	globalCustomDomain,
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
+	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
 }): TBarChartTransitionContext {
 	const {width, itemHeight, easingPercentage} = listTransitionContext;
 
@@ -168,11 +170,13 @@ export function useBarChartTransition({
 		const xScaleFrom = getXScale({
 			visibleItems: listTransitionContext.from.visibleItems,
 			xAxisWidth: barChartItemLayoutFrom.barArea.width,
+			customDomain: globalCustomDomain,
 		});
 
 		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayoutTo.barArea.width,
+			customDomain: globalCustomDomain,
 		});
 
 		const interpolatedExtent_0 = interpolate(
@@ -246,6 +250,7 @@ export function useBarChartTransition({
 		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
 			xAxisWidth: barChartItemLayoutTo.barArea.width,
+			customDomain: globalCustomDomain,
 		});
 
 		// TODO listItemHeight should be property of individual transition ("from"/"to")
@@ -292,6 +297,7 @@ export function useBarChartTransition({
 	const xScaleFrom = getXScale({
 		visibleItems: listTransitionContext.from.visibleItems,
 		xAxisWidth: barChartItemLayoutFrom.barArea.width,
+		customDomain: globalCustomDomain,
 	});
 
 	// TODO listItemHeight should be property of individual transition
@@ -320,22 +326,30 @@ export function useBarChartTransition({
 function getXScale({
 	visibleItems,
 	xAxisWidth,
+	// customDomain = [-100, 100],
+	customDomain,
 }: {
 	visibleItems: TBarChartItem[];
 	xAxisWidth: number;
+	customDomain?: [number, number];
 }): ScaleLinear<number, number> {
-	const dataExtent = extent(visibleItems, (it) => it.value) as [number, number];
-
-	invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
 	const domain =
-		dataExtent[0] > 0 ? ([0, dataExtent[1]] as [number, number]) : dataExtent;
+		customDomain ||
+		(() => {
+			const dataExtent = extent(visibleItems, (it) => it.value) as [
+				number,
+				number
+			];
+			invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
+			return dataExtent[0] > 0
+				? ([0, dataExtent[1]] as [number, number])
+				: dataExtent;
+		})();
 
 	const xScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(domain)
 		.range([0, xAxisWidth]);
 
-	// return {domain, xScale};
-	// return {xScale};
 	return xScale;
 }
 
