@@ -29,7 +29,7 @@ type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
 	transitionType: 'enter';
 	to: {
 		xScale: ScaleLinear<number, number>;
-		// barChartItemLayout: TBarChartItemLayout;
+		barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
@@ -37,7 +37,7 @@ type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
 	transitionType: 'exit';
 	from: {
 		xScale: ScaleLinear<number, number>;
-		// barChartItemLayout: TBarChartItemLayout;
+		barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
@@ -45,11 +45,11 @@ type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
 	transitionType: 'update';
 	from: {
 		xScale: ScaleLinear<number, number>;
-		// barChartItemLayout: TBarChartItemLayout;
+		barChartItemLayout: TBarChartItemLayout;
 	};
 	to: {
 		xScale: ScaleLinear<number, number>;
-		// barChartItemLayout: TBarChartItemLayout;
+		barChartItemLayout: TBarChartItemLayout;
 	};
 };
 
@@ -81,27 +81,56 @@ export function useBarChartTransition({
 	const {width, itemHeight} = listTransitionContext;
 
 	// TODO we need a barChartItemLayout for from and to, and an averaged one for the 'update' case
-	const barChartItemLayout = getBarChartItemLayout({
-		height: itemHeight,
-		width,
-		baseline,
-		labelWidth,
-		valueLabelWidth,
-		negativeValueLabelWidth,
-	});
+	// const barChartItemLayout = getBarChartItemLayout({
+	// 	height: itemHeight,
+	// 	width,
+	// 	baseline,
+	// 	labelWidth,
+	// 	valueLabelWidth,
+	// 	negativeValueLabelWidth,
+	// });
 
 	// ***********************************************************************
 	// return context for 'update' transitionType
 	// ***********************************************************************
 	if (listTransitionContext.transitionType === 'update') {
+		const hasNegativeValuesFrom = listTransitionContext.from.visibleItems.some(
+			(it) => it.value < 0
+		);
+		const hasNegativeValuesTo = listTransitionContext.to.visibleItems.some(
+			(it) => it.value < 0
+		);
+
+		const barChartItemLayoutFrom = getBarChartItemLayout({
+			height: itemHeight, // TODO will be specific to current "from" spec.
+			width,
+			baseline,
+			labelWidth,
+			valueLabelWidth,
+			negativeValueLabelWidth: hasNegativeValuesFrom
+				? negativeValueLabelWidth
+				: 0,
+		});
+
+		const barChartItemLayoutTo = getBarChartItemLayout({
+			height: itemHeight, // TODO will be specific to current "from" spec.
+			width,
+			baseline,
+			labelWidth,
+			valueLabelWidth,
+			negativeValueLabelWidth: hasNegativeValuesTo
+				? negativeValueLabelWidth
+				: 0,
+		});
+
 		const xScaleFrom = getXScale({
 			visibleItems: listTransitionContext.from.visibleItems,
-			xAxisWidth: barChartItemLayout.barArea.width,
+			xAxisWidth: barChartItemLayoutFrom.barArea.width,
 		});
 
 		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
-			xAxisWidth: barChartItemLayout.barArea.width,
+			xAxisWidth: barChartItemLayoutTo.barArea.width,
 		});
 
 		const interpolatedExtent_0 = interpolate(
@@ -117,6 +146,9 @@ export function useBarChartTransition({
 			{}
 		);
 
+		// TODO interpolateBarChartItemLayouts(from, to, easingPerc...?)
+		const barChartItemLayout = barChartItemLayoutTo;
+
 		const xScale: ScaleLinear<number, number> = scaleLinear()
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
 			.range([0, barChartItemLayout.barArea.width]);
@@ -125,8 +157,8 @@ export function useBarChartTransition({
 			transitionType: 'update',
 			barChartItemLayout,
 			xScale,
-			from: {xScale: xScaleFrom},
-			to: {xScale: xScaleTo},
+			from: {xScale: xScaleFrom, barChartItemLayout: barChartItemLayoutFrom},
+			to: {xScale: xScaleTo, barChartItemLayout: barChartItemLayoutTo},
 		};
 	}
 
@@ -134,33 +166,63 @@ export function useBarChartTransition({
 	// return context for 'enter' transitionType
 	// ***********************************************************************
 	if (listTransitionContext.transitionType === 'enter') {
+		const hasNegativeValuesTo = listTransitionContext.to.visibleItems.some(
+			(it) => it.value < 0
+		);
+
+		const barChartItemLayoutTo = getBarChartItemLayout({
+			height: itemHeight, // TODO will be specific to current "from" spec.
+			width,
+			baseline,
+			labelWidth,
+			valueLabelWidth,
+			negativeValueLabelWidth: hasNegativeValuesTo
+				? negativeValueLabelWidth
+				: 0,
+		});
+
 		const xScaleTo = getXScale({
 			visibleItems: listTransitionContext.to.visibleItems,
-			xAxisWidth: barChartItemLayout.barArea.width,
+			xAxisWidth: barChartItemLayoutTo.barArea.width,
 		});
 
 		return {
 			transitionType: 'enter',
-			barChartItemLayout,
+			barChartItemLayout: barChartItemLayoutTo,
 			xScale: xScaleTo,
-			to: {xScale: xScaleTo},
+			to: {xScale: xScaleTo, barChartItemLayout: barChartItemLayoutTo},
 		};
 	}
-
-	invariant(listTransitionContext.transitionType === 'exit');
-	const xScaleFrom = getXScale({
-		visibleItems: listTransitionContext.from.visibleItems,
-		xAxisWidth: barChartItemLayout.barArea.width,
-	});
 
 	// ***********************************************************************
 	// return context for 'exit' transitionType
 	// ***********************************************************************
+	invariant(listTransitionContext.transitionType === 'exit');
+	const hasNegativeValuesFrom = listTransitionContext.from.visibleItems.some(
+		(it) => it.value < 0
+	);
+
+	const barChartItemLayoutFrom = getBarChartItemLayout({
+		height: itemHeight, // TODO will be specific to current "from" spec.
+		width,
+		baseline,
+		labelWidth,
+		valueLabelWidth,
+		negativeValueLabelWidth: hasNegativeValuesFrom
+			? negativeValueLabelWidth
+			: 0,
+	});
+
+	const xScaleFrom = getXScale({
+		visibleItems: listTransitionContext.from.visibleItems,
+		xAxisWidth: barChartItemLayoutFrom.barArea.width,
+	});
+
 	return {
 		transitionType: 'exit',
-		barChartItemLayout,
+		barChartItemLayout: barChartItemLayoutFrom,
 		xScale: xScaleFrom,
-		from: {xScale: xScaleFrom},
+		from: {xScale: xScaleFrom, barChartItemLayout: barChartItemLayoutFrom},
 	};
 }
 
