@@ -120,7 +120,6 @@ export const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 		<div>
 			{[...enterAreas].map((enterArea) => {
 				const {opacity, item} = enterArea;
-				// const color = getPredefinedColor(id);
 
 				const barWidth = xScale(item.value);
 
@@ -366,41 +365,110 @@ export const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	ValueLabelComponent,
 	barChartTransitionContext,
 }) => {
-	// TODO remove this console.log
-	console.log({LabelComponent, ValueLabelComponent, barChartTransitionContext});
-
 	const {theme, baseline} = usePage();
 
-	const visibleItemIds = listTransitionContext.to.visibleItems.map(
-		(it) => it.id
+	const {frame, durationInFrames} = listTransitionContext;
+
+	const {visibleItems} = listTransitionContext.to;
+
+	const backgroundColorOpacity = interpolate(
+		listTransitionContext.easingPercentage,
+		[0, 0.2, 1],
+		[0, 1, 0]
 	);
 
-	const areasData = visibleItemIds.map((id) => {
-		const areaFrom = listTransitionContext.to.getListItemArea(id);
-		const currentOpacity = interpolate(
-			listTransitionContext.easingPercentage,
-			[0, 1],
-			[0, 1]
-		);
-		const item = listTransitionContext.to.items.find((it) => it.id === id);
-		invariant(item);
-		return {id, area: areaFrom, item, opacity: currentOpacity};
+	const backgroundColor = `rgba(0,255,0,${backgroundColorOpacity})`;
+
+	const {xScale} = barChartTransitionContext;
+
+	const {barArea, labelArea, valueLabelArea} =
+		barChartTransitionContext.barChartItemLayout;
+
+	const rowsInfo = visibleItems.map((dataItem) => {
+		const area = listTransitionContext.to.getListItemArea(dataItem.id);
+		return {area, dataItem};
 	});
+
+	const DISPLAY_GRID_RAILS = true;
+	const GRID_RAILS_COLOR = 'magenta';
 
 	return (
 		<div>
-			{areasData.map((area) => {
-				const {opacity, id} = area;
-				const color = getPredefinedColor(id);
+			{rowsInfo.map(({dataItem, area}) => {
+				const currentValue = interpolate(
+					frame,
+					[0, durationInFrames - 1],
+					[0, dataItem.value],
+					{}
+				);
+
+				const barWidth = xScale(currentValue);
 
 				return (
-					<HtmlArea area={area.area} fill={color} opacity={opacity}>
-						<TypographyStyle
-							typographyStyle={theme.typography.textStyles.body}
-							baseline={baseline}
-						>
-							{id} (ENTER)
-						</TypographyStyle>
+					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
+						{DISPLAY_GRID_RAILS ? (
+							<div style={{position: 'absolute'}}>
+								<DisplayGridRails
+									{...barChartTransitionContext.barChartItemLayout.gridLayout}
+									stroke={GRID_RAILS_COLOR}
+								/>
+							</div>
+						) : null}
+
+						{/* the label */}
+						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+							<LabelComponent
+								id={dataItem.id}
+								animateExit={false}
+								animateEnter={false}
+								baseline={baseline}
+								theme={theme}
+							>
+								{dataItem.label}
+							</LabelComponent>
+						</HtmlArea>
+
+						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+							<svg width={barArea.width} height={barArea.height}>
+								{currentValue > 0 && barArea.width ? (
+									<RoundedRightRect
+										y={0}
+										x={0}
+										height={barArea.height}
+										width={barWidth}
+										// fill={it.barColor || 'magenta'}
+										fill="white"
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : currentValue < 0 && barArea.width ? (
+									<RoundedLeftRect
+										y={0}
+										x={0}
+										height={barArea.height}
+										width={barWidth}
+										// fill={it.barColor || 'magenta'}
+										fill="white"
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : null}
+							</svg>
+						</HtmlArea>
+
+						{/* the value label */}
+						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
+							<ValueLabelComponent
+								id={dataItem.id}
+								animateExit={false}
+								animateEnter={false}
+								baseline={baseline}
+								theme={theme}
+								value={dataItem.value}
+							>
+								{dataItem.valueLabel}
+							</ValueLabelComponent>
+						</HtmlArea>
 					</HtmlArea>
 				);
 			})}

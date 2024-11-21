@@ -19,18 +19,11 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {useListAnimation, ListAnimationTransition} from './useListAnimation';
-import {
-	// BarsTransitionUpdate,
-	// BarsTransitionEnter,
-	// BarsTransitionExit,
-	BarsTransition,
-} from './BarsTransition';
+import {BarsTransition} from './BarsTransition';
 import {TBarChartItem} from './useBarChartTransition';
 import {
 	DefaultLabelComponent,
-	// TBarChartLabelComponent,
 	DefaultValueLabelComponent,
-	// TBarChartValueLabelComponent,
 	MeasureLabels,
 	MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
