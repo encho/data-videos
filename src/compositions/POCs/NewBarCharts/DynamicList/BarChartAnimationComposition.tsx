@@ -387,6 +387,7 @@ export const ListAnimationPage: React.FC = () => {
 
 							<HtmlArea area={area_3} fill="rgba(255,0,255,0.15)">
 								<BarsTransition
+									// showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
