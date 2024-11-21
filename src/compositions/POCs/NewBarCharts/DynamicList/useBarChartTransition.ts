@@ -70,11 +70,13 @@ export function useBarChartTransition({
 	baseline,
 	labelWidth,
 	valueLabelWidth,
+	negativeValueLabelWidth,
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
+	negativeValueLabelWidth: number;
 }): TBarChartTransitionContext {
 	const {width, itemHeight} = listTransitionContext;
 
@@ -85,6 +87,7 @@ export function useBarChartTransition({
 		baseline,
 		labelWidth,
 		valueLabelWidth,
+		negativeValueLabelWidth,
 	});
 
 	// ***********************************************************************
@@ -227,7 +230,7 @@ export function getBarChartItemLayout({
 	width,
 	baseline,
 	labelWidth,
-	negativeValueLabelWidth = 50,
+	negativeValueLabelWidth,
 	valueLabelWidth,
 }: {
 	height: number;
@@ -235,7 +238,7 @@ export function getBarChartItemLayout({
 	baseline: number;
 	labelWidth: number;
 	valueLabelWidth: number;
-	negativeValueLabelWidth?: number; // TODO compulsory
+	negativeValueLabelWidth: number;
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 

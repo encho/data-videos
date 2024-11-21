@@ -128,6 +128,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 				const barWidth = xScale(item.value);
 
+				const isPositiveBar = item.value >= 0;
+
 				return (
 					// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
 					<HtmlArea
@@ -156,9 +158,23 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						</HtmlArea>
 
 						{/* the negative value label */}
-						<HtmlArea area={negativeValueLabelArea} fill="magenta">
-							<></>
-						</HtmlArea>
+						{isPositiveBar ? null : (
+							<HtmlArea
+								area={negativeValueLabelArea}
+								fill={theme.global.backgroundColor}
+							>
+								<ValueLabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={item.value}
+								>
+									{item.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						)}
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
@@ -187,33 +203,36 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								) : null}
 							</svg>
 						</HtmlArea>
-						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
-							<ValueLabelComponent
-								id={item.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-								value={item.value}
+
+						{isPositiveBar ? (
+							<HtmlArea
+								area={valueLabelArea}
+								fill={theme.global.backgroundColor}
 							>
-								{item.valueLabel}
-							</ValueLabelComponent>
-						</HtmlArea>
+								<ValueLabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={item.value}
+								>
+									{item.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						) : null}
 					</HtmlArea>
 				);
 			})}
 			{[...exitAreas].map((enterArea) => {
 				const {opacity, item} = enterArea;
-				// const color = getPredefinedColor(id);
 
 				const barWidth = xScale(item.value);
 
+				const isPositiveBar = item.value >= 0;
+
 				return (
-					<HtmlArea
-						area={enterArea.area}
-						// fill={color}
-						opacity={opacity}
-					>
+					<HtmlArea area={enterArea.area} opacity={opacity}>
 						{showLayout ? (
 							<div style={{position: 'absolute'}}>
 								<DisplayGridRails
@@ -236,9 +255,14 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						</HtmlArea>
 
 						{/* the negative value label */}
-						<HtmlArea area={negativeValueLabelArea} fill="magenta">
-							<></>
-						</HtmlArea>
+						{isPositiveBar ? null : (
+							<HtmlArea
+								area={negativeValueLabelArea}
+								fill={theme.global.backgroundColor}
+							>
+								<></>
+							</HtmlArea>
+						)}
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
@@ -268,18 +292,23 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							</svg>
 						</HtmlArea>
 
-						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
-							<ValueLabelComponent
-								id={item.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-								value={item.value}
+						{isPositiveBar ? (
+							<HtmlArea
+								area={valueLabelArea}
+								fill={theme.global.backgroundColor}
 							>
-								{item.valueLabel}
-							</ValueLabelComponent>
-						</HtmlArea>
+								<ValueLabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={item.value}
+								>
+									{item.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						) : null}
 					</HtmlArea>
 				);
 			})}
@@ -296,6 +325,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					);
 
 					const barWidth = xScale(currentValue);
+
+					const isPositiveBar = currentValue >= 0;
 
 					return (
 						<HtmlArea
@@ -325,9 +356,14 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							</HtmlArea>
 
 							{/* the negative value label */}
-							<HtmlArea area={negativeValueLabelArea} fill="magenta">
-								<></>
-							</HtmlArea>
+							{isPositiveBar ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									fill={theme.global.backgroundColor}
+								>
+									<></>
+								</HtmlArea>
+							)}
 
 							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 								<svg width={barArea.width} height={barArea.height}>
@@ -357,21 +393,23 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								</svg>
 							</HtmlArea>
 
-							<HtmlArea
-								area={valueLabelArea}
-								fill={theme.global.backgroundColor}
-							>
-								<ValueLabelComponent
-									id={itemTo.id}
-									animateExit={false}
-									animateEnter={false}
-									baseline={baseline}
-									theme={theme}
-									value={itemTo.value}
+							{isPositiveBar ? (
+								<HtmlArea
+									area={valueLabelArea}
+									fill={theme.global.backgroundColor}
 								>
-									{itemTo.valueLabel}
-								</ValueLabelComponent>
-							</HtmlArea>
+									<ValueLabelComponent
+										id={itemTo.id}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+										value={itemTo.value}
+									>
+										{itemTo.valueLabel}
+									</ValueLabelComponent>
+								</HtmlArea>
+							) : null}
 						</HtmlArea>
 					);
 				}
@@ -425,6 +463,8 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				const barWidth = xScale(currentValue);
 
+				const isPositiveBar = currentValue >= 0;
+
 				return (
 					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
 						{showLayout ? (
@@ -450,9 +490,23 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						</HtmlArea>
 
 						{/* the negative value label */}
-						<HtmlArea area={negativeValueLabelArea} fill="magenta">
-							<></>
-						</HtmlArea>
+						{isPositiveBar ? null : (
+							<HtmlArea
+								area={negativeValueLabelArea}
+								fill={theme.global.backgroundColor}
+							>
+								<ValueLabelComponent
+									id={dataItem.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={dataItem.value}
+								>
+									{dataItem.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						)}
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
@@ -483,18 +537,24 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						</HtmlArea>
 
 						{/* the value label */}
-						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
-							<ValueLabelComponent
-								id={dataItem.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-								value={dataItem.value}
+
+						{isPositiveBar ? (
+							<HtmlArea
+								area={valueLabelArea}
+								fill={theme.global.backgroundColor}
 							>
-								{dataItem.valueLabel}
-							</ValueLabelComponent>
-						</HtmlArea>
+								<ValueLabelComponent
+									id={dataItem.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={dataItem.value}
+								>
+									{dataItem.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						) : null}
 					</HtmlArea>
 				);
 			})}
@@ -547,6 +607,8 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 				const barWidth = xScale(currentValue);
 
+				const isPositiveBar = currentValue >= 0;
+
 				return (
 					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
 						{showLayout ? (
@@ -572,9 +634,14 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						</HtmlArea>
 
 						{/* the negative value label */}
-						<HtmlArea area={negativeValueLabelArea} fill="magenta">
-							<></>
-						</HtmlArea>
+						{isPositiveBar ? null : (
+							<HtmlArea
+								area={negativeValueLabelArea}
+								fill={theme.global.backgroundColor}
+							>
+								<></>
+							</HtmlArea>
+						)}
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
@@ -605,18 +672,24 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						</HtmlArea>
 
 						{/* the value label */}
-						<HtmlArea area={valueLabelArea} fill={theme.global.backgroundColor}>
-							<ValueLabelComponent
-								id={dataItem.id}
-								animateExit={false}
-								animateEnter={false}
-								baseline={baseline}
-								theme={theme}
-								value={dataItem.value}
+
+						{isPositiveBar ? (
+							<HtmlArea
+								area={valueLabelArea}
+								fill={theme.global.backgroundColor}
 							>
-								{dataItem.valueLabel}
-							</ValueLabelComponent>
-						</HtmlArea>
+								<ValueLabelComponent
+									id={dataItem.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									value={dataItem.value}
+								>
+									{dataItem.valueLabel}
+								</ValueLabelComponent>
+							</HtmlArea>
+						) : null}
 					</HtmlArea>
 				);
 			})}
