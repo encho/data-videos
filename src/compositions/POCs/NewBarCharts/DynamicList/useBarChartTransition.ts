@@ -18,6 +18,7 @@ import {interpolate} from 'remotion';
 type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
 	barChartItemLayout: TBarChartItemLayout; // TODO deprecate??? or average the from and to??
+	plotArea: TGridLayoutArea;
 	// TODO
 	// barChartMotherLayoutAreas: {
 	// 	labelsArea:
@@ -47,6 +48,7 @@ type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
 	from: {
 		xScale: ScaleLinear<number, number>;
 		barChartItemLayout: TBarChartItemLayout;
+		// mappedValue:
 	};
 	to: {
 		xScale: ScaleLinear<number, number>;
@@ -190,10 +192,34 @@ export function useBarChartTransition({
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
 			.range([0, barChartItemLayout.barArea.width]);
 
+		// TODO listItemHeight should be property of individual transition
+		const plotAreaHeightFrom =
+			listTransitionContext.from.visibleItems.length *
+			listTransitionContext.itemHeight;
+		const plotAreaHeightTo =
+			listTransitionContext.to.visibleItems.length *
+			listTransitionContext.itemHeight;
+
+		const plotAreaHeightCurrent = interpolate(
+			easingPercentage,
+			[0, 1],
+			[plotAreaHeightFrom, plotAreaHeightTo]
+		);
+
+		const plotAreaCurrent = {
+			x1: 0,
+			x2: barChartItemLayout.barArea.width,
+			y1: 0,
+			y2: plotAreaHeightCurrent,
+			width: barChartItemLayout.barArea.width,
+			height: plotAreaHeightCurrent,
+		};
+
 		return {
 			transitionType: 'update',
 			barChartItemLayout,
 			xScale,
+			plotArea: plotAreaCurrent,
 			from: {xScale: xScaleFrom, barChartItemLayout: barChartItemLayoutFrom},
 			to: {xScale: xScaleTo, barChartItemLayout: barChartItemLayoutTo},
 		};
@@ -222,10 +248,25 @@ export function useBarChartTransition({
 			xAxisWidth: barChartItemLayoutTo.barArea.width,
 		});
 
+		// TODO listItemHeight should be property of individual transition ("from"/"to")
+		const plotAreaHeightTo =
+			listTransitionContext.to.visibleItems.length *
+			listTransitionContext.itemHeight;
+
+		const plotAreaTo = {
+			x1: xScaleTo.range()[0] + barChartItemLayoutTo.barArea.x1,
+			x2: xScaleTo.range()[1] + barChartItemLayoutTo.barArea.x1,
+			y1: 0,
+			y2: plotAreaHeightTo,
+			width: xScaleTo.range()[1] - xScaleTo.range()[0],
+			height: plotAreaHeightTo,
+		};
+
 		return {
 			transitionType: 'enter',
 			barChartItemLayout: barChartItemLayoutTo,
 			xScale: xScaleTo,
+			plotArea: plotAreaTo,
 			to: {xScale: xScaleTo, barChartItemLayout: barChartItemLayoutTo},
 		};
 	}
@@ -253,10 +294,25 @@ export function useBarChartTransition({
 		xAxisWidth: barChartItemLayoutFrom.barArea.width,
 	});
 
+	// TODO listItemHeight should be property of individual transition
+	const plotAreaHeightFrom =
+		listTransitionContext.from.visibleItems.length *
+		listTransitionContext.itemHeight;
+
+	const plotAreaFrom = {
+		x1: xScaleFrom.domain()[0],
+		x2: xScaleFrom.domain()[1],
+		y1: 0,
+		y2: plotAreaHeightFrom,
+		width: xScaleFrom.domain()[1] - xScaleFrom.domain()[0],
+		height: plotAreaHeightFrom,
+	};
+
 	return {
 		transitionType: 'exit',
 		barChartItemLayout: barChartItemLayoutFrom,
 		xScale: xScaleFrom,
+		plotArea: plotAreaFrom,
 		from: {xScale: xScaleFrom, barChartItemLayout: barChartItemLayoutFrom},
 	};
 }

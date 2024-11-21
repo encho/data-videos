@@ -385,6 +385,7 @@ export const ListAnimationPage: React.FC = () => {
 
 										return (
 											<HtmlArea
+												key={it.id}
 												area={area}
 												fill={isVisible ? idColor : 'rgba(0,0,0,0.3)'}
 											>
@@ -484,6 +485,7 @@ export const ListAnimationPage: React.FC = () => {
 																i;
 															return (
 																<div
+																	key={i}
 																	style={{
 																		margin: 10,
 																		backgroundColor: '#660000',

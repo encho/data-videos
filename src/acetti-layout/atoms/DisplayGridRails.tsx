@@ -22,6 +22,7 @@ export default function DisplayGridRails({
 				{rows.map((row) => {
 					return (
 						<rect
+							key={row.name + row.positionOfType}
 							x={0}
 							y={row.start}
 							height={row.end - row.start}
@@ -35,6 +36,7 @@ export default function DisplayGridRails({
 				{columns.map((column) => {
 					return (
 						<rect
+							key={column.name + column.positionOfType}
 							x={column.start}
 							y={0}
 							height={height}

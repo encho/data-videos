@@ -715,19 +715,18 @@ export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 					visibility: 'hidden',
 				}}
 			>
-				{data
-					// .map((it) => it.label)
-					.map((it) => (
-						<Component
-							id={it.id}
-							theme={theme}
-							baseline={baseline}
-							animateEnter={false}
-							animateExit={false}
-						>
-							{it.label}
-						</Component>
-					))}
+				{data.map((it, i) => (
+					<Component
+						key={it.id + i}
+						id={it.id}
+						theme={theme}
+						baseline={baseline}
+						animateEnter={false}
+						animateExit={false}
+					>
+						{it.label}
+					</Component>
+				))}
 			</div>
 		);
 	}
@@ -755,8 +754,9 @@ export const MeasureValueLabels = forwardRef<
 				visibility: 'hidden',
 			}}
 		>
-			{data.map((it) => (
+			{data.map((it, i) => (
 				<Component
+					key={it.id + i}
 					id={it.id}
 					theme={theme}
 					baseline={baseline}
