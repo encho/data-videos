@@ -90,7 +90,6 @@ export type TDynamicListTransitionContext<T extends {id: string}> =
 export function useListTransition<T extends {id: string}>({
 	width,
 	height,
-	// itemHeight = 100,
 	itemMarginTop = 0,
 	itemMarginBottom = 0,
 	itemHeightFrom,
@@ -108,7 +107,6 @@ export function useListTransition<T extends {id: string}>({
 	height: number;
 	itemHeightFrom: number;
 	itemHeightTo: number;
-	// itemHeight?: number; // TODO deprecate
 	itemMarginTop?: number; // TODO not optional
 	itemMarginBottom?: number; // TODO not optional
 	// TODO:
@@ -230,7 +228,7 @@ export function useListTransition<T extends {id: string}>({
 				},
 			};
 		},
-		[itemMarginBottom, itemMarginTop, justifyContent, width]
+		[itemMarginBottom, itemMarginTop, justifyContent, width, height]
 	);
 
 	if (transitionType === 'update') {

@@ -200,36 +200,52 @@ export function useBarChartTransition({
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
 			.range([0, barChartItemLayout.barArea.width]);
 
-		// TODO bring height as prop into listTransitionContext.from
+		// determine plotArea
+		const topListItemAreaFrom = listTransitionContext.from.getListItemArea(0);
+		const bottomListItemAreaFrom = listTransitionContext.from.getListItemArea(
+			listTransitionContext.from.visibleItems.length - 1
+		);
 		const plotAreaHeightFrom =
-			listTransitionContext.from.visibleItems.length *
-			listTransitionContext.from.itemHeight;
+			bottomListItemAreaFrom.y2 - topListItemAreaFrom.y1;
 
-		// TODO bring height as prop into listTransitionContext.to
-		const plotAreaHeightTo =
-			listTransitionContext.to.visibleItems.length *
-			listTransitionContext.to.itemHeight;
+		const topListItemAreaTo = listTransitionContext.to.getListItemArea(0);
+		const bottomListItemAreaTo = listTransitionContext.to.getListItemArea(
+			listTransitionContext.to.visibleItems.length - 1
+		);
+		const plotAreaHeightTo = bottomListItemAreaTo.y2 - topListItemAreaTo.y1;
 
-		const plotAreaHeightCurrent = interpolate(
+		const plotArea_height = interpolate(
 			easingPercentage,
 			[0, 1],
 			[plotAreaHeightFrom, plotAreaHeightTo]
 		);
 
-		const plotAreaCurrent = {
+		const plotArea_y1 = interpolate(
+			easingPercentage,
+			[0, 1],
+			[topListItemAreaFrom.y1, topListItemAreaTo.y1]
+		);
+
+		const plotArea_y2 = interpolate(
+			easingPercentage,
+			[0, 1],
+			[topListItemAreaFrom.y2, topListItemAreaTo.y2]
+		);
+
+		const plotArea = {
 			x1: barChartItemLayout.barArea.x1,
 			x2: barChartItemLayout.barArea.width + barChartItemLayout.barArea.x1,
-			y1: 0,
-			y2: plotAreaHeightCurrent,
+			y1: plotArea_y1,
+			y2: plotArea_y2,
 			width: barChartItemLayout.barArea.width,
-			height: plotAreaHeightCurrent,
+			height: plotArea_height,
 		};
 
 		return {
 			transitionType: 'update',
 			barChartItemLayout,
 			xScale,
-			plotArea: plotAreaCurrent,
+			plotArea,
 			from: {xScale: xScaleFrom, barChartItemLayout: barChartItemLayoutFrom},
 			to: {xScale: xScaleTo, barChartItemLayout: barChartItemLayoutTo},
 		};
@@ -259,17 +275,23 @@ export function useBarChartTransition({
 			customDomain: globalCustomDomain,
 		});
 
-		const plotAreaHeightTo =
-			listTransitionContext.to.visibleItems.length *
-			listTransitionContext.to.itemHeight;
+		// determine plotArea
+		const topListItemAreaTo = listTransitionContext.to.getListItemArea(0);
+		const bottomListItemAreaTo = listTransitionContext.to.getListItemArea(
+			listTransitionContext.to.visibleItems.length - 1
+		);
+
+		const plotAreaTo_y1 = topListItemAreaTo.y1;
+		const plotAreaTo_y2 = bottomListItemAreaTo.y2;
+		const plotAreaTo_height = plotAreaTo_y2 - plotAreaTo_y1;
 
 		const plotAreaTo = {
-			x1: xScaleTo.range()[0] + barChartItemLayoutTo.barArea.x1,
-			x2: xScaleTo.range()[1] + barChartItemLayoutTo.barArea.x1,
-			y1: 0,
-			y2: plotAreaHeightTo,
-			width: xScaleTo.range()[1] - xScaleTo.range()[0],
-			height: plotAreaHeightTo,
+			x1: barChartItemLayoutTo.barArea.x1,
+			x2: barChartItemLayoutTo.barArea.x2,
+			y1: plotAreaTo_y1,
+			y2: plotAreaTo_y2,
+			width: barChartItemLayoutTo.barArea.width,
+			height: plotAreaTo_height,
 		};
 
 		return {
@@ -305,18 +327,23 @@ export function useBarChartTransition({
 		customDomain: globalCustomDomain,
 	});
 
-	// TODO listItemHeight should be property of individual transition
-	const plotAreaHeightFrom =
-		listTransitionContext.from.visibleItems.length *
-		listTransitionContext.from.itemHeight;
+	// determine plotArea
+	const topListItemAreaFrom = listTransitionContext.from.getListItemArea(0);
+	const bottomListItemAreaFrom = listTransitionContext.from.getListItemArea(
+		listTransitionContext.from.visibleItems.length - 1
+	);
+
+	const plotAreaFrom_y1 = topListItemAreaFrom.y1;
+	const plotAreaFrom_y2 = bottomListItemAreaFrom.y2;
+	const plotAreaFrom_height = plotAreaFrom_y2 - plotAreaFrom_y1;
 
 	const plotAreaFrom = {
-		x1: xScaleFrom.range()[0] + barChartItemLayoutFrom.barArea.x1,
-		x2: xScaleFrom.range()[1] + barChartItemLayoutFrom.barArea.x1,
-		y1: 0,
-		y2: plotAreaHeightFrom,
-		width: xScaleFrom.range()[1] - xScaleFrom.range()[0],
-		height: plotAreaHeightFrom,
+		x1: barChartItemLayoutFrom.barArea.x1,
+		x2: barChartItemLayoutFrom.barArea.x2,
+		y1: plotAreaFrom_y1,
+		y2: plotAreaFrom_y2,
+		width: barChartItemLayoutFrom.barArea.width,
+		height: plotAreaFrom_height,
 	};
 
 	return {
@@ -331,7 +358,6 @@ export function useBarChartTransition({
 function getXScale({
 	visibleItems,
 	xAxisWidth,
-	// customDomain = [-100, 100],
 	customDomain,
 }: {
 	visibleItems: TBarChartItem[];

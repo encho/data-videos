@@ -127,7 +127,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'magenta';
+	const zeroLine_color = 'cyan';
 
 	return (
 		<div>
@@ -510,7 +510,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'magenta';
+	const zeroLine_color = 'cyan';
 
 	return (
 		<div>
@@ -685,7 +685,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'magenta';
+	const zeroLine_color = 'cyan';
 
 	return (
 		<div>
