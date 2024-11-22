@@ -1,17 +1,21 @@
-import {memo} from 'react';
+import {memo, forwardRef} from 'react';
 
 import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+import {TBarChartItem} from '../useBarChartTransition';
 
-export type TBarChartLabelComponent = React.ComponentType<{
-	children: string;
-	id: string;
-	animateExit: boolean;
-	animateEnter: boolean;
-	baseline: number;
-	theme: ThemeType;
-}>;
+// TODO
+// type TValueLabelProps = {...}
+
+// export type TBarChartLabelComponent = React.ComponentType<{
+// 	children: string;
+// 	id: string;
+// 	animateExit: boolean;
+// 	animateEnter: boolean;
+// 	baseline: number;
+// 	theme: ThemeType;
+// }>;
 
 export type TBarChartValueLabelComponent = React.ComponentType<{
 	id: string;
@@ -77,3 +81,43 @@ export const DefaultValueLabelComponent = memo(
 		);
 	}
 );
+
+interface ValueLabelsDivProps {
+	data: TBarChartItem[];
+	theme: ThemeType;
+	baseline: number;
+	Component: TBarChartValueLabelComponent;
+}
+
+export const MeasureValueLabels = forwardRef<
+	HTMLDivElement,
+	ValueLabelsDivProps
+>(({data, theme, baseline, Component}, ref) => {
+	return (
+		<div
+			ref={ref}
+			style={{
+				position: 'fixed',
+				left: '-9999px', // Move off-screen
+				top: '-9999px',
+				whiteSpace: 'nowrap', // Prevent labels from wrapping
+				visibility: 'hidden',
+			}}
+		>
+			{data.map((it, i) => (
+				<Component
+					key={it.id + i}
+					id={it.id}
+					theme={theme}
+					baseline={baseline}
+					animateEnter={false}
+					animateExit={false}
+					value={it.value}
+				/>
+			))}
+		</div>
+	);
+});
+
+// Optional: Set a display name for easier debugging
+// MeasureValueLabels.displayName = 'MeasureValueLabels';

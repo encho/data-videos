@@ -22,15 +22,17 @@ import {useListAnimation, ListAnimationTransition} from './useListAnimation';
 import {BarsTransition} from './BarsTransition';
 import {TBarChartItem} from './useBarChartTransition';
 import {
-	MeasureLabels,
-	MeasureValueLabels,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {
 	getBarChartItemHeight,
 	useBarChartTransition,
 } from './useBarChartTransition';
-import {DefaultValueLabelComponent} from './components/ValueLabelComponent';
-import {DefaultLabelComponent} from './components/LabelComponent';
+import {
+	DefaultValueLabelComponent,
+	MeasureValueLabels,
+} from './components/ValueLabelComponent';
+import {
+	DefaultLabelComponent,
+	MeasureLabels,
+} from './components/LabelComponent';
 
 export const barChartAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -78,17 +80,16 @@ export const ListAnimationPage: React.FC = () => {
 
 	const MeasureLabelComponent = useCallback(
 		// eslint-disable-next-line
-		({id, children}: {children: string; id: string}) => {
+		({id, label}: {label: string; id: string}) => {
 			return (
 				<LabelComponent
 					id={id}
+					label={label}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-				>
-					{children}
-				</LabelComponent>
+				/>
 			);
 		},
 		[baseline, theme, LabelComponent]
@@ -97,7 +98,7 @@ export const ListAnimationPage: React.FC = () => {
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
 		// eslint-disable-next-line
-		({id, children, value}: {children: string; id: string; value: number}) => {
+		({id, value}: {id: string; value: number}) => {
 			return (
 				<ValueLabelComponent
 					// id={id}

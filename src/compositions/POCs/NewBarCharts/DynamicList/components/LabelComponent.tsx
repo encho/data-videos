@@ -1,11 +1,17 @@
-import {memo} from 'react';
+import {memo, forwardRef} from 'react';
 
 import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+import {TBarChartItem} from '../useBarChartTransition';
+
+// TODO
+// type TLabelComponentProps = {
+// ...
+// }
 
 export type TBarChartLabelComponent = React.ComponentType<{
-	children: string;
+	label: string;
 	id: string;
 	animateExit: boolean;
 	animateEnter: boolean;
@@ -17,13 +23,13 @@ export const DefaultLabelComponent = memo(
 	({
 		// eslint-disable-next-line
 		id,
-		children,
+		label,
 		animateExit,
 		animateEnter,
 		baseline,
 		theme,
 	}: {
-		children: string;
+		label: string;
 		id: string;
 		baseline: number;
 		theme: ThemeType;
@@ -53,9 +59,45 @@ export const DefaultLabelComponent = memo(
 						animateExit={animateExit}
 						animateEnter={animateEnter}
 					>
-						{children}
+						{label}
 					</TextAnimationSubtle>
 				</TypographyStyle>
+			</div>
+		);
+	}
+);
+
+interface LabelsDivProps {
+	data: TBarChartItem[];
+	theme: ThemeType;
+	baseline: number;
+	Component: TBarChartLabelComponent;
+}
+
+export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
+	({data, theme, baseline, Component}, ref) => {
+		return (
+			<div
+				ref={ref}
+				style={{
+					position: 'fixed',
+					left: '-9999px', // Move off-screen
+					top: '-9999px',
+					whiteSpace: 'nowrap', // Prevent labels from wrapping
+					visibility: 'hidden',
+				}}
+			>
+				{data.map((it, i) => (
+					<Component
+						key={it.id + i}
+						id={it.id}
+						label={it.label}
+						theme={theme}
+						baseline={baseline}
+						animateEnter={false}
+						animateExit={false}
+					/>
+				))}
 			</div>
 		);
 	}

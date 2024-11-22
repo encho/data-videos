@@ -176,9 +176,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									animateEnter={false}
 									baseline={baseline}
 									theme={theme}
-								>
-									{item.label}
-								</LabelComponent>
+									label={item.label}
+								/>
 							</HtmlArea>
 
 							{/* the negative value label */}
@@ -284,9 +283,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									animateEnter={false}
 									baseline={baseline}
 									theme={theme}
-								>
-									{item.label}
-								</LabelComponent>
+									label={item.label}
+								/>
 							</HtmlArea>
 
 							{/* the negative value label */}
@@ -402,9 +400,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-									>
-										{itemTo.label}
-									</LabelComponent>
+										label={itemTo.label}
+									/>
 								</HtmlArea>
 
 								{/* the negative value label */}
@@ -573,9 +570,8 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 								id={dataItem.id}
 								baseline={baseline}
 								theme={theme}
-							>
-								{dataItem.label}
-							</LabelComponent>
+								label={dataItem.label}
+							/>
 						</HtmlArea>
 
 						{/* the negative value label */}
@@ -743,9 +739,8 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 								id={dataItem.id}
 								baseline={baseline}
 								theme={theme}
-							>
-								{dataItem.label}
-							</LabelComponent>
+								label={dataItem.label}
+							/>
 						</HtmlArea>
 
 						{/* the negative value label */}
