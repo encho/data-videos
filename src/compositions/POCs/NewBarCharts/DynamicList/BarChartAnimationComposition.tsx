@@ -187,13 +187,14 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
-	const itemHeightForBaseline = getBarChartItemHeight({baseline});
+	const ibcsItemHeightForBaseline = getBarChartItemHeight({baseline});
 
 	const listAnimationContextForDebug = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
 		transitions,
-		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		fitItemHeights: false,
 		easing,
 	});
 
@@ -204,7 +205,8 @@ export const ListAnimationPage: React.FC = () => {
 		width: area_3.width,
 		height: area_3.height,
 		transitions,
-		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		fitItemHeights: false,
 		easing,
 	});
 
@@ -434,6 +436,38 @@ export const ListAnimationPage: React.FC = () => {
 																		<Value>
 																			{JSON.stringify(
 																				editedTransition.frameRange
+																			)}
+																		</Value>
+																	</Row>
+																	<Row>
+																		<div>itemHeightFrom</div>
+																		<Value>
+																			{JSON.stringify(
+																				editedTransition.itemHeightFrom
+																			)}
+																		</Value>
+																	</Row>
+																	<Row>
+																		<div>nr of visible items FROM</div>
+																		<Value>
+																			{JSON.stringify(
+																				editedTransition.visibleItemsFrom.length
+																			)}
+																		</Value>
+																	</Row>
+																	<Row>
+																		<div>nr of visible items TO</div>
+																		<Value>
+																			{JSON.stringify(
+																				editedTransition.visibleItemsTo.length
+																			)}
+																		</Value>
+																	</Row>
+																	<Row>
+																		<div>itemHeightTo</div>
+																		<Value>
+																			{JSON.stringify(
+																				editedTransition.itemHeightTo
 																			)}
 																		</Value>
 																	</Row>

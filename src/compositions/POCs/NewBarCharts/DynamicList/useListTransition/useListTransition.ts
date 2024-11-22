@@ -8,7 +8,7 @@ import {getListLayout, TListLayout} from './getListLayout';
 type ListTransitionContext_Common = {
 	frame: number;
 	durationInFrames: number;
-	itemHeight: number;
+	// itemHeight: number;
 	width: number;
 	easingPercentage: number;
 };
@@ -17,6 +17,7 @@ export type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
 	transitionType: 'enter';
 	to: {
 		items: T[];
+		itemHeight: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 		layout: TListLayout;
@@ -31,6 +32,7 @@ export type ListTransitionContext_Exit<T> = ListTransitionContext_Common & {
 	transitionType: 'exit';
 	from: {
 		items: T[];
+		itemHeight: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 		layout: TListLayout;
@@ -45,6 +47,7 @@ export type ListTransitionContext_Update<T> = ListTransitionContext_Common & {
 	transitionType: 'update';
 	from: {
 		items: T[];
+		itemHeight: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 		layout: TListLayout;
@@ -55,6 +58,7 @@ export type ListTransitionContext_Update<T> = ListTransitionContext_Common & {
 	};
 	to: {
 		items: T[];
+		itemHeight: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 		layout: TListLayout;
@@ -85,10 +89,12 @@ export type TDynamicListTransitionContext<T extends {id: string}> =
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListTransition<T extends {id: string}>({
 	width,
-	height,
-	itemHeight = 100,
+	// height,
+	// itemHeight = 100,
 	itemMarginTop = 0,
 	itemMarginBottom = 0,
+	itemHeightFrom,
+	itemHeightTo,
 	itemsFrom,
 	itemsTo,
 	visibleIndicesFrom,
@@ -99,8 +105,10 @@ export function useListTransition<T extends {id: string}>({
 	easing = Easing.linear,
 }: {
 	width: number;
-	height: number;
-	itemHeight?: number; // TODO not optional
+	// height: number;
+	itemHeightFrom: number;
+	itemHeightTo: number;
+	itemHeight?: number; // TODO deprecate
 	itemMarginTop?: number; // TODO not optional
 	itemMarginBottom?: number; // TODO not optional
 	// TODO:
@@ -142,7 +150,7 @@ export function useListTransition<T extends {id: string}>({
 		durationInFrames,
 		easingPercentage,
 		// transitionTypes, // in update instead
-		itemHeight,
+		// itemHeight,
 		width,
 	};
 
@@ -164,17 +172,23 @@ export function useListTransition<T extends {id: string}>({
 		({
 			items,
 			visibleIndices,
+			itemHeight: itemHeightArg,
 		}: {
 			items: T[];
 			visibleIndices: [number, number];
+			itemHeight: number;
 		}) => {
 			const visibleItems = getVisibleItems<T>(items, visibleIndices);
+
+			// TODO pass height to useListTransition, because it may be that if we use
+			// fixed itemHeights,  we need that info to center all the items (justifyContent)
+			const height = itemHeightArg * visibleItems.length;
 
 			const layout = getListLayout({
 				width,
 				height,
 				items,
-				itemHeight,
+				itemHeight: itemHeightArg,
 				itemMarginTop,
 				itemMarginBottom,
 			});
@@ -198,6 +212,7 @@ export function useListTransition<T extends {id: string}>({
 
 			return {
 				items,
+				itemHeight: itemHeightArg,
 				visibleIndices,
 				visibleItems,
 				layout,
@@ -215,17 +230,19 @@ export function useListTransition<T extends {id: string}>({
 				},
 			};
 		},
-		[height, itemHeight, itemMarginBottom, itemMarginTop, justifyContent, width]
+		[itemMarginBottom, itemMarginTop, justifyContent, width]
 	);
 
 	if (transitionType === 'update') {
 		const from = getTransitionStateData({
 			items: itemsFrom,
 			visibleIndices: visibleIndicesFrom,
+			itemHeight: itemHeightFrom,
 		});
 		const to = getTransitionStateData({
 			items: itemsTo,
 			visibleIndices: visibleIndicesTo,
+			itemHeight: itemHeightTo,
 		});
 		const transitionTypes = getTransitionTypes({
 			allFrom: from.items.map((it) => it.id),
@@ -247,6 +264,7 @@ export function useListTransition<T extends {id: string}>({
 		const to = getTransitionStateData({
 			items: itemsTo,
 			visibleIndices: visibleIndicesTo,
+			itemHeight: itemHeightTo,
 		});
 
 		return {
@@ -261,6 +279,7 @@ export function useListTransition<T extends {id: string}>({
 	const from = getTransitionStateData({
 		items: itemsFrom,
 		visibleIndices: visibleIndicesFrom,
+		itemHeight: itemHeightFrom,
 	});
 
 	return {
@@ -401,11 +420,16 @@ function useUpdateTypeAreas<T extends {id: string}>(
  * @param visibleIndices - A tuple [start, end] representing the inclusive start and exclusive end indices.
  * @returns A subarray of items within the specified visible range.
  */
-function getVisibleItems<T extends {id: string}>(
+export function getVisibleItems<T extends {id: string}>(
 	items: T[],
 	visibleIndices: [number, number]
 ): T[] {
 	const [start, end] = visibleIndices;
+
+	// If the items list is empty, return an empty array, without caring of validation of visibleIndices
+	if (items.length === 0) {
+		return [];
+	}
 
 	// Validate indices: must be integers
 	if (!Number.isInteger(start) || !Number.isInteger(end)) {
@@ -415,11 +439,6 @@ function getVisibleItems<T extends {id: string}>(
 	// Validate that start < end in the original visibleIndices
 	if (start >= end) {
 		throw new Error('Invalid indices: start must be less than end.');
-	}
-
-	// If the items list is empty, return an empty array
-	if (items.length === 0) {
-		return [];
 	}
 
 	// Normalize indices to stay within bounds

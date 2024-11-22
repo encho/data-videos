@@ -224,7 +224,8 @@ const BarChartTransitionPage: React.FC<{
 		visibleIndicesFrom,
 		visibleIndicesTo,
 		width: area_1.width,
-		height: area_1.height,
+		itemHeightFrom: 100,
+		itemHeightTo: 100,
 		justifyContent: 'start',
 		easing: Easing.ease,
 	});

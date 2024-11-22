@@ -84,10 +84,11 @@ export const DynamicListPage: React.FC = () => {
 		durationInFrames,
 		itemsFrom,
 		itemsTo,
+		itemHeightFrom: 100,
+		itemHeightTo: 200,
 		visibleIndicesFrom,
 		visibleIndicesTo,
 		width: area_1.width,
-		height: area_1.height,
 		justifyContent: 'center',
 	});
 

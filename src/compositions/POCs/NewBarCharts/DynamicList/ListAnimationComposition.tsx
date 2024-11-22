@@ -88,7 +88,7 @@ export const ListAnimationPage: React.FC = () => {
 	const duration_4 =
 		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
 
-	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 
 	// eslint-disable-next-line
 	const weirdTransitions: ListAnimationTransition<{id: string}>[] = [
@@ -97,7 +97,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: [0, 1],
 			visibleIndicesTo: [0, 5],
-			easingFunction,
+			easing,
 			durationInFrames: duration_0,
 		},
 		{
@@ -105,7 +105,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo,
 			visibleIndicesFrom,
 			visibleIndicesTo,
-			easingFunction,
+			easing,
 			durationInFrames: duration_1,
 		},
 		{
@@ -113,7 +113,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: visibleIndicesTo,
 			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
+			easing,
 			durationInFrames: duration_2,
 		},
 		{
@@ -121,7 +121,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo,
 			visibleIndicesFrom,
 			visibleIndicesTo: [0, 2],
-			easingFunction,
+			easing,
 			durationInFrames: duration_3,
 		},
 		{
@@ -129,7 +129,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: [],
 			visibleIndicesFrom: [0, 2],
 			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
+			easing,
 			durationInFrames: duration_4,
 		},
 	];
@@ -140,7 +140,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: [0, 1],
 			visibleIndicesTo: [0, 3],
-			easingFunction,
+			easing,
 			durationInFrames: duration_0,
 		},
 		{
@@ -148,7 +148,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: [0, 3],
 			visibleIndicesTo: [2, 5],
-			easingFunction,
+			easing,
 			durationInFrames: duration_1,
 		},
 		{
@@ -156,7 +156,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: [2, 5],
 			visibleIndicesTo: [5, 8],
-			easingFunction,
+			easing,
 			durationInFrames: duration_2,
 		},
 		{
@@ -164,7 +164,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: itemsFrom,
 			visibleIndicesFrom: [5, 8],
 			visibleIndicesTo: [0, 3],
-			easingFunction,
+			easing,
 			durationInFrames: duration_3,
 		},
 		{
@@ -172,7 +172,7 @@ export const ListAnimationPage: React.FC = () => {
 			itemsTo: [],
 			visibleIndicesFrom: [0, 3],
 			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
+			easing,
 			durationInFrames: duration_4,
 		},
 	];
@@ -182,6 +182,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		// transitions: weirdTransitions,
 		transitions: scrollingTransitions,
+		easing,
 	});
 
 	const {currentTransitionContext} = listAnimationContext;

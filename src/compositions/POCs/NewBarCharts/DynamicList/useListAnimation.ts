@@ -2,6 +2,7 @@ import {EasingFunction, useCurrentFrame, useVideoConfig} from 'remotion';
 import {useMemo} from 'react';
 import invariant from 'tiny-invariant';
 
+import {getVisibleItems} from './useListTransition/useListTransition';
 import {findFrameRangeIndex} from '../../09-Timeseries/utils/usePeriodScaleAnimation';
 import {
 	TDynamicListTransitionContext,
@@ -22,6 +23,9 @@ export type ListAnimationTransition<T> = {
 
 type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
 	frameRange: TFrameRange;
+	//
+	itemHeightFrom: number;
+	itemHeightTo: number;
 	// from: {visibleIndices, items} // TODO
 	// to: {visibleIndices, items} // TODO
 	itemsFrom: T[];
@@ -30,8 +34,9 @@ type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
 	visibleIndicesTo: [number, number];
 	easing: EasingFunction;
 	durationInFrames: number;
-	// vistibleItemsFrom: T[]; // currently happening in useListTransition
-	// vistibleItemsTo: T[]; // currently happening in useListTransition
+	//
+	visibleItemsFrom: T[]; // currently happening in useListTransition
+	visibleItemsTo: T[]; // currently happening in useListTransition
 };
 
 export type ListAnimationContext<T extends {id: string}> = {
@@ -48,6 +53,7 @@ type UseListAnimationArgs<T> = {
 	width: number;
 	height: number;
 	itemHeight?: number;
+	fitItemHeights?: boolean;
 	transitions: ListAnimationTransition<T>[];
 	easing: EasingFunction;
 };
@@ -59,6 +65,7 @@ export function useListAnimation<T extends {id: string}>({
 	height,
 	transitions,
 	itemHeight = 100,
+	fitItemHeights = false,
 	easing: easingProp,
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
@@ -94,18 +101,34 @@ export function useListAnimation<T extends {id: string}>({
 			? currentTransition.visibleIndicesTo
 			: ([0, currentTransition.itemsTo.length] as [number, number]);
 
+		const visibleItemsFrom = getVisibleItems<T>(itemsFrom, visibleIndicesFrom);
+		const visibleItemsTo = getVisibleItems<T>(
+			currentTransition.itemsTo,
+			visibleIndicesTo
+		);
+
+		const itemHeightFrom = fitItemHeights
+			? height / visibleItemsFrom.length
+			: itemHeight;
+
+		const itemHeightTo = fitItemHeights
+			? height / visibleItemsTo.length
+			: itemHeight;
+
 		const easing = currentTransition.easing
 			? currentTransition.easing
 			: easingProp;
 
 		const editedTransition = {
 			...currentTransition,
-			//
+			itemHeightFrom,
+			itemHeightTo,
 			itemsFrom,
 			visibleIndicesFrom,
 			visibleIndicesTo,
 			easing,
-			//
+			visibleItemsFrom,
+			visibleItemsTo,
 			frameRange: frameRanges[i],
 		};
 
@@ -125,8 +148,10 @@ export function useListAnimation<T extends {id: string}>({
 
 	const currentTransitionContext = useListTransition({
 		width,
-		height,
-		itemHeight,
+		// height,
+		// itemHeight, // TODO deprecate
+		itemHeightFrom: editedTransitions[currentTransitionIndex].itemHeightFrom,
+		itemHeightTo: editedTransitions[currentTransitionIndex].itemHeightTo,
 		itemMarginTop: ITEM_MARGIN_TOP,
 		itemMarginBottom: ITEM_MARGIN_BOTTOM,
 		easing: editedTransitions[currentTransitionIndex].easing,

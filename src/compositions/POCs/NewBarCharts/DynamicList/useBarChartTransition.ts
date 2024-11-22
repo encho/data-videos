@@ -83,7 +83,11 @@ export function useBarChartTransition({
 	negativeValueLabelWidth: number;
 	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
 }): TBarChartTransitionContext {
-	const {width, itemHeight, easingPercentage} = listTransitionContext;
+	const {
+		width,
+		// itemHeight,
+		easingPercentage,
+	} = listTransitionContext;
 
 	// TODO we need a barChartItemLayout for from and to, and an averaged one for the 'update' case
 	// const barChartItemLayout = getBarChartItemLayout({
@@ -107,7 +111,7 @@ export function useBarChartTransition({
 		);
 
 		// TODO will be specific to current "from" transition spec.
-		const itemHeightFrom = itemHeight;
+		const itemHeightFrom = listTransitionContext.from.itemHeight;
 		const negativeValueLabelWidthFrom = hasNegativeValuesFrom
 			? negativeValueLabelWidth
 			: 0;
@@ -115,7 +119,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidthFrom / negativeValueLabelWidth;
 
 		// TODO will be specific to current "to" transition spec.
-		const itemHeightTo = itemHeight;
+		const itemHeightTo = listTransitionContext.to.itemHeight;
 		const negativeValueLabelWidthTo = hasNegativeValuesTo
 			? negativeValueLabelWidth
 			: 0;
@@ -196,13 +200,15 @@ export function useBarChartTransition({
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
 			.range([0, barChartItemLayout.barArea.width]);
 
-		// TODO listItemHeight should be property of individual transition
+		// TODO bring height as prop into listTransitionContext.from
 		const plotAreaHeightFrom =
 			listTransitionContext.from.visibleItems.length *
-			listTransitionContext.itemHeight;
+			listTransitionContext.from.itemHeight;
+
+		// TODO bring height as prop into listTransitionContext.to
 		const plotAreaHeightTo =
 			listTransitionContext.to.visibleItems.length *
-			listTransitionContext.itemHeight;
+			listTransitionContext.to.itemHeight;
 
 		const plotAreaHeightCurrent = interpolate(
 			easingPercentage,
@@ -238,7 +244,7 @@ export function useBarChartTransition({
 		);
 
 		const barChartItemLayoutTo = getBarChartItemLayout({
-			height: itemHeight, // TODO will be specific to current "from" spec.
+			height: listTransitionContext.to.itemHeight,
 			width,
 			baseline,
 			labelWidth,
@@ -253,10 +259,9 @@ export function useBarChartTransition({
 			customDomain: globalCustomDomain,
 		});
 
-		// TODO listItemHeight should be property of individual transition ("from"/"to")
 		const plotAreaHeightTo =
 			listTransitionContext.to.visibleItems.length *
-			listTransitionContext.itemHeight;
+			listTransitionContext.to.itemHeight;
 
 		const plotAreaTo = {
 			x1: xScaleTo.range()[0] + barChartItemLayoutTo.barArea.x1,
@@ -285,7 +290,7 @@ export function useBarChartTransition({
 	);
 
 	const barChartItemLayoutFrom = getBarChartItemLayout({
-		height: itemHeight, // TODO will be specific to current "from" spec.
+		height: listTransitionContext.from.itemHeight,
 		width,
 		baseline,
 		labelWidth,
@@ -303,7 +308,7 @@ export function useBarChartTransition({
 	// TODO listItemHeight should be property of individual transition
 	const plotAreaHeightFrom =
 		listTransitionContext.from.visibleItems.length *
-		listTransitionContext.itemHeight;
+		listTransitionContext.from.itemHeight;
 
 	const plotAreaFrom = {
 		x1: xScaleFrom.range()[0] + barChartItemLayoutFrom.barArea.x1,
@@ -416,9 +421,14 @@ export function getBarChartItemLayout({
 			value: ibcsSizes.marginTop,
 			name: 'marginTop',
 		},
+		// {
+		// 	type: 'pixel',
+		// 	value: ibcsSizes.barHeight,
+		// 	name: 'bar',
+		// },
 		{
-			type: 'pixel',
-			value: ibcsSizes.barHeight,
+			type: 'fr',
+			value: 1,
 			name: 'bar',
 		},
 		{
