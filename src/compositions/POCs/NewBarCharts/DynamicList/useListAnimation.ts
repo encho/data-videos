@@ -16,7 +16,7 @@ export type ListAnimationTransition<T> = {
 	itemsTo: T[];
 	visibleIndicesTo?: [number, number];
 	//
-	easing: EasingFunction;
+	easing?: EasingFunction;
 	durationInFrames: number;
 };
 
@@ -49,7 +49,7 @@ type UseListAnimationArgs<T> = {
 	height: number;
 	itemHeight?: number;
 	transitions: ListAnimationTransition<T>[];
-	// easing?: EasingFunction; // TODO
+	easing: EasingFunction;
 };
 
 // TODO, this actually represents only 1 animation step. the useListTransition will have to
@@ -59,6 +59,7 @@ export function useListAnimation<T extends {id: string}>({
 	height,
 	transitions,
 	itemHeight = 100,
+	easing: easingProp,
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
 	const {
@@ -93,11 +94,18 @@ export function useListAnimation<T extends {id: string}>({
 			? currentTransition.visibleIndicesTo
 			: ([0, currentTransition.itemsTo.length] as [number, number]);
 
+		const easing = currentTransition.easing
+			? currentTransition.easing
+			: easingProp;
+
 		const editedTransition = {
 			...currentTransition,
+			//
 			itemsFrom,
 			visibleIndicesFrom,
 			visibleIndicesTo,
+			easing,
+			//
 			frameRange: frameRanges[i],
 		};
 

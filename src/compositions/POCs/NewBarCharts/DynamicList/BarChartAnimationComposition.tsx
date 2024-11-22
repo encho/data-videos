@@ -163,31 +163,27 @@ export const ListAnimationPage: React.FC = () => {
 		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
 
 	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	// const easing = Easing.bounce;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
 			itemsTo: manyItemsWithNegatives,
-			easing,
 			durationInFrames: duration_0,
 		},
 		{
 			itemsTo: fewItemsWithJustPositives,
-			easing,
 			durationInFrames: duration_1,
 		},
 		{
 			itemsTo: manyItemsWithNegatives,
-			easing,
 			durationInFrames: duration_2,
 		},
 		{
 			itemsTo: fewItemsWithJustPositives,
-			easing,
 			durationInFrames: duration_3,
 		},
 		{
 			itemsTo: [],
-			easing,
 			durationInFrames: duration_4,
 		},
 	];
@@ -199,6 +195,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		transitions,
 		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		easing,
 	});
 
 	const listTransitionContextForDebug =
@@ -209,6 +206,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_3.height,
 		transitions,
 		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		easing,
 	});
 
 	const listTransitionContext = listAnimationContext.currentTransitionContext;
