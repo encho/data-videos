@@ -67,7 +67,6 @@ export const ListAnimationPage: React.FC = () => {
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
 	// useBarChartElementDimensions({baseline, theme})...
-
 	const {ref: labelsRef, dimensions: labelsDimensions} =
 		useElementDimensions(true);
 	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
