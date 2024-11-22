@@ -136,43 +136,27 @@ export const ListAnimationPage: React.FC = () => {
 
 	const scrollingTransitions: ListAnimationTransition<{id: string}>[] = [
 		{
-			itemsFrom: [],
 			itemsTo: itemsFrom,
-			visibleIndicesFrom: [0, 1],
 			visibleIndicesTo: [0, 3],
-			easing,
 			durationInFrames: duration_0,
 		},
 		{
-			itemsFrom,
 			itemsTo: itemsFrom,
-			visibleIndicesFrom: [0, 3],
 			visibleIndicesTo: [2, 5],
-			easing,
 			durationInFrames: duration_1,
 		},
 		{
-			itemsFrom,
 			itemsTo: itemsFrom,
-			visibleIndicesFrom: [2, 5],
 			visibleIndicesTo: [5, 8],
-			easing,
 			durationInFrames: duration_2,
 		},
 		{
-			itemsFrom,
 			itemsTo: itemsFrom,
-			visibleIndicesFrom: [5, 8],
-			visibleIndicesTo: [0, 3],
-			easing,
+			visibleIndicesTo: [5, 8],
 			durationInFrames: duration_3,
 		},
 		{
-			itemsFrom,
 			itemsTo: [],
-			visibleIndicesFrom: [0, 3],
-			visibleIndicesTo: visibleIndicesFrom,
-			easing,
 			durationInFrames: duration_4,
 		},
 	];
@@ -180,9 +164,11 @@ export const ListAnimationPage: React.FC = () => {
 	const listAnimationContext = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
-		// transitions: weirdTransitions,
 		transitions: scrollingTransitions,
 		easing,
+		// transitions: weirdTransitions,
+		// justifyContent: 'center',
+		// fitItemHeights: true,
 	});
 
 	const {currentTransitionContext} = listAnimationContext;

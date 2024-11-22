@@ -89,6 +89,7 @@ export const DynamicListPage: React.FC = () => {
 		visibleIndicesFrom,
 		visibleIndicesTo,
 		width: area_1.width,
+		height: area_1.height,
 		justifyContent: 'center',
 	});
 

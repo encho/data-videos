@@ -216,7 +216,6 @@ const BarChartTransitionPage: React.FC<{
 	const listTransitionContext = useListTransition({
 		itemMarginTop: baseline * 0,
 		itemMarginBottom: baseline * 0,
-		itemHeight: barChartItemHeight,
 		frame,
 		durationInFrames,
 		itemsFrom,
@@ -224,8 +223,9 @@ const BarChartTransitionPage: React.FC<{
 		visibleIndicesFrom,
 		visibleIndicesTo,
 		width: area_1.width,
-		itemHeightFrom: 100,
-		itemHeightTo: 100,
+		height: area_1.height,
+		itemHeightFrom: barChartItemHeight,
+		itemHeightTo: barChartItemHeight,
 		justifyContent: 'start',
 		easing: Easing.ease,
 	});

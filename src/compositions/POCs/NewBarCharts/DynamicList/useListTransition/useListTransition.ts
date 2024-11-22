@@ -89,7 +89,7 @@ export type TDynamicListTransitionContext<T extends {id: string}> =
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListTransition<T extends {id: string}>({
 	width,
-	// height,
+	height,
 	// itemHeight = 100,
 	itemMarginTop = 0,
 	itemMarginBottom = 0,
@@ -105,10 +105,10 @@ export function useListTransition<T extends {id: string}>({
 	easing = Easing.linear,
 }: {
 	width: number;
-	// height: number;
+	height: number;
 	itemHeightFrom: number;
 	itemHeightTo: number;
-	itemHeight?: number; // TODO deprecate
+	// itemHeight?: number; // TODO deprecate
 	itemMarginTop?: number; // TODO not optional
 	itemMarginBottom?: number; // TODO not optional
 	// TODO:
@@ -182,7 +182,7 @@ export function useListTransition<T extends {id: string}>({
 
 			// TODO pass height to useListTransition, because it may be that if we use
 			// fixed itemHeights,  we need that info to center all the items (justifyContent)
-			const height = itemHeightArg * visibleItems.length;
+			// const height = itemHeightArg * visibleItems.length;
 
 			const layout = getListLayout({
 				width,

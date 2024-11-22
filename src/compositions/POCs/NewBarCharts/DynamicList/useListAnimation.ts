@@ -1,4 +1,9 @@
-import {EasingFunction, useCurrentFrame, useVideoConfig} from 'remotion';
+import {
+	EasingFunction,
+	useCurrentFrame,
+	Easing,
+	useVideoConfig,
+} from 'remotion';
 import {useMemo} from 'react';
 import invariant from 'tiny-invariant';
 
@@ -55,7 +60,8 @@ type UseListAnimationArgs<T> = {
 	itemHeight?: number;
 	fitItemHeights?: boolean;
 	transitions: ListAnimationTransition<T>[];
-	easing: EasingFunction;
+	easing?: EasingFunction;
+	justifyContent?: 'start' | 'center';
 };
 
 // TODO, this actually represents only 1 animation step. the useListTransition will have to
@@ -66,7 +72,8 @@ export function useListAnimation<T extends {id: string}>({
 	transitions,
 	itemHeight = 100,
 	fitItemHeights = false,
-	easing: easingProp,
+	easing: easingProp = Easing.ease,
+	justifyContent = 'start',
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
 	const {
@@ -95,7 +102,7 @@ export function useListAnimation<T extends {id: string}>({
 			? currentTransition.visibleIndicesFrom
 			: itemsFrom.length === 0
 			? ([0, 0] as [number, number])
-			: ([0, itemsFrom.length] as [number, number]);
+			: memo[i - 1].visibleIndicesTo;
 
 		const visibleIndicesTo = currentTransition.visibleIndicesTo
 			? currentTransition.visibleIndicesTo
@@ -148,7 +155,7 @@ export function useListAnimation<T extends {id: string}>({
 
 	const currentTransitionContext = useListTransition({
 		width,
-		// height,
+		height,
 		// itemHeight, // TODO deprecate
 		itemHeightFrom: editedTransitions[currentTransitionIndex].itemHeightFrom,
 		itemHeightTo: editedTransitions[currentTransitionIndex].itemHeightTo,
@@ -161,7 +168,7 @@ export function useListAnimation<T extends {id: string}>({
 			editedTransitions[currentTransitionIndex].visibleIndicesFrom,
 		visibleIndicesTo:
 			editedTransitions[currentTransitionIndex].visibleIndicesTo,
-		justifyContent: 'start',
+		justifyContent,
 		frame: currentRelativeFrame,
 		durationInFrames:
 			editedTransitions[currentTransitionIndex].frameRange.endFrame -

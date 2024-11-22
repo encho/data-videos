@@ -196,6 +196,7 @@ export const ListAnimationPage: React.FC = () => {
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 		fitItemHeights: false,
 		easing,
+		// justifyContent: 'center',
 	});
 
 	const listTransitionContextForDebug =
@@ -208,6 +209,7 @@ export const ListAnimationPage: React.FC = () => {
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 		fitItemHeights: false,
 		easing,
+		// justifyContent: 'center',
 	});
 
 	const listTransitionContext = listAnimationContext.currentTransitionContext;
