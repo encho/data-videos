@@ -147,6 +147,13 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const isPositiveBar = item.value >= 0;
 
+					const currentValue = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[0, item.value],
+						{}
+					);
+
 					return (
 						// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
 						<HtmlArea
@@ -186,7 +193,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-										value={item.value}
+										// value={item.value}
+										value={currentValue}
 									>
 										{item.valueLabel}
 									</ValueLabelComponent>
@@ -232,7 +240,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-										value={item.value}
+										// value={item.value}
+										value={currentValue}
 									>
 										{item.valueLabel}
 									</ValueLabelComponent>
@@ -253,6 +262,13 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						height: barArea.height,
 						width: currentBarWidth,
 					};
+
+					const currentValue = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[item.value, 0],
+						{}
+					);
 
 					const isPositiveBar = item.value >= 0;
 
@@ -285,7 +301,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									area={negativeValueLabelArea}
 									fill={theme.global.backgroundColor}
 								>
-									<></>
+									<ValueLabelComponent
+										animateEnter
+										animateExit={false}
+										id={item.id}
+										baseline={baseline}
+										theme={theme}
+										value={currentValue}
+									>
+										{item.valueLabel}
+									</ValueLabelComponent>
 								</HtmlArea>
 							)}
 
@@ -328,7 +353,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-										value={item.value}
+										value={currentValue}
 									>
 										{item.valueLabel}
 									</ValueLabelComponent>
@@ -398,7 +423,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 										area={negativeValueLabelArea}
 										fill={theme.global.backgroundColor}
 									>
-										<></>
+										<ValueLabelComponent
+											animateEnter
+											animateExit={false}
+											id={itemTo.id}
+											baseline={baseline}
+											theme={theme}
+											value={currentValue}
+										>
+											{itemTo.valueLabel}
+										</ValueLabelComponent>
 									</HtmlArea>
 								)}
 
@@ -441,7 +475,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											animateEnter={false}
 											baseline={baseline}
 											theme={theme}
-											value={itemTo.value}
+											// value={itemTo.value}
+											value={currentValue}
 										>
 											{itemTo.valueLabel}
 										</ValueLabelComponent>

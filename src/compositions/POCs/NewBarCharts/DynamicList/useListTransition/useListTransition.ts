@@ -8,7 +8,6 @@ import {getListLayout, TListLayout} from './getListLayout';
 type ListTransitionContext_Common = {
 	frame: number;
 	durationInFrames: number;
-	// itemHeight: number;
 	width: number;
 	easingPercentage: number;
 };
