@@ -1,8 +1,8 @@
 import {memo} from 'react';
 
-import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
 export type TBarChartLabelComponent = React.ComponentType<{
 	children: string;
@@ -14,13 +14,12 @@ export type TBarChartLabelComponent = React.ComponentType<{
 }>;
 
 export type TBarChartValueLabelComponent = React.ComponentType<{
+	id: string;
+	value: number;
 	animateExit?: boolean;
 	animateEnter?: boolean;
 	baseline: number;
 	theme: ThemeType;
-	//
-	id: string; // TODO deprecate
-	value: number; // TODO deprecate
 }>;
 
 function formatPercentage(value: number): string {
@@ -42,15 +41,13 @@ export const DefaultValueLabelComponent = memo(
 		theme,
 		value,
 	}: {
-		// children: string;
-		// id: string;
-		baseline: number;
-		theme: ThemeType;
+		value: number;
 		// eslint-disable-next-line
 		animateEnter?: boolean;
 		// eslint-disable-next-line
 		animateExit?: boolean;
-		value: number;
+		baseline: number;
+		theme: ThemeType;
 	}) => {
 		return (
 			<div
@@ -59,7 +56,7 @@ export const DefaultValueLabelComponent = memo(
 					justifyContent: value >= 0 ? 'flex-start' : 'flex-end',
 					alignItems: 'center',
 					height: '100%',
-					// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
+					// QUICK-FIX: for safety, as we are not measuring all interpolated values, just the from -and to values
 					textWrap: 'nowrap',
 				}}
 			>

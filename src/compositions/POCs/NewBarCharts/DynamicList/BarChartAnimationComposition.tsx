@@ -22,7 +22,6 @@ import {useListAnimation, ListAnimationTransition} from './useListAnimation';
 import {BarsTransition} from './BarsTransition';
 import {TBarChartItem} from './useBarChartTransition';
 import {
-	DefaultLabelComponent,
 	MeasureLabels,
 	MeasureValueLabels,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
@@ -30,7 +29,8 @@ import {
 	getBarChartItemHeight,
 	useBarChartTransition,
 } from './useBarChartTransition';
-import {DefaultValueLabelComponent} from './LabelComponents';
+import {DefaultValueLabelComponent} from './components/ValueLabelComponent';
+import {DefaultLabelComponent} from './components/LabelComponent';
 
 export const barChartAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

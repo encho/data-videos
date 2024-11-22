@@ -6,10 +6,8 @@ import {
 	RoundedRightRect,
 	RoundedLeftRect,
 } from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {
-	TBarChartValueLabelComponent,
-	TBarChartLabelComponent,
-} from './LabelComponents';
+import {TBarChartValueLabelComponent} from './components/ValueLabelComponent';
+import {TBarChartLabelComponent} from './components/LabelComponent';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {
 	ListTransitionContext_Update,
