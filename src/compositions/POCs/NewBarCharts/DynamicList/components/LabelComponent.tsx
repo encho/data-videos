@@ -5,19 +5,16 @@ import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextSty
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {TBarChartItem} from '../useBarChartTransition';
 
-// TODO
-// type TLabelComponentProps = {
-// ...
-// }
-
-export type TBarChartLabelComponent = React.ComponentType<{
+type TLabelComponentProps = {
 	label: string;
 	id: string;
 	animateExit: boolean;
 	animateEnter: boolean;
 	baseline: number;
 	theme: ThemeType;
-}>;
+};
+
+export type TBarChartLabelComponent = React.ComponentType<TLabelComponentProps>;
 
 export const DefaultLabelComponent = memo(
 	({

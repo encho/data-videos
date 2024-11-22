@@ -5,27 +5,19 @@ import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextSty
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {TBarChartItem} from '../useBarChartTransition';
 
-// TODO
-// type TValueLabelProps = {...}
-
-// export type TBarChartLabelComponent = React.ComponentType<{
-// 	children: string;
-// 	id: string;
-// 	animateExit: boolean;
-// 	animateEnter: boolean;
-// 	baseline: number;
-// 	theme: ThemeType;
-// }>;
-
-export type TBarChartValueLabelComponent = React.ComponentType<{
+type TValueLabelProps = {
 	id: string;
 	value: number;
 	animateExit?: boolean;
 	animateEnter?: boolean;
 	baseline: number;
 	theme: ThemeType;
-}>;
+};
 
+export type TBarChartValueLabelComponent =
+	React.ComponentType<TValueLabelProps>;
+
+// TODO pass in from outside
 function formatPercentage(value: number): string {
 	// Add a + sign for positive values, keep the sign for negative values
 	const sign = value > 0 ? '+' : '';
@@ -119,5 +111,4 @@ export const MeasureValueLabels = forwardRef<
 	);
 });
 
-// Optional: Set a display name for easier debugging
-// MeasureValueLabels.displayName = 'MeasureValueLabels';
+MeasureValueLabels.displayName = 'MeasureValueLabels';
