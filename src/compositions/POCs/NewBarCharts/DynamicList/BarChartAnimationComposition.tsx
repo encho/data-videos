@@ -155,9 +155,6 @@ export const ListAnimationPage: React.FC = () => {
 		column: 2,
 	});
 
-	const visibleIndicesFrom = [0, 5] as [number, number];
-	const visibleIndicesTo = [0, 4] as [number, number];
-
 	const duration_0 = Math.floor(durationInFrames / 5);
 	const duration_1 = Math.floor(durationInFrames / 5);
 	const duration_2 = Math.floor(durationInFrames / 5);
@@ -165,92 +162,32 @@ export const ListAnimationPage: React.FC = () => {
 	const duration_4 =
 		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
 
-	const easingFunction = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 
-	// eslint-disable-next-line
-	const weirdTransitions: ListAnimationTransition<TBarChartItem>[] = [
+	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
-			itemsFrom: [],
-			itemsTo: itemsFrom,
-			visibleIndicesFrom,
-			visibleIndicesTo,
-			easingFunction,
+			itemsTo: manyItemsWithNegatives,
+			easing,
 			durationInFrames: duration_0,
 		},
 		{
-			itemsFrom,
-			itemsTo,
-			visibleIndicesFrom,
-			visibleIndicesTo,
-			easingFunction,
+			itemsTo: fewItemsWithJustPositives,
+			easing,
 			durationInFrames: duration_1,
 		},
 		{
-			itemsFrom: itemsTo,
-			itemsTo: itemsFrom,
-			visibleIndicesFrom: visibleIndicesTo,
-			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
+			itemsTo: manyItemsWithNegatives,
+			easing,
 			durationInFrames: duration_2,
 		},
 		{
-			itemsFrom,
-			itemsTo,
-			visibleIndicesFrom,
-			visibleIndicesTo: [0, 2],
-			easingFunction,
+			itemsTo: fewItemsWithJustPositives,
+			easing,
 			durationInFrames: duration_3,
 		},
 		{
-			itemsFrom: itemsTo,
 			itemsTo: [],
-			visibleIndicesFrom: [0, 2],
-			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
-			durationInFrames: duration_4,
-		},
-	];
-
-	// eslint-disable-next-line
-	const scrollingTransitions: ListAnimationTransition<TBarChartItem>[] = [
-		{
-			itemsFrom: [],
-			itemsTo: itemsFrom,
-			visibleIndicesFrom: [0, 1],
-			visibleIndicesTo: [0, 3],
-			easingFunction,
-			durationInFrames: duration_0,
-		},
-		{
-			itemsFrom,
-			itemsTo: itemsFrom,
-			visibleIndicesFrom: [0, 3],
-			visibleIndicesTo: [2, 5],
-			easingFunction,
-			durationInFrames: duration_1,
-		},
-		{
-			itemsFrom,
-			itemsTo: itemsFrom,
-			visibleIndicesFrom: [2, 5],
-			visibleIndicesTo: [5, 8],
-			easingFunction,
-			durationInFrames: duration_2,
-		},
-		{
-			itemsFrom,
-			itemsTo: itemsFrom,
-			visibleIndicesFrom: [5, 8],
-			visibleIndicesTo: [0, 3],
-			easingFunction,
-			durationInFrames: duration_3,
-		},
-		{
-			itemsFrom,
-			itemsTo: [],
-			visibleIndicesFrom: [0, 3],
-			visibleIndicesTo: visibleIndicesFrom,
-			easingFunction,
+			easing,
 			durationInFrames: duration_4,
 		},
 	];
@@ -260,8 +197,7 @@ export const ListAnimationPage: React.FC = () => {
 	const listAnimationContextForDebug = useListAnimation({
 		width: area_1.width,
 		height: area_1.height,
-		transitions: weirdTransitions,
-		// transitions: scrollingTransitions,
+		transitions,
 		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 	});
 
@@ -271,8 +207,7 @@ export const ListAnimationPage: React.FC = () => {
 	const listAnimationContext = useListAnimation({
 		width: area_3.width,
 		height: area_3.height,
-		transitions: weirdTransitions,
-		// transitions: scrollingTransitions,
+		transitions,
 		itemHeight: itemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 	});
 
@@ -284,7 +219,7 @@ export const ListAnimationPage: React.FC = () => {
 		labelWidth: labelWidth || 0,
 		valueLabelWidth: valueLabelWidth || 0,
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
-		globalCustomDomain: [-100, 100],
+		// globalCustomDomain: [-100, 100],
 	});
 
 	return (
@@ -293,7 +228,7 @@ export const ListAnimationPage: React.FC = () => {
 			<MeasureLabels
 				key="labelMeasurement"
 				ref={labelsRef}
-				data={[...itemsFrom, ...itemsTo]}
+				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives]}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureLabelComponent}
@@ -303,7 +238,9 @@ export const ListAnimationPage: React.FC = () => {
 			<MeasureValueLabels
 				key="valueLabelMeasurement"
 				ref={valueLabelsRef}
-				data={[...itemsFrom, ...itemsTo].filter((it) => it.value >= 0)}
+				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives].filter(
+					(it) => it.value >= 0
+				)}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureValueLabelComponent}
@@ -312,7 +249,9 @@ export const ListAnimationPage: React.FC = () => {
 			<MeasureValueLabels
 				key="negativeValueLabelMeasurement"
 				ref={negativeValueLabelsRef}
-				data={[...itemsFrom, ...itemsTo].filter((it) => it.value < 0)}
+				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives].filter(
+					(it) => it.value < 0
+				)}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureValueLabelComponent}
@@ -522,7 +461,7 @@ export const ListAnimationPage: React.FC = () => {
 	);
 };
 
-const itemsFrom = [
+const manyItemsWithNegatives = [
 	{id: 'Id-001', label: 'Item 001', valueLabel: '$10.00', value: 10},
 	{id: 'Id-002', label: 'Item 002', valueLabel: '$20.50', value: 20.5},
 	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
@@ -537,7 +476,7 @@ const itemsFrom = [
 	{id: 'Id-010', label: 'Item 010', valueLabel: '$45.90', value: 45.9},
 ];
 
-const itemsTo = [
+const fewItemsWithJustPositives = [
 	{id: 'Id-009', label: 'Item 009', valueLabel: '$70.00', value: 70},
 	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
 	{id: 'Id-007', label: 'Item 007', valueLabel: '$20.80', value: 20.8},

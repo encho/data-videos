@@ -127,7 +127,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
+	const zeroLine_color = 'magenta';
 
 	return (
 		<div>
@@ -454,7 +454,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 			</div>
 
 			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,255,0,0.2)">
+			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
 				<svg width={plotArea.width} height={plotArea.height}>
 					<line
 						x1={zeroLine_x1}
@@ -510,7 +510,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
+	const zeroLine_color = 'magenta';
 
 	return (
 		<div>
@@ -629,7 +629,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 			})}
 
 			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,255,0,0.2)">
+			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
 				<svg width={plotArea.width} height={plotArea.height}>
 					<line
 						x1={zeroLine_x1}
@@ -685,7 +685,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
+	const zeroLine_color = 'magenta';
 
 	return (
 		<div>
@@ -803,7 +803,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 				);
 			})}
 			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,255,0,0.2)">
+			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
 				<svg width={plotArea.width} height={plotArea.height}>
 					<line
 						x1={zeroLine_x1}

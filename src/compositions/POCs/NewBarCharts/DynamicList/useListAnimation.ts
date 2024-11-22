@@ -9,19 +9,29 @@ import {
 } from './useListTransition/useListTransition';
 
 export type ListAnimationTransition<T> = {
-	itemsFrom: T[];
+	// from: {visibleIndices, items} // TODO
+	itemsFrom?: T[];
+	visibleIndicesFrom?: [number, number];
+	// to: {visibleIndices, items} // TODO
 	itemsTo: T[];
-	visibleIndicesFrom: [number, number];
-	visibleIndicesTo: [number, number];
-	easingFunction: EasingFunction;
+	visibleIndicesTo?: [number, number];
+	//
+	easing: EasingFunction;
 	durationInFrames: number;
 };
 
 type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
 	frameRange: TFrameRange;
-	// TODO
-	// visibleItemsFrom: T[];
-	// visibleItemsTo: T[];
+	// from: {visibleIndices, items} // TODO
+	// to: {visibleIndices, items} // TODO
+	itemsFrom: T[];
+	itemsTo: T[];
+	visibleIndicesFrom: [number, number];
+	visibleIndicesTo: [number, number];
+	easing: EasingFunction;
+	durationInFrames: number;
+	// vistibleItemsFrom: T[]; // currently happening in useListTransition
+	// vistibleItemsTo: T[]; // currently happening in useListTransition
 };
 
 export type ListAnimationContext<T extends {id: string}> = {
@@ -29,6 +39,7 @@ export type ListAnimationContext<T extends {id: string}> = {
 	durationInFrames: number;
 	numberOfTransitions: number;
 	currentTransitionIndex: number;
+	// TODO add linearPercentage to context, not everywhing should animate with the easingTransition for the list items!!!
 	currentTransitionContext: TDynamicListTransitionContext<T>;
 	transitions: EditedListAnimationTransition<T>[];
 };
@@ -38,6 +49,7 @@ type UseListAnimationArgs<T> = {
 	height: number;
 	itemHeight?: number;
 	transitions: ListAnimationTransition<T>[];
+	// easing?: EasingFunction; // TODO
 };
 
 // TODO, this actually represents only 1 animation step. the useListTransition will have to
@@ -62,14 +74,35 @@ export function useListAnimation<T extends {id: string}>({
 		return calculateFrameRanges(transitionDurations);
 	}, [transitions]);
 
-	// TODO wrap in useMemo
-	const editedTransitions = transitions.map((it, i) => {
-		//
-		return {
-			...it,
+	const editedTransitions = transitions.reduce<
+		EditedListAnimationTransition<T>[]
+	>((memo, currentTransition, i) => {
+		const itemsFrom = currentTransition.itemsFrom
+			? currentTransition.itemsFrom
+			: i === 0
+			? []
+			: memo[i - 1].itemsTo;
+
+		const visibleIndicesFrom = currentTransition.visibleIndicesFrom
+			? currentTransition.visibleIndicesFrom
+			: itemsFrom.length === 0
+			? ([0, 0] as [number, number])
+			: ([0, itemsFrom.length] as [number, number]);
+
+		const visibleIndicesTo = currentTransition.visibleIndicesTo
+			? currentTransition.visibleIndicesTo
+			: ([0, currentTransition.itemsTo.length] as [number, number]);
+
+		const editedTransition = {
+			...currentTransition,
+			itemsFrom,
+			visibleIndicesFrom,
+			visibleIndicesTo,
 			frameRange: frameRanges[i],
 		};
-	});
+
+		return [...memo, editedTransition];
+	}, []);
 
 	const totalDurationInFrames =
 		frameRanges[frameRanges.length - 1].endFrame + 1;
@@ -88,7 +121,7 @@ export function useListAnimation<T extends {id: string}>({
 		itemHeight,
 		itemMarginTop: ITEM_MARGIN_TOP,
 		itemMarginBottom: ITEM_MARGIN_BOTTOM,
-		easing: editedTransitions[currentTransitionIndex].easingFunction,
+		easing: editedTransitions[currentTransitionIndex].easing,
 		itemsFrom: editedTransitions[currentTransitionIndex].itemsFrom,
 		itemsTo: editedTransitions[currentTransitionIndex].itemsTo,
 		visibleIndicesFrom:
