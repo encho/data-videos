@@ -256,11 +256,6 @@ import {
 } from './compositions/POCs/NewBarCharts/DynamicList/ListTransitionComposition';
 
 import {
-	BarChartTransitionComposition,
-	barChartTransitionCompositionSchema,
-} from './compositions/POCs/NewBarCharts/DynamicList/BarChartTransitionComposition';
-
-import {
 	ListAnimationComposition,
 	listAnimationCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/ListAnimationComposition';
@@ -1327,7 +1322,7 @@ export const RemotionRoot: React.FC = () => {
 						schema={listAnimationCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
-					<Composition
+					{/* <Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="BarChartTransition"
@@ -1338,7 +1333,7 @@ export const RemotionRoot: React.FC = () => {
 						// height={12000}
 						schema={barChartTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
+					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
