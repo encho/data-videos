@@ -1,6 +1,6 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
-import {interpolate} from 'remotion';
+import {interpolate, interpolateColors} from 'remotion';
 
 import {
 	RoundedRightRect,
@@ -154,6 +154,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						{}
 					);
 
+					const barColor = item.color;
+
 					return (
 						// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
 						<HtmlArea
@@ -205,8 +207,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											x={relativeBarPositions.x}
 											height={relativeBarPositions.height}
 											width={relativeBarPositions.width}
-											// fill={it.barColor || 'magenta'}
-											fill="magenta"
+											fill={barColor}
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
@@ -216,8 +217,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											x={relativeBarPositions.x}
 											height={relativeBarPositions.height}
 											width={relativeBarPositions.width}
-											// fill={it.barColor || 'magenta'}
-											fill="magenta"
+											fill={barColor}
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
@@ -262,6 +262,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						[item.value, 0],
 						{}
 					);
+
+					const barColor = item.color;
 
 					const isPositiveBar = item.value >= 0;
 
@@ -312,8 +314,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											x={relativeBarPositions.x}
 											height={relativeBarPositions.height}
 											width={relativeBarPositions.width}
-											// fill={it.barColor || 'magenta'}
-											fill="magenta"
+											fill={barColor}
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
@@ -323,8 +324,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 											x={relativeBarPositions.x}
 											height={relativeBarPositions.height}
 											width={relativeBarPositions.width}
-											// fill={it.barColor || 'magenta'}
-											fill="magenta"
+											fill={barColor}
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
@@ -376,6 +376,12 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						};
 
 						const isPositiveBar = currentValue >= 0;
+
+						const currentBarColor = interpolateColors(
+							frame,
+							[0, durationInFrames - 1],
+							[itemFrom.color, itemTo.color]
+						);
 
 						return (
 							<HtmlArea
@@ -429,8 +435,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 												x={relativeBarPositions.x}
 												height={relativeBarPositions.height}
 												width={relativeBarPositions.width}
-												// fill={it.barColor || 'magenta'}
-												fill="magenta"
+												fill={currentBarColor}
 												// TODO: get radius from baseline?
 												radius={5}
 											/>
@@ -440,8 +445,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 												x={relativeBarPositions.x}
 												height={relativeBarPositions.height}
 												width={relativeBarPositions.width}
-												// fill={it.barColor || 'magenta'}
-												fill="magenta"
+												fill={currentBarColor}
 												// TODO: get radius from baseline?
 												radius={5}
 											/>
@@ -551,6 +555,8 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				const isPositiveBar = currentValue >= 0;
 
+				const barColor = dataItem.color;
+
 				return (
 					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
 						{showLayout ? (
@@ -599,8 +605,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 										x={relativeBarPositions.x}
 										height={relativeBarPositions.height}
 										width={relativeBarPositions.width}
-										// fill={it.barColor || 'magenta'}
-										fill="magenta"
+										fill={barColor}
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
@@ -610,8 +615,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 										x={relativeBarPositions.x}
 										height={relativeBarPositions.height}
 										width={relativeBarPositions.width}
-										// fill={it.barColor || 'magenta'}
-										fill="magenta"
+										fill={barColor}
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
@@ -718,6 +722,8 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					width: currentBarWidth,
 				};
 
+				const barColor = dataItem.color;
+
 				const isPositiveBar = currentValue >= 0;
 
 				return (
@@ -768,8 +774,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 										x={relativeBarPositions.x}
 										height={relativeBarPositions.height}
 										width={relativeBarPositions.width}
-										// fill={it.barColor || 'magenta'}
-										fill="magenta"
+										fill={barColor}
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
@@ -779,8 +784,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 										x={relativeBarPositions.x}
 										height={relativeBarPositions.height}
 										width={relativeBarPositions.width}
-										// fill={it.barColor || 'magenta'}
-										fill="magenta"
+										fill={barColor}
 										// TODO: get radius from baseline?
 										radius={5}
 									/>

@@ -64,8 +64,8 @@ export type TBarChartTransitionContext =
 export type TBarChartItem = {
 	id: string;
 	label: string;
-	valueLabel: string;
 	value: number;
+	color: string;
 };
 
 export function useBarChartTransition({
