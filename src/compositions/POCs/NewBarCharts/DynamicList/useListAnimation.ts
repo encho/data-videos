@@ -173,6 +173,7 @@ export function useListAnimation<T extends {id: string}>({
 		easing: editedTransitions[currentTransitionIndex].easing,
 		justifyContent,
 		frame: currentRelativeFrame,
+		frameRange: editedTransitions[currentTransitionIndex].frameRange,
 		durationInFrames:
 			editedTransitions[currentTransitionIndex].frameRange.endFrame -
 			editedTransitions[currentTransitionIndex].frameRange.startFrame +

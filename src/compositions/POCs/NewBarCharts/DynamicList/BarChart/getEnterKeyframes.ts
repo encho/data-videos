@@ -8,7 +8,7 @@ import {
 import {TBarChartItem} from '../useBarChartTransition';
 
 // TODO eventually as hook, as we can memoize labelStartKeyframes etc...
-export function getBarChartKeyframes({
+export function getBarChartEnterKeyframes({
 	fps,
 	durationInFrames,
 	data,
@@ -38,7 +38,6 @@ export function getBarChartKeyframes({
 				accumulator.push({
 					type: 'R_SECOND',
 					value: 0.025,
-					// value: 0.0,
 					id: `LABEL_APPEAR__${currentItem.id}`,
 					relativeId: previousLabelKeyframe.id,
 				});
@@ -62,17 +61,6 @@ export function getBarChartKeyframes({
 			id: `ZEROLINE_ENTER_END`,
 			relativeId: `ZEROLINE_ENTER_START`,
 		},
-		// {
-		// 	type: 'SECOND',
-		// 	value: -0,
-		// 	id: `ZEROLINE_EXIT_END`,
-		// },
-		// {
-		// 	type: 'R_SECOND',
-		// 	value: -0.5,
-		// 	id: `ZEROLINE_EXIT_START`,
-		// 	relativeId: `ZEROLINE_EXIT_END`,
-		// },
 	];
 
 	// bars and value labels enter keyframes
@@ -91,33 +79,13 @@ export function getBarChartKeyframes({
 					id: `BAR_ENTER_END__${currentItem.id}`,
 					relativeId: `BAR_ENTER_START__${currentItem.id}`,
 				});
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.05,
-				// 	id: `BAR_EXIT_END__${currentItem.id}`,
-				// 	relativeId: 'ZEROLINE_EXIT_START',
-				// });
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.5,
-				// 	id: `BAR_EXIT_START__${currentItem.id}`,
-				// 	relativeId: `BAR_EXIT_END__${currentItem.id}`,
-				// });
 				accumulator.push({
 					type: 'R_SECOND',
 					value: -0.4,
 					id: `VALUE_LABEL_APPEAR__${currentItem.id}`,
 					relativeId: `BAR_ENTER_END__${currentItem.id}`,
 				});
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.1,
-				// 	id: `VALUE_LABEL_DISSAPPEAR__${currentItem.id}`,
-				// 	relativeId: `BAR_EXIT_END__${currentItem.id}`,
-				// });
 			} else {
-				// const previousLabelKeyframe = accumulator[accumulator.length - 1];
-
 				accumulator.push({
 					type: 'R_SECOND',
 					value: 0.05,
@@ -130,30 +98,12 @@ export function getBarChartKeyframes({
 					id: `BAR_ENTER_END__${currentItem.id}`,
 					relativeId: `BAR_ENTER_START__${currentItem.id}`,
 				});
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.05,
-				// 	id: `BAR_EXIT_END__${currentItem.id}`,
-				// 	relativeId: 'ZEROLINE_EXIT_START',
-				// });
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.5,
-				// 	id: `BAR_EXIT_START__${currentItem.id}`,
-				// 	relativeId: `BAR_EXIT_END__${currentItem.id}`,
-				// });
 				accumulator.push({
 					type: 'R_SECOND',
 					value: -0.4,
 					id: `VALUE_LABEL_APPEAR__${currentItem.id}`,
 					relativeId: `BAR_ENTER_END__${currentItem.id}`,
 				});
-				// accumulator.push({
-				// 	type: 'R_SECOND',
-				// 	value: -0.1,
-				// 	id: `VALUE_LABEL_DISSAPPEAR__${currentItem.id}`,
-				// 	relativeId: `BAR_EXIT_END__${currentItem.id}`,
-				// });
 			}
 			return accumulator;
 		},
@@ -162,6 +112,92 @@ export function getBarChartKeyframes({
 
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
 		...labelStartKeyframes,
+		...zeroLineKeyframes,
+		...barKeyframes,
+	]);
+
+	return keyframes;
+}
+
+export function getBarChartExitKeyframes({
+	fps,
+	durationInFrames,
+	data,
+	keyframes: keyframesProp,
+}: {
+	fps: number;
+	durationInFrames: number;
+	data: TBarChartItem[];
+	keyframes?: TKeyFramesGroup;
+}) {
+	if (keyframesProp) {
+		return keyframesProp;
+	}
+
+	// zero line enter keyframes
+	const zeroLineKeyframes: TKeyFrameSpec[] = [
+		{
+			type: 'SECOND',
+			value: -0,
+			id: `ZEROLINE_EXIT_END`,
+		},
+		{
+			type: 'R_SECOND',
+			value: -0.5,
+			id: `ZEROLINE_EXIT_START`,
+			relativeId: `ZEROLINE_EXIT_END`,
+		},
+	];
+
+	// bars and value labels enter keyframes
+	const barKeyframes = data.reduce<TKeyFrameSpec[]>(
+		(accumulator, currentItem, index) => {
+			if (index === 0) {
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.05,
+					id: `BAR_EXIT_END__${currentItem.id}`,
+					relativeId: 'ZEROLINE_EXIT_START',
+				});
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.5,
+					id: `BAR_EXIT_START__${currentItem.id}`,
+					relativeId: `BAR_EXIT_END__${currentItem.id}`,
+				});
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.1,
+					id: `VALUE_LABEL_DISAPPEAR__${currentItem.id}`,
+					relativeId: `BAR_EXIT_END__${currentItem.id}`,
+				});
+			} else {
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.05,
+					id: `BAR_EXIT_END__${currentItem.id}`,
+					relativeId: 'ZEROLINE_EXIT_START',
+				});
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.5,
+					id: `BAR_EXIT_START__${currentItem.id}`,
+					relativeId: `BAR_EXIT_END__${currentItem.id}`,
+				});
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.1,
+					id: `VALUE_LABEL_DISAPPEAR__${currentItem.id}`,
+					relativeId: `BAR_EXIT_END__${currentItem.id}`,
+				});
+			}
+			return accumulator;
+		},
+		[]
+	);
+
+	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
+		// ...labelStartKeyframes,
 		...zeroLineKeyframes,
 		...barKeyframes,
 	]);

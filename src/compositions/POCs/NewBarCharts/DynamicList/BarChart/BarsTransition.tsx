@@ -9,7 +9,10 @@ import {
 } from 'remotion';
 
 import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
-import {getBarChartKeyframes} from './getEnterKeyframes';
+import {
+	getBarChartEnterKeyframes,
+	getBarChartExitKeyframes,
+} from './getEnterKeyframes';
 import {
 	RoundedRightRect,
 	RoundedLeftRect,
@@ -174,7 +177,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					const barColor = item.color;
 
 					return (
-						<HtmlArea area={area} opacity={opacity}>
+						<HtmlArea key={item.id} area={area} opacity={opacity}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
 									<DisplayGridRails
@@ -289,7 +292,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					const isPositiveBar = item.value >= 0;
 
 					return (
-						<HtmlArea area={area} opacity={opacity}>
+						<HtmlArea key={item.id} area={area} opacity={opacity}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
 									<DisplayGridRails
@@ -421,7 +424,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					);
 
 					return (
-						<HtmlArea area={area} opacity={opacity}>
+						<HtmlArea key={itemTo.id} area={area} opacity={opacity}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
 									<DisplayGridRails
@@ -558,23 +561,15 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	const {fps} = useVideoConfig();
 
 	// TODO evtl. have it called relativeFrame
-	const {frame, durationInFrames} = listTransitionContext;
-
-	const keyframes = getBarChartKeyframes({
-		fps,
-		durationInFrames,
-		data: listTransitionContext.to.items,
-	});
+	const {frame, durationInFrames, frameRange} = listTransitionContext;
 
 	const {visibleItems} = listTransitionContext.to;
 
-	// const backgroundColorOpacity = interpolate(
-	// 	listTransitionContext.easingPercentage,
-	// 	[0, 0.2, 1],
-	// 	[0, 1, 0]
-	// );
-
-	// const backgroundColor = `rgba(0,255,0,${backgroundColorOpacity})`;
+	const keyframes = getBarChartEnterKeyframes({
+		fps,
+		durationInFrames,
+		data: visibleItems,
+	});
 
 	const {xScale} = barChartTransitionContext;
 
@@ -593,7 +588,11 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	const zeroLine_x1 = xScale(0);
 
 	return (
-		<div>
+		<Sequence
+			from={frameRange.startFrame}
+			durationInFrames={durationInFrames}
+			layout="none"
+		>
 			<div
 				style={{
 					position: 'fixed',
@@ -613,13 +612,6 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 			</div>
 
 			{rowsInfo.map(({dataItem, area}) => {
-				const currentValue = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[0, dataItem.value],
-					{}
-				);
-
 				const keyframe_label_appear = getKeyFrame(
 					keyframes,
 					'LABEL_APPEAR__' + dataItem.id
@@ -656,7 +648,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				const negativeValueLabelMarginLeft = relativeBarPositions.x;
 
-				const isPositiveBar = currentValue >= 0;
+				const isPositiveBar = dataItem.value >= 0;
 
 				const barColor = dataItem.color;
 
@@ -689,7 +681,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 								<svg width={barArea.width} height={barArea.height}>
-									{currentValue > 0 && barArea.width ? (
+									{isPositiveBar && barArea.width ? (
 										<RoundedRightRect
 											y={relativeBarPositions.y}
 											x={relativeBarPositions.x}
@@ -699,7 +691,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 											// TODO: get radius from baseline?
 											radius={5}
 										/>
-									) : currentValue < 0 && barArea.width ? (
+									) : !isPositiveBar && barArea.width ? (
 										<RoundedLeftRect
 											y={relativeBarPositions.y}
 											x={relativeBarPositions.x}
@@ -798,7 +790,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					</HtmlArea>
 				);
 			})()}
-		</div>
+		</Sequence>
 	);
 };
 
@@ -811,17 +803,19 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 }) => {
 	const {theme, baseline} = usePage();
 
-	const {frame, durationInFrames} = listTransitionContext;
+	const {fps} = useVideoConfig();
+
+	const {frame, durationInFrames, frameRange} = listTransitionContext;
+
+	// listTransitionContext.
 
 	const {visibleItems} = listTransitionContext.from;
 
-	const backgroundColorOpacity = interpolate(
-		listTransitionContext.easingPercentage,
-		[0, 0.2, 1],
-		[0, 1, 0]
-	);
-
-	const backgroundColor = `rgba(255,0,0,${backgroundColorOpacity})`;
+	const keyframes = getBarChartExitKeyframes({
+		fps,
+		durationInFrames,
+		data: visibleItems,
+	});
 
 	const {xScale} = barChartTransitionContext;
 
@@ -838,23 +832,47 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
 	const zeroLine_x1 = xScale(0);
-	const zeroLine_x2 = zeroLine_x1;
-	const zeroLine_y1 = 0;
-	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
 
 	return (
-		<div>
+		<Sequence
+			from={frameRange.startFrame}
+			durationInFrames={durationInFrames}
+			layout="none"
+		>
+			<div
+				style={{
+					position: 'fixed',
+					top: 900,
+					left: 0,
+					background: 'black',
+					zIndex: 100,
+				}}
+			>
+				<KeyFramesInspector
+					theme={theme}
+					frame={frame}
+					width={1500}
+					baseFontSize={20}
+					keyFramesGroup={keyframes}
+				/>
+			</div>
+
 			{rowsInfo.map(({dataItem, area}) => {
-				const currentValue = interpolate(
-					frame,
-					[0, durationInFrames - 1],
-					[dataItem.value, 0],
-					{}
+				const keyframe_valueLabel_disappear = getKeyFrame(
+					keyframes,
+					'VALUE_LABEL_DISAPPEAR__' + dataItem.id
 				);
 
-				// see also useAnimatedBarChartLayout line 100 ff.
-				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+				const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
+
+				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+					keyframes,
+					[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
+					[fullBarWidth, 0],
+					[Easing.ease]
+				);
+
+				const currentBarWidth = interpolateCurrentBarWidth(frame);
 
 				const relativeBarPositions = {
 					y: 0,
@@ -871,10 +889,10 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 				const barColor = dataItem.color;
 
-				const isPositiveBar = currentValue >= 0;
+				const isPositiveBar = dataItem.value >= 0;
 
 				return (
-					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
+					<HtmlArea key={dataItem.id} area={area}>
 						{showLayout ? (
 							<div style={{position: 'absolute'}}>
 								<DisplayGridRails
@@ -898,7 +916,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
 							<svg width={barArea.width} height={barArea.height}>
-								{currentValue > 0 && barArea.width ? (
+								{isPositiveBar && barArea.width ? (
 									<RoundedRightRect
 										y={relativeBarPositions.y}
 										x={relativeBarPositions.x}
@@ -908,7 +926,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 										// TODO: get radius from baseline?
 										radius={5}
 									/>
-								) : currentValue < 0 && barArea.width ? (
+								) : !isPositiveBar && barArea.width ? (
 									<RoundedLeftRect
 										y={relativeBarPositions.y}
 										x={relativeBarPositions.x}
@@ -923,45 +941,50 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						</HtmlArea>
 
 						{/* the negative value label */}
-						{isPositiveBar ? null : (
-							<HtmlArea
-								area={negativeValueLabelArea}
-								fill={theme.global.backgroundColor}
-								style={{marginLeft: negativeValueLabelMarginLeft}}
-							>
-								<ValueLabelComponent
-									animateExit
-									animateEnter={false}
-									id={dataItem.id}
-									baseline={baseline}
-									theme={theme}
-									value={dataItem.value}
-								/>
-							</HtmlArea>
-						)}
+						<Sequence
+							durationInFrames={keyframe_valueLabel_disappear.frame}
+							layout="none"
+						>
+							{isPositiveBar ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									fill={theme.global.backgroundColor}
+									style={{marginLeft: negativeValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
+										animateExit
+										animateEnter={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										value={dataItem.value}
+									/>
+								</HtmlArea>
+							)}
 
-						{/* the value label */}
-						{isPositiveBar ? (
-							<HtmlArea
-								area={valueLabelArea}
-								fill={theme.global.backgroundColor}
-								style={{marginLeft: positiveValueLabelMarginLeft}}
-							>
-								<ValueLabelComponent
-									animateExit
-									animateEnter={false}
-									id={dataItem.id}
-									baseline={baseline}
-									theme={theme}
-									value={dataItem.value}
-								/>
-							</HtmlArea>
-						) : null}
+							{/* the value label */}
+							{isPositiveBar ? (
+								<HtmlArea
+									area={valueLabelArea}
+									fill={theme.global.backgroundColor}
+									style={{marginLeft: positiveValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
+										animateExit
+										animateEnter={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										value={dataItem.value}
+									/>
+								</HtmlArea>
+							) : null}
+						</Sequence>
 					</HtmlArea>
 				);
 			})}
 			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+			{/* <HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
 				<svg width={plotArea.width} height={plotArea.height}>
 					<line
 						x1={zeroLine_x1}
@@ -973,7 +996,51 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						// opacity={opacity}
 					/>
 				</svg>
-			</HtmlArea>
-		</div>
+			</HtmlArea> */}
+
+			{/* the zero line */}
+			{(() => {
+				const zeroLine_x2 = zeroLine_x1;
+				const zeroLine_y1_full = 0;
+				const zeroLine_y2_full = plotArea.height;
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
+					[zeroLine_y1_full, zeroLine_y2_full],
+					[Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
+					[zeroLine_y2_full, zeroLine_y2_full],
+					[Easing.ease]
+				);
+
+				const zeroLine_color = 'cyan';
+
+				const zeroLine_y1 = interpolateZeroLine__y1(frame);
+				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+
+				return (
+					<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+						<svg width={plotArea.width} height={plotArea.height}>
+							<line
+								x1={zeroLine_x1}
+								x2={zeroLine_x2}
+								y1={zeroLine_y1}
+								y2={zeroLine_y2}
+								stroke={zeroLine_color}
+								strokeWidth={baseline * 0.2} // TODO from some ibcs setting
+								// opacity={opacity}
+							/>
+						</svg>
+					</HtmlArea>
+				);
+			})()}
+		</Sequence>
 	);
 };

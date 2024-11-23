@@ -81,7 +81,7 @@ export function buildKeyFramesGroup(
 			if (getSign(keyFrameSpec.value) === 1) {
 				keyFrame = Math.floor(keyFrameSpec.value * (fps - 1)); // Convert seconds to frames
 			} else {
-				keyFrame = durationInFrames - 1 + keyFrameSpec.value * fps;
+				keyFrame = durationInFrames - 1 + Math.floor(keyFrameSpec.value * fps);
 			}
 		} else if (keyFrameSpec.type === 'FRAME') {
 			if (getSign(keyFrameSpec.value) === 1) {
@@ -109,7 +109,8 @@ export function buildKeyFramesGroup(
 					`Unknown relative keyframe id ${keyFrameSpec.relativeId}`
 				);
 			}
-			keyFrame = relativeKeyFrameObject.frame + keyFrameSpec.value * fps;
+			keyFrame =
+				relativeKeyFrameObject.frame + Math.floor(keyFrameSpec.value * fps);
 		} else {
 			throw new Error(`Unknown keyFrame type`);
 		}

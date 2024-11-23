@@ -10,6 +10,7 @@ type ListTransitionContext_Common = {
 	durationInFrames: number;
 	width: number;
 	easingPercentage: number;
+	frameRange: {startFrame: number; endFrame: number};
 };
 
 export type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
@@ -97,6 +98,7 @@ export function useListTransition<T extends {id: string}>({
 	frame,
 	durationInFrames,
 	easing = Easing.linear,
+	frameRange,
 }: {
 	from: {
 		items: T[];
@@ -108,6 +110,7 @@ export function useListTransition<T extends {id: string}>({
 		visibleIndices: [number, number];
 		itemHeight: number;
 	};
+	frameRange: {startFrame: number; endFrame: number};
 	width: number;
 	height: number;
 	itemMarginTop?: number; // TODO not optional
@@ -131,6 +134,7 @@ export function useListTransition<T extends {id: string}>({
 		frame,
 		durationInFrames,
 		easingPercentage,
+		frameRange,
 		// transitionTypes, // in update instead
 		// itemHeight,
 		width,
