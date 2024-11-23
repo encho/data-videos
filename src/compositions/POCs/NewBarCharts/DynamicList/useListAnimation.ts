@@ -31,8 +31,8 @@ type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
 	//
 	itemHeightFrom: number;
 	itemHeightTo: number;
-	// from: {visibleIndices, items} // TODO
-	// to: {visibleIndices, items} // TODO
+	// from: {visibleIndices, items, ...} // TODO
+	// to: {visibleIndices, items, ...} // TODO
 	itemsFrom: T[];
 	itemsTo: T[];
 	visibleIndicesFrom: [number, number];
@@ -154,20 +154,23 @@ export function useListAnimation<T extends {id: string}>({
 		frame - editedTransitions[currentTransitionIndex].frameRange.startFrame;
 
 	const currentTransitionContext = useListTransition({
+		from: {
+			items: editedTransitions[currentTransitionIndex].itemsFrom,
+			visibleIndices:
+				editedTransitions[currentTransitionIndex].visibleIndicesFrom,
+			itemHeight: editedTransitions[currentTransitionIndex].itemHeightFrom,
+		},
+		to: {
+			items: editedTransitions[currentTransitionIndex].itemsTo,
+			visibleIndices:
+				editedTransitions[currentTransitionIndex].visibleIndicesTo,
+			itemHeight: editedTransitions[currentTransitionIndex].itemHeightTo,
+		},
 		width,
 		height,
-		// itemHeight, // TODO deprecate
-		itemHeightFrom: editedTransitions[currentTransitionIndex].itemHeightFrom,
-		itemHeightTo: editedTransitions[currentTransitionIndex].itemHeightTo,
 		itemMarginTop: ITEM_MARGIN_TOP,
 		itemMarginBottom: ITEM_MARGIN_BOTTOM,
 		easing: editedTransitions[currentTransitionIndex].easing,
-		itemsFrom: editedTransitions[currentTransitionIndex].itemsFrom,
-		itemsTo: editedTransitions[currentTransitionIndex].itemsTo,
-		visibleIndicesFrom:
-			editedTransitions[currentTransitionIndex].visibleIndicesFrom,
-		visibleIndicesTo:
-			editedTransitions[currentTransitionIndex].visibleIndicesTo,
 		justifyContent,
 		frame: currentRelativeFrame,
 		durationInFrames:

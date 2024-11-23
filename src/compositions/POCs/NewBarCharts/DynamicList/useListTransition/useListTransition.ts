@@ -87,46 +87,31 @@ export type TDynamicListTransitionContext<T extends {id: string}> =
 // TODO, this actually represents only 1 animation step. the useListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListTransition<T extends {id: string}>({
+	from: fromProp,
+	to: toProp,
 	width,
 	height,
 	itemMarginTop = 0,
 	itemMarginBottom = 0,
-	itemHeightFrom,
-	itemHeightTo,
-	itemsFrom,
-	itemsTo,
-	visibleIndicesFrom,
-	visibleIndicesTo,
 	justifyContent = 'center',
 	frame,
 	durationInFrames,
 	easing = Easing.linear,
 }: {
+	from: {
+		items: T[];
+		visibleIndices: [number, number];
+		itemHeight: number;
+	};
+	to: {
+		items: T[];
+		visibleIndices: [number, number];
+		itemHeight: number;
+	};
 	width: number;
 	height: number;
-	itemHeightFrom: number;
-	itemHeightTo: number;
 	itemMarginTop?: number; // TODO not optional
 	itemMarginBottom?: number; // TODO not optional
-	// TODO:
-	// itemSizes: {
-	// 	height?: number;
-	// 	marginTop?: number;
-	// 	marginBottom?: number;
-	// };
-	// TODO
-	// from: {
-	// 	items: T[];
-	// 	visibleIndices: [number, number];
-	// };
-	// to: {
-	// 	items: T[];
-	// 	visibleIndices: [number, number];
-	// };
-	itemsFrom: T[];
-	itemsTo: T[];
-	visibleIndicesFrom: [number, number];
-	visibleIndicesTo: [number, number];
 	justifyContent?: 'center' | 'start';
 	frame: number;
 	durationInFrames: number;
@@ -151,8 +136,8 @@ export function useListTransition<T extends {id: string}>({
 		width,
 	};
 
-	const isEnterTransition = itemsFrom.length === 0;
-	const isExitTransition = itemsTo.length === 0;
+	const isEnterTransition = fromProp.items.length === 0;
+	const isExitTransition = toProp.items.length === 0;
 
 	const transitionType = isEnterTransition
 		? 'enter'
@@ -231,16 +216,18 @@ export function useListTransition<T extends {id: string}>({
 	);
 
 	if (transitionType === 'update') {
-		const from = getTransitionStateData({
-			items: itemsFrom,
-			visibleIndices: visibleIndicesFrom,
-			itemHeight: itemHeightFrom,
-		});
-		const to = getTransitionStateData({
-			items: itemsTo,
-			visibleIndices: visibleIndicesTo,
-			itemHeight: itemHeightTo,
-		});
+		// const from = getTransitionStateData({
+		// 	items: fromProp.items,
+		// 	visibleIndices: fromProp.visibleIndices,
+		// 	itemHeight: fromProp.itemHeight,
+		// });
+		// const to = getTransitionStateData({
+		// 	items: toProp.items,
+		// 	visibleIndices: toProp.visibleIndices,
+		// 	itemHeight: toProp.itemHeight,
+		// });
+		const from = getTransitionStateData(fromProp);
+		const to = getTransitionStateData(toProp);
 		const transitionTypes = getTransitionTypes({
 			allFrom: from.items.map((it) => it.id),
 			allTo: to.items.map((it) => it.id),
@@ -258,11 +245,7 @@ export function useListTransition<T extends {id: string}>({
 	}
 
 	if (transitionType === 'enter') {
-		const to = getTransitionStateData({
-			items: itemsTo,
-			visibleIndices: visibleIndicesTo,
-			itemHeight: itemHeightTo,
-		});
+		const to = getTransitionStateData(toProp);
 
 		return {
 			transitionType,
@@ -273,11 +256,7 @@ export function useListTransition<T extends {id: string}>({
 
 	invariant(transitionType === 'exit');
 
-	const from = getTransitionStateData({
-		items: itemsFrom,
-		visibleIndices: visibleIndicesFrom,
-		itemHeight: itemHeightFrom,
-	});
+	const from = getTransitionStateData(fromProp);
 
 	return {
 		transitionType,
