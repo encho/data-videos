@@ -3,10 +3,11 @@ import {
 	buildKeyFramesGroup,
 	TKeyFramesGroup,
 	TKeyFrameSpec,
-} from '../../Keyframes/Keyframes/keyframes';
+} from '../../../Keyframes/Keyframes/keyframes';
 
-import {TBarChartItem} from './useBarChartTransition';
+import {TBarChartItem} from '../useBarChartTransition';
 
+// TODO eventually as hook, as we can memoize labelStartKeyframes etc...
 export function getBarChartKeyframes({
 	fps,
 	durationInFrames,
@@ -37,6 +38,7 @@ export function getBarChartKeyframes({
 				accumulator.push({
 					type: 'R_SECOND',
 					value: 0.025,
+					// value: 0.0,
 					id: `LABEL_APPEAR__${currentItem.id}`,
 					relativeId: previousLabelKeyframe.id,
 				});

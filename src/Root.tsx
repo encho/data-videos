@@ -1342,7 +1342,7 @@ export const RemotionRoot: React.FC = () => {
 						durationInFrames={30 * 12}
 						fps={30}
 						{...videoSizes.widescreen_16x9}
-						height={2000}
+						height={2500}
 						schema={barChartAnimationCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>

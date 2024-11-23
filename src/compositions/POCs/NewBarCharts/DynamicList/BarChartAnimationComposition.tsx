@@ -19,7 +19,7 @@ import {
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
 import {useListAnimation, ListAnimationTransition} from './useListAnimation';
-import {BarsTransition} from './BarsTransition';
+import {BarsTransition} from './BarChart/BarsTransition';
 import {TBarChartItem} from './useBarChartTransition';
 import {
 	getBarChartItemHeight,
@@ -50,7 +50,7 @@ export const BarChartAnimationComposition: React.FC<
 				margin={50}
 				nrBaselines={40}
 				width={width}
-				height={height / 2}
+				height={height * 0.32}
 				theme={theme}
 			>
 				<ListAnimationPage />
@@ -61,7 +61,7 @@ export const BarChartAnimationComposition: React.FC<
 
 export const ListAnimationPage: React.FC = () => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
-	const {durationInFrames} = useVideoConfig();
+	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
@@ -153,7 +153,7 @@ export const ListAnimationPage: React.FC = () => {
 		column: 2,
 	});
 
-	const duration_0 = Math.floor(durationInFrames / 5);
+	const duration_0 = Math.floor(fps * 3);
 	const duration_1 = Math.floor(durationInFrames / 5);
 	const duration_2 = Math.floor(durationInFrames / 5);
 	const duration_3 = Math.floor(durationInFrames / 5);
@@ -493,27 +493,6 @@ export const ListAnimationPage: React.FC = () => {
 		</>
 	);
 };
-
-// const manyItemsWithNegatives = [
-// 	{id: 'Id-001', label: 'Item 001', valueLabel: '$10.00', value: 10},
-// 	{id: 'Id-002', label: 'Item 002', valueLabel: '$20.50', value: 20.5},
-// 	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
-// 	{id: 'Id-004', label: 'Item 004', valueLabel: '-$40.25', value: -40.25},
-// 	{id: 'Id-011', label: 'Item 011', valueLabel: '-$55.10', value: -55.1},
-// 	{id: 'Id-005', label: 'Item 005', valueLabel: '-$25.30', value: -25.3},
-// 	{id: 'Id-006', label: 'Item 006', valueLabel: '$60.60', value: 60.6},
-// 	{id: 'Id-007', label: 'Item 007', valueLabel: '$35.80', value: 35.8},
-// 	{id: 'Id-010', label: 'Item 010', valueLabel: '$45.90', value: 45.9},
-// ];
-
-// const fewItemsWithJustPositives = [
-// 	{id: 'Id-009', label: 'Item 009', valueLabel: '$70.00', value: 70},
-// 	{id: 'Id-003', label: 'Item 003', valueLabel: '$30.75', value: 30.75},
-// 	{id: 'Id-007', label: 'Item 007', valueLabel: '$20.80', value: 20.8},
-// 	{id: 'Id-002', label: 'Item 002', valueLabel: '$20.50', value: 20.5},
-// 	{id: 'Id-005', label: 'Item 005', valueLabel: '$33.30', value: 33.3},
-// 	{id: 'Id-001', label: 'Item 001', valueLabel: '$12.00', value: 12},
-// ];
 
 const manyItemsWithNegatives = [
 	{

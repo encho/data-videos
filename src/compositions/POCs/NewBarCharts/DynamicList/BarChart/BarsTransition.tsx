@@ -1,14 +1,22 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
-import {interpolate, interpolateColors} from 'remotion';
+import {
+	interpolate,
+	interpolateColors,
+	useVideoConfig,
+	Sequence,
+	Easing,
+} from 'remotion';
 
+import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
+import {getBarChartKeyframes} from './getEnterKeyframes';
 import {
 	RoundedRightRect,
 	RoundedLeftRect,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {TBarChartValueLabelComponent} from './components/ValueLabelComponent';
-import {TBarChartLabelComponent} from './components/LabelComponent';
-import {usePage} from '../../../../acetti-components/PageContext';
+} from '../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {TBarChartValueLabelComponent} from '../components/ValueLabelComponent';
+import {TBarChartLabelComponent} from '../components/LabelComponent';
+import {usePage} from '../../../../../acetti-components/PageContext';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
@@ -18,10 +26,14 @@ import {
 	getListItems_Update,
 	getListItems_Appear,
 	getListItems_Disappear,
-} from './useListTransition/useListTransition';
-import {TBarChartTransitionContext} from './useBarChartTransition';
-import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
-import {TBarChartItem} from './useBarChartTransition';
+} from '../useListTransition/useListTransition';
+import {TBarChartTransitionContext} from '../useBarChartTransition';
+import {HtmlArea, DisplayGridRails} from '../../../../../acetti-layout';
+import {TBarChartItem} from '../useBarChartTransition';
+import {
+	getKeyFrame,
+	getKeyFramesInterpolator,
+} from '../../../Keyframes/Keyframes/keyframes';
 
 type TBarsTransitionCommonProps = {
 	showLayout: boolean;
@@ -540,20 +552,29 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	LabelComponent,
 	ValueLabelComponent,
 	barChartTransitionContext,
+	// keyframes TODO provide flexibility to pass keyframes from outside?
 }) => {
 	const {theme, baseline} = usePage();
+	const {fps} = useVideoConfig();
 
+	// TODO evtl. have it called relativeFrame
 	const {frame, durationInFrames} = listTransitionContext;
+
+	const keyframes = getBarChartKeyframes({
+		fps,
+		durationInFrames,
+		data: listTransitionContext.to.items,
+	});
 
 	const {visibleItems} = listTransitionContext.to;
 
-	const backgroundColorOpacity = interpolate(
-		listTransitionContext.easingPercentage,
-		[0, 0.2, 1],
-		[0, 1, 0]
-	);
+	// const backgroundColorOpacity = interpolate(
+	// 	listTransitionContext.easingPercentage,
+	// 	[0, 0.2, 1],
+	// 	[0, 1, 0]
+	// );
 
-	const backgroundColor = `rgba(0,255,0,${backgroundColorOpacity})`;
+	// const backgroundColor = `rgba(0,255,0,${backgroundColorOpacity})`;
 
 	const {xScale} = barChartTransitionContext;
 
@@ -570,10 +591,6 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
 	const zeroLine_x1 = xScale(0);
-	const zeroLine_x2 = zeroLine_x1;
-	const zeroLine_y1 = 0;
-	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
 
 	return (
 		<div>
@@ -585,8 +602,28 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					{}
 				);
 
-				// see also useAnimatedBarChartLayout line 100 ff.
-				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+				const keyframe_label_appear = getKeyFrame(
+					keyframes,
+					'LABEL_APPEAR__' + dataItem.id
+				);
+
+				const keyframe_valueLabel_appear = getKeyFrame(
+					keyframes,
+					'VALUE_LABEL_APPEAR__' + dataItem.id
+				);
+
+				///
+				const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
+
+				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+					keyframes,
+					[`BAR_ENTER_START__${dataItem.id}`, `BAR_ENTER_END__${dataItem.id}`],
+					[0, fullBarWidth],
+					[Easing.ease]
+				);
+
+				const currentBarWidth = interpolateCurrentBarWidth(frame);
+				///
 
 				const relativeBarPositions = {
 					y: 0,
@@ -606,107 +643,160 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 				const barColor = dataItem.color;
 
 				return (
-					<HtmlArea key={dataItem.id} area={area} fill={backgroundColor}>
-						{showLayout ? (
-							<div style={{position: 'absolute'}}>
-								<DisplayGridRails
-									{...barChartTransitionContext.barChartItemLayout.gridLayout}
-									stroke={GRID_RAILS_COLOR}
-								/>
-							</div>
-						) : null}
-
-						{/* the label */}
-						<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
-							<LabelComponent
-								animateEnter
-								animateExit={false}
-								id={dataItem.id}
-								baseline={baseline}
+					<>
+						<div
+							style={{
+								position: 'fixed',
+								top: 900,
+								left: 0,
+								background: 'black',
+								zIndex: 100,
+							}}
+						>
+							<KeyFramesInspector
 								theme={theme}
-								label={dataItem.label}
+								frame={frame}
+								width={1500}
+								baseFontSize={20}
+								keyFramesGroup={keyframes}
 							/>
-						</HtmlArea>
+						</div>
+						<HtmlArea key={dataItem.id} area={area}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...barChartTransitionContext.barChartItemLayout.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
 
-						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
-							<svg width={barArea.width} height={barArea.height}>
-								{currentValue > 0 && barArea.width ? (
-									<RoundedRightRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
+							{/* the label */}
+
+							<Sequence from={keyframe_label_appear.frame}>
+								<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+									<LabelComponent
+										animateEnter
+										animateExit={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										label={dataItem.label}
 									/>
-								) : currentValue < 0 && barArea.width ? (
-									<RoundedLeftRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
+								</HtmlArea>
+							</Sequence>
+
+							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+								<svg width={barArea.width} height={barArea.height}>
+									{currentValue > 0 && barArea.width ? (
+										<RoundedRightRect
+											y={relativeBarPositions.y}
+											x={relativeBarPositions.x}
+											height={relativeBarPositions.height}
+											width={relativeBarPositions.width}
+											fill={barColor}
+											// TODO: get radius from baseline?
+											radius={5}
+										/>
+									) : currentValue < 0 && barArea.width ? (
+										<RoundedLeftRect
+											y={relativeBarPositions.y}
+											x={relativeBarPositions.x}
+											height={relativeBarPositions.height}
+											width={relativeBarPositions.width}
+											fill={barColor}
+											// TODO: get radius from baseline?
+											radius={5}
+										/>
+									) : null}
+								</svg>
+							</HtmlArea>
+
+							<Sequence from={keyframe_valueLabel_appear.frame}>
+								{/* the negative value label */}
+								{isPositiveBar ? null : (
+									<HtmlArea
+										area={negativeValueLabelArea}
+										fill={theme.global.backgroundColor}
+										style={{marginLeft: negativeValueLabelMarginLeft}}
+									>
+										<ValueLabelComponent
+											animateEnter
+											animateExit={false}
+											id={dataItem.id}
+											baseline={baseline}
+											theme={theme}
+											value={dataItem.value}
+										/>
+									</HtmlArea>
+								)}
+
+								{/* the value label */}
+								{isPositiveBar ? (
+									<HtmlArea
+										area={valueLabelArea}
+										fill={theme.global.backgroundColor}
+										style={{marginLeft: positiveValueLabelMarginLeft}}
+									>
+										<ValueLabelComponent
+											animateEnter
+											animateExit={false}
+											id={dataItem.id}
+											baseline={baseline}
+											theme={theme}
+											value={dataItem.value}
+										/>
+									</HtmlArea>
 								) : null}
-							</svg>
+							</Sequence>
 						</HtmlArea>
-
-						{/* the negative value label */}
-						{isPositiveBar ? null : (
-							<HtmlArea
-								area={negativeValueLabelArea}
-								fill={theme.global.backgroundColor}
-								style={{marginLeft: negativeValueLabelMarginLeft}}
-							>
-								<ValueLabelComponent
-									animateEnter
-									animateExit={false}
-									id={dataItem.id}
-									baseline={baseline}
-									theme={theme}
-									value={dataItem.value}
-								/>
-							</HtmlArea>
-						)}
-
-						{/* the value label */}
-						{isPositiveBar ? (
-							<HtmlArea
-								area={valueLabelArea}
-								fill={theme.global.backgroundColor}
-								style={{marginLeft: positiveValueLabelMarginLeft}}
-							>
-								<ValueLabelComponent
-									animateEnter
-									animateExit={false}
-									id={dataItem.id}
-									baseline={baseline}
-									theme={theme}
-									value={dataItem.value}
-								/>
-							</HtmlArea>
-						) : null}
-					</HtmlArea>
+					</>
 				);
 			})}
 
-			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
-				<svg width={plotArea.width} height={plotArea.height}>
-					<line
-						x1={zeroLine_x1}
-						x2={zeroLine_x2}
-						y1={zeroLine_y1}
-						y2={zeroLine_y2}
-						stroke={zeroLine_color}
-						strokeWidth={baseline * 0.2} // TODO from some ibcs setting
-						// opacity={opacity}
-					/>
-				</svg>
-			</HtmlArea>
+			{/* the zero line */}
+			{(() => {
+				const zeroLine_x2 = zeroLine_x1;
+				const zeroLine_y1_full = 0;
+				const zeroLine_y2_full = plotArea.height;
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_ENTER_START', 'ZEROLINE_ENTER_END'],
+					[zeroLine_y1_full, zeroLine_y1_full],
+					[Easing.ease]
+				);
+
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_ENTER_START', 'ZEROLINE_ENTER_END'],
+					[0, zeroLine_y2_full],
+					[Easing.ease]
+				);
+
+				const zeroLine_color = 'cyan';
+
+				const zeroLine_y1 = interpolateZeroLine__y1(frame);
+				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+
+				return (
+					<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+						<svg width={plotArea.width} height={plotArea.height}>
+							<line
+								x1={zeroLine_x1}
+								x2={zeroLine_x2}
+								y1={zeroLine_y1}
+								y2={zeroLine_y2}
+								stroke={zeroLine_color}
+								strokeWidth={baseline * 0.2} // TODO from some ibcs setting
+								// opacity={opacity}
+							/>
+						</svg>
+					</HtmlArea>
+				);
+			})()}
 		</div>
 	);
 };
