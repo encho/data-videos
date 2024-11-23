@@ -286,7 +286,7 @@ export function useListTransition<T extends {id: string}>({
 	};
 }
 
-export function useEnterItems<T extends {id: string}>(
+export function getListItems_Enter<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
@@ -310,7 +310,7 @@ export function useEnterItems<T extends {id: string}>(
 	return areaProperties;
 }
 
-export function useExitItems<T extends {id: string}>(
+export function getListItems_Exit<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
@@ -325,25 +325,25 @@ export function useExitItems<T extends {id: string}>(
 	});
 }
 
-export function useAppearItems<T extends {id: string}>(
+export function getListItems_Appear<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
-	return useUpdateTypeAreas(context, 'appear');
+	return getListItems_FromTo(context, 'appear');
 }
 
-export function useDisappearItems<T extends {id: string}>(
+export function getListItems_Disappear<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
-	return useUpdateTypeAreas(context, 'disappear');
+	return getListItems_FromTo(context, 'disappear');
 }
 
-export function useUpdateItems<T extends {id: string}>(
+export function getListItems_Update<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
-	return useUpdateTypeAreas(context, 'update');
+	return getListItems_FromTo(context, 'update');
 }
 
-function useUpdateTypeAreas<T extends {id: string}>(
+function getListItems_FromTo<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>,
 	updateType: 'appear' | 'disappear' | 'update'
 ) {

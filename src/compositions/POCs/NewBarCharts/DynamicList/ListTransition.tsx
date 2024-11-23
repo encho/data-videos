@@ -8,11 +8,11 @@ import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-	useEnterItems,
-	useExitItems,
-	useUpdateItems,
-	useAppearItems,
-	useDisappearItems,
+	getListItems_Enter,
+	getListItems_Exit,
+	getListItems_Update,
+	getListItems_Appear,
+	getListItems_Disappear,
 } from './useListTransition/useListTransition';
 import {HtmlArea} from '../../../../acetti-layout';
 
@@ -22,11 +22,11 @@ export const ListTransitionUpdate: React.FC<{
 	const {theme, baseline} = usePage();
 
 	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
-	const enterAreas = useEnterItems(context);
-	const exitAreas = useExitItems(context);
-	const appearAreas = useAppearItems(context);
-	const disappearAreas = useDisappearItems(context);
-	const updateAreas = useUpdateItems(context);
+	const enterAreas = getListItems_Enter(context);
+	const exitAreas = getListItems_Exit(context);
+	const appearAreas = getListItems_Appear(context);
+	const disappearAreas = getListItems_Disappear(context);
+	const updateAreas = getListItems_Update(context);
 
 	return (
 		<div>

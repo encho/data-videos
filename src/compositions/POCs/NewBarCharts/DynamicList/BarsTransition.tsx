@@ -13,11 +13,11 @@ import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-	useEnterItems,
-	useExitItems,
-	useUpdateItems,
-	useAppearItems,
-	useDisappearItems,
+	getListItems_Enter,
+	getListItems_Exit,
+	getListItems_Update,
+	getListItems_Appear,
+	getListItems_Disappear,
 } from './useListTransition/useListTransition';
 import {TBarChartTransitionContext} from './useBarChartTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
@@ -114,12 +114,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 	const GRID_RAILS_COLOR = 'magenta';
 
-	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
-	const enterItems = useEnterItems(listTransitionContext);
-	const exitItems = useExitItems(listTransitionContext);
-	const appearItems = useAppearItems(listTransitionContext);
-	const disappearItems = useDisappearItems(listTransitionContext);
-	const updateItems = useUpdateItems(listTransitionContext);
+	const enterItems = getListItems_Enter(listTransitionContext);
+	const exitItems = getListItems_Exit(listTransitionContext);
+	const appearItems = getListItems_Appear(listTransitionContext);
+	const disappearItems = getListItems_Disappear(listTransitionContext);
+	const updateItems = getListItems_Update(listTransitionContext);
 
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
@@ -493,7 +492,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	);
 };
 
-// TODO think about if we here do not need useEnterItems
+// TODO think about if we here do not need getListItems_Enter
 // also: these are not really hooks but just memoized functions of TListTransitionContext
 const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	showLayout,
