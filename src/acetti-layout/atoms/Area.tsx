@@ -1,4 +1,4 @@
-import {ReactNode} from 'react';
+import {CSSProperties, ReactNode} from 'react';
 import config from '../config';
 import {TGridLayoutArea} from '../types2';
 // QUICK-FIX, we should be able to have griddy independant of appTheme, passing theme in!
@@ -12,6 +12,7 @@ type TAreaProps = {
 	stroke?: string;
 	// eslint-disable-next-line
 	show?: boolean;
+	style?: CSSProperties;
 };
 
 export default function Area({
@@ -76,6 +77,7 @@ export function HtmlArea({
 	children,
 	fill = 'transparent',
 	opacity,
+	style,
 }: TAreaProps & {opacity?: number}) {
 	return (
 		<div
@@ -87,6 +89,7 @@ export function HtmlArea({
 				height: area.height,
 				top: area.y1,
 				left: area.x1,
+				...style,
 			}}
 		>
 			{children || null}
