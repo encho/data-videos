@@ -594,6 +594,24 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 	return (
 		<div>
+			<div
+				style={{
+					position: 'fixed',
+					top: 900,
+					left: 0,
+					background: 'black',
+					zIndex: 100,
+				}}
+			>
+				<KeyFramesInspector
+					theme={theme}
+					frame={frame}
+					width={1500}
+					baseFontSize={20}
+					keyFramesGroup={keyframes}
+				/>
+			</div>
+
 			{rowsInfo.map(({dataItem, area}) => {
 				const currentValue = interpolate(
 					frame,
@@ -644,23 +662,6 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				return (
 					<>
-						<div
-							style={{
-								position: 'fixed',
-								top: 900,
-								left: 0,
-								background: 'black',
-								zIndex: 100,
-							}}
-						>
-							<KeyFramesInspector
-								theme={theme}
-								frame={frame}
-								width={1500}
-								baseFontSize={20}
-								keyFramesGroup={keyframes}
-							/>
-						</div>
 						<HtmlArea key={dataItem.id} area={area}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
