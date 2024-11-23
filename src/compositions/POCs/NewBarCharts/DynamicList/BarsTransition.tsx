@@ -13,11 +13,11 @@ import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-	useEnterAreas,
-	useExitAreas,
-	useUpdateAreas,
-	useAppearAreas,
-	useDisappearAreas,
+	useEnterItems,
+	useExitItems,
+	useUpdateItems,
+	useAppearItems,
+	useDisappearItems,
 } from './useListTransition/useListTransition';
 import {TBarChartTransitionContext} from './useBarChartTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
@@ -115,11 +115,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const GRID_RAILS_COLOR = 'magenta';
 
 	// store in namespace useListTransition (useListTransitionEnterAreas, ....)
-	const enterAreas = useEnterAreas(listTransitionContext);
-	const exitAreas = useExitAreas(listTransitionContext);
-	const appearAreas = useAppearAreas(listTransitionContext);
-	const disappearAreas = useDisappearAreas(listTransitionContext);
-	const updateAreas = useUpdateAreas(listTransitionContext);
+	const enterItems = useEnterItems(listTransitionContext);
+	const exitItems = useExitItems(listTransitionContext);
+	const appearItems = useAppearItems(listTransitionContext);
+	const disappearItems = useDisappearItems(listTransitionContext);
+	const updateItems = useUpdateItems(listTransitionContext);
 
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
@@ -132,8 +132,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	return (
 		<div>
 			<div>
-				{[...enterAreas].map((enterArea) => {
-					const {opacity, item} = enterArea;
+				{[...enterItems].map((enterItem) => {
+					const {opacity, item, area} = enterItem;
 
 					// see also useAnimatedBarChartLayout line 100 ff.
 					const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
@@ -157,12 +157,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					const barColor = item.color;
 
 					return (
-						// <HtmlArea area={currentArea.area} fill={color} opacity={opacity}>
-						<HtmlArea
-							area={enterArea.area}
-							// fill={color}
-							opacity={opacity}
-						>
+						<HtmlArea area={area} opacity={opacity}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
 									<DisplayGridRails
@@ -243,12 +238,13 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						</HtmlArea>
 					);
 				})}
-				{[...exitAreas].map((enterArea) => {
-					const {opacity, item} = enterArea;
+				{[...exitItems].map((exitItem) => {
+					const {opacity, item, area} = exitItem;
 
 					// see also useAnimatedBarChartLayout line 100 ff.
 					const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
 
+					// TODO rather as Area format with x1 x2 y1 y2 height width
 					const relativeBarPositions = {
 						y: 0,
 						x: item.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
@@ -268,7 +264,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					const isPositiveBar = item.value >= 0;
 
 					return (
-						<HtmlArea area={enterArea.area} opacity={opacity}>
+						<HtmlArea area={area} opacity={opacity}>
 							{showLayout ? (
 								<div style={{position: 'absolute'}}>
 									<DisplayGridRails
@@ -350,128 +346,133 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						</HtmlArea>
 					);
 				})}
-				{[...appearAreas, ...disappearAreas, ...updateAreas].map(
-					(currentArea) => {
-						const {opacity, itemFrom, itemTo} = currentArea;
-						// const color = getPredefinedColor(id);
+				{[...appearItems, ...disappearItems, ...updateItems].map((listItem) => {
+					const {opacity, itemFrom, itemTo, area} = listItem;
+					// const color = getPredefinedColor(id);
 
-						const currentValue = interpolate(
-							frame,
-							[0, durationInFrames - 1],
-							[itemFrom.value, itemTo.value],
-							{}
-						);
+					const currentValue = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[itemFrom.value, itemTo.value],
+						{}
+					);
 
-						// see also useAnimatedBarChartLayout line 100 ff.
-						const currentBarWidth = Math.abs(
-							xScale(currentValue) - zeroLine_x1
-						);
+					// see also useAnimatedBarChartLayout line 100 ff.
+					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
-						const relativeBarPositions = {
-							y: 0,
-							x:
-								currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-							height: barArea.height,
-							width: currentBarWidth,
-						};
+					const relativeBarPositions = {
+						y: 0,
+						x: currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
+						height: barArea.height,
+						width: currentBarWidth,
+					};
 
-						const isPositiveBar = currentValue >= 0;
+					const isPositiveBar = currentValue >= 0;
 
-						const currentBarColor = interpolateColors(
-							frame,
-							[0, durationInFrames - 1],
-							[itemFrom.color, itemTo.color]
-						);
+					const currentBarColor = interpolateColors(
+						frame,
+						[0, durationInFrames - 1],
+						[itemFrom.color, itemTo.color]
+					);
 
-						return (
-							<HtmlArea
-								area={currentArea.area}
-								// fill={color}
-								opacity={opacity}
-							>
-								{showLayout ? (
-									<div style={{position: 'absolute'}}>
-										<DisplayGridRails
-											{...barChartTransitionContext.barChartItemLayout
-												.gridLayout}
-											stroke={GRID_RAILS_COLOR}
+					return (
+						<HtmlArea area={area} opacity={opacity}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...barChartTransitionContext.barChartItemLayout.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
+
+							<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+								<LabelComponent
+									id={itemTo.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									label={itemTo.label} // TODO deprecate
+									// TODO
+									// itemFrom={itemFrom}
+									// itemTo={itemTo}
+								/>
+							</HtmlArea>
+
+							{/* the negative value label */}
+							{isPositiveBar ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									fill={theme.global.backgroundColor}
+								>
+									<ValueLabelComponent
+										animateEnter
+										animateExit={false}
+										id={itemTo.id}
+										value={currentValue} // TODO deprecate
+										baseline={baseline}
+										theme={theme}
+										// TODO
+										// itemFrom={itemFrom}
+										// itemTo={itemTo}
+									/>
+								</HtmlArea>
+							)}
+
+							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+								{/* TODO */}
+								{/* <BarComponent
+								id={itemTo.id}
+											baseline={baseline}
+											// TODO
+											// itemFrom={itemFrom}
+											// itemTo={itemTo}
+											/> */}
+
+								<svg width={barArea.width} height={barArea.height}>
+									{currentValue > 0 && barArea.width ? (
+										<RoundedRightRect
+											y={relativeBarPositions.y}
+											x={relativeBarPositions.x}
+											height={relativeBarPositions.height}
+											width={relativeBarPositions.width}
+											fill={currentBarColor}
+											// TODO: get radius from baseline?
+											radius={5}
 										/>
-									</div>
-								) : null}
+									) : currentValue < 0 && barArea.width ? (
+										<RoundedLeftRect
+											y={relativeBarPositions.y}
+											x={relativeBarPositions.x}
+											height={relativeBarPositions.height}
+											width={relativeBarPositions.width}
+											fill={currentBarColor}
+											// TODO: get radius from baseline?
+											radius={5}
+										/>
+									) : null}
+								</svg>
+							</HtmlArea>
 
-								<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
-									<LabelComponent
+							{isPositiveBar ? (
+								<HtmlArea
+									area={valueLabelArea}
+									fill={theme.global.backgroundColor}
+								>
+									<ValueLabelComponent
 										id={itemTo.id}
 										animateExit={false}
 										animateEnter={false}
 										baseline={baseline}
 										theme={theme}
-										label={itemTo.label}
+										value={currentValue}
 									/>
 								</HtmlArea>
-
-								{/* the negative value label */}
-								{isPositiveBar ? null : (
-									<HtmlArea
-										area={negativeValueLabelArea}
-										fill={theme.global.backgroundColor}
-									>
-										<ValueLabelComponent
-											animateEnter
-											animateExit={false}
-											id={itemTo.id}
-											value={currentValue}
-											baseline={baseline}
-											theme={theme}
-										/>
-									</HtmlArea>
-								)}
-
-								<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
-									<svg width={barArea.width} height={barArea.height}>
-										{currentValue > 0 && barArea.width ? (
-											<RoundedRightRect
-												y={relativeBarPositions.y}
-												x={relativeBarPositions.x}
-												height={relativeBarPositions.height}
-												width={relativeBarPositions.width}
-												fill={currentBarColor}
-												// TODO: get radius from baseline?
-												radius={5}
-											/>
-										) : currentValue < 0 && barArea.width ? (
-											<RoundedLeftRect
-												y={relativeBarPositions.y}
-												x={relativeBarPositions.x}
-												height={relativeBarPositions.height}
-												width={relativeBarPositions.width}
-												fill={currentBarColor}
-												// TODO: get radius from baseline?
-												radius={5}
-											/>
-										) : null}
-									</svg>
-								</HtmlArea>
-
-								{isPositiveBar ? (
-									<HtmlArea
-										area={valueLabelArea}
-										fill={theme.global.backgroundColor}
-									>
-										<ValueLabelComponent
-											id={itemTo.id}
-											animateExit={false}
-											animateEnter={false}
-											baseline={baseline}
-											theme={theme}
-											value={currentValue}
-										/>
-									</HtmlArea>
-								) : null}
-							</HtmlArea>
-						);
-					}
-				)}
+							) : null}
+						</HtmlArea>
+					);
+				})}
 			</div>
 
 			{/* the plot area */}
@@ -492,6 +493,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	);
 };
 
+// TODO think about if we here do not need useEnterItems
+// also: these are not really hooks but just memoized functions of TListTransitionContext
 const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	showLayout,
 	listTransitionContext,

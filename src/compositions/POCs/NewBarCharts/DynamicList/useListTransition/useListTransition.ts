@@ -286,7 +286,7 @@ export function useListTransition<T extends {id: string}>({
 	};
 }
 
-export function useEnterAreas<T extends {id: string}>(
+export function useEnterItems<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
@@ -296,21 +296,21 @@ export function useEnterAreas<T extends {id: string}>(
 
 		const currentOpacity = interpolate(easingPercentage, [0, 1], [0, 1]);
 
-		const item = context.to.items.find((it) => it.id === id);
-		invariant(item);
+		const itemTo = context.to.items.find((it) => it.id === id);
+		invariant(itemTo);
 
 		return {
 			id,
 			area: areaTo,
 			opacity: currentOpacity,
-			item,
+			item: itemTo,
 		};
 	});
 
 	return areaProperties;
 }
 
-export function useExitAreas<T extends {id: string}>(
+export function useExitItems<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	const {transitionTypes, easingPercentage} = context;
@@ -325,19 +325,19 @@ export function useExitAreas<T extends {id: string}>(
 	});
 }
 
-export function useAppearAreas<T extends {id: string}>(
+export function useAppearItems<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'appear');
 }
 
-export function useDisappearAreas<T extends {id: string}>(
+export function useDisappearItems<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'disappear');
 }
 
-export function useUpdateAreas<T extends {id: string}>(
+export function useUpdateItems<T extends {id: string}>(
 	context: ListTransitionContext_Update<T>
 ) {
 	return useUpdateTypeAreas(context, 'update');
