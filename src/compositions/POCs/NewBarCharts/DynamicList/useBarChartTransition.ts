@@ -9,7 +9,6 @@ import {
 	TGridLayout,
 	TGridLayoutAreaSpec,
 	TGridLayoutArea,
-	// averageAreas,
 } from '../../../../acetti-layout';
 
 import {TDynamicListTransitionContext} from './useListTransition/useListTransition';
