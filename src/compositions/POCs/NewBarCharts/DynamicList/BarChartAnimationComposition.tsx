@@ -441,10 +441,10 @@ export const ListAnimationPage: React.FC = () => {
 																		</Value>
 																	</Row>
 																	<Row>
-																		<div>itemHeightFrom</div>
+																		<div>from.itemHeight</div>
 																		<Value>
 																			{JSON.stringify(
-																				editedTransition.itemHeightFrom
+																				editedTransition.from.itemHeight
 																			)}
 																		</Value>
 																	</Row>
@@ -452,7 +452,8 @@ export const ListAnimationPage: React.FC = () => {
 																		<div>nr of visible items FROM</div>
 																		<Value>
 																			{JSON.stringify(
-																				editedTransition.visibleItemsFrom.length
+																				editedTransition.from.visibleItems
+																					.length
 																			)}
 																		</Value>
 																	</Row>
@@ -460,15 +461,15 @@ export const ListAnimationPage: React.FC = () => {
 																		<div>nr of visible items TO</div>
 																		<Value>
 																			{JSON.stringify(
-																				editedTransition.visibleItemsTo.length
+																				editedTransition.to.visibleItems.length
 																			)}
 																		</Value>
 																	</Row>
 																	<Row>
-																		<div>itemHeightTo</div>
+																		<div>to.itemHeight</div>
 																		<Value>
 																			{JSON.stringify(
-																				editedTransition.itemHeightTo
+																				editedTransition.to.itemHeight
 																			)}
 																		</Value>
 																	</Row>

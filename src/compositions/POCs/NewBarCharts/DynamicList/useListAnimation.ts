@@ -15,33 +15,30 @@ import {
 } from './useListTransition/useListTransition';
 
 export type ListAnimationTransition<T> = {
-	// from: {visibleIndices, items} // TODO
+	durationInFrames: number;
+	easing?: EasingFunction;
 	itemsFrom?: T[];
 	visibleIndicesFrom?: [number, number];
-	// to: {visibleIndices, items} // TODO
 	itemsTo: T[];
 	visibleIndicesTo?: [number, number];
-	//
-	easing?: EasingFunction;
-	durationInFrames: number;
 };
 
-type EditedListAnimationTransition<T> = ListAnimationTransition<T> & {
-	frameRange: TFrameRange;
-	//
-	itemHeightFrom: number;
-	itemHeightTo: number;
-	// from: {visibleIndices, items, ...} // TODO
-	// to: {visibleIndices, items, ...} // TODO
-	itemsFrom: T[];
-	itemsTo: T[];
-	visibleIndicesFrom: [number, number];
-	visibleIndicesTo: [number, number];
-	easing: EasingFunction;
+type EditedListAnimationTransition<T> = {
+	easing?: EasingFunction;
 	durationInFrames: number;
-	//
-	visibleItemsFrom: T[]; // currently happening in useListTransition
-	visibleItemsTo: T[]; // currently happening in useListTransition
+	frameRange: TFrameRange;
+	from: {
+		items: T[];
+		itemHeight: number;
+		visibleIndices: [number, number];
+		visibleItems: T[];
+	};
+	to: {
+		items: T[];
+		itemHeight: number;
+		visibleIndices: [number, number];
+		visibleItems: T[];
+	};
 };
 
 export type ListAnimationContext<T extends {id: string}> = {
@@ -64,8 +61,6 @@ type UseListAnimationArgs<T> = {
 	justifyContent?: 'start' | 'center';
 };
 
-// TODO, this actually represents only 1 animation step. the useListTransition will have to
-// deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListAnimation<T extends {id: string}>({
 	width,
 	height,
@@ -96,13 +91,13 @@ export function useListAnimation<T extends {id: string}>({
 			? currentTransition.itemsFrom
 			: i === 0
 			? []
-			: memo[i - 1].itemsTo;
+			: memo[i - 1].to.items;
 
 		const visibleIndicesFrom = currentTransition.visibleIndicesFrom
 			? currentTransition.visibleIndicesFrom
 			: itemsFrom.length === 0
 			? ([0, 0] as [number, number])
-			: memo[i - 1].visibleIndicesTo;
+			: memo[i - 1].to.visibleIndices;
 
 		const visibleIndicesTo = currentTransition.visibleIndicesTo
 			? currentTransition.visibleIndicesTo
@@ -127,16 +122,21 @@ export function useListAnimation<T extends {id: string}>({
 			: easingProp;
 
 		const editedTransition = {
-			...currentTransition,
-			itemHeightFrom,
-			itemHeightTo,
-			itemsFrom,
-			visibleIndicesFrom,
-			visibleIndicesTo,
 			easing,
-			visibleItemsFrom,
-			visibleItemsTo,
 			frameRange: frameRanges[i],
+			durationInFrames: currentTransition.durationInFrames,
+			from: {
+				items: itemsFrom,
+				itemHeight: itemHeightFrom,
+				visibleIndices: visibleIndicesFrom,
+				visibleItems: visibleItemsFrom,
+			},
+			to: {
+				items: currentTransition.itemsTo,
+				itemHeight: itemHeightTo,
+				visibleIndices: visibleIndicesTo,
+				visibleItems: visibleItemsTo,
+			},
 		};
 
 		return [...memo, editedTransition];
@@ -155,16 +155,16 @@ export function useListAnimation<T extends {id: string}>({
 
 	const currentTransitionContext = useListTransition({
 		from: {
-			items: editedTransitions[currentTransitionIndex].itemsFrom,
+			items: editedTransitions[currentTransitionIndex].from.items,
 			visibleIndices:
-				editedTransitions[currentTransitionIndex].visibleIndicesFrom,
-			itemHeight: editedTransitions[currentTransitionIndex].itemHeightFrom,
+				editedTransitions[currentTransitionIndex].from.visibleIndices,
+			itemHeight: editedTransitions[currentTransitionIndex].from.itemHeight,
 		},
 		to: {
-			items: editedTransitions[currentTransitionIndex].itemsTo,
+			items: editedTransitions[currentTransitionIndex].to.items,
 			visibleIndices:
-				editedTransitions[currentTransitionIndex].visibleIndicesTo,
-			itemHeight: editedTransitions[currentTransitionIndex].itemHeightTo,
+				editedTransitions[currentTransitionIndex].to.visibleIndices,
+			itemHeight: editedTransitions[currentTransitionIndex].to.itemHeight,
 		},
 		width,
 		height,
