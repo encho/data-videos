@@ -8,6 +8,7 @@ import {
 	Easing,
 } from 'remotion';
 
+import {ZeroLine} from './ZeroLine';
 import {
 	getBarChartEnterKeyframes,
 	getBarChartExitKeyframes,
@@ -146,10 +147,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
 	const zeroLine_x1 = xScale(0);
-	const zeroLine_x2 = zeroLine_x1;
 	const zeroLine_y1 = 0;
 	const zeroLine_y2 = plotArea.height;
-	const zeroLine_color = 'cyan';
 
 	return (
 		<div>
@@ -537,24 +536,14 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 				})}
 			</div>
 
-			{/* the plot area */}
-			<HtmlArea area={plotArea}>
-				<svg
-					width={plotArea.width}
-					height={plotArea.height}
-					style={{overflow: 'visible'}}
-				>
-					<line
-						x1={zeroLine_x1}
-						x2={zeroLine_x2}
-						y1={zeroLine_y1}
-						y2={zeroLine_y2}
-						stroke={zeroLine_color}
-						strokeWidth={baseline * 0.2} // TODO from some ibcs setting
-						// opacity={opacity}
-					/>
-				</svg>
-			</HtmlArea>
+			<ZeroLine
+				area={plotArea}
+				x={zeroLine_x1}
+				y1={zeroLine_y1}
+				y2={zeroLine_y2}
+				theme={theme}
+				baseline={baseline}
+			/>
 		</div>
 	);
 };
@@ -742,7 +731,6 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 			{/* the zero line */}
 			{(() => {
-				const zeroLine_x2 = zeroLine_x1;
 				const zeroLine_y1_full = 0;
 				const zeroLine_y2_full = plotArea.height;
 
@@ -762,29 +750,18 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					[Easing.ease]
 				);
 
-				const zeroLine_color = 'cyan';
-
 				const zeroLine_y1 = interpolateZeroLine__y1(frame);
 				const zeroLine_y2 = interpolateZeroLine__y2(frame);
 
 				return (
-					<HtmlArea area={plotArea}>
-						<svg
-							width={plotArea.width}
-							height={plotArea.height}
-							style={{overflow: 'visible'}}
-						>
-							<line
-								x1={zeroLine_x1}
-								x2={zeroLine_x2}
-								y1={zeroLine_y1}
-								y2={zeroLine_y2}
-								stroke={zeroLine_color}
-								strokeWidth={baseline * 0.2} // TODO from some ibcs setting
-								// opacity={opacity}
-							/>
-						</svg>
-					</HtmlArea>
+					<ZeroLine
+						area={plotArea}
+						x={zeroLine_x1}
+						y1={zeroLine_y1}
+						y2={zeroLine_y2}
+						theme={theme}
+						baseline={baseline}
+					/>
 				);
 			})()}
 		</Sequence>
@@ -965,7 +942,6 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 			{/* the zero line */}
 			{(() => {
-				const zeroLine_x2 = zeroLine_x1;
 				const zeroLine_y1_full = 0;
 				const zeroLine_y2_full = plotArea.height;
 
@@ -985,29 +961,18 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					[Easing.ease]
 				);
 
-				const zeroLine_color = 'cyan';
-
 				const zeroLine_y1 = interpolateZeroLine__y1(frame);
 				const zeroLine_y2 = interpolateZeroLine__y2(frame);
 
 				return (
-					<HtmlArea area={plotArea}>
-						<svg
-							width={plotArea.width}
-							height={plotArea.height}
-							style={{overflow: 'visible'}}
-						>
-							<line
-								x1={zeroLine_x1}
-								x2={zeroLine_x2}
-								y1={zeroLine_y1}
-								y2={zeroLine_y2}
-								stroke={zeroLine_color}
-								strokeWidth={baseline * 0.2} // TODO from some ibcs setting
-								// opacity={opacity}
-							/>
-						</svg>
-					</HtmlArea>
+					<ZeroLine
+						area={plotArea}
+						x={zeroLine_x1}
+						y1={zeroLine_y1}
+						y2={zeroLine_y2}
+						theme={theme}
+						baseline={baseline}
+					/>
 				);
 			})()}
 		</Sequence>
