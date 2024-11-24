@@ -16,7 +16,6 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-// import {DisplayGridRails} from '../../../../acetti-layout';
 import {HtmlArea} from '../../../../acetti-layout';
 import {
 	getMatrixLayoutCellArea,
@@ -135,11 +134,7 @@ export const ListAnimationPage: React.FC = () => {
 		columnSpacePixels: 50,
 		rowPaddingPixels: 0,
 		columnPaddingPixels: 0,
-		columnSizes: [
-			{type: 'fr', value: 1},
-			// {type: 'fr', value: 1},
-			// {type: 'fr', value: 2},
-		],
+		columnSizes: [{type: 'fr', value: 1}],
 	});
 	const area_3 = getMatrixLayoutCellArea({
 		layout: matrixLayout,
@@ -289,7 +284,7 @@ export const ListAnimationPage: React.FC = () => {
 						<div style={{position: 'relative'}}>
 							<HtmlArea area={area_3}>
 								<BarsTransition
-									showLayout
+									// showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
