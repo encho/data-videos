@@ -8,7 +8,6 @@ import {
 	Easing,
 } from 'remotion';
 
-import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
 import {
 	getBarChartEnterKeyframes,
 	getBarChartExitKeyframes,
@@ -530,7 +529,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 			</div>
 
 			{/* the plot area */}
-			<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+			<HtmlArea area={plotArea}>
 				<svg width={plotArea.width} height={plotArea.height}>
 					<line
 						x1={zeroLine_x1}
@@ -593,24 +592,6 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 			durationInFrames={durationInFrames}
 			layout="none"
 		>
-			<div
-				style={{
-					position: 'fixed',
-					top: 900,
-					left: 0,
-					background: 'black',
-					zIndex: 100,
-				}}
-			>
-				<KeyFramesInspector
-					theme={theme}
-					frame={frame}
-					width={1500}
-					baseFontSize={20}
-					keyFramesGroup={keyframes}
-				/>
-			</div>
-
 			{rowsInfo.map(({dataItem, area}) => {
 				const keyframe_label_appear = getKeyFrame(
 					keyframes,
@@ -775,7 +756,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 				const zeroLine_y2 = interpolateZeroLine__y2(frame);
 
 				return (
-					<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+					<HtmlArea area={plotArea}>
 						<svg width={plotArea.width} height={plotArea.height}>
 							<line
 								x1={zeroLine_x1}
@@ -807,8 +788,6 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 	const {frame, durationInFrames, frameRange} = listTransitionContext;
 
-	// listTransitionContext.
-
 	const {visibleItems} = listTransitionContext.from;
 
 	const keyframes = getBarChartExitKeyframes({
@@ -839,24 +818,6 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 			durationInFrames={durationInFrames}
 			layout="none"
 		>
-			<div
-				style={{
-					position: 'fixed',
-					top: 900,
-					left: 0,
-					background: 'black',
-					zIndex: 100,
-				}}
-			>
-				<KeyFramesInspector
-					theme={theme}
-					frame={frame}
-					width={1500}
-					baseFontSize={20}
-					keyFramesGroup={keyframes}
-				/>
-			</div>
-
 			{rowsInfo.map(({dataItem, area}) => {
 				const keyframe_valueLabel_disappear = getKeyFrame(
 					keyframes,
@@ -983,20 +944,6 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					</HtmlArea>
 				);
 			})}
-			{/* the plot area */}
-			{/* <HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
-				<svg width={plotArea.width} height={plotArea.height}>
-					<line
-						x1={zeroLine_x1}
-						x2={zeroLine_x2}
-						y1={zeroLine_y1}
-						y2={zeroLine_y2}
-						stroke={zeroLine_color}
-						strokeWidth={baseline * 0.2} // TODO from some ibcs setting
-						// opacity={opacity}
-					/>
-				</svg>
-			</HtmlArea> */}
 
 			{/* the zero line */}
 			{(() => {
@@ -1026,7 +973,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 				const zeroLine_y2 = interpolateZeroLine__y2(frame);
 
 				return (
-					<HtmlArea area={plotArea} fill="rgba(255,0,255,0.2)">
+					<HtmlArea area={plotArea}>
 						<svg width={plotArea.width} height={plotArea.height}>
 							<line
 								x1={zeroLine_x1}
