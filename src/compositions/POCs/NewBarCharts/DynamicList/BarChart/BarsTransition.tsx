@@ -539,7 +539,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 			{/* the plot area */}
 			<HtmlArea area={plotArea}>
-				<svg width={plotArea.width} height={plotArea.height}>
+				<svg
+					width={plotArea.width}
+					height={plotArea.height}
+					style={{overflow: 'visible'}}
+				>
 					<line
 						x1={zeroLine_x1}
 						x2={zeroLine_x2}
@@ -767,7 +771,11 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				return (
 					<HtmlArea area={plotArea}>
-						<svg width={plotArea.width} height={plotArea.height}>
+						<svg
+							width={plotArea.width}
+							height={plotArea.height}
+							style={{overflow: 'visible'}}
+						>
 							<line
 								x1={zeroLine_x1}
 								x2={zeroLine_x2}
@@ -986,7 +994,11 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 				return (
 					<HtmlArea area={plotArea}>
-						<svg width={plotArea.width} height={plotArea.height}>
+						<svg
+							width={plotArea.width}
+							height={plotArea.height}
+							style={{overflow: 'visible'}}
+						>
 							<line
 								x1={zeroLine_x1}
 								x2={zeroLine_x2}
