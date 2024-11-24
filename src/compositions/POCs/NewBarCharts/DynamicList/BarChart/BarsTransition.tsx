@@ -35,6 +35,7 @@ import {TBarChartItem} from '../useBarChartTransition';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,
+	TKeyFramesGroup,
 } from '../../../Keyframes/Keyframes/keyframes';
 
 type TBarsTransitionCommonProps = {
@@ -50,10 +51,12 @@ type TBarsTransitionUpdateProps = TBarsTransitionCommonProps & {
 
 type TBarsTransitionEnterProps = TBarsTransitionCommonProps & {
 	listTransitionContext: ListTransitionContext_Enter<TBarChartItem>;
+	keyframes?: TKeyFramesGroup;
 };
 
 type TBarsTransitionExitProps = TBarsTransitionCommonProps & {
 	listTransitionContext: ListTransitionContext_Exit<TBarChartItem>;
+	keyframes?: TKeyFramesGroup;
 };
 
 type TBarsTransitionProps = {
@@ -65,6 +68,8 @@ type TBarsTransitionProps = {
 		| ListTransitionContext_Enter<TBarChartItem>
 		| ListTransitionContext_Update<TBarChartItem>
 		| ListTransitionContext_Exit<TBarChartItem>;
+	enterKeyframes?: TKeyFramesGroup;
+	exitKeyframes?: TKeyFramesGroup;
 };
 
 export const BarsTransition: React.FC<TBarsTransitionProps> = ({
@@ -73,6 +78,8 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 	LabelComponent,
 	ValueLabelComponent,
 	barChartTransitionContext,
+	enterKeyframes,
+	exitKeyframes,
 }) => {
 	if (listTransitionContext.transitionType === 'update') {
 		return (
@@ -94,6 +101,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				barChartTransitionContext={barChartTransitionContext}
 				LabelComponent={LabelComponent}
 				ValueLabelComponent={ValueLabelComponent}
+				keyframes={enterKeyframes}
 			/>
 		);
 	}
@@ -107,6 +115,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 			barChartTransitionContext={barChartTransitionContext}
 			LabelComponent={LabelComponent}
 			ValueLabelComponent={ValueLabelComponent}
+			keyframes={exitKeyframes}
 		/>
 	);
 };
@@ -554,7 +563,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	LabelComponent,
 	ValueLabelComponent,
 	barChartTransitionContext,
-	// keyframes TODO provide flexibility to pass keyframes from outside?
+	keyframes: keyframesProp,
 }) => {
 	const {theme, baseline} = usePage();
 	const {fps} = useVideoConfig();
@@ -568,6 +577,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 		fps,
 		durationInFrames,
 		data: visibleItems,
+		keyframes: keyframesProp,
 	});
 
 	const {xScale} = barChartTransitionContext;
@@ -781,6 +791,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	LabelComponent,
 	ValueLabelComponent,
 	barChartTransitionContext,
+	keyframes: keyframesProp,
 }) => {
 	const {theme, baseline} = usePage();
 
@@ -794,6 +805,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 		fps,
 		durationInFrames,
 		data: visibleItems,
+		keyframes: keyframesProp,
 	});
 
 	const {xScale} = barChartTransitionContext;

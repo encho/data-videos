@@ -3,8 +3,12 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
+import {
+	getBarChartEnterKeyframes,
+	getBarChartExitKeyframes,
+} from './BarChart/getEnterKeyframes';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {Row} from '../../09-Timeseries/utils/InspectorTools';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
@@ -199,6 +203,41 @@ export const ListAnimationPage: React.FC = () => {
 		// globalCustomDomain: [-100, 100],
 	});
 
+	const isFirstTransition = listAnimationContext.currentTransitionIndex === 0;
+
+	const isLastTransition =
+		listAnimationContext.currentTransitionIndex ===
+		listAnimationContext.numberOfTransitions - 1;
+
+	// define the "enter" keyframes here and pass them in
+	const firstTransition = listAnimationContext.transitions[0];
+	const {
+		durationInFrames: durationInFrames_1,
+		to: {items: dataItems_1},
+	} = firstTransition;
+
+	const enterKeyframes = getBarChartEnterKeyframes({
+		fps,
+		durationInFrames: durationInFrames_1,
+		data: dataItems_1,
+	});
+
+	// define the "enter" keyframes here and pass them in
+	const lastTransition =
+		listAnimationContext.transitions[
+			listAnimationContext.transitions.length - 1
+		];
+	const {
+		durationInFrames: durationInFrames_last,
+		from: {items: dataItems_last},
+	} = lastTransition;
+
+	const exitKeyframes = getBarChartExitKeyframes({
+		fps,
+		durationInFrames: durationInFrames_last,
+		data: dataItems_last,
+	});
+
 	return (
 		<>
 			{/* measure labels */}
@@ -248,19 +287,16 @@ export const ListAnimationPage: React.FC = () => {
 						</TypographyStyle>
 
 						<div style={{position: 'relative'}}>
-							<HtmlArea
-								area={area_3}
-								// fill="blue"
-							>
+							<HtmlArea area={area_3}>
 								<BarsTransition
 									showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
 									ValueLabelComponent={DefaultValueLabelComponent}
-									// TODO
-									// enterKeyframes?? optionally pass it in, here s.t. we can debug
-									// exitKeyframes?? ""
+									//
+									enterKeyframes={enterKeyframes}
+									exitKeyframes={exitKeyframes}
 								/>
 							</HtmlArea>
 						</div>
@@ -274,29 +310,42 @@ export const ListAnimationPage: React.FC = () => {
 						theme={theme}
 					>
 						<Page show>
-							{({baseline}) => {
+							{({baseline, contentWidth}) => {
 								const FONT_SIZE = baseline;
 								return (
 									<div style={{fontSize: FONT_SIZE}}>
-										<Row>KEYFRAMES INSPECTOR HERE...</Row>
-
-										{/* <div
-				style={{
-					position: 'fixed',
-					top: 900,
-					left: 0,
-					background: 'black',
-					zIndex: 100,
-				}}
-			>
-				<KeyFramesInspector
-					theme={theme}
-					frame={frame}
-					width={1500}
-					baseFontSize={20}
-					keyFramesGroup={keyframes}
-				/>
-			</div> */}
+										{isFirstTransition
+											? (() => {
+													return (
+														<KeyFramesInspector
+															theme={theme}
+															frame={
+																listAnimationContext.currentTransitionContext
+																	.frame
+															}
+															width={contentWidth}
+															baseFontSize={20}
+															keyFramesGroup={enterKeyframes}
+														/>
+													);
+											  })()
+											: null}
+										{isLastTransition
+											? (() => {
+													return (
+														<KeyFramesInspector
+															theme={theme}
+															frame={
+																listAnimationContext.currentTransitionContext
+																	.frame
+															}
+															width={contentWidth}
+															baseFontSize={20}
+															keyFramesGroup={exitKeyframes}
+														/>
+													);
+											  })()
+											: null}
 									</div>
 								);
 							}}

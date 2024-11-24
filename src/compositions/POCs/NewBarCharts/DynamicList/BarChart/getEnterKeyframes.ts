@@ -37,7 +37,7 @@ export function getBarChartEnterKeyframes({
 
 				accumulator.push({
 					type: 'R_SECOND',
-					value: 0.025,
+					value: 0.04,
 					id: `LABEL_APPEAR__${currentItem.id}`,
 					relativeId: previousLabelKeyframe.id,
 				});
@@ -51,13 +51,13 @@ export function getBarChartEnterKeyframes({
 	const zeroLineKeyframes: TKeyFrameSpec[] = [
 		{
 			type: 'R_SECOND',
-			value: 0.2,
+			value: 0.5,
 			id: `ZEROLINE_ENTER_START`,
 			relativeId: labelStartKeyframes[labelStartKeyframes.length - 1].id,
 		},
 		{
 			type: 'R_SECOND',
-			value: 0.75,
+			value: 0.5,
 			id: `ZEROLINE_ENTER_END`,
 			relativeId: `ZEROLINE_ENTER_START`,
 		},
