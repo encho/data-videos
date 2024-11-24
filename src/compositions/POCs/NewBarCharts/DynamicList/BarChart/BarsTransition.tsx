@@ -157,8 +157,15 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 				{[...enterItems].map((enterItem) => {
 					const {opacity, item, area} = enterItem;
 
-					// see also useAnimatedBarChartLayout line 100 ff.
-					const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
+					// TODO this may have to happen quicker than the whole durationInFrames
+					const currentValue = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[0, item.value],
+						{}
+					);
+
+					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
 					const relativeBarPositions = {
 						y: 0,
@@ -174,13 +181,6 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
 
 					const isPositiveBar = item.value >= 0;
-
-					const currentValue = interpolate(
-						frame,
-						[0, durationInFrames - 1],
-						[0, item.value],
-						{}
-					);
 
 					const barColor = item.color;
 
