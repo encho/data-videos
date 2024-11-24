@@ -648,97 +648,95 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 				const barColor = dataItem.color;
 
 				return (
-					<>
-						<HtmlArea key={dataItem.id} area={area}>
-							{showLayout ? (
-								<div style={{position: 'absolute'}}>
-									<DisplayGridRails
-										{...barChartTransitionContext.barChartItemLayout.gridLayout}
-										stroke={GRID_RAILS_COLOR}
+					<HtmlArea key={dataItem.id} area={area}>
+						{showLayout ? (
+							<div style={{position: 'absolute'}}>
+								<DisplayGridRails
+									{...barChartTransitionContext.barChartItemLayout.gridLayout}
+									stroke={GRID_RAILS_COLOR}
+								/>
+							</div>
+						) : null}
+
+						{/* the label */}
+
+						<Sequence from={keyframe_label_appear.frame}>
+							<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
+								<LabelComponent
+									animateEnter
+									animateExit={false}
+									id={dataItem.id}
+									baseline={baseline}
+									theme={theme}
+									label={dataItem.label}
+								/>
+							</HtmlArea>
+						</Sequence>
+
+						<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
+							<svg width={barArea.width} height={barArea.height}>
+								{isPositiveBar && barArea.width ? (
+									<RoundedRightRect
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
+										fill={barColor}
+										// TODO: get radius from baseline?
+										radius={5}
 									/>
-								</div>
-							) : null}
+								) : !isPositiveBar && barArea.width ? (
+									<RoundedLeftRect
+										y={relativeBarPositions.y}
+										x={relativeBarPositions.x}
+										height={relativeBarPositions.height}
+										width={relativeBarPositions.width}
+										fill={barColor}
+										// TODO: get radius from baseline?
+										radius={5}
+									/>
+								) : null}
+							</svg>
+						</HtmlArea>
 
-							{/* the label */}
-
-							<Sequence from={keyframe_label_appear.frame}>
-								<HtmlArea area={labelArea} fill={theme.global.backgroundColor}>
-									<LabelComponent
+						<Sequence from={keyframe_valueLabel_appear.frame}>
+							{/* the negative value label */}
+							{isPositiveBar ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									fill={theme.global.backgroundColor}
+									style={{marginLeft: negativeValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
 										animateEnter
 										animateExit={false}
 										id={dataItem.id}
 										baseline={baseline}
 										theme={theme}
-										label={dataItem.label}
+										value={dataItem.value}
 									/>
 								</HtmlArea>
-							</Sequence>
+							)}
 
-							<HtmlArea area={barArea} fill={theme.global.backgroundColor}>
-								<svg width={barArea.width} height={barArea.height}>
-									{isPositiveBar && barArea.width ? (
-										<RoundedRightRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : !isPositiveBar && barArea.width ? (
-										<RoundedLeftRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : null}
-								</svg>
-							</HtmlArea>
-
-							<Sequence from={keyframe_valueLabel_appear.frame}>
-								{/* the negative value label */}
-								{isPositiveBar ? null : (
-									<HtmlArea
-										area={negativeValueLabelArea}
-										fill={theme.global.backgroundColor}
-										style={{marginLeft: negativeValueLabelMarginLeft}}
-									>
-										<ValueLabelComponent
-											animateEnter
-											animateExit={false}
-											id={dataItem.id}
-											baseline={baseline}
-											theme={theme}
-											value={dataItem.value}
-										/>
-									</HtmlArea>
-								)}
-
-								{/* the value label */}
-								{isPositiveBar ? (
-									<HtmlArea
-										area={valueLabelArea}
-										fill={theme.global.backgroundColor}
-										style={{marginLeft: positiveValueLabelMarginLeft}}
-									>
-										<ValueLabelComponent
-											animateEnter
-											animateExit={false}
-											id={dataItem.id}
-											baseline={baseline}
-											theme={theme}
-											value={dataItem.value}
-										/>
-									</HtmlArea>
-								) : null}
-							</Sequence>
-						</HtmlArea>
-					</>
+							{/* the value label */}
+							{isPositiveBar ? (
+								<HtmlArea
+									area={valueLabelArea}
+									fill={theme.global.backgroundColor}
+									style={{marginLeft: positiveValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
+										animateEnter
+										animateExit={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										value={dataItem.value}
+									/>
+								</HtmlArea>
+							) : null}
+						</Sequence>
+					</HtmlArea>
 				);
 			})}
 

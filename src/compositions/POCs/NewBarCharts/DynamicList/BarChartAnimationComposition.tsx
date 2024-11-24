@@ -500,13 +500,11 @@ const manyItemsWithNegatives = [
 		id: 'Id-001',
 		label: 'Item 001',
 		value: 10,
-		color: '#FF5733',
 	},
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: 20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-003',
@@ -518,78 +516,66 @@ const manyItemsWithNegatives = [
 		id: 'Id-004',
 		label: 'Item 004',
 		value: -40.25,
-		color: '#FF33A1',
 	},
 	{
 		id: 'Id-011',
 		label: 'Item 011',
 		value: -55.1,
-		color: '#A133FF',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: -25.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-006',
 		label: 'Item 006',
 		value: 60.6,
-		color: '#FFC733',
 	},
 	{
 		id: 'Id-007',
 		label: 'Item 007',
 		value: 35.8,
-		color: '#C7FF33',
 	},
 	{
 		id: 'Id-010',
 		label: 'Item 010',
 		value: 45.9,
-		color: '#5733FF',
 	},
-];
+].map((it) => ({...it, color: getPredefinedColor(it.id)}));
 
 const fewItemsWithJustPositives = [
 	{
 		id: 'Id-009',
 		label: 'Item 009',
 		value: 70,
-		color: '#FF5733',
 	},
 	{
 		id: 'Id-003',
 		label: 'Item 003',
 		value: 30.75,
-		color: '#3357FF',
 	},
 	{
 		id: 'Id-007',
 		label: 'Item 007',
 		value: 20.8,
-		color: '#C7FF33',
 	},
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: 20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: 33.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-001',
 		label: 'Item 001',
 		value: 12,
-		color: '#FF5733',
 	},
-];
+].map((it) => ({...it, color: getPredefinedColor(it.id)}));
 
 type Item = {id: string};
 
@@ -613,34 +599,34 @@ function isIdInItems(id: string, items: Item[]): boolean {
 // console.log(isIdInItems("003",items)); // true
 // console.log(isIdInItems("007",items)); // false
 
-const idColorMap: {[key: string]: string} = {
-	'Id-001': '#007bff', // Neon Blue
-	'Id-002': '#ff4500', // Neon Orange
-	'Id-003': '#39ff14', // Neon Green
-	'Id-004': '#ff073a', // Neon Red
-	'Id-005': '#9d00ff', // Neon Purple
-	'Id-006': '#a0522d', // Neon Brown (Slightly brighter)
-	'Id-007': '#ff00ff', // Neon Pink
-	'Id-008': '#8c8c8c', // Neon Gray
-	'Id-009': '#d4ff00', // Neon Yellow-Green
-	'Id-010': '#00ffff', // Neon Teal
-	'Id-011': '#5b9bff', // Neon Light Blue
-	'Id-012': '#ff8300', // Neon Light Orange
-	'Id-013': '#aaff66', // Neon Light Green
-	'Id-014': '#ff5e5e', // Neon Light Red
-	'Id-015': '#bf80ff', // Neon Light Purple
-	'Id-016': '#e5b98e', // Neon Light Brown
-	'Id-017': '#ff85c2', // Neon Light Pink
-	'Id-018': '#d3d3d3', // Neon Light Gray
-	'Id-019': '#eaff00', // Neon Light Yellow-Green
-	'Id-020': '#6effff', // Neon Light Teal
-};
-
 /**
  * Returns a unique, predefined color for the given Id.
  * @param id - The string Id (e.g., "Id-001", "Id-002").
  * @returns The hex color as a string.
  */
 function getPredefinedColor(id: string): string {
+	const idColorMap: {[key: string]: string} = {
+		'Id-001': '#007bff', // Neon Blue
+		'Id-002': '#ff4500', // Neon Orange
+		'Id-003': '#39ff14', // Neon Green
+		'Id-004': '#ff073a', // Neon Red
+		'Id-005': '#9d00ff', // Neon Purple
+		'Id-006': '#a0522d', // Neon Brown (Slightly brighter)
+		'Id-007': '#ff00ff', // Neon Pink
+		'Id-008': '#8c8c8c', // Neon Gray
+		'Id-009': '#d4ff00', // Neon Yellow-Green
+		'Id-010': '#00ffff', // Neon Teal
+		'Id-011': '#5b9bff', // Neon Light Blue
+		'Id-012': '#ff8300', // Neon Light Orange
+		'Id-013': '#aaff66', // Neon Light Green
+		'Id-014': '#ff5e5e', // Neon Light Red
+		'Id-015': '#bf80ff', // Neon Light Purple
+		'Id-016': '#e5b98e', // Neon Light Brown
+		'Id-017': '#ff85c2', // Neon Light Pink
+		'Id-018': '#d3d3d3', // Neon Light Gray
+		'Id-019': '#eaff00', // Neon Light Yellow-Green
+		'Id-020': '#6effff', // Neon Light Teal
+	};
+
 	return idColorMap[id] || 'magenta'; // Default to black if ID is not found
 }
