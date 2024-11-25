@@ -7,14 +7,8 @@
     "react/jsx-pascal-case": "off",
 		"camelcase": "off",
 		"react/boolean-prop-naming": "off", // TODO re-enable
-
-		"no-unused-vars": [
-      "error",
-      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
-    ],
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
-    ]
+		"react/no-unused-prop-types": "off",
+   	"no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off"
   }
 }

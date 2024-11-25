@@ -13,7 +13,7 @@ export default function DisplayGridRails({
 	rows,
 	columns,
 	// areas,
-	stroke = 'red',
+	stroke = 'rgba(255,0,255,0.3)',
 	strokeWidth = 3,
 }: TDisplayGridRailsProps) {
 	return (

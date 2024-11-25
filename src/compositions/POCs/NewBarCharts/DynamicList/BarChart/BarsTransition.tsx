@@ -14,10 +14,6 @@ import {
 	getBarChartEnterKeyframes,
 	getBarChartExitKeyframes,
 } from './getEnterKeyframes';
-import {
-	RoundedRightRect,
-	RoundedLeftRect,
-} from '../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TBarChartValueLabelComponent} from '../components/ValueLabelComponent';
 import {TBarChartLabelComponent} from '../components/LabelComponent';
 import {
@@ -149,7 +145,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
 		barChartTransitionContext.barChartItemLayout;
 
-	const GRID_RAILS_COLOR = 'magenta';
+	// const GRID_RAILS_COLOR = 'magenta';
+	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
 
 	const enterItems = getListItems_Enter(listTransitionContext);
 	const exitItems = getListItems_Exit(listTransitionContext);
@@ -541,7 +538,8 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 		return {area, dataItem};
 	});
 
-	const GRID_RAILS_COLOR = 'magenta';
+	// const GRID_RAILS_COLOR = 'magenta';
+	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
 
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;
@@ -742,7 +740,8 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 		return {area, dataItem};
 	});
 
-	const GRID_RAILS_COLOR = 'magenta';
+	// const GRID_RAILS_COLOR = 'magenta';
+	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
 
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = barChartTransitionContext;

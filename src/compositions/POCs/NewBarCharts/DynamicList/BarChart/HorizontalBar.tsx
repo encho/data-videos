@@ -25,8 +25,8 @@ export const HorizontalBar: React.FC<{
 	currentValue,
 	currentColor,
 	xScale,
-	baseline: _baseline,
-	theme: _theme,
+	// baseline: _baseline,
+	// theme: _theme,
 }) => {
 	const zeroLine_x = xScale(0);
 
