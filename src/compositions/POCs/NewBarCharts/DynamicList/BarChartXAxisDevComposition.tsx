@@ -3,6 +3,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {XAxisTransition} from './BarChart/XAxisTransition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -160,9 +161,14 @@ export const HorizontalBarChart: React.FC<{
 			{type: 'pixel', value: 200},
 		],
 	});
-	const area_3 = getMatrixLayoutCellArea({
+	const barsArea = getMatrixLayoutCellArea({
 		layout: matrixLayout,
 		row: 0,
+		column: 0,
+	});
+	const xAxisArea = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 1,
 		column: 0,
 	});
 
@@ -202,8 +208,8 @@ export const HorizontalBarChart: React.FC<{
 	const ibcsItemHeightForBaseline = getBarChartItemHeight({baseline});
 
 	const listAnimationContext = useListAnimation({
-		width: area_3.width,
-		height: area_3.height,
+		width: barsArea.width,
+		height: barsArea.height,
 		transitions,
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
 		fitItemHeights: true,
@@ -262,15 +268,12 @@ export const HorizontalBarChart: React.FC<{
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
 					<div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails
-							{...matrixLayout}
-							// stroke="#ffff00"
-						/>
+						<DisplayGridRails {...matrixLayout} />
 					</div>
 
-					<HtmlArea area={area_3}>
+					<HtmlArea area={barsArea}>
 						<BarsTransition
-							// showLayout
+							showLayout
 							listTransitionContext={listTransitionContext}
 							barChartTransitionContext={barChartTransitionContext}
 							LabelComponent={DefaultLabelComponent}
@@ -280,6 +283,55 @@ export const HorizontalBarChart: React.FC<{
 							baseline={baseline}
 						/>
 					</HtmlArea>
+
+					{(() => {
+						// const
+
+						const {xScale} = barChartTransitionContext;
+
+						const realXAxisArea = {
+							y1: 0,
+							y2: xAxisArea.height,
+							x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
+							x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
+
+							height: xAxisArea.height,
+							width: barChartTransitionContext.barChartItemLayout.barArea.width,
+						};
+
+						return (
+							<HtmlArea area={xAxisArea} fill="rgba(255,0,255,0.2)">
+								{/* TODO <XAxisTransition 
+							listTransitionContext={listTransitionContext}
+							barChartTransitionContext={barChartTransitionContext}
+							theme={theme}
+							baseline={baseline} />
+								*/}
+								<XAxisTransition
+									height={xAxisArea.height}
+									listTransitionContext={listTransitionContext}
+									barChartTransitionContext={barChartTransitionContext}
+									theme={theme}
+									baseline={baseline}
+									area={realXAxisArea}
+								/>
+								{/* <div
+									style={{
+										backgroundColor: 'rgba(255,0,255,0.2)',
+										position: 'absolute',
+										left: barChartTransitionContext.barChartItemLayout.barArea
+											.x1,
+										top: 0,
+										height: xAxisArea.height,
+										width:
+											barChartTransitionContext.barChartItemLayout.barArea
+												.width,
+									}}
+								>
+								</div> */}
+							</HtmlArea>
+						);
+					})()}
 				</div>
 			) : null}
 		</>

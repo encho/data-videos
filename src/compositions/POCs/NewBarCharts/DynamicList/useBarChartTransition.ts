@@ -26,34 +26,37 @@ type BarChartTransitionContext_Common = {
 	// }
 };
 
-type BarChartTransitionContext_Enter = BarChartTransitionContext_Common & {
-	transitionType: 'enter';
-	to: {
-		xScale: ScaleLinear<number, number>;
-		barChartItemLayout: TBarChartItemLayout;
+export type BarChartTransitionContext_Enter =
+	BarChartTransitionContext_Common & {
+		transitionType: 'enter';
+		to: {
+			xScale: ScaleLinear<number, number>;
+			barChartItemLayout: TBarChartItemLayout;
+		};
 	};
-};
 
-type BarChartTransitionContext_Exit = BarChartTransitionContext_Common & {
-	transitionType: 'exit';
-	from: {
-		xScale: ScaleLinear<number, number>;
-		barChartItemLayout: TBarChartItemLayout;
+export type BarChartTransitionContext_Exit =
+	BarChartTransitionContext_Common & {
+		transitionType: 'exit';
+		from: {
+			xScale: ScaleLinear<number, number>;
+			barChartItemLayout: TBarChartItemLayout;
+		};
 	};
-};
 
-type BarChartTransitionContext_Update = BarChartTransitionContext_Common & {
-	transitionType: 'update';
-	from: {
-		xScale: ScaleLinear<number, number>;
-		barChartItemLayout: TBarChartItemLayout;
-		// mappedValue:
+export type BarChartTransitionContext_Update =
+	BarChartTransitionContext_Common & {
+		transitionType: 'update';
+		from: {
+			xScale: ScaleLinear<number, number>;
+			barChartItemLayout: TBarChartItemLayout;
+			// mappedValue:
+		};
+		to: {
+			xScale: ScaleLinear<number, number>;
+			barChartItemLayout: TBarChartItemLayout;
+		};
 	};
-	to: {
-		xScale: ScaleLinear<number, number>;
-		barChartItemLayout: TBarChartItemLayout;
-	};
-};
 
 export type TBarChartTransitionContext =
 	| BarChartTransitionContext_Enter
@@ -446,11 +449,6 @@ export function getBarChartItemLayout({
 			value: ibcsSizes.marginTop,
 			name: 'marginTop',
 		},
-		// {
-		// 	type: 'pixel',
-		// 	value: ibcsSizes.barHeight,
-		// 	name: 'bar',
-		// },
 		{
 			type: 'fr',
 			value: 1,

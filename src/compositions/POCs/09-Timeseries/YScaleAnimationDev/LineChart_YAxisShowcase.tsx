@@ -38,7 +38,12 @@ export const LineChart_YAxisShowcase: React.FC<{
 	useEffect(() => {
 		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
 		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
-	}, [layoutAreas.plot.width]);
+	}, [
+		layoutAreas.plot.width,
+		layoutAreas.plot.height,
+		periodScaleAnimation,
+		yScaleAnimation,
+	]);
 
 	return (
 		<div
