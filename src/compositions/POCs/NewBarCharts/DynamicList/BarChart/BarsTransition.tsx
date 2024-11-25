@@ -759,17 +759,6 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					'VALUE_LABEL_DISAPPEAR__' + dataItem.id
 				);
 
-				// const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
-
-				// const interpolateCurrentBarWidth = getKeyFramesInterpolator(
-				// 	keyframes,
-				// 	[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
-				// 	[fullBarWidth, 0],
-				// 	[Easing.ease]
-				// );
-
-				// const currentBarWidth = interpolateCurrentBarWidth(frame);
-
 				const currentValueEasingPercentage = getKeyFramesInterpolator(
 					keyframes,
 					[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],

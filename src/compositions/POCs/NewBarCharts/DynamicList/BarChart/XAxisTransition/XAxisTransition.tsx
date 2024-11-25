@@ -1,30 +1,27 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
-// import {
-// 	interpolate,
-// 	interpolateColors,
-// 	useVideoConfig,
-// 	Sequence,
-// 	Easing,
-// } from 'remotion';
+import {interpolate, Easing} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
 
-import {TGridLayoutArea} from '../../../../../acetti-layout';
+import {Animated_XAxis_Enter} from './Animated_XAxis_Enter/Animated_XAxis_Enter';
+import {TypographyStyle} from '../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {getEnterUpdateExits} from '../../../../../../acetti-ts-utils/utils';
+import {TGridLayoutArea} from '../../../../../../acetti-layout';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-} from '../useListTransition/useListTransition';
+} from '../../useListTransition/useListTransition';
 import {
 	TBarChartTransitionContext,
 	BarChartTransitionContext_Enter,
 	BarChartTransitionContext_Update,
 	BarChartTransitionContext_Exit,
-} from '../useBarChartTransition';
-import {HtmlArea} from '../../../../../acetti-layout';
-import {TBarChartItem} from '../useBarChartTransition';
-import {TKeyFramesGroup} from '../../../Keyframes/Keyframes/keyframes';
-import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+} from '../../useBarChartTransition';
+import {HtmlArea} from '../../../../../../acetti-layout';
+import {TBarChartItem} from '../../useBarChartTransition';
+import {TKeyFramesGroup} from '../../../../Keyframes/Keyframes/keyframes';
+import {ThemeType} from '../../../../../../acetti-themes/themeTypes';
 
 type TXAxisTransitionCommonProps = {
 	theme: ThemeType;
@@ -142,37 +139,6 @@ const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
 	);
 };
 
-// TODO think about if we here do not need getListItems_Enter
-// also: these are not really hooks but just memoized functions of TListTransitionContext
-const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
-	listTransitionContext,
-	barChartTransitionContext,
-	theme,
-	baseline,
-	area,
-}) => {
-	const {
-		// xScale,
-		to: {xScale: xScaleTo},
-	} = barChartTransitionContext;
-
-	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
-
-	return (
-		<div style={{fontSize: 50, color: 'orange'}}>
-			<XAxis_SpecBased
-				area={area}
-				xScaleCurrent={xScaleTo}
-				theme={theme.xAxis}
-				xAxisSpec={xAxisSpecTo}
-			/>
-			{JSON.stringify({xAxisSpecTo})}
-		</div>
-	);
-};
-
 const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
 	listTransitionContext,
 	barChartTransitionContext,
@@ -281,10 +247,10 @@ export const XAxis_SpecBased: React.FC<{
 }> = ({area, xScaleCurrent, theme, xAxisSpec}) => {
 	// TODO ideally these are to be found in theme// BUT multiple size options somwehow...
 	// const TICK_LINE_SIZE = 20;
-	const TICK_LINE_SIZE = 24;
-	const TICK_TEXT_FONT_SIZE = 24;
-	const TICK_TEXT_FONT_WEIGHT = 500;
-	const TICK_TEXT_LEFT_PADDING = 5;
+	// const TICK_LINE_SIZE = 24;
+	// const TICK_TEXT_FONT_SIZE = 24;
+	// const TICK_TEXT_FONT_WEIGHT = 500;
+	// const TICK_TEXT_LEFT_PADDING = 5;
 
 	// const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
 
@@ -334,5 +300,36 @@ export const XAxis_SpecBased: React.FC<{
 				})}
 			</svg>
 		</HtmlArea>
+	);
+};
+
+// TODO think about if we here do not need getListItems_Enter
+// also: these are not really hooks but just memoized functions of TListTransitionContext
+const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
+	listTransitionContext,
+	barChartTransitionContext,
+	theme,
+	baseline,
+	area,
+}) => {
+	const {
+		// xScale,
+		to: {xScale: xScaleTo},
+	} = barChartTransitionContext;
+
+	const nrTicks = 5;
+	const tickFormatter = (x: number) => `${x}`;
+	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
+
+	return (
+		<Animated_XAxis_Enter
+			frame={listTransitionContext.frame}
+			durationInFrames={listTransitionContext.durationInFrames}
+			area={area}
+			xScaleCurrent={xScaleTo}
+			theme={theme}
+			xAxisSpec={xAxisSpecTo}
+			baseline={baseline}
+		/>
 	);
 };

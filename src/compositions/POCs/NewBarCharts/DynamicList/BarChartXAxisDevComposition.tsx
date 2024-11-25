@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
-import {XAxisTransition} from './BarChart/XAxisTransition';
+import {XAxisTransition} from './BarChart/XAxisTransition/XAxisTransition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
