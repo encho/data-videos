@@ -1,57 +1,33 @@
 import React from 'react';
-// import {interpolate} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
-// import {isNumber} from 'lodash';
-// import invariant from 'tiny-invariant';
 
 import {HtmlArea, TGridLayoutArea} from '../../../../../acetti-layout';
-// import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {
 	RoundedRightRect,
 	RoundedLeftRect,
 } from '../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
 export const HorizontalBar: React.FC<{
 	area: TGridLayoutArea;
-	// theme: ThemeType;
-	// id: string;
 	currentValue: number;
-	// valueTo: number;
-	// colorFrom: number;
-	// colorTo: number;
-	// easingPercentage: number;
+	currentColor: string;
 	xScale: ScaleLinear<number, number>;
+	baseline: number;
+	theme: ThemeType;
+	// TODO evantually pass also these infos to all HorizontalBar Components!
+	// theme
+	// itemFrom
+	// itemTo
+	// easingPercentage
 }> = ({
 	area,
-	// theme,
-	// id,
-	// valueFrom: valueFromProp, // TODO deprecate
-	// valueTo: valueToProp, // TODO deprecate
 	currentValue,
-	// TODO: pass:
-	// currentValue directly!!!
-	// colorFrom,
-	// colorTo,
-	// TODO currentColor
-	// TODO currentOpacity
-	// easingPercentage, // TODO deprecate
+	currentColor,
 	xScale,
+	baseline: _baseline,
+	theme: _theme,
 }) => {
-	// invariant(
-	// 	isNumber(valueFromProp) || isNumber(valueToProp),
-	// 	'HorizontalBarChart: please provide at least one of valueTo and valueFrom'
-	// );
-
-	// const valueTo = valueToProp ? valueToProp : 0;
-	// const valueFrom = valueFromProp ? valueFromProp : 0;
-
-	// const currentValue = interpolate(
-	// 	easingPercentage,
-	// 	[0, 1],
-	// 	[valueFrom, valueTo],
-	// 	{}
-	// );
-
 	const zeroLine_x = xScale(0);
 
 	const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x);
@@ -63,7 +39,7 @@ export const HorizontalBar: React.FC<{
 		width: currentBarWidth,
 	};
 
-	const barColor = 'orange';
+	const barColor = currentColor;
 
 	return (
 		<HtmlArea area={area}>

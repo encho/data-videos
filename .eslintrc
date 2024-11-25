@@ -6,6 +6,15 @@
 	"rules": {
     "react/jsx-pascal-case": "off",
 		"camelcase": "off",
-		"react/boolean-prop-naming": "off" // TODO re-enable
+		"react/boolean-prop-naming": "off", // TODO re-enable
+
+		"no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+    ]
   }
 }

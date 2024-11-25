@@ -633,7 +633,7 @@ export const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	width,
 	height,
 	radius,
-	fill = 'blue',
+	fill = 'magenta',
 	stroke = 'transparent',
 	strokeWidth = 0,
 }) => {
@@ -665,7 +665,7 @@ export const RoundedLeftRect: React.FC<RoundedRectProps> = ({
 	width,
 	height,
 	radius,
-	fill = 'blue',
+	fill = 'magenta',
 	stroke = 'transparent',
 	strokeWidth = 0,
 }) => {

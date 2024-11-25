@@ -200,7 +200,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const isPositiveBarOrZero = item.value >= 0;
 
-					// const barColor = item.color;
+					const barColor = item.color;
 
 					return (
 						<HtmlArea key={item.id} area={area} opacity={opacity}>
@@ -224,11 +224,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							</HtmlArea>
 
 							<HorizontalBar
+								baseline={baseline}
+								theme={theme}
 								area={barArea}
 								currentValue={currentValue}
-								// valueFrom={0}
-								// valueTo={item.value}
-								// easingPercentage={valueAnimationPercentage}
+								currentColor={barColor}
 								xScale={xScale}
 							/>
 
@@ -301,7 +301,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
 
-					// const barColor = item.color;
+					const barColor = item.color;
 
 					const isPositiveBarOrZero = item.value >= 0;
 
@@ -328,8 +328,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							</HtmlArea>
 
 							<HorizontalBar
+								baseline={baseline}
+								theme={theme}
 								area={barArea}
 								currentValue={currentValue}
+								currentColor={barColor}
 								xScale={xScale}
 							/>
 
@@ -404,11 +407,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const isPositiveBarOrZero = currentValue >= 0;
 
-					// const currentBarColor = interpolateColors(
-					// 	frame,
-					// 	[0, durationInFrames - 1],
-					// 	[itemFrom.color, itemTo.color]
-					// );
+					const currentBarColor = interpolateColors(
+						frame,
+						[0, durationInFrames - 1],
+						[itemFrom.color, itemTo.color]
+					);
 
 					return (
 						<HtmlArea key={itemTo.id} area={area} opacity={opacity}>
@@ -439,8 +442,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							</HtmlArea>
 
 							<HorizontalBar
+								baseline={baseline}
+								theme={theme}
 								area={barArea}
 								currentValue={currentValue}
+								currentColor={currentBarColor}
 								xScale={xScale}
 							/>
 
@@ -588,7 +594,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				const isPositiveBarOrZero = dataItem.value >= 0;
 
-				// const barColor = dataItem.color;
+				const barColor = dataItem.color;
 
 				return (
 					<HtmlArea key={dataItem.id} area={area}>
@@ -617,7 +623,10 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						</Sequence>
 
 						<HorizontalBar
+							baseline={baseline}
+							theme={theme}
 							currentValue={currentValue}
+							currentColor={barColor}
 							xScale={xScale}
 							area={barArea}
 						/>
@@ -751,16 +760,31 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					'VALUE_LABEL_DISAPPEAR__' + dataItem.id
 				);
 
-				const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
+				// const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
 
-				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+				// const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+				// 	keyframes,
+				// 	[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
+				// 	[fullBarWidth, 0],
+				// 	[Easing.ease]
+				// );
+
+				// const currentBarWidth = interpolateCurrentBarWidth(frame);
+
+				const currentValueEasingPercentage = getKeyFramesInterpolator(
 					keyframes,
 					[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
-					[fullBarWidth, 0],
+					[0, 1],
 					[Easing.ease]
 				);
 
-				const currentBarWidth = interpolateCurrentBarWidth(frame);
+				const currentValue = interpolate(
+					currentValueEasingPercentage(frame),
+					[0, 1],
+					[dataItem.value, 0]
+				);
+
+				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
 				const relativeBarPositions = {
 					y: 0,
@@ -802,31 +826,14 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							/>
 						</HtmlArea>
 
-						<HtmlArea area={barArea}>
-							<svg width={barArea.width} height={barArea.height}>
-								{currentBarWidth > 0 && barArea.width ? (
-									<RoundedRightRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : currentBarWidth < 0 && barArea.width ? (
-									<RoundedLeftRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : null}
-							</svg>
-						</HtmlArea>
+						<HorizontalBar
+							baseline={baseline}
+							theme={theme}
+							currentValue={currentValue}
+							currentColor={barColor}
+							xScale={xScale}
+							area={barArea}
+						/>
 
 						{/* the negative value label */}
 						<Sequence

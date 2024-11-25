@@ -284,7 +284,7 @@ export const ListAnimationPage: React.FC = () => {
 						<div style={{position: 'relative'}}>
 							<HtmlArea area={area_3}>
 								<BarsTransition
-									// showLayout
+									showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
@@ -294,7 +294,8 @@ export const ListAnimationPage: React.FC = () => {
 									exitKeyframes={exitKeyframes}
 									//
 									theme={theme}
-									baseline={baseline}
+									// baseline={baseline}
+									baseline={40}
 								/>
 							</HtmlArea>
 						</div>
