@@ -558,18 +558,20 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					'VALUE_LABEL_APPEAR__' + dataItem.id
 				);
 
-				///
-				const fullBarWidth = Math.abs(xScale(dataItem.value) - zeroLine_x1);
-
-				const interpolateCurrentBarWidth = getKeyFramesInterpolator(
+				const currentValueEasingPercentage = getKeyFramesInterpolator(
 					keyframes,
 					[`BAR_ENTER_START__${dataItem.id}`, `BAR_ENTER_END__${dataItem.id}`],
-					[0, fullBarWidth],
+					[0, 1],
 					[Easing.ease]
 				);
 
-				const currentBarWidth = interpolateCurrentBarWidth(frame);
-				///
+				const currentValue = interpolate(
+					currentValueEasingPercentage(frame),
+					[0, 1],
+					[0, dataItem.value]
+				);
+
+				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
 				const relativeBarPositions = {
 					y: 0,
@@ -586,7 +588,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 				const isPositiveBarOrZero = dataItem.value >= 0;
 
-				const barColor = dataItem.color;
+				// const barColor = dataItem.color;
 
 				return (
 					<HtmlArea key={dataItem.id} area={area}>
@@ -614,31 +616,11 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							</HtmlArea>
 						</Sequence>
 
-						<HtmlArea area={barArea}>
-							<svg width={barArea.width} height={barArea.height}>
-								{currentBarWidth > 0 && barArea.width ? (
-									<RoundedRightRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : currentBarWidth < 0 && barArea.width ? (
-									<RoundedLeftRect
-										y={relativeBarPositions.y}
-										x={relativeBarPositions.x}
-										height={relativeBarPositions.height}
-										width={relativeBarPositions.width}
-										fill={barColor}
-										// TODO: get radius from baseline?
-										radius={5}
-									/>
-								) : null}
-							</svg>
-						</HtmlArea>
+						<HorizontalBar
+							currentValue={currentValue}
+							xScale={xScale}
+							area={barArea}
+						/>
 
 						<Sequence from={keyframe_valueLabel_appear.frame}>
 							{/* the negative value label */}

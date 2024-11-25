@@ -1,8 +1,8 @@
 import React from 'react';
-import {interpolate} from 'remotion';
+// import {interpolate} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
-import {isNumber} from 'lodash';
-import invariant from 'tiny-invariant';
+// import {isNumber} from 'lodash';
+// import invariant from 'tiny-invariant';
 
 import {HtmlArea, TGridLayoutArea} from '../../../../../acetti-layout';
 // import {ThemeType} from '../../../../../acetti-themes/themeTypes';
