@@ -8,6 +8,7 @@ import {
 	Easing,
 } from 'remotion';
 
+import {HorizontalBar} from './HorizontalBar';
 import {ZeroLine} from './ZeroLine';
 import {
 	getBarChartEnterKeyframes,
@@ -168,10 +169,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 				{[...enterItems].map((enterItem) => {
 					const {opacity, item, area} = enterItem;
 
-					// TODO this may have to happen quicker than the whole durationInFrames
-					const currentValue = interpolate(
+					const valueAnimationPercentage = interpolate(
 						frame,
 						[0, durationInFrames - 1],
+						[0, 1]
+					);
+
+					// TODO this may have to happen quicker than the whole durationInFrames
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
 						[0, item.value],
 						{}
 					);
@@ -193,7 +200,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const isPositiveBarOrZero = item.value >= 0;
 
-					const barColor = item.color;
+					// const barColor = item.color;
 
 					return (
 						<HtmlArea key={item.id} area={area} opacity={opacity}>
@@ -216,31 +223,14 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HtmlArea area={barArea}>
-								<svg width={barArea.width} height={barArea.height}>
-									{currentValue > 0 && barArea.width ? (
-										<RoundedRightRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : currentValue < 0 && barArea.width ? (
-										<RoundedLeftRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : null}
-								</svg>
-							</HtmlArea>
+							<HorizontalBar
+								area={barArea}
+								currentValue={currentValue}
+								// valueFrom={0}
+								// valueTo={item.value}
+								// easingPercentage={valueAnimationPercentage}
+								xScale={xScale}
+							/>
 
 							{/* the negative value label */}
 							{isPositiveBarOrZero ? null : (
@@ -280,15 +270,22 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 				{[...exitItems].map((exitItem) => {
 					const {opacity, item, area} = exitItem;
 
-					const currentValue = interpolate(
+					const valueAnimationPercentage = interpolate(
 						frame,
 						[0, durationInFrames - 1],
+						[0, 1]
+					);
+
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
 						[item.value, 0],
 						{}
 					);
 
 					// see also useAnimatedBarChartLayout line 100 ff.
-					const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
+					// const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
+					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
 					// TODO rather as Area format with x1 x2 y1 y2 height width
 					const relativeBarPositions = {
@@ -304,7 +301,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
 
-					const barColor = item.color;
+					// const barColor = item.color;
 
 					const isPositiveBarOrZero = item.value >= 0;
 
@@ -330,31 +327,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HtmlArea area={barArea}>
-								<svg width={barArea.width} height={barArea.height}>
-									{currentValue > 0 && barArea.width ? (
-										<RoundedRightRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : currentValue < 0 && barArea.width ? (
-										<RoundedLeftRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={barColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : null}
-								</svg>
-							</HtmlArea>
+							<HorizontalBar
+								area={barArea}
+								currentValue={currentValue}
+								xScale={xScale}
+							/>
 
 							{/* the negative value label */}
 							{isPositiveBarOrZero ? null : (
@@ -394,11 +371,19 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 				{[...appearItems, ...disappearItems, ...updateItems].map((listItem) => {
 					const {opacity, itemFrom, itemTo, area} = listItem;
 
-					const currentValue = interpolate(
+					// TODO this could be brought into the context
+					const valueAnimationPercentage = interpolate(
 						frame,
 						[0, durationInFrames - 1],
-						[itemFrom.value, itemTo.value],
+						[0, 1],
 						{}
+					);
+
+					// TODO this could be brought into the context
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
+						[itemFrom.value, itemTo.value]
 					);
 
 					// see also useAnimatedBarChartLayout line 100 ff.
@@ -411,18 +396,6 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						width: currentBarWidth,
 					};
 
-					// TODO evtl. use this
-					// const relativeBarArea_x1 =
-					// 	currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth;
-					// const relativeBarArea = {
-					// 	y1: 0,
-					// 	y2: barArea.height,
-					// 	x1: relativeBarArea_x1,
-					// 	x2: relativeBarArea_x1 + currentBarWidth,
-					// 	height: barArea.height,
-					// 	width: currentBarWidth,
-					// };
-
 					// the value label margins
 					const positiveValueLabelMarginLeft =
 						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
@@ -431,11 +404,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 					const isPositiveBarOrZero = currentValue >= 0;
 
-					const currentBarColor = interpolateColors(
-						frame,
-						[0, durationInFrames - 1],
-						[itemFrom.color, itemTo.color]
-					);
+					// const currentBarColor = interpolateColors(
+					// 	frame,
+					// 	[0, durationInFrames - 1],
+					// 	[itemFrom.color, itemTo.color]
+					// );
 
 					return (
 						<HtmlArea key={itemTo.id} area={area} opacity={opacity}>
@@ -465,31 +438,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HtmlArea area={barArea}>
-								<svg width={barArea.width} height={barArea.height}>
-									{currentValue > 0 && barArea.width ? (
-										<RoundedRightRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={currentBarColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : currentValue < 0 && barArea.width ? (
-										<RoundedLeftRect
-											y={relativeBarPositions.y}
-											x={relativeBarPositions.x}
-											height={relativeBarPositions.height}
-											width={relativeBarPositions.width}
-											fill={currentBarColor}
-											// TODO: get radius from baseline?
-											radius={5}
-										/>
-									) : null}
-								</svg>
-							</HtmlArea>
+							<HorizontalBar
+								area={barArea}
+								currentValue={currentValue}
+								xScale={xScale}
+							/>
 
 							{/* the negative value label */}
 							{isPositiveBarOrZero ? null : (
