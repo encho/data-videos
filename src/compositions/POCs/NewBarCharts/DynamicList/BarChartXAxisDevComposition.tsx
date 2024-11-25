@@ -285,50 +285,24 @@ export const HorizontalBarChart: React.FC<{
 					</HtmlArea>
 
 					{(() => {
-						// const
-
-						const {xScale} = barChartTransitionContext;
-
 						const realXAxisArea = {
 							y1: 0,
 							y2: xAxisArea.height,
 							x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
 							x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
-
 							height: xAxisArea.height,
 							width: barChartTransitionContext.barChartItemLayout.barArea.width,
 						};
 
 						return (
 							<HtmlArea area={xAxisArea} fill="rgba(255,0,255,0.2)">
-								{/* TODO <XAxisTransition 
-							listTransitionContext={listTransitionContext}
-							barChartTransitionContext={barChartTransitionContext}
-							theme={theme}
-							baseline={baseline} />
-								*/}
 								<XAxisTransition
-									height={xAxisArea.height}
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
 									theme={theme}
 									baseline={baseline}
 									area={realXAxisArea}
 								/>
-								{/* <div
-									style={{
-										backgroundColor: 'rgba(255,0,255,0.2)',
-										position: 'absolute',
-										left: barChartTransitionContext.barChartItemLayout.barArea
-											.x1,
-										top: 0,
-										height: xAxisArea.height,
-										width:
-											barChartTransitionContext.barChartItemLayout.barArea
-												.width,
-									}}
-								>
-								</div> */}
 							</HtmlArea>
 						);
 					})()}

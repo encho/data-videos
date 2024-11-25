@@ -1,32 +1,19 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
-import {
-	interpolate,
-	interpolateColors,
-	useVideoConfig,
-	Sequence,
-	Easing,
-} from 'remotion';
+// import {
+// 	interpolate,
+// 	interpolateColors,
+// 	useVideoConfig,
+// 	Sequence,
+// 	Easing,
+// } from 'remotion';
 import {ScaleLinear} from 'd3-scale';
 
 import {TGridLayoutArea} from '../../../../../acetti-layout';
-import {HorizontalBar} from './HorizontalBar';
-import {ZeroLine} from './ZeroLine';
-import {
-	getBarChartEnterKeyframes,
-	getBarChartExitKeyframes,
-} from './getEnterKeyframes';
-import {TBarChartValueLabelComponent} from '../components/ValueLabelComponent';
-import {TBarChartLabelComponent} from '../components/LabelComponent';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-	getListItems_Enter,
-	getListItems_Exit,
-	getListItems_Update,
-	getListItems_Appear,
-	getListItems_Disappear,
 } from '../useListTransition/useListTransition';
 import {
 	TBarChartTransitionContext,
@@ -34,45 +21,35 @@ import {
 	BarChartTransitionContext_Update,
 	BarChartTransitionContext_Exit,
 } from '../useBarChartTransition';
-import {HtmlArea, DisplayGridRails} from '../../../../../acetti-layout';
+import {HtmlArea} from '../../../../../acetti-layout';
 import {TBarChartItem} from '../useBarChartTransition';
-import {
-	getKeyFrame,
-	getKeyFramesInterpolator,
-	TKeyFramesGroup,
-} from '../../../Keyframes/Keyframes/keyframes';
+import {TKeyFramesGroup} from '../../../Keyframes/Keyframes/keyframes';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
-type TBarsTransitionCommonProps = {
-	// showLayout: boolean;
-	// barChartTransitionContext: TBarChartTransitionContext;
-	// LabelComponent: TBarChartLabelComponent;
-	// ValueLabelComponent: TBarChartValueLabelComponent;
+type TXAxisTransitionCommonProps = {
 	theme: ThemeType;
 	baseline: number;
 	area: TGridLayoutArea;
 };
 
-type TBarsTransitionUpdateProps = TBarsTransitionCommonProps & {
+type TXAxisTransitionUpdateProps = TXAxisTransitionCommonProps & {
 	listTransitionContext: ListTransitionContext_Update<TBarChartItem>;
 	barChartTransitionContext: BarChartTransitionContext_Update;
 };
 
-type TBarsTransitionEnterProps = TBarsTransitionCommonProps & {
+type TXAxisTransitionEnterProps = TXAxisTransitionCommonProps & {
 	listTransitionContext: ListTransitionContext_Enter<TBarChartItem>;
 	barChartTransitionContext: BarChartTransitionContext_Enter;
 	keyframes?: TKeyFramesGroup;
 };
 
-type TBarsTransitionExitProps = TBarsTransitionCommonProps & {
+type TXAxisTransitionExitProps = TXAxisTransitionCommonProps & {
 	barChartTransitionContext: BarChartTransitionContext_Exit;
 	listTransitionContext: ListTransitionContext_Exit<TBarChartItem>;
 	keyframes?: TKeyFramesGroup;
 };
 
 type TXAxisTransitionProps = {
-	// showLayout?: boolean;
-	height: number;
 	barChartTransitionContext: TBarChartTransitionContext;
 	listTransitionContext:
 		| ListTransitionContext_Enter<TBarChartItem>
@@ -84,14 +61,8 @@ type TXAxisTransitionProps = {
 };
 
 export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
-	height,
-	// showLayout = false,
 	listTransitionContext,
-	// LabelComponent,
-	// ValueLabelComponent,
 	barChartTransitionContext,
-	// enterKeyframes,
-	// exitKeyframes,
 	theme,
 	baseline,
 	area,
@@ -141,7 +112,7 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 	);
 };
 
-const XAxisTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
+const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
 	listTransitionContext,
 	barChartTransitionContext,
 	theme,
@@ -173,7 +144,7 @@ const XAxisTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 // TODO think about if we here do not need getListItems_Enter
 // also: these are not really hooks but just memoized functions of TListTransitionContext
-const XAxisTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
+const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
 	listTransitionContext,
 	barChartTransitionContext,
 	theme,
@@ -202,7 +173,7 @@ const XAxisTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	);
 };
 
-const XAxisTransitionExit: React.FC<TBarsTransitionExitProps> = ({
+const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
 	listTransitionContext,
 	barChartTransitionContext,
 	theme,
