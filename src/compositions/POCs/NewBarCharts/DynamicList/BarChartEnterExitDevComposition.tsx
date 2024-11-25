@@ -294,8 +294,7 @@ export const ListAnimationPage: React.FC = () => {
 									exitKeyframes={exitKeyframes}
 									//
 									theme={theme}
-									// baseline={baseline}
-									baseline={40}
+									baseline={baseline}
 								/>
 							</HtmlArea>
 						</div>
