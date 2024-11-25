@@ -155,7 +155,7 @@ const XAxisTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	} = barChartTransitionContext;
 
 	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x} NR`;
+	const tickFormatter = (x: number) => `${x}`;
 	const xAxisSpec = getXAxisSpec(xScale, nrTicks, tickFormatter);
 
 	return (
@@ -186,7 +186,7 @@ const XAxisTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	} = barChartTransitionContext;
 
 	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x} NR`;
+	const tickFormatter = (x: number) => `${x}`;
 	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
 
 	return (
@@ -215,7 +215,7 @@ const XAxisTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	} = barChartTransitionContext;
 
 	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x} NR`;
+	const tickFormatter = (x: number) => `${x}`;
 	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
 
 	return (
@@ -279,7 +279,7 @@ export function getXAxisSpec(
 
 	const labels = tickValues.map((tickValue) => {
 		return {
-			id: `yTickLabel-id-${tickValue}`,
+			id: `xTickLabel-id-${tickValue}`,
 			domainValue: tickValue,
 			label: formatter(tickValue),
 			// textAnchor: 'middle' as const,
@@ -340,24 +340,27 @@ export const XAxis_SpecBased: React.FC<{
 				})}
 
 				{/* update labels  */}
-				{/* {yAxisSpec.labels.map((it) => {
-				const labelMappedValue = yScaleCurrent(it.domainValue);
-				return (
-					<g key={it.id}>
-						<text
-							textAnchor="start"
-							alignmentBaseline="middle"
-							fill={theme.color}
-							fontSize={TICK_TEXT_FONT_SIZE}
-							fontWeight={TICK_TEXT_FONT_WEIGHT}
-							y={labelMappedValue}
-							x={TICK_LINE_SIZE + TICK_TEXT_LEFT_PADDING}
-						>
-							{it.label}
-						</text>
-					</g>
-				);
-			})} */}
+				{xAxisSpec.labels.map((it) => {
+					const labelMappedValue = xScaleCurrent(it.domainValue);
+					return (
+						<g key={it.id}>
+							<text
+								textAnchor="middle"
+								// alignmentBaseline="middle"
+								alignmentBaseline="hanging"
+								fill={theme.color}
+								// fontSize={TICK_TEXT_FONT_SIZE}
+								fontSize={40}
+								fontWeight={700}
+								x={labelMappedValue}
+								// x={TICK_LINE_SIZE + TICK_TEXT_LEFT_PADDING}
+								y={50}
+							>
+								{it.label}
+							</text>
+						</g>
+					);
+				})}
 			</svg>
 		</HtmlArea>
 	);
