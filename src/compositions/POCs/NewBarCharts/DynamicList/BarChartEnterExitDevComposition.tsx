@@ -292,6 +292,9 @@ export const ListAnimationPage: React.FC = () => {
 									//
 									enterKeyframes={enterKeyframes}
 									exitKeyframes={exitKeyframes}
+									//
+									theme={theme}
+									baseline={baseline}
 								/>
 							</HtmlArea>
 						</div>

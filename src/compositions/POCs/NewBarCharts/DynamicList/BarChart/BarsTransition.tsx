@@ -19,7 +19,6 @@ import {
 } from '../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {TBarChartValueLabelComponent} from '../components/ValueLabelComponent';
 import {TBarChartLabelComponent} from '../components/LabelComponent';
-import {usePage} from '../../../../../acetti-components/PageContext';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
@@ -38,12 +37,15 @@ import {
 	getKeyFramesInterpolator,
 	TKeyFramesGroup,
 } from '../../../Keyframes/Keyframes/keyframes';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 
 type TBarsTransitionCommonProps = {
 	showLayout: boolean;
 	barChartTransitionContext: TBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
+	theme: ThemeType;
+	baseline: number;
 };
 
 type TBarsTransitionUpdateProps = TBarsTransitionCommonProps & {
@@ -71,6 +73,8 @@ type TBarsTransitionProps = {
 		| ListTransitionContext_Exit<TBarChartItem>;
 	enterKeyframes?: TKeyFramesGroup;
 	exitKeyframes?: TKeyFramesGroup;
+	theme: ThemeType;
+	baseline: number;
 };
 
 export const BarsTransition: React.FC<TBarsTransitionProps> = ({
@@ -81,6 +85,8 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 	barChartTransitionContext,
 	enterKeyframes,
 	exitKeyframes,
+	theme,
+	baseline,
 }) => {
 	if (listTransitionContext.transitionType === 'update') {
 		return (
@@ -90,6 +96,8 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				barChartTransitionContext={barChartTransitionContext}
 				LabelComponent={LabelComponent}
 				ValueLabelComponent={ValueLabelComponent}
+				theme={theme}
+				baseline={baseline}
 			/>
 		);
 	}
@@ -103,6 +111,8 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				LabelComponent={LabelComponent}
 				ValueLabelComponent={ValueLabelComponent}
 				keyframes={enterKeyframes}
+				theme={theme}
+				baseline={baseline}
 			/>
 		);
 	}
@@ -117,6 +127,8 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 			LabelComponent={LabelComponent}
 			ValueLabelComponent={ValueLabelComponent}
 			keyframes={exitKeyframes}
+			theme={theme}
+			baseline={baseline}
 		/>
 	);
 };
@@ -127,9 +139,9 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	LabelComponent,
 	ValueLabelComponent,
 	barChartTransitionContext,
+	theme,
+	baseline,
 }) => {
-	const {theme, baseline} = usePage();
-
 	const {frame, durationInFrames} = listTransitionContext;
 
 	const {xScale} = barChartTransitionContext;
@@ -543,8 +555,9 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	ValueLabelComponent,
 	barChartTransitionContext,
 	keyframes: keyframesProp,
+	theme,
+	baseline,
 }) => {
-	const {theme, baseline} = usePage();
 	const {fps} = useVideoConfig();
 
 	// TODO evtl. have it called relativeFrame
@@ -759,9 +772,9 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	ValueLabelComponent,
 	barChartTransitionContext,
 	keyframes: keyframesProp,
+	theme,
+	baseline,
 }) => {
-	const {theme, baseline} = usePage();
-
 	const {fps} = useVideoConfig();
 
 	const {frame, durationInFrames, frameRange} = listTransitionContext;

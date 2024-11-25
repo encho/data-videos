@@ -349,6 +349,8 @@ export const ListAnimationPage: React.FC = () => {
 									barChartTransitionContext={barChartTransitionContext}
 									LabelComponent={DefaultLabelComponent}
 									ValueLabelComponent={DefaultValueLabelComponent}
+									theme={theme}
+									baseline={baseline}
 								/>
 							</HtmlArea>
 						</div>
