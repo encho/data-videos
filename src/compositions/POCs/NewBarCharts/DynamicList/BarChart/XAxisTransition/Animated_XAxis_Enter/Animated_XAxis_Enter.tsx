@@ -101,7 +101,7 @@ export const Animated_XAxis_Enter: React.FC<{
 									typographyStyle={tickLabelStyle}
 									baseline={baseline}
 								>
-									<TextAnimationSubtle animateEnter>
+									<TextAnimationSubtle animateEnter animateExit={false}>
 										{it.label}
 									</TextAnimationSubtle>
 								</TypographyStyle>

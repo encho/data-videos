@@ -83,10 +83,10 @@ export const Animated_XAxis_Update: React.FC<{
 		xAxisSpecTo.ticks.map((it) => it.id)
 	);
 
-	// const labelsEnterUpdateExits = getEnterUpdateExits(
-	// 	xAxisSpecFrom.ticks.map((it) => it.id),
-	// 	xAxisSpecTo.ticks.map((it) => it.id)
-	// );
+	const labelsEnterUpdateExits = getEnterUpdateExits(
+		xAxisSpecFrom.labels.map((it) => it.id),
+		xAxisSpecTo.labels.map((it) => it.id)
+	);
 
 	const visibleDomainValues = xScaleCurrent.domain();
 	const visibleDomainValuesRange =
@@ -106,9 +106,20 @@ export const Animated_XAxis_Update: React.FC<{
 		);
 	};
 
+	const updateLabels = labelsEnterUpdateExits.update.map((labelId) => {
+		const labelTo = getLabel(xAxisSpecTo, labelId);
+		const labelMappedValue = xScaleCurrent(labelTo.domainValue);
+
+		return {
+			id: labelId,
+			label: labelTo.label,
+			value: labelMappedValue,
+			opacity: getOpacityNearVisibleBoundary(labelTo.domainValue),
+		};
+	});
+
 	const updateTicks = ticksEnterUpdateExits.update.map((tickId) => {
 		const tickTo = getTick(xAxisSpecTo, tickId);
-
 		const tickMappedValue = xScaleCurrent(tickTo.domainValue);
 
 		return {
@@ -118,9 +129,32 @@ export const Animated_XAxis_Update: React.FC<{
 		};
 	});
 
+	const enterLabels = labelsEnterUpdateExits.enter.map((labelId) => {
+		const labelTo = getLabel(xAxisSpecTo, labelId);
+		const labelMappedValue = xScaleCurrent(labelTo.domainValue);
+
+		const interpolatedOpacity = interpolate(
+			frame,
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
+			[0, 1],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			label: labelTo.label,
+			value: labelMappedValue,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(labelTo.domainValue),
+		};
+	});
+
 	const enterTicks = ticksEnterUpdateExits.enter.map((tickId) => {
 		const tickTo = getTick(xAxisSpecTo, tickId);
-
 		const tickMappedValue = xScaleCurrent(tickTo.domainValue);
 
 		const interpolatedOpacity = interpolate(
@@ -141,9 +175,32 @@ export const Animated_XAxis_Update: React.FC<{
 		};
 	});
 
+	const exitLabels = labelsEnterUpdateExits.exit.map((labelId) => {
+		const labelFrom = getLabel(xAxisSpecFrom, labelId);
+		const labelMappedValue = xScaleCurrent(labelFrom.domainValue);
+
+		const interpolatedOpacity = interpolate(
+			frame,
+			[0, FADE_IN_OUT_DURATION_IN_FRAMES],
+			[1, 0],
+			{
+				extrapolateLeft: 'clamp',
+				extrapolateRight: 'clamp',
+			}
+		);
+
+		return {
+			id: labelId,
+			label: labelFrom.label,
+			value: labelMappedValue,
+			opacity:
+				interpolatedOpacity *
+				getOpacityNearVisibleBoundary(labelFrom.domainValue),
+		};
+	});
+
 	const exitTicks = ticksEnterUpdateExits.exit.map((tickId) => {
 		const tickFrom = getTick(xAxisSpecFrom, tickId);
-
 		const tickMappedValue = xScaleCurrent(tickFrom.domainValue);
 
 		const interpolatedOpacity = interpolate(
@@ -168,8 +225,8 @@ export const Animated_XAxis_Update: React.FC<{
 	return (
 		// <Sequence from={startFrame} durationInFrames={durationInFrames}>
 		<HtmlArea area={area} fill="black">
-			{/* {xAxisSpecTo.labels.map((it) => {
-				const labelMappedValue = xScaleCurrent(it.domainValue);
+			{[...updateLabels, ...enterLabels, ...exitLabels].map((it) => {
+				// const labelMappedValue = xScaleCurrent(it.domainValue);
 
 				return (
 					<div
@@ -177,8 +234,9 @@ export const Animated_XAxis_Update: React.FC<{
 						style={{
 							position: 'absolute',
 							top: 80,
-							left: labelMappedValue,
+							left: it.value,
 							transform: 'translateX(-50%)',
+							opacity: it.opacity,
 						}}
 					>
 						<TypographyStyle
@@ -189,7 +247,7 @@ export const Animated_XAxis_Update: React.FC<{
 						</TypographyStyle>
 					</div>
 				);
-			})} */}
+			})}
 
 			<svg overflow="visible" width={area.width} height={area.height}>
 				{[...enterTicks, ...updateTicks, ...exitTicks].map((it, i) => {
