@@ -3,7 +3,7 @@ import {ScaleLinear} from 'd3-scale';
 import {interpolate, useVideoConfig} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {getStyles} from '../utils';
+import {getStyles} from '../getStyles';
 import {getEnterUpdateExits} from '../../../../../../../../acetti-ts-utils/utils';
 import {TypographyStyle} from '../../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TGridLayoutArea} from '../../../../../../../../acetti-layout';
