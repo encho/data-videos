@@ -1,6 +1,6 @@
 import React from 'react';
 import {ScaleLinear} from 'd3-scale';
-import {interpolate, Easing, useVideoConfig, Sequence} from 'remotion';
+import {Easing, useVideoConfig, Sequence} from 'remotion';
 
 import {
 	getKeyFrame,
@@ -32,7 +32,7 @@ export type TXAxisSpec = {
 	labels: TLabelSpec_XAxis[];
 };
 
-export const Animated_XAxis_Enter: React.FC<{
+export const Animated_XAxis_Exit: React.FC<{
 	area: TGridLayoutArea;
 	xScaleCurrent: ScaleLinear<number, number>;
 	theme: ThemeType;
@@ -55,19 +55,19 @@ export const Animated_XAxis_Enter: React.FC<{
 
 	const keyframes = getKeyframes({durationInFrames, fps, xAxisSpec});
 
-	const axisLine_x1 = 0;
+	const axisLine_x2 = area.width;
 
-	const axisLine_x2 = getKeyFramesInterpolator(
+	const axisLine_x1 = getKeyFramesInterpolator(
 		keyframes,
-		['AXIS_LINE_ENTER_START', 'AXIS_LINE_ENTER_END'],
+		['AXIS_LINE_EXIT_START', 'AXIS_LINE_EXIT_END'],
 		[0, area.width],
 		[Easing.ease]
 	)(frame);
 
 	const axisLine_opacity = getKeyFramesInterpolator(
 		keyframes,
-		['AXIS_LINE_ENTER_START', 'AXIS_LINE_ENTER_END'],
-		[0, 1],
+		['AXIS_LINE_EXIT_START', 'AXIS_LINE_EXIT_END'],
+		[1, 0],
 		[Easing.ease]
 	)(frame);
 
@@ -78,32 +78,30 @@ export const Animated_XAxis_Enter: React.FC<{
 			{xAxisSpec.labels.map((it) => {
 				const labelMappedValue = xScaleCurrent(it.domainValue);
 
-				const keyframe_label_appear = getKeyFrame(
-					keyframes,
-					'LABEL_APPEAR__' + it.id
-				);
+				// const keyframe_label_appear = getKeyFrame(
+				// 	keyframes,
+				// 	'LABEL_APPEAR__' + it.id
+				// );
 
 				return (
-					<Sequence from={keyframe_label_appear.frame}>
-						<div
-							key={it.id}
-							style={{
-								position: 'absolute',
-								top: 80,
-								left: labelMappedValue,
-								transform: 'translateX(-50%)',
-							}}
+					// <Sequence from={keyframe_label_appear.frame}>
+					<div
+						key={it.id}
+						style={{
+							position: 'absolute',
+							top: 80,
+							left: labelMappedValue,
+							transform: 'translateX(-50%)',
+						}}
+					>
+						<TypographyStyle
+							typographyStyle={tickLabelStyle}
+							baseline={baseline}
 						>
-							<TypographyStyle
-								typographyStyle={tickLabelStyle}
-								baseline={baseline}
-							>
-								<TextAnimationSubtle animateEnter>
-									{it.label}
-								</TextAnimationSubtle>
-							</TypographyStyle>
-						</div>
-					</Sequence>
+							<TextAnimationSubtle animateEnter>{it.label}</TextAnimationSubtle>
+						</TypographyStyle>
+					</div>
+					// </Sequence>
 				);
 			})}
 
@@ -113,8 +111,8 @@ export const Animated_XAxis_Enter: React.FC<{
 
 					const currentTickOpacity = getKeyFramesInterpolator(
 						keyframes,
-						[`TICK_ENTER_START__${it.id}`, `TICK_ENTER_END__${it.id}`],
-						[0, 1],
+						[`TICK_EXIT_START__${it.id}`, `TICK_EXIT_END__${it.id}`],
+						[1, 0],
 						[Easing.ease]
 					);
 

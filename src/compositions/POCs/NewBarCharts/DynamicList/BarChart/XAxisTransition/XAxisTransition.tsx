@@ -1,11 +1,10 @@
 import React from 'react';
 import invariant from 'tiny-invariant';
-import {interpolate, Easing} from 'remotion';
 import {ScaleLinear} from 'd3-scale';
 
 import {Animated_XAxis_Enter} from './Animated_XAxis_Enter/Animated_XAxis_Enter';
-import {TypographyStyle} from '../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {getEnterUpdateExits} from '../../../../../../acetti-ts-utils/utils';
+import {Animated_XAxis_Exit} from './Animated_XAxis_Exit/Animated_XAxis_Exit';
+// import {getEnterUpdateExits} from '../../../../../../acetti-ts-utils/utils';
 import {TGridLayoutArea} from '../../../../../../acetti-layout';
 import {
 	ListTransitionContext_Update,
@@ -68,7 +67,6 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 		listTransitionContext.transitionType === 'enter' &&
 		barChartTransitionContext.transitionType === 'enter'
 	) {
-		// return <div style={{fontSize: 80, color: 'cyan'}}>hello enter</div>;
 		return (
 			<XAxisTransitionEnter
 				listTransitionContext={listTransitionContext}
@@ -135,35 +133,6 @@ const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
 				xAxisSpec={xAxisSpec}
 			/>
 			{JSON.stringify({xAxisSpec})}
-		</div>
-	);
-};
-
-const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
-	listTransitionContext,
-	barChartTransitionContext,
-	theme,
-	baseline,
-	area,
-}) => {
-	const {
-		// xScale,
-		from: {xScale: xScaleFrom},
-	} = barChartTransitionContext;
-
-	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
-
-	return (
-		<div style={{fontSize: 50, color: 'orange'}}>
-			<XAxis_SpecBased
-				area={area}
-				xScaleCurrent={xScaleFrom}
-				theme={theme.xAxis}
-				xAxisSpec={xAxisSpecFrom}
-			/>
-			{JSON.stringify({xAxisSpecFrom})}
 		</div>
 	);
 };
@@ -329,6 +298,35 @@ const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
 			xScaleCurrent={xScaleTo}
 			theme={theme}
 			xAxisSpec={xAxisSpecTo}
+			baseline={baseline}
+		/>
+	);
+};
+
+const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
+	listTransitionContext,
+	barChartTransitionContext,
+	theme,
+	baseline,
+	area,
+}) => {
+	const {
+		// xScale,
+		from: {xScale: xScaleFrom},
+	} = barChartTransitionContext;
+
+	const nrTicks = 5;
+	const tickFormatter = (x: number) => `${x}`;
+	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
+
+	return (
+		<Animated_XAxis_Exit
+			frame={listTransitionContext.frame}
+			durationInFrames={listTransitionContext.durationInFrames}
+			area={area}
+			xScaleCurrent={xScaleFrom}
+			theme={theme}
+			xAxisSpec={xAxisSpecFrom}
 			baseline={baseline}
 		/>
 	);
