@@ -27,10 +27,8 @@ import {
 } from './packages/ListAnimation/useListAnimation';
 import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
 import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {
-	getBarChartItemHeight,
-	useBarChartTransition,
-} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
+import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
