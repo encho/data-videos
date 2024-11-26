@@ -4,7 +4,7 @@ import {ScaleLinear} from 'd3-scale';
 
 import {Animated_XAxis_Enter} from './Animated_XAxis_Enter/Animated_XAxis_Enter';
 import {Animated_XAxis_Exit} from './Animated_XAxis_Exit/Animated_XAxis_Exit';
-// import {getEnterUpdateExits} from '../../../../../../acetti-ts-utils/utils';
+import {Animated_XAxis_Update} from './Animated_XAxis_Update/Animated_XAxis_Update';
 import {TGridLayoutArea} from '../../../../../../acetti-layout';
 import {
 	ListTransitionContext_Update,
@@ -107,35 +107,35 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 	);
 };
 
-const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
-	listTransitionContext,
-	barChartTransitionContext,
-	theme,
-	baseline,
-	area,
-}) => {
-	const {
-		xScale,
-		// to: {xScale: xScale},
-		// from: {xScale: xScaleFrom},
-	} = barChartTransitionContext;
+// const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
+// 	listTransitionContext,
+// 	barChartTransitionContext,
+// 	theme,
+// 	baseline,
+// 	area,
+// }) => {
+// 	const {
+// 		xScale,
+// 		// to: {xScale: xScale},
+// 		// from: {xScale: xScaleFrom},
+// 	} = barChartTransitionContext;
 
-	const nrTicks = 5;
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpec = getXAxisSpec(xScale, nrTicks, tickFormatter);
+// 	const nrTicks = 5;
+// 	const tickFormatter = (x: number) => `${x}`;
+// 	const xAxisSpec = getXAxisSpec(xScale, nrTicks, tickFormatter);
 
-	return (
-		<div style={{fontSize: 50, color: 'orange'}}>
-			<XAxis_SpecBased
-				area={area}
-				xScaleCurrent={xScale}
-				theme={theme.xAxis}
-				xAxisSpec={xAxisSpec}
-			/>
-			{JSON.stringify({xAxisSpec})}
-		</div>
-	);
-};
+// 	return (
+// 		<div style={{fontSize: 50, color: 'orange'}}>
+// 			<XAxis_SpecBased
+// 				area={area}
+// 				xScaleCurrent={xScale}
+// 				theme={theme.xAxis}
+// 				xAxisSpec={xAxisSpec}
+// 			/>
+// 			{JSON.stringify({xAxisSpec})}
+// 		</div>
+// 	);
+// };
 
 // import {getYear} from 'date-fns';
 // import {TPeriodsScale} from '../../../periodsScale/periodsScale';
@@ -329,6 +329,39 @@ const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
 			xScaleCurrent={xScaleFrom}
 			theme={theme}
 			xAxisSpec={xAxisSpecFrom}
+			baseline={baseline}
+		/>
+	);
+};
+
+const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
+	listTransitionContext,
+	barChartTransitionContext,
+	theme,
+	baseline,
+	area,
+}) => {
+	const {
+		xScale,
+		to: {xScale: xScaleTo},
+		from: {xScale: xScaleFrom},
+	} = barChartTransitionContext;
+
+	const nrTicks = 5;
+	const tickFormatter = (x: number) => `${x}`;
+	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
+	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
+
+	return (
+		<Animated_XAxis_Update
+			frame={listTransitionContext.frame}
+			durationInFrames={listTransitionContext.durationInFrames}
+			startFrame={listTransitionContext.frameRange.startFrame}
+			area={area}
+			xScaleCurrent={xScale}
+			theme={theme}
+			xAxisSpecFrom={xAxisSpecFrom}
+			xAxisSpecTo={xAxisSpecTo}
 			baseline={baseline}
 		/>
 	);
