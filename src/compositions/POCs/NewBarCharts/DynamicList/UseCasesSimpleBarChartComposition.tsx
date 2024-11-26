@@ -97,7 +97,7 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 									layout="none"
 								>
 									<SimpleBarChart
-										showLayout
+										// showLayout
 										height={700}
 										width={contentWidth}
 										theme={theme}
@@ -286,7 +286,7 @@ export const SimpleBarChart: React.FC<{
 			<MeasureLabels
 				key="labelMeasurement"
 				ref={labelsRef}
-				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives]}
+				data={dataItems}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureLabelComponent}
@@ -296,9 +296,7 @@ export const SimpleBarChart: React.FC<{
 			<MeasureValueLabels
 				key="valueLabelMeasurement"
 				ref={valueLabelsRef}
-				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives].filter(
-					(it) => it.value >= 0
-				)}
+				data={dataItems.filter((it) => it.value >= 0)}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureValueLabelComponent}
@@ -307,9 +305,7 @@ export const SimpleBarChart: React.FC<{
 			<MeasureValueLabels
 				key="negativeValueLabelMeasurement"
 				ref={negativeValueLabelsRef}
-				data={[...manyItemsWithNegatives, ...fewItemsWithJustPositives].filter(
-					(it) => it.value < 0
-				)}
+				data={dataItems.filter((it) => it.value < 0)}
 				theme={theme}
 				baseline={baseline}
 				Component={MeasureValueLabelComponent}

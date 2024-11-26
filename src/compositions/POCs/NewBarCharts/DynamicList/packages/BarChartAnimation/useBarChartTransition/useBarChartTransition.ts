@@ -354,6 +354,8 @@ function getXScale({
 			invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
 			return dataExtent[0] > 0
 				? ([0, dataExtent[1]] as [number, number])
+				: dataExtent[1] < 0
+				? ([dataExtent[0], 0] as [number, number])
 				: dataExtent;
 		})();
 
