@@ -16,9 +16,9 @@ import {
 	BarChartTransitionContext_Enter,
 	BarChartTransitionContext_Update,
 	BarChartTransitionContext_Exit,
-} from '../useBarChartTransition';
+} from '../useBarChartTransition/useBarChartTransition';
 import {HtmlArea} from '../../../../../../../acetti-layout';
-import {TBarChartItem} from '../useBarChartTransition';
+import {TBarChartItem} from '../useBarChartTransition/useBarChartTransition';
 import {TKeyFramesGroup} from '../../../../../Keyframes/Keyframes/keyframes';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 

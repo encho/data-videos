@@ -7,6 +7,9 @@ export function getStyles({
 	theme: ThemeType;
 	baseline: number;
 }) {
+	const tickLabelStyle = getTickLabelStyle({theme});
+	const tickLabelTop = getTickLabelPositionTop({baseline, theme});
+
 	return {
 		tick: {
 			size: getTickSize({theme, baseline}),
@@ -15,8 +18,8 @@ export function getStyles({
 			color: theme.xAxis.tickColor,
 		},
 		tickLabel: {
-			typographyStyle: getTickLabelStyle({theme}),
-			top: getTickLabelPositionTop({theme, baseline}),
+			typographyStyle: tickLabelStyle,
+			top: tickLabelTop,
 		},
 		line: {
 			color: theme.xAxis.color,
@@ -25,13 +28,33 @@ export function getStyles({
 	};
 }
 
-export function getTickSize({
+export function getXAxisHeight({
 	theme,
 	baseline,
 }: {
 	theme: ThemeType;
 	baseline: number;
 }) {
+	const tickLabelStyle = getTickLabelStyle({theme});
+	const tickLabelTop = getTickLabelPositionTop({baseline, theme});
+	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * baseline;
+
+	return tickLabelTop + tickLabelCapHeight;
+}
+
+export function getXAxisMarginTop({
+	// theme,
+	baseline,
+}: {
+	// theme: ThemeType;
+	baseline: number;
+}) {
+	const marginTopInBaselines = 1; // TODO from theme
+	const marginTop = marginTopInBaselines * baseline;
+	return marginTop;
+}
+
+function getTickSize({theme, baseline}: {theme: ThemeType; baseline: number}) {
 	const tickSizeMedium = theme.sizes.axisTicks.medium;
 	return baseline * tickSizeMedium;
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import {ScaleLinear} from 'd3-scale';
 import {Easing, useVideoConfig, Sequence} from 'remotion';
 
-import {getStyles} from '../getStyles';
+import {getStyles} from '../getStyles_XAxis';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,

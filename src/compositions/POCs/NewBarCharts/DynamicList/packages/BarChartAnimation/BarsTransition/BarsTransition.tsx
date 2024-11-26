@@ -23,9 +23,9 @@ import {
 	getListItems_Appear,
 	getListItems_Disappear,
 } from '../../ListAnimation/useListTransition/useListTransition';
-import {TBarChartTransitionContext} from '../useBarChartTransition';
+import {TBarChartTransitionContext} from '../useBarChartTransition/useBarChartTransition';
 import {HtmlArea, DisplayGridRails} from '../../../../../../../acetti-layout';
-import {TBarChartItem} from '../useBarChartTransition';
+import {TBarChartItem} from '../useBarChartTransition/useBarChartTransition';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,

@@ -22,11 +22,12 @@ import {
 	ListAnimationTransition,
 } from './packages/ListAnimation/useListAnimation';
 import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
-import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition';
+import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {
 	getBarChartItemHeight,
-	useBarChartTransition,
-} from './packages/BarChartAnimation/useBarChartTransition';
+	getAllBarChartItemsHeight,
+} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
@@ -36,6 +37,10 @@ import {
 	MeasureLabels,
 } from './packages/BarChartAnimation/BarsTransition/LabelComponent';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {
+	getXAxisHeight,
+	getXAxisMarginTop,
+} from './packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
 export const barChartXAxisDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -68,8 +73,8 @@ export const BarChartXAxisDevComposition: React.FC<
 									Bar Chart X-Axis Dev
 								</TypographyStyle>
 								<HorizontalBarChart
-									baseline={22}
-									height={900}
+									showLayout
+									height={770}
 									width={contentWidth}
 									theme={theme}
 								/>
@@ -82,16 +87,51 @@ export const BarChartXAxisDevComposition: React.FC<
 	);
 };
 
+function getPerfectBaselineForHeight({
+	height,
+	nrItems,
+	theme,
+}: {
+	height: number;
+	nrItems: number;
+	theme: ThemeType;
+}) {
+	const referenceBaseline = 10;
+	const remainingSpaceForBars =
+		height -
+		getXAxisHeight({theme, baseline: referenceBaseline}) -
+		getXAxisMarginTop({baseline: referenceBaseline});
+
+	const ibcsBarsHeight = getAllBarChartItemsHeight({
+		baseline: referenceBaseline,
+		nrItems,
+	});
+
+	const baselineFactor = remainingSpaceForBars / ibcsBarsHeight;
+
+	return referenceBaseline * baselineFactor;
+}
+
 export const HorizontalBarChart: React.FC<{
-	baseline: number;
+	baseline?: number;
 	height: number;
 	width: number;
 	theme: ThemeType;
-}> = ({baseline, height, width, theme}) => {
+	showLayout?: boolean;
+}> = ({baseline: baselineProp, height, width, theme, showLayout = false}) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
+
+	const MOST_ITEMS_AT_ONCE = 9;
+
+	const baseline = baselineProp
+		? baselineProp
+		: getPerfectBaselineForHeight({theme, nrItems: MOST_ITEMS_AT_ONCE, height});
+
+	const xAxisHeight = getXAxisHeight({theme, baseline});
+	const xAxisMarginTop = getXAxisMarginTop({baseline});
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -154,14 +194,14 @@ export const HorizontalBarChart: React.FC<{
 		height,
 		nrColumns: 1,
 		nrRows: 2,
-		rowSpacePixels: 50,
-		columnSpacePixels: 50,
+		rowSpacePixels: xAxisMarginTop,
+		columnSpacePixels: 0,
 		rowPaddingPixels: 0,
 		columnPaddingPixels: 0,
 		columnSizes: [{type: 'fr', value: 1}],
 		rowSizes: [
 			{type: 'fr', value: 1},
-			{type: 'pixel', value: 200},
+			{type: 'pixel', value: xAxisHeight},
 		],
 	});
 	const barsArea = getMatrixLayoutCellArea({
@@ -182,8 +222,8 @@ export const HorizontalBarChart: React.FC<{
 	const duration_4 =
 		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
 
-	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
-	// const easing = Easing.bounce;
+	// const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	const easing = Easing.bounce;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
@@ -270,18 +310,19 @@ export const HorizontalBarChart: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
-					{/* <div style={{position: 'absolute', top: 0, left: 0}}>
-						<DisplayGridRails {...matrixLayout} />
-					</div> */}
+					{showLayout ? (
+						<div style={{position: 'absolute', top: 0, left: 0}}>
+							<DisplayGridRails {...matrixLayout} />
+						</div>
+					) : null}
 
 					<HtmlArea area={barsArea}>
 						<BarsTransition
-							// showLayout
+							showLayout={showLayout}
 							listTransitionContext={listTransitionContext}
 							barChartTransitionContext={barChartTransitionContext}
 							LabelComponent={DefaultLabelComponent}
 							ValueLabelComponent={DefaultValueLabelComponent}
-							//
 							theme={theme}
 							baseline={baseline}
 						/>
@@ -298,10 +339,7 @@ export const HorizontalBarChart: React.FC<{
 						};
 
 						return (
-							<HtmlArea
-								area={xAxisArea}
-								// fill="rgba(255,0,255,0.2)"
-							>
+							<HtmlArea area={xAxisArea}>
 								<XAxisTransition
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}

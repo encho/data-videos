@@ -5,7 +5,7 @@ import {
 	TKeyFrameSpec,
 } from '../../../../../Keyframes/Keyframes/keyframes';
 
-import {TBarChartItem} from '../useBarChartTransition';
+import {TBarChartItem} from '../useBarChartTransition/useBarChartTransition';
 
 // TODO eventually as hook, as we can memoize labelStartKeyframes etc...
 export function getEnterKeyframes({
