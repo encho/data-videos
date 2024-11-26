@@ -1309,17 +1309,6 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 				<Folder name="New-BarCharts">
-					{/* <Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="ListTransition"
-						component={ListTransitionComposition}
-						durationInFrames={90 * 3}
-						fps={90}
-						{...videoSizes.widescreen_16x9}
-						schema={listTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -1332,18 +1321,6 @@ export const RemotionRoot: React.FC = () => {
 						schema={listAnimationCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
-					{/* <Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="BarChartTransition"
-						component={BarChartTransitionComposition}
-						durationInFrames={90 * 3}
-						fps={90}
-						{...videoSizes.square}
-						// height={12000}
-						schema={barChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -1384,7 +1361,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="UseCases-SimpleBarChart"
 						component={UseCasesSimpleBarChartComposition}
-						durationInFrames={30 * 12}
+						durationInFrames={30 * 15}
 						fps={30}
 						{...videoSizes.square}
 						schema={useCasesSimpleBarChartCompositionSchema}

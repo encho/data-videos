@@ -3,6 +3,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {getPerfectBaselineForHeight} from './packages/BarChartAnimation/getPerfectBaselineForHeight';
 import {XAxisTransition} from './packages/BarChartAnimation/XAxisTransition/XAxisTransition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -24,10 +25,7 @@ import {
 import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
 import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {
-	getBarChartItemHeight,
-	getAllBarChartItemsHeight,
-} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
+import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
@@ -86,31 +84,6 @@ export const BarChartXAxisDevComposition: React.FC<
 		</div>
 	);
 };
-
-function getPerfectBaselineForHeight({
-	height,
-	nrItems,
-	theme,
-}: {
-	height: number;
-	nrItems: number;
-	theme: ThemeType;
-}) {
-	const referenceBaseline = 10;
-	const remainingSpaceForBars =
-		height -
-		getXAxisHeight({theme, baseline: referenceBaseline}) -
-		getXAxisMarginTop({baseline: referenceBaseline});
-
-	const ibcsBarsHeight = getAllBarChartItemsHeight({
-		baseline: referenceBaseline,
-		nrItems,
-	});
-
-	const baselineFactor = remainingSpaceForBars / ibcsBarsHeight;
-
-	return referenceBaseline * baselineFactor;
-}
 
 export const HorizontalBarChart: React.FC<{
 	baseline?: number;

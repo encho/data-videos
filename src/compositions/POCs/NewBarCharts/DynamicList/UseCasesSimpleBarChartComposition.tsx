@@ -1,8 +1,11 @@
 import {z} from 'zod';
 import React, {useCallback} from 'react';
-import {useVideoConfig, Easing} from 'remotion';
+import {useVideoConfig, Easing, Sequence} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
+import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {getPerfectBaselineForHeight} from './packages/BarChartAnimation/getPerfectBaselineForHeight';
 import {XAxisTransition} from './packages/BarChartAnimation/XAxisTransition/XAxisTransition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -22,12 +25,8 @@ import {
 	ListAnimationTransition,
 } from './packages/ListAnimation/useListAnimation';
 import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
-import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {
-	getBarChartItemHeight,
-	getAllBarChartItemsHeight,
-} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
+import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
@@ -50,7 +49,14 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 	z.infer<typeof useCasesSimpleBarChartCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum);
-	const {width, height} = useVideoConfig();
+	const {width, height, durationInFrames} = useVideoConfig();
+
+	const durationInFrames_onlyPositives = Math.floor(durationInFrames / 3);
+	const durationInFrames_onlyNegatives = Math.floor(durationInFrames / 3);
+	const durationInFrames_positivesAndNegatives =
+		durationInFrames -
+		durationInFrames_onlyNegatives -
+		durationInFrames_onlyPositives;
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -70,14 +76,50 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 									baseline={baseline}
 									marginBottom={5}
 								>
-									Use Case: Simple Bar Chart
+									Use Case:
+									<br /> Simple Bar Chart
 								</TypographyStyle>
-								<HorizontalBarChart
-									showLayout
-									height={770}
-									width={contentWidth}
-									theme={theme}
-								/>
+								<Sequence
+									durationInFrames={durationInFrames_onlyPositives}
+									layout="none"
+								>
+									<SimpleBarChart
+										// showLayout
+										height={700}
+										width={contentWidth}
+										theme={theme}
+										dataItems={fewItemsWithJustPositives}
+									/>
+								</Sequence>
+								<Sequence
+									from={durationInFrames_onlyPositives}
+									durationInFrames={durationInFrames_onlyNegatives}
+									layout="none"
+								>
+									<SimpleBarChart
+										showLayout
+										height={700}
+										width={contentWidth}
+										theme={theme}
+										dataItems={fewItemsWithJustNegatives}
+									/>
+								</Sequence>
+								<Sequence
+									from={
+										durationInFrames_onlyPositives +
+										durationInFrames_onlyNegatives
+									}
+									durationInFrames={durationInFrames_positivesAndNegatives}
+									layout="none"
+								>
+									<SimpleBarChart
+										// showLayout
+										height={700}
+										width={contentWidth}
+										theme={theme}
+										dataItems={manyItemsWithNegatives}
+									/>
+								</Sequence>
 							</>
 						);
 					}}
@@ -87,44 +129,27 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 	);
 };
 
-function getPerfectBaselineForHeight({
-	height,
-	nrItems,
-	theme,
-}: {
-	height: number;
-	nrItems: number;
-	theme: ThemeType;
-}) {
-	const referenceBaseline = 10;
-	const remainingSpaceForBars =
-		height -
-		getXAxisHeight({theme, baseline: referenceBaseline}) -
-		getXAxisMarginTop({baseline: referenceBaseline});
-
-	const ibcsBarsHeight = getAllBarChartItemsHeight({
-		baseline: referenceBaseline,
-		nrItems,
-	});
-
-	const baselineFactor = remainingSpaceForBars / ibcsBarsHeight;
-
-	return referenceBaseline * baselineFactor;
-}
-
-export const HorizontalBarChart: React.FC<{
+export const SimpleBarChart: React.FC<{
 	baseline?: number;
 	height: number;
 	width: number;
 	theme: ThemeType;
+	dataItems: TBarChartItem[];
 	showLayout?: boolean;
-}> = ({baseline: baselineProp, height, width, theme, showLayout = false}) => {
+}> = ({
+	baseline: baselineProp,
+	height,
+	width,
+	theme,
+	showLayout = false,
+	dataItems,
+}) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
 
-	const MOST_ITEMS_AT_ONCE = 9;
+	const MOST_ITEMS_AT_ONCE = dataItems.length;
 
 	const baseline = baselineProp
 		? baselineProp
@@ -215,36 +240,20 @@ export const HorizontalBarChart: React.FC<{
 		column: 0,
 	});
 
-	const duration_0 = Math.floor(fps * 3);
-	const duration_1 = Math.floor(durationInFrames / 5);
-	const duration_2 = Math.floor(durationInFrames / 5);
-	const duration_3 = Math.floor(durationInFrames / 5);
-	const duration_4 =
-		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
+	const duration_enter = Math.floor(fps * 3);
+	const duration_exit = durationInFrames - duration_enter;
 
 	// const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 	const easing = Easing.bounce;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
-			itemsTo: manyItemsWithNegatives,
-			durationInFrames: duration_0,
-		},
-		{
-			itemsTo: fewItemsWithJustPositives,
-			durationInFrames: duration_1,
-		},
-		{
-			itemsTo: manyItemsWithNegatives,
-			durationInFrames: duration_2,
-		},
-		{
-			itemsTo: fewItemsWithJustPositives,
-			durationInFrames: duration_3,
+			itemsTo: dataItems,
+			durationInFrames: duration_enter,
 		},
 		{
 			itemsTo: [],
-			durationInFrames: duration_4,
+			durationInFrames: duration_exit,
 		},
 	];
 
@@ -361,57 +370,51 @@ const manyItemsWithNegatives = [
 		id: 'Id-001',
 		label: 'Item 001',
 		value: 10,
-		color: '#FF5733',
 	},
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: 20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-003',
 		label: 'Item 003',
 		value: 30.75,
-		color: '#3357FF',
 	},
 	{
 		id: 'Id-004',
 		label: 'Item 004',
 		value: -40.25,
-		color: '#FF33A1',
 	},
 	{
 		id: 'Id-011',
 		label: 'Item 011',
 		value: -55.1,
-		color: '#A133FF',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: -25.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-006',
 		label: 'Item 006',
 		value: 60.6,
-		color: '#FFC733',
 	},
 	{
 		id: 'Id-007',
 		label: 'Item 007',
 		value: 35.8,
-		color: '#C7FF33',
 	},
 	{
 		id: 'Id-010',
 		label: 'Item 010',
 		value: 45.9,
-		color: '#5733FF',
 	},
-];
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? colorPalettes.Indigo[500] : colorPalettes.Orange[500],
+}));
 
 const fewItemsWithJustPositives = [
 	{
@@ -448,6 +451,45 @@ const fewItemsWithJustPositives = [
 		id: 'Id-001',
 		label: 'Item 001',
 		value: 12,
+		color: '#FF5733',
+	},
+];
+
+const fewItemsWithJustNegatives = [
+	{
+		id: 'Id-009',
+		label: 'Item 009',
+		value: -70,
+		color: '#FF5733',
+	},
+	{
+		id: 'Id-003',
+		label: 'Item 003',
+		value: -30.75,
+		color: '#3357FF',
+	},
+	{
+		id: 'Id-007',
+		label: 'Item 007',
+		value: -20.8,
+		color: '#C7FF33',
+	},
+	{
+		id: 'Id-002',
+		label: 'Item 002',
+		value: -20.5,
+		color: '#33FF57',
+	},
+	{
+		id: 'Id-005',
+		label: 'Item 005',
+		value: -33.3,
+		color: '#33FFF3',
+	},
+	{
+		id: 'Id-001',
+		label: 'Item 001',
+		value: -12,
 		color: '#FF5733',
 	},
 ];
