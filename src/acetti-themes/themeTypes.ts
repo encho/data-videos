@@ -55,6 +55,7 @@ export const zodThemeType = z.object({
 		strokeWidth: z.number(),
 		color: zColor(),
 		tickColor: zColor(),
+		// tickSize: z.number(),
 	}),
 	xAxis: z.object({
 		fontSize: z.number(),

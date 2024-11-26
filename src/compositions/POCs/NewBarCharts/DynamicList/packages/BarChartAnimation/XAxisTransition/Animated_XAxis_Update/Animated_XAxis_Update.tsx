@@ -1,8 +1,9 @@
 import React from 'react';
 import {ScaleLinear} from 'd3-scale';
-import {interpolate, Easing, useVideoConfig, Sequence} from 'remotion';
+import {interpolate, useVideoConfig} from 'remotion';
 import invariant from 'tiny-invariant';
 
+import {getStyles} from '../utils';
 import {getEnterUpdateExits} from '../../../../../../../../acetti-ts-utils/utils';
 import {TypographyStyle} from '../../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TGridLayoutArea} from '../../../../../../../../acetti-layout';
@@ -63,6 +64,8 @@ export const Animated_XAxis_Update: React.FC<{
 	startFrame,
 }) => {
 	const {fps} = useVideoConfig();
+
+	const styles = getStyles({theme, baseline});
 
 	const tickLabelStyle = theme.typography.textStyles.datavizTickLabel;
 
@@ -223,24 +226,21 @@ export const Animated_XAxis_Update: React.FC<{
 	});
 
 	return (
-		// <Sequence from={startFrame} durationInFrames={durationInFrames}>
-		<HtmlArea area={area} fill="black">
+		<HtmlArea area={area}>
 			{[...updateLabels, ...enterLabels, ...exitLabels].map((it) => {
-				// const labelMappedValue = xScaleCurrent(it.domainValue);
-
 				return (
 					<div
 						key={it.id}
 						style={{
 							position: 'absolute',
-							top: 80,
+							top: styles.tickLabel.top,
 							left: it.value,
 							transform: 'translateX(-50%)',
 							opacity: it.opacity,
 						}}
 					>
 						<TypographyStyle
-							typographyStyle={tickLabelStyle}
+							typographyStyle={styles.tickLabel.typographyStyle}
 							baseline={baseline}
 						>
 							<TextAnimationSubtle animateEnter>{it.label}</TextAnimationSubtle>
@@ -251,26 +251,16 @@ export const Animated_XAxis_Update: React.FC<{
 
 			<svg overflow="visible" width={area.width} height={area.height}>
 				{[...enterTicks, ...updateTicks, ...exitTicks].map((it, i) => {
-					// const tickMappedValue = xScaleCurrent(it.domainValue);
-
-					// const currentTickOpacity = getKeyFramesInterpolator(
-					// 	keyframes,
-					// 	[`TICK_ENTER_START__${it.id}`, `TICK_ENTER_END__${it.id}`],
-					// 	[0, 1],
-					// 	[Easing.ease]
-					// );
-
 					return (
 						<g key={it.id}>
 							<line
+								opacity={it.opacity}
 								x1={it.value}
 								x2={it.value}
 								y1={0}
-								y2={40}
-								stroke={theme.xAxis.tickColor}
-								// strokeWidth={theme.xaxis.strokeWidth} // TODO activate again
-								strokeWidth={5}
-								opacity={it.opacity}
+								y2={styles.tick.size}
+								stroke={styles.tick.color}
+								strokeWidth={styles.tick.strokeWidth}
 							/>
 						</g>
 					);
@@ -282,11 +272,10 @@ export const Animated_XAxis_Update: React.FC<{
 					opacity={axisLine_opacity}
 					y1={0}
 					y2={0}
-					stroke={axisLine_color}
-					strokeWidth={5}
+					stroke={styles.line.color}
+					strokeWidth={styles.line.strokeWidth}
 				/>
 			</svg>
 		</HtmlArea>
-		// </Sequence>
 	);
 };

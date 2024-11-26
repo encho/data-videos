@@ -12,8 +12,15 @@ const zTheme_sizes_lineWidths = z.object({
 	large: z.number(),
 });
 
+const zTheme_sizes_axisTicks = z.object({
+	small: z.number(),
+	medium: z.number(),
+	large: z.number(),
+});
+
 export const zTheme_sizes = z.object({
 	lineWidths: zTheme_sizes_lineWidths,
+	axisTicks: zTheme_sizes_axisTicks,
 });
 
 export type Theme_sizes = z.infer<typeof zTheme_sizes>;
@@ -113,6 +120,11 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 					medium: 0.2,
 					large: 0.4,
 				},
+				axisTicks: {
+					small: 0.7,
+					medium: 1,
+					large: 1.3,
+				},
 			},
 			global: {
 				backgroundColor: palette.background.main, // TODO deprecate take from palette
@@ -203,6 +215,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 				strokeWidth: 3,
 				color: palette.typography.axisLine.main,
 				tickColor: palette.typography.axisTick.main,
+				// tickSizeInBaselines: 1.5,
 			},
 			xAxis: {
 				fontSize: 16,

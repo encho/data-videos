@@ -107,39 +107,6 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 	);
 };
 
-// const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
-// 	listTransitionContext,
-// 	barChartTransitionContext,
-// 	theme,
-// 	baseline,
-// 	area,
-// }) => {
-// 	const {
-// 		xScale,
-// 		// to: {xScale: xScale},
-// 		// from: {xScale: xScaleFrom},
-// 	} = barChartTransitionContext;
-
-// 	const nrTicks = 5;
-// 	const tickFormatter = (x: number) => `${x}`;
-// 	const xAxisSpec = getXAxisSpec(xScale, nrTicks, tickFormatter);
-
-// 	return (
-// 		<div style={{fontSize: 50, color: 'orange'}}>
-// 			<XAxis_SpecBased
-// 				area={area}
-// 				xScaleCurrent={xScale}
-// 				theme={theme.xAxis}
-// 				xAxisSpec={xAxisSpec}
-// 			/>
-// 			{JSON.stringify({xAxisSpec})}
-// 		</div>
-// 	);
-// };
-
-// import {getYear} from 'date-fns';
-// import {TPeriodsScale} from '../../../periodsScale/periodsScale';
-
 export type TXAxis = ScaleLinear<number, number>; // TODO deprecate
 export type TXAxisScale = ScaleLinear<number, number>;
 
@@ -204,72 +171,6 @@ export type TTheme_XAxis = {
 	strokeWidth: number;
 	color: string;
 	tickColor: string;
-};
-
-export const XAxis_SpecBased: React.FC<{
-	area: TGridLayoutArea;
-	xScaleCurrent: ScaleLinear<number, number>;
-	theme: TTheme_XAxis;
-	// formatter: (x: number) => string;
-	// yAxisSpec: TAxisSpec_Linear_Numeric;
-	xAxisSpec: TXAxisSpec;
-}> = ({area, xScaleCurrent, theme, xAxisSpec}) => {
-	// TODO ideally these are to be found in theme// BUT multiple size options somwehow...
-	// const TICK_LINE_SIZE = 20;
-	// const TICK_LINE_SIZE = 24;
-	// const TICK_TEXT_FONT_SIZE = 24;
-	// const TICK_TEXT_FONT_WEIGHT = 500;
-	// const TICK_TEXT_LEFT_PADDING = 5;
-
-	// const yAxisSpec = getYAxisSpecFromScale(yScaleCurrent, formatter);
-
-	return (
-		<HtmlArea area={area} fill="black">
-			<svg overflow="visible">
-				{xAxisSpec.ticks.map((it, i) => {
-					// const tickMappedValue = yAxisSpec.scale(it.value);
-					const tickMappedValue = xScaleCurrent(it.domainValue);
-
-					return (
-						<g key={i}>
-							<line
-								x1={tickMappedValue}
-								x2={tickMappedValue}
-								y1={0}
-								y2={40}
-								stroke={theme.tickColor}
-								// strokeWidth={theme.strokeWidth}
-								strokeWidth={5}
-							/>
-						</g>
-					);
-				})}
-
-				{/* update labels  */}
-				{xAxisSpec.labels.map((it) => {
-					const labelMappedValue = xScaleCurrent(it.domainValue);
-					return (
-						<g key={it.id}>
-							<text
-								textAnchor="middle"
-								// alignmentBaseline="middle"
-								alignmentBaseline="hanging"
-								fill={theme.color}
-								// fontSize={TICK_TEXT_FONT_SIZE}
-								fontSize={40}
-								fontWeight={700}
-								x={labelMappedValue}
-								// x={TICK_LINE_SIZE + TICK_TEXT_LEFT_PADDING}
-								y={50}
-							>
-								{it.label}
-							</text>
-						</g>
-					);
-				})}
-			</svg>
-		</HtmlArea>
-	);
 };
 
 // TODO think about if we here do not need getListItems_Enter

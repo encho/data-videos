@@ -270,13 +270,13 @@ export const HorizontalBarChart: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
-					<div style={{position: 'absolute', top: 0, left: 0}}>
+					{/* <div style={{position: 'absolute', top: 0, left: 0}}>
 						<DisplayGridRails {...matrixLayout} />
-					</div>
+					</div> */}
 
 					<HtmlArea area={barsArea}>
 						<BarsTransition
-							showLayout
+							// showLayout
 							listTransitionContext={listTransitionContext}
 							barChartTransitionContext={barChartTransitionContext}
 							LabelComponent={DefaultLabelComponent}
@@ -298,7 +298,10 @@ export const HorizontalBarChart: React.FC<{
 						};
 
 						return (
-							<HtmlArea area={xAxisArea} fill="rgba(255,0,255,0.2)">
+							<HtmlArea
+								area={xAxisArea}
+								// fill="rgba(255,0,255,0.2)"
+							>
 								<XAxisTransition
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}

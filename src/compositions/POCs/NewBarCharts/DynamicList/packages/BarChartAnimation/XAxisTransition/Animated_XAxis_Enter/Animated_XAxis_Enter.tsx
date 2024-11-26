@@ -1,7 +1,8 @@
 import React from 'react';
 import {ScaleLinear} from 'd3-scale';
-import {interpolate, Easing, useVideoConfig, Sequence} from 'remotion';
+import {Easing, useVideoConfig, Sequence} from 'remotion';
 
+import {getStyles} from '../utils';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,
@@ -53,7 +54,7 @@ export const Animated_XAxis_Enter: React.FC<{
 }) => {
 	const {fps} = useVideoConfig();
 
-	const tickLabelStyle = theme.typography.textStyles.datavizTickLabel;
+	const styles = getStyles({theme, baseline});
 
 	const keyframes = getKeyframes({durationInFrames, fps, xAxisSpec});
 
@@ -73,11 +74,9 @@ export const Animated_XAxis_Enter: React.FC<{
 		[Easing.ease]
 	)(frame);
 
-	const axisLine_color = theme.xAxis.color;
-
 	return (
 		<Sequence from={startFrame} durationInFrames={durationInFrames}>
-			<HtmlArea area={area} fill="black">
+			<HtmlArea area={area}>
 				{xAxisSpec.labels.map((it) => {
 					const labelMappedValue = xScaleCurrent(it.domainValue);
 
@@ -92,13 +91,13 @@ export const Animated_XAxis_Enter: React.FC<{
 								key={it.id}
 								style={{
 									position: 'absolute',
-									top: 80,
+									top: styles.tickLabel.top,
 									left: labelMappedValue,
 									transform: 'translateX(-50%)',
 								}}
 							>
 								<TypographyStyle
-									typographyStyle={tickLabelStyle}
+									typographyStyle={styles.tickLabel.typographyStyle}
 									baseline={baseline}
 								>
 									<TextAnimationSubtle animateEnter animateExit={false}>
@@ -124,14 +123,13 @@ export const Animated_XAxis_Enter: React.FC<{
 						return (
 							<g key={i}>
 								<line
+									opacity={currentTickOpacity(frame)}
 									x1={tickMappedValue}
 									x2={tickMappedValue}
 									y1={0}
-									y2={40}
-									stroke={theme.xAxis.tickColor}
-									// strokeWidth={theme.xaxis.strokeWidth} // TODO activate again
-									strokeWidth={5}
-									opacity={currentTickOpacity(frame)}
+									y2={styles.tick.size}
+									stroke={styles.tick.color}
+									strokeWidth={styles.tick.strokeWidth}
 								/>
 							</g>
 						);
@@ -143,8 +141,8 @@ export const Animated_XAxis_Enter: React.FC<{
 						opacity={axisLine_opacity}
 						y1={0}
 						y2={0}
-						stroke={axisLine_color}
-						strokeWidth={5}
+						stroke={styles.line.color}
+						strokeWidth={styles.line.strokeWidth}
 					/>
 				</svg>
 			</HtmlArea>
