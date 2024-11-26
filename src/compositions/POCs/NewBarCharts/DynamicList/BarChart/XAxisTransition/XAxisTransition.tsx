@@ -294,6 +294,7 @@ const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
 		<Animated_XAxis_Enter
 			frame={listTransitionContext.frame}
 			durationInFrames={listTransitionContext.durationInFrames}
+			startFrame={listTransitionContext.frameRange.startFrame}
 			area={area}
 			xScaleCurrent={xScaleTo}
 			theme={theme}
@@ -323,6 +324,7 @@ const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
 		<Animated_XAxis_Exit
 			frame={listTransitionContext.frame}
 			durationInFrames={listTransitionContext.durationInFrames}
+			startFrame={listTransitionContext.frameRange.startFrame}
 			area={area}
 			xScaleCurrent={xScaleFrom}
 			theme={theme}

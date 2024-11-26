@@ -14,28 +14,27 @@ export function getKeyframes({
 	durationInFrames: number;
 	xAxisSpec: TXAxisSpec;
 }) {
-	// const labelEnterKeyframes = xAxisSpec.labels.reduce<TKeyFrameSpec[]>(
-	// 	(accumulator, currentItem, index) => {
-	// 		if (index === 0) {
-	// 			accumulator.push({
-	// 				type: 'SECOND',
-	// 				value: 0,
-	// 				id: `LABEL_APPEAR__${currentItem.id}`,
-	// 			});
-	// 		} else {
-	// 			const previousLabelKeyframe = accumulator[accumulator.length - 1];
+	const labelDisappearKeyframes = [...xAxisSpec.labels]
+		.reverse()
+		.reduce<TKeyFrameSpec[]>((accumulator, currentItem, index) => {
+			if (index === 0) {
+				accumulator.push({
+					type: 'SECOND',
+					value: -0,
+					id: `LABEL_DISAPPEAR__${currentItem.id}`,
+				});
+			} else {
+				const previousLabelKeyframe = accumulator[accumulator.length - 1];
 
-	// 			accumulator.push({
-	// 				type: 'R_SECOND',
-	// 				value: 0.04,
-	// 				id: `LABEL_APPEAR__${currentItem.id}`,
-	// 				relativeId: previousLabelKeyframe.id,
-	// 			});
-	// 		}
-	// 		return accumulator;
-	// 	},
-	// 	[]
-	// );
+				accumulator.push({
+					type: 'R_SECOND',
+					value: -0.04,
+					id: `LABEL_DISAPPEAR__${currentItem.id}`,
+					relativeId: previousLabelKeyframe.id,
+				});
+			}
+			return accumulator;
+		}, []);
 
 	const tickKeyframes = [...xAxisSpec.ticks].reverse().reduce<TKeyFrameSpec[]>(
 		// const tickKeyframes = xAxisSpec.ticks.reduce<TKeyFrameSpec[]>(
@@ -73,7 +72,7 @@ export function getKeyframes({
 	);
 
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
-		// ...labelEnterKeyframes,
+		...labelDisappearKeyframes,
 		...tickKeyframes,
 		{
 			type: 'SECOND',

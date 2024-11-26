@@ -7,6 +7,7 @@ import {getListLayout, TListLayout} from './getListLayout';
 
 type ListTransitionContext_Common = {
 	frame: number;
+	globalAnimationFrame: number;
 	durationInFrames: number;
 	width: number;
 	easingPercentage: number;
@@ -97,6 +98,8 @@ export function useListTransition<T extends {id: string}>({
 	justifyContent = 'center',
 	frame,
 	durationInFrames,
+	globalAnimationFrame,
+	globalAnimationDurationInFrames,
 	easing = Easing.linear,
 	frameRange,
 }: {
@@ -117,6 +120,8 @@ export function useListTransition<T extends {id: string}>({
 	itemMarginBottom?: number; // TODO not optional
 	justifyContent?: 'center' | 'start';
 	frame: number;
+	globalAnimationFrame: number;
+	globalAnimationDurationInFrames: number;
 	durationInFrames: number;
 	easing?: EasingFunction;
 	// TODO: baseline, to determine the sizes in the layout!!!!!!!!!!!
@@ -133,6 +138,8 @@ export function useListTransition<T extends {id: string}>({
 	const common = {
 		frame,
 		durationInFrames,
+		globalAnimationFrame,
+		globalAnimationDurationInFrames,
 		easingPercentage,
 		frameRange,
 		// transitionTypes, // in update instead

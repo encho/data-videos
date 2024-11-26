@@ -40,6 +40,7 @@ export const Animated_XAxis_Exit: React.FC<{
 	baseline: number;
 	frame: number;
 	durationInFrames: number;
+	startFrame: number;
 }> = ({
 	area,
 	xScaleCurrent,
@@ -48,6 +49,7 @@ export const Animated_XAxis_Exit: React.FC<{
 	baseline,
 	frame,
 	durationInFrames,
+	startFrame, // the startFrame of the current animation
 }) => {
 	const {fps} = useVideoConfig();
 
@@ -74,74 +76,78 @@ export const Animated_XAxis_Exit: React.FC<{
 	const axisLine_color = theme.xAxis.color;
 
 	return (
-		<HtmlArea area={area} fill="black">
-			{xAxisSpec.labels.map((it) => {
-				const labelMappedValue = xScaleCurrent(it.domainValue);
+		<Sequence from={startFrame} durationInFrames={durationInFrames}>
+			<HtmlArea area={area} fill="black">
+				{xAxisSpec.labels.map((it) => {
+					const labelMappedValue = xScaleCurrent(it.domainValue);
 
-				// const keyframe_label_appear = getKeyFrame(
-				// 	keyframes,
-				// 	'LABEL_APPEAR__' + it.id
-				// );
-
-				return (
-					// <Sequence from={keyframe_label_appear.frame}>
-					<div
-						key={it.id}
-						style={{
-							position: 'absolute',
-							top: 80,
-							left: labelMappedValue,
-							transform: 'translateX(-50%)',
-						}}
-					>
-						<TypographyStyle
-							typographyStyle={tickLabelStyle}
-							baseline={baseline}
-						>
-							<TextAnimationSubtle animateEnter>{it.label}</TextAnimationSubtle>
-						</TypographyStyle>
-					</div>
-					// </Sequence>
-				);
-			})}
-
-			<svg overflow="visible" width={area.width} height={area.height}>
-				{xAxisSpec.ticks.map((it, i) => {
-					const tickMappedValue = xScaleCurrent(it.domainValue);
-
-					const currentTickOpacity = getKeyFramesInterpolator(
+					const keyframe_label_disappear = getKeyFrame(
 						keyframes,
-						[`TICK_EXIT_START__${it.id}`, `TICK_EXIT_END__${it.id}`],
-						[1, 0],
-						[Easing.ease]
+						'LABEL_DISAPPEAR__' + it.id
 					);
 
 					return (
-						<g key={i}>
-							<line
-								x1={tickMappedValue}
-								x2={tickMappedValue}
-								y1={0}
-								y2={40}
-								stroke={theme.xAxis.tickColor}
-								// strokeWidth={theme.xaxis.strokeWidth} // TODO activate again
-								strokeWidth={5}
-								opacity={currentTickOpacity(frame)}
-							/>
-						</g>
+						<Sequence durationInFrames={keyframe_label_disappear.frame}>
+							<div
+								key={it.id}
+								style={{
+									position: 'absolute',
+									top: 80,
+									left: labelMappedValue,
+									transform: 'translateX(-50%)',
+								}}
+							>
+								<TypographyStyle
+									typographyStyle={tickLabelStyle}
+									baseline={baseline}
+								>
+									<TextAnimationSubtle animateEnter>
+										{it.label}
+									</TextAnimationSubtle>
+								</TypographyStyle>
+							</div>
+						</Sequence>
 					);
 				})}
 
-				<line
-					x1={axisLine_x1}
-					x2={axisLine_x2}
-					opacity={axisLine_opacity}
-					y1={0}
-					y2={0}
-					stroke={axisLine_color}
-					strokeWidth={5}
-				/>
-			</svg>
-		</HtmlArea>
+				<svg overflow="visible" width={area.width} height={area.height}>
+					{xAxisSpec.ticks.map((it, i) => {
+						const tickMappedValue = xScaleCurrent(it.domainValue);
+
+						const currentTickOpacity = getKeyFramesInterpolator(
+							keyframes,
+							[`TICK_EXIT_START__${it.id}`, `TICK_EXIT_END__${it.id}`],
+							[1, 0],
+							[Easing.ease]
+						);
+
+						return (
+							<g key={i}>
+								<line
+									x1={tickMappedValue}
+									x2={tickMappedValue}
+									y1={0}
+									y2={40}
+									stroke={theme.xAxis.tickColor}
+									// strokeWidth={theme.xaxis.strokeWidth} // TODO activate again
+									strokeWidth={5}
+									opacity={currentTickOpacity(frame)}
+								/>
+							</g>
+						);
+					})}
+
+					<line
+						x1={axisLine_x1}
+						x2={axisLine_x2}
+						opacity={axisLine_opacity}
+						y1={0}
+						y2={0}
+						stroke={axisLine_color}
+						strokeWidth={5}
+					/>
+				</svg>
+			</HtmlArea>
+		</Sequence>
 	);
 };
