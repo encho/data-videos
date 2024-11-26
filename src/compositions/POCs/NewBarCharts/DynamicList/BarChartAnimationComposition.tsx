@@ -18,21 +18,24 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useListAnimation, ListAnimationTransition} from './useListAnimation';
-import {BarsTransition} from './BarChart/BarsTransition';
-import {TBarChartItem} from './useBarChartTransition';
+import {
+	useListAnimation,
+	ListAnimationTransition,
+} from './packages/ListAnimation/useListAnimation';
+import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
+import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	getBarChartItemHeight,
 	useBarChartTransition,
-} from './useBarChartTransition';
+} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
-} from './components/ValueLabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
-} from './components/LabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/LabelComponent';
 
 export const barChartAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

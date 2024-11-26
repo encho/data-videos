@@ -5,9 +5,9 @@ import {isNumber} from 'lodash';
 
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {
-	getBarChartEnterKeyframes,
-	getBarChartExitKeyframes,
-} from './BarChart/getEnterKeyframes';
+	getEnterKeyframes,
+	getExitKeyframes,
+} from './packages/BarChartAnimation/BarsTransition/getKeyframes';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -21,21 +21,24 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useListAnimation, ListAnimationTransition} from './useListAnimation';
-import {BarsTransition} from './BarChart/BarsTransition';
-import {TBarChartItem} from './useBarChartTransition';
+import {
+	useListAnimation,
+	ListAnimationTransition,
+} from './packages/ListAnimation/useListAnimation';
+import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
+import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	getBarChartItemHeight,
 	useBarChartTransition,
-} from './useBarChartTransition';
+} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
-} from './components/ValueLabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
-} from './components/LabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/LabelComponent';
 
 export const barChartEnterExitDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -211,7 +214,7 @@ export const ListAnimationPage: React.FC = () => {
 		to: {items: dataItems_1},
 	} = firstTransition;
 
-	const enterKeyframes = getBarChartEnterKeyframes({
+	const enterKeyframes = getEnterKeyframes({
 		fps,
 		durationInFrames: durationInFrames_1,
 		data: dataItems_1,
@@ -227,7 +230,7 @@ export const ListAnimationPage: React.FC = () => {
 		from: {items: dataItems_last},
 	} = lastTransition;
 
-	const exitKeyframes = getBarChartExitKeyframes({
+	const exitKeyframes = getExitKeyframes({
 		fps,
 		durationInFrames: durationInFrames_last,
 		data: dataItems_last,

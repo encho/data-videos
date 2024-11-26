@@ -5,13 +5,13 @@ import {Easing, useVideoConfig, Sequence} from 'remotion';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,
-} from '../../../../../Keyframes/Keyframes/keyframes';
+} from '../../../../../../Keyframes/Keyframes/keyframes';
 import {getKeyframes} from './getKeyframes';
-import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {HtmlArea} from '../../../../../../../acetti-layout';
-import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
-import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {TypographyStyle} from '../../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {TGridLayoutArea} from '../../../../../../../../acetti-layout';
+import {HtmlArea} from '../../../../../../../../acetti-layout';
+import {ThemeType} from '../../../../../../../../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 type TTickSpec_XAxis = {
 	id: string;

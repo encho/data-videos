@@ -3,12 +3,12 @@ import {
 	buildKeyFramesGroup,
 	TKeyFramesGroup,
 	TKeyFrameSpec,
-} from '../../../Keyframes/Keyframes/keyframes';
+} from '../../../../../Keyframes/Keyframes/keyframes';
 
 import {TBarChartItem} from '../useBarChartTransition';
 
 // TODO eventually as hook, as we can memoize labelStartKeyframes etc...
-export function getBarChartEnterKeyframes({
+export function getEnterKeyframes({
 	fps,
 	durationInFrames,
 	data,
@@ -119,7 +119,7 @@ export function getBarChartEnterKeyframes({
 	return keyframes;
 }
 
-export function getBarChartExitKeyframes({
+export function getExitKeyframes({
 	fps,
 	durationInFrames,
 	data,

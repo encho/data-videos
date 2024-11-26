@@ -3,7 +3,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
-import {XAxisTransition} from './BarChart/XAxisTransition/XAxisTransition';
+import {XAxisTransition} from './packages/BarChartAnimation/XAxisTransition/XAxisTransition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -17,21 +17,24 @@ import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {useListAnimation, ListAnimationTransition} from './useListAnimation';
-import {BarsTransition} from './BarChart/BarsTransition';
-import {TBarChartItem} from './useBarChartTransition';
+import {
+	useListAnimation,
+	ListAnimationTransition,
+} from './packages/ListAnimation/useListAnimation';
+import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
+import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	getBarChartItemHeight,
 	useBarChartTransition,
-} from './useBarChartTransition';
+} from './packages/BarChartAnimation/useBarChartTransition';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
-} from './components/ValueLabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
-} from './components/LabelComponent';
+} from './packages/BarChartAnimation/BarsTransition/LabelComponent';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 
 export const barChartXAxisDevCompositionSchema = z.object({
@@ -47,8 +50,8 @@ export const BarChartXAxisDevComposition: React.FC<
 	return (
 		<div style={{position: 'relative'}}>
 			<PageContext
-				margin={100}
-				nrBaselines={80}
+				margin={50}
+				nrBaselines={60}
 				width={width}
 				height={height}
 				theme={theme}
@@ -65,8 +68,8 @@ export const BarChartXAxisDevComposition: React.FC<
 									Bar Chart X-Axis Dev
 								</TypographyStyle>
 								<HorizontalBarChart
-									baseline={40}
-									height={1500}
+									baseline={22}
+									height={900}
 									width={contentWidth}
 									theme={theme}
 								/>

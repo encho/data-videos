@@ -1,12 +1,12 @@
 import React from 'react';
 import {ScaleLinear} from 'd3-scale';
 
-import {HtmlArea, TGridLayoutArea} from '../../../../../acetti-layout';
+import {HtmlArea, TGridLayoutArea} from '../../../../../../../acetti-layout';
 import {
 	RoundedRightRect,
 	RoundedLeftRect,
-} from '../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
-import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+} from '../../../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 export const HorizontalBar: React.FC<{
 	area: TGridLayoutArea;

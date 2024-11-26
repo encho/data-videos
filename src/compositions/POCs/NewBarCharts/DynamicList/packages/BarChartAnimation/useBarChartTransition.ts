@@ -9,9 +9,9 @@ import {
 	TGridLayout,
 	TGridLayoutAreaSpec,
 	TGridLayoutArea,
-} from '../../../../acetti-layout';
+} from '../../../../../../acetti-layout';
 
-import {TDynamicListTransitionContext} from './useListTransition/useListTransition';
+import {TDynamicListTransitionContext} from '../ListAnimation/useListTransition/useListTransition';
 import {interpolate} from 'remotion';
 
 type BarChartTransitionContext_Common = {

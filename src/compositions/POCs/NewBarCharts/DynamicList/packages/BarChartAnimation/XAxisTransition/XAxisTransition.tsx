@@ -5,22 +5,22 @@ import {ScaleLinear} from 'd3-scale';
 import {Animated_XAxis_Enter} from './Animated_XAxis_Enter/Animated_XAxis_Enter';
 import {Animated_XAxis_Exit} from './Animated_XAxis_Exit/Animated_XAxis_Exit';
 import {Animated_XAxis_Update} from './Animated_XAxis_Update/Animated_XAxis_Update';
-import {TGridLayoutArea} from '../../../../../../acetti-layout';
+import {TGridLayoutArea} from '../../../../../../../acetti-layout';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
 	ListTransitionContext_Exit,
-} from '../../useListTransition/useListTransition';
+} from '../../ListAnimation/useListTransition/useListTransition';
 import {
 	TBarChartTransitionContext,
 	BarChartTransitionContext_Enter,
 	BarChartTransitionContext_Update,
 	BarChartTransitionContext_Exit,
-} from '../../useBarChartTransition';
-import {HtmlArea} from '../../../../../../acetti-layout';
-import {TBarChartItem} from '../../useBarChartTransition';
-import {TKeyFramesGroup} from '../../../../Keyframes/Keyframes/keyframes';
-import {ThemeType} from '../../../../../../acetti-themes/themeTypes';
+} from '../useBarChartTransition';
+import {HtmlArea} from '../../../../../../../acetti-layout';
+import {TBarChartItem} from '../useBarChartTransition';
+import {TKeyFramesGroup} from '../../../../../Keyframes/Keyframes/keyframes';
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 type TXAxisTransitionCommonProps = {
 	theme: ThemeType;

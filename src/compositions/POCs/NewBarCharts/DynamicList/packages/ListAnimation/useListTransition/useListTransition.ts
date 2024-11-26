@@ -2,7 +2,7 @@ import {interpolate, Easing, EasingFunction} from 'remotion';
 import invariant from 'tiny-invariant';
 import {useCallback} from 'react';
 
-import {TGridLayoutArea} from '../../../../../acetti-layout';
+import {TGridLayoutArea} from '../../../../../../../acetti-layout';
 import {getListLayout, TListLayout} from './getListLayout';
 
 type ListTransitionContext_Common = {

@@ -2,8 +2,8 @@ import React from 'react';
 import invariant from 'tiny-invariant';
 import {interpolate} from 'remotion';
 
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {usePage} from '../../../../acetti-components/PageContext';
+import {TypographyStyle} from '../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {usePage} from '../../../../../../acetti-components/PageContext';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
@@ -14,7 +14,7 @@ import {
 	getListItems_Appear,
 	getListItems_Disappear,
 } from './useListTransition/useListTransition';
-import {HtmlArea} from '../../../../acetti-layout';
+import {HtmlArea} from '../../../../../../acetti-layout';
 
 export const ListTransitionUpdate: React.FC<{
 	context: ListTransitionContext_Update<{id: string}>;

@@ -3,12 +3,12 @@ import {ScaleLinear} from 'd3-scale';
 import {interpolate, Easing, useVideoConfig, Sequence} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {getEnterUpdateExits} from '../../../../../../../acetti-ts-utils/utils';
-import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {HtmlArea} from '../../../../../../../acetti-layout';
-import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
-import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {getEnterUpdateExits} from '../../../../../../../../acetti-ts-utils/utils';
+import {TypographyStyle} from '../../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {TGridLayoutArea} from '../../../../../../../../acetti-layout';
+import {HtmlArea} from '../../../../../../../../acetti-layout';
+import {ThemeType} from '../../../../../../../../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 type TTickSpec_XAxis = {
 	id: string;

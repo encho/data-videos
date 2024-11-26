@@ -20,8 +20,11 @@ import {
 	ListTransitionUpdate,
 	ListTransitionEnter,
 	ListTransitionExit,
-} from './ListTransition';
-import {useListAnimation, ListAnimationTransition} from './useListAnimation';
+} from './packages/ListAnimation/ListTransition';
+import {
+	useListAnimation,
+	ListAnimationTransition,
+} from './packages/ListAnimation/useListAnimation';
 
 export const listAnimationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,

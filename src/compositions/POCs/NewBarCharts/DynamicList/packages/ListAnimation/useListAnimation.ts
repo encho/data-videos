@@ -8,7 +8,7 @@ import {useMemo} from 'react';
 import invariant from 'tiny-invariant';
 
 import {getVisibleItems} from './useListTransition/useListTransition';
-import {findFrameRangeIndex} from '../../09-Timeseries/utils/usePeriodScaleAnimation';
+import {findFrameRangeIndex} from '../../../../09-Timeseries/utils/usePeriodScaleAnimation';
 import {
 	TDynamicListTransitionContext,
 	useListTransition,

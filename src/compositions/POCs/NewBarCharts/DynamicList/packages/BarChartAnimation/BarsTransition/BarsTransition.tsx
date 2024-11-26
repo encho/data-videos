@@ -10,12 +10,9 @@ import {
 
 import {HorizontalBar} from './HorizontalBar';
 import {ZeroLine} from './ZeroLine';
-import {
-	getBarChartEnterKeyframes,
-	getBarChartExitKeyframes,
-} from './getEnterKeyframes';
-import {TBarChartValueLabelComponent} from '../components/ValueLabelComponent';
-import {TBarChartLabelComponent} from '../components/LabelComponent';
+import {getEnterKeyframes, getExitKeyframes} from './getKeyframes';
+import {TBarChartValueLabelComponent} from './ValueLabelComponent';
+import {TBarChartLabelComponent} from './LabelComponent';
 import {
 	ListTransitionContext_Update,
 	ListTransitionContext_Enter,
@@ -25,16 +22,16 @@ import {
 	getListItems_Update,
 	getListItems_Appear,
 	getListItems_Disappear,
-} from '../useListTransition/useListTransition';
+} from '../../ListAnimation/useListTransition/useListTransition';
 import {TBarChartTransitionContext} from '../useBarChartTransition';
-import {HtmlArea, DisplayGridRails} from '../../../../../acetti-layout';
+import {HtmlArea, DisplayGridRails} from '../../../../../../../acetti-layout';
 import {TBarChartItem} from '../useBarChartTransition';
 import {
 	getKeyFrame,
 	getKeyFramesInterpolator,
 	TKeyFramesGroup,
-} from '../../../Keyframes/Keyframes/keyframes';
-import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+} from '../../../../../Keyframes/Keyframes/keyframes';
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 type TBarsTransitionCommonProps = {
 	showLayout: boolean;
@@ -521,7 +518,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 
 	const {visibleItems} = listTransitionContext.to;
 
-	const keyframes = getBarChartEnterKeyframes({
+	const keyframes = getEnterKeyframes({
 		fps,
 		durationInFrames,
 		data: visibleItems,
@@ -723,7 +720,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 
 	const {visibleItems} = listTransitionContext.from;
 
-	const keyframes = getBarChartExitKeyframes({
+	const keyframes = getExitKeyframes({
 		fps,
 		durationInFrames,
 		data: visibleItems,

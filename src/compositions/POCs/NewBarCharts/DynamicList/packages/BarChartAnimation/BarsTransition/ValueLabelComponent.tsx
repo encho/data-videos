@@ -1,8 +1,8 @@
 import {memo, forwardRef} from 'react';
 
-import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 import {TBarChartItem} from '../useBarChartTransition';
 
 type TValueLabelProps = {

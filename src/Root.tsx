@@ -251,11 +251,6 @@ import {
 } from './compositions/POCs/01-TextEffects/SvgFilter/SvgFilterComposition';
 
 import {
-	ListTransitionComposition,
-	listTransitionCompositionSchema,
-} from './compositions/POCs/NewBarCharts/DynamicList/ListTransitionComposition';
-
-import {
 	ListAnimationComposition,
 	listAnimationCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/ListAnimationComposition';
@@ -1309,7 +1304,7 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 				<Folder name="New-BarCharts">
-					<Composition
+					{/* <Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="ListTransition"
@@ -1319,7 +1314,7 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						schema={listTransitionCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
+					/> */}
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
@@ -1375,8 +1370,7 @@ export const RemotionRoot: React.FC = () => {
 						component={BarChartXAxisDevComposition}
 						durationInFrames={30 * 12}
 						fps={30}
-						{...videoSizes.widescreen_16x9}
-						height={2500}
+						{...videoSizes.square}
 						schema={barChartXAxisDevCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
