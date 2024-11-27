@@ -52,6 +52,10 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 									dataUpperRight={dataUpperRight}
 									dataLowerLeft={dataLowerLeft}
 									dataLowerRight={dataLowerRight}
+									dataUpperLeftDelayInSeconds={0}
+									dataUpperRightDelayInSeconds={2.5}
+									dataLowerLeftDelayInSeconds={5}
+									dataLowerRightDelayInSeconds={7.5}
 									theme={theme}
 									width={contentWidth}
 									height={800}

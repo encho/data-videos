@@ -1,4 +1,5 @@
 import React, {useCallback} from 'react';
+import {Sequence, useVideoConfig} from 'remotion';
 
 import {isNumber} from 'lodash';
 import {
@@ -28,6 +29,10 @@ export const SimpleBarChart_2x2: React.FC<{
 	dataUpperRight: TBarChartItem[];
 	dataLowerLeft: TBarChartItem[];
 	dataLowerRight: TBarChartItem[];
+	dataUpperLeftDelayInSeconds?: number;
+	dataUpperRightDelayInSeconds?: number;
+	dataLowerLeftDelayInSeconds?: number;
+	dataLowerRightDelayInSeconds?: number;
 	theme: ThemeType;
 	width: number;
 	height: number;
@@ -39,9 +44,15 @@ export const SimpleBarChart_2x2: React.FC<{
 	dataUpperRight,
 	dataLowerLeft,
 	dataLowerRight,
+	dataUpperLeftDelayInSeconds = 0,
+	dataUpperRightDelayInSeconds = 0,
+	dataLowerLeftDelayInSeconds = 0,
+	dataLowerRightDelayInSeconds = 0,
 }) => {
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
+
+	const {fps} = useVideoConfig();
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -260,84 +271,95 @@ export const SimpleBarChart_2x2: React.FC<{
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
 					{/* bar chart 1 */}
-					<HtmlArea
-						area={areaUpperLeft}
-						// fill="rgba(255,0,255,0.2)"
+					<Sequence
+						from={Math.floor(fps * dataUpperLeftDelayInSeconds)}
+						layout="none"
 					>
-						<SimpleBarChart
-							forceNegativeValueLabelWidth
-							// showLayout
-							height={areaUpperLeft.height}
-							baseline={smallestCommonBaseline}
-							width={areaUpperLeft.width}
-							theme={theme}
-							dataItems={dataUpperLeft}
-							domain={commonDomain}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							negativeValueLabelWidth={negativeValueLabelWidth}
-						/>
-					</HtmlArea>
+						<HtmlArea area={areaUpperLeft}>
+							<SimpleBarChart
+								forceNegativeValueLabelWidth
+								// showLayout
+								height={areaUpperLeft.height}
+								baseline={smallestCommonBaseline}
+								width={areaUpperLeft.width}
+								theme={theme}
+								dataItems={dataUpperLeft}
+								domain={commonDomain}
+								labelWidth={labelWidth}
+								valueLabelWidth={valueLabelWidth}
+								negativeValueLabelWidth={negativeValueLabelWidth}
+							/>
+						</HtmlArea>
+					</Sequence>
 
 					{/* bar chart 2 */}
-					<HtmlArea
-						area={areaUpperRight}
-						// fill="rgba(255,0,255,0.2)"
+					<Sequence
+						from={Math.floor(fps * dataUpperRightDelayInSeconds)}
+						layout="none"
 					>
-						<SimpleBarChart
-							forceNegativeValueLabelWidth
-							// showLayout
-							height={areaUpperRight.height}
-							baseline={smallestCommonBaseline}
-							width={areaUpperRight.width}
-							theme={theme}
-							dataItems={dataUpperRight}
-							domain={commonDomain}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							negativeValueLabelWidth={negativeValueLabelWidth}
-						/>
-					</HtmlArea>
+						<HtmlArea area={areaUpperRight}>
+							<SimpleBarChart
+								forceNegativeValueLabelWidth
+								// showLayout
+								height={areaUpperRight.height}
+								baseline={smallestCommonBaseline}
+								width={areaUpperRight.width}
+								theme={theme}
+								dataItems={dataUpperRight}
+								domain={commonDomain}
+								labelWidth={labelWidth}
+								valueLabelWidth={valueLabelWidth}
+								negativeValueLabelWidth={negativeValueLabelWidth}
+							/>
+						</HtmlArea>
+					</Sequence>
 
 					{/* bar chart 3 */}
-					<HtmlArea
-						area={areaLowerLeft}
-						// fill="rgba(255,0,255,0.2)"
+					<Sequence
+						from={Math.floor(fps * dataLowerLeftDelayInSeconds)}
+						layout="none"
 					>
-						<SimpleBarChart
-							forceNegativeValueLabelWidth
-							// showLayout
-							height={areaLowerLeft.height}
-							baseline={smallestCommonBaseline}
-							width={areaLowerLeft.width}
-							theme={theme}
-							dataItems={dataLowerLeft}
-							domain={commonDomain}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							negativeValueLabelWidth={negativeValueLabelWidth}
-						/>
-					</HtmlArea>
+						<HtmlArea
+							area={areaLowerLeft}
+							// fill="rgba(255,0,255,0.2)"
+						>
+							<SimpleBarChart
+								forceNegativeValueLabelWidth
+								// showLayout
+								height={areaLowerLeft.height}
+								baseline={smallestCommonBaseline}
+								width={areaLowerLeft.width}
+								theme={theme}
+								dataItems={dataLowerLeft}
+								domain={commonDomain}
+								labelWidth={labelWidth}
+								valueLabelWidth={valueLabelWidth}
+								negativeValueLabelWidth={negativeValueLabelWidth}
+							/>
+						</HtmlArea>
+					</Sequence>
 
 					{/* bar chart 4 */}
-					<HtmlArea
-						area={areaLowerRight}
-						// fill="rgba(255,0,255,0.2)"
+					<Sequence
+						from={Math.floor(fps * dataLowerRightDelayInSeconds)}
+						layout="none"
 					>
-						<SimpleBarChart
-							forceNegativeValueLabelWidth
-							// showLayout
-							height={areaLowerLeft.height}
-							baseline={smallestCommonBaseline}
-							width={areaLowerLeft.width}
-							theme={theme}
-							dataItems={dataLowerRight}
-							domain={commonDomain}
-							labelWidth={labelWidth}
-							valueLabelWidth={valueLabelWidth}
-							negativeValueLabelWidth={negativeValueLabelWidth}
-						/>
-					</HtmlArea>
+						<HtmlArea area={areaLowerRight}>
+							<SimpleBarChart
+								forceNegativeValueLabelWidth
+								// showLayout
+								height={areaLowerLeft.height}
+								baseline={smallestCommonBaseline}
+								width={areaLowerLeft.width}
+								theme={theme}
+								dataItems={dataLowerRight}
+								domain={commonDomain}
+								labelWidth={labelWidth}
+								valueLabelWidth={valueLabelWidth}
+								negativeValueLabelWidth={negativeValueLabelWidth}
+							/>
+						</HtmlArea>
+					</Sequence>
 				</div>
 			) : null}
 		</>
