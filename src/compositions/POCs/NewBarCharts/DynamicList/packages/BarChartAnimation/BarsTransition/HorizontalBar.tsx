@@ -25,10 +25,12 @@ export const HorizontalBar: React.FC<{
 	currentValue,
 	currentColor,
 	xScale,
-	// baseline: _baseline,
+	baseline,
 	// theme: _theme,
 }) => {
 	const zeroLine_x = xScale(0);
+
+	const barRadius = baseline / 4;
 
 	const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x);
 
@@ -51,8 +53,7 @@ export const HorizontalBar: React.FC<{
 						height={relativeBarPositions.height}
 						width={relativeBarPositions.width}
 						fill={barColor}
-						// TODO: get radius from baseline?
-						radius={5}
+						radius={barRadius}
 					/>
 				) : currentValue < 0 && area.width ? (
 					<RoundedLeftRect
@@ -61,8 +62,7 @@ export const HorizontalBar: React.FC<{
 						height={relativeBarPositions.height}
 						width={relativeBarPositions.width}
 						fill={barColor}
-						// TODO: get radius from baseline?
-						radius={5}
+						radius={barRadius}
 					/>
 				) : null}
 			</svg>

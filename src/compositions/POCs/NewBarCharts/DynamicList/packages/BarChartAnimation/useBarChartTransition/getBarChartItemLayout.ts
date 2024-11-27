@@ -15,7 +15,7 @@ export function getIbcsSizes(baseline: number) {
 		barHeight: baseline * 2,
 		marginBottom: baseline * 0.5,
 		// columns
-		labelMargin: baseline * 0.75,
+		labelMargin: baseline,
 		valueLabelMargin: baseline * 0.75,
 	};
 
