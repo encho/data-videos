@@ -39,6 +39,8 @@ export const SimpleBarChart_2x2: React.FC<{
 	theme: ThemeType;
 	width: number;
 	height: number;
+	fitItemsHeight?: boolean;
+	areRowsEqualHeight?: boolean;
 }> = ({
 	theme,
 	width,
@@ -51,6 +53,8 @@ export const SimpleBarChart_2x2: React.FC<{
 	dataUpperRightDelayInSeconds = 0,
 	dataLowerLeftDelayInSeconds = 0,
 	dataLowerRightDelayInSeconds = 0,
+	fitItemsHeight = true,
+	areRowsEqualHeight = true,
 }) => {
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
@@ -128,7 +132,9 @@ export const SimpleBarChart_2x2: React.FC<{
 	const row_1_height = Math.max(heightUpperLeft, heightUpperRight);
 	const row_2_height = Math.max(heightLowerLeft, heightLowerRight);
 
-	const relative_row_2_height = row_2_height / row_1_height;
+	const relative_row_2_height = areRowsEqualHeight
+		? 1
+		: row_2_height / row_1_height;
 
 	const rowSpacePixels = 60;
 	// const titleHeightPixels = 50; // TODO determine according to used typographystyle
@@ -336,6 +342,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
 									// showLayout
+									fitItemsHeight={fitItemsHeight}
 									height={areaUpperLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperLeft.width}
@@ -371,6 +378,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
 									// showLayout
+									fitItemsHeight={fitItemsHeight}
 									height={areaUpperRight.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperRight.width}
@@ -409,6 +417,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
 									// showLayout
+									fitItemsHeight={fitItemsHeight}
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}
@@ -443,6 +452,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaLowerRight}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
+									fitItemsHeight={fitItemsHeight}
 									// showLayout
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
