@@ -23,7 +23,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		subtitle: {
-			main: GRAYS['500'],
+			main: GRAYS['300'],
 			soft: GRAYS['400'],
 		},
 		datavizLabel: {

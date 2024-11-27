@@ -1,12 +1,13 @@
 import React, {useCallback} from 'react';
 import {Sequence, useVideoConfig} from 'remotion';
 
+import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {isNumber} from 'lodash';
 import {
 	getPerfectBaselineForHeight,
 	getPerfectHeightForBaseline,
 } from '../packages/BarChartAnimation/getPerfectBaselineForHeight';
-import {HtmlArea} from '../../../../../acetti-layout';
+import {HtmlArea, DisplayGridRails} from '../../../../../acetti-layout';
 import {SimpleBarChart} from './SimpleBarChart';
 import {
 	useMatrixLayout,
@@ -23,6 +24,8 @@ import {
 	MeasureLabels,
 } from '../packages/BarChartAnimation/BarsTransition/LabelComponent';
 import {useElementDimensions} from '../../../03-Page/SimplePage/useElementDimensions';
+import {usePage} from '../../../../../acetti-components/PageContext';
+import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 export const SimpleBarChart_2x2: React.FC<{
 	dataUpperLeft: TBarChartItem[];
@@ -53,6 +56,16 @@ export const SimpleBarChart_2x2: React.FC<{
 	const ValueLabelComponent = DefaultValueLabelComponent;
 
 	const {fps} = useVideoConfig();
+	const {baseline: pageBaseline} = usePage();
+
+	const titleTypographyStyle = theme.typography.textStyles.h2;
+	const titleMarginBottomInBaselines = 2;
+
+	const titleCapHeight =
+		titleTypographyStyle.capHeightInBaselines * pageBaseline;
+	const titleMarginBottom = titleMarginBottomInBaselines * pageBaseline;
+
+	const titleHeightInPixels = titleCapHeight + titleMarginBottom;
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -117,38 +130,66 @@ export const SimpleBarChart_2x2: React.FC<{
 
 	const relative_row_2_height = row_2_height / row_1_height;
 
+	const rowSpacePixels = 60;
+	// const titleHeightPixels = 50; // TODO determine according to used typographystyle
+	// const freeHeight = height - rowSpacePixels;
+
 	const matrixLayout = useMatrixLayout({
 		width,
 		height,
 		nrColumns: 2,
-		nrRows: 2,
-		rowSpacePixels: 100,
+		nrRows: 5,
+		rowSpacePixels: 0,
 		columnSpacePixels: 150,
 		rowPaddingPixels: 0,
 		columnPaddingPixels: 0,
 		rowSizes: [
+			{type: 'pixel', value: titleHeightInPixels},
 			{type: 'fr', value: 1},
+			{type: 'pixel', value: rowSpacePixels},
+			{type: 'pixel', value: titleHeightInPixels},
 			{type: 'fr', value: relative_row_2_height},
 		],
 	});
 	const areaUpperLeft = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		row: 0,
+		row: 1,
 		column: 0,
 	});
 	const areaUpperRight = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		row: 0,
+		row: 1,
 		column: 1,
 	});
 	const areaLowerLeft = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		row: 1,
+		row: 4,
 		column: 0,
 	});
 	const areaLowerRight = getMatrixLayoutCellArea({
 		layout: matrixLayout,
-		row: 1,
+		row: 4,
+		column: 1,
+	});
+
+	const areaUpperLeftTitle = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 0,
+		column: 0,
+	});
+	const areaUpperRightTitle = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 0,
+		column: 1,
+	});
+	const areaLowerLeftTitle = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 3,
+		column: 0,
+	});
+	const areaLowerRightTitle = getMatrixLayoutCellArea({
+		layout: matrixLayout,
+		row: 3,
 		column: 1,
 	});
 
@@ -235,6 +276,9 @@ export const SimpleBarChart_2x2: React.FC<{
 		...dataLowerRight,
 	];
 
+	// TODO f(plotAreaWidth, baseline)
+	const nrTicks = 4;
+
 	return (
 		<>
 			{/* measure labels */}
@@ -270,26 +314,41 @@ export const SimpleBarChart_2x2: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
+					{/* <DisplayGridRails {...matrixLayout} /> */}
+
 					{/* bar chart 1 */}
 					<Sequence
 						from={Math.floor(fps * dataUpperLeftDelayInSeconds)}
 						layout="none"
 					>
-						<HtmlArea area={areaUpperLeft}>
-							<SimpleBarChart
-								forceNegativeValueLabelWidth
-								// showLayout
-								height={areaUpperLeft.height}
-								baseline={smallestCommonBaseline}
-								width={areaUpperLeft.width}
-								theme={theme}
-								dataItems={dataUpperLeft}
-								domain={commonDomain}
-								labelWidth={labelWidth}
-								valueLabelWidth={valueLabelWidth}
-								negativeValueLabelWidth={negativeValueLabelWidth}
-							/>
+						<HtmlArea area={areaUpperLeftTitle}>
+							<TypographyStyle
+								typographyStyle={titleTypographyStyle}
+								baseline={pageBaseline}
+								marginBottom={titleMarginBottomInBaselines}
+							>
+								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+							</TypographyStyle>
 						</HtmlArea>
+
+						<Sequence from={Math.floor(fps * 0.5)} layout="none">
+							<HtmlArea area={areaUpperLeft}>
+								<SimpleBarChart
+									forceNegativeValueLabelWidth
+									// showLayout
+									height={areaUpperLeft.height}
+									baseline={smallestCommonBaseline}
+									width={areaUpperLeft.width}
+									theme={theme}
+									dataItems={dataUpperLeft}
+									domain={commonDomain}
+									labelWidth={labelWidth}
+									valueLabelWidth={valueLabelWidth}
+									negativeValueLabelWidth={negativeValueLabelWidth}
+									nrTicks={nrTicks}
+								/>
+							</HtmlArea>
+						</Sequence>
 					</Sequence>
 
 					{/* bar chart 2 */}
@@ -297,21 +356,34 @@ export const SimpleBarChart_2x2: React.FC<{
 						from={Math.floor(fps * dataUpperRightDelayInSeconds)}
 						layout="none"
 					>
-						<HtmlArea area={areaUpperRight}>
-							<SimpleBarChart
-								forceNegativeValueLabelWidth
-								// showLayout
-								height={areaUpperRight.height}
-								baseline={smallestCommonBaseline}
-								width={areaUpperRight.width}
-								theme={theme}
-								dataItems={dataUpperRight}
-								domain={commonDomain}
-								labelWidth={labelWidth}
-								valueLabelWidth={valueLabelWidth}
-								negativeValueLabelWidth={negativeValueLabelWidth}
-							/>
+						<HtmlArea area={areaUpperRightTitle}>
+							<TypographyStyle
+								typographyStyle={titleTypographyStyle}
+								baseline={pageBaseline}
+								marginBottom={titleMarginBottomInBaselines}
+							>
+								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+							</TypographyStyle>
 						</HtmlArea>
+
+						<Sequence from={Math.floor(fps * 0.5)} layout="none">
+							<HtmlArea area={areaUpperRight}>
+								<SimpleBarChart
+									forceNegativeValueLabelWidth
+									// showLayout
+									height={areaUpperRight.height}
+									baseline={smallestCommonBaseline}
+									width={areaUpperRight.width}
+									theme={theme}
+									dataItems={dataUpperRight}
+									domain={commonDomain}
+									labelWidth={labelWidth}
+									valueLabelWidth={valueLabelWidth}
+									negativeValueLabelWidth={negativeValueLabelWidth}
+									nrTicks={nrTicks}
+								/>
+							</HtmlArea>
+						</Sequence>
 					</Sequence>
 
 					{/* bar chart 3 */}
@@ -319,24 +391,37 @@ export const SimpleBarChart_2x2: React.FC<{
 						from={Math.floor(fps * dataLowerLeftDelayInSeconds)}
 						layout="none"
 					>
-						<HtmlArea
-							area={areaLowerLeft}
-							// fill="rgba(255,0,255,0.2)"
-						>
-							<SimpleBarChart
-								forceNegativeValueLabelWidth
-								// showLayout
-								height={areaLowerLeft.height}
-								baseline={smallestCommonBaseline}
-								width={areaLowerLeft.width}
-								theme={theme}
-								dataItems={dataLowerLeft}
-								domain={commonDomain}
-								labelWidth={labelWidth}
-								valueLabelWidth={valueLabelWidth}
-								negativeValueLabelWidth={negativeValueLabelWidth}
-							/>
+						<HtmlArea area={areaLowerLeftTitle}>
+							<TypographyStyle
+								typographyStyle={titleTypographyStyle}
+								baseline={pageBaseline}
+								marginBottom={titleMarginBottomInBaselines}
+							>
+								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+							</TypographyStyle>
 						</HtmlArea>
+
+						<Sequence from={Math.floor(fps * 0.5)} layout="none">
+							<HtmlArea
+								area={areaLowerLeft}
+								// fill="rgba(255,0,255,0.2)"
+							>
+								<SimpleBarChart
+									forceNegativeValueLabelWidth
+									// showLayout
+									height={areaLowerLeft.height}
+									baseline={smallestCommonBaseline}
+									width={areaLowerLeft.width}
+									theme={theme}
+									dataItems={dataLowerLeft}
+									domain={commonDomain}
+									labelWidth={labelWidth}
+									valueLabelWidth={valueLabelWidth}
+									negativeValueLabelWidth={negativeValueLabelWidth}
+									nrTicks={nrTicks}
+								/>
+							</HtmlArea>
+						</Sequence>
 					</Sequence>
 
 					{/* bar chart 4 */}
@@ -344,21 +429,34 @@ export const SimpleBarChart_2x2: React.FC<{
 						from={Math.floor(fps * dataLowerRightDelayInSeconds)}
 						layout="none"
 					>
-						<HtmlArea area={areaLowerRight}>
-							<SimpleBarChart
-								forceNegativeValueLabelWidth
-								// showLayout
-								height={areaLowerLeft.height}
-								baseline={smallestCommonBaseline}
-								width={areaLowerLeft.width}
-								theme={theme}
-								dataItems={dataLowerRight}
-								domain={commonDomain}
-								labelWidth={labelWidth}
-								valueLabelWidth={valueLabelWidth}
-								negativeValueLabelWidth={negativeValueLabelWidth}
-							/>
+						<HtmlArea area={areaLowerRightTitle}>
+							<TypographyStyle
+								typographyStyle={titleTypographyStyle}
+								baseline={pageBaseline}
+								marginBottom={titleMarginBottomInBaselines}
+							>
+								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+							</TypographyStyle>
 						</HtmlArea>
+
+						<Sequence from={Math.floor(fps * 0.5)} layout="none">
+							<HtmlArea area={areaLowerRight}>
+								<SimpleBarChart
+									forceNegativeValueLabelWidth
+									// showLayout
+									height={areaLowerLeft.height}
+									baseline={smallestCommonBaseline}
+									width={areaLowerLeft.width}
+									theme={theme}
+									dataItems={dataLowerRight}
+									domain={commonDomain}
+									labelWidth={labelWidth}
+									valueLabelWidth={valueLabelWidth}
+									negativeValueLabelWidth={negativeValueLabelWidth}
+									nrTicks={nrTicks}
+								/>
+							</HtmlArea>
+						</Sequence>
 					</Sequence>
 				</div>
 			) : null}
