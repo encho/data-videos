@@ -69,6 +69,9 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 	);
 };
 
+const positiveColor = colorPalettes.Green[500];
+const negativeColor = colorPalettes.Red[500];
+
 const manyItemsWithNegatives = [
 	{
 		id: 'Id-001',
@@ -117,7 +120,7 @@ const manyItemsWithNegatives = [
 	},
 ].map((it) => ({
 	...it,
-	color: it.value >= 0 ? colorPalettes.Indigo[500] : colorPalettes.Orange[500],
+	color: it.value >= 0 ? positiveColor : negativeColor,
 }));
 
 const fewItemsWithJustPositives = [
@@ -125,114 +128,90 @@ const fewItemsWithJustPositives = [
 		id: 'Id-009',
 		label: 'Item 009',
 		value: 70,
-		color: '#FF5733',
 	},
 	{
 		id: 'Id-003',
 		label: 'Item 003',
 		value: 30.75,
-		color: '#3357FF',
 	},
 	{
 		id: 'Id-007',
 		label: 'Item 007',
 		value: 20.8,
-		color: '#C7FF33',
 	},
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: 20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: 33.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-001',
 		label: 'Item 001',
 		value: 12,
-		color: '#FF5733',
 	},
-];
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
 
 const fewItemsWithJustNegatives = [
 	{
 		id: 'Id-009',
 		label: 'Item 009',
 		value: -70,
-		color: '#FF5733',
 	},
 	{
 		id: 'Id-003',
 		label: 'Item 003',
 		value: -30.75,
-		color: '#3357FF',
 	},
 	{
 		id: 'Id-007',
 		label: 'Item 007',
 		value: -20.8,
-		color: '#C7FF33',
 	},
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: -20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: -33.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-001',
 		label: 'Item 001',
 		value: -12,
-		color: '#FF5733',
 	},
-];
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
 
 const veryFewItemsWithJustNegatives = [
-	// {
-	// 	id: 'Id-009',
-	// 	label: 'Item 009',
-	// 	value: -70,
-	// 	color: '#FF5733',
-	// },
-	// {
-	// 	id: 'Id-003',
-	// 	label: 'Item 003',
-	// 	value: -30.75,
-	// 	color: '#3357FF',
-	// },
-	// {
-	// 	id: 'Id-007',
-	// 	label: 'Item 007',
-	// 	value: -20.8,
-	// 	color: '#C7FF33',
-	// },
 	{
 		id: 'Id-002',
 		label: 'Item 002',
 		value: -20.5,
-		color: '#33FF57',
 	},
 	{
 		id: 'Id-005',
 		label: 'Item 005',
 		value: -33.3,
-		color: '#33FFF3',
 	},
 	{
 		id: 'Id-001',
 		label: 'Item 001',
 		value: -12,
-		color: '#FF5733',
 	},
-];
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));

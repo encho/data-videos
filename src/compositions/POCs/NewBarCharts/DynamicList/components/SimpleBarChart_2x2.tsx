@@ -232,14 +232,14 @@ export const SimpleBarChart_2x2: React.FC<{
 				<LabelComponent
 					id={id}
 					label={label}
-					baseline={baseline}
+					baseline={smallestCommonBaseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
 				/>
 			);
 		},
-		[baseline, theme, LabelComponent]
+		[smallestCommonBaseline, theme, LabelComponent]
 	);
 
 	// TODO get the corresponding component and it's parametrization from theme
@@ -249,7 +249,7 @@ export const SimpleBarChart_2x2: React.FC<{
 			return (
 				<ValueLabelComponent
 					// id={id}
-					baseline={baseline}
+					baseline={smallestCommonBaseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
@@ -257,7 +257,7 @@ export const SimpleBarChart_2x2: React.FC<{
 				/>
 			);
 		},
-		[baseline, theme, ValueLabelComponent]
+		[smallestCommonBaseline, theme, ValueLabelComponent]
 	);
 
 	const labelWidthProp = undefined;
@@ -314,7 +314,7 @@ export const SimpleBarChart_2x2: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
-					<DisplayGridRails {...matrixLayout} />
+					{/* <DisplayGridRails {...matrixLayout} /> */}
 
 					{/* bar chart 1 */}
 					<Sequence
@@ -335,7 +335,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaUpperLeft}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									showLayout
+									// showLayout
 									height={areaUpperLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperLeft.width}
@@ -370,7 +370,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaUpperRight}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									showLayout
+									// showLayout
 									height={areaUpperRight.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperRight.width}
@@ -408,7 +408,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									showLayout
+									// showLayout
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}
@@ -443,7 +443,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaLowerRight}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									showLayout
+									// showLayout
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}
