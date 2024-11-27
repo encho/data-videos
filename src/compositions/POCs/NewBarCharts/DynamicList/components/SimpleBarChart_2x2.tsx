@@ -314,7 +314,7 @@ export const SimpleBarChart_2x2: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
-					{/* <DisplayGridRails {...matrixLayout} /> */}
+					<DisplayGridRails {...matrixLayout} />
 
 					{/* bar chart 1 */}
 					<Sequence
@@ -335,7 +335,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaUpperLeft}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									// showLayout
+									showLayout
 									height={areaUpperLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperLeft.width}
@@ -362,7 +362,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								baseline={pageBaseline}
 								marginBottom={titleMarginBottomInBaselines}
 							>
-								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+								<TextAnimationSubtle>London</TextAnimationSubtle>
 							</TypographyStyle>
 						</HtmlArea>
 
@@ -370,7 +370,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaUpperRight}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									// showLayout
+									showLayout
 									height={areaUpperRight.height}
 									baseline={smallestCommonBaseline}
 									width={areaUpperRight.width}
@@ -397,7 +397,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								baseline={pageBaseline}
 								marginBottom={titleMarginBottomInBaselines}
 							>
-								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+								<TextAnimationSubtle>Paris</TextAnimationSubtle>
 							</TypographyStyle>
 						</HtmlArea>
 
@@ -408,7 +408,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									// showLayout
+									showLayout
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}
@@ -435,7 +435,7 @@ export const SimpleBarChart_2x2: React.FC<{
 								baseline={pageBaseline}
 								marginBottom={titleMarginBottomInBaselines}
 							>
-								<TextAnimationSubtle>Berlin</TextAnimationSubtle>
+								<TextAnimationSubtle>New York</TextAnimationSubtle>
 							</TypographyStyle>
 						</HtmlArea>
 
@@ -443,7 +443,7 @@ export const SimpleBarChart_2x2: React.FC<{
 							<HtmlArea area={areaLowerRight}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth
-									// showLayout
+									showLayout
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}
