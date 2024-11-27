@@ -36,11 +36,30 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 	const dataLowerLeft = manyItemsWithNegatives;
 	const dataLowerRight = veryFewItemsWithJustNegatives;
 
+	const commonMin = Math.min(
+		...[
+			...dataUpperLeft,
+			...dataUpperRight,
+			...dataLowerLeft,
+			...dataLowerRight,
+		].map((it) => it.value)
+	);
+	const commonMax = Math.max(
+		...[
+			...dataUpperLeft,
+			...dataUpperRight,
+			...dataLowerLeft,
+			...dataLowerRight,
+		].map((it) => it.value)
+	);
+
+	const commonDomain = [commonMin, commonMax] as [number, number];
+
 	return (
 		<div style={{position: 'relative'}}>
 			<PageContext
-				margin={50}
-				nrBaselines={60}
+				margin={80}
+				nrBaselines={80}
 				width={width}
 				height={height}
 				theme={theme}
@@ -76,7 +95,7 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 						// eslint-disable-next-line
 						const matrixLayout = useMatrixLayout({
 							width: contentWidth,
-							height: height - 450,
+							height: height - 280,
 							nrColumns: 2,
 							nrRows: 2,
 							rowSpacePixels: 100,
@@ -141,26 +160,14 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 							baselineLowerRight
 						);
 
-						// const durationInFrames_onlyPositives = Math.floor(
-						// 	durationInFrames / 3
-						// );
-						// const durationInFrames_onlyNegatives = Math.floor(
-						// 	durationInFrames / 3
-						// );
-						// const durationInFrames_positivesAndNegatives =
-						// 	durationInFrames -
-						// 	durationInFrames_onlyNegatives -
-						// 	durationInFrames_onlyPositives;
-
 						return (
 							<>
 								<TypographyStyle
 									typographyStyle={theme.typography.textStyles.h1}
 									baseline={baseline}
-									marginBottom={5}
+									marginBottom={7}
 								>
-									Use Case:
-									<br /> Simple Bar Chart Multiples
+									Simple Bar Chart Multiples
 								</TypographyStyle>
 								<div style={{position: 'relative'}}>
 									{/* bar chart 1 */}
@@ -175,6 +182,7 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 											width={areaUpperLeft.width}
 											theme={theme}
 											dataItems={dataUpperLeft}
+											domain={commonDomain}
 										/>
 									</HtmlArea>
 
@@ -190,6 +198,7 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 											width={areaUpperRight.width}
 											theme={theme}
 											dataItems={dataUpperRight}
+											domain={commonDomain}
 										/>
 									</HtmlArea>
 
@@ -205,6 +214,7 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 											width={areaLowerLeft.width}
 											theme={theme}
 											dataItems={dataLowerLeft}
+											domain={commonDomain}
 										/>
 									</HtmlArea>
 
@@ -220,6 +230,7 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 											width={areaLowerLeft.width}
 											theme={theme}
 											dataItems={dataLowerRight}
+											domain={commonDomain}
 										/>
 									</HtmlArea>
 								</div>

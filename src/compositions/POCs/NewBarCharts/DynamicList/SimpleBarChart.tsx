@@ -47,6 +47,10 @@ export const SimpleBarChart: React.FC<{
 	fitItemsHeight?: boolean;
 	showLayout?: boolean;
 	justifyContent?: 'center' | 'start';
+	domain?: [number, number];
+	labelWidth?: number;
+	valueLabelWidth?: number;
+	negativeValueLabelWidth?: number;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -56,6 +60,10 @@ export const SimpleBarChart: React.FC<{
 	justifyContent = 'center',
 	showLayout = false,
 	fitItemsHeight = false,
+	domain,
+	labelWidth: labelWidthProp,
+	valueLabelWidth: valueLabelWidthProp,
+	negativeValueLabelWidth: negativeValueLabelWidthProp,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -117,10 +125,6 @@ export const SimpleBarChart: React.FC<{
 		},
 		[baseline, theme, ValueLabelComponent]
 	);
-
-	const labelWidthProp = undefined;
-	const valueLabelWidthProp = undefined;
-	const negativeValueLabelWidthProp = undefined;
 
 	const labelWidth = labelWidthProp || labelsDimensions?.width;
 	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
@@ -190,7 +194,7 @@ export const SimpleBarChart: React.FC<{
 		labelWidth: labelWidth || 0,
 		valueLabelWidth: valueLabelWidth || 0,
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
-		// globalCustomDomain: [-100, 100],
+		globalCustomDomain: domain, // TODO rename to domain
 	});
 
 	return (
