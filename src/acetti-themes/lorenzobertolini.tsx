@@ -27,7 +27,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		datavizLabel: {
-			main: GRAYS['500'],
+			main: GRAYS['400'],
 			soft: GRAYS['400'],
 		},
 		datavizValueLabel: {
