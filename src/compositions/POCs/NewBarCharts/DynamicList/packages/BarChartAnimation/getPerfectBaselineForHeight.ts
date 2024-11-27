@@ -29,3 +29,22 @@ export function getPerfectBaselineForHeight({
 
 	return referenceBaseline * baselineFactor;
 }
+
+export function getPerfectHeightForBaseline({
+	baseline,
+	nrItems,
+	theme,
+}: {
+	baseline: number;
+	nrItems: number;
+	theme: ThemeType;
+}) {
+	const ibcsBarsHeight = getAllBarChartItemsHeight({
+		baseline,
+		nrItems,
+	});
+	const xAxisHeight = getXAxisHeight({theme, baseline});
+	const xAxisMarginTop = getXAxisMarginTop({baseline});
+
+	return ibcsBarsHeight + xAxisHeight + xAxisMarginTop;
+}

@@ -1,7 +1,11 @@
 import {z} from 'zod';
 import React from 'react';
-import {useVideoConfig, Sequence} from 'remotion';
+import {useVideoConfig} from 'remotion';
 
+import {
+	getPerfectBaselineForHeight,
+	getPerfectHeightForBaseline,
+} from './packages/BarChartAnimation/getPerfectBaselineForHeight';
 import {HtmlArea} from '../../../../acetti-layout';
 import {SimpleBarChart} from './SimpleBarChart';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
@@ -16,7 +20,6 @@ import {
 	useMatrixLayout,
 	getMatrixLayoutCellArea,
 } from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {Html} from '@react-three/drei';
 
 export const useCasesSimpleBarChartMultiplesCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -26,7 +29,12 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 	z.infer<typeof useCasesSimpleBarChartMultiplesCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum);
-	const {width, height, durationInFrames} = useVideoConfig();
+	const {width, height} = useVideoConfig();
+
+	const dataUpperLeft = fewItemsWithJustPositives;
+	const dataUpperRight = fewItemsWithJustNegatives;
+	const dataLowerLeft = manyItemsWithNegatives;
+	const dataLowerRight = veryFewItemsWithJustNegatives;
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -39,6 +47,32 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 			>
 				<Page>
 					{({baseline, contentWidth}) => {
+						const heightUpperLeft = getPerfectHeightForBaseline({
+							theme,
+							baseline,
+							nrItems: dataUpperLeft.length,
+						});
+						const heightUpperRight = getPerfectHeightForBaseline({
+							theme,
+							baseline,
+							nrItems: dataUpperRight.length,
+						});
+						const heightLowerLeft = getPerfectHeightForBaseline({
+							theme,
+							baseline,
+							nrItems: dataLowerLeft.length,
+						});
+						const heightLowerRight = getPerfectHeightForBaseline({
+							theme,
+							baseline,
+							nrItems: dataLowerRight.length,
+						});
+
+						const row_1_height = Math.max(heightUpperLeft, heightUpperRight);
+						const row_2_height = Math.max(heightLowerLeft, heightLowerRight);
+
+						const relative_row_2_height = row_2_height / row_1_height;
+
 						// eslint-disable-next-line
 						const matrixLayout = useMatrixLayout({
 							width: contentWidth,
@@ -49,27 +83,63 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 							columnSpacePixels: 150,
 							rowPaddingPixels: 0,
 							columnPaddingPixels: 0,
+							rowSizes: [
+								{type: 'fr', value: 1},
+								{type: 'fr', value: relative_row_2_height},
+							],
 						});
-						const area_1 = getMatrixLayoutCellArea({
+						const areaUpperLeft = getMatrixLayoutCellArea({
 							layout: matrixLayout,
 							row: 0,
 							column: 0,
 						});
-						const area_2 = getMatrixLayoutCellArea({
+						const areaUpperRight = getMatrixLayoutCellArea({
 							layout: matrixLayout,
 							row: 0,
 							column: 1,
 						});
-						const area_3 = getMatrixLayoutCellArea({
+						const areaLowerLeft = getMatrixLayoutCellArea({
 							layout: matrixLayout,
 							row: 1,
 							column: 0,
 						});
-						const area_4 = getMatrixLayoutCellArea({
+						const areaLowerRight = getMatrixLayoutCellArea({
 							layout: matrixLayout,
 							row: 1,
 							column: 1,
 						});
+
+						// TODO pass xAxis visible flag
+						const baselineUpperLeft = getPerfectBaselineForHeight({
+							height: areaUpperLeft.height,
+							theme,
+							nrItems: dataUpperLeft.length,
+						});
+
+						const baselineUpperRight = getPerfectBaselineForHeight({
+							height: areaUpperRight.height,
+							theme,
+							nrItems: dataUpperRight.length,
+						});
+
+						const baselineLowerLeft = getPerfectBaselineForHeight({
+							height: areaLowerLeft.height,
+							theme,
+							nrItems: dataLowerLeft.length,
+						});
+
+						const baselineLowerRight = getPerfectBaselineForHeight({
+							height: areaLowerRight.height,
+							theme,
+							nrItems: dataLowerRight.length,
+						});
+
+						const smallestCommonBaseline = Math.min(
+							baselineUpperLeft,
+							baselineUpperRight,
+							baselineLowerLeft,
+							baselineLowerRight
+						);
 
 						// const durationInFrames_onlyPositives = Math.floor(
 						// 	durationInFrames / 3
@@ -95,57 +165,61 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 								<div style={{position: 'relative'}}>
 									{/* bar chart 1 */}
 									<HtmlArea
-										area={area_1}
+										area={areaUpperLeft}
 										// fill="rgba(255,0,255,0.2)"
 									>
 										<SimpleBarChart
 											// showLayout
-											height={area_1.height}
-											width={area_1.width}
+											height={areaUpperLeft.height}
+											baseline={smallestCommonBaseline}
+											width={areaUpperLeft.width}
 											theme={theme}
-											dataItems={fewItemsWithJustPositives}
+											dataItems={dataUpperLeft}
 										/>
 									</HtmlArea>
 
 									{/* bar chart 2 */}
 									<HtmlArea
-										area={area_2}
+										area={areaUpperRight}
 										// fill="rgba(255,0,255,0.2)"
 									>
 										<SimpleBarChart
 											// showLayout
-											height={area_2.height}
-											width={area_2.width}
+											height={areaUpperRight.height}
+											baseline={smallestCommonBaseline}
+											width={areaUpperRight.width}
 											theme={theme}
-											dataItems={fewItemsWithJustNegatives}
+											dataItems={dataUpperRight}
 										/>
 									</HtmlArea>
 
 									{/* bar chart 3 */}
 									<HtmlArea
-										area={area_3}
+										area={areaLowerLeft}
 										// fill="rgba(255,0,255,0.2)"
 									>
 										<SimpleBarChart
 											// showLayout
-											height={area_3.height}
-											width={area_3.width}
+											height={areaLowerLeft.height}
+											baseline={smallestCommonBaseline}
+											width={areaLowerLeft.width}
 											theme={theme}
-											dataItems={manyItemsWithNegatives}
+											dataItems={dataLowerLeft}
 										/>
 									</HtmlArea>
 
 									{/* bar chart 4 */}
 									<HtmlArea
-										area={area_4}
+										area={areaLowerRight}
 										// fill="rgba(255,0,255,0.2)"
 									>
 										<SimpleBarChart
 											// showLayout
-											height={area_3.height}
-											width={area_3.width}
+											height={areaLowerLeft.height}
+											baseline={smallestCommonBaseline}
+											width={areaLowerLeft.width}
 											theme={theme}
-											dataItems={manyItemsWithNegatives}
+											dataItems={dataLowerRight}
 										/>
 									</HtmlArea>
 								</div>
@@ -308,6 +382,45 @@ const fewItemsWithJustNegatives = [
 		value: -20.8,
 		color: '#C7FF33',
 	},
+	{
+		id: 'Id-002',
+		label: 'Item 002',
+		value: -20.5,
+		color: '#33FF57',
+	},
+	{
+		id: 'Id-005',
+		label: 'Item 005',
+		value: -33.3,
+		color: '#33FFF3',
+	},
+	{
+		id: 'Id-001',
+		label: 'Item 001',
+		value: -12,
+		color: '#FF5733',
+	},
+];
+
+const veryFewItemsWithJustNegatives = [
+	// {
+	// 	id: 'Id-009',
+	// 	label: 'Item 009',
+	// 	value: -70,
+	// 	color: '#FF5733',
+	// },
+	// {
+	// 	id: 'Id-003',
+	// 	label: 'Item 003',
+	// 	value: -30.75,
+	// 	color: '#3357FF',
+	// },
+	// {
+	// 	id: 'Id-007',
+	// 	label: 'Item 007',
+	// 	value: -20.8,
+	// 	color: '#C7FF33',
+	// },
 	{
 		id: 'Id-002',
 		label: 'Item 002',

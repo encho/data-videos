@@ -44,14 +44,18 @@ export const SimpleBarChart: React.FC<{
 	width: number;
 	theme: ThemeType;
 	dataItems: TBarChartItem[];
+	fitItemsHeight?: boolean;
 	showLayout?: boolean;
+	justifyContent?: 'center' | 'start';
 }> = ({
+	dataItems,
 	baseline: baselineProp,
 	height,
 	width,
 	theme,
+	justifyContent = 'center',
 	showLayout = false,
-	dataItems,
+	fitItemsHeight = false,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -173,9 +177,9 @@ export const SimpleBarChart: React.FC<{
 		height: barsArea.height,
 		transitions,
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemHeights: true,
+		fitItemHeights: fitItemsHeight, // TODO rename to fitItemsHeight
 		easing,
-		justifyContent: 'center',
+		justifyContent,
 	});
 
 	const listTransitionContext = listAnimationContext.currentTransitionContext;
