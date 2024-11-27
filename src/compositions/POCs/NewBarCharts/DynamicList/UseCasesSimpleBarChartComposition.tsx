@@ -55,8 +55,9 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 									layout="none"
 								>
 									<SimpleBarChart
-										// showLayout
+										showLayout
 										height={700}
+										// baseline={20}
 										width={contentWidth}
 										theme={theme}
 										dataItems={fewItemsWithJustPositives}
@@ -68,7 +69,7 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 									layout="none"
 								>
 									<SimpleBarChart
-										// showLayout
+										showLayout
 										height={700}
 										width={contentWidth}
 										theme={theme}
@@ -84,7 +85,7 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 									layout="none"
 								>
 									<SimpleBarChart
-										// showLayout
+										showLayout
 										height={700}
 										width={contentWidth}
 										theme={theme}

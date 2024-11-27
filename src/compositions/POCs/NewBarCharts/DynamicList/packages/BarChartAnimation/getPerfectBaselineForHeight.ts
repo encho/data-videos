@@ -15,19 +15,18 @@ export function getPerfectBaselineForHeight({
 	theme: ThemeType;
 }) {
 	const referenceBaseline = 10;
-	const remainingSpaceForBars =
-		height -
-		getXAxisHeight({theme, baseline: referenceBaseline}) -
-		getXAxisMarginTop({baseline: referenceBaseline});
 
+	const xAxisHeight = getXAxisHeight({theme, baseline: referenceBaseline});
+	const xAxisMarginTop = getXAxisMarginTop({baseline: referenceBaseline});
 	const ibcsBarsHeight = getAllBarChartItemsHeight({
 		baseline: referenceBaseline,
 		nrItems,
 	});
 
-	const baselineFactor = remainingSpaceForBars / ibcsBarsHeight;
+	const totalHeight = xAxisHeight + xAxisMarginTop + ibcsBarsHeight;
+	const factor = height / totalHeight;
 
-	return referenceBaseline * baselineFactor;
+	return referenceBaseline * factor;
 }
 
 export function getPerfectHeightForBaseline({
