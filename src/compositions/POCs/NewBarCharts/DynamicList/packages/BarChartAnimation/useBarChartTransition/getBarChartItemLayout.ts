@@ -11,12 +11,12 @@ export function getIbcsSizes(baseline: number) {
 	// TODO from theme
 	const ibcsSizes = {
 		// rows
-		marginTop: baseline * 0.75,
+		marginTop: baseline * 0.5,
 		barHeight: baseline * 2,
-		marginBottom: baseline * 0.75,
+		marginBottom: baseline * 0.5,
 		// columns
-		labelMarginRight: baseline * 0.9,
-		valueLabelMarginRight: baseline * 0.9,
+		labelMargin: baseline * 0.75,
+		valueLabelMargin: baseline * 0.75,
 	};
 
 	return ibcsSizes;
@@ -44,8 +44,6 @@ export function getAllBarChartItemsHeight({
 	baseline: number;
 	nrItems: number;
 }) {
-	// const xAxisMarginTop = getXAxisMarginTop({baseline});
-	// const xAxisHeight = getXAxisHeight({baseline, theme});
 	const barChartItemHeight = getBarChartItemHeight({baseline});
 	const barChartItemsHeight = nrItems * barChartItemHeight;
 
@@ -106,7 +104,7 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: 20,
+			value: ibcsSizes.labelMargin,
 			name: 'labelMarginRight',
 		},
 		{
@@ -116,7 +114,7 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: 20 * negativeValueLabelWidthPercentage,
+			value: ibcsSizes.valueLabelMargin * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabelMarginRight',
 		},
 		{
@@ -126,7 +124,7 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: 20,
+			value: ibcsSizes.valueLabelMargin,
 			name: 'valueLabelMarginLeft',
 		},
 		{
