@@ -51,6 +51,7 @@ export const SimpleBarChart: React.FC<{
 	labelWidth?: number;
 	valueLabelWidth?: number;
 	negativeValueLabelWidth?: number;
+	forceNegativeValueLabelWidth?: boolean;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -64,6 +65,7 @@ export const SimpleBarChart: React.FC<{
 	labelWidth: labelWidthProp,
 	valueLabelWidth: valueLabelWidthProp,
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
+	forceNegativeValueLabelWidth = false,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -195,6 +197,7 @@ export const SimpleBarChart: React.FC<{
 		valueLabelWidth: valueLabelWidth || 0,
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
 		globalCustomDomain: domain, // TODO rename to domain
+		forceNegativeValueLabelWidth,
 	});
 
 	return (

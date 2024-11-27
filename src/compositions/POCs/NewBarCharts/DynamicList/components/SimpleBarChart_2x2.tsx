@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
+import {isNumber} from 'lodash';
 import {
 	getPerfectBaselineForHeight,
 	getPerfectHeightForBaseline,
@@ -12,6 +13,15 @@ import {
 } from '../../../../../acetti-layout/hooks/useMatrixLayout';
 import {TBarChartItem} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
+import {
+	DefaultValueLabelComponent,
+	MeasureValueLabels,
+} from '../packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
+import {
+	DefaultLabelComponent,
+	MeasureLabels,
+} from '../packages/BarChartAnimation/BarsTransition/LabelComponent';
+import {useElementDimensions} from '../../../03-Page/SimplePage/useElementDimensions';
 
 export const SimpleBarChart_2x2: React.FC<{
 	dataUpperLeft: TBarChartItem[];
@@ -30,6 +40,21 @@ export const SimpleBarChart_2x2: React.FC<{
 	dataLowerLeft,
 	dataLowerRight,
 }) => {
+	const LabelComponent = DefaultLabelComponent;
+	const ValueLabelComponent = DefaultValueLabelComponent;
+
+	// TODO
+	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
+	// useBarChartElementDimensions({baseline, theme})...
+	const {ref: labelsRef, dimensions: labelsDimensions} =
+		useElementDimensions(true);
+	const {ref: valueLabelsRef, dimensions: valueLabelsDimensions} =
+		useElementDimensions(true);
+	const {
+		ref: negativeValueLabelsRef,
+		dimensions: negativeValueLabelsDimensions,
+	} = useElementDimensions(true);
+
 	const commonMin = Math.min(
 		...[
 			...dataUpperLeft,
@@ -148,73 +173,173 @@ export const SimpleBarChart_2x2: React.FC<{
 		baselineLowerRight
 	);
 
+	const MeasureLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, label}: {label: string; id: string}) => {
+			return (
+				<LabelComponent
+					id={id}
+					label={label}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+				/>
+			);
+		},
+		[baseline, theme, LabelComponent]
+	);
+
+	// TODO get the corresponding component and it's parametrization from theme
+	const MeasureValueLabelComponent = useCallback(
+		// eslint-disable-next-line
+		({id, value}: {id: string; value: number}) => {
+			return (
+				<ValueLabelComponent
+					// id={id}
+					baseline={baseline}
+					theme={theme}
+					animateEnter={false}
+					animateExit={false}
+					value={value}
+				/>
+			);
+		},
+		[baseline, theme, ValueLabelComponent]
+	);
+
+	const labelWidthProp = undefined;
+	const valueLabelWidthProp = undefined;
+	const negativeValueLabelWidthProp = undefined;
+
+	const labelWidth = labelWidthProp || labelsDimensions?.width;
+	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
+	const negativeValueLabelWidth =
+		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
+
+	const allDataItems = [
+		...dataUpperLeft,
+		...dataUpperRight,
+		...dataLowerLeft,
+		...dataLowerRight,
+	];
+
 	return (
 		<>
-			<div style={{position: 'relative'}}>
-				{/* bar chart 1 */}
-				<HtmlArea
-					area={areaUpperLeft}
-					// fill="rgba(255,0,255,0.2)"
-				>
-					<SimpleBarChart
-						// showLayout
-						height={areaUpperLeft.height}
-						baseline={smallestCommonBaseline}
-						width={areaUpperLeft.width}
-						theme={theme}
-						dataItems={dataUpperLeft}
-						domain={commonDomain}
-					/>
-				</HtmlArea>
+			{/* measure labels */}
+			<MeasureLabels
+				key="labelMeasurement"
+				ref={labelsRef}
+				data={allDataItems}
+				theme={theme}
+				baseline={baseline}
+				Component={MeasureLabelComponent}
+			/>
 
-				{/* bar chart 2 */}
-				<HtmlArea
-					area={areaUpperRight}
-					// fill="rgba(255,0,255,0.2)"
-				>
-					<SimpleBarChart
-						// showLayout
-						height={areaUpperRight.height}
-						baseline={smallestCommonBaseline}
-						width={areaUpperRight.width}
-						theme={theme}
-						dataItems={dataUpperRight}
-						domain={commonDomain}
-					/>
-				</HtmlArea>
+			{/* measure positive value labels */}
+			<MeasureValueLabels
+				key="valueLabelMeasurement"
+				ref={valueLabelsRef}
+				data={allDataItems.filter((it) => it.value >= 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={MeasureValueLabelComponent}
+			/>
+			{/* measure negative value labels */}
+			<MeasureValueLabels
+				key="negativeValueLabelMeasurement"
+				ref={negativeValueLabelsRef}
+				data={allDataItems.filter((it) => it.value < 0)}
+				theme={theme}
+				baseline={baseline}
+				Component={MeasureValueLabelComponent}
+			/>
 
-				{/* bar chart 3 */}
-				<HtmlArea
-					area={areaLowerLeft}
-					// fill="rgba(255,0,255,0.2)"
-				>
-					<SimpleBarChart
-						// showLayout
-						height={areaLowerLeft.height}
-						baseline={smallestCommonBaseline}
-						width={areaLowerLeft.width}
-						theme={theme}
-						dataItems={dataLowerLeft}
-						domain={commonDomain}
-					/>
-				</HtmlArea>
+			{isNumber(labelWidth) &&
+			isNumber(valueLabelWidth) &&
+			isNumber(negativeValueLabelWidth) ? (
+				<div style={{position: 'relative'}}>
+					{/* bar chart 1 */}
+					<HtmlArea
+						area={areaUpperLeft}
+						// fill="rgba(255,0,255,0.2)"
+					>
+						<SimpleBarChart
+							forceNegativeValueLabelWidth
+							// showLayout
+							height={areaUpperLeft.height}
+							baseline={smallestCommonBaseline}
+							width={areaUpperLeft.width}
+							theme={theme}
+							dataItems={dataUpperLeft}
+							domain={commonDomain}
+							labelWidth={labelWidth}
+							valueLabelWidth={valueLabelWidth}
+							negativeValueLabelWidth={negativeValueLabelWidth}
+						/>
+					</HtmlArea>
 
-				{/* bar chart 4 */}
-				<HtmlArea
-					area={areaLowerRight}
-					// fill="rgba(255,0,255,0.2)"
-				>
-					<SimpleBarChart
-						// showLayout
-						height={areaLowerLeft.height}
-						baseline={smallestCommonBaseline}
-						width={areaLowerLeft.width}
-						theme={theme}
-						dataItems={dataLowerRight}
-						domain={commonDomain}
-					/>
-				</HtmlArea>
-			</div>
+					{/* bar chart 2 */}
+					<HtmlArea
+						area={areaUpperRight}
+						// fill="rgba(255,0,255,0.2)"
+					>
+						<SimpleBarChart
+							forceNegativeValueLabelWidth
+							// showLayout
+							height={areaUpperRight.height}
+							baseline={smallestCommonBaseline}
+							width={areaUpperRight.width}
+							theme={theme}
+							dataItems={dataUpperRight}
+							domain={commonDomain}
+							labelWidth={labelWidth}
+							valueLabelWidth={valueLabelWidth}
+							negativeValueLabelWidth={negativeValueLabelWidth}
+						/>
+					</HtmlArea>
+
+					{/* bar chart 3 */}
+					<HtmlArea
+						area={areaLowerLeft}
+						// fill="rgba(255,0,255,0.2)"
+					>
+						<SimpleBarChart
+							forceNegativeValueLabelWidth
+							// showLayout
+							height={areaLowerLeft.height}
+							baseline={smallestCommonBaseline}
+							width={areaLowerLeft.width}
+							theme={theme}
+							dataItems={dataLowerLeft}
+							domain={commonDomain}
+							labelWidth={labelWidth}
+							valueLabelWidth={valueLabelWidth}
+							negativeValueLabelWidth={negativeValueLabelWidth}
+						/>
+					</HtmlArea>
+
+					{/* bar chart 4 */}
+					<HtmlArea
+						area={areaLowerRight}
+						// fill="rgba(255,0,255,0.2)"
+					>
+						<SimpleBarChart
+							forceNegativeValueLabelWidth
+							// showLayout
+							height={areaLowerLeft.height}
+							baseline={smallestCommonBaseline}
+							width={areaLowerLeft.width}
+							theme={theme}
+							dataItems={dataLowerRight}
+							domain={commonDomain}
+							labelWidth={labelWidth}
+							valueLabelWidth={valueLabelWidth}
+							negativeValueLabelWidth={negativeValueLabelWidth}
+						/>
+					</HtmlArea>
+				</div>
+			) : null}
 		</>
 	);
 };

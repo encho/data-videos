@@ -67,6 +67,7 @@ export function useBarChartTransition({
 	labelWidth,
 	valueLabelWidth,
 	negativeValueLabelWidth,
+	forceNegativeValueLabelWidth = false,
 	globalCustomDomain,
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
@@ -74,6 +75,7 @@ export function useBarChartTransition({
 	labelWidth: number;
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
+	forceNegativeValueLabelWidth?: boolean;
 	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
 }): TBarChartTransitionContext {
 	//
@@ -92,17 +94,19 @@ export function useBarChartTransition({
 
 		// TODO will be specific to current "from" transition spec.
 		const itemHeightFrom = listTransitionContext.from.itemHeight;
-		const negativeValueLabelWidthFrom = hasNegativeValuesFrom
-			? negativeValueLabelWidth
-			: 0;
+		const negativeValueLabelWidthFrom =
+			hasNegativeValuesFrom || forceNegativeValueLabelWidth
+				? negativeValueLabelWidth
+				: 0;
 		const negativeValueLabelWidthPercentageFrom =
 			negativeValueLabelWidthFrom / negativeValueLabelWidth;
 
 		// TODO will be specific to current "to" transition spec.
 		const itemHeightTo = listTransitionContext.to.itemHeight;
-		const negativeValueLabelWidthTo = hasNegativeValuesTo
-			? negativeValueLabelWidth
-			: 0;
+		const negativeValueLabelWidthTo =
+			hasNegativeValuesTo || forceNegativeValueLabelWidth
+				? negativeValueLabelWidth
+				: 0;
 		const negativeValueLabelWidthPercentageTo =
 			negativeValueLabelWidthTo / negativeValueLabelWidth;
 
@@ -246,7 +250,8 @@ export function useBarChartTransition({
 			labelWidth,
 			valueLabelWidth,
 			negativeValueLabelWidth,
-			negativeValueLabelWidthPercentage: hasNegativeValuesTo ? 1 : 0,
+			negativeValueLabelWidthPercentage:
+				hasNegativeValuesTo || forceNegativeValueLabelWidth ? 1 : 0,
 		});
 
 		const xScaleTo = getXScale({
@@ -298,7 +303,8 @@ export function useBarChartTransition({
 		labelWidth,
 		valueLabelWidth,
 		negativeValueLabelWidth,
-		negativeValueLabelWidthPercentage: hasNegativeValuesFrom ? 1 : 0,
+		negativeValueLabelWidthPercentage:
+			hasNegativeValuesFrom || forceNegativeValueLabelWidth ? 1 : 0,
 	});
 
 	const xScaleFrom = getXScale({
