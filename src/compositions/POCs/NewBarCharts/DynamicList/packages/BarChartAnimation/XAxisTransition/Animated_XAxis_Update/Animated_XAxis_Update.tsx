@@ -67,19 +67,14 @@ export const Animated_XAxis_Update: React.FC<{
 
 	const styles = getStyles({theme, baseline});
 
-	const tickLabelStyle = theme.typography.textStyles.datavizTickLabel;
-
 	const FADE_IN_OUT_DURATION_IN_FRAMES = Math.min(
 		Math.floor(fps * 0.75),
 		durationInFrames
 	);
 
-	// const keyframes = getKeyframes({durationInFrames, fps, xAxisSpec});
-
 	const axisLine_x1 = 0;
 	const axisLine_x2 = area.width;
 	const axisLine_opacity = 1;
-	const axisLine_color = theme.xAxis.color;
 
 	const ticksEnterUpdateExits = getEnterUpdateExits(
 		xAxisSpecFrom.ticks.map((it) => it.id),

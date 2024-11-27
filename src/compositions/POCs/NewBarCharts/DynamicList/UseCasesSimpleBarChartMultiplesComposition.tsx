@@ -1,6 +1,6 @@
 import {z} from 'zod';
 import React from 'react';
-import {useVideoConfig} from 'remotion';
+import {useVideoConfig, Sequence} from 'remotion';
 
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -20,7 +20,10 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 	z.infer<typeof useCasesSimpleBarChartMultiplesCompositionSchema>
 > = ({themeEnum}) => {
 	const theme = useThemeFromEnum(themeEnum);
-	const {width, height} = useVideoConfig();
+	const {width, height, durationInFrames} = useVideoConfig();
+
+	const durationInFrames_1 = Math.floor(durationInFrames / 2);
+	const durationInFrames_2 = durationInFrames - durationInFrames_1;
 
 	const dataUpperLeft = fewItemsWithJustPositives;
 	const dataUpperRight = fewItemsWithJustNegatives;
@@ -40,26 +43,58 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 					{({baseline, contentWidth}) => {
 						return (
 							<>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.h1}
-									baseline={baseline}
-									marginBottom={7}
+								<Sequence durationInFrames={durationInFrames_1} layout="none">
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h1}
+										baseline={baseline}
+										marginBottom={7}
+									>
+										Simple Bar Chart Multiples (1)
+										{/* no x axis, no layout, all datasets same size and positive */}
+									</TypographyStyle>
+									<SimpleBarChart_2x2
+										// showLayout
+										hideAxis
+										dataUpperLeft={dataBerlin}
+										dataUpperRight={dataLondon}
+										dataLowerLeft={dataParis}
+										dataLowerRight={dataNewYork}
+										dataUpperLeftDelayInSeconds={0}
+										dataUpperRightDelayInSeconds={3}
+										dataLowerLeftDelayInSeconds={6}
+										dataLowerRightDelayInSeconds={9}
+										theme={theme}
+										width={contentWidth}
+										height={760}
+									/>
+								</Sequence>
+								<Sequence
+									from={durationInFrames_1}
+									durationInFrames={durationInFrames_2}
+									layout="none"
 								>
-									Simple Bar Chart Multiples
-								</TypographyStyle>
-								<SimpleBarChart_2x2
-									dataUpperLeft={dataUpperLeft}
-									dataUpperRight={dataUpperRight}
-									dataLowerLeft={dataLowerLeft}
-									dataLowerRight={dataLowerRight}
-									dataUpperLeftDelayInSeconds={0}
-									dataUpperRightDelayInSeconds={3}
-									dataLowerLeftDelayInSeconds={6}
-									dataLowerRightDelayInSeconds={9}
-									theme={theme}
-									width={contentWidth}
-									height={800}
-								/>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h1}
+										baseline={baseline}
+										marginBottom={7}
+									>
+										Simple Bar Chart Multiples
+									</TypographyStyle>
+									<SimpleBarChart_2x2
+										showLayout
+										dataUpperLeft={dataUpperLeft}
+										dataUpperRight={dataUpperRight}
+										dataLowerLeft={dataLowerLeft}
+										dataLowerRight={dataLowerRight}
+										dataUpperLeftDelayInSeconds={0}
+										dataUpperRightDelayInSeconds={3}
+										dataLowerLeftDelayInSeconds={6}
+										dataLowerRightDelayInSeconds={9}
+										theme={theme}
+										width={contentWidth}
+										height={760}
+									/>
+								</Sequence>
 							</>
 						);
 					}}
@@ -210,6 +245,150 @@ const veryFewItemsWithJustNegatives = [
 		id: 'Id-001',
 		label: 'Item 001',
 		value: -12,
+	},
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
+
+const dataBerlin = [
+	{
+		id: 'Id-001',
+		label: 'Sunny',
+		value: 30,
+	},
+	{
+		id: 'Id-002',
+		label: 'Mostly Sunny',
+		value: 20,
+	},
+	{
+		id: 'Id-003',
+		label: 'Cloudy',
+		value: 10,
+	},
+	{
+		id: 'Id-004',
+		label: 'Rainy',
+		value: 5,
+	},
+	{
+		id: 'Id-005',
+		label: 'Windy',
+		value: 20,
+	},
+	{
+		id: 'Id-006',
+		label: 'Thunder',
+		value: 15,
+	},
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
+
+const dataLondon = [
+	{
+		id: 'Id-001',
+		label: 'Sunny',
+		value: 10,
+	},
+	{
+		id: 'Id-002',
+		label: 'Mostly Sunny',
+		value: 10,
+	},
+	{
+		id: 'Id-003',
+		label: 'Cloudy',
+		value: 10,
+	},
+	{
+		id: 'Id-004',
+		label: 'Rainy',
+		value: 50,
+	},
+	{
+		id: 'Id-005',
+		label: 'Windy',
+		value: 10,
+	},
+	{
+		id: 'Id-006',
+		label: 'Thunder',
+		value: 10,
+	},
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
+
+const dataParis = [
+	{
+		id: 'Id-001',
+		label: 'Sunny',
+		value: 20,
+	},
+	{
+		id: 'Id-002',
+		label: 'Mostly Sunny',
+		value: 20,
+	},
+	{
+		id: 'Id-003',
+		label: 'Cloudy',
+		value: 20,
+	},
+	{
+		id: 'Id-004',
+		label: 'Rainy',
+		value: 20,
+	},
+	{
+		id: 'Id-005',
+		label: 'Windy',
+		value: 10,
+	},
+	{
+		id: 'Id-006',
+		label: 'Thunder',
+		value: 10,
+	},
+].map((it) => ({
+	...it,
+	color: it.value >= 0 ? positiveColor : negativeColor,
+}));
+
+const dataNewYork = [
+	{
+		id: 'Id-001',
+		label: 'Sunny',
+		value: 30,
+	},
+	{
+		id: 'Id-002',
+		label: 'Mostly Sunny',
+		value: 10,
+	},
+	{
+		id: 'Id-003',
+		label: 'Cloudy',
+		value: 10,
+	},
+	{
+		id: 'Id-004',
+		label: 'Rainy',
+		value: 20,
+	},
+	{
+		id: 'Id-005',
+		label: 'Windy',
+		value: 10,
+	},
+	{
+		id: 'Id-006',
+		label: 'Thunder',
+		value: 20,
 	},
 ].map((it) => ({
 	...it,

@@ -76,8 +76,6 @@ export const Animated_XAxis_Exit: React.FC<{
 		[Easing.ease]
 	)(frame);
 
-	const axisLine_color = theme.xAxis.color;
-
 	return (
 		<Sequence from={startFrame} durationInFrames={durationInFrames}>
 			<HtmlArea area={area}>

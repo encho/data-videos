@@ -53,6 +53,7 @@ export const SimpleBarChart: React.FC<{
 	negativeValueLabelWidth?: number;
 	forceNegativeValueLabelWidth?: boolean;
 	nrTicks?: number;
+	hideAxis?: boolean;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -68,6 +69,7 @@ export const SimpleBarChart: React.FC<{
 	negativeValueLabelWidth: negativeValueLabelWidthProp,
 	forceNegativeValueLabelWidth = false,
 	nrTicks,
+	hideAxis = false,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -78,10 +80,15 @@ export const SimpleBarChart: React.FC<{
 
 	const baseline = baselineProp
 		? baselineProp
-		: getPerfectBaselineForHeight({theme, nrItems: MOST_ITEMS_AT_ONCE, height});
+		: getPerfectBaselineForHeight({
+				theme,
+				nrItems: MOST_ITEMS_AT_ONCE,
+				height,
+				hideAxis,
+		  });
 
-	const xAxisHeight = getXAxisHeight({theme, baseline});
-	const xAxisMarginTop = getXAxisMarginTop({baseline});
+	const xAxisHeight = hideAxis ? 0 : getXAxisHeight({theme, baseline});
+	const xAxisMarginTop = hideAxis ? 0 : getXAxisMarginTop({baseline});
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -251,29 +258,32 @@ export const SimpleBarChart: React.FC<{
 						/>
 					</HtmlArea>
 
-					{(() => {
-						const realXAxisArea = {
-							y1: 0,
-							y2: xAxisArea.height,
-							x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
-							x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
-							height: xAxisArea.height,
-							width: barChartTransitionContext.barChartItemLayout.barArea.width,
-						};
+					{hideAxis
+						? null
+						: (() => {
+								const realXAxisArea = {
+									y1: 0,
+									y2: xAxisArea.height,
+									x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
+									x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
+									height: xAxisArea.height,
+									width:
+										barChartTransitionContext.barChartItemLayout.barArea.width,
+								};
 
-						return (
-							<HtmlArea area={xAxisArea}>
-								<XAxisTransition
-									listTransitionContext={listTransitionContext}
-									barChartTransitionContext={barChartTransitionContext}
-									theme={theme}
-									baseline={baseline}
-									area={realXAxisArea}
-									nrTicks={nrTicks}
-								/>
-							</HtmlArea>
-						);
-					})()}
+								return (
+									<HtmlArea area={xAxisArea}>
+										<XAxisTransition
+											listTransitionContext={listTransitionContext}
+											barChartTransitionContext={barChartTransitionContext}
+											theme={theme}
+											baseline={baseline}
+											area={realXAxisArea}
+											nrTicks={nrTicks}
+										/>
+									</HtmlArea>
+								);
+						  })()}
 				</div>
 			) : null}
 		</>

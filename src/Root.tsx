@@ -266,11 +266,6 @@ import {
 } from './compositions/POCs/NewBarCharts/DynamicList/BarChartEnterExitDevComposition';
 
 import {
-	BarChartXAxisDevComposition,
-	barChartXAxisDevCompositionSchema,
-} from './compositions/POCs/NewBarCharts/DynamicList/BarChartXAxisDevComposition';
-
-import {
 	UseCasesSimpleBarChartComposition,
 	useCasesSimpleBarChartCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/UseCasesSimpleBarChartComposition';
@@ -1353,17 +1348,6 @@ export const RemotionRoot: React.FC = () => {
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
-						id="BarChartXAxisDev"
-						component={BarChartXAxisDevComposition}
-						durationInFrames={30 * 12}
-						fps={30}
-						{...videoSizes.square}
-						schema={barChartXAxisDevCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
 						id="UseCases-SimpleBarChart"
 						component={UseCasesSimpleBarChartComposition}
 						durationInFrames={30 * 15}
@@ -1377,7 +1361,7 @@ export const RemotionRoot: React.FC = () => {
 						// npx remotion render src/index.ts <id> out/video.mp4
 						id="UseCases-SimpleBarChart-Multiples"
 						component={UseCasesSimpleBarChartMultiplesComposition}
-						durationInFrames={30 * 15}
+						durationInFrames={30 * 30}
 						fps={30}
 						{...videoSizes.square}
 						schema={useCasesSimpleBarChartMultiplesCompositionSchema}

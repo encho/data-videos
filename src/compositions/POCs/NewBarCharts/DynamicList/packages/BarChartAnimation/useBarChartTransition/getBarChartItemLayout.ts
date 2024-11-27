@@ -1,5 +1,3 @@
-import {ScaleLinear} from 'd3-scale';
-
 import {
 	createGridLayout,
 	TGridRailSpec,

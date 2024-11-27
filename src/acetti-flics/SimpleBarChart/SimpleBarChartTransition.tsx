@@ -105,6 +105,7 @@ export const SimpleBarChartTransition: React.FC<
 		({id, children}: {children: string; id: string}) => {
 			return (
 				<ValueLabelComponent
+					value={99} // TODO deprecate the whole component anyway
 					id={id}
 					baseline={baseline}
 					theme={theme}
@@ -339,6 +340,7 @@ export const SimpleBarChartTransitionWithMeasurements: React.FC<{
 									animateExit={false}
 									baseline={baseline}
 									theme={theme}
+									value={99} // TODO we'll deprecate the whole component anyway
 								>
 									{dataTo[i].valueLabel}
 								</ValueLabelComponent>

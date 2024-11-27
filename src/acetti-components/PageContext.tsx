@@ -28,7 +28,14 @@ export const pageContext = createContext<TPageContext>({
 	contentHeight: 0,
 	baseline: 0,
 	theme: lorenzobertolinibright(),
-	sizes: {lineWidths: {small: 0, medium: 0, large: 0}},
+	sizes: {
+		lineWidths: {small: 0, medium: 0, large: 0},
+		axisTicks: {
+			small: 0,
+			medium: 0,
+			large: 0,
+		},
+	},
 });
 
 export const PageContext: React.FC<{
@@ -53,6 +60,11 @@ export const PageContext: React.FC<{
 				small: theme.sizes.lineWidths.small * baseline,
 				medium: theme.sizes.lineWidths.medium * baseline,
 				large: theme.sizes.lineWidths.large * baseline,
+			},
+			axisTicks: {
+				small: theme.sizes.axisTicks.small * baseline,
+				medium: theme.sizes.axisTicks.medium * baseline,
+				large: theme.sizes.axisTicks.large * baseline,
 			},
 		}),
 		[theme, baseline]

@@ -41,6 +41,8 @@ export const SimpleBarChart_2x2: React.FC<{
 	height: number;
 	fitItemsHeight?: boolean;
 	areRowsEqualHeight?: boolean;
+	hideAxis?: boolean;
+	showLayout?: boolean;
 }> = ({
 	theme,
 	width,
@@ -55,6 +57,8 @@ export const SimpleBarChart_2x2: React.FC<{
 	dataLowerRightDelayInSeconds = 0,
 	fitItemsHeight = true,
 	areRowsEqualHeight = true,
+	hideAxis = false,
+	showLayout = false,
 }) => {
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = DefaultValueLabelComponent;
@@ -112,21 +116,25 @@ export const SimpleBarChart_2x2: React.FC<{
 		theme,
 		baseline,
 		nrItems: dataUpperLeft.length,
+		hideAxis,
 	});
 	const heightUpperRight = getPerfectHeightForBaseline({
 		theme,
 		baseline,
 		nrItems: dataUpperRight.length,
+		hideAxis,
 	});
 	const heightLowerLeft = getPerfectHeightForBaseline({
 		theme,
 		baseline,
 		nrItems: dataLowerLeft.length,
+		hideAxis,
 	});
 	const heightLowerRight = getPerfectHeightForBaseline({
 		theme,
 		baseline,
 		nrItems: dataLowerRight.length,
+		hideAxis,
 	});
 
 	const row_1_height = Math.max(heightUpperLeft, heightUpperRight);
@@ -136,9 +144,7 @@ export const SimpleBarChart_2x2: React.FC<{
 		? 1
 		: row_2_height / row_1_height;
 
-	const rowSpacePixels = 60;
-	// const titleHeightPixels = 50; // TODO determine according to used typographystyle
-	// const freeHeight = height - rowSpacePixels;
+	const rowSpacePixels = 60; // TODO from theme
 
 	const matrixLayout = useMatrixLayout({
 		width,
@@ -204,24 +210,28 @@ export const SimpleBarChart_2x2: React.FC<{
 		height: areaUpperLeft.height,
 		theme,
 		nrItems: dataUpperLeft.length,
+		hideAxis,
 	});
 
 	const baselineUpperRight = getPerfectBaselineForHeight({
 		height: areaUpperRight.height,
 		theme,
 		nrItems: dataUpperRight.length,
+		hideAxis,
 	});
 
 	const baselineLowerLeft = getPerfectBaselineForHeight({
 		height: areaLowerLeft.height,
 		theme,
 		nrItems: dataLowerLeft.length,
+		hideAxis,
 	});
 
 	const baselineLowerRight = getPerfectBaselineForHeight({
 		height: areaLowerRight.height,
 		theme,
 		nrItems: dataLowerRight.length,
+		hideAxis,
 	});
 
 	const smallestCommonBaseline = Math.min(
@@ -282,6 +292,8 @@ export const SimpleBarChart_2x2: React.FC<{
 		...dataLowerRight,
 	];
 
+	const isThereAnyNegativeData = allDataItems.some((it) => it.value < 0);
+
 	// TODO f(plotAreaWidth, baseline)
 	const nrTicks = 4;
 
@@ -320,7 +332,7 @@ export const SimpleBarChart_2x2: React.FC<{
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
 				<div style={{position: 'relative'}}>
-					{/* <DisplayGridRails {...matrixLayout} /> */}
+					{showLayout ? <DisplayGridRails {...matrixLayout} /> : null}
 
 					{/* bar chart 1 */}
 					<Sequence
@@ -340,8 +352,9 @@ export const SimpleBarChart_2x2: React.FC<{
 						<Sequence from={Math.floor(fps * 0.5)} layout="none">
 							<HtmlArea area={areaUpperLeft}>
 								<SimpleBarChart
-									forceNegativeValueLabelWidth
-									// showLayout
+									forceNegativeValueLabelWidth={isThereAnyNegativeData}
+									showLayout={showLayout}
+									hideAxis={hideAxis}
 									fitItemsHeight={fitItemsHeight}
 									height={areaUpperLeft.height}
 									baseline={smallestCommonBaseline}
@@ -376,8 +389,9 @@ export const SimpleBarChart_2x2: React.FC<{
 						<Sequence from={Math.floor(fps * 0.5)} layout="none">
 							<HtmlArea area={areaUpperRight}>
 								<SimpleBarChart
-									forceNegativeValueLabelWidth
-									// showLayout
+									forceNegativeValueLabelWidth={isThereAnyNegativeData}
+									showLayout={showLayout}
+									hideAxis={hideAxis}
 									fitItemsHeight={fitItemsHeight}
 									height={areaUpperRight.height}
 									baseline={smallestCommonBaseline}
@@ -415,8 +429,9 @@ export const SimpleBarChart_2x2: React.FC<{
 								// fill="rgba(255,0,255,0.2)"
 							>
 								<SimpleBarChart
-									forceNegativeValueLabelWidth
-									// showLayout
+									forceNegativeValueLabelWidth={isThereAnyNegativeData}
+									showLayout={showLayout}
+									hideAxis={hideAxis}
 									fitItemsHeight={fitItemsHeight}
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
@@ -451,9 +466,10 @@ export const SimpleBarChart_2x2: React.FC<{
 						<Sequence from={Math.floor(fps * 0.5)} layout="none">
 							<HtmlArea area={areaLowerRight}>
 								<SimpleBarChart
-									forceNegativeValueLabelWidth
+									forceNegativeValueLabelWidth={isThereAnyNegativeData}
 									fitItemsHeight={fitItemsHeight}
-									// showLayout
+									showLayout={showLayout}
+									hideAxis={hideAxis}
 									height={areaLowerLeft.height}
 									baseline={smallestCommonBaseline}
 									width={areaLowerLeft.width}

@@ -56,6 +56,7 @@ export const UseCasesSimpleBarChartComposition: React.FC<
 								>
 									<SimpleBarChart
 										showLayout
+										hideAxis
 										height={700}
 										// baseline={20}
 										width={contentWidth}

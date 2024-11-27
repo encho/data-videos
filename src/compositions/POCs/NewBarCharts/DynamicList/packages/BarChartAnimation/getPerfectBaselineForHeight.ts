@@ -9,15 +9,23 @@ export function getPerfectBaselineForHeight({
 	height,
 	nrItems,
 	theme,
+	hideAxis,
 }: {
 	height: number;
 	nrItems: number;
 	theme: ThemeType;
+	hideAxis: boolean;
 }) {
 	const referenceBaseline = 10;
 
-	const xAxisHeight = getXAxisHeight({theme, baseline: referenceBaseline});
-	const xAxisMarginTop = getXAxisMarginTop({baseline: referenceBaseline});
+	const xAxisHeight = hideAxis
+		? 0
+		: getXAxisHeight({theme, baseline: referenceBaseline});
+
+	const xAxisMarginTop = hideAxis
+		? 0
+		: getXAxisMarginTop({baseline: referenceBaseline});
+
 	const ibcsBarsHeight = getAllBarChartItemsHeight({
 		baseline: referenceBaseline,
 		nrItems,
@@ -33,17 +41,20 @@ export function getPerfectHeightForBaseline({
 	baseline,
 	nrItems,
 	theme,
+	hideAxis,
 }: {
 	baseline: number;
 	nrItems: number;
 	theme: ThemeType;
+	hideAxis: boolean;
 }) {
 	const ibcsBarsHeight = getAllBarChartItemsHeight({
 		baseline,
 		nrItems,
 	});
-	const xAxisHeight = getXAxisHeight({theme, baseline});
-	const xAxisMarginTop = getXAxisMarginTop({baseline});
+
+	const xAxisHeight = hideAxis ? 0 : getXAxisHeight({theme, baseline});
+	const xAxisMarginTop = hideAxis ? 0 : getXAxisMarginTop({baseline});
 
 	return ibcsBarsHeight + xAxisHeight + xAxisMarginTop;
 }
