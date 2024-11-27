@@ -2,7 +2,7 @@ import {z} from 'zod';
 import React from 'react';
 import {useVideoConfig, Sequence} from 'remotion';
 
-import {SimpleBarChart} from './SimpleBarChart';
+import {SimpleBarChart} from './components/SimpleBarChart';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';

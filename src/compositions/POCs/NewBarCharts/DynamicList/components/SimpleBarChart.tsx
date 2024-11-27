@@ -3,36 +3,36 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
-import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {getPerfectBaselineForHeight} from './packages/BarChartAnimation/getPerfectBaselineForHeight';
-import {XAxisTransition} from './packages/BarChartAnimation/XAxisTransition/XAxisTransition';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {HtmlArea, DisplayGridRails} from '../../../../acetti-layout';
+import {TBarChartItem} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {getPerfectBaselineForHeight} from '../packages/BarChartAnimation/getPerfectBaselineForHeight';
+import {XAxisTransition} from '../packages/BarChartAnimation/XAxisTransition/XAxisTransition';
+import {useElementDimensions} from '../../../03-Page/SimplePage/useElementDimensions';
+import {zThemeEnum} from '../../../../../acetti-themes/getThemeFromEnum';
+import {HtmlArea, DisplayGridRails} from '../../../../../acetti-layout';
 import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
-} from '../../../../acetti-layout/hooks/useMatrixLayout';
+} from '../../../../../acetti-layout/hooks/useMatrixLayout';
 import {
 	useListAnimation,
 	ListAnimationTransition,
-} from './packages/ListAnimation/useListAnimation';
-import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
-import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
+} from '../packages/ListAnimation/useListAnimation';
+import {BarsTransition} from '../packages/BarChartAnimation/BarsTransition/BarsTransition';
+import {useBarChartTransition} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {getBarChartItemHeight} from '../packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
 	DefaultValueLabelComponent,
 	MeasureValueLabels,
-} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
+} from '../packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
-} from './packages/BarChartAnimation/BarsTransition/LabelComponent';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
+} from '../packages/BarChartAnimation/BarsTransition/LabelComponent';
+import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {
 	getXAxisHeight,
 	getXAxisMarginTop,
-} from './packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
+} from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
 export const useCasesSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
