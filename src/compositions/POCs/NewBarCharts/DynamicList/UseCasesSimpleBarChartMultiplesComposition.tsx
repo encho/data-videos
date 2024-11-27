@@ -38,25 +38,6 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 	const dataLowerLeft = manyItemsWithNegatives;
 	const dataLowerRight = veryFewItemsWithJustNegatives;
 
-	const commonMin = Math.min(
-		...[
-			...dataUpperLeft,
-			...dataUpperRight,
-			...dataLowerLeft,
-			...dataLowerRight,
-		].map((it) => it.value)
-	);
-	const commonMax = Math.max(
-		...[
-			...dataUpperLeft,
-			...dataUpperRight,
-			...dataLowerLeft,
-			...dataLowerRight,
-		].map((it) => it.value)
-	);
-
-	const commonDomain = [commonMin, commonMax] as [number, number];
-
 	return (
 		<div style={{position: 'relative'}}>
 			<PageContext
@@ -78,10 +59,10 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 									Simple Bar Chart Multiples
 								</TypographyStyle>
 								<SimpleBarChart_2x2
-									dataUpperLeft={dataUpperRight}
+									dataUpperLeft={dataUpperLeft}
 									dataUpperRight={dataUpperRight}
-									dataLowerLeft={dataUpperRight}
-									dataLowerRight={dataUpperRight}
+									dataLowerLeft={dataLowerLeft}
+									dataLowerRight={dataLowerRight}
 									theme={theme}
 									width={contentWidth}
 									height={800}
