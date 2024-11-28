@@ -138,15 +138,16 @@ export const SimpleBarChart: React.FC<{
 	// TODO get the corresponding component and it's parametrization from theme
 	const MeasureValueLabelComponent = useCallback(
 		// eslint-disable-next-line
-		({id, value}: {id: string; value: number}) => {
+		({id, value, label}: {id: string; value: number; label: string}) => {
 			return (
 				<ValueLabelComponent
 					id={id}
+					value={value}
+					label={label}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}
 					animateExit={false}
-					value={value}
 				/>
 			);
 		},

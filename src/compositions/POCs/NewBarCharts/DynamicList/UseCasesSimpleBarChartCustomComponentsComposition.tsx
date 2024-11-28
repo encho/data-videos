@@ -124,6 +124,7 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
 									<SimpleBarChart
+										showLayout
 										hideLabel
 										ValueLabelComponent={ImageValueLabelComponent}
 										height={700}
