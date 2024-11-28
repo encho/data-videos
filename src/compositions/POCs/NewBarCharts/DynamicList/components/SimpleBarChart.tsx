@@ -24,6 +24,7 @@ import {
 	// DefaultValueLabelComponent,
 	getDefaultValueLabelComponent,
 	MeasureValueLabels,
+	TBarChartValueLabelComponent,
 } from '../packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
@@ -60,6 +61,7 @@ export const SimpleBarChart: React.FC<{
 	valueLabelFormatter?: (value: number) => string;
 	tickLabelFormatter?: (value: number) => string;
 	LabelComponent?: TBarChartLabelComponent;
+	ValueLabelComponent?: TBarChartValueLabelComponent;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -80,12 +82,15 @@ export const SimpleBarChart: React.FC<{
 	valueLabelFormatter,
 	tickLabelFormatter,
 	LabelComponent = DefaultLabelComponent,
+	ValueLabelComponent: ValueLabelComponentProp,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const ValueLabelComponent = getDefaultValueLabelComponent({
-		numberFormatter: valueLabelFormatter,
-	});
+	const ValueLabelComponent =
+		ValueLabelComponentProp ||
+		getDefaultValueLabelComponent({
+			numberFormatter: valueLabelFormatter,
+		});
 
 	const MOST_ITEMS_AT_ONCE = dataItems.length;
 
@@ -136,7 +141,7 @@ export const SimpleBarChart: React.FC<{
 		({id, value}: {id: string; value: number}) => {
 			return (
 				<ValueLabelComponent
-					// id={id}
+					id={id}
 					baseline={baseline}
 					theme={theme}
 					animateEnter={false}

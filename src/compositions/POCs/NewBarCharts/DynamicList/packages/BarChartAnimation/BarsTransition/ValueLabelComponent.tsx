@@ -1,4 +1,6 @@
 import {memo, forwardRef} from 'react';
+import invariant from 'tiny-invariant';
+import {Img} from 'remotion';
 
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
@@ -157,3 +159,79 @@ export const MeasureValueLabels = forwardRef<
 });
 
 MeasureValueLabels.displayName = 'MeasureValueLabels';
+
+// TODO factor out
+export const getImageValueLabelComponent = ({
+	numberFormatter = defaultNumberFormatter,
+	imageMappings,
+}: {
+	imageMappings: {[id: string]: string};
+	numberFormatter?: (value: number) => string;
+}) =>
+	memo(
+		({
+			animateExit,
+			animateEnter,
+			baseline,
+			theme,
+			value,
+			id,
+		}: {
+			id: string;
+			value: number;
+			// eslint-disable-next-line
+			animateEnter?: boolean;
+			// eslint-disable-next-line
+			animateExit?: boolean;
+			baseline: number;
+			theme: ThemeType;
+		}) => {
+			const imageSrc = imageMappings[id];
+			invariant(imageSrc);
+
+			return (
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: value >= 0 ? 'flex-start' : 'flex-end',
+						flexDirection: value >= 0 ? 'row' : 'row-reverse',
+						alignItems: 'center',
+						height: '100%',
+						// QUICK-FIX: for safety, as we are not measuring all interpolated values, just the from -and to values
+						textWrap: 'nowrap',
+						gap: baseline * 0.5,
+					}}
+				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateEnter}
+					>
+						<Img
+							style={{
+								borderRadius: '50%',
+								width: baseline * 2,
+								height: baseline * 2,
+							}}
+							src={imageSrc}
+						/>
+					</TextAnimationSubtle>
+
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.datavizValueLabel}
+						baseline={baseline}
+					>
+						<TextAnimationSubtle
+							innerDelayInSeconds={0}
+							translateY={baseline * 1.15}
+							animateExit={animateExit}
+							animateEnter={animateEnter}
+						>
+							{numberFormatter(value)}
+						</TextAnimationSubtle>
+					</TypographyStyle>
+				</div>
+			);
+		}
+	);

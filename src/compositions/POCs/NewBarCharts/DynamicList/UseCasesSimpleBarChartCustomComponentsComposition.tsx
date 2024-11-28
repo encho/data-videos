@@ -8,17 +8,17 @@ import {Page} from '../../../../acetti-components/Page';
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {SimpleBarChart} from './components/SimpleBarChart';
 import {getImageLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
+import {getImageValueLabelComponent} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {SimpleBarChart_Composed} from './components/SimpleBarChart_Composed';
 
 const imageMappings: {[id: string]: string} = {
 	'Id-001':
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
 	'Id-002':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/uk-flag-circular-1024.png',
 	'Id-003':
 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
 	'Id-004':
@@ -31,6 +31,12 @@ const imageMappings: {[id: string]: string} = {
 
 const ImageLabelComponent = getImageLabelComponent({
 	imageMappings,
+});
+
+const ImageValueLabelComponent = getImageValueLabelComponent({
+	imageMappings,
+	// numberFormatter: (x: number) => `${x}--->`,
+	numberFormatter: formatPercentage,
 });
 
 // TODO pass in from outside
@@ -93,15 +99,12 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										marginBottom={7}
 									>
 										Bar Chart with Custom Label
-										{/* Simple Bar Chart Custom Components */}
-										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
 									<SimpleBarChart
 										showLayout
 										hideAxis
 										LabelComponent={ImageLabelComponent}
 										height={700}
-										// baseline={20}
 										width={contentWidth}
 										theme={theme}
 										dataItems={dataBerlin}
@@ -117,24 +120,17 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										baseline={baseline}
 										marginBottom={7}
 									>
-										Simple Bar Chart Composed (1)
+										Bar Chart with Custom Value Label
 										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
-									<SimpleBarChart_Composed
-										// showLayout
-										// hideAxis
-										dataLeft={dataBerlin}
-										dataRight={dataChange}
-										titleLeft="Performance 2024"
-										titleRight="vs. Previous Year"
-										dataUpperLeftDelayInSeconds={0}
-										dataUpperRightDelayInSeconds={3}
-										theme={theme}
+									<SimpleBarChart
+										hideLabel
+										ValueLabelComponent={ImageValueLabelComponent}
+										height={700}
 										width={contentWidth}
-										height={680}
-										valueLabelFormatterRight={formatPercentage}
-										tickLabelFormatterRight={formatPercentage_0}
-										nrTicksRight={2}
+										theme={theme}
+										dataItems={dataChange}
+										tickLabelFormatter={formatPercentage_0}
 									/>
 								</Sequence>
 							</>
