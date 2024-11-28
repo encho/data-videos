@@ -27,8 +27,12 @@ export const SimpleBarChart_Composed: React.FC<{
 	showLayout?: boolean;
 	titleLeft: string;
 	titleRight: string;
+	nrTicksRight?: number;
+	nrTicksLeft?: number;
 	valueLabelFormatterLeft?: (value: number) => string; // either this OR pass ValueLabelComponent
 	valueLabelFormatterRight?: (value: number) => string; // either this OR pass ValueLabelComponent
+	tickLabelFormatterLeft?: (value: number) => string; // either this OR pass ValueLabelComponent
+	tickLabelFormatterRight?: (value: number) => string; // either this OR pass ValueLabelComponent
 }> = ({
 	theme,
 	width,
@@ -37,6 +41,8 @@ export const SimpleBarChart_Composed: React.FC<{
 	dataRight,
 	titleLeft,
 	titleRight,
+	nrTicksRight,
+	nrTicksLeft,
 	dataUpperLeftDelayInSeconds = 0,
 	dataUpperRightDelayInSeconds = 0,
 	fitItemsHeight = true,
@@ -44,6 +50,8 @@ export const SimpleBarChart_Composed: React.FC<{
 	showLayout = false,
 	valueLabelFormatterLeft,
 	valueLabelFormatterRight,
+	tickLabelFormatterLeft,
+	tickLabelFormatterRight,
 }) => {
 	// const LabelComponent = DefaultLabelComponent;
 	// const ValueLabelComponent = DefaultValueLabelComponent;
@@ -120,9 +128,6 @@ export const SimpleBarChart_Composed: React.FC<{
 		baselineUpperRight
 	);
 
-	// TODO f(plotAreaWidth, baseline)
-	const nrTicks = 4;
-
 	return (
 		<>
 			<div style={{position: 'relative'}}>
@@ -154,8 +159,9 @@ export const SimpleBarChart_Composed: React.FC<{
 								width={areaUpperLeft.width}
 								theme={theme}
 								dataItems={dataLeft}
-								nrTicks={nrTicks}
+								nrTicks={nrTicksLeft}
 								valueLabelFormatter={valueLabelFormatterLeft}
+								tickLabelFormatter={tickLabelFormatterLeft}
 							/>
 						</HtmlArea>
 					</Sequence>
@@ -188,8 +194,9 @@ export const SimpleBarChart_Composed: React.FC<{
 								width={areaUpperRight.width}
 								theme={theme}
 								dataItems={dataRight}
-								nrTicks={nrTicks}
+								nrTicks={nrTicksRight}
 								valueLabelFormatter={valueLabelFormatterRight}
+								tickLabelFormatter={tickLabelFormatterRight}
 							/>
 						</HtmlArea>
 					</Sequence>

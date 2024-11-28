@@ -56,7 +56,8 @@ export const SimpleBarChart: React.FC<{
 	nrTicks?: number;
 	hideAxis?: boolean;
 	hideLabel?: boolean;
-	valueLabelFormatter?: (value: number) => string; // TODO either this OR pass in custom ValueLabelComponent
+	valueLabelFormatter?: (value: number) => string;
+	tickLabelFormatter?: (value: number) => string;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -75,6 +76,7 @@ export const SimpleBarChart: React.FC<{
 	hideAxis = false,
 	hideLabel = false,
 	valueLabelFormatter,
+	tickLabelFormatter,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -289,6 +291,7 @@ export const SimpleBarChart: React.FC<{
 											baseline={baseline}
 											area={realXAxisArea}
 											nrTicks={nrTicks}
+											tickLabelFormatter={tickLabelFormatter}
 										/>
 									</HtmlArea>
 								);

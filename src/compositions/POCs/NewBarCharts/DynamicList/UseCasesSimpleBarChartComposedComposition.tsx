@@ -25,6 +25,18 @@ function formatPercentage(value: number): string {
 // console.log(formatPercentage(-15.678)); // Output: "-15.68%"
 // console.log(formatPercentage(0)); // Output: "0.00%"
 
+function formatPercentage_0(value: number): string {
+	// Add a + sign for positive values, keep the sign for negative values
+	const sign = value > 0 ? '+' : '';
+	// Format the number with two decimal places and append %
+	// return `${sign}${(value * 100).toFixed(2)}%`;
+	return `${sign}${(value * 100).toFixed(0)}%`;
+}
+// // Example usage
+// console.log(formatPercentage(40.4)); // Output: "+40.40%"
+// console.log(formatPercentage(-15.678)); // Output: "-15.68%"
+// console.log(formatPercentage(0)); // Output: "0.00%"
+
 export const useCasesSimpleBarChartComposedCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -101,6 +113,8 @@ export const UseCasesSimpleBarChartComposedComposition: React.FC<
 										width={contentWidth}
 										height={680}
 										valueLabelFormatterRight={formatPercentage}
+										tickLabelFormatterRight={formatPercentage_0}
+										nrTicksRight={2}
 									/>
 								</Sequence>
 							</>

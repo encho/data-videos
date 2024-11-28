@@ -21,11 +21,25 @@ import {TBarChartItem} from '../useBarChartTransition/useBarChartTransition';
 import {TKeyFramesGroup} from '../../../../../Keyframes/Keyframes/keyframes';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
+// TODO such a function should actually preferably be passed in instead of the nrTicks...
+const getNrTicks = ({
+	areaWidth,
+	baseline,
+}: {
+	areaWidth: number;
+	baseline: number;
+	// theme: ThemeType; // TODO to measure the widths actually!
+}) => {
+	const nrTicks = areaWidth / (7 * baseline);
+	return nrTicks;
+};
+
 type TXAxisTransitionCommonProps = {
 	theme: ThemeType;
 	baseline: number;
 	area: TGridLayoutArea;
 	nrTicks?: number;
+	tickLabelFormatter: (tickValue: number) => string;
 };
 
 type TXAxisTransitionUpdateProps = TXAxisTransitionCommonProps & {
@@ -55,6 +69,7 @@ type TXAxisTransitionProps = {
 	baseline: number;
 	area: TGridLayoutArea;
 	nrTicks?: number;
+	tickLabelFormatter?: (tickValue: number) => string;
 };
 
 export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
@@ -64,6 +79,7 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 	baseline,
 	area,
 	nrTicks,
+	tickLabelFormatter = (value: number) => `${value}`,
 }) => {
 	if (
 		listTransitionContext.transitionType === 'enter' &&
@@ -77,6 +93,7 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 				baseline={baseline}
 				area={area}
 				nrTicks={nrTicks}
+				tickLabelFormatter={tickLabelFormatter}
 			/>
 		);
 	}
@@ -93,6 +110,7 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 				baseline={baseline}
 				area={area}
 				nrTicks={nrTicks}
+				tickLabelFormatter={tickLabelFormatter}
 			/>
 		);
 	}
@@ -108,6 +126,7 @@ export const XAxisTransition: React.FC<TXAxisTransitionProps> = ({
 			baseline={baseline}
 			area={area}
 			nrTicks={nrTicks}
+			tickLabelFormatter={tickLabelFormatter}
 		/>
 	);
 };
@@ -186,15 +205,16 @@ const XAxisTransitionEnter: React.FC<TXAxisTransitionEnterProps> = ({
 	theme,
 	baseline,
 	area,
-	nrTicks = 5,
+	nrTicks: nrTicksProp,
+	tickLabelFormatter,
 }) => {
 	const {
-		// xScale,
 		to: {xScale: xScaleTo},
 	} = barChartTransitionContext;
 
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
+	const nrTicks = nrTicksProp || getNrTicks({areaWidth: area.width, baseline});
+
+	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickLabelFormatter);
 
 	return (
 		<Animated_XAxis_Enter
@@ -216,15 +236,16 @@ const XAxisTransitionExit: React.FC<TXAxisTransitionExitProps> = ({
 	theme,
 	baseline,
 	area,
-	nrTicks = 5,
+	nrTicks: nrTicksProp,
+	tickLabelFormatter,
 }) => {
 	const {
-		// xScale,
 		from: {xScale: xScaleFrom},
 	} = barChartTransitionContext;
 
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
+	const nrTicks = nrTicksProp || getNrTicks({areaWidth: area.width, baseline});
+
+	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickLabelFormatter);
 
 	return (
 		<Animated_XAxis_Exit
@@ -246,7 +267,8 @@ const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
 	theme,
 	baseline,
 	area,
-	nrTicks = 5,
+	nrTicks: nrTicksProp,
+	tickLabelFormatter,
 }) => {
 	const {
 		xScale,
@@ -254,9 +276,10 @@ const XAxisTransitionUpdate: React.FC<TXAxisTransitionUpdateProps> = ({
 		from: {xScale: xScaleFrom},
 	} = barChartTransitionContext;
 
-	const tickFormatter = (x: number) => `${x}`;
-	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickFormatter);
-	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickFormatter);
+	const nrTicks = nrTicksProp || getNrTicks({areaWidth: area.width, baseline});
+
+	const xAxisSpecFrom = getXAxisSpec(xScaleFrom, nrTicks, tickLabelFormatter);
+	const xAxisSpecTo = getXAxisSpec(xScaleTo, nrTicks, tickLabelFormatter);
 
 	return (
 		<Animated_XAxis_Update
