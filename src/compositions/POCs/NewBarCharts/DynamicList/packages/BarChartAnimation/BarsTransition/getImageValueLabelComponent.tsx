@@ -1,24 +1,11 @@
-import {memo, forwardRef} from 'react';
+import {memo} from 'react';
 import invariant from 'tiny-invariant';
 import {Img} from 'remotion';
 
+import {TBarChartValueLabelComponent} from './ValueLabelComponent';
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
-import {TBarChartItem} from '../useBarChartTransition/useBarChartTransition';
-
-type TValueLabelProps = {
-	id: string;
-	label: string;
-	value: number;
-	animateExit?: boolean;
-	animateEnter?: boolean;
-	baseline: number;
-	theme: ThemeType;
-};
-
-export type TBarChartValueLabelComponent =
-	React.ComponentType<TValueLabelProps>;
 
 function defaultNumberFormatter(value: number): string {
 	return value.toLocaleString('en-GB', {
@@ -27,11 +14,13 @@ function defaultNumberFormatter(value: number): string {
 	});
 }
 
-export const getDefaultValueLabelComponent = ({
+export const getImageValueLabelComponent = ({
 	numberFormatter = defaultNumberFormatter,
+	imageMappings,
 }: {
+	imageMappings: {[id: string]: string};
 	numberFormatter?: (value: number) => string;
-}) =>
+}): TBarChartValueLabelComponent =>
 	memo(
 		({
 			animateExit,
@@ -39,8 +28,12 @@ export const getDefaultValueLabelComponent = ({
 			baseline,
 			theme,
 			value,
+			label,
+			id,
 		}: {
+			id: string;
 			value: number;
+			label: string;
 			// eslint-disable-next-line
 			animateEnter?: boolean;
 			// eslint-disable-next-line
@@ -48,17 +41,52 @@ export const getDefaultValueLabelComponent = ({
 			baseline: number;
 			theme: ThemeType;
 		}) => {
+			const imageSrc = imageMappings[id];
+			invariant(imageSrc);
+
 			return (
 				<div
 					style={{
 						display: 'flex',
 						justifyContent: value >= 0 ? 'flex-start' : 'flex-end',
+						flexDirection: value >= 0 ? 'row' : 'row-reverse',
 						alignItems: 'center',
 						height: '100%',
 						// QUICK-FIX: for safety, as we are not measuring all interpolated values, just the from -and to values
 						textWrap: 'nowrap',
+						gap: baseline * 0.5,
 					}}
 				>
+					<TextAnimationSubtle
+						innerDelayInSeconds={0}
+						translateY={baseline * 1.15}
+						animateExit={animateExit}
+						animateEnter={animateEnter}
+					>
+						<Img
+							style={{
+								borderRadius: '50%',
+								width: baseline * 2,
+								height: baseline * 2,
+							}}
+							src={imageSrc}
+						/>
+					</TextAnimationSubtle>
+
+					<TypographyStyle
+						typographyStyle={theme.typography.textStyles.datavizValueLabel}
+						baseline={baseline}
+					>
+						<TextAnimationSubtle
+							innerDelayInSeconds={0}
+							translateY={baseline * 1.15}
+							animateExit={animateExit}
+							animateEnter={animateEnter}
+						>
+							{label}
+						</TextAnimationSubtle>
+					</TypographyStyle>
+
 					<TypographyStyle
 						typographyStyle={theme.typography.textStyles.datavizValueLabel}
 						baseline={baseline}
@@ -76,43 +104,3 @@ export const getDefaultValueLabelComponent = ({
 			);
 		}
 	);
-
-interface ValueLabelsDivProps {
-	data: TBarChartItem[];
-	theme: ThemeType;
-	baseline: number;
-	Component: TBarChartValueLabelComponent;
-}
-
-export const MeasureValueLabels = forwardRef<
-	HTMLDivElement,
-	ValueLabelsDivProps
->(({data, theme, baseline, Component}, ref) => {
-	return (
-		<div
-			ref={ref}
-			style={{
-				position: 'fixed',
-				left: '-9999px', // Move off-screen
-				top: '-9999px',
-				whiteSpace: 'nowrap', // Prevent labels from wrapping
-				visibility: 'hidden',
-			}}
-		>
-			{data.map((it, i) => (
-				<Component
-					key={it.id + i}
-					id={it.id}
-					label={it.label}
-					theme={theme}
-					baseline={baseline}
-					animateEnter={false}
-					animateExit={false}
-					value={it.value}
-				/>
-			))}
-		</div>
-	);
-});
-
-MeasureValueLabels.displayName = 'MeasureValueLabels';

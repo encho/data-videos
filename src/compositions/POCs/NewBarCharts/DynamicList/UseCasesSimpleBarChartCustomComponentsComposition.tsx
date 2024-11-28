@@ -8,7 +8,7 @@ import {Page} from '../../../../acetti-components/Page';
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {SimpleBarChart} from './components/SimpleBarChart';
 import {getImageLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
-import {getImageValueLabelComponent} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
+import {getImageValueLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageValueLabelComponent';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
