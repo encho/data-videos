@@ -30,7 +30,7 @@ import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/
 import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {
-	DefaultValueLabelComponent,
+	getDefaultValueLabelComponent,
 	MeasureValueLabels,
 } from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
@@ -68,7 +68,7 @@ export const ListAnimationPage: React.FC = () => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
-	const ValueLabelComponent = DefaultValueLabelComponent;
+	const ValueLabelComponent = getDefaultValueLabelComponent({});
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -288,12 +288,10 @@ export const ListAnimationPage: React.FC = () => {
 									showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
-									LabelComponent={DefaultLabelComponent}
-									ValueLabelComponent={DefaultValueLabelComponent}
-									//
+									LabelComponent={LabelComponent}
+									ValueLabelComponent={ValueLabelComponent}
 									enterKeyframes={enterKeyframes}
 									exitKeyframes={exitKeyframes}
-									//
 									theme={theme}
 									baseline={baseline}
 								/>
@@ -451,35 +449,3 @@ const fewItemsWithJustPositives = [
 		color: '#FF5733',
 	},
 ];
-
-// const idColorMap: {[key: string]: string} = {
-// 	'Id-001': '#007bff', // Neon Blue
-// 	'Id-002': '#ff4500', // Neon Orange
-// 	'Id-003': '#39ff14', // Neon Green
-// 	'Id-004': '#ff073a', // Neon Red
-// 	'Id-005': '#9d00ff', // Neon Purple
-// 	'Id-006': '#a0522d', // Neon Brown (Slightly brighter)
-// 	'Id-007': '#ff00ff', // Neon Pink
-// 	'Id-008': '#8c8c8c', // Neon Gray
-// 	'Id-009': '#d4ff00', // Neon Yellow-Green
-// 	'Id-010': '#00ffff', // Neon Teal
-// 	'Id-011': '#5b9bff', // Neon Light Blue
-// 	'Id-012': '#ff8300', // Neon Light Orange
-// 	'Id-013': '#aaff66', // Neon Light Green
-// 	'Id-014': '#ff5e5e', // Neon Light Red
-// 	'Id-015': '#bf80ff', // Neon Light Purple
-// 	'Id-016': '#e5b98e', // Neon Light Brown
-// 	'Id-017': '#ff85c2', // Neon Light Pink
-// 	'Id-018': '#d3d3d3', // Neon Light Gray
-// 	'Id-019': '#eaff00', // Neon Light Yellow-Green
-// 	'Id-020': '#6effff', // Neon Light Teal
-// };
-
-// /**
-//  * Returns a unique, predefined color for the given Id.
-//  * @param id - The string Id (e.g., "Id-001", "Id-002").
-//  * @returns The hex color as a string.
-//  */
-// function getPredefinedColor(id: string): string {
-// 	return idColorMap[id] || 'magenta'; // Default to black if ID is not found
-// }

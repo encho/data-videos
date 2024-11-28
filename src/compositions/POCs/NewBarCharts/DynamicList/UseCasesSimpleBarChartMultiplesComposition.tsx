@@ -93,6 +93,9 @@ export const UseCasesSimpleBarChartMultiplesComposition: React.FC<
 										theme={theme}
 										width={contentWidth}
 										height={760}
+										// areRowsEqualHeight={false}
+										// fitItemsHeight={false}
+										// hideAxis
 									/>
 								</Sequence>
 							</>

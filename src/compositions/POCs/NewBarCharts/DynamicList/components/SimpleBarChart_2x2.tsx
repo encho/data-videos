@@ -16,7 +16,7 @@ import {
 import {TBarChartItem} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {
-	DefaultValueLabelComponent,
+	getDefaultValueLabelComponent,
 	MeasureValueLabels,
 } from '../packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
@@ -61,7 +61,7 @@ export const SimpleBarChart_2x2: React.FC<{
 	showLayout = false,
 }) => {
 	const LabelComponent = DefaultLabelComponent;
-	const ValueLabelComponent = DefaultValueLabelComponent;
+	const ValueLabelComponent = getDefaultValueLabelComponent({});
 
 	const {fps} = useVideoConfig();
 	const {baseline: pageBaseline} = usePage();

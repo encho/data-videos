@@ -21,7 +21,8 @@ import {BarsTransition} from '../packages/BarChartAnimation/BarsTransition/BarsT
 import {useBarChartTransition} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {getBarChartItemHeight} from '../packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
-	DefaultValueLabelComponent,
+	// DefaultValueLabelComponent,
+	getDefaultValueLabelComponent,
 	MeasureValueLabels,
 } from '../packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
@@ -54,6 +55,8 @@ export const SimpleBarChart: React.FC<{
 	forceNegativeValueLabelWidth?: boolean;
 	nrTicks?: number;
 	hideAxis?: boolean;
+	hideLabel?: boolean;
+	valueLabelFormatter?: (value: number) => string; // TODO either this OR pass in custom ValueLabelComponent
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -70,11 +73,15 @@ export const SimpleBarChart: React.FC<{
 	forceNegativeValueLabelWidth = false,
 	nrTicks,
 	hideAxis = false,
+	hideLabel = false,
+	valueLabelFormatter,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
-	const ValueLabelComponent = DefaultValueLabelComponent;
+	const ValueLabelComponent = getDefaultValueLabelComponent({
+		numberFormatter: valueLabelFormatter,
+	});
 
 	const MOST_ITEMS_AT_ONCE = dataItems.length;
 
@@ -207,6 +214,7 @@ export const SimpleBarChart: React.FC<{
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
 		globalCustomDomain: domain, // TODO rename to domain
 		forceNegativeValueLabelWidth,
+		hideLabel,
 	});
 
 	return (
@@ -251,10 +259,11 @@ export const SimpleBarChart: React.FC<{
 							showLayout={showLayout}
 							listTransitionContext={listTransitionContext}
 							barChartTransitionContext={barChartTransitionContext}
-							LabelComponent={DefaultLabelComponent}
-							ValueLabelComponent={DefaultValueLabelComponent}
+							LabelComponent={LabelComponent}
+							ValueLabelComponent={ValueLabelComponent}
 							theme={theme}
 							baseline={baseline}
+							hideLabel={hideLabel}
 						/>
 					</HtmlArea>
 

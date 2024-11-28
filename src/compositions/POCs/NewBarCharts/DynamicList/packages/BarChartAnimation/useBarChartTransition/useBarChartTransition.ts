@@ -69,6 +69,7 @@ export function useBarChartTransition({
 	negativeValueLabelWidth,
 	forceNegativeValueLabelWidth = false,
 	globalCustomDomain,
+	hideLabel = false,
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
@@ -77,6 +78,7 @@ export function useBarChartTransition({
 	negativeValueLabelWidth: number;
 	forceNegativeValueLabelWidth?: boolean;
 	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
+	hideLabel?: boolean;
 }): TBarChartTransitionContext {
 	//
 	const {width, easingPercentage} = listTransitionContext;
@@ -132,6 +134,7 @@ export function useBarChartTransition({
 			valueLabelWidth,
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageFrom,
+			hideLabel,
 		});
 
 		const barChartItemLayoutTo = getBarChartItemLayout({
@@ -142,6 +145,7 @@ export function useBarChartTransition({
 			valueLabelWidth,
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageTo,
+			hideLabel,
 		});
 
 		const barChartItemLayout = getBarChartItemLayout({
@@ -153,6 +157,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage:
 				currentNegativeValueLabelWidthPercentage,
+			hideLabel,
 		});
 
 		const xScaleFrom = getXScale({
@@ -252,6 +257,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage:
 				hasNegativeValuesTo || forceNegativeValueLabelWidth ? 1 : 0,
+			hideLabel,
 		});
 
 		const xScaleTo = getXScale({
@@ -305,6 +311,7 @@ export function useBarChartTransition({
 		negativeValueLabelWidth,
 		negativeValueLabelWidthPercentage:
 			hasNegativeValuesFrom || forceNegativeValueLabelWidth ? 1 : 0,
+		hideLabel,
 	});
 
 	const xScaleFrom = getXScale({

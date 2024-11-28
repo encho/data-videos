@@ -10,7 +10,20 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {SimpleBarChart_2x2} from './components/SimpleBarChart_2x2';
+import {SimpleBarChart_Composed} from './components/SimpleBarChart_Composed';
+
+// TODO pass in from outside
+function formatPercentage(value: number): string {
+	// Add a + sign for positive values, keep the sign for negative values
+	const sign = value > 0 ? '+' : '';
+	// Format the number with two decimal places and append %
+	// return `${sign}${(value * 100).toFixed(2)}%`;
+	return `${sign}${(value * 100).toFixed(1)}%`;
+}
+// // Example usage
+// console.log(formatPercentage(40.4)); // Output: "+40.40%"
+// console.log(formatPercentage(-15.678)); // Output: "-15.68%"
+// console.log(formatPercentage(0)); // Output: "0.00%"
 
 export const useCasesSimpleBarChartComposedCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -25,16 +38,11 @@ export const UseCasesSimpleBarChartComposedComposition: React.FC<
 	const durationInFrames_1 = Math.floor(durationInFrames / 2);
 	const durationInFrames_2 = durationInFrames - durationInFrames_1;
 
-	const dataUpperLeft = fewItemsWithJustPositives;
-	const dataUpperRight = fewItemsWithJustNegatives;
-	const dataLowerLeft = manyItemsWithNegatives;
-	const dataLowerRight = veryFewItemsWithJustNegatives;
-
 	return (
 		<div style={{position: 'relative'}}>
 			<PageContext
 				margin={80}
-				nrBaselines={80}
+				nrBaselines={50}
 				width={width}
 				height={height}
 				theme={theme}
@@ -49,23 +57,22 @@ export const UseCasesSimpleBarChartComposedComposition: React.FC<
 										baseline={baseline}
 										marginBottom={7}
 									>
-										Simple Bar Chart Composed
+										Simple Bar Chart Composed (1)
 										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
-									<SimpleBarChart_2x2
+									<SimpleBarChart_Composed
 										// showLayout
 										hideAxis
-										dataUpperLeft={dataBerlin}
-										dataUpperRight={dataLondon}
-										dataLowerLeft={dataParis}
-										dataLowerRight={dataNewYork}
+										dataLeft={dataBerlin}
+										dataRight={dataChange}
+										titleLeft="Performance 2024"
+										titleRight="vs. Previous Year"
 										dataUpperLeftDelayInSeconds={0}
 										dataUpperRightDelayInSeconds={3}
-										dataLowerLeftDelayInSeconds={6}
-										dataLowerRightDelayInSeconds={9}
 										theme={theme}
 										width={contentWidth}
-										height={760}
+										height={680}
+										valueLabelFormatterRight={formatPercentage}
 									/>
 								</Sequence>
 								<Sequence
@@ -78,21 +85,22 @@ export const UseCasesSimpleBarChartComposedComposition: React.FC<
 										baseline={baseline}
 										marginBottom={7}
 									>
-										Simple Bar Chart Multiples
+										Simple Bar Chart Composed (1)
+										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
-									<SimpleBarChart_2x2
-										showLayout
-										dataUpperLeft={dataUpperLeft}
-										dataUpperRight={dataUpperRight}
-										dataLowerLeft={dataLowerLeft}
-										dataLowerRight={dataLowerRight}
+									<SimpleBarChart_Composed
+										// showLayout
+										// hideAxis
+										dataLeft={dataBerlin}
+										dataRight={dataChange}
+										titleLeft="Performance 2024"
+										titleRight="vs. Previous Year"
 										dataUpperLeftDelayInSeconds={0}
 										dataUpperRightDelayInSeconds={3}
-										dataLowerLeftDelayInSeconds={6}
-										dataLowerRightDelayInSeconds={9}
 										theme={theme}
 										width={contentWidth}
-										height={760}
+										height={680}
+										valueLabelFormatterRight={formatPercentage}
 									/>
 								</Sequence>
 							</>
@@ -104,152 +112,8 @@ export const UseCasesSimpleBarChartComposedComposition: React.FC<
 	);
 };
 
-const positiveColor = colorPalettes.Green[500];
-const negativeColor = colorPalettes.Red[500];
-
-const manyItemsWithNegatives = [
-	{
-		id: 'Id-001',
-		label: 'Item 001',
-		value: 10,
-	},
-	{
-		id: 'Id-002',
-		label: 'Item 002',
-		value: 20.5,
-	},
-	{
-		id: 'Id-003',
-		label: 'Item 003',
-		value: 30.75,
-	},
-	{
-		id: 'Id-004',
-		label: 'Item 004',
-		value: -40.25,
-	},
-	{
-		id: 'Id-011',
-		label: 'Item 011',
-		value: -55.1,
-	},
-	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: -25.3,
-	},
-	{
-		id: 'Id-006',
-		label: 'Item 006',
-		value: 60.6,
-	},
-	{
-		id: 'Id-007',
-		label: 'Item 007',
-		value: 35.8,
-	},
-	{
-		id: 'Id-010',
-		label: 'Item 010',
-		value: 45.9,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
-
-const fewItemsWithJustPositives = [
-	{
-		id: 'Id-009',
-		label: 'Item 009',
-		value: 70,
-	},
-	{
-		id: 'Id-003',
-		label: 'Item 003',
-		value: 30.75,
-	},
-	{
-		id: 'Id-007',
-		label: 'Item 007',
-		value: 20.8,
-	},
-	{
-		id: 'Id-002',
-		label: 'Item 002',
-		value: 20.5,
-	},
-	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: 33.3,
-	},
-	{
-		id: 'Id-001',
-		label: 'Item 001',
-		value: 12,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
-
-const fewItemsWithJustNegatives = [
-	{
-		id: 'Id-009',
-		label: 'Item 009',
-		value: -70,
-	},
-	{
-		id: 'Id-003',
-		label: 'Item 003',
-		value: -30.75,
-	},
-	{
-		id: 'Id-007',
-		label: 'Item 007',
-		value: -20.8,
-	},
-	{
-		id: 'Id-002',
-		label: 'Item 002',
-		value: -20.5,
-	},
-	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: -33.3,
-	},
-	{
-		id: 'Id-001',
-		label: 'Item 001',
-		value: -12,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
-
-const veryFewItemsWithJustNegatives = [
-	{
-		id: 'Id-002',
-		label: 'Item 002',
-		value: -20.5,
-	},
-	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: -33.3,
-	},
-	{
-		id: 'Id-001',
-		label: 'Item 001',
-		value: -12,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
+const positiveColor = colorPalettes.Emerald[500];
+const negativeColor = colorPalettes.Rose[500];
 
 const dataBerlin = [
 	{
@@ -287,108 +151,36 @@ const dataBerlin = [
 	color: it.value >= 0 ? positiveColor : negativeColor,
 }));
 
-const dataLondon = [
+const dataChange = [
 	{
 		id: 'Id-001',
 		label: 'Sunny',
-		value: 10,
+		value: -0.1,
 	},
 	{
 		id: 'Id-002',
 		label: 'Mostly Sunny',
-		value: 10,
+		value: 0.23,
 	},
 	{
 		id: 'Id-003',
 		label: 'Cloudy',
-		value: 10,
+		value: 0.04,
 	},
 	{
 		id: 'Id-004',
 		label: 'Rainy',
-		value: 50,
+		value: 0.022,
 	},
 	{
 		id: 'Id-005',
 		label: 'Windy',
-		value: 10,
+		value: -0.32,
 	},
 	{
 		id: 'Id-006',
 		label: 'Thunder',
-		value: 10,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
-
-const dataParis = [
-	{
-		id: 'Id-001',
-		label: 'Sunny',
-		value: 20,
-	},
-	{
-		id: 'Id-002',
-		label: 'Mostly Sunny',
-		value: 20,
-	},
-	{
-		id: 'Id-003',
-		label: 'Cloudy',
-		value: 20,
-	},
-	{
-		id: 'Id-004',
-		label: 'Rainy',
-		value: 20,
-	},
-	{
-		id: 'Id-005',
-		label: 'Windy',
-		value: 10,
-	},
-	{
-		id: 'Id-006',
-		label: 'Thunder',
-		value: 10,
-	},
-].map((it) => ({
-	...it,
-	color: it.value >= 0 ? positiveColor : negativeColor,
-}));
-
-const dataNewYork = [
-	{
-		id: 'Id-001',
-		label: 'Sunny',
-		value: 30,
-	},
-	{
-		id: 'Id-002',
-		label: 'Mostly Sunny',
-		value: 10,
-	},
-	{
-		id: 'Id-003',
-		label: 'Cloudy',
-		value: 10,
-	},
-	{
-		id: 'Id-004',
-		label: 'Rainy',
-		value: 20,
-	},
-	{
-		id: 'Id-005',
-		label: 'Windy',
-		value: 10,
-	},
-	{
-		id: 'Id-006',
-		label: 'Thunder',
-		value: 20,
+		value: 0.4,
 	},
 ].map((it) => ({
 	...it,

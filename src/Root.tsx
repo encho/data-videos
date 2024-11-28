@@ -1379,7 +1379,7 @@ export const RemotionRoot: React.FC = () => {
 						component={UseCasesSimpleBarChartComposedComposition}
 						durationInFrames={30 * 30}
 						fps={30}
-						{...videoSizes.square}
+						{...videoSizes.widescreen_16x9}
 						schema={useCasesSimpleBarChartComposedCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>

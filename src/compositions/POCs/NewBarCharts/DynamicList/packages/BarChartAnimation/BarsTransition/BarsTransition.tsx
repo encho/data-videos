@@ -40,6 +40,7 @@ type TBarsTransitionCommonProps = {
 	ValueLabelComponent: TBarChartValueLabelComponent;
 	theme: ThemeType;
 	baseline: number;
+	hideLabel?: boolean;
 };
 
 type TBarsTransitionUpdateProps = TBarsTransitionCommonProps & {
@@ -69,6 +70,7 @@ type TBarsTransitionProps = {
 	exitKeyframes?: TKeyFramesGroup;
 	theme: ThemeType;
 	baseline: number;
+	hideLabel?: boolean;
 };
 
 export const BarsTransition: React.FC<TBarsTransitionProps> = ({
@@ -81,6 +83,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 	exitKeyframes,
 	theme,
 	baseline,
+	hideLabel = false,
 }) => {
 	if (listTransitionContext.transitionType === 'update') {
 		return (
@@ -92,6 +95,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				ValueLabelComponent={ValueLabelComponent}
 				theme={theme}
 				baseline={baseline}
+				hideLabel={hideLabel}
 			/>
 		);
 	}
@@ -107,6 +111,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				keyframes={enterKeyframes}
 				theme={theme}
 				baseline={baseline}
+				hideLabel={hideLabel}
 			/>
 		);
 	}
@@ -123,6 +128,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 			keyframes={exitKeyframes}
 			theme={theme}
 			baseline={baseline}
+			hideLabel={hideLabel}
 		/>
 	);
 };
@@ -135,6 +141,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	barChartTransitionContext,
 	theme,
 	baseline,
+	hideLabel,
 }) => {
 	const {frame, durationInFrames} = listTransitionContext;
 
@@ -206,16 +213,18 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 									/>
 								</div>
 							) : null}
-							<HtmlArea area={labelArea}>
-								<LabelComponent
-									id={item.id}
-									animateExit={false}
-									animateEnter={false}
-									baseline={baseline}
-									theme={theme}
-									label={item.label}
-								/>
-							</HtmlArea>
+							{hideLabel ? null : (
+								<HtmlArea area={labelArea}>
+									<LabelComponent
+										id={item.id}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+										label={item.label}
+									/>
+								</HtmlArea>
+							)}
 
 							<HorizontalBar
 								baseline={baseline}
@@ -510,6 +519,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	keyframes: keyframesProp,
 	theme,
 	baseline,
+	hideLabel,
 }) => {
 	const {fps} = useVideoConfig();
 
@@ -603,19 +613,20 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						) : null}
 
 						{/* the label */}
-
-						<Sequence from={keyframe_label_appear.frame}>
-							<HtmlArea area={labelArea}>
-								<LabelComponent
-									animateEnter
-									animateExit={false}
-									id={dataItem.id}
-									baseline={baseline}
-									theme={theme}
-									label={dataItem.label}
-								/>
-							</HtmlArea>
-						</Sequence>
+						{hideLabel ? null : (
+							<Sequence from={keyframe_label_appear.frame}>
+								<HtmlArea area={labelArea}>
+									<LabelComponent
+										animateEnter
+										animateExit={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										label={dataItem.label}
+									/>
+								</HtmlArea>
+							</Sequence>
+						)}
 
 						<HorizontalBar
 							baseline={baseline}
@@ -713,6 +724,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	keyframes: keyframesProp,
 	theme,
 	baseline,
+	hideLabel,
 }) => {
 	const {fps} = useVideoConfig();
 
@@ -800,16 +812,18 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						) : null}
 
 						{/* the label */}
-						<HtmlArea area={labelArea}>
-							<LabelComponent
-								animateExit
-								animateEnter={false}
-								id={dataItem.id}
-								baseline={baseline}
-								theme={theme}
-								label={dataItem.label}
-							/>
-						</HtmlArea>
+						{hideLabel ? null : (
+							<HtmlArea area={labelArea}>
+								<LabelComponent
+									animateExit
+									animateEnter={false}
+									id={dataItem.id}
+									baseline={baseline}
+									theme={theme}
+									label={dataItem.label}
+								/>
+							</HtmlArea>
+						)}
 
 						<HorizontalBar
 							baseline={baseline}

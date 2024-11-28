@@ -66,6 +66,7 @@ export function getBarChartItemLayout({
 	valueLabelWidth,
 	negativeValueLabelWidth,
 	negativeValueLabelWidthPercentage,
+	hideLabel = false,
 }: {
 	height: number;
 	width: number;
@@ -74,6 +75,7 @@ export function getBarChartItemLayout({
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
 	negativeValueLabelWidthPercentage: number;
+	hideLabel: boolean;
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 
@@ -99,12 +101,12 @@ export function getBarChartItemLayout({
 	const columns: TGridRailSpec = [
 		{
 			type: 'pixel',
-			value: labelWidth,
+			value: hideLabel ? 0 : labelWidth,
 			name: 'label',
 		},
 		{
 			type: 'pixel',
-			value: ibcsSizes.labelMargin,
+			value: hideLabel ? 0 : ibcsSizes.labelMargin,
 			name: 'labelMarginRight',
 		},
 		{

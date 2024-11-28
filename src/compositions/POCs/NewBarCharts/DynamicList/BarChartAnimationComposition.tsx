@@ -27,7 +27,7 @@ import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/
 import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {
-	DefaultValueLabelComponent,
+	getDefaultValueLabelComponent,
 	MeasureValueLabels,
 } from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
 import {
@@ -65,7 +65,7 @@ export const ListAnimationPage: React.FC = () => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const LabelComponent = DefaultLabelComponent;
-	const ValueLabelComponent = DefaultValueLabelComponent;
+	const ValueLabelComponent = getDefaultValueLabelComponent({});
 
 	// TODO
 	// const {refs: {labels, valueLabels, bars}, dimensions: {labels, valueLabels, bars}, MeasureLabelCOmponent,MeaseureValueLabelCOmponent} =
@@ -348,8 +348,8 @@ export const ListAnimationPage: React.FC = () => {
 									showLayout
 									listTransitionContext={listTransitionContext}
 									barChartTransitionContext={barChartTransitionContext}
-									LabelComponent={DefaultLabelComponent}
-									ValueLabelComponent={DefaultValueLabelComponent}
+									LabelComponent={LabelComponent}
+									ValueLabelComponent={ValueLabelComponent}
 									theme={theme}
 									baseline={baseline}
 								/>
