@@ -285,6 +285,11 @@ import {
 	useCasesSimpleBarChartCustomComponentsCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/UseCasesSimpleBarChartCustomComponentsComposition';
 
+import {
+	UseCasesSimpleBarChartRaceComposition,
+	useCasesSimpleBarChartRaceCompositionSchema,
+} from './compositions/POCs/NewBarCharts/DynamicList/UseCasesSimpleBarChartRaceComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
@@ -1397,6 +1402,17 @@ export const RemotionRoot: React.FC = () => {
 						fps={30}
 						{...videoSizes.widescreen_16x9}
 						schema={useCasesSimpleBarChartCustomComponentsCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="UseCases-BarChartRace"
+						component={UseCasesSimpleBarChartRaceComposition}
+						durationInFrames={30 * 30}
+						fps={30}
+						{...videoSizes.widescreen_16x9}
+						schema={useCasesSimpleBarChartRaceCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 				</Folder>
