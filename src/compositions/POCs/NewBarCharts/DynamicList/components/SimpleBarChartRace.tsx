@@ -193,17 +193,33 @@ export const SimpleBarChartRace: React.FC<{
 		column: 0,
 	});
 
-	const duration_enter = Math.floor(fps * 3);
-	const duration_exit = durationInFrames - duration_enter;
+	const duration_0 = Math.floor(fps * 3);
+	const duration_1 = Math.floor(fps * 3);
+	const duration_2 = Math.floor(fps * 3);
+	const duration_3 = Math.floor(fps * 3);
 
-	// const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
-	const easing = Easing.bounce;
+	const duration_exit =
+		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
+
+	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	// const easing = Easing.bounce;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
-			// itemsTo: dataItems,
 			itemsTo: barChartRaceData[0].data,
-			durationInFrames: duration_enter,
+			durationInFrames: duration_0,
+		},
+		{
+			itemsTo: barChartRaceData[1].data,
+			durationInFrames: duration_1,
+		},
+		{
+			itemsTo: barChartRaceData[2].data,
+			durationInFrames: duration_2,
+		},
+		{
+			itemsTo: barChartRaceData[3].data,
+			durationInFrames: duration_3,
 		},
 		{
 			itemsTo: [],

@@ -124,7 +124,9 @@ export function useBarChartTransition({
 		);
 
 		const currentNegativeValueLabelWidthPercentage =
-			currentNegativeValueLabelWidth / negativeValueLabelWidth;
+			negativeValueLabelWidth === 0
+				? negativeValueLabelWidth
+				: currentNegativeValueLabelWidth / negativeValueLabelWidth;
 
 		const barChartItemLayoutFrom = getBarChartItemLayout({
 			height: itemHeightFrom,
