@@ -28,6 +28,7 @@ import {
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
+	TBarChartLabelComponent,
 } from '../packages/BarChartAnimation/BarsTransition/LabelComponent';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {
@@ -58,6 +59,7 @@ export const SimpleBarChart: React.FC<{
 	hideLabel?: boolean;
 	valueLabelFormatter?: (value: number) => string;
 	tickLabelFormatter?: (value: number) => string;
+	LabelComponent?: TBarChartLabelComponent;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -77,10 +79,10 @@ export const SimpleBarChart: React.FC<{
 	hideLabel = false,
 	valueLabelFormatter,
 	tickLabelFormatter,
+	LabelComponent = DefaultLabelComponent,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = getDefaultValueLabelComponent({
 		numberFormatter: valueLabelFormatter,
 	});

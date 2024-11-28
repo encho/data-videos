@@ -291,7 +291,6 @@ export const BarChartWithLogos: React.FC<{
 						{children}
 					</TextAnimationSubtle>
 				</TypographyStyle>
-
 				<TextAnimationSubtle
 					innerDelayInSeconds={0}
 					translateY={barChartBaseline * 1.15}
