@@ -77,7 +77,7 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 	// const durationInFrames_1 = Math.floor(durationInFrames / 2);
 	// const durationInFrames_2 = durationInFrames - durationInFrames_1;
 
-	const gdpDataArray = useMemo(() => getGdpData(2020, 2024), []);
+	const gdpDataArray = useMemo(() => getGdpData(2010, 2024), []);
 
 	const barChartRaceData = gdpDataArray.map((it) => {
 		return {
@@ -118,7 +118,7 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 										Bar Chart Race
 									</TypographyStyle>
 									<SimpleBarChartRace
-										showLayout
+										// showLayout
 										hideAxis
 										barChartRaceData={barChartRaceData}
 										// LabelComponent={ImageLabelComponent}

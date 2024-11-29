@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {TypographyStyle} from '../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TBarChartItem} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {getPerfectBaselineForHeight} from '../packages/BarChartAnimation/getPerfectBaselineForHeight';
 import {XAxisTransition} from '../packages/BarChartAnimation/XAxisTransition/XAxisTransition';
@@ -193,39 +194,30 @@ export const SimpleBarChartRace: React.FC<{
 		column: 0,
 	});
 
-	const duration_0 = Math.floor(fps * 3);
-	const duration_1 = Math.floor(fps * 3);
-	const duration_2 = Math.floor(fps * 3);
-	const duration_3 = Math.floor(fps * 3);
-
+	const duration_entry = Math.floor(fps * 3.5);
+	const provisory_duration_exit = Math.floor(fps * 5);
+	const duration_single_transition = Math.floor(
+		(durationInFrames - provisory_duration_exit - duration_entry) /
+			(barChartRaceData.length - 1)
+	);
 	const duration_exit =
-		durationInFrames - duration_0 - duration_1 - duration_2 - duration_3;
+		durationInFrames -
+		duration_entry -
+		(barChartRaceData.length - 1) * duration_single_transition;
 
 	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 	// const easing = Easing.bounce;
 
-	const transitions: ListAnimationTransition<TBarChartItem>[] = [
-		{
-			itemsTo: barChartRaceData[0].data,
-			durationInFrames: duration_0,
-		},
-		{
-			itemsTo: barChartRaceData[1].data,
-			durationInFrames: duration_1,
-		},
-		{
-			itemsTo: barChartRaceData[2].data,
-			durationInFrames: duration_2,
-		},
-		{
-			itemsTo: barChartRaceData[3].data,
-			durationInFrames: duration_3,
-		},
-		{
-			itemsTo: [],
-			durationInFrames: duration_exit,
-		},
-	];
+	const transitions: ListAnimationTransition<TBarChartItem>[] =
+		barChartRaceData.map((it, i) => ({
+			itemsTo: it.data,
+			durationInFrames: i === 0 ? duration_entry : duration_single_transition,
+		}));
+
+	transitions.push({
+		itemsTo: [],
+		durationInFrames: duration_exit,
+	});
 
 	const ibcsItemHeightForBaseline = getBarChartItemHeight({baseline});
 
@@ -253,6 +245,11 @@ export const SimpleBarChartRace: React.FC<{
 	});
 
 	const allDataItems = barChartRaceData.map((it) => it.data).flat();
+
+	const currentPeriodLabel =
+		barChartRaceData[listAnimationContext.currentTransitionIndex]
+			?.periodLabel ||
+		barChartRaceData[barChartRaceData.length - 1].periodLabel;
 
 	return (
 		<>
@@ -288,49 +285,76 @@ export const SimpleBarChartRace: React.FC<{
 			{isNumber(labelWidth) &&
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
-				<div style={{position: 'relative'}}>
-					{showLayout ? <DisplayGridRails {...matrixLayout} /> : null}
+				<div>
+					<div style={{position: 'relative'}}>
+						{/* {showLayout ? <DisplayGridRails {...matrixLayout} /> : null} */}
+						{true ? <DisplayGridRails {...matrixLayout} /> : null}
+						<HtmlArea area={barsArea}>
+							<BarsTransition
+								showLayout={showLayout}
+								listTransitionContext={listTransitionContext}
+								barChartTransitionContext={barChartTransitionContext}
+								LabelComponent={LabelComponent}
+								ValueLabelComponent={ValueLabelComponent}
+								theme={theme}
+								baseline={baseline}
+								hideLabel={hideLabel}
+							/>
+						</HtmlArea>
 
-					<HtmlArea area={barsArea}>
-						<BarsTransition
-							showLayout={showLayout}
-							listTransitionContext={listTransitionContext}
-							barChartTransitionContext={barChartTransitionContext}
-							LabelComponent={LabelComponent}
-							ValueLabelComponent={ValueLabelComponent}
-							theme={theme}
-							baseline={baseline}
-							hideLabel={hideLabel}
-						/>
-					</HtmlArea>
+						<HtmlArea area={barsArea}>
+							<HtmlArea
+								area={barChartTransitionContext.plotArea}
+								fill="rgba(255,0,255,0.2)"
+							>
+								<div
+									style={{
+										position: 'absolute',
+										bottom: 0,
+										right: 0,
+										// backgroundColor: 'cyan',
+									}}
+								>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h2}
+										baseline={baseline}
+										// marginBottom={7}
+									>
+										{currentPeriodLabel}
+									</TypographyStyle>
+								</div>
+							</HtmlArea>
+						</HtmlArea>
 
-					{hideAxis
-						? null
-						: (() => {
-								const realXAxisArea = {
-									y1: 0,
-									y2: xAxisArea.height,
-									x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
-									x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
-									height: xAxisArea.height,
-									width:
-										barChartTransitionContext.barChartItemLayout.barArea.width,
-								};
+						{hideAxis
+							? null
+							: (() => {
+									const realXAxisArea = {
+										y1: 0,
+										y2: xAxisArea.height,
+										x1: barChartTransitionContext.barChartItemLayout.barArea.x1,
+										x2: barChartTransitionContext.barChartItemLayout.barArea.x2,
+										height: xAxisArea.height,
+										width:
+											barChartTransitionContext.barChartItemLayout.barArea
+												.width,
+									};
 
-								return (
-									<HtmlArea area={xAxisArea}>
-										<XAxisTransition
-											listTransitionContext={listTransitionContext}
-											barChartTransitionContext={barChartTransitionContext}
-											theme={theme}
-											baseline={baseline}
-											area={realXAxisArea}
-											nrTicks={nrTicks}
-											tickLabelFormatter={tickLabelFormatter}
-										/>
-									</HtmlArea>
-								);
-						  })()}
+									return (
+										<HtmlArea area={xAxisArea}>
+											<XAxisTransition
+												listTransitionContext={listTransitionContext}
+												barChartTransitionContext={barChartTransitionContext}
+												theme={theme}
+												baseline={baseline}
+												area={realXAxisArea}
+												nrTicks={nrTicks}
+												tickLabelFormatter={tickLabelFormatter}
+											/>
+										</HtmlArea>
+									);
+							  })()}
+					</div>
 				</div>
 			) : null}
 		</>

@@ -144,7 +144,7 @@ export const SimpleBarChart_2x2: React.FC<{
 		? 1
 		: row_2_height / row_1_height;
 
-	const rowSpacePixels = 60; // TODO from theme
+	const rowSpacePixels = pageBaseline * 4; // TODO from theme
 
 	const matrixLayout = useMatrixLayout({
 		width,
@@ -152,7 +152,7 @@ export const SimpleBarChart_2x2: React.FC<{
 		nrColumns: 2,
 		nrRows: 5,
 		rowSpacePixels: 0,
-		columnSpacePixels: 150,
+		columnSpacePixels: pageBaseline * 4,
 		rowPaddingPixels: 0,
 		columnPaddingPixels: 0,
 		rowSizes: [
