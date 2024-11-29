@@ -290,6 +290,11 @@ import {
 	useCasesSimpleBarChartRaceCompositionSchema,
 } from './compositions/POCs/NewBarCharts/DynamicList/UseCasesSimpleBarChartRaceComposition';
 
+import {
+	ShearedSlideOutComposition,
+	shearedSlideOutCompositionSchema,
+} from './compositions/POCs/3D-Experiments/ShearedWrappers/ShearedSlideOutComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
@@ -1287,6 +1292,16 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 				<Folder name="3d-Experiments">
+					<Composition
+						id="ShearedSlideOut"
+						component={ShearedSlideOutComposition}
+						schema={shearedSlideOutCompositionSchema}
+						durationInFrames={150} // Animation lasts 150 frames
+						fps={30} // 30 FPS
+						width={1920}
+						height={1080}
+						defaultProps={{themeEnum: 'NERDY' as const}}
+					/>
 					<Composition
 						// You can take the "id" to render a video:
 						// npx remotion render src/index.ts <id> out/video.mp4
