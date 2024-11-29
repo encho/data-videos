@@ -9,7 +9,7 @@ import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStyles
 import {Page} from '../../../../acetti-components/Page';
 import {PageContext} from '../../../../acetti-components/PageContext';
 // import {SimpleBarChart} from './components/SimpleBarChart';
-// import {getImageLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
+import {getImageLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
 // import {getImageValueLabelComponent} from './packages/BarChartAnimation/BarsTransition/getImageValueLabelComponent';
 import {
 	useThemeFromEnum,
@@ -17,23 +17,21 @@ import {
 } from '../../../../acetti-themes/getThemeFromEnum';
 
 const imageMappings: {[id: string]: string} = {
-	'Id-001':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
-	'Id-002':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/uk-flag-circular-1024.png',
-	'Id-003':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
-	'Id-004':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
-	'Id-005':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
-	'Id-006':
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png',
+	US: getCountryImageURL('US'),
+	CN: getCountryImageURL('CN'),
+	JP: getCountryImageURL('JP'),
+	DE: getCountryImageURL('DE'),
+	IN: getCountryImageURL('IN'),
+	GB: getCountryImageURL('GB'),
+	FR: getCountryImageURL('FR'),
+	IT: getCountryImageURL('IT'),
+	CA: getCountryImageURL('CA'),
+	KR: getCountryImageURL('KR'),
 };
 
-// const ImageLabelComponent = getImageLabelComponent({
-// 	imageMappings,
-// });
+const ImageLabelComponent = getImageLabelComponent({
+	imageMappings,
+});
 
 // const ImageValueLabelComponent = getImageValueLabelComponent({
 // 	imageMappings,
@@ -74,24 +72,26 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 	const {width, height, durationInFrames} = useVideoConfig();
 
 	const durationInFrames_1 = durationInFrames;
-	// const durationInFrames_1 = Math.floor(durationInFrames / 2);
-	// const durationInFrames_2 = durationInFrames - durationInFrames_1;
 
-	const gdpDataArray = useMemo(() => getGdpData(2010, 2024), []);
+	const gdpDataArray = useMemo(() => getGdpData(1990, 2024), []);
 
-	const barChartRaceData = gdpDataArray.map((it) => {
-		return {
-			periodLabel: it.year,
-			data: it.data.map((dataItem) => {
+	const barChartRaceData = useMemo(
+		() =>
+			gdpDataArray.map((it) => {
 				return {
-					id: dataItem.id,
-					label: dataItem.country,
-					value: dataItem.gdp,
-					color: '#f05122',
+					periodLabel: it.year,
+					data: it.data.map((dataItem) => {
+						return {
+							id: dataItem.id,
+							label: dataItem.country,
+							value: dataItem.gdp,
+							color: '#f05122',
+						};
+					}),
 				};
 			}),
-		};
-	});
+		[gdpDataArray]
+	);
 
 	// TODO work with this data to create SimpleBarChartRace component
 	// console.log({gdpDataArray});
@@ -121,11 +121,12 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 										// showLayout
 										hideAxis
 										barChartRaceData={barChartRaceData}
-										// LabelComponent={ImageLabelComponent}
 										height={700}
 										width={contentWidth}
 										theme={theme}
-										// dataItems={dataBerlin}
+										//
+										LabelComponent={ImageLabelComponent}
+										valueLabelFormatter={formatTrillionUSD}
 									/>
 								</Sequence>
 								{/* <Sequence
@@ -159,6 +160,18 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 		</div>
 	);
 };
+
+/**
+ * Formats a number to two decimal places and appends "T USD" (abbreviation for Trillion USD).
+ * @param num - The number to format.
+ * @returns A string in the format "X.XX T USD".
+ */
+function formatTrillionUSD(num: number): string {
+	return `${num.toFixed(2)} T USD`;
+}
+// Example usage:
+// console.log(formatTrillionUSD(5.2)); // Output: "5.20 T USD"
+// console.log(formatTrillionUSD(3));   // Output: "3.00 T USD"
 
 export function getGdpData(startYear: number, endYear: number) {
 	const gdpData: {
@@ -235,4 +248,43 @@ export function getGdpData(startYear: number, endYear: number) {
 
 	// return gdpData;
 	return gdpDataArray;
+}
+
+function getCountryImageURL(countryId: string): string {
+	const germany =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/germany-flag-circular-1024.png';
+	const italy =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/italy-flag-circular-1024.png';
+	const uk =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/uk-flag-circular-1024.png';
+
+	const china =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/china-flag-circular-1024.png';
+	const usa =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/usa-flag-circular-1024.png';
+
+	const india =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/india-flag-circular-1024.png';
+	const france =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/france-flag-circular-1024.png';
+	const canada =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/canada-flag-circular-1024.png';
+	const japan =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/japan-flag-circular-1024.png';
+
+	const southKorea =
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/countryIcons/south-korea-flag-circular-1024.png';
+
+	if (countryId === 'US') return usa;
+	if (countryId === 'CN') return china;
+	if (countryId === 'JP') return japan;
+	if (countryId === 'DE') return germany;
+	if (countryId === 'IN') return india;
+	if (countryId === 'GB') return uk;
+	if (countryId === 'FR') return france;
+	if (countryId === 'IT') return italy;
+	if (countryId === 'CA') return canada;
+	if (countryId === 'KR') return southKorea;
+
+	throw Error('no matching image found');
 }

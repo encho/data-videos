@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
@@ -244,51 +244,60 @@ export const SimpleBarChartRace: React.FC<{
 		hideLabel,
 	});
 
-	const allDataItems = barChartRaceData.map((it) => it.data).flat();
+	const allDataItems = useMemo(
+		() => barChartRaceData.map((it) => it.data).flat(),
+		[barChartRaceData]
+	);
 
 	const currentPeriodLabel =
 		barChartRaceData[listAnimationContext.currentTransitionIndex]
 			?.periodLabel ||
 		barChartRaceData[barChartRaceData.length - 1].periodLabel;
 
+	const hasBeenMeasured =
+		isNumber(labelWidth) &&
+		isNumber(valueLabelWidth) &&
+		isNumber(negativeValueLabelWidth);
+
 	return (
 		<>
-			{/* measure labels */}
-			<MeasureLabels
-				key="labelMeasurement"
-				ref={labelsRef}
-				data={allDataItems}
-				theme={theme}
-				baseline={baseline}
-				Component={MeasureLabelComponent}
-			/>
+			{hasBeenMeasured ? null : (
+				<>
+					{/* measure labels */}
+					<MeasureLabels
+						key="labelMeasurement"
+						ref={labelsRef}
+						data={allDataItems}
+						theme={theme}
+						baseline={baseline}
+						Component={MeasureLabelComponent}
+					/>
 
-			{/* measure positive value labels */}
-			<MeasureValueLabels
-				key="valueLabelMeasurement"
-				ref={valueLabelsRef}
-				data={allDataItems.filter((it) => it.value >= 0)}
-				theme={theme}
-				baseline={baseline}
-				Component={MeasureValueLabelComponent}
-			/>
-			{/* measure negative value labels */}
-			<MeasureValueLabels
-				key="negativeValueLabelMeasurement"
-				ref={negativeValueLabelsRef}
-				data={allDataItems.filter((it) => it.value < 0)}
-				theme={theme}
-				baseline={baseline}
-				Component={MeasureValueLabelComponent}
-			/>
+					{/* measure positive value labels */}
+					<MeasureValueLabels
+						key="valueLabelMeasurement"
+						ref={valueLabelsRef}
+						data={allDataItems.filter((it) => it.value >= 0)}
+						theme={theme}
+						baseline={baseline}
+						Component={MeasureValueLabelComponent}
+					/>
+					{/* measure negative value labels */}
+					<MeasureValueLabels
+						key="negativeValueLabelMeasurement"
+						ref={negativeValueLabelsRef}
+						data={allDataItems.filter((it) => it.value < 0)}
+						theme={theme}
+						baseline={baseline}
+						Component={MeasureValueLabelComponent}
+					/>
+				</>
+			)}
 
-			{isNumber(labelWidth) &&
-			isNumber(valueLabelWidth) &&
-			isNumber(negativeValueLabelWidth) ? (
+			{hasBeenMeasured ? (
 				<div>
 					<div style={{position: 'relative'}}>
-						{/* {showLayout ? <DisplayGridRails {...matrixLayout} /> : null} */}
-						{true ? <DisplayGridRails {...matrixLayout} /> : null}
+						{showLayout ? <DisplayGridRails {...matrixLayout} /> : null}
 						<HtmlArea area={barsArea}>
 							<BarsTransition
 								showLayout={showLayout}
@@ -303,28 +312,24 @@ export const SimpleBarChartRace: React.FC<{
 						</HtmlArea>
 
 						<HtmlArea area={barsArea}>
-							<HtmlArea
-								area={barChartTransitionContext.plotArea}
-								fill="rgba(255,0,255,0.2)"
+							<div
+								style={{
+									position: 'absolute',
+									bottom: 0,
+									right: 0,
+									// backgroundColor: 'cyan',
+								}}
 							>
-								<div
-									style={{
-										position: 'absolute',
-										bottom: 0,
-										right: 0,
-										// backgroundColor: 'cyan',
-									}}
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.h2}
+									baseline={baseline}
+									// marginBottom={7}
 								>
-									<TypographyStyle
-										typographyStyle={theme.typography.textStyles.h2}
-										baseline={baseline}
-										// marginBottom={7}
-									>
-										{currentPeriodLabel}
-									</TypographyStyle>
-								</div>
-							</HtmlArea>
+									{currentPeriodLabel}
+								</TypographyStyle>
+							</div>
 						</HtmlArea>
+						{/* </HtmlArea> */}
 
 						{hideAxis
 							? null
