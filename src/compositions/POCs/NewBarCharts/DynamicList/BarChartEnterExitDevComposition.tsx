@@ -38,35 +38,6 @@ import {
 	MeasureLabels,
 } from './packages/BarChartAnimation/BarsTransition/LabelComponent';
 
-// TODO could be in Theme!
-type IBCS_Sizes_HorizontalBarChartItem = {
-	rows: {
-		barMarginTop: number;
-		barHeight: number;
-		barMarginBottom: number;
-	};
-	columns: {
-		labelMargin: number;
-		valueLabelMargin: number;
-	};
-};
-
-// TODO think about top bar and bottom bar too....
-function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
-	const THEME_IBCS_SIZES_SPEC = {
-		rows: {
-			barMarginTop: 0.3,
-			barHeight: 2,
-			barMarginBottom: 0.3,
-		},
-		columns: {
-			labelMargin: 1,
-			valueLabelMargin: 0.75,
-		},
-	};
-	return THEME_IBCS_SIZES_SPEC;
-}
-
 export const barChartEnterExitDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -95,6 +66,8 @@ export const BarChartEnterExitDevComposition: React.FC<
 export const ListAnimationPage: React.FC = () => {
 	const {theme, baseline, contentWidth, contentHeight} = usePage();
 	const {durationInFrames, fps} = useVideoConfig();
+
+	const ibcsSizesSpec = theme.ibcsSizes.barChartItem;
 
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = getDefaultValueLabelComponent({});
@@ -204,9 +177,6 @@ export const ListAnimationPage: React.FC = () => {
 			durationInFrames: duration_4,
 		},
 	];
-
-	// TODO directly access from theme!
-	const ibcsSizesSpec = getIbcsSizesSpecFromTheme();
 
 	const ibcsItemHeightForBaseline = getBarChartItemHeight({
 		baseline,

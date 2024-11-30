@@ -2,6 +2,7 @@ import {z} from 'zod';
 import React, {useCallback, useMemo} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
+import {cloneDeep} from 'lodash';
 
 import {TBarChartItem} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {getPerfectBaselineForHeight} from '../packages/BarChartAnimation/getPerfectBaselineForHeight';
@@ -36,35 +37,6 @@ import {
 	getXAxisHeight,
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
-
-// TODO could be in Theme!
-type IBCS_Sizes_HorizontalBarChartItem = {
-	rows: {
-		barMarginTop: number;
-		barHeight: number;
-		barMarginBottom: number;
-	};
-	columns: {
-		labelMargin: number;
-		valueLabelMargin: number;
-	};
-};
-
-// TODO think about top bar and bottom bar too....
-function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
-	const THEME_IBCS_SIZES_SPEC = {
-		rows: {
-			barMarginTop: 0.3,
-			barHeight: 2,
-			barMarginBottom: 0.3,
-		},
-		columns: {
-			labelMargin: 1,
-			valueLabelMargin: 0.75,
-		},
-	};
-	return THEME_IBCS_SIZES_SPEC;
-}
 
 export const useCasesSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -117,8 +89,10 @@ export const SimpleBarChart: React.FC<{
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	// TODO actually intgrate in theme!
-	const ibcsSizesSpecFromTheme = getIbcsSizesSpecFromTheme();
+	const ibcsSizesSpecFromTheme = useMemo(
+		() => cloneDeep(theme.ibcsSizes.barChartItem),
+		[theme]
+	);
 
 	if (hideLabel) {
 		ibcsSizesSpecFromTheme.columns.labelMargin = 0;

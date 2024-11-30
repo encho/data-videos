@@ -103,6 +103,7 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										Bar Chart with Custom Label
 									</TypographyStyle>
 									<SimpleBarChart
+										key="custom-label"
 										showLayout
 										hideAxis
 										LabelComponent={ImageLabelComponent}
@@ -126,6 +127,7 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
 									<SimpleBarChart
+										key="custom-value-label"
 										showLayout
 										hideLabel
 										ValueLabelComponent={ImageValueLabelComponent}
@@ -150,6 +152,7 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										{/* no x axis, no layout, all datasets same size and positive */}
 									</TypographyStyle>
 									<SimpleBarChart
+										key="custom-bar"
 										showLayout
 										hideValueLabel
 										hideLabel

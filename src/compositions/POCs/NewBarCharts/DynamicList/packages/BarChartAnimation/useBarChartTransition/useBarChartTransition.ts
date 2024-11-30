@@ -10,19 +10,7 @@ import {
 } from './getBarChartItemLayout';
 import {TDynamicListTransitionContext} from '../../ListAnimation/useListTransition/useListTransition';
 import {interpolate} from 'remotion';
-
-// TODO could be in Theme!
-type IBCS_Sizes_HorizontalBarChartItem = {
-	rows: {
-		barMarginTop: number;
-		barHeight: number;
-		barMarginBottom: number;
-	};
-	columns: {
-		labelMargin: number;
-		valueLabelMargin: number;
-	};
-};
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
@@ -86,14 +74,13 @@ export function useBarChartTransition({
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
+	ibcsSizesSpec: ThemeType['ibcsSizes']['barChartItem'];
 	labelWidth: number;
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
 	forceNegativeValueLabelWidth?: boolean;
 	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
-	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
 }): TBarChartTransitionContext {
-	//
 	const {width, easingPercentage} = listTransitionContext;
 
 	// ***********************************************************************

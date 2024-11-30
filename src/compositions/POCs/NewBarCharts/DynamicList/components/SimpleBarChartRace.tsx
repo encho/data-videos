@@ -36,35 +36,6 @@ import {
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
-// TODO could be in Theme!
-type IBCS_Sizes_HorizontalBarChartItem = {
-	rows: {
-		barMarginTop: number;
-		barHeight: number;
-		barMarginBottom: number;
-	};
-	columns: {
-		labelMargin: number;
-		valueLabelMargin: number;
-	};
-};
-
-// TODO think about top bar and bottom bar too....
-function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
-	const THEME_IBCS_SIZES_SPEC = {
-		rows: {
-			barMarginTop: 0.3,
-			barHeight: 2,
-			barMarginBottom: 0.3,
-		},
-		columns: {
-			labelMargin: 1,
-			valueLabelMargin: 0.75,
-		},
-	};
-	return THEME_IBCS_SIZES_SPEC;
-}
-
 type TBarChartRaceData = {
 	periodLabel: string;
 	data: {
@@ -123,8 +94,7 @@ export const SimpleBarChartRace: React.FC<{
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	// TODO actually intgrate in theme!
-	const ibcsSizesSpecFromTheme = getIbcsSizesSpecFromTheme();
+	const ibcsSizesSpecFromTheme = theme.ibcsSizes.barChartItem;
 
 	if (hideLabel) {
 		ibcsSizesSpecFromTheme.columns.labelMargin = 0;

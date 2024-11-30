@@ -5,40 +5,12 @@ import {
 	TGridLayoutAreaSpec,
 	TGridLayoutArea,
 } from '../../../../../../../acetti-layout';
+import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
-// TODO could be in Theme!
-type IBCS_Sizes_HorizontalBarChartItem = {
-	rows: {
-		barMarginTop: number;
-		barHeight: number;
-		barMarginBottom: number;
-	};
-	columns: {
-		labelMargin: number;
-		valueLabelMargin: number;
-	};
-};
-
-// TODO think about top bar and bottom bar too....
-const THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM: IBCS_Sizes_HorizontalBarChartItem =
-	{
-		rows: {
-			barMarginTop: 0.3,
-			barHeight: 2,
-			barMarginBottom: 0.3,
-		},
-		columns: {
-			labelMargin: 1,
-			valueLabelMargin: 0.75,
-		},
-	};
-
-// TODO into theme
-// export function getIbcsSizes(baseline: number) {
 function getIbcsSizes(
 	baseline: number,
-	ibcsSizesObject: IBCS_Sizes_HorizontalBarChartItem = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM
-): IBCS_Sizes_HorizontalBarChartItem {
+	ibcsSizesObject: ThemeType['ibcsSizes']['barChartItem']
+): ThemeType['ibcsSizes']['barChartItem'] {
 	const ibcsSizes = {
 		rows: {
 			barMarginTop: baseline * ibcsSizesObject.rows.barMarginTop,
@@ -54,14 +26,12 @@ function getIbcsSizes(
 }
 
 // TODO account for flag includeSecondaryBars
-// TODO ibcs in the name
-// export function getBarChartItemHeight({
 export function getBarChartItemHeight({
 	baseline,
-	ibcsSizesSpec = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM,
+	ibcsSizesSpec,
 }: {
 	baseline: number;
-	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
+	ibcsSizesSpec: ThemeType['ibcsSizes']['barChartItem'];
 }) {
 	const ibcsSizes = getIbcsSizes(baseline, ibcsSizesSpec);
 
@@ -74,17 +44,14 @@ export function getBarChartItemHeight({
 	return barChartItemHeight;
 }
 
-// TODO ibcs in the name
 export function getAllBarChartItemsHeight({
-	// theme,
 	baseline,
 	nrItems,
 	ibcsSizesSpec,
 }: {
-	// theme: ThemeType;
 	baseline: number;
 	nrItems: number;
-	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
+	ibcsSizesSpec: ThemeType['ibcsSizes']['barChartItem'];
 }) {
 	const barChartItemHeight = getBarChartItemHeight({baseline, ibcsSizesSpec});
 	const barChartItemsHeight = nrItems * barChartItemHeight;
@@ -108,9 +75,7 @@ export function getBarChartItemLayout({
 	valueLabelWidth,
 	negativeValueLabelWidth,
 	negativeValueLabelWidthPercentage,
-	// hideLabel = false, // TODO deprecate?
-	// hideValueLabel = false, // TODO deprecate?
-	ibcsSizesSpec = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM,
+	ibcsSizesSpec,
 }: {
 	height: number;
 	width: number;
@@ -119,9 +84,7 @@ export function getBarChartItemLayout({
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
 	negativeValueLabelWidthPercentage: number;
-	// hideLabel: boolean;
-	// hideValueLabel: boolean;
-	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
+	ibcsSizesSpec: ThemeType['ibcsSizes']['barChartItem'];
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline, ibcsSizesSpec);
 

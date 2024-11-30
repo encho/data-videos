@@ -14,9 +14,26 @@ const zTextStyle = z.object({
 	color: zColor(),
 });
 
+const zTheme_ibcsSizes = z.object({
+	barChartItem: z.object({
+		rows: z.object({
+			barMarginTop: z.number(),
+			barHeight: z.number(),
+			barMarginBottom: z.number(),
+		}),
+		columns: z.object({
+			labelMargin: z.number(),
+			valueLabelMargin: z.number(),
+		}),
+	}),
+});
+
+export type Theme_IBCS_Sizes_BarChartItem = z.infer<typeof zTheme_ibcsSizes>;
+
 export type ThemeTextStyle = z.infer<typeof zTextStyle>;
 
 export const zodThemeType = z.object({
+	ibcsSizes: zTheme_ibcsSizes,
 	sizes: zTheme_sizes,
 	data: zThemePalette_Data,
 	global: z.object({

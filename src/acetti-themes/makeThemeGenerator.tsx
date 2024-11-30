@@ -114,6 +114,19 @@ export type ThemePalette = {
 export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 	const themeGenerator = (): ThemeType => {
 		return {
+			ibcsSizes: {
+				barChartItem: {
+					rows: {
+						barMarginTop: 0.3,
+						barHeight: 2,
+						barMarginBottom: 0.3,
+					},
+					columns: {
+						labelMargin: 1,
+						valueLabelMargin: 0.75,
+					},
+				},
+			},
 			sizes: {
 				lineWidths: {
 					small: 0.1,
