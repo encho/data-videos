@@ -2,9 +2,9 @@ import {colorPalettes} from './tailwindPalettes';
 import {makeThemeGenerator} from './makeThemeGenerator';
 import {ThemePalette} from './makeThemeGenerator';
 
-// const GRAYS = colorPalettes.Zinc;
+const GRAYS = colorPalettes.Zinc;
 // const GRAYS = colorPalettes.Stone;
-const GRAYS = colorPalettes.Slate;
+// const GRAYS = colorPalettes.Slate;
 // const GRAYS = colorPalettes.Gray;
 // const GRAYS = colorPalettes.Neutral;
 // const GRAYS = colorPalettes.Blue;
@@ -27,7 +27,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		datavizLabel: {
-			main: GRAYS['400'],
+			main: GRAYS['300'],
 			soft: GRAYS['400'],
 		},
 		datavizValueLabel: {

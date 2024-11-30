@@ -184,9 +184,15 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 						lineGapInBaselines: 1,
 						color: palette.typography.datavizLabel.main,
 					},
+					// datavizValueLabel: {
+					// 	fontFamily: 'Inter-Bold',
+					// 	capHeightInBaselines: 0.75,
+					// 	lineGapInBaselines: 1,
+					// 	color: palette.typography.datavizValueLabel.main,
+					// },
 					datavizValueLabel: {
 						fontFamily: 'Inter-Bold',
-						capHeightInBaselines: 0.85,
+						capHeightInBaselines: 0.65,
 						lineGapInBaselines: 1,
 						color: palette.typography.datavizValueLabel.main,
 					},

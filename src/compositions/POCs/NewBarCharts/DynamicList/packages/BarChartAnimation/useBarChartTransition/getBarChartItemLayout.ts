@@ -8,12 +8,12 @@ import {
 
 // TODO into theme
 export function getIbcsSizes(baseline: number) {
-	// TODO from theme
+	// TODO from theme AND from inputs
 	const ibcsSizes = {
 		// rows
-		marginTop: baseline * 0.5,
+		marginTop: baseline * 0.3,
 		barHeight: baseline * 2,
-		marginBottom: baseline * 0.5,
+		marginBottom: baseline * 0.3,
 		// columns
 		labelMargin: baseline,
 		valueLabelMargin: baseline * 0.75,

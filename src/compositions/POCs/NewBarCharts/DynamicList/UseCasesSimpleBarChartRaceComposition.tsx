@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import React, {useMemo} from 'react';
 import {useVideoConfig, Sequence} from 'remotion';
+import chroma from 'chroma-js';
 
 import {SimpleBarChartRace} from './components/SimpleBarChartRace';
 import {SeededRandom} from '../../../../acetti-utils/seededRandom';
@@ -85,12 +86,15 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 							id: dataItem.id,
 							label: dataItem.country,
 							value: dataItem.gdp,
-							color: '#f05122',
+							// color: '#f05122',
+							// color: 'rgba(255,255,255,0.6)',
+							// TODO from theme
+							color: chroma(theme.data.grays['200']).alpha(0.2).css(), // 50% opacitytheme.data.grays[300],
 						};
 					}),
 				};
 			}),
-		[gdpDataArray]
+		[gdpDataArray, theme]
 	);
 
 	// TODO work with this data to create SimpleBarChartRace component
@@ -113,7 +117,7 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 									<TypographyStyle
 										typographyStyle={theme.typography.textStyles.h1}
 										baseline={baseline}
-										marginBottom={7}
+										marginBottom={3}
 									>
 										Bar Chart Race
 									</TypographyStyle>
@@ -121,7 +125,7 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
 										// showLayout
 										hideAxis
 										barChartRaceData={barChartRaceData}
-										height={700}
+										height={800}
 										width={contentWidth}
 										theme={theme}
 										//
@@ -167,7 +171,7 @@ export const UseCasesSimpleBarChartRaceComposition: React.FC<
  * @returns A string in the format "X.XX T USD".
  */
 function formatTrillionUSD(num: number): string {
-	return `${num.toFixed(2)} T USD`;
+	return `$${'\u2009'}${num.toFixed(2)} T`;
 }
 // Example usage:
 // console.log(formatTrillionUSD(5.2)); // Output: "5.20 T USD"

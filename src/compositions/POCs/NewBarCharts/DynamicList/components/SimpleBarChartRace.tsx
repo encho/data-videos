@@ -36,6 +36,16 @@ import {
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
+function easeInElastic(x: number): number {
+	const c4 = (2 * Math.PI) / 3;
+
+	return x === 0
+		? 0
+		: x === 1
+		? 1
+		: (-2) ** (10 * x - 10) * Math.sin((x * 10 - 10.75) * c4);
+}
+
 type TBarChartRaceData = {
 	periodLabel: string;
 	data: {
@@ -51,7 +61,6 @@ export const SimpleBarChartRace: React.FC<{
 	height: number;
 	width: number;
 	theme: ThemeType;
-	// dataItems: TBarChartItem[];
 	fitItemsHeight?: boolean;
 	showLayout?: boolean;
 	justifyContent?: 'center' | 'start';
@@ -205,8 +214,9 @@ export const SimpleBarChartRace: React.FC<{
 		duration_entry -
 		(barChartRaceData.length - 1) * duration_single_transition;
 
-	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
-	// const easing = Easing.bounce;
+	// const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
+	const easing = Easing.bounce;
+	// const easing = easeInElastic;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] =
 		barChartRaceData.map((it, i) => ({
@@ -298,6 +308,31 @@ export const SimpleBarChartRace: React.FC<{
 				<div>
 					<div style={{position: 'relative'}}>
 						{showLayout ? <DisplayGridRails {...matrixLayout} /> : null}
+
+						<HtmlArea area={barsArea}>
+							<div
+								style={{
+									position: 'absolute',
+									bottom:
+										barChartTransitionContext.barChartItemLayout.gridLayout
+											.height -
+										barChartTransitionContext.barChartItemLayout.barArea.y2,
+									right: 0,
+									// opacity: 0.2,
+								}}
+							>
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.h1}
+									// baseline={baseline * 1.35}
+									baseline={baseline}
+									color={theme.data.grays[800]}
+									// marginBottom={7}
+								>
+									{currentPeriodLabel}
+								</TypographyStyle>
+							</div>
+						</HtmlArea>
+
 						<HtmlArea area={barsArea}>
 							<BarsTransition
 								showLayout={showLayout}
@@ -311,24 +346,6 @@ export const SimpleBarChartRace: React.FC<{
 							/>
 						</HtmlArea>
 
-						<HtmlArea area={barsArea}>
-							<div
-								style={{
-									position: 'absolute',
-									bottom: 0,
-									right: 0,
-									// backgroundColor: 'cyan',
-								}}
-							>
-								<TypographyStyle
-									typographyStyle={theme.typography.textStyles.h2}
-									baseline={baseline}
-									// marginBottom={7}
-								>
-									{currentPeriodLabel}
-								</TypographyStyle>
-							</div>
-						</HtmlArea>
 						{/* </HtmlArea> */}
 
 						{hideAxis
