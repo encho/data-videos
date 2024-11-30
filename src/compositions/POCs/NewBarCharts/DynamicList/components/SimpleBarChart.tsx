@@ -22,7 +22,6 @@ import {BarsTransition} from '../packages/BarChartAnimation/BarsTransition/BarsT
 import {useBarChartTransition} from '../packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {getBarChartItemHeight} from '../packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {
-	// DefaultValueLabelComponent,
 	getDefaultValueLabelComponent,
 	MeasureValueLabels,
 	TBarChartValueLabelComponent,
@@ -37,6 +36,7 @@ import {
 	getXAxisHeight,
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
+import {THorizontalBarComponent} from '../packages/BarChartAnimation/BarsTransition/HorizontalBar';
 
 export const useCasesSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -64,6 +64,7 @@ export const SimpleBarChart: React.FC<{
 	tickLabelFormatter?: (value: number) => string;
 	LabelComponent?: TBarChartLabelComponent;
 	ValueLabelComponent?: TBarChartValueLabelComponent;
+	HorizontalBarComponent?: THorizontalBarComponent;
 }> = ({
 	dataItems,
 	baseline: baselineProp,
@@ -86,6 +87,7 @@ export const SimpleBarChart: React.FC<{
 	tickLabelFormatter,
 	LabelComponent: LabelComponentProp,
 	ValueLabelComponent: ValueLabelComponentProp,
+	HorizontalBarComponent,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
@@ -301,6 +303,7 @@ export const SimpleBarChart: React.FC<{
 							barChartTransitionContext={barChartTransitionContext}
 							LabelComponent={LabelComponent}
 							ValueLabelComponent={ValueLabelComponent}
+							HorizontalBarComponent={HorizontalBarComponent}
 							theme={theme}
 							baseline={baseline}
 						/>

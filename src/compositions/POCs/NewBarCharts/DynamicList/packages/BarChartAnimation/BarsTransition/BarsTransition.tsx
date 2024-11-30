@@ -232,8 +232,11 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								theme={theme}
 								area={barArea}
 								currentValue={currentValue}
+								valueTo={item.value}
 								currentColor={barColor}
 								xScale={xScale}
+								animateExit={false}
+								animateEnter={false}
 							/>
 
 							{/* the negative value label */}
@@ -339,9 +342,12 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								baseline={baseline}
 								theme={theme}
 								area={barArea}
+								valueFrom={item.value}
 								currentValue={currentValue}
 								currentColor={barColor}
 								xScale={xScale}
+								animateExit={false}
+								animateEnter={false}
 							/>
 
 							{/* the negative value label */}
@@ -457,9 +463,13 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								baseline={baseline}
 								theme={theme}
 								area={barArea}
+								valueFrom={itemFrom.value}
+								valueTo={itemTo.value}
 								currentValue={currentValue}
 								currentColor={currentBarColor}
 								xScale={xScale}
+								animateExit={false}
+								animateEnter={false}
 							/>
 
 							{/* the negative value label */}
@@ -638,10 +648,13 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 						</Sequence>
 
 						<HorizontalBarComponent
+							animateEnter
+							animateExit={false}
 							id={dataItem.id}
 							label={dataItem.label}
 							baseline={baseline}
 							theme={theme}
+							valueTo={dataItem.value}
 							currentValue={currentValue}
 							currentColor={barColor}
 							xScale={xScale}
@@ -837,10 +850,13 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 						</HtmlArea>
 
 						<HorizontalBarComponent
+							animateExit
+							animateEnter={false}
 							id={dataItem.id}
 							label={dataItem.label}
 							baseline={baseline}
 							theme={theme}
+							valueFrom={dataItem.value}
 							currentValue={currentValue}
 							currentColor={barColor}
 							xScale={xScale}

@@ -8,8 +8,10 @@ import {
 } from '../../../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
-type THorizontalBarComponentProps = {
+export type THorizontalBarComponentProps = {
 	area: TGridLayoutArea;
+	valueFrom?: number;
+	valueTo?: number;
 	currentValue: number;
 	currentColor: string;
 	xScale: ScaleLinear<number, number>;
@@ -17,6 +19,8 @@ type THorizontalBarComponentProps = {
 	theme: ThemeType;
 	id: string;
 	label: string;
+	animateExit: boolean;
+	animateEnter: boolean;
 	// TODO evantually pass also these infos to all HorizontalBar Components! and also Label and ValueLabel
 	// easingPercentage
 	// statusFrom: "default" | ""

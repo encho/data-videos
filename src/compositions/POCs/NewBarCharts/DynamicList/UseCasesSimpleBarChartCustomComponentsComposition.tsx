@@ -2,6 +2,7 @@ import {z} from 'zod';
 import React from 'react';
 import {useVideoConfig, Sequence} from 'remotion';
 
+import {getHorizontalBarWithLabelAndValue} from './packages/BarChartAnimation/BarsTransition/HorizontalBarWithLabelAndValue';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {Page} from '../../../../acetti-components/Page';
@@ -35,8 +36,11 @@ const ImageLabelComponent = getImageLabelComponent({
 
 const ImageValueLabelComponent = getImageValueLabelComponent({
 	imageMappings,
-	// numberFormatter: (x: number) => `${x}--->`,
 	numberFormatter: formatPercentage,
+});
+
+const HorizontalBarCustomComponent = getHorizontalBarWithLabelAndValue({
+	valueLabelFormatter: formatPercentage,
 });
 
 // TODO pass in from outside
@@ -153,14 +157,15 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 									</TypographyStyle>
 									<SimpleBarChart
 										key="custom-bar"
-										showLayout
+										// showLayout
 										hideValueLabel
 										hideLabel
-										ValueLabelComponent={() => null}
+										HorizontalBarComponent={HorizontalBarCustomComponent}
 										height={650}
 										width={contentWidth}
 										theme={theme}
-										dataItems={dataBerlin}
+										// dataItems={dataBerlin}
+										dataItems={dataChange}
 										tickLabelFormatter={formatPercentage_0}
 									/>
 								</Sequence>
