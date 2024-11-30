@@ -8,7 +8,7 @@ import {
 	Easing,
 } from 'remotion';
 
-import {HorizontalBar} from './HorizontalBar';
+import {HorizontalBar, THorizontalBarComponent} from './HorizontalBar';
 import {ZeroLine} from './ZeroLine';
 import {getEnterKeyframes, getExitKeyframes} from './getKeyframes';
 import {TBarChartValueLabelComponent} from './ValueLabelComponent';
@@ -38,6 +38,7 @@ type TBarsTransitionCommonProps = {
 	barChartTransitionContext: TBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
+	HorizontalBarComponent: THorizontalBarComponent;
 	theme: ThemeType;
 	baseline: number;
 	hideLabel?: boolean;
@@ -62,6 +63,7 @@ type TBarsTransitionProps = {
 	barChartTransitionContext: TBarChartTransitionContext;
 	LabelComponent: TBarChartLabelComponent;
 	ValueLabelComponent: TBarChartValueLabelComponent;
+	HorizontalBarComponent?: THorizontalBarComponent;
 	listTransitionContext:
 		| ListTransitionContext_Enter<TBarChartItem>
 		| ListTransitionContext_Update<TBarChartItem>
@@ -77,6 +79,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 	listTransitionContext,
 	LabelComponent,
 	ValueLabelComponent,
+	HorizontalBarComponent = HorizontalBar,
 	barChartTransitionContext,
 	enterKeyframes,
 	exitKeyframes,
@@ -91,6 +94,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				barChartTransitionContext={barChartTransitionContext}
 				LabelComponent={LabelComponent}
 				ValueLabelComponent={ValueLabelComponent}
+				HorizontalBarComponent={HorizontalBarComponent}
 				theme={theme}
 				baseline={baseline}
 			/>
@@ -105,6 +109,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 				barChartTransitionContext={barChartTransitionContext}
 				LabelComponent={LabelComponent}
 				ValueLabelComponent={ValueLabelComponent}
+				HorizontalBarComponent={HorizontalBarComponent}
 				keyframes={enterKeyframes}
 				theme={theme}
 				baseline={baseline}
@@ -121,6 +126,7 @@ export const BarsTransition: React.FC<TBarsTransitionProps> = ({
 			barChartTransitionContext={barChartTransitionContext}
 			LabelComponent={LabelComponent}
 			ValueLabelComponent={ValueLabelComponent}
+			HorizontalBarComponent={HorizontalBarComponent}
 			keyframes={exitKeyframes}
 			theme={theme}
 			baseline={baseline}
@@ -133,6 +139,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 	listTransitionContext,
 	LabelComponent,
 	ValueLabelComponent,
+	HorizontalBarComponent,
 	barChartTransitionContext,
 	theme,
 	baseline,
@@ -218,7 +225,9 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HorizontalBar
+							<HorizontalBarComponent
+								id={item.id}
+								label={item.label}
 								baseline={baseline}
 								theme={theme}
 								area={barArea}
@@ -324,7 +333,9 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HorizontalBar
+							<HorizontalBarComponent
+								id={item.id}
+								label={item.label}
 								baseline={baseline}
 								theme={theme}
 								area={barArea}
@@ -440,7 +451,9 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 								/>
 							</HtmlArea>
 
-							<HorizontalBar
+							<HorizontalBarComponent
+								id={itemTo.id}
+								label={itemTo.label}
 								baseline={baseline}
 								theme={theme}
 								area={barArea}
@@ -513,6 +526,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 	listTransitionContext,
 	LabelComponent,
 	ValueLabelComponent,
+	HorizontalBarComponent,
 	barChartTransitionContext,
 	keyframes: keyframesProp,
 	theme,
@@ -623,7 +637,9 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							</HtmlArea>
 						</Sequence>
 
-						<HorizontalBar
+						<HorizontalBarComponent
+							id={dataItem.id}
+							label={dataItem.label}
 							baseline={baseline}
 							theme={theme}
 							currentValue={currentValue}
@@ -717,6 +733,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 	listTransitionContext,
 	LabelComponent,
 	ValueLabelComponent,
+	HorizontalBarComponent,
 	barChartTransitionContext,
 	keyframes: keyframesProp,
 	theme,
@@ -819,7 +836,9 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							/>
 						</HtmlArea>
 
-						<HorizontalBar
+						<HorizontalBarComponent
+							id={dataItem.id}
+							label={dataItem.label}
 							baseline={baseline}
 							theme={theme}
 							currentValue={currentValue}

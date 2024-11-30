@@ -8,25 +8,30 @@ import {
 } from '../../../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
-export const HorizontalBar: React.FC<{
+type THorizontalBarComponentProps = {
 	area: TGridLayoutArea;
 	currentValue: number;
 	currentColor: string;
 	xScale: ScaleLinear<number, number>;
 	baseline: number;
 	theme: ThemeType;
-	// TODO evantually pass also these infos to all HorizontalBar Components!
-	// theme
-	// itemFrom
-	// itemTo
+	id: string;
+	label: string;
+	// TODO evantually pass also these infos to all HorizontalBar Components! and also Label and ValueLabel
 	// easingPercentage
-}> = ({
+	// statusFrom: "default" | ""
+	// statusTo:
+};
+
+export type THorizontalBarComponent =
+	React.ComponentType<THorizontalBarComponentProps>;
+
+export const HorizontalBar: React.FC<THorizontalBarComponentProps> = ({
 	area,
 	currentValue,
 	currentColor,
 	xScale,
 	baseline,
-	// theme: _theme,
 }) => {
 	const zeroLine_x = xScale(0);
 
