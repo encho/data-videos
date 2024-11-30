@@ -132,7 +132,7 @@ export const PageFooter: React.FC<{
 	const page = usePage();
 
 	const {baseline} = page;
-	const paddingTopInBaselines = 5;
+	const paddingTopInBaselines = 4;
 
 	return (
 		<div

@@ -1,8 +1,11 @@
 import {z} from 'zod';
-import {useVideoConfig, Img, Sequence} from 'remotion';
+import {useVideoConfig, Sequence} from 'remotion';
+import {useMemo} from 'react';
 
+import {getEnterKeyframes} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getKeyframes';
+import {getImageLabelComponent} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
+import {SimpleBarChart as SimpleBarChartNew} from '../../NewBarCharts/DynamicList/components/SimpleBarChart';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
-import {useBarChartKeyframes} from '../../../../acetti-flics/SimpleBarChart/useBarChartKeyframes';
 import {
 	Page,
 	PageHeader,
@@ -15,15 +18,9 @@ import {
 	useThemeFromEnum,
 	zThemeEnum,
 } from '../../../../acetti-themes/getThemeFromEnum';
-import {
-	SimpleBarChart,
-	TSimpleBarChartDataItem,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {TBarChartItem} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {zColor} from '@remotion/zod-types';
 import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {getBarChartBaseline} from '../../../../acetti-flics/SimpleBarChart/useBarChartLayout';
-import invariant from 'tiny-invariant';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
 import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
@@ -38,9 +35,7 @@ export const bundesligaTabelleCompositionSchema = z.object({
 		z.object({
 			label: z.string(),
 			value: z.number(),
-			barColor: zColor(),
 			id: z.string(),
-			valueLabel: z.string(),
 			teamIconUrl: z.string(),
 		})
 	),
@@ -66,12 +61,40 @@ export const BundesligaTabelleComposition: React.FC<
 		startingFiveSlideDurationInFrames + whiteSpaceSlideDurationInFrames;
 	const lastSlideFrom = barChartFrom + barChartDurationInFrames;
 
+	const colors = {
+		championsLeague: colorPalettes.Emerald[400],
+		championsOrUefaLeague: colorPalettes.Emerald[500],
+		uefaLeague: colorPalettes.Emerald[600],
+		uefaConferenceLeague: colorPalettes.Emerald[700],
+		relegation: colorPalettes.Rose[700],
+		abstieg: colorPalettes.Rose[600],
+		mittlerePosition: theme.data.grays[700],
+	};
+
+	const dataWithColors = data.map((it, i) => ({
+		...it,
+		color:
+			i < 2
+				? colors.championsLeague
+				: i === 2
+				? colors.championsOrUefaLeague
+				: i === 3
+				? colors.uefaLeague
+				: i === 4
+				? colors.uefaConferenceLeague
+				: i === 15
+				? colors.relegation
+				: i > 15
+				? colors.abstieg
+				: colors.mittlerePosition,
+	}));
+
 	return (
 		<PageContext
 			width={width}
 			height={height}
 			margin={50}
-			nrBaselines={60}
+			nrBaselines={70}
 			theme={theme}
 		>
 			<Sequence
@@ -107,7 +130,7 @@ export const BundesligaTabelleComposition: React.FC<
 			>
 				<BundesligaBarChartsPage
 					theme={theme}
-					data={data}
+					data={dataWithColors}
 					title={title}
 					subtitle={subtitle}
 					dataSource={dataSource}
@@ -122,7 +145,7 @@ export const BundesligaTabelleComposition: React.FC<
 
 export const BundesligaBarChartsPage: React.FC<{
 	theme: ThemeType;
-	data: Array<TSimpleBarChartDataItem & {teamIconUrl: string}>;
+	data: Array<TBarChartItem & {teamIconUrl: string}>;
 	title: string;
 	subtitle: string;
 	dataSource: string;
@@ -130,7 +153,7 @@ export const BundesligaBarChartsPage: React.FC<{
 	const {fps, durationInFrames} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 
-	const keyframes = useBarChartKeyframes({
+	const keyframes = getEnterKeyframes({
 		fps,
 		durationInFrames,
 		data,
@@ -148,7 +171,7 @@ export const BundesligaBarChartsPage: React.FC<{
 	const page = usePage();
 
 	return (
-		<Page show>
+		<Page>
 			<div
 				style={{
 					display: 'flex',
@@ -175,7 +198,13 @@ export const BundesligaBarChartsPage: React.FC<{
 					}}
 				>
 					{dimensions ? (
-						<div>
+						<div
+							style={{
+								width: dimensions.width,
+								height: dimensions.height,
+								// backgroundColor: 'gray',
+							}}
+						>
 							<Sequence
 								from={Math.floor(fps * barChartDelayInSeconds)}
 								layout="none"
@@ -225,97 +254,34 @@ export const BundesligaBarChartsPage: React.FC<{
 
 export const BarChartWithLogos: React.FC<{
 	theme: ThemeType;
-	data: Array<TSimpleBarChartDataItem & {teamIconUrl: string}>;
+	data: Array<TBarChartItem & {teamIconUrl: string}>;
 	height: number;
 	width: number;
-}> = ({theme, data: dataProp, width, height}) => {
-	const barChartBaseline = getBarChartBaseline(height, dataProp);
+}> = ({theme, data, width, height}) => {
+	const imageMappings = useMemo(() => {
+		const idImagePairs = data.map((it) => [it.id, it.teamIconUrl]);
+		return Object.fromEntries(idImagePairs);
+	}, [data]);
 
-	const colors = {
-		championsLeague: colorPalettes.Emerald[400],
-		championsOrUefaLeague: colorPalettes.Emerald[500],
-		uefaLeague: colorPalettes.Emerald[600],
-		uefaConferenceLeague: colorPalettes.Emerald[700],
-		relegation: colorPalettes.Rose[700],
-		abstieg: colorPalettes.Rose[600],
-		// mittlerePosition: colorPalettes['Slate'][600],
-		mittlerePosition: theme.BarChart.barColors.subtle,
-		// mittl
-	};
-
-	const data = dataProp.map((it, i) => ({
-		...it,
-		barColor:
-			i < 2
-				? colors.championsLeague
-				: i === 2
-				? colors.championsOrUefaLeague
-				: i === 3
-				? colors.uefaLeague
-				: i === 4
-				? colors.uefaConferenceLeague
-				: i === 15
-				? colors.relegation
-				: i > 15
-				? colors.abstieg
-				: colors.mittlerePosition,
-	}));
-
-	// TODO factor out
-	const CustomBarChartLabelComponent = ({
-		children,
-		id,
-	}: {
-		children: string;
-		id: string;
-	}) => {
-		const imageSrc = data.find((it) => it.id === id)?.teamIconUrl;
-		invariant(imageSrc);
-
-		return (
-			<div
-				style={{
-					display: 'flex',
-					gap: barChartBaseline * 0.6,
-					alignItems: 'center',
-				}}
-			>
-				<TypographyStyle
-					typographyStyle={theme.typography.textStyles.datavizLabel}
-					baseline={barChartBaseline}
-				>
-					<TextAnimationSubtle
-						innerDelayInSeconds={0}
-						translateY={barChartBaseline * 1.15}
-					>
-						{children}
-					</TextAnimationSubtle>
-				</TypographyStyle>
-				<TextAnimationSubtle
-					innerDelayInSeconds={0}
-					translateY={barChartBaseline * 1.15}
-				>
-					<Img
-						style={{
-							borderRadius: '50%',
-							width: barChartBaseline * 2,
-							height: barChartBaseline * 2,
-						}}
-						src={imageSrc}
-					/>
-				</TextAnimationSubtle>
-			</div>
-		);
-	};
+	const BundesligaTeamLabelComponent = useMemo(
+		() =>
+			getImageLabelComponent({
+				imageMappings,
+			}),
+		[imageMappings]
+	);
 
 	return (
-		<SimpleBarChart
-			data={data}
+		<SimpleBarChartNew
+			hideAxis
+			dataItems={data}
 			width={width}
-			baseline={barChartBaseline}
+			height={height}
 			theme={theme}
-			// keyframes={keyframes} // TODO evtl. pass from above
-			CustomLabelComponent={CustomBarChartLabelComponent}
+			LabelComponent={BundesligaTeamLabelComponent}
+			valueLabelFormatter={(value) =>
+				value === 1 ? `${value} Punkt` : `${value} Punkte`
+			}
 		/>
 	);
 };

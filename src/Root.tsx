@@ -335,8 +335,8 @@ export const RemotionRoot: React.FC = () => {
 					component={BundesligaTabelleComposition}
 					durationInFrames={30 * 12}
 					fps={30}
-					// {...videoSizes.square}
-					{...videoSizes.linkedInTall}
+					{...videoSizes.square}
+					// {...videoSizes.linkedInTall}
 					schema={bundesligaTabelleCompositionSchema}
 					defaultProps={{
 						themeEnum: 'LORENZOBERTOLINI' as const,
@@ -360,16 +360,25 @@ export const RemotionRoot: React.FC = () => {
 							teamIconUrl: it.teamIconUrl,
 							label: it.teamName,
 							value: it.points,
-							barColor: '#ffffff',
 							id: `id-${it.teamInfoId}`,
-							valueLabel:
-								it.points === 1 ? `${it.points} Punkt` : `${it.points} Punkte`,
 						}));
+
+						const formatGermanDate = (date: Date): string => {
+							return new Intl.DateTimeFormat('de-DE', {
+								day: 'numeric',
+								month: 'long',
+								year: 'numeric',
+							}).format(date);
+						};
+
+						const today = new Date();
+						const formattedDate = formatGermanDate(today);
 
 						return {
 							props: {
 								...props,
 								data: parsedData,
+								subtitle: `Punktestand am ${formattedDate}`,
 							},
 						};
 					}}

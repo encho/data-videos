@@ -2,8 +2,8 @@ import {colorPalettes} from './tailwindPalettes';
 import {makeThemeGenerator} from './makeThemeGenerator';
 import {ThemePalette} from './makeThemeGenerator';
 
-const GRAYS = colorPalettes.Zinc;
-// const GRAYS = colorPalettes.Stone;
+// const GRAYS = colorPalettes.Zinc;
+const GRAYS = colorPalettes.Stone;
 // const GRAYS = colorPalettes.Slate;
 // const GRAYS = colorPalettes.Gray;
 // const GRAYS = colorPalettes.Neutral;
