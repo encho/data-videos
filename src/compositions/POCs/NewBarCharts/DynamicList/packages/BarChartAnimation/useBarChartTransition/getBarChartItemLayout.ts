@@ -6,30 +6,70 @@ import {
 	TGridLayoutArea,
 } from '../../../../../../../acetti-layout';
 
-// TODO into theme
-export function getIbcsSizes(baseline: number) {
-	// TODO from theme AND from inputs
-	const ibcsSizes = {
-		// rows
-		marginTop: baseline * 0.3,
-		barHeight: baseline * 2,
-		marginBottom: baseline * 0.3,
-		// columns
-		labelMargin: baseline,
-		valueLabelMargin: baseline * 0.75,
+// TODO could be in Theme!
+type IBCS_Sizes_HorizontalBarChartItem = {
+	rows: {
+		barMarginTop: number;
+		barHeight: number;
+		barMarginBottom: number;
+	};
+	columns: {
+		labelMargin: number;
+		valueLabelMargin: number;
+	};
+};
+
+// TODO think about top bar and bottom bar too....
+const THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM: IBCS_Sizes_HorizontalBarChartItem =
+	{
+		rows: {
+			barMarginTop: 0.3,
+			barHeight: 2,
+			barMarginBottom: 0.3,
+		},
+		columns: {
+			labelMargin: 1,
+			valueLabelMargin: 0.75,
+		},
 	};
 
+// TODO into theme
+// export function getIbcsSizes(baseline: number) {
+function getIbcsSizes(
+	baseline: number,
+	ibcsSizesObject: IBCS_Sizes_HorizontalBarChartItem = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM
+): IBCS_Sizes_HorizontalBarChartItem {
+	const ibcsSizes = {
+		rows: {
+			barMarginTop: baseline * ibcsSizesObject.rows.barMarginTop,
+			barHeight: baseline * ibcsSizesObject.rows.barHeight,
+			barMarginBottom: baseline * ibcsSizesObject.rows.barMarginBottom,
+		},
+		columns: {
+			labelMargin: baseline * ibcsSizesObject.columns.labelMargin,
+			valueLabelMargin: baseline * ibcsSizesObject.columns.valueLabelMargin,
+		},
+	};
 	return ibcsSizes;
 }
 
 // TODO account for flag includeSecondaryBars
 // TODO ibcs in the name
-export function getBarChartItemHeight({baseline}: {baseline: number}) {
-	const ibcsSizes = getIbcsSizes(baseline);
+// export function getBarChartItemHeight({
+export function getBarChartItemHeight({
+	baseline,
+	ibcsSizesSpec = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM,
+}: {
+	baseline: number;
+	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
+}) {
+	const ibcsSizes = getIbcsSizes(baseline, ibcsSizesSpec);
 
 	// TODO also upperBar and lowerBar should be taken into consideration
 	const barChartItemHeight =
-		ibcsSizes.marginTop + ibcsSizes.barHeight + ibcsSizes.marginBottom;
+		ibcsSizes.rows.barMarginTop +
+		ibcsSizes.rows.barHeight +
+		ibcsSizes.rows.barMarginBottom;
 
 	return barChartItemHeight;
 }
@@ -39,12 +79,14 @@ export function getAllBarChartItemsHeight({
 	// theme,
 	baseline,
 	nrItems,
+	ibcsSizesSpec,
 }: {
 	// theme: ThemeType;
 	baseline: number;
 	nrItems: number;
+	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
 }) {
-	const barChartItemHeight = getBarChartItemHeight({baseline});
+	const barChartItemHeight = getBarChartItemHeight({baseline, ibcsSizesSpec});
 	const barChartItemsHeight = nrItems * barChartItemHeight;
 
 	return barChartItemsHeight;
@@ -66,8 +108,9 @@ export function getBarChartItemLayout({
 	valueLabelWidth,
 	negativeValueLabelWidth,
 	negativeValueLabelWidthPercentage,
-	hideLabel = false,
-	hideValueLabel = false,
+	// hideLabel = false, // TODO deprecate?
+	// hideValueLabel = false, // TODO deprecate?
+	ibcsSizesSpec = THEME_IBCS_SIZES_HORIZONTAL_BARCHART_ITEM,
 }: {
 	height: number;
 	width: number;
@@ -76,15 +119,16 @@ export function getBarChartItemLayout({
 	valueLabelWidth: number;
 	negativeValueLabelWidth: number;
 	negativeValueLabelWidthPercentage: number;
-	hideLabel: boolean;
-	hideValueLabel: boolean;
+	// hideLabel: boolean;
+	// hideValueLabel: boolean;
+	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
 }): TBarChartItemLayout {
-	const ibcsSizes = getIbcsSizes(baseline);
+	const ibcsSizes = getIbcsSizes(baseline, ibcsSizesSpec);
 
 	const rows: TGridRailSpec = [
 		{
 			type: 'pixel',
-			value: ibcsSizes.marginTop,
+			value: ibcsSizes.rows.barMarginTop,
 			name: 'marginTop',
 		},
 		// in this case we fill all remaining space, and do not guarantee ibcs size!
@@ -95,7 +139,7 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: ibcsSizes.marginBottom,
+			value: ibcsSizes.rows.barMarginBottom,
 			name: 'marginBottom',
 		},
 	];
@@ -103,26 +147,24 @@ export function getBarChartItemLayout({
 	const columns: TGridRailSpec = [
 		{
 			type: 'pixel',
-			value: hideLabel ? 0 : labelWidth,
+			// value: hideLabel ? 0 : labelWidth,
+			value: labelWidth,
 			name: 'label',
 		},
 		{
 			type: 'pixel',
-			value: hideLabel ? 0 : ibcsSizes.labelMargin,
+			value: ibcsSizes.columns.labelMargin,
 			name: 'labelMarginRight',
 		},
 		{
 			type: 'pixel',
-			value: hideValueLabel
-				? 0
-				: negativeValueLabelWidth * negativeValueLabelWidthPercentage,
+			value: negativeValueLabelWidth * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabel',
 		},
 		{
 			type: 'pixel',
-			value: hideValueLabel
-				? 0
-				: ibcsSizes.valueLabelMargin * negativeValueLabelWidthPercentage,
+			value:
+				ibcsSizes.columns.valueLabelMargin * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabelMarginRight',
 		},
 		{
@@ -132,12 +174,12 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: hideValueLabel ? 0 : ibcsSizes.valueLabelMargin,
+			value: ibcsSizes.columns.valueLabelMargin,
 			name: 'valueLabelMarginLeft',
 		},
 		{
 			type: 'pixel',
-			value: hideValueLabel ? 0 : valueLabelWidth,
+			value: valueLabelWidth,
 			name: 'valueLabel',
 		},
 	];

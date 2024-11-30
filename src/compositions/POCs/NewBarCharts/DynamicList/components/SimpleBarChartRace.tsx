@@ -36,14 +36,33 @@ import {
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
-function easeInElastic(x: number): number {
-	const c4 = (2 * Math.PI) / 3;
+// TODO could be in Theme!
+type IBCS_Sizes_HorizontalBarChartItem = {
+	rows: {
+		barMarginTop: number;
+		barHeight: number;
+		barMarginBottom: number;
+	};
+	columns: {
+		labelMargin: number;
+		valueLabelMargin: number;
+	};
+};
 
-	return x === 0
-		? 0
-		: x === 1
-		? 1
-		: (-2) ** (10 * x - 10) * Math.sin((x * 10 - 10.75) * c4);
+// TODO think about top bar and bottom bar too....
+function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
+	const THEME_IBCS_SIZES_SPEC = {
+		rows: {
+			barMarginTop: 0.3,
+			barHeight: 2,
+			barMarginBottom: 0.3,
+		},
+		columns: {
+			labelMargin: 1,
+			valueLabelMargin: 0.75,
+		},
+	};
+	return THEME_IBCS_SIZES_SPEC;
 }
 
 type TBarChartRaceData = {
@@ -72,6 +91,7 @@ export const SimpleBarChartRace: React.FC<{
 	nrTicks?: number;
 	hideAxis?: boolean;
 	hideLabel?: boolean;
+	hideValueLabel?: boolean;
 	valueLabelFormatter?: (value: number) => string;
 	tickLabelFormatter?: (value: number) => string;
 	LabelComponent?: TBarChartLabelComponent;
@@ -95,18 +115,40 @@ export const SimpleBarChartRace: React.FC<{
 	nrTicks,
 	hideAxis = false,
 	hideLabel = false,
+	hideValueLabel = false,
 	valueLabelFormatter,
 	tickLabelFormatter,
-	LabelComponent = DefaultLabelComponent,
+	LabelComponent: LabelComponentProp,
 	ValueLabelComponent: ValueLabelComponentProp,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const ValueLabelComponent =
-		ValueLabelComponentProp ||
-		getDefaultValueLabelComponent({
-			numberFormatter: valueLabelFormatter,
-		});
+	// TODO actually intgrate in theme!
+	const ibcsSizesSpecFromTheme = getIbcsSizesSpecFromTheme();
+
+	if (hideLabel) {
+		ibcsSizesSpecFromTheme.columns.labelMargin = 0;
+	}
+	if (hideValueLabel) {
+		ibcsSizesSpecFromTheme.columns.valueLabelMargin = 0;
+	}
+
+	const LabelComponent = useMemo(
+		() =>
+			hideLabel ? () => null : LabelComponentProp || DefaultLabelComponent,
+		[hideLabel, LabelComponentProp]
+	);
+
+	const ValueLabelComponent = useMemo(
+		() =>
+			hideValueLabel
+				? () => null
+				: ValueLabelComponentProp ||
+				  getDefaultValueLabelComponent({
+						numberFormatter: valueLabelFormatter,
+				  }),
+		[hideValueLabel, ValueLabelComponentProp, valueLabelFormatter]
+	);
 
 	const MOST_ITEMS_AT_ONCE = Math.max(
 		...barChartRaceData.map((it) => it.data.length)
@@ -119,6 +161,7 @@ export const SimpleBarChartRace: React.FC<{
 				nrItems: MOST_ITEMS_AT_ONCE,
 				height,
 				hideAxis,
+				ibcsSizesSpec: ibcsSizesSpecFromTheme,
 		  });
 
 	const xAxisHeight = hideAxis ? 0 : getXAxisHeight({theme, baseline});
@@ -229,7 +272,10 @@ export const SimpleBarChartRace: React.FC<{
 		durationInFrames: duration_exit,
 	});
 
-	const ibcsItemHeightForBaseline = getBarChartItemHeight({baseline});
+	const ibcsItemHeightForBaseline = getBarChartItemHeight({
+		baseline,
+		ibcsSizesSpec: ibcsSizesSpecFromTheme,
+	});
 
 	const listAnimationContext = useListAnimation({
 		width: barsArea.width,
@@ -251,7 +297,7 @@ export const SimpleBarChartRace: React.FC<{
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
 		globalCustomDomain: domain, // TODO rename to domain
 		forceNegativeValueLabelWidth,
-		hideLabel,
+		ibcsSizesSpec: ibcsSizesSpecFromTheme,
 	});
 
 	const allDataItems = useMemo(
@@ -318,15 +364,12 @@ export const SimpleBarChartRace: React.FC<{
 											.height -
 										barChartTransitionContext.barChartItemLayout.barArea.y2,
 									right: 0,
-									// opacity: 0.2,
 								}}
 							>
 								<TypographyStyle
 									typographyStyle={theme.typography.textStyles.h1}
-									// baseline={baseline * 1.35}
 									baseline={baseline}
 									color={theme.data.grays[800]}
-									// marginBottom={7}
 								>
 									{currentPeriodLabel}
 								</TypographyStyle>
@@ -342,7 +385,6 @@ export const SimpleBarChartRace: React.FC<{
 								ValueLabelComponent={ValueLabelComponent}
 								theme={theme}
 								baseline={baseline}
-								hideLabel={hideLabel}
 							/>
 						</HtmlArea>
 

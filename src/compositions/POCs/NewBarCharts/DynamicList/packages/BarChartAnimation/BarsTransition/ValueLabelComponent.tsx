@@ -1,6 +1,4 @@
 import {memo, forwardRef} from 'react';
-import invariant from 'tiny-invariant';
-import {Img} from 'remotion';
 
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';

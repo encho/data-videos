@@ -14,6 +14,35 @@ import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {usePage} from '../../../../../acetti-components/PageContext';
 import {TextAnimationSubtle} from '../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
+// TODO could be in Theme!
+type IBCS_Sizes_HorizontalBarChartItem = {
+	rows: {
+		barMarginTop: number;
+		barHeight: number;
+		barMarginBottom: number;
+	};
+	columns: {
+		labelMargin: number;
+		valueLabelMargin: number;
+	};
+};
+
+// TODO think about top bar and bottom bar too....
+function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
+	const THEME_IBCS_SIZES_SPEC = {
+		rows: {
+			barMarginTop: 0.3,
+			barHeight: 2,
+			barMarginBottom: 0.3,
+		},
+		columns: {
+			labelMargin: 1,
+			valueLabelMargin: 0.75,
+		},
+	};
+	return THEME_IBCS_SIZES_SPEC;
+}
+
 export const SimpleBarChart_Composed: React.FC<{
 	dataLeft: TBarChartItem[];
 	dataRight: TBarChartItem[];
@@ -53,8 +82,8 @@ export const SimpleBarChart_Composed: React.FC<{
 	tickLabelFormatterLeft,
 	tickLabelFormatterRight,
 }) => {
-	// const LabelComponent = DefaultLabelComponent;
-	// const ValueLabelComponent = DefaultValueLabelComponent;
+	// TODO pick from theme
+	const ibcsSizesSpec = getIbcsSizesSpecFromTheme();
 
 	const {fps} = useVideoConfig();
 	const {baseline: pageBaseline} = usePage();
@@ -114,6 +143,7 @@ export const SimpleBarChart_Composed: React.FC<{
 		theme,
 		nrItems: dataLeft.length,
 		hideAxis,
+		ibcsSizesSpec,
 	});
 
 	const baselineUpperRight = getPerfectBaselineForHeight({
@@ -121,6 +151,7 @@ export const SimpleBarChart_Composed: React.FC<{
 		theme,
 		nrItems: dataRight.length,
 		hideAxis,
+		ibcsSizesSpec,
 	});
 
 	const smallestCommonBaseline = Math.min(

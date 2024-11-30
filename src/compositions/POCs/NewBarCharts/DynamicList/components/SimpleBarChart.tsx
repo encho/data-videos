@@ -37,6 +37,35 @@ import {
 	getXAxisMarginTop,
 } from '../packages/BarChartAnimation/XAxisTransition/getStyles_XAxis';
 
+// TODO could be in Theme!
+type IBCS_Sizes_HorizontalBarChartItem = {
+	rows: {
+		barMarginTop: number;
+		barHeight: number;
+		barMarginBottom: number;
+	};
+	columns: {
+		labelMargin: number;
+		valueLabelMargin: number;
+	};
+};
+
+// TODO think about top bar and bottom bar too....
+function getIbcsSizesSpecFromTheme(): IBCS_Sizes_HorizontalBarChartItem {
+	const THEME_IBCS_SIZES_SPEC = {
+		rows: {
+			barMarginTop: 0.3,
+			barHeight: 2,
+			barMarginBottom: 0.3,
+		},
+		columns: {
+			labelMargin: 1,
+			valueLabelMargin: 0.75,
+		},
+	};
+	return THEME_IBCS_SIZES_SPEC;
+}
+
 export const useCasesSimpleBarChartCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 });
@@ -81,14 +110,29 @@ export const SimpleBarChart: React.FC<{
 	hideAxis = false,
 	hideLabel = false,
 	hideValueLabel = false,
-	valueLabelFormatter,
+	valueLabelFormatter, // TODO deprecate this should be handled by ValueLabelComponent
 	tickLabelFormatter,
-	LabelComponent = DefaultLabelComponent,
+	LabelComponent: LabelComponentProp,
 	ValueLabelComponent: ValueLabelComponentProp,
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	// TODO do the same with LabelCompontent, s.t. we do not have to conditionally render it or not in the BarsTransition
+	// TODO actually intgrate in theme!
+	const ibcsSizesSpecFromTheme = getIbcsSizesSpecFromTheme();
+
+	if (hideLabel) {
+		ibcsSizesSpecFromTheme.columns.labelMargin = 0;
+	}
+	if (hideValueLabel) {
+		ibcsSizesSpecFromTheme.columns.valueLabelMargin = 0;
+	}
+
+	const LabelComponent = useMemo(
+		() =>
+			hideLabel ? () => null : LabelComponentProp || DefaultLabelComponent,
+		[hideLabel, LabelComponentProp]
+	);
+
 	const ValueLabelComponent = useMemo(
 		() =>
 			hideValueLabel
@@ -109,6 +153,7 @@ export const SimpleBarChart: React.FC<{
 				nrItems: MOST_ITEMS_AT_ONCE,
 				height,
 				hideAxis,
+				ibcsSizesSpec: ibcsSizesSpecFromTheme,
 		  });
 
 	const xAxisHeight = hideAxis ? 0 : getXAxisHeight({theme, baseline});
@@ -210,7 +255,10 @@ export const SimpleBarChart: React.FC<{
 		},
 	];
 
-	const ibcsItemHeightForBaseline = getBarChartItemHeight({baseline});
+	const ibcsItemHeightForBaseline = getBarChartItemHeight({
+		baseline,
+		ibcsSizesSpec: ibcsSizesSpecFromTheme,
+	});
 
 	const listAnimationContext = useListAnimation({
 		width: barsArea.width,
@@ -232,8 +280,7 @@ export const SimpleBarChart: React.FC<{
 		negativeValueLabelWidth: negativeValueLabelWidth || 0,
 		globalCustomDomain: domain, // TODO rename to domain
 		forceNegativeValueLabelWidth,
-		hideLabel,
-		hideValueLabel,
+		ibcsSizesSpec: ibcsSizesSpecFromTheme,
 	});
 
 	return (
@@ -282,7 +329,6 @@ export const SimpleBarChart: React.FC<{
 							ValueLabelComponent={ValueLabelComponent}
 							theme={theme}
 							baseline={baseline}
-							hideLabel={hideLabel}
 						/>
 					</HtmlArea>
 

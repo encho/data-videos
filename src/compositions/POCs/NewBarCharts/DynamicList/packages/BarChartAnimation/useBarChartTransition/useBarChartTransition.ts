@@ -11,6 +11,19 @@ import {
 import {TDynamicListTransitionContext} from '../../ListAnimation/useListTransition/useListTransition';
 import {interpolate} from 'remotion';
 
+// TODO could be in Theme!
+type IBCS_Sizes_HorizontalBarChartItem = {
+	rows: {
+		barMarginTop: number;
+		barHeight: number;
+		barMarginBottom: number;
+	};
+	columns: {
+		labelMargin: number;
+		valueLabelMargin: number;
+	};
+};
+
 type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
 	barChartItemLayout: TBarChartItemLayout; // TODO deprecate??? or average the from and to??
@@ -69,8 +82,7 @@ export function useBarChartTransition({
 	negativeValueLabelWidth,
 	forceNegativeValueLabelWidth = false,
 	globalCustomDomain,
-	hideLabel = false,
-	hideValueLabel = false,
+	ibcsSizesSpec,
 }: {
 	listTransitionContext: TDynamicListTransitionContext<TBarChartItem>;
 	baseline: number;
@@ -79,8 +91,7 @@ export function useBarChartTransition({
 	negativeValueLabelWidth: number;
 	forceNegativeValueLabelWidth?: boolean;
 	globalCustomDomain?: [number, number]; // TODO would also be good to pass transition specific custom domains...
-	hideLabel?: boolean;
-	hideValueLabel?: boolean;
+	ibcsSizesSpec: IBCS_Sizes_HorizontalBarChartItem;
 }): TBarChartTransitionContext {
 	//
 	const {width, easingPercentage} = listTransitionContext;
@@ -138,8 +149,7 @@ export function useBarChartTransition({
 			valueLabelWidth,
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageFrom,
-			hideLabel,
-			hideValueLabel,
+			ibcsSizesSpec,
 		});
 
 		const barChartItemLayoutTo = getBarChartItemLayout({
@@ -150,8 +160,7 @@ export function useBarChartTransition({
 			valueLabelWidth,
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage: negativeValueLabelWidthPercentageTo,
-			hideLabel,
-			hideValueLabel,
+			ibcsSizesSpec,
 		});
 
 		const barChartItemLayout = getBarChartItemLayout({
@@ -163,8 +172,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage:
 				currentNegativeValueLabelWidthPercentage,
-			hideLabel,
-			hideValueLabel,
+			ibcsSizesSpec,
 		});
 
 		const xScaleFrom = getXScale({
@@ -264,8 +272,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidth,
 			negativeValueLabelWidthPercentage:
 				hasNegativeValuesTo || forceNegativeValueLabelWidth ? 1 : 0,
-			hideLabel,
-			hideValueLabel,
+			ibcsSizesSpec,
 		});
 
 		const xScaleTo = getXScale({
@@ -319,8 +326,7 @@ export function useBarChartTransition({
 		negativeValueLabelWidth,
 		negativeValueLabelWidthPercentage:
 			hasNegativeValuesFrom || forceNegativeValueLabelWidth ? 1 : 0,
-		hideLabel,
-		hideValueLabel,
+		ibcsSizesSpec,
 	});
 
 	const xScaleFrom = getXScale({

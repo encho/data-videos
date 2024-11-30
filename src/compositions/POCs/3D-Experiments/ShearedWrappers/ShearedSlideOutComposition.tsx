@@ -1,14 +1,14 @@
 import {
 	interpolate,
-	spring,
+	// spring,
 	Easing,
 	useCurrentFrame,
-	useVideoConfig,
+	// useVideoConfig,
 } from 'remotion';
 import {z} from 'zod';
 
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
+// import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 
 export const shearedSlideOutCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -18,9 +18,9 @@ export const ShearedSlideOutComposition: React.FC<
 	z.infer<typeof shearedSlideOutCompositionSchema>
 > = ({themeEnum}) => {
 	// const {width, height} = useVideoConfig();
-	const _theme = useThemeFromEnum(themeEnum);
+	// const _theme = useThemeFromEnum(themeEnum);
 	const frame = useCurrentFrame();
-	const {width, height} = useVideoConfig();
+	// const {width, height} = useVideoConfig();
 
 	// Define perspective depth
 	const perspectiveDepth = 800;
