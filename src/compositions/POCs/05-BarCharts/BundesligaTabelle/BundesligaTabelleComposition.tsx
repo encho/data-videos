@@ -104,8 +104,8 @@ export const BundesligaTabelleComposition: React.FC<
 			>
 				<StartingFiveSlide
 					theme={theme}
-					fontSizeInBaselines={4}
-					lineHeightInBaselines={4.25}
+					fontSizeInBaselines={5}
+					lineHeightInBaselines={5.25}
 					numberOfWordRows={17}
 					word="BUNDESLIGA."
 					video="FOOTBALL_FIELD"
