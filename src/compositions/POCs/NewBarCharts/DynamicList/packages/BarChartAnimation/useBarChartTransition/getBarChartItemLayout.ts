@@ -67,6 +67,7 @@ export function getBarChartItemLayout({
 	negativeValueLabelWidth,
 	negativeValueLabelWidthPercentage,
 	hideLabel = false,
+	hideValueLabel = false,
 }: {
 	height: number;
 	width: number;
@@ -76,6 +77,7 @@ export function getBarChartItemLayout({
 	negativeValueLabelWidth: number;
 	negativeValueLabelWidthPercentage: number;
 	hideLabel: boolean;
+	hideValueLabel: boolean;
 }): TBarChartItemLayout {
 	const ibcsSizes = getIbcsSizes(baseline);
 
@@ -111,12 +113,16 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: negativeValueLabelWidth * negativeValueLabelWidthPercentage,
+			value: hideValueLabel
+				? 0
+				: negativeValueLabelWidth * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabel',
 		},
 		{
 			type: 'pixel',
-			value: ibcsSizes.valueLabelMargin * negativeValueLabelWidthPercentage,
+			value: hideValueLabel
+				? 0
+				: ibcsSizes.valueLabelMargin * negativeValueLabelWidthPercentage,
 			name: 'negativeValueLabelMarginRight',
 		},
 		{
@@ -126,12 +132,12 @@ export function getBarChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: ibcsSizes.valueLabelMargin,
+			value: hideValueLabel ? 0 : ibcsSizes.valueLabelMargin,
 			name: 'valueLabelMarginLeft',
 		},
 		{
 			type: 'pixel',
-			value: valueLabelWidth,
+			value: hideValueLabel ? 0 : valueLabelWidth,
 			name: 'valueLabel',
 		},
 	];

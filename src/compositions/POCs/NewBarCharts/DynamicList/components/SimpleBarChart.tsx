@@ -1,5 +1,5 @@
 import {z} from 'zod';
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
@@ -58,6 +58,7 @@ export const SimpleBarChart: React.FC<{
 	nrTicks?: number;
 	hideAxis?: boolean;
 	hideLabel?: boolean;
+	hideValueLabel?: boolean;
 	valueLabelFormatter?: (value: number) => string;
 	tickLabelFormatter?: (value: number) => string;
 	LabelComponent?: TBarChartLabelComponent;
@@ -79,6 +80,7 @@ export const SimpleBarChart: React.FC<{
 	nrTicks,
 	hideAxis = false,
 	hideLabel = false,
+	hideValueLabel = false,
 	valueLabelFormatter,
 	tickLabelFormatter,
 	LabelComponent = DefaultLabelComponent,
@@ -86,11 +88,17 @@ export const SimpleBarChart: React.FC<{
 }) => {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const ValueLabelComponent =
-		ValueLabelComponentProp ||
-		getDefaultValueLabelComponent({
-			numberFormatter: valueLabelFormatter,
-		});
+	// TODO do the same with LabelCompontent, s.t. we do not have to conditionally render it or not in the BarsTransition
+	const ValueLabelComponent = useMemo(
+		() =>
+			hideValueLabel
+				? () => null
+				: ValueLabelComponentProp ||
+				  getDefaultValueLabelComponent({
+						numberFormatter: valueLabelFormatter,
+				  }),
+		[hideValueLabel, ValueLabelComponentProp, valueLabelFormatter]
+	);
 
 	const MOST_ITEMS_AT_ONCE = dataItems.length;
 
@@ -225,6 +233,7 @@ export const SimpleBarChart: React.FC<{
 		globalCustomDomain: domain, // TODO rename to domain
 		forceNegativeValueLabelWidth,
 		hideLabel,
+		hideValueLabel,
 	});
 
 	return (

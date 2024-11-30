@@ -76,8 +76,10 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height, durationInFrames} = useVideoConfig();
 
-	const durationInFrames_1 = Math.floor(durationInFrames / 2);
-	const durationInFrames_2 = durationInFrames - durationInFrames_1;
+	const durationInFrames_1 = Math.floor(durationInFrames / 3);
+	const durationInFrames_2 = Math.floor(durationInFrames / 3);
+	const durationInFrames_3 =
+		durationInFrames - durationInFrames_1 - durationInFrames_2;
 
 	return (
 		<div style={{position: 'relative'}}>
@@ -131,6 +133,31 @@ export const UseCasesSimpleBarChartCustomComponentsComposition: React.FC<
 										width={contentWidth}
 										theme={theme}
 										dataItems={dataChange}
+										tickLabelFormatter={formatPercentage_0}
+									/>
+								</Sequence>
+								<Sequence
+									from={durationInFrames_1 + durationInFrames_2}
+									durationInFrames={durationInFrames_3}
+									layout="none"
+								>
+									<TypographyStyle
+										typographyStyle={theme.typography.textStyles.h1}
+										baseline={baseline}
+										marginBottom={7}
+									>
+										Bar Chart with Custom Bar and NO Value Label
+										{/* no x axis, no layout, all datasets same size and positive */}
+									</TypographyStyle>
+									<SimpleBarChart
+										showLayout
+										hideValueLabel
+										hideLabel
+										ValueLabelComponent={() => null}
+										height={650}
+										width={contentWidth}
+										theme={theme}
+										dataItems={dataBerlin}
 										tickLabelFormatter={formatPercentage_0}
 									/>
 								</Sequence>
