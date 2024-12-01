@@ -2,10 +2,7 @@ import React from 'react';
 import invariant from 'tiny-invariant';
 
 import {HtmlArea} from '../../../../../../../acetti-layout';
-import {
-	RoundedRightRect,
-	RoundedLeftRect,
-} from '../../../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {RoundedRightRect, RoundedLeftRect} from './RoundedRect/RoundedRect';
 import {
 	THorizontalBarComponentProps,
 	THorizontalBarComponent,

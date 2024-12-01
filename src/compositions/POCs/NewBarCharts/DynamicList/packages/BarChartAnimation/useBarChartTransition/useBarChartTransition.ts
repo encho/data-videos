@@ -1,5 +1,6 @@
 import {extent} from 'd3-array';
 import {isNumber} from 'lodash';
+import {z} from 'zod';
 import invariant from 'tiny-invariant';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 
@@ -11,6 +12,7 @@ import {
 import {TDynamicListTransitionContext} from '../../ListAnimation/useListTransition/useListTransition';
 import {interpolate} from 'remotion';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
+import {zColor} from '@remotion/zod-types';
 
 type BarChartTransitionContext_Common = {
 	xScale: ScaleLinear<number, number>;
@@ -42,7 +44,6 @@ export type BarChartTransitionContext_Update =
 		from: {
 			xScale: ScaleLinear<number, number>;
 			barChartItemLayout: TBarChartItemLayout;
-			// mappedValue:
 		};
 		to: {
 			xScale: ScaleLinear<number, number>;
@@ -55,12 +56,18 @@ export type TBarChartTransitionContext =
 	| BarChartTransitionContext_Exit
 	| BarChartTransitionContext_Update;
 
-export type TBarChartItem = {
-	id: string;
-	label: string;
-	value: number;
-	color: string;
-};
+export const zBarChartItem = z.object({
+	label: z.string(),
+	value: z.number(),
+	id: z.string(),
+	color: zColor(),
+});
+
+export const zBarChartItems = z.array(zBarChartItem);
+
+export type TBarChartItem = z.infer<typeof zBarChartItem>;
+
+export type TBarChartItems = z.infer<typeof zBarChartItems>;
 
 export function useBarChartTransition({
 	listTransitionContext,

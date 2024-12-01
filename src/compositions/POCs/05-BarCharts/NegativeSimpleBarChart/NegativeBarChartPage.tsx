@@ -8,25 +8,33 @@ import {
 } from '../../../../acetti-components/Page';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {
-	SimpleBarChart,
-	TSimpleBarChartData,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {TBarChartItem} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
+import {SimpleBarChart} from '../../NewBarCharts/DynamicList/components/SimpleBarChart';
 
 export const NegativeBarChartPage: React.FC<{
 	theme: ThemeType;
 	title: string;
 	subtitle: string;
-	data: TSimpleBarChartData;
+	data: TBarChartItem[];
 	dataSource: string;
-}> = ({theme, title, subtitle, data, dataSource}) => {
+	valueLabelFormatter: (value: number) => string;
+	// tickLabelFormatter: (value: number) => string;
+}> = ({
+	theme,
+	title,
+	subtitle,
+	data,
+	dataSource,
+	valueLabelFormatter,
+	// tickLabelFormatter,
+}) => {
 	const {fps} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 
 	return (
-		<Page show>
+		<Page>
 			{({baseline}) => {
 				return (
 					<>
@@ -57,11 +65,13 @@ export const NegativeBarChartPage: React.FC<{
 								{dimensions ? (
 									<Sequence from={Math.floor(fps * 0.75)} layout="none">
 										<SimpleBarChart
-											data={data}
+											hideAxis
+											dataItems={data}
 											width={dimensions.width}
 											height={dimensions.height}
 											theme={theme}
-											// showLayout
+											valueLabelFormatter={valueLabelFormatter}
+											// tickLabelFormatter={tickLabelFormatter}
 										/>
 									</Sequence>
 								) : null}

@@ -70,11 +70,6 @@ import {
 } from './compositions/POCs/02-TypographicLayouts/SilkscreenFont/SilkscreenFontComposition';
 
 import {
-	SimpleBarChartComposition,
-	simpleBarChartCompositionSchema,
-} from './compositions/POCs/05-BarCharts/SimpleBarChart/SimpleBarChartComposition';
-
-import {
 	SimpleSparklineComposition,
 	simpleSparklineCompositionSchema,
 } from './compositions/POCs/07-Sparklines/SimpleSparkline/SimpleSparklineComposition';
@@ -88,11 +83,6 @@ import {
 	MultipleSimpleColumnChartComposition,
 	multipleSimpleColumnChartCompositionSchema,
 } from './compositions/POCs/06-ColumnCharts/MultipleSimpleColumnChart/MultipleSimpleColumnChartComposition';
-
-import {
-	MultipleSimpleBarChartComposition,
-	multipleSimpleBarChartCompositionSchema,
-} from './compositions/POCs/05-BarCharts/MultipleSimpleBarChart/MultipleSimpleBarChartComposition';
 
 import {
 	ModularScaleComposition,
@@ -140,29 +130,9 @@ import {
 } from './compositions/POCs/01-TextEffects/FramesAnimation/FramesAnimationComposition';
 
 import {
-	SimpleBarChartDevComposition,
-	simpleBarChartDevCompositionSchema,
-} from './compositions/POCs/05-BarCharts/SimpleBarChartDev/SimpleBarChartDevComposition';
-
-import {
 	VaryingSizesMatrixLayoutComposition,
 	varyingSizesMatrixLayoutCompositionSchema,
 } from './compositions/POCs/02-TypographicLayouts/MatrixLayout/VaryingSizesMatrixLayout/VaryingSizesMatrixLayoutComposition';
-
-import {
-	SimpleBarChartPerfectSizingComposition,
-	simpleBarChartPerfectSizingCompositionSchema,
-} from './compositions/POCs/05-BarCharts/SimpleBarChartPerfectSizing/SimpleBarChartPerfectSizingComposition';
-
-import {
-	ComposedSimpleBarChartComposition,
-	composedSimpleBarChartCompositionSchema,
-} from './compositions/POCs/05-BarCharts/ComposedSimpleBarChart/ComposedSImpleBarChartComposition';
-
-import {
-	NegativeSimpleBarChartComposition,
-	negativeSimpleBarChartCompositionSchema,
-} from './compositions/POCs/05-BarCharts/NegativeSimpleBarChart/NegativeSimpleBarChartComposition';
 
 import {
 	SimplePageComposition,
@@ -192,23 +162,7 @@ import {
 import {
 	ApiBasedSparklinesPresentationComposition,
 	apiBasedSparklinesPresentationCompositionSchema,
-	// SingleSparklineSlide,
 } from './compositions/POCs/07-Sparklines/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
-
-import {
-	SimpleBarChartTransitionComposition,
-	simpleBarChartTransitionCompositionSchema,
-} from './compositions/POCs/05-BarCharts/SimpleBarChartTransition/SimpleBarChartTransitionComposition';
-
-import {
-	BarChartRace_Simple_Composition,
-	barChartRaceSimpleCompositionSchema,
-} from './compositions/POCs/05-BarCharts/BarChartRace_Simple/BarChartRace_Simple_Composition';
-
-import {
-	BarChartRace_CustomLabel_Composition,
-	barChartRaceCustomLabelCompositionSchema,
-} from './compositions/POCs/05-BarCharts/BarChartRace_CustomLabel/BarChartRace_CustomLabel_Composition';
 
 import {
 	BundesligaTabelleComposition,
@@ -668,118 +622,8 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 
-				<Folder name="05-BarCharts">
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SimpleBarChartDev"
-						component={SimpleBarChartDevComposition}
-						durationInFrames={90 * 5}
-						fps={90}
-						{...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						schema={simpleBarChartDevCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SimpleBarChart"
-						component={SimpleBarChartComposition}
-						durationInFrames={30 * 7}
-						fps={30}
-						{...videoSizes.square}
-						schema={simpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="NegativeSimpleBarChart"
-						component={NegativeSimpleBarChartComposition}
-						durationInFrames={30 * 7}
-						fps={30}
-						{...videoSizes.square}
-						schema={negativeSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SimpleBarChartPerfectSizing"
-						component={SimpleBarChartPerfectSizingComposition}
-						durationInFrames={30 * 7}
-						fps={30}
-						{...videoSizes.square}
-						schema={simpleBarChartPerfectSizingCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="MultipleSimpleBarChart"
-						component={MultipleSimpleBarChartComposition}
-						durationInFrames={30 * 12}
-						fps={30}
-						// {...videoSizes.square}
-						{...videoSizes.linkedInTall}
-						schema={multipleSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="ComposedSimpleBarChart"
-						component={ComposedSimpleBarChartComposition}
-						durationInFrames={30 * 8}
-						fps={30}
-						{...videoSizes.widescreen_16x9}
-						schema={composedSimpleBarChartCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="SimpleBarChartTransition"
-						component={SimpleBarChartTransitionComposition}
-						durationInFrames={30 * 18}
-						fps={30}
-						// {...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						{...videoSizes.square}
-						schema={simpleBarChartTransitionCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="BarChartRace-Simple"
-						component={BarChartRace_Simple_Composition}
-						durationInFrames={30 * 12}
-						fps={30}
-						{...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						// {...videoSizes.square}
-						schema={barChartRaceSimpleCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="BarChartRace-CustomLabel"
-						component={BarChartRace_CustomLabel_Composition}
-						durationInFrames={30 * 40}
-						fps={30}
-						{...videoSizes.linkedInTall}
-						// {...videoSizes.widescreen_16x9}
-						// {...videoSizes.square}
-						schema={barChartRaceCustomLabelCompositionSchema}
-						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
-					/>
-				</Folder>
+				{/* <Folder name="05-BarCharts">
+				</Folder> */}
 
 				<Folder name="06-ColumnCharts">
 					<Composition
@@ -888,11 +732,10 @@ export const RemotionRoot: React.FC = () => {
 						component={ApiBasedSparklinesPresentationComposition}
 						durationInFrames={30 * 32}
 						fps={30}
-						// {...videoSizes.square}
-						{...videoSizes.linkedInWide}
+						{...videoSizes.square}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
-							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 							data: [],
 							dataInfo: [],
 							singleSparklineDurationInSeconds: 6,
@@ -1035,22 +878,21 @@ export const RemotionRoot: React.FC = () => {
 									}))
 								);
 
-								const valueLabelFormatted =
-									(percReturn * 100).toLocaleString(undefined, {
-										minimumFractionDigits: 1,
-										maximumFractionDigits: 1,
-									}) + '%';
+								// const valueLabelFormatted =
+								// 	(percReturn * 100).toLocaleString(undefined, {
+								// 		minimumFractionDigits: 1,
+								// 		maximumFractionDigits: 1,
+								// 	}) + '%';
 
-								const valueLabel =
-									percReturn >= 0
-										? `+${valueLabelFormatted}`
-										: valueLabelFormatted;
+								// const valueLabel =
+								// 	percReturn >= 0
+								// 		? `+${valueLabelFormatted}`
+								// 		: valueLabelFormatted;
 
 								return {
 									label: it.tickerMetadata.name,
 									value: percReturn,
-									valueLabel,
-									barColor: percReturn >= 0 ? positiveColor : negativeColor,
+									color: percReturn >= 0 ? positiveColor : negativeColor,
 									id: it.ticker,
 								};
 							});

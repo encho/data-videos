@@ -293,7 +293,7 @@ export const SimpleBarChart: React.FC<{
 			{isNumber(labelWidth) &&
 			isNumber(valueLabelWidth) &&
 			isNumber(negativeValueLabelWidth) ? (
-				<div style={{position: 'relative'}}>
+				<div style={{position: 'relative', width, height}}>
 					{showLayout ? <DisplayGridRails {...matrixLayout} /> : null}
 
 					<HtmlArea area={barsArea}>

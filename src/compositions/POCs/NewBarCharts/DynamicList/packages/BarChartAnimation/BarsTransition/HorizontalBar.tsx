@@ -2,10 +2,7 @@ import React from 'react';
 import {ScaleLinear} from 'd3-scale';
 
 import {HtmlArea, TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {
-	RoundedRightRect,
-	RoundedLeftRect,
-} from '../../../../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+import {RoundedRightRect, RoundedLeftRect} from './RoundedRect/RoundedRect';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 export type THorizontalBarComponentProps = {

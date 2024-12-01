@@ -33,14 +33,14 @@ import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimension
 import {ThemeType} from '../../../../acetti-themes/themeTypes';
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 import {
-	TSimpleBarChartData,
-	zSimpleBarChartData,
-} from '../../../../acetti-flics/SimpleBarChart/SimpleBarChart';
+	zBarChartItems,
+	TBarChartItems,
+} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 
 export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
 	data: z.array(zNerdyFinancePriceChartDataResult),
-	barChartData: zSimpleBarChartData,
+	barChartData: zBarChartItems,
 	dataInfo: z.array(
 		z.object({ticker: z.string(), formatter: z.string(), color: zColor()})
 	),
@@ -51,7 +51,7 @@ export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 
 type FlicProps = {
 	theme: ThemeType;
-	barChartData: TSimpleBarChartData;
+	barChartData: TBarChartItems;
 	dataInfo: {
 		ticker: string;
 		formatter: string;
@@ -100,7 +100,7 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 			width={width}
 			height={height}
 			margin={60}
-			nrBaselines={50}
+			nrBaselines={60}
 			theme={theme}
 		>
 			<ApiBasedSparklinesPresentationFlic
@@ -146,6 +146,27 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 		durationInFrames: lastSlideDurationInSeconds * fps,
 	};
 
+	const valueLabelFormatter = (percReturn: number) => {
+		const sign = percReturn > 0 ? '+' : '';
+		return (
+			sign +
+			(percReturn * 100).toLocaleString(undefined, {
+				minimumFractionDigits: 1,
+				maximumFractionDigits: 1,
+			}) +
+			'%'
+		);
+	};
+
+	// const tickLabelFormatter = (percReturn: number) => {
+	// 	return (
+	// 		(percReturn * 100).toLocaleString(undefined, {
+	// 			minimumFractionDigits: 0,
+	// 			maximumFractionDigits: 0,
+	// 		}) + '%'
+	// 	);
+	// };
+
 	return (
 		<>
 			{data.map((it, i) => {
@@ -179,10 +200,12 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 			<Sequence {...barChartSlideSequence} layout="none">
 				<NegativeBarChartPage
 					title="Performance Overview"
-					subtitle="3-Year Performance of Selected Assets in Percent"
+					subtitle="3-Year Performance in %"
 					theme={theme}
 					data={barChartData}
 					dataSource="Data Source: Yahoo Finance, own calculations."
+					valueLabelFormatter={valueLabelFormatter}
+					// tickLabelFormatter={tickLabelFormatter}
 				/>
 			</Sequence>
 
@@ -232,7 +255,7 @@ export const SingleSparklineSlide: React.FC<{
 	const domain = extent(data, (it) => it.value);
 
 	return (
-		<Page show>
+		<Page>
 			<div
 				style={{
 					display: 'flex',
