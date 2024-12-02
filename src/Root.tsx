@@ -1149,9 +1149,13 @@ export const RemotionRoot: React.FC = () => {
 						schema={shearedSlideOutCompositionSchema}
 						durationInFrames={150} // Animation lasts 150 frames
 						fps={30} // 30 FPS
-						width={1920}
-						height={1080}
-						defaultProps={{themeEnum: 'NERDY' as const}}
+						// width={1920}
+						// height={1080}
+						{...videoSizes.square}
+						defaultProps={{
+							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnumPlatte: 'LORENZOBERTOLINI_BRIGHT' as const,
+						}}
 					/>
 					<Composition
 						// You can take the "id" to render a video:

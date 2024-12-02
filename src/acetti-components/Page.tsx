@@ -14,6 +14,7 @@ type PageChildFunctionArgs = {
 	contentWidth: number;
 	contentHeight: number;
 	baseline: number;
+	theme: ThemeType;
 };
 
 type PageChildren = ReactNode | ((props: PageChildFunctionArgs) => ReactNode);
