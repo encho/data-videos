@@ -249,6 +249,11 @@ import {
 	shearedSlideOutCompositionSchema,
 } from './compositions/POCs/3D-Experiments/ShearedWrappers/ShearedSlideOutComposition';
 
+import {
+	SentenceAnimationChimeDevComposition,
+	sentenceAnimationChimeDevCompositionSchema,
+} from './compositions/POCs/01-TextEffects/TextAnimations/SentenceAnimationChime/SentenceAnimationChimeDevComposition';
+
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
@@ -369,6 +374,23 @@ export const RemotionRoot: React.FC = () => {
 							defaultProps={{
 								themeEnum: 'LORENZOBERTOLINI' as const,
 								text: 'Subtle Text Animation',
+								innerDelayInSeconds: 1,
+								translateYInPageBaselines: 1,
+							}}
+						/>
+						<Composition
+							// You can take the "id" to render a video:
+							// npx remotion render src/index.ts <id> out/video.mp4
+							id="SentenceAnimationChimeDev"
+							component={SentenceAnimationChimeDevComposition}
+							durationInFrames={30 * 5}
+							// 	(INPUT_PROPS?.durationSecs ?? DEFAULT_DURATION_SECONDS) *
+							fps={30}
+							{...videoSizes.linkedInTall}
+							schema={sentenceAnimationChimeDevCompositionSchema}
+							defaultProps={{
+								themeEnum: 'LORENZOBERTOLINI' as const,
+								text: 'This is a great title',
 								innerDelayInSeconds: 1,
 								translateYInPageBaselines: 1,
 							}}
