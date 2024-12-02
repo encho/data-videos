@@ -62,6 +62,7 @@ export const SentenceAnimationChimeDevComposition: React.FC<
 							<SentenceAnimationChimeKeyframes
 								innerDelayInSeconds={innerDelayInSeconds}
 								theme={theme}
+								sentence={text}
 							/>
 						</>
 					);

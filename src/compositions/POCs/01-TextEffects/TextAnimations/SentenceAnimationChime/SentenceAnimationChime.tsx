@@ -1,16 +1,18 @@
-import React, {ReactNode, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import invariant from 'tiny-invariant';
 
 import {
 	buildKeyFramesGroup,
 	getKeyFramesInterpolator,
+	TKeyFrameSpec,
 } from '../../../Keyframes/Keyframes/keyframes';
 import {KeyFramesInspector} from '../../../Keyframes/Keyframes/KeyframesInspector';
 import {ThemeType} from '../../../../../acetti-themes/themeTypes';
 import {usePage} from '../../../../../acetti-components/PageContext';
 
 export const SentenceAnimationChime: React.FC<{
-	children: ReactNode;
+	children: string;
 	translateY?: number;
 	innerDelayInSeconds?: number;
 	animateExit?: boolean;
@@ -27,79 +29,160 @@ export const SentenceAnimationChime: React.FC<{
 
 	const translateY = translateYProp || pageBaseline * 0.5;
 
+	const words = children.split(' ');
+
+	console.log({words});
+
 	const {keyframes: keyFramesGroup} = useKeyframes({
 		innerDelayInSeconds,
+		words,
 	});
 
-	const interpolateTextOpacity = getKeyFramesInterpolator(
-		keyFramesGroup,
-		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[animateEnter ? 0 : 1, 1, 1, animateExit ? 0 : 1],
-		[Easing.ease, Easing.ease, Easing.ease]
-	);
+	// TODO useMemo
+	// const wordInterpolators = words.map((word, i) => {
+	const wordInterpolators = words.map((word, i) => {
+		const getTranslateY = getKeyFramesInterpolator(
+			keyFramesGroup,
+			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
+			// [animateEnter ? translateY : 0, 0],
+			[translateY, 0],
+			[Easing.ease]
+			// [animateEnter ? translateY : 0, 0, 0, 0],
+			// ['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+			// [animateEnter ? translateY : 0, 0, 0, 0],
+			// [Easing.ease, Easing.ease, Easing.ease]
+		);
 
-	const interpolateTextFilterPixels = getKeyFramesInterpolator(
-		keyFramesGroup,
-		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
-		[Easing.ease, Easing.ease, Easing.ease]
-	);
+		const getOpacity = getKeyFramesInterpolator(
+			keyFramesGroup,
+			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
+			[animateEnter ? 0 : 1, 1],
+			[Easing.ease]
+			// [animateEnter ? translateY : 0, 0, 0, 0],
+			// ['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+			// [animateEnter ? translateY : 0, 0, 0, 0],
+			// [Easing.ease, Easing.ease, Easing.ease]
+		);
 
-	const interpolateTextTranslateY = getKeyFramesInterpolator(
-		keyFramesGroup,
-		['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		[animateEnter ? translateY : 0, 0, 0, 0],
-		[Easing.ease, Easing.ease, Easing.ease]
-	);
-
-	const titleOpacity = interpolateTextOpacity(frame);
-	const titleFilterPixels = interpolateTextFilterPixels(frame);
-	const titleTranslateY = interpolateTextTranslateY(frame);
+		return {getTranslateY, getOpacity};
+	});
 
 	return (
 		<div
 			style={{
-				opacity: titleOpacity,
-				filter: `blur(${titleFilterPixels}px)`,
-				transform: `translateY(${titleTranslateY}px)`,
+				backgroundColor: 'gray',
 			}}
 		>
-			{children}
+			{words.map((word, i) => {
+				return (
+					<>
+						<span
+							style={{
+								display: 'inline-block',
+								transform: `translateY(${wordInterpolators[i].getTranslateY(
+									frame
+								)}px)`,
+								opacity: wordInterpolators[i].getOpacity(frame),
+							}}
+						>
+							{word}
+						</span>
+						{i < words.length - 1 ? <span> </span> : null}
+					</>
+				);
+			})}
 		</div>
 	);
+
+	// const interpolateTextOpacity = getKeyFramesInterpolator(
+	// 	keyFramesGroup,
+	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+	// 	[animateEnter ? 0 : 1, 1, 1, animateExit ? 0 : 1],
+	// 	[Easing.ease, Easing.ease, Easing.ease]
+	// );
+
+	// const interpolateTextFilterPixels = getKeyFramesInterpolator(
+	// 	keyFramesGroup,
+	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+	// 	[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
+	// 	[Easing.ease, Easing.ease, Easing.ease]
+	// );
+
+	// const interpolateTextTranslateY = getKeyFramesInterpolator(
+	// 	keyFramesGroup,
+	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+	// 	[animateEnter ? translateY : 0, 0, 0, 0],
+	// 	[Easing.ease, Easing.ease, Easing.ease]
+	// );
+
+	// const titleOpacity = interpolateTextOpacity(frame);
+	// const titleFilterPixels = interpolateTextFilterPixels(frame);
+	// const titleTranslateY = interpolateTextTranslateY(frame);
+
+	// return (
+	// 	<div
+	// 		style={{
+	// 			opacity: titleOpacity,
+	// 			filter: `blur(${titleFilterPixels}px)`,
+	// 			transform: `translateY(${titleTranslateY}px)`,
+	// 		}}
+	// 	>
+	// 		{children}
+	// 	</div>
+	// );
 };
 
-export function useKeyframes({
+function useKeyframes({
 	innerDelayInSeconds = 0,
+	words,
 }: {
 	innerDelayInSeconds?: number;
+	words: string[];
 }) {
+	invariant(
+		words.length > 0,
+		'SentenceAnimationChime.useKeyframes: words array has to be longer than 0'
+	);
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const keyframes = useMemo(
-		() =>
-			buildKeyFramesGroup(durationInFrames, fps, [
-				{type: 'SECOND', value: innerDelayInSeconds, id: 'TEXT_ENTER_START'},
-				{
-					type: 'R_SECOND',
-					value: 0.6,
-					id: 'TEXT_ENTER_END',
-					relativeId: 'TEXT_ENTER_START',
-				},
-				{
-					type: 'FRAME',
-					value: -0,
-					id: 'TEXT_EXIT_END',
-				},
-				{
-					type: 'R_SECOND',
-					value: -0.6,
-					id: 'TEXT_EXIT_START',
-					relativeId: 'TEXT_EXIT_END',
-				},
-			]),
-		[durationInFrames, fps, innerDelayInSeconds]
-	);
+	const keyframes = useMemo(() => {
+		const keyframeSpecs = words
+			.map<TKeyFrameSpec[]>((_word, i) => {
+				if (i === 0) {
+					return [
+						{
+							type: 'SECOND',
+							value: innerDelayInSeconds,
+							id: 'WORD_0_ENTER_START',
+						},
+						{
+							type: 'R_SECOND',
+							value: 0.6, // TODO variable wordEnterDurationInSeconds
+							id: 'WORD_0_ENTER_END',
+							relativeId: 'WORD_0_ENTER_START',
+						},
+					];
+				}
+
+				return [
+					{
+						type: 'R_SECOND',
+						value: 0.4, // TODO variable wordDelayInSeconds
+						id: `WORD_${i}_ENTER_START`,
+						relativeId: `WORD_${i - 1}_ENTER_START`,
+					},
+					{
+						type: 'R_SECOND',
+						value: 0.6, // TODO variable wordEnterDurationInSeconds
+						id: `WORD_${i}_ENTER_END`,
+						relativeId: `WORD_${i}_ENTER_START`,
+					},
+				];
+			})
+			.flat();
+
+		return buildKeyFramesGroup(durationInFrames, fps, keyframeSpecs);
+	}, [durationInFrames, fps, innerDelayInSeconds, words]);
 
 	return {keyframes};
 }
@@ -107,10 +190,15 @@ export function useKeyframes({
 export const SentenceAnimationChimeKeyframes: React.FC<{
 	theme: ThemeType;
 	innerDelayInSeconds?: number;
-}> = ({innerDelayInSeconds = 0, theme}) => {
+	sentence: string;
+}> = ({innerDelayInSeconds = 0, theme, sentence}) => {
 	const frame = useCurrentFrame();
+
+	const words = sentence.split(' ');
+
 	const {keyframes: keyFramesGroup} = useKeyframes({
 		innerDelayInSeconds,
+		words,
 	});
 
 	return (
