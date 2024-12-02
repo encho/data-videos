@@ -3,6 +3,7 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 import {zColor} from '@remotion/zod-types';
 
+import {Platte3D_SlideInAndOut} from '../../3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {
 	zNerdyFinancePriceChartDataResult,
@@ -96,23 +97,31 @@ export const ApiBasedSparklinesPresentationComposition: React.FC<
 	const {width, height} = useVideoConfig();
 
 	return (
-		<PageContext
-			width={width}
-			height={height}
-			margin={60}
-			nrBaselines={60}
-			theme={theme}
+		<div
+			style={{
+				width,
+				height,
+				backgroundColor: theme.typography.textStyles.h1.color,
+			}}
 		>
-			<ApiBasedSparklinesPresentationFlic
+			<PageContext
+				width={width}
+				height={height}
+				margin={60}
+				nrBaselines={60}
 				theme={theme}
-				data={data}
-				dataInfo={dataInfo}
-				singleSparklineDurationInSeconds={singleSparklineDurationInSeconds}
-				barChartDurationInSeconds={barChartDurationInSeconds}
-				lastSlideDurationInSeconds={lastSlideDurationInSeconds}
-				barChartData={barChartData}
-			/>
-		</PageContext>
+			>
+				<ApiBasedSparklinesPresentationFlic
+					theme={theme}
+					data={data}
+					dataInfo={dataInfo}
+					singleSparklineDurationInSeconds={singleSparklineDurationInSeconds}
+					barChartDurationInSeconds={barChartDurationInSeconds}
+					lastSlideDurationInSeconds={lastSlideDurationInSeconds}
+					barChartData={barChartData}
+				/>
+			</PageContext>
+		</div>
 	);
 };
 
@@ -133,7 +142,12 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 	const singleDuration = Math.floor(fps * singleSparklineDurationInSeconds);
 
 	const getSequenceForIndex = (i: number) => {
-		return {from: i * singleDuration, durationInFrames: singleDuration};
+		const overlap = i > 0 ? Math.floor(fps * 0.3) : 0;
+
+		return {
+			from: i * singleDuration - overlap,
+			durationInFrames: singleDuration + overlap,
+		};
 	};
 
 	const barChartSlideSequence = {
@@ -157,15 +171,6 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 			'%'
 		);
 	};
-
-	// const tickLabelFormatter = (percReturn: number) => {
-	// 	return (
-	// 		(percReturn * 100).toLocaleString(undefined, {
-	// 			minimumFractionDigits: 0,
-	// 			maximumFractionDigits: 0,
-	// 		}) + '%'
-	// 	);
-	// };
 
 	return (
 		<>
@@ -255,90 +260,92 @@ export const SingleSparklineSlide: React.FC<{
 	const domain = extent(data, (it) => it.value);
 
 	return (
-		<Page>
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					height: '100%',
-					position: 'relative',
-				}}
-			>
-				<PageHeader>
-					<TitleWithSubtitle
-						title={title}
-						subtitle={description}
-						theme={theme}
-					/>
-				</PageHeader>
-
+		<Platte3D_SlideInAndOut width={page.width} height={page.height}>
+			<Page>
 				<div
-					ref={ref}
 					style={{
-						flex: 1,
 						display: 'flex',
-						justifyContent: 'center',
+						flexDirection: 'column',
+						height: '100%',
+						position: 'relative',
 					}}
 				>
-					{dimensions &&
-					Math.round(matrixLayout.width) === Math.round(dimensions.width) ? (
-						<Sequence from={Math.floor(fps * 0.75)} layout="none">
-							<div style={{position: 'relative'}}>
-								<DisplayGridRails
-									{...matrixLayout}
-									// stroke={theme.TypographicLayouts.gridLayout.lineColor}
-									stroke={DEBUG ? '#292929' : 'transparent'}
-								/>
-								<HtmlArea area={area_1}>
-									<Sequence layout="none">
-										<Sequence from={Math.floor(fps * 0.0)} layout="none">
-											<SparklineLarge
-												baseline={baseline}
-												id="001"
-												data={data}
-												width={area_1.width}
-												height={area_1.height}
-												theme={theme}
-												domain={domain as [number, number]}
-												lineColor={lineColor}
-												formatString={formatString}
-												showLayout={DEBUG}
-												xAxisFormatString="MMM yy"
-											/>
-										</Sequence>
-									</Sequence>
-								</HtmlArea>
-							</div>
-						</Sequence>
-					) : null}
-				</div>
+					<PageHeader>
+						<TitleWithSubtitle
+							title={title}
+							subtitle={description}
+							theme={theme}
+						/>
+					</PageHeader>
 
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter>
 					<div
+						ref={ref}
 						style={{
+							flex: 1,
 							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
+							justifyContent: 'center',
 						}}
 					>
+						{dimensions &&
+						Math.round(matrixLayout.width) === Math.round(dimensions.width) ? (
+							<Sequence from={Math.floor(fps * 0.75)} layout="none">
+								<div style={{position: 'relative'}}>
+									<DisplayGridRails
+										{...matrixLayout}
+										// stroke={theme.TypographicLayouts.gridLayout.lineColor}
+										stroke={DEBUG ? '#292929' : 'transparent'}
+									/>
+									<HtmlArea area={area_1}>
+										<Sequence layout="none">
+											<Sequence from={Math.floor(fps * 0.0)} layout="none">
+												<SparklineLarge
+													baseline={baseline}
+													id="001"
+													data={data}
+													width={area_1.width}
+													height={area_1.height}
+													theme={theme}
+													domain={domain as [number, number]}
+													lineColor={lineColor}
+													formatString={formatString}
+													showLayout={DEBUG}
+													xAxisFormatString="MMM yy"
+												/>
+											</Sequence>
+										</Sequence>
+									</HtmlArea>
+								</div>
+							</Sequence>
+						) : null}
+					</div>
+
+					{/* TODO introduce evtl. also absolute positioned footer */}
+					<PageFooter>
 						<div
 							style={{
-								maxWidth: '62%',
-								textWrap: 'pretty',
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'flex-end',
 							}}
 						>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-								baseline={page.baseline}
+							<div
+								style={{
+									maxWidth: '62%',
+									textWrap: 'pretty',
+								}}
 							>
-								Data Source: Yahoo Finance
-							</TypographyStyle>
+								<TypographyStyle
+									typographyStyle={theme.typography.textStyles.dataSource}
+									baseline={page.baseline}
+								>
+									Data Source: Yahoo Finance
+								</TypographyStyle>
+							</div>
 						</div>
-					</div>
-					<PageLogo />
-				</PageFooter>
-			</div>
-		</Page>
+						<PageLogo />
+					</PageFooter>
+				</div>
+			</Page>
+		</Platte3D_SlideInAndOut>
 	);
 };

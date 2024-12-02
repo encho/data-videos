@@ -732,7 +732,8 @@ export const RemotionRoot: React.FC = () => {
 						component={ApiBasedSparklinesPresentationComposition}
 						durationInFrames={30 * 32}
 						fps={30}
-						{...videoSizes.square}
+						// {...videoSizes.square}
+						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
@@ -912,7 +913,7 @@ export const RemotionRoot: React.FC = () => {
 							const neonColors = {
 								neonGreen: '#39FF14', // Neon Green
 								neonPink: '#FF1493', // Neon Pink
-								neonYellow: '#FFFF33', // Neon Yellow
+								// neonYellow: '#FFFF33', // Neon Yellow
 								neonOrange: '#FF4500', // Neon Orange
 								neonBlue: '#1F51FF', // Neon Blue
 								neonPurple: '#BF00FF', // Neon Purple
@@ -939,7 +940,7 @@ export const RemotionRoot: React.FC = () => {
 										},
 										{
 											ticker: 'XAU-USD',
-											color: neonColors.neonYellow,
+											color: neonColors.neonBlue,
 											formatter: '$0,0.0',
 										},
 										{
