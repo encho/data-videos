@@ -1147,11 +1147,11 @@ export const RemotionRoot: React.FC = () => {
 						id="ShearedSlideOut"
 						component={ShearedSlideOutComposition}
 						schema={shearedSlideOutCompositionSchema}
-						durationInFrames={150} // Animation lasts 150 frames
+						durationInFrames={30 * 8} // Animation lasts 150 frames
 						fps={30} // 30 FPS
-						// width={1920}
-						// height={1080}
-						{...videoSizes.square}
+						// {...videoSizes.square}
+						{...videoSizes.widescreen_16x9}
+						// {...videoSizes.linkedInTall}
 						defaultProps={{
 							themeEnum: 'LORENZOBERTOLINI' as const,
 							themeEnumPlatte: 'LORENZOBERTOLINI_BRIGHT' as const,
