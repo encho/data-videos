@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, Fragment} from 'react';
 import {useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import invariant from 'tiny-invariant';
 
@@ -31,8 +31,6 @@ export const SentenceAnimationChime: React.FC<{
 
 	const words = children.split(' ');
 
-	console.log({words});
-
 	const {keyframes: keyFramesGroup} = useKeyframes({
 		innerDelayInSeconds,
 		words,
@@ -44,8 +42,7 @@ export const SentenceAnimationChime: React.FC<{
 		const getTranslateY = getKeyFramesInterpolator(
 			keyFramesGroup,
 			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
-			// [animateEnter ? translateY : 0, 0],
-			[translateY, 0],
+			[animateEnter ? translateY : 0, 0],
 			[Easing.ease]
 			// [animateEnter ? translateY : 0, 0, 0, 0],
 			// ['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
@@ -64,7 +61,21 @@ export const SentenceAnimationChime: React.FC<{
 			// [Easing.ease, Easing.ease, Easing.ease]
 		);
 
-		return {getTranslateY, getOpacity};
+		const getFilterPixels = getKeyFramesInterpolator(
+			keyFramesGroup,
+			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
+			[animateEnter ? 10 : 0, 0],
+			[Easing.ease]
+		);
+
+		// const interpolateTextFilterPixels = getKeyFramesInterpolator(
+		// 	keyFramesGroup,
+		// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
+		// 	[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
+		// 	[Easing.ease, Easing.ease, Easing.ease]
+		// );
+
+		return {getTranslateY, getOpacity, getFilterPixels};
 	});
 
 	return (
@@ -75,7 +86,7 @@ export const SentenceAnimationChime: React.FC<{
 		>
 			{words.map((word, i) => {
 				return (
-					<>
+					<Fragment key={`word-${word}-${i}`}>
 						<span
 							style={{
 								display: 'inline-block',
@@ -83,12 +94,17 @@ export const SentenceAnimationChime: React.FC<{
 									frame
 								)}px)`,
 								opacity: wordInterpolators[i].getOpacity(frame),
+								filter: `blur(${wordInterpolators[i].getFilterPixels(
+									frame
+								)}px)`,
 							}}
 						>
 							{word}
 						</span>
-						{i < words.length - 1 ? <span> </span> : null}
-					</>
+						{i < words.length - 1 ? (
+							<span key={`whitespace-${i}`}> </span>
+						) : null}
+					</Fragment>
 				);
 			})}
 		</div>

@@ -110,7 +110,7 @@ export const KeyFramesInspector: React.FC<{
 					/>
 					{ticks.map((tick) => {
 						return (
-							<g>
+							<g key={`tick-${tick}`}>
 								<line
 									x1={frameToPixel(tick)}
 									x2={frameToPixel(tick)}
@@ -153,7 +153,7 @@ export const KeyFramesInspector: React.FC<{
 					/>
 					{secondsTicks.map((tick) => {
 						return (
-							<g>
+							<g key={`tick-${tick}`}>
 								<line
 									x1={secondToPixel(tick)}
 									x2={secondToPixel(tick)}
@@ -313,7 +313,7 @@ export const KeyFramesInspector: React.FC<{
 					}
 
 					return (
-						<g transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
+						<g key={i} transform={`translate(${0}, ${i * HEIGHT_PER_FRAME})`}>
 							<rect
 								x={0}
 								y={0}
