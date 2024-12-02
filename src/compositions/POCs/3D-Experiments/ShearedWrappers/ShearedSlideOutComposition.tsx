@@ -15,7 +15,7 @@ import {
 } from '../../Keyframes/Keyframes/keyframes';
 import {zThemeEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {PageContext} from '../../../../acetti-components/PageContext';
+import {PageContext, usePage} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 
@@ -81,6 +81,7 @@ const Platte3D: React.FC<{
 }> = ({children, width, height}) => {
 	const frame = useCurrentFrame();
 	const {durationInFrames, fps} = useVideoConfig();
+	const {theme} = usePage();
 
 	// TODO useMemo
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
@@ -170,62 +171,23 @@ const Platte3D: React.FC<{
 	)(frame);
 
 	// Define perspective depth
-	// const perspectiveDepth = 500;
 	const perspectiveDepth = 500;
-
-	// // Interpolate translation and rotation for animation
-	// const translateZ = interpolate(
-	// 	frame,
-	// 	[0, 100],
-	// 	[0, -200],
-	// 	// [0, 0],
-	// 	// [0, -300],
-	// 	{
-	// 		extrapolateRight: 'clamp',
-	// 		easing: Easing.bezier(0.22, 1, 0.36, 1),
-	// 	}
-	// );
-	// const rotateY = interpolate(
-	// 	frame,
-	// 	[0, 100],
-	// 	// [0, 0],
-	// 	[0, -5],
-	// 	// [-30, -30],
-	// 	// [0, 45]
-	// 	{
-	// 		extrapolateRight: 'clamp',
-	// 	}
-	// );
-	// const translateX = interpolate(
-	// 	frame,
-	// 	[0, 100],
-	// 	// [0, -300],
-	// 	// [0, -2000],
-	// 	[0, 0],
-	// 	{
-	// 		// easeOutQuint
-	// 		easing: Easing.bezier(0.22, 1, 0.36, 1),
-	// 		extrapolateRight: 'clamp',
-	// 	}
-	// );
 
 	return (
 		<div
 			style={{
-				// width: '500px',
-				// height: '300px',
 				width,
 				height,
 				position: 'relative',
 				margin: '0 auto',
-				backgroundColor: 'lightblue',
+				backgroundColor: theme.global.backgroundColor,
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'center',
-				color: 'black',
-				fontSize: '24px',
-				borderRadius: '10px',
-				boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+				// color: 'black',
+				// fontSize: '24px',
+				borderRadius: '10px', // TODO from theme
+				boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', // TODO from theme
 				transformStyle: 'preserve-3d', // Ensures child elements respect 3D perspective
 				perspective: `${perspectiveDepth}px`, // Set perspective for parent container
 				transform: `perspective(${perspectiveDepth}px) translateY(0px) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg)`,
