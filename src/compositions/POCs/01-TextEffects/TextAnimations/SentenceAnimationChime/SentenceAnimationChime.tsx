@@ -41,49 +41,45 @@ export const SentenceAnimationChime: React.FC<{
 	const wordInterpolators = words.map((word, i) => {
 		const getTranslateY = getKeyFramesInterpolator(
 			keyFramesGroup,
-			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
-			[animateEnter ? translateY : 0, 0],
-			[Easing.ease]
-			// [animateEnter ? translateY : 0, 0, 0, 0],
-			// ['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-			// [animateEnter ? translateY : 0, 0, 0, 0],
-			// [Easing.ease, Easing.ease, Easing.ease]
+			[
+				`WORD_${i}_ENTER_START`,
+				`WORD_${i}_ENTER_END`,
+				`WORD_${i}_EXIT_START`,
+				`WORD_${i}_EXIT_END`,
+			],
+			[animateEnter ? translateY : 0, 0, 0, 0],
+			[Easing.ease, Easing.ease, Easing.ease]
 		);
 
 		const getOpacity = getKeyFramesInterpolator(
 			keyFramesGroup,
-			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
-			[animateEnter ? 0 : 1, 1],
-			[Easing.ease]
-			// [animateEnter ? translateY : 0, 0, 0, 0],
-			// ['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-			// [animateEnter ? translateY : 0, 0, 0, 0],
-			// [Easing.ease, Easing.ease, Easing.ease]
+			[
+				`WORD_${i}_ENTER_START`,
+				`WORD_${i}_ENTER_END`,
+				`WORD_${i}_EXIT_START`,
+				`WORD_${i}_EXIT_END`,
+			],
+			[animateEnter ? 0 : 1, 1, 1, animateExit ? 0 : 1],
+			[Easing.ease, Easing.ease, Easing.ease]
 		);
 
 		const getFilterPixels = getKeyFramesInterpolator(
 			keyFramesGroup,
-			[`WORD_${i}_ENTER_START`, `WORD_${i}_ENTER_END`],
-			[animateEnter ? 10 : 0, 0],
-			[Easing.ease]
+			[
+				`WORD_${i}_ENTER_START`,
+				`WORD_${i}_ENTER_END`,
+				`WORD_${i}_EXIT_START`,
+				`WORD_${i}_EXIT_END`,
+			],
+			[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
+			[Easing.ease, Easing.ease, Easing.ease]
 		);
-
-		// const interpolateTextFilterPixels = getKeyFramesInterpolator(
-		// 	keyFramesGroup,
-		// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-		// 	[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
-		// 	[Easing.ease, Easing.ease, Easing.ease]
-		// );
 
 		return {getTranslateY, getOpacity, getFilterPixels};
 	});
 
 	return (
-		<div
-			style={{
-				backgroundColor: 'gray',
-			}}
-		>
+		<div>
 			{words.map((word, i) => {
 				return (
 					<Fragment key={`word-${word}-${i}`}>
@@ -109,43 +105,6 @@ export const SentenceAnimationChime: React.FC<{
 			})}
 		</div>
 	);
-
-	// const interpolateTextOpacity = getKeyFramesInterpolator(
-	// 	keyFramesGroup,
-	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-	// 	[animateEnter ? 0 : 1, 1, 1, animateExit ? 0 : 1],
-	// 	[Easing.ease, Easing.ease, Easing.ease]
-	// );
-
-	// const interpolateTextFilterPixels = getKeyFramesInterpolator(
-	// 	keyFramesGroup,
-	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-	// 	[animateEnter ? 10 : 0, 0, 0, animateExit ? 10 : 0],
-	// 	[Easing.ease, Easing.ease, Easing.ease]
-	// );
-
-	// const interpolateTextTranslateY = getKeyFramesInterpolator(
-	// 	keyFramesGroup,
-	// 	['TEXT_ENTER_START', 'TEXT_ENTER_END', 'TEXT_EXIT_START', 'TEXT_EXIT_END'],
-	// 	[animateEnter ? translateY : 0, 0, 0, 0],
-	// 	[Easing.ease, Easing.ease, Easing.ease]
-	// );
-
-	// const titleOpacity = interpolateTextOpacity(frame);
-	// const titleFilterPixels = interpolateTextFilterPixels(frame);
-	// const titleTranslateY = interpolateTextTranslateY(frame);
-
-	// return (
-	// 	<div
-	// 		style={{
-	// 			opacity: titleOpacity,
-	// 			filter: `blur(${titleFilterPixels}px)`,
-	// 			transform: `translateY(${titleTranslateY}px)`,
-	// 		}}
-	// 	>
-	// 		{children}
-	// 	</div>
-	// );
 };
 
 function useKeyframes({
@@ -161,8 +120,13 @@ function useKeyframes({
 	);
 	const {durationInFrames, fps} = useVideoConfig();
 
+	const WORD_APPEAR_DURATION_IN_SECONDS = 0.4;
+	const WORD_APPEAR_DELAY_IN_SECONDS = 0.2;
+	const WORD_DISAPPEAR_DURATION_IN_SECONDS = 0.4;
+	const WORD_DISAPPEAR_DELAY_IN_SECONDS = 0.2;
+
 	const keyframes = useMemo(() => {
-		const keyframeSpecs = words
+		const enterKeyframeSpecs = words
 			.map<TKeyFrameSpec[]>((_word, i) => {
 				if (i === 0) {
 					return [
@@ -173,7 +137,7 @@ function useKeyframes({
 						},
 						{
 							type: 'R_SECOND',
-							value: 0.6, // TODO variable wordEnterDurationInSeconds
+							value: WORD_APPEAR_DURATION_IN_SECONDS,
 							id: 'WORD_0_ENTER_END',
 							relativeId: 'WORD_0_ENTER_START',
 						},
@@ -183,13 +147,13 @@ function useKeyframes({
 				return [
 					{
 						type: 'R_SECOND',
-						value: 0.4, // TODO variable wordDelayInSeconds
+						value: WORD_APPEAR_DELAY_IN_SECONDS,
 						id: `WORD_${i}_ENTER_START`,
 						relativeId: `WORD_${i - 1}_ENTER_START`,
 					},
 					{
 						type: 'R_SECOND',
-						value: 0.6, // TODO variable wordEnterDurationInSeconds
+						value: WORD_APPEAR_DURATION_IN_SECONDS,
 						id: `WORD_${i}_ENTER_END`,
 						relativeId: `WORD_${i}_ENTER_START`,
 					},
@@ -197,7 +161,48 @@ function useKeyframes({
 			})
 			.flat();
 
-		return buildKeyFramesGroup(durationInFrames, fps, keyframeSpecs);
+		const exitKeyframeSpecs = [...words]
+			.reverse()
+			.map<TKeyFrameSpec[]>((word, i) => {
+				const indexInOriginalSorting = words.length - 1 - i;
+
+				if (i === 0) {
+					return [
+						{
+							type: 'SECOND',
+							value: -0,
+							id: `WORD_${indexInOriginalSorting}_EXIT_END`,
+						},
+						{
+							type: 'R_SECOND',
+							value: -WORD_DISAPPEAR_DURATION_IN_SECONDS,
+							id: `WORD_${indexInOriginalSorting}_EXIT_START`,
+							relativeId: `WORD_${indexInOriginalSorting}_EXIT_END`,
+						},
+					];
+				}
+
+				return [
+					{
+						type: 'R_SECOND',
+						value: -WORD_DISAPPEAR_DELAY_IN_SECONDS,
+						id: `WORD_${indexInOriginalSorting}_EXIT_END`,
+						relativeId: `WORD_${indexInOriginalSorting + 1}_EXIT_END`,
+					},
+					{
+						type: 'R_SECOND',
+						value: -WORD_DISAPPEAR_DELAY_IN_SECONDS,
+						id: `WORD_${indexInOriginalSorting}_EXIT_START`,
+						relativeId: `WORD_${indexInOriginalSorting + 1}_EXIT_START`,
+					},
+				];
+			})
+			.flat();
+
+		return buildKeyFramesGroup(durationInFrames, fps, [
+			...enterKeyframeSpecs,
+			...exitKeyframeSpecs,
+		]);
 	}, [durationInFrames, fps, innerDelayInSeconds, words]);
 
 	return {keyframes};
