@@ -3,10 +3,7 @@ import React from 'react';
 import {useVideoConfig} from 'remotion';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
-import {
-	TitleWithSubtitle,
-	TitleWithSubtitleKeyframes,
-} from './TitleWithSubtitle';
+import {TitleWithSubtitle} from './TitleWithSubtitle';
 import {Page} from '../../../../acetti-components/Page';
 import {
 	useThemeFromEnum,
@@ -54,10 +51,6 @@ export const TitleWithSubtitleDevComposition: React.FC<
 									innerDelayInSeconds={INNER_DELAY_SECONDS}
 								/>
 							</div>
-							<TitleWithSubtitleKeyframes
-								theme={theme}
-								innerDelayInSeconds={INNER_DELAY_SECONDS}
-							/>
 						</>
 					);
 				}}

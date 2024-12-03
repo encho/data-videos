@@ -390,6 +390,8 @@ export const RemotionRoot: React.FC = () => {
 							schema={sentenceAnimationChimeDevCompositionSchema}
 							defaultProps={{
 								themeEnum: 'LORENZOBERTOLINI' as const,
+								animateEnter: true,
+								animateExit: true,
 								text: 'This is a thing!!',
 								innerDelayInSeconds: 1,
 								translateYInPageBaselines: 1,

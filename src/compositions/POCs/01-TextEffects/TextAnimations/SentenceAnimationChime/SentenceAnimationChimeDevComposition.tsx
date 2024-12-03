@@ -19,11 +19,20 @@ export const sentenceAnimationChimeDevCompositionSchema = z.object({
 	text: z.string(),
 	innerDelayInSeconds: z.number(),
 	translateYInPageBaselines: z.number(),
+	animateEnter: z.boolean(),
+	animateExit: z.boolean(),
 });
 
 export const SentenceAnimationChimeDevComposition: React.FC<
 	z.infer<typeof sentenceAnimationChimeDevCompositionSchema>
-> = ({themeEnum, text, innerDelayInSeconds, translateYInPageBaselines}) => {
+> = ({
+	themeEnum,
+	text,
+	innerDelayInSeconds,
+	translateYInPageBaselines,
+	animateEnter,
+	animateExit,
+}) => {
 	const theme = useThemeFromEnum(themeEnum);
 	const {width, height} = useVideoConfig();
 
@@ -52,6 +61,8 @@ export const SentenceAnimationChimeDevComposition: React.FC<
 									baseline={baseline}
 								>
 									<SentenceAnimationChime
+										animateEnter={animateEnter}
+										animateExit={animateExit}
 										innerDelayInSeconds={innerDelayInSeconds}
 										translateY={baseline * translateYInPageBaselines}
 									>
