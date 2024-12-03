@@ -756,7 +756,6 @@ export const RemotionRoot: React.FC = () => {
 						component={ApiBasedSparklinesPresentationComposition}
 						durationInFrames={30 * 32}
 						fps={30}
-						// {...videoSizes.square}
 						{...videoSizes.linkedInWide}
 						schema={apiBasedSparklinesPresentationCompositionSchema}
 						defaultProps={{
@@ -814,14 +813,7 @@ export const RemotionRoot: React.FC = () => {
 								},
 								nerdyENV
 							);
-							// const rippleusd = await fetchNerdyFinancePriceChartData(
-							// 	{
-							// 		ticker: 'XRP-USD',
-							// 		endDate: new Date(),
-							// 		timePeriod: '3Y',
-							// 	},
-							// 	'STAGE'
-							// );
+
 							const tesla = await fetchNerdyFinancePriceChartData(
 								{
 									ticker: 'TESLA',
@@ -839,24 +831,6 @@ export const RemotionRoot: React.FC = () => {
 								nerdyENV
 							);
 
-							// const apple = await fetchNerdyFinancePriceChartData(
-							// 	{
-							// 		ticker: 'AAPL',
-							// 		endDate: new Date(),
-							// 		timePeriod: '3Y',
-							// 	},
-							// 	'STAGE'
-							// );
-
-							// const goldman = await fetchNerdyFinancePriceChartData(
-							// 	{
-							// 		ticker: 'GS',
-							// 		endDate: new Date(),
-							// 		timePeriod: '3Y',
-							// 	},
-							// 	'STAGE'
-							// );
-
 							const data = [
 								// stocks
 								spx,
@@ -867,10 +841,8 @@ export const RemotionRoot: React.FC = () => {
 								btcusd,
 								ethusd,
 								// stocks,
-								// apple,
 								tesla,
 								amazon,
-								// goldman,
 							];
 
 							const fps = 30;
@@ -903,17 +875,6 @@ export const RemotionRoot: React.FC = () => {
 									}))
 								);
 
-								// const valueLabelFormatted =
-								// 	(percReturn * 100).toLocaleString(undefined, {
-								// 		minimumFractionDigits: 1,
-								// 		maximumFractionDigits: 1,
-								// 	}) + '%';
-
-								// const valueLabel =
-								// 	percReturn >= 0
-								// 		? `+${valueLabelFormatted}`
-								// 		: valueLabelFormatted;
-
 								return {
 									label: it.tickerMetadata.name,
 									value: percReturn,
@@ -934,17 +895,6 @@ export const RemotionRoot: React.FC = () => {
 							// });
 							// console.log({forChat});
 
-							const neonColors = {
-								neonGreen: '#39FF14', // Neon Green
-								neonPink: '#FF1493', // Neon Pink
-								// neonYellow: '#FFFF33', // Neon Yellow
-								neonOrange: '#FF4500', // Neon Orange
-								neonBlue: '#1F51FF', // Neon Blue
-								neonPurple: '#BF00FF', // Neon Purple
-								neonCyan: '#00FFFF', // Neon Cyan
-								neonMagenta: '#FF00FF', // Neon Magenta
-							};
-
 							return {
 								durationInFrames,
 								props: {
@@ -954,54 +904,39 @@ export const RemotionRoot: React.FC = () => {
 									dataInfo: [
 										{
 											ticker: 'SPX_INDEX',
-											color: neonColors.neonGreen,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '0,0.0',
 										},
 										{
 											ticker: 'DAX_INDEX',
-											color: neonColors.neonPink,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '0,0.0',
 										},
 										{
 											ticker: 'XAU-USD',
-											color: neonColors.neonBlue,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '$0,0.0',
 										},
 										{
 											ticker: 'BTC-USD',
-											color: neonColors.neonOrange,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '$0,0',
 										},
 										{
 											ticker: 'ETH-USD',
-											color: neonColors.neonBlue,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '$0,0',
 										},
 										{
 											ticker: 'TESLA',
-											color: neonColors.neonPurple,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '$0.00',
 										},
-										// {
-										// 	ticker: 'XRP-USD',
-										// 	color: neonColors.neonBlue,
-										// 	formatter: '$0,0.00',
-										// },
 										{
 											ticker: 'AMZN',
-											color: neonColors.neonCyan,
+											color: theme.typography.textStyles.h1.color,
 											formatter: '$0.00',
 										},
-										// {
-										// 	ticker: 'AAPL',
-										// 	color: neonColors.neonPink,
-										// 	formatter: '$0.00',
-										// },
-										// {
-										// 	ticker: 'GS',
-										// 	color: neonColors.neonPink,
-										// 	formatter: '$0.00',
-										// },
 									],
 								},
 							};
