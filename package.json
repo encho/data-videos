@@ -9,7 +9,8 @@
     "start": "remotion studio",
     "build": "remotion render MyComp out/video.mp4",
     "upgrade": "remotion upgrade",
-    "test": "eslint src --ext ts,tsx,js,jsx && tsc"
+    "test": "eslint src --ext ts,tsx,js,jsx && tsc",
+    "build_nerdy_types": "ts-node ./code-generation/nerdyFinance/generateTypes_nerdyFinance_availableStrategies.ts"
   },
   "repository": {},
   "license": "UNLICENSED",
@@ -71,7 +72,8 @@
     "@types/web": "^0.0.86",
     "eslint": "^8.43.0",
     "prettier": "^2.8.8",
-    "typescript": "^4.9.4"
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   },
   "packageManager": "npm@10.1.0"
 }

@@ -325,7 +325,7 @@ export const RemotionRoot: React.FC = () => {
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
 						timePeriod: '2Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
+						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
 						chartTheme: 'LORENZOBERTOLINI_BRIGHT' as const,
 					}}
