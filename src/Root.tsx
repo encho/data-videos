@@ -1,6 +1,11 @@
 import {Composition, Folder} from 'remotion';
 
-import {fetchNerdyFinancePerformanceCompareData} from './acetti-http/nerdy-finance/fetchPerformanceCompareData';
+// PRODUCTION FLICS
+import {PerformanceChart} from './compositions/ProductionFilcs/PerformanceChart';
+import {PerformanceCompareChart} from './compositions/ProductionFilcs/PerformanceCompareChart';
+import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
+import {BacktestChart} from './compositions/ProductionFilcs/BacktestChart';
+import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
 
 import {
 	HorizontalBarsStar,
@@ -159,12 +164,6 @@ import {
 	lastLogoPageCompositionSchema,
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
 
-// PRODUCTION FLICS
-import {PerformanceChart} from './compositions/ProductionFilcs/PerformanceChart';
-import {PerformanceCompareChart} from './compositions/ProductionFilcs/PerformanceCompareChart';
-import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
-import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
-
 import {
 	ThreeD_BarChartComposition,
 	threeD_BarChartCompositionSchema,
@@ -179,11 +178,6 @@ import {
 	yScaleAnimationDevCompositionSchema,
 	YScaleAnimationDevComposition,
 } from './compositions/POCs/09-Timeseries/YScaleAnimationDev/YScaleAnimationDevComposition';
-
-import {
-	PerformanceCompareChartComposition,
-	performanceCompareChartCompositionSchema,
-} from './compositions/ProductionFilcs/PerformanceCompareChart/PerformanceCompareChartComposition';
 
 import {
 	MissingDataTimeseriesComposition,
@@ -246,7 +240,6 @@ import {
 } from './compositions/POCs/01-TextEffects/TextAnimations/SentenceAnimationChime/SentenceAnimationChimeDevComposition';
 
 import './tailwind.css';
-import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
 
 export const videoSizes = {
 	square: {
@@ -321,6 +314,20 @@ export const RemotionRoot: React.FC = () => {
 						barChartDurationInSeconds: 6,
 						lastSlideDurationInSeconds: 6,
 						barChartData: [],
+					}}
+				/>
+
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="BacktestChart"
+					{...BacktestChart}
+					defaultProps={{
+						ticker: 'BTC-USD' as const,
+						timePeriod: '2Y' as const,
+						nerdyFinanceEnv: 'PROD' as const,
+						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
+						chartTheme: 'LORENZOBERTOLINI_BRIGHT' as const,
 					}}
 				/>
 
