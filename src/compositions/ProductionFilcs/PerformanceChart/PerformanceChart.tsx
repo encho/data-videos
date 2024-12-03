@@ -1,14 +1,14 @@
 import {useEffect} from 'react';
 
-import {Position} from '../../../../acetti-layout/atoms/Position';
-import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
-import {AnimatedLine} from '../../../../acetti-ts-components/AnimatedLine';
-import {Animated_XAxis} from '../utils/Animated_XAxis';
-import {Animated_YAxis} from '../utils/Animated_YAxis';
-import {Animated_ValueDot} from '../utils/Animated_ValueDot';
-import {TYScaleAnimationContext} from '../utils/useYScaleAnimation';
-import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
+import {Position} from '../../../acetti-layout/atoms/Position';
+import {TGridLayoutArea} from '../../../acetti-layout';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {AnimatedLine} from '../../../acetti-ts-components/AnimatedLine';
+import {Animated_XAxis} from '../../POCs/09-Timeseries/utils/Animated_XAxis';
+import {Animated_YAxis} from '../../POCs/09-Timeseries/utils/Animated_YAxis';
+import {Animated_ValueDot} from '../../POCs/09-Timeseries/utils/Animated_ValueDot';
+import {TYScaleAnimationContext} from '../../POCs/09-Timeseries/utils/useYScaleAnimation';
+import {TPeriodScaleAnimationContext} from '../../POCs/09-Timeseries/utils/usePeriodScaleAnimation';
 
 export const PerformanceChart: React.FC<{
 	periodScaleAnimation: TPeriodScaleAnimationContext;

@@ -160,6 +160,7 @@ import {
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
 
 // PRODUCTION FLICS
+import {PerformanceChart} from './compositions/ProductionFilcs/PerformanceChart';
 import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
 import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
 
@@ -186,7 +187,7 @@ import {
 import {
 	PerformanceChartComposition,
 	performanceChartCompositionSchema,
-} from './compositions/POCs/09-Timeseries/PerformanceChart/PerformanceChartComposition';
+} from './compositions/ProductionFilcs/PerformanceChart/PerformanceChartComposition';
 
 import {
 	PerformanceCompareChartComposition,
@@ -287,6 +288,20 @@ export const RemotionRoot: React.FC = () => {
 	return (
 		<>
 			<Folder name="Production-Flics">
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="PerformanceChart"
+					{...PerformanceChart}
+					defaultProps={{
+						ticker: 'BTC-USD' as const,
+						timePeriod: '2Y' as const,
+						nerdyFinanceEnv: 'PROD' as const,
+						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
+						chartTheme: 'LORENZOBERTOLINI' as const,
+					}}
+				/>
+
 				<Composition
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
@@ -773,43 +788,6 @@ export const RemotionRoot: React.FC = () => {
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
-						}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="PerformanceChart"
-						component={PerformanceChartComposition}
-						durationInFrames={30 * 15}
-						fps={30}
-						{...videoSizes.square}
-						schema={performanceChartCompositionSchema}
-						defaultProps={{
-							ticker: 'SPX_INDEX' as const,
-							timePeriod: '2Y' as const,
-							nerdyFinanceEnv: 'PROD' as const,
-							theme: 'LORENZOBERTOLINI_BRIGHT' as const,
-							chartTheme: 'LORENZOBERTOLINI' as const,
-						}}
-						calculateMetadata={async ({props}) => {
-							const {nerdyFinanceEnv, ticker, timePeriod} = props;
-
-							const apiPriceData = await fetchNerdyFinancePriceChartData(
-								{
-									ticker,
-									endDate: new Date(),
-									timePeriod,
-								},
-								nerdyFinanceEnv
-							);
-
-							return {
-								props: {
-									...props,
-									apiPriceData,
-								},
-							};
 						}}
 					/>
 

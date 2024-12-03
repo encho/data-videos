@@ -1,20 +1,20 @@
 import {useVideoConfig, Easing, Sequence} from 'remotion';
 import invariant from 'tiny-invariant';
 
-import {usePeriodScaleAnimation} from '../utils/usePeriodScaleAnimation';
-import {useYScaleAnimation} from '../utils/useYScaleAnimation';
-import {usePage} from '../../../../acetti-components/PageContext';
+import {usePeriodScaleAnimation} from '../../POCs/09-Timeseries/utils/usePeriodScaleAnimation';
+import {useYScaleAnimation} from '../../POCs/09-Timeseries/utils/useYScaleAnimation';
+import {usePage} from '../../../acetti-components/PageContext';
 import {useChartLayout} from './useChartLayout';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {PageContext} from '../../../../acetti-components/PageContext';
-import {Page} from '../../../../acetti-components/Page';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {PageContext} from '../../../acetti-components/PageContext';
+import {Page} from '../../../acetti-components/Page';
 import {PerformanceChart} from './PerformanceChart';
-import {DisplayGridLayout} from '../../../../acetti-layout';
-import {useXAxisAreaHeight} from '../utils/Animated_XAxis';
-import {Position} from '../../../../acetti-layout/atoms/Position';
-import {Animated_PercentageChangeArea} from '../utils/Animated_PercentageChangeArea';
-import {OpacifyInAndOut} from '../../../../SlideIn';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+import {DisplayGridLayout} from '../../../acetti-layout';
+import {useXAxisAreaHeight} from '../../POCs/09-Timeseries/utils/Animated_XAxis';
+import {Position} from '../../../acetti-layout/atoms/Position';
+import {Animated_PercentageChangeArea} from '../../POCs/09-Timeseries/utils/Animated_PercentageChangeArea';
+import {OpacifyInAndOut} from '../../../SlideIn';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 
 type TAnimatedLineChart2Props = {
 	width: number;

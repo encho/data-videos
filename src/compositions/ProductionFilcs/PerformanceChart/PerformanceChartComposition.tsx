@@ -2,15 +2,15 @@ import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
 import {z} from 'zod';
 
 import {PerformanceChartPage} from './PerformanceChartPage';
-import {PageContext} from '../../../../acetti-components/PageContext';
-import {zNerdyFinancePriceChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
+import {PageContext} from '../../../acetti-components/PageContext';
+import {zNerdyFinancePriceChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
 	zNerdyTickers,
 	zNerdyTimePeriod,
-} from '../../../../acetti-http/zNerdyTickers';
-import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
-import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
+} from '../../../acetti-http/zNerdyTickers';
+import {useThemeFromEnum} from '../../../acetti-themes/getThemeFromEnum';
+import {GlobalVideoContextWrapper} from '../../../acetti-components/GlobalVideoContext';
+import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPage';
 
 export const performanceChartCompositionSchema = z.object({
 	ticker: zNerdyTickers,
@@ -20,6 +20,10 @@ export const performanceChartCompositionSchema = z.object({
 	chartTheme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	apiPriceData: zNerdyFinancePriceChartDataResult.optional(),
 });
+
+export type TPerformanceChartCompositionSchema = z.infer<
+	typeof performanceChartCompositionSchema
+>;
 
 export const PerformanceChartComposition: React.FC<
 	z.infer<typeof performanceChartCompositionSchema>
