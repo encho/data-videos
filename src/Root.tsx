@@ -159,12 +159,14 @@ import {
 	lastLogoPageCompositionSchema,
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
 
+// PRODUCTION FLICS
 import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
+import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
 
-import {
-	BundesligaTabelleComposition,
-	bundesligaTabelleCompositionSchema,
-} from './compositions/ProductionFilcs/BundesligaTabelle/BundesligaTabelleComposition';
+// import {
+// 	BundesligaTabelleComposition,
+// 	bundesligaTabelleCompositionSchema,
+// } from './compositions/ProductionFilcs/BundesligaTabelle/BundesligaTabelleComposition';
 
 import {
 	ThreeD_BarChartComposition,
@@ -289,11 +291,7 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="SelectedAssetsChartbook"
-					component={SelectedAssetsChartbook.Composition}
-					durationInFrames={30 * 32}
-					fps={30}
-					{...videoSizes.linkedInWide}
-					schema={SelectedAssetsChartbook.schema}
+					{...SelectedAssetsChartbook}
 					defaultProps={{
 						themeEnum: 'LORENZOBERTOLINI' as const,
 						data: [],
@@ -303,60 +301,17 @@ export const RemotionRoot: React.FC = () => {
 						lastSlideDurationInSeconds: 6,
 						barChartData: [],
 					}}
-					calculateMetadata={SelectedAssetsChartbook.calculateMetadata}
 				/>
 
 				<Composition
 					id="Bundesliga-Tabelle"
-					component={BundesligaTabelleComposition}
-					durationInFrames={30 * 12}
-					fps={30}
-					{...videoSizes.square}
-					// {...videoSizes.linkedInTall}
-					schema={bundesligaTabelleCompositionSchema}
+					{...BundesligaTabelle}
 					defaultProps={{
 						themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
 						data: [],
 						title: 'Bundesliga Tabelle',
 						subtitle: 'Punktestand am 6. November 2024',
 						dataSource: 'Datenquelle: https://api.openligadb.de',
-					}}
-					calculateMetadata={async ({props}) => {
-						const year = 2024;
-						const apiUrl = `https://api.openligadb.de/getbltable/bl1/${year}`;
-						const data = await fetch(apiUrl);
-						const json = (await data.json()) as {
-							teamName: string;
-							points: number;
-							teamInfoId: number;
-							teamIconUrl: string;
-						}[];
-
-						const parsedData = json.map((it) => ({
-							teamIconUrl: it.teamIconUrl,
-							label: it.teamName,
-							value: it.points,
-							id: `id-${it.teamInfoId}`,
-						}));
-
-						const formatGermanDate = (date: Date): string => {
-							return new Intl.DateTimeFormat('de-DE', {
-								day: 'numeric',
-								month: 'long',
-								year: 'numeric',
-							}).format(date);
-						};
-
-						const today = new Date();
-						const formattedDate = formatGermanDate(today);
-
-						return {
-							props: {
-								...props,
-								data: parsedData,
-								subtitle: `Punktestand am ${formattedDate}`,
-							},
-						};
 					}}
 				/>
 			</Folder>

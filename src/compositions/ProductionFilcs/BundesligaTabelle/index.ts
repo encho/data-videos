@@ -1,7 +1,7 @@
 import {
-	SelectedAssetsChartbookComposition,
-	selectedAssetsChartbookSchema,
-} from './SelectedAssetsChartbookComposition';
+	BundesligaTabelleComposition,
+	bundesligaTabelleCompositionSchema,
+} from './BundesligaTabelleComposition';
 import {calculateMetadata} from './calculateMetadata';
 
 // TODO import
@@ -26,11 +26,12 @@ const videoSizes = {
 
 const fps = 30;
 
-export const SelectedAssetsChartbook = {
-	component: SelectedAssetsChartbookComposition,
-	schema: selectedAssetsChartbookSchema,
+export const BundesligaTabelle = {
+	component: BundesligaTabelleComposition,
+	schema: bundesligaTabelleCompositionSchema,
 	calculateMetadata,
 	fps,
 	durationInFrames: 12 * fps,
-	...videoSizes.widescreen_16x9,
+	...videoSizes.linkedInWide,
+	// ...videoSizes.linkedInTall,
 };

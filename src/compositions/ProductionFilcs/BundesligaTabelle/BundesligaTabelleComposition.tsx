@@ -41,6 +41,10 @@ export const bundesligaTabelleCompositionSchema = z.object({
 	),
 });
 
+export type TBundesLigaTabelleCompositionSchema = z.infer<
+	typeof bundesligaTabelleCompositionSchema
+>;
+
 export const BundesligaTabelleComposition: React.FC<
 	z.infer<typeof bundesligaTabelleCompositionSchema>
 > = ({themeEnum, data, title, subtitle, dataSource}) => {
