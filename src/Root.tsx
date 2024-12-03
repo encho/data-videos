@@ -167,7 +167,7 @@ import {
 import {
 	BundesligaTabelleComposition,
 	bundesligaTabelleCompositionSchema,
-} from './compositions/POCs/05-BarCharts/BundesligaTabelle/BundesligaTabelleComposition';
+} from './compositions/ProductionFilcs/BundesligaTabelle/BundesligaTabelleComposition';
 
 import {
 	ThreeD_BarChartComposition,

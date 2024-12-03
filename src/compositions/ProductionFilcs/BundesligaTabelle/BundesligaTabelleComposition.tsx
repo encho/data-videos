@@ -2,29 +2,29 @@ import {z} from 'zod';
 import {useVideoConfig, Sequence} from 'remotion';
 import {useMemo} from 'react';
 
-import {getEnterKeyframes} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getKeyframes';
-import {getImageLabelComponent} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
-import {SimpleBarChart as SimpleBarChartNew} from '../../NewBarCharts/DynamicList/components/SimpleBarChart';
-import {PageContext, usePage} from '../../../../acetti-components/PageContext';
+import {getEnterKeyframes} from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getKeyframes';
+import {getImageLabelComponent} from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/BarsTransition/getImageLabelComponent';
+import {SimpleBarChart as SimpleBarChartNew} from '../../POCs/NewBarCharts/DynamicList/components/SimpleBarChart';
+import {PageContext, usePage} from '../../../acetti-components/PageContext';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../../../acetti-components/Page';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
+} from '../../../acetti-components/Page';
+import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
-} from '../../../../acetti-themes/getThemeFromEnum';
-import {TBarChartItem} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {colorPalettes} from '../../../../acetti-themes/tailwindPalettes';
-import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
-import {StartingFiveSlide} from '../../01-TextEffects/StartingFiveSlide/StartingFiveSlide';
+} from '../../../acetti-themes/getThemeFromEnum';
+import {TBarChartItem} from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {colorPalettes} from '../../../acetti-themes/tailwindPalettes';
+import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPage';
+import {StartingFiveSlide} from '../../POCs/01-TextEffects/StartingFiveSlide/StartingFiveSlide';
 
 export const bundesligaTabelleCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
