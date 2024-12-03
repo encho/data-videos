@@ -161,13 +161,9 @@ import {
 
 // PRODUCTION FLICS
 import {PerformanceChart} from './compositions/ProductionFilcs/PerformanceChart';
+import {PerformanceCompareChart} from './compositions/ProductionFilcs/PerformanceCompareChart';
 import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
 import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
-
-// import {
-// 	BundesligaTabelleComposition,
-// 	bundesligaTabelleCompositionSchema,
-// } from './compositions/ProductionFilcs/BundesligaTabelle/BundesligaTabelleComposition';
 
 import {
 	ThreeD_BarChartComposition,
@@ -185,14 +181,9 @@ import {
 } from './compositions/POCs/09-Timeseries/YScaleAnimationDev/YScaleAnimationDevComposition';
 
 import {
-	PerformanceChartComposition,
-	performanceChartCompositionSchema,
-} from './compositions/ProductionFilcs/PerformanceChart/PerformanceChartComposition';
-
-import {
 	PerformanceCompareChartComposition,
 	performanceCompareChartCompositionSchema,
-} from './compositions/POCs/09-Timeseries/PerformanceCompareChart/PerformanceCompareChartComposition';
+} from './compositions/ProductionFilcs/PerformanceCompareChart/PerformanceCompareChartComposition';
 
 import {
 	MissingDataTimeseriesComposition,
@@ -295,6 +286,21 @@ export const RemotionRoot: React.FC = () => {
 					{...PerformanceChart}
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
+						timePeriod: '2Y' as const,
+						nerdyFinanceEnv: 'PROD' as const,
+						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
+						chartTheme: 'LORENZOBERTOLINI' as const,
+					}}
+				/>
+
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="PerformanceCompareChart"
+					{...PerformanceCompareChart}
+					defaultProps={{
+						ticker: 'XAU-USD' as const,
+						ticker2: 'BTC-USD' as const,
 						timePeriod: '2Y' as const,
 						nerdyFinanceEnv: 'PROD' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
@@ -788,46 +794,6 @@ export const RemotionRoot: React.FC = () => {
 							timePeriod: '2Y' as const,
 							nerdyFinanceEnv: 'PROD' as const,
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
-						}}
-					/>
-
-					<Composition
-						// You can take the "id" to render a video:
-						// npx remotion render src/index.ts <id> out/video.mp4
-						id="PerformanceCompareChart"
-						component={PerformanceCompareChartComposition}
-						durationInFrames={30 * 15}
-						fps={30}
-						{...videoSizes.square}
-						schema={performanceCompareChartCompositionSchema}
-						defaultProps={{
-							ticker: 'SPX_INDEX' as const,
-							ticker2: 'DJI_INDEX' as const,
-							timePeriod: '2Y' as const,
-							nerdyFinanceEnv: 'PROD' as const,
-							theme: 'LORENZOBERTOLINI_BRIGHT' as const,
-							chartTheme: 'LORENZOBERTOLINI' as const,
-						}}
-						calculateMetadata={async ({props}) => {
-							const {nerdyFinanceEnv, ticker, ticker2, timePeriod} = props;
-
-							const apiPerformanceCompareData =
-								await fetchNerdyFinancePerformanceCompareData(
-									{
-										ticker,
-										ticker2,
-										endDate: new Date().toISOString(),
-										timePeriod,
-									},
-									nerdyFinanceEnv
-								);
-
-							return {
-								props: {
-									...props,
-									apiPerformanceCompareData,
-								},
-							};
 						}}
 					/>
 

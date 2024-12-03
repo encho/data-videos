@@ -3,17 +3,17 @@ import {z} from 'zod';
 import {useMemo} from 'react';
 import invariant from 'tiny-invariant';
 
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {PerformanceCompareChartPage} from './PerformanceCompareChartPage';
-import {PageContext} from '../../../../acetti-components/PageContext';
+import {PageContext} from '../../../acetti-components/PageContext';
 import {
 	zNerdyTickers,
 	zNerdyTimePeriod,
-} from '../../../../acetti-http/zNerdyTickers';
-import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
-import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
-import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
-import {zNerdyFinancePerformanceCompareChartDataResult} from '../../../../acetti-http/nerdy-finance/fetchPerformanceCompareData';
+} from '../../../acetti-http/zNerdyTickers';
+import {useThemeFromEnum} from '../../../acetti-themes/getThemeFromEnum';
+import {GlobalVideoContextWrapper} from '../../../acetti-components/GlobalVideoContext';
+import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPage';
+import {zNerdyFinancePerformanceCompareChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPerformanceCompareData';
 
 export const performanceCompareChartCompositionSchema = z.object({
 	ticker: zNerdyTickers,
@@ -25,6 +25,10 @@ export const performanceCompareChartCompositionSchema = z.object({
 	apiPerformanceCompareData:
 		zNerdyFinancePerformanceCompareChartDataResult.optional(),
 });
+
+export type TPerformanceCompareChartCompositionSchema = z.infer<
+	typeof performanceCompareChartCompositionSchema
+>;
 
 export const PerformanceCompareChartComposition: React.FC<
 	z.infer<typeof performanceCompareChartCompositionSchema>

@@ -54,13 +54,18 @@ export type TNerdyFinancePerformanceCompareChartDataResult = z.infer<
 type NerdyFinancePerformanceCompareArgs = {
 	ticker: string;
 	ticker2: string;
-	endDate: string;
+	endDate: string | Date;
 	timePeriod: '1M' | '3M' | '1Y' | '2Y' | 'YTD' | 'QTD';
 };
 
 // https://www.notion.so/Infrastructure-e7e97661104a4dbba99d3a648c8f3228
 export const fetchNerdyFinancePerformanceCompareData = async (
-	{ticker, ticker2, endDate, timePeriod}: NerdyFinancePerformanceCompareArgs,
+	{
+		ticker,
+		ticker2,
+		endDate: endDateProp,
+		timePeriod,
+	}: NerdyFinancePerformanceCompareArgs,
 	nerdyFinanceEnv: 'DEV' | 'STAGE' | 'PROD'
 ): Promise<TNerdyFinancePerformanceCompareChartDataResult> => {
 	const apiBase =
@@ -70,19 +75,10 @@ export const fetchNerdyFinancePerformanceCompareData = async (
 			? 'https://coinfolio-quant-stage.onrender.com'
 			: 'https://coinfolio-quant.onrender.com';
 
-	console.log({endDate, timePeriod});
+	const endDateString =
+		typeof endDateProp === 'string' ? endDateProp : endDateProp.toISOString();
 
-	// const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDate}&timePeriod=${timePeriod}`;
-
-	// const apiUrl = `${apiBase}/analytics-tools/performance-compare?firstAsset=${ticker}&secondAsset=${ticker2}&endDate=${endDate}&timePeriod=${timePeriod}`;
-	// const apiUrl =
-	// 	apiBase +
-	// 	'/analytics-tools/performance-compare?firstAsset=XAU-USD&secondAsset=BTC-USD&endDate=2024-07-03T13:51:28.917Z&timePeriod=2Y';
-	const apiUrl = `${apiBase}/analytics-tools/performance-compare?firstAsset=${ticker}&secondAsset=${ticker2}&endDate=2024-07-03T13:51:28.917Z&timePeriod=2Y`;
-	// const apiUrl =  "https://nerdy.finance/analytics/performance-compare?firstAsset=BTC-USD&secondAsset=COIN&endDate=2024-07-02T13%3A43%3A55.406Z&timePeriod=1Y&_data=root";
-	// const apiUrl =
-	// 	apiBase +
-	// 	'/analytics/performance-compare?firstAsset=BTC-USD&secondAsset=COIN&endDate=2024-07-02T13%3A43%3A55.406Z&timePeriod=1Y&_data=root';
+	const apiUrl = `${apiBase}/analytics-tools/performance-compare?firstAsset=${ticker}&secondAsset=${ticker2}&endDate=${endDateString}&timePeriod=2Y`;
 
 	const data = await fetch(apiUrl);
 
@@ -95,7 +91,6 @@ export const fetchNerdyFinancePerformanceCompareData = async (
 	const dates: Date[] = [];
 
 	for (const it of seriesData) {
-		// console.log(num);
 		series1.push(it.firstAsset);
 		series2.push(it.secondAsset);
 		dates.push(new Date(it.date));
@@ -106,10 +101,6 @@ export const fetchNerdyFinancePerformanceCompareData = async (
 		series: [series1, series2],
 		index: dates,
 	};
-
-	console.log(json);
-	console.log({seriesData});
-	console.log({parsedMultiSeries});
 
 	// TODO validate a specific return type
 	// maybe with zod it is possible?

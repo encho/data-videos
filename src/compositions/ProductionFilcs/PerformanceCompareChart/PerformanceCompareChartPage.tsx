@@ -2,20 +2,20 @@ import {useVideoConfig, Sequence} from 'remotion';
 // import {format} from 'date-fns';
 // import {enGB} from 'date-fns/locale';
 
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {usePage} from '../../../../acetti-components/PageContext';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {usePage} from '../../../acetti-components/PageContext';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../../../acetti-components/Page';
+} from '../../../acetti-components/Page';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {TextAnimationSubtle} from '../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
+import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 // const formatDate = (date: Date): string => {
 // 	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
