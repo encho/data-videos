@@ -3,40 +3,40 @@ import {Sequence, useVideoConfig} from 'remotion';
 import {extent} from 'd3-array';
 import {zColor} from '@remotion/zod-types';
 
-import {Platte3D_SlideInAndOut} from '../../3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
-import {PageContext, usePage} from '../../../../acetti-components/PageContext';
+import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
+import {PageContext, usePage} from '../../../acetti-components/PageContext';
 import {
 	zNerdyFinancePriceChartDataResult,
 	TNerdyFinancePriceChartDataResult,
-} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
+} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {
 	Page,
 	PageHeader,
 	PageFooter,
 	PageLogo,
-} from '../../../../acetti-components/Page';
-import {NegativeBarChartPage} from '../../05-BarCharts/NegativeSimpleBarChart/NegativeBarChartPage';
-import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {HtmlArea} from '../../../../acetti-layout';
-import {DisplayGridRails} from '../../../../acetti-layout';
-import {LastLogoPage} from '../../03-Page/LastLogoPageContentDev/LastLogoPage';
+} from '../../../acetti-components/Page';
+import {NegativeBarChartPage} from '../../POCs/05-BarCharts/NegativeSimpleBarChart/NegativeBarChartPage';
+import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
+import {HtmlArea} from '../../../acetti-layout';
+import {DisplayGridRails} from '../../../acetti-layout';
+import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPage';
 import {
 	useThemeFromEnum,
 	zThemeEnum,
-} from '../../../../acetti-themes/getThemeFromEnum';
-import {SparklineLarge} from '../../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
+} from '../../../acetti-themes/getThemeFromEnum';
+import {SparklineLarge} from '../../../acetti-ts-flics/single-timeseries/SparklineLarge/SparklineLarge';
 import {
 	getMatrixLayoutCellArea,
 	useMatrixLayout,
-} from '../../../../acetti-layout/hooks/useMatrixLayout';
-import {TitleWithSubtitle} from '../../03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {useElementDimensions} from '../../03-Page/SimplePage/useElementDimensions';
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
+} from '../../../acetti-layout/hooks/useMatrixLayout';
+import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
+import {ThemeType} from '../../../acetti-themes/themeTypes';
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {
 	zBarChartItems,
 	TBarChartItems,
-} from '../../NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+} from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 
 export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
