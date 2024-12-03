@@ -37,8 +37,12 @@ import {
 	zBarChartItems,
 	TBarChartItems,
 } from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+// import {
+// 	zNerdyTickers,
+// 	zNerdyTimePeriod,
+// } from '../../../acetti-http/zNerdyTickers';
 
-export const apiBasedSparklinesPresentationCompositionSchema = z.object({
+export const selectedAssetsChartbookSchema = z.object({
 	themeEnum: zThemeEnum,
 	data: z.array(zNerdyFinancePriceChartDataResult),
 	barChartData: zBarChartItems,
@@ -48,7 +52,14 @@ export const apiBasedSparklinesPresentationCompositionSchema = z.object({
 	singleSparklineDurationInSeconds: z.number(),
 	barChartDurationInSeconds: z.number(),
 	lastSlideDurationInSeconds: z.number(),
+	// TODO:
+	// tickersArray: zNerdyTickers,
+	// timePeriod: zNerdyTimePeriod
 });
+
+export type TSelectedAssetsChartbookSchema = z.infer<
+	typeof selectedAssetsChartbookSchema
+>;
 
 type FlicProps = {
 	theme: ThemeType;
@@ -82,8 +93,8 @@ function getDataFormatter(
 	return color;
 }
 
-export const ApiBasedSparklinesPresentationComposition: React.FC<
-	z.infer<typeof apiBasedSparklinesPresentationCompositionSchema>
+export const SelectedAssetsChartbookComposition: React.FC<
+	z.infer<typeof selectedAssetsChartbookSchema>
 > = ({
 	themeEnum,
 	data,

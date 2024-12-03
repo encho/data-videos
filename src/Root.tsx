@@ -1,12 +1,12 @@
 import {Composition, Folder} from 'remotion';
 
 import {fetchNerdyFinancePerformanceCompareData} from './acetti-http/nerdy-finance/fetchPerformanceCompareData';
-import {getThemeFromEnum} from './acetti-themes/getThemeFromEnum';
-// import {zSimpleBarChartData} from './acetti-flics/SimpleBarChart/SimpleBarChart';
+
 import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
 } from './HorizontalBarsStar/HorizontalBarsStar';
+
 import {
 	BundesligaTop10BarChart,
 	bundesligaTop10BarChartSchema,
@@ -159,10 +159,7 @@ import {
 	lastLogoPageCompositionSchema,
 } from './compositions/POCs/03-Page/LastLogoPageContentDev/LastLogoPageComposition';
 
-import {
-	ApiBasedSparklinesPresentationComposition,
-	apiBasedSparklinesPresentationCompositionSchema,
-} from './compositions/ProductionFilcs/ApiBasedSparklinesPresentation/ApiBasedSparklinesPresentationComposition';
+import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
 
 import {
 	BundesligaTabelleComposition,
@@ -256,7 +253,6 @@ import {
 
 import './tailwind.css';
 import {fetchNerdyFinancePriceChartData} from './acetti-http/nerdy-finance/fetchPriceChartData';
-import {getPercentageChange} from './acetti-ts-utils/timeSeries/timeSeries';
 
 export const videoSizes = {
 	square: {
@@ -293,11 +289,11 @@ export const RemotionRoot: React.FC = () => {
 					// You can take the "id" to render a video:
 					// npx remotion render src/index.ts <id> out/video.mp4
 					id="SelectedAssetsChartbook"
-					component={ApiBasedSparklinesPresentationComposition}
+					component={SelectedAssetsChartbook.Composition}
 					durationInFrames={30 * 32}
 					fps={30}
 					{...videoSizes.linkedInWide}
-					schema={apiBasedSparklinesPresentationCompositionSchema}
+					schema={SelectedAssetsChartbook.schema}
 					defaultProps={{
 						themeEnum: 'LORENZOBERTOLINI' as const,
 						data: [],
@@ -307,179 +303,7 @@ export const RemotionRoot: React.FC = () => {
 						lastSlideDurationInSeconds: 6,
 						barChartData: [],
 					}}
-					calculateMetadata={async ({props}) => {
-						const nerdyENV = 'PROD';
-
-						const spx = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'SPX_INDEX',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-
-						const dax = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'DAX_INDEX',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-
-						const btcusd = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'BTC-USD',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-
-						const xauusd = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'XAU-USD',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-						const ethusd = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'ETH-USD',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-
-						const tesla = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'TESLA',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-						const amazon = await fetchNerdyFinancePriceChartData(
-							{
-								ticker: 'AMZN',
-								endDate: new Date(),
-								timePeriod: '3Y',
-							},
-							nerdyENV
-						);
-
-						const data = [
-							// stocks
-							spx,
-							dax,
-							// commodities,
-							xauusd,
-							// crypto
-							btcusd,
-							ethusd,
-							// stocks,
-							tesla,
-							amazon,
-						];
-
-						const fps = 30;
-						const singleDurationInSeconds =
-							props.singleSparklineDurationInSeconds;
-						const singleDurationInFrames = singleDurationInSeconds * fps;
-
-						const sparklinesTotalDuration =
-							data.length * singleDurationInFrames;
-
-						const percentageComparisonDurationInFrames =
-							fps * props.barChartDurationInSeconds;
-						const lastSlideTotalDurationInFrames =
-							fps * props.lastSlideDurationInSeconds;
-
-						const durationInFrames =
-							sparklinesTotalDuration +
-							lastSlideTotalDurationInFrames +
-							percentageComparisonDurationInFrames;
-
-						const theme = getThemeFromEnum(props.themeEnum);
-						const {positiveColor, negativeColor} = theme.positiveNegativeColors;
-
-						const returnComparisonBarChartData = data.map((it) => {
-							const percReturn = getPercentageChange(
-								it.data.map((dataItem) => ({
-									...dataItem,
-									date: dataItem.index,
-								}))
-							);
-
-							return {
-								label: it.tickerMetadata.name,
-								value: percReturn,
-								color: percReturn >= 0 ? positiveColor : negativeColor,
-								id: it.ticker,
-							};
-						});
-
-						const barChartData = returnComparisonBarChartData.sort(
-							(a, b) => b.value - a.value
-						);
-
-						// const forChat = barChartData.map((it) => {
-						// 	return {
-						// 		asset: it.label,
-						// 		percentagePerformanceInLast3Years: it.value * 100,
-						// 	};
-						// });
-						// console.log({forChat});
-
-						return {
-							durationInFrames,
-							props: {
-								...props,
-								data,
-								barChartData,
-								dataInfo: [
-									{
-										ticker: 'SPX_INDEX',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '0,0.0',
-									},
-									{
-										ticker: 'DAX_INDEX',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '0,0.0',
-									},
-									{
-										ticker: 'XAU-USD',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '$0,0.0',
-									},
-									{
-										ticker: 'BTC-USD',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '$0,0',
-									},
-									{
-										ticker: 'ETH-USD',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '$0,0',
-									},
-									{
-										ticker: 'TESLA',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '$0.00',
-									},
-									{
-										ticker: 'AMZN',
-										color: theme.typography.textStyles.h1.color,
-										formatter: '$0.00',
-									},
-								],
-							},
-						};
-					}}
+					calculateMetadata={SelectedAssetsChartbook.calculateMetadata}
 				/>
 
 				<Composition
