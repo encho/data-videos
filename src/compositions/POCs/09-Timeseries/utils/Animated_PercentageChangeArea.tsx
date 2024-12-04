@@ -5,13 +5,6 @@ import {TGridLayoutArea} from '../../../../acetti-layout';
 
 import {usePage} from '../../../../acetti-components/PageContext';
 import {Position} from '../../../../acetti-layout/atoms/Position';
-// import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
-
-import {ThemeType} from '../../../../acetti-themes/themeTypes';
-
-// TODO evtl. deprecate, try to not export
-export type Theme_PercentageChangeArea =
-	ThemeType['timeseriesComponents']['percentageChangeArea'];
 
 export const Animated_PercentageChangeArea: React.FC<{
 	yScale: ScaleLinear<number, number>; // TODO poass context
@@ -22,6 +15,9 @@ export const Animated_PercentageChangeArea: React.FC<{
 }> = ({yScale, area, firstValue, lastValue}) => {
 	const currentFrame = useCurrentFrame();
 	const {fps} = useVideoConfig();
+
+	const ENTER_DURATION_IN_SECONDS = 0.6;
+	const enterDurationInFrames = ENTER_DURATION_IN_SECONDS * fps;
 
 	const {theme: fullTheme} = usePage();
 
@@ -42,7 +38,7 @@ export const Animated_PercentageChangeArea: React.FC<{
 			mass: 0.5,
 			stiffness: 27,
 		},
-		durationInFrames: 48,
+		durationInFrames: enterDurationInFrames,
 	});
 
 	const aLastValue = firstValue + aPerc * (lastValue - firstValue);
@@ -123,9 +119,6 @@ export const Animated_PercentageChangeArea: React.FC<{
 						{formatPercentage(aPercentageChange)}
 					</text>
 				</g>
-				{/* <g transform="translate(0,130)">
-					<text>{durationInFrames}</text>
-				</g> */}
 			</svg>
 		</Position>
 	);

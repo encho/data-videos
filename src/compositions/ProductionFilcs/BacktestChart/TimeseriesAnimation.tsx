@@ -13,7 +13,6 @@ import {DisplayGridLayout} from '../../../acetti-layout';
 import {useXAxisAreaHeight} from '../../POCs/09-Timeseries/utils/Animated_XAxis';
 import {Position} from '../../../acetti-layout/atoms/Position';
 import {Animated_PercentageChangeArea} from '../../POCs/09-Timeseries/utils/Animated_PercentageChangeArea';
-import {OpacifyInAndOut} from '../../../SlideIn';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 
