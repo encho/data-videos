@@ -12,13 +12,13 @@ export const titleWithSubtitleDevCompositionSchema = z.object({
 });
 
 export const TitleWithSubtitle: React.FC<{
-	theme: ThemeType;
+	theme?: ThemeType;
 	title: string;
 	subtitle: string;
 	baseline?: number;
 	innerDelayInSeconds?: number;
 }> = ({
-	theme,
+	theme: themeProp,
 	title,
 	subtitle,
 	baseline: baselineProp,
@@ -27,6 +27,7 @@ export const TitleWithSubtitle: React.FC<{
 	const page = usePage();
 
 	const baseline = baselineProp || page.baseline;
+	const theme = themeProp || page.theme;
 
 	const SUBTITLE_INNER_DELAY_IN_SECONDS = innerDelayInSeconds + 1;
 

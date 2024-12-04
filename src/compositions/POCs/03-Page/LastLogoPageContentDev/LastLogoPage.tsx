@@ -46,13 +46,14 @@ export function useLastLogoPageContentKeyframes() {
 }
 
 export const LastLogoPageContent: React.FC<{
-	theme: ThemeType;
+	theme?: ThemeType;
 	baseline?: number;
-}> = ({theme, baseline: baselineProp}) => {
+}> = ({theme: themeProp, baseline: baselineProp}) => {
 	const frame = useCurrentFrame();
 	const page = usePage();
 
 	const baseline = baselineProp || page.baseline;
+	const theme = themeProp || page.theme;
 
 	const {keyframes: keyFramesGroup} = useLastLogoPageContentKeyframes();
 
@@ -150,11 +151,13 @@ export const LastLogoPageContentKeyframes: React.FC<{
 };
 
 export const LastLogoPage: React.FC<{
-	theme: ThemeType;
+	theme?: ThemeType;
 	baseline?: number;
-}> = ({theme, baseline: baselineProp}) => {
+}> = ({theme: themeProp, baseline: baselineProp}) => {
 	const page = usePage();
 	const baseline = baselineProp || page.baseline * 2;
+	const theme = themeProp || page.theme;
+
 	return (
 		<Page>
 			<div

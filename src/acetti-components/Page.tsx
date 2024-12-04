@@ -174,6 +174,7 @@ export function PageLogo() {
 		<div
 			style={{
 				position: 'fixed',
+				zIndex: 1000,
 				bottom: page.marginBottom,
 				right: page.marginRight,
 			}}
@@ -199,6 +200,7 @@ export const LorenzoBertoliniLogo = ({
 	baseline: number;
 }) => {
 	const color = colorProp || theme.typography.logoColor;
+	// const color = colorProp || theme.typography.colors.logo.main;
 	const capHeight = baseline * capHeightInBaselines;
 
 	return (

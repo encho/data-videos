@@ -13,7 +13,7 @@ export const KeyFramesSequence: React.FC<{
 	name: string;
 	children: ReactNode;
 	exclusive?: boolean;
-}> = ({keyframes, from, to, name, children, exclusive = false}) => {
+}> = ({keyframes, from, to, name, children, exclusive = true}) => {
 	const keyFrameFrom = getKeyFrame(keyframes, from).frame; // e.g.
 	const keyFrameTo = getKeyFrame(keyframes, to).frame;
 

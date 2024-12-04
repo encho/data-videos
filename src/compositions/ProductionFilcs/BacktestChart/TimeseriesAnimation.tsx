@@ -15,6 +15,7 @@ import {Position} from '../../../acetti-layout/atoms/Position';
 import {Animated_PercentageChangeArea} from '../../POCs/09-Timeseries/utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../SlideIn';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -43,11 +44,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					nrBaselines={30}
 					theme={theme}
 				>
-					<OpacifyInAndOut>
+					<Platte3D_SlideInAndOut
+						width={CHART_PAGE_WIDTH}
+						height={CHART_PAGE_HEIGHT}
+					>
 						<Page boxShadow borderRadius={5}>
 							<TimeseriesAnimationInside timeSeries={timeSeries} />
 						</Page>
-					</OpacifyInAndOut>
+					</Platte3D_SlideInAndOut>
 				</PageContext>
 			</div>
 		</div>

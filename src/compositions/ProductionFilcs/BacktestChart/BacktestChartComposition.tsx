@@ -1,5 +1,7 @@
-import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
+import {AbsoluteFill, useVideoConfig} from 'remotion';
 import {z} from 'zod';
+import invariant from 'tiny-invariant';
+import {useMemo} from 'react';
 
 import {BacktestChartPage} from './BacktestChartPage';
 import {PageContext} from '../../../acetti-components/PageContext';
@@ -11,8 +13,19 @@ import {
 import {useThemeFromEnum} from '../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../acetti-components/GlobalVideoContext';
 import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPage';
+import {zNerdyFinance_availableStrategies} from '../../../acetti-http/nerdy-finance/types/nerdyFinance_types_availableStrategies';
+import {zNerdyFinance_strategyInfo} from '../../../acetti-http/nerdy-finance/types/nerdyFinance_types_strategyInfo';
+import {
+	TKeyFrameSpec,
+	buildKeyFramesGroup,
+} from '../../POCs/Keyframes/Keyframes/keyframes';
+import {KeyFramesSequence} from '../../POCs/Keyframes/Keyframes/KeyframesInspector';
+import {Page, PageLogo} from '../../../acetti-components/Page';
+import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
 
 export const zBacktestChartCompositionSchema = z.object({
+	strategyTicker: zNerdyFinance_availableStrategies,
+	strategyInfo: zNerdyFinance_strategyInfo.optional(),
 	ticker: zNerdyTickers,
 	timePeriod: zNerdyTimePeriod,
 	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
@@ -27,16 +40,20 @@ export type TBacktestChartCompositionSchema = z.infer<
 
 export const BacktestChartComposition: React.FC<
 	z.infer<typeof zBacktestChartCompositionSchema>
-> = ({theme: themeEnum, chartTheme: chartThemeEnum, apiPriceData}) => {
+> = ({
+	theme: themeEnum,
+	chartTheme: chartThemeEnum,
+	apiPriceData,
+	strategyInfo,
+}) => {
+	invariant(
+		strategyInfo,
+		'BacktestChartComposition: strategyInfo has to be provided by calculateMetaData'
+	);
+	const {width, height} = useVideoConfig();
+	const keyframes = useCompositionKeyframes();
 	const theme = useThemeFromEnum(themeEnum);
-	const {fps, durationInFrames, width, height} = useVideoConfig();
-
-	// const chartTheme = useThemeFromEnum(chartThemeEnum as any);
 	const chartTheme = useThemeFromEnum(chartThemeEnum);
-
-	const lastSlideDurationInFrames = Math.floor(fps * 2);
-	const performanceChartDurationInFrames =
-		durationInFrames - lastSlideDurationInFrames;
 
 	if (!apiPriceData) {
 		return <AbsoluteFill />;
@@ -51,20 +68,124 @@ export const BacktestChartComposition: React.FC<
 				nrBaselines={60}
 				theme={theme}
 			>
-				<Sequence
-					layout="none"
-					from={fps * 0}
-					durationInFrames={performanceChartDurationInFrames}
-				>
-					<BacktestChartPage
-						chartTheme={chartTheme}
-						apiPriceData={apiPriceData}
-					/>
-				</Sequence>
-				<Sequence layout="none" from={performanceChartDurationInFrames}>
-					<LastLogoPage theme={theme} />
-				</Sequence>
+				<>
+					<KeyFramesSequence
+						name="LOGO"
+						from="TITLE_SEQUENCE_START"
+						to="CHART_SEQUENCE_END"
+						keyframes={keyframes}
+					>
+						<PageLogo />
+					</KeyFramesSequence>
+
+					<KeyFramesSequence
+						name="TITLE"
+						from="TITLE_SEQUENCE_START"
+						to="TITLE_SEQUENCE_END"
+						keyframes={keyframes}
+					>
+						<Page>
+							{({baseline}) => (
+								<TitleWithSubtitle
+									title={strategyInfo.name}
+									subtitle={strategyInfo.description}
+									theme={theme}
+									baseline={baseline * 1.5}
+								/>
+							)}
+						</Page>
+					</KeyFramesSequence>
+					<KeyFramesSequence
+						name="CHART"
+						from="CHART_SEQUENCE_START"
+						to="CHART_SEQUENCE_END"
+						keyframes={keyframes}
+					>
+						<BacktestChartPage
+							chartTheme={chartTheme}
+							apiPriceData={apiPriceData}
+						/>
+					</KeyFramesSequence>
+				</>
 			</PageContext>
+
+			<KeyFramesSequence
+				name="LAST_SLIDE"
+				from="LAST_SLIDE_SEQUENCE_START"
+				to="LAST_SLIDE_SEQUENCE_END"
+				keyframes={keyframes}
+			>
+				<PageContext
+					width={width}
+					height={height}
+					margin={0}
+					nrBaselines={30}
+					theme={theme}
+				>
+					<LastLogoPage />
+				</PageContext>
+			</KeyFramesSequence>
 		</GlobalVideoContextWrapper>
 	);
 };
+
+function useCompositionKeyframes() {
+	const {durationInFrames, fps} = useVideoConfig();
+
+	const titleSequenceDurationInSeconds = 4;
+	const lastSlideDurationInSeconds = 3;
+
+	const remainingDurationInFrames =
+		durationInFrames -
+		titleSequenceDurationInSeconds * fps -
+		lastSlideDurationInSeconds * fps;
+
+	const keyframes = useMemo(() => {
+		const keyframeSpecs: TKeyFrameSpec[] = [
+			{
+				type: 'SECOND',
+				value: 0,
+				id: 'TITLE_SEQUENCE_START',
+			},
+			{
+				type: 'R_SECOND',
+				value: 4,
+				id: 'TITLE_SEQUENCE_END',
+				relativeId: 'TITLE_SEQUENCE_START',
+			},
+			{
+				type: 'R_SECOND',
+				value: 0,
+				id: 'CHART_SEQUENCE_START',
+				relativeId: 'TITLE_SEQUENCE_END',
+			},
+			{
+				type: 'R_FRAME',
+				value: remainingDurationInFrames,
+				id: 'CHART_SEQUENCE_END',
+				relativeId: 'CHART_SEQUENCE_START',
+			},
+			{
+				type: 'R_SECOND',
+				value: 0,
+				id: 'LAST_SLIDE_SEQUENCE_START',
+				relativeId: 'CHART_SEQUENCE_END',
+			},
+			{
+				type: 'R_SECOND',
+				value: lastSlideDurationInSeconds,
+				id: 'LAST_SLIDE_SEQUENCE_END',
+				relativeId: 'LAST_SLIDE_SEQUENCE_START',
+			},
+		];
+
+		return buildKeyFramesGroup(durationInFrames, fps, keyframeSpecs);
+	}, [
+		durationInFrames,
+		fps,
+		lastSlideDurationInSeconds,
+		remainingDurationInFrames,
+	]);
+
+	return keyframes;
+}
