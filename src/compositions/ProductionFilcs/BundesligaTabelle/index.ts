@@ -32,6 +32,6 @@ export const BundesligaTabelle = {
 	calculateMetadata,
 	fps,
 	durationInFrames: 12 * fps,
-	...videoSizes.linkedInWide,
+	...videoSizes.linkedInTall,
 	// ...videoSizes.linkedInTall,
 };

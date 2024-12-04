@@ -88,6 +88,7 @@ export const BacktestChartComposition: React.FC<
 							{({baseline}) => (
 								<TitleWithSubtitle
 									title={strategyInfo.name}
+									// subtitle={strategyInfo.description.slice(0, 4)}
 									subtitle={strategyInfo.description}
 									theme={theme}
 									baseline={baseline * 1.5}
@@ -119,7 +120,7 @@ export const BacktestChartComposition: React.FC<
 					width={width}
 					height={height}
 					margin={0}
-					nrBaselines={30}
+					nrBaselines={40}
 					theme={theme}
 				>
 					<LastLogoPage />
@@ -132,7 +133,7 @@ export const BacktestChartComposition: React.FC<
 function useCompositionKeyframes() {
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const titleSequenceDurationInSeconds = 4;
+	const titleSequenceDurationInSeconds = 6;
 	const lastSlideDurationInSeconds = 3;
 
 	const remainingDurationInFrames =
@@ -149,7 +150,7 @@ function useCompositionKeyframes() {
 			},
 			{
 				type: 'R_SECOND',
-				value: 4,
+				value: titleSequenceDurationInSeconds,
 				id: 'TITLE_SEQUENCE_END',
 				relativeId: 'TITLE_SEQUENCE_START',
 			},

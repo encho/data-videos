@@ -120,10 +120,15 @@ function useKeyframes({
 	);
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const WORD_APPEAR_DURATION_IN_SECONDS = 0.4;
-	const WORD_APPEAR_DELAY_IN_SECONDS = 0.2;
-	const WORD_DISAPPEAR_DURATION_IN_SECONDS = 0.4;
-	const WORD_DISAPPEAR_DELAY_IN_SECONDS = 0.2;
+	// const WORD_APPEAR_DURATION_IN_SECONDS = 0.4;
+	// const WORD_APPEAR_DELAY_IN_SECONDS = 0.2;
+	// const WORD_DISAPPEAR_DURATION_IN_SECONDS = 0.4;
+	// const WORD_DISAPPEAR_DELAY_IN_SECONDS = 0.2;
+
+	const WORD_APPEAR_DURATION_IN_SECONDS = 0.2;
+	const WORD_APPEAR_DELAY_IN_SECONDS = 0.1;
+	const WORD_DISAPPEAR_DURATION_IN_SECONDS = 0.2;
+	const WORD_DISAPPEAR_DELAY_IN_SECONDS = 0;
 
 	const keyframes = useMemo(() => {
 		const enterKeyframeSpecs = words

@@ -31,6 +31,6 @@ export const BacktestChart = {
 	schema: zBacktestChartCompositionSchema,
 	calculateMetadata,
 	fps,
-	durationInFrames: 15 * fps,
+	durationInFrames: 18 * fps,
 	...videoSizes.linkedInWide,
 };
