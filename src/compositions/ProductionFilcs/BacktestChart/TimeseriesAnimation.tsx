@@ -107,7 +107,8 @@ export const TimeseriesAnimationInside: React.FC<{
 	const yScaleAnimationUpper = useYScaleAnimation({
 		periodScaleAnimation,
 		timeSeriesArray: [timeSeries],
-		tickFormatter: (tick) => `${tick} $`,
+		tickFormatter: (value: number) =>
+			`$${value.toLocaleString('en-US', {maximumFractionDigits: 0})}`,
 		yScalesInitialHeight: 200,
 		domainType: 'VISIBLE',
 		paddingPerc: 0.1,
