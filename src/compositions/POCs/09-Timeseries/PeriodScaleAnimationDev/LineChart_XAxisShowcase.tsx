@@ -1,3 +1,4 @@
+// import { differenceInCalendarDays } from 'date-fns';
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
 import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
@@ -6,35 +7,15 @@ import {
 	getDaysAxisSpec,
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
+	getSemesterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {Animated_XAxis} from '../utils/Animated_XAxis';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
 
-const AXIS_SPEC_FUNCTIONS = {
-	indices: getIndicesAxisSpec,
-	days: getDaysAxisSpec,
-	monthStarts: getMonthStartsAxisSpec,
-	quarterStarts: getQuarterStartsAxisSpec,
-} as const;
-
-type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
-
-const getAxisSpecType = (periodsScale: TPeriodsScale): TSpecType => {
-	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE =
-		numberOfVisibleDaysFrom < 20
-			? 'days'
-			: numberOfVisibleDaysFrom < 200
-			? 'monthStarts'
-			: 'quarterStarts';
-
-	return SPEC_TYPE;
-};
-
-const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
-	const axisSpec = AXIS_SPEC_FUNCTIONS[specType](periodsScale);
-	return axisSpec;
-};
+import {
+	getAxisSpecType,
+	getAxisSpec,
+} from '../utils/xAxisSpecUtils_periodScale';
 
 export const LineChart_XAxisShowcase: React.FC<{
 	periodScaleAnimation: TPeriodScaleAnimationContext;
@@ -43,6 +24,7 @@ export const LineChart_XAxisShowcase: React.FC<{
 		xAxis_days: TGridLayoutArea;
 		xAxis_monthStarts: TGridLayoutArea;
 		xAxis_quarterStarts: TGridLayoutArea;
+		xAxis_semesterStarts: TGridLayoutArea;
 	};
 }> = ({periodScaleAnimation, layoutAreas}) => {
 	const fromPeriodScale =
@@ -60,17 +42,22 @@ export const LineChart_XAxisShowcase: React.FC<{
 	// ***************************
 
 	// 1. days
-	const xAxisSpec_days_from = getDaysAxisSpec(fromPeriodScale);
-	const xAxisSpec_days_to = getDaysAxisSpec(toPeriodScale);
+	// const xAxisSpec_days_from = getDaysAxisSpec(fromPeriodScale);
+	// const xAxisSpec_days_to = getDaysAxisSpec(toPeriodScale);
 
 	// 2. month starts
-	const xAxisSpec_monthStarts_from = getMonthStartsAxisSpec(fromPeriodScale);
-	const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(toPeriodScale);
+	// const xAxisSpec_monthStarts_from = getMonthStartsAxisSpec(fromPeriodScale);
+	// const xAxisSpec_monthStarts_to = getMonthStartsAxisSpec(toPeriodScale);
 
 	// 3. quarter starts
 	const xAxisSpec_quarterStarts_from =
 		getQuarterStartsAxisSpec(fromPeriodScale);
 	const xAxisSpec_quarterStarts_to = getQuarterStartsAxisSpec(toPeriodScale);
+
+	// 4. semester starts
+	const xAxisSpec_semesterStarts_from =
+		getSemesterStartsAxisSpec(fromPeriodScale);
+	const xAxisSpec_semesterStarts_to = getSemesterStartsAxisSpec(toPeriodScale);
 
 	const xAxisDebugColors = {
 		debugEnterColor: 'lime',
@@ -80,6 +67,19 @@ export const LineChart_XAxisShowcase: React.FC<{
 
 	return (
 		<>
+			<div
+				style={{
+					position: 'fixed',
+					bottom: 50,
+					right: 50,
+					color: 'orange',
+					zIndex: 1000,
+					fontSize: 50,
+				}}
+			>
+				Number of visible days:{' '}
+				{periodScaleAnimation.periodsScale.getVisibleDomain_NumberOfDays()}
+			</div>
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}
 			>
@@ -99,13 +99,13 @@ export const LineChart_XAxisShowcase: React.FC<{
 					top: layoutAreas.xAxis_days.y1,
 				}}
 			>
-				<Animated_XAxis
+				{/* <Animated_XAxis
 					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_days_from}
 					axisSpecTo={xAxisSpec_days_to}
 					area={layoutAreas.xAxis}
 					{...xAxisDebugColors}
-				/>
+				/> */}
 			</Position>
 
 			{/* month starts x axis */}
@@ -115,13 +115,13 @@ export const LineChart_XAxisShowcase: React.FC<{
 					top: layoutAreas.xAxis_monthStarts.y1,
 				}}
 			>
-				<Animated_XAxis
+				{/* <Animated_XAxis
 					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_monthStarts_from}
 					axisSpecTo={xAxisSpec_monthStarts_to}
 					area={layoutAreas.xAxis}
 					{...xAxisDebugColors}
-				/>
+				/> */}
 			</Position>
 
 			{/* quarter starts x axis */}
@@ -135,6 +135,22 @@ export const LineChart_XAxisShowcase: React.FC<{
 					periodsScaleAnimation={periodScaleAnimation}
 					axisSpecFrom={xAxisSpec_quarterStarts_from}
 					axisSpecTo={xAxisSpec_quarterStarts_to}
+					area={layoutAreas.xAxis}
+					{...xAxisDebugColors}
+				/>
+			</Position>
+
+			{/* semester starts x axis */}
+			<Position
+				position={{
+					left: layoutAreas.xAxis_semesterStarts.x1,
+					top: layoutAreas.xAxis_semesterStarts.y1,
+				}}
+			>
+				<Animated_XAxis
+					periodsScaleAnimation={periodScaleAnimation}
+					axisSpecFrom={xAxisSpec_semesterStarts_from}
+					axisSpecTo={xAxisSpec_semesterStarts_to}
 					area={layoutAreas.xAxis}
 					{...xAxisDebugColors}
 				/>

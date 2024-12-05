@@ -30,7 +30,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	const CHART_PAGE_MARGIN = 60;
 	const CHART_PAGE_WIDTH = width;
-	const CHART_PAGE_HEIGHT = height * 0.25;
+	const CHART_PAGE_HEIGHT = height * 0.4;
 	const CHART_CONTENT_WIDTH = CHART_PAGE_WIDTH - 2 * CHART_PAGE_MARGIN;
 	const CHART_CONTENT_HEIGHT = CHART_PAGE_HEIGHT - 2 * CHART_PAGE_MARGIN;
 
@@ -141,7 +141,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				width={CHART_PAGE_WIDTH}
 				height={CHART_PAGE_HEIGHT}
 				margin={CHART_PAGE_MARGIN}
-				nrBaselines={20}
+				nrBaselines={30}
 				theme={theme}
 			>
 				<Page
@@ -167,6 +167,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										xAxis_days: chartLayout.areas.xAxis_days,
 										xAxis_monthStarts: chartLayout.areas.xAxis_monthStarts,
 										xAxis_quarterStarts: chartLayout.areas.xAxis_quarterStarts,
+										xAxis_semesterStarts:
+											chartLayout.areas.xAxis_semesterStarts,
 									}}
 								/>
 							</>

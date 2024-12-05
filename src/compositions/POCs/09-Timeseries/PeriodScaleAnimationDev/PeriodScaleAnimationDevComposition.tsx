@@ -9,66 +9,41 @@ import {useEffect, useState} from 'react';
 
 import {PageContext} from '../../../../acetti-components/PageContext';
 import {Page} from '../../../../acetti-components/Page';
-import {
-	fetchNerdyFinancePriceChartData,
-	TNerdyFinancePriceChartDataResult,
-} from '../../../../acetti-http/nerdy-finance/fetchPriceChartData';
-import {zNerdyTickers} from '../../../../acetti-http/zNerdyTickers';
 import {useThemeFromEnum} from '../../../../acetti-themes/getThemeFromEnum';
 import {GlobalVideoContextWrapper} from '../../../../acetti-components/GlobalVideoContext';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
+import generateBrownianMotionTimeSeries from '../../../../acetti-ts-utils/timeSeries/generateBrownianMotionTimeSeries';
+import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const periodScaleAnimationDevCompositionSchema = z.object({
-	ticker: zNerdyTickers,
-	timePeriod: z.enum(['1M', '3M', '1Y', '2Y', 'YTD', 'QTD']),
-	nerdyFinanceEnv: z.enum(['DEV', 'STAGE', 'PROD']),
+	firstDate: z.date(),
+	lastDate: z.date(),
 	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 });
 
 export const PeriodScaleAnimationDevComposition: React.FC<
 	z.infer<typeof periodScaleAnimationDevCompositionSchema>
-> = ({ticker, timePeriod, nerdyFinanceEnv, themeEnum}) => {
+> = ({firstDate, lastDate, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {height, width} = useVideoConfig();
 
-	const today = new Date();
-	const endDate = today.toISOString();
-
-	const [apiResult, setApiResult] =
-		useState<null | TNerdyFinancePriceChartDataResult>(null);
+	const [timeseries, setTimeseries] = useState<null | TimeSeries>(null);
 
 	const theme = useThemeFromEnum(themeEnum);
 
 	useEffect(() => {
-		const handle = delayRender('FETCH_API_DATA');
-		async function fetchAndSetData() {
-			try {
-				const response = await fetchNerdyFinancePriceChartData(
-					{
-						ticker,
-						endDate,
-						timePeriod,
-					},
-					nerdyFinanceEnv
-				);
-				setApiResult(response);
-				continueRender(handle);
-			} catch (error) {
-				// Handle any errors
-			}
-		}
-		fetchAndSetData();
-		// }, [ticker, timePeriod, endDate, nerdyFinanceEnv]);
-	}, []);
+		const handle = delayRender('GENERATE_TIMESERIES');
+		const generatedTimeseries = generateBrownianMotionTimeSeries(
+			firstDate,
+			lastDate
+		);
+		setTimeseries(generatedTimeseries);
+		continueRender(handle);
+	}, [firstDate, lastDate]);
 
-	if (!apiResult) {
+	if (!timeseries) {
 		return <AbsoluteFill />;
 	}
-
-	const timeSeries = apiResult.data.map((it) => ({
-		value: it.value,
-		date: new Date(it.index),
-	}));
 
 	return (
 		<GlobalVideoContextWrapper>
@@ -85,7 +60,7 @@ export const PeriodScaleAnimationDevComposition: React.FC<
 							<TimeseriesAnimation
 								width={contentWidth}
 								height={contentHeight}
-								timeSeries={timeSeries}
+								timeSeries={timeseries}
 								theme={theme}
 							/>
 						);
@@ -95,14 +70,3 @@ export const PeriodScaleAnimationDevComposition: React.FC<
 		</GlobalVideoContextWrapper>
 	);
 };
-
-// {/* <TitleAndSubtitle
-// 	title={'XAxisSpecDev TODO here showcase all xaxis specs'}
-// 	titleColor={theme.typography.title.color}
-// 	titleFontFamily={theme.typography.title.fontFamily}
-// 	titleFontSize={60}
-// 	subTitle={apiResult.tickerMetadata.name + apiResult.timePeriod}
-// 	subTitleColor={theme.typography.subTitle.color}
-// 	subTitleFontFamily={theme.typography.subTitle.fontFamily}
-// 	subTitleFontSize={40}
-// /> */}

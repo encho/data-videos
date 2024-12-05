@@ -252,6 +252,59 @@ export function getQuarterStartsAxisSpec(
 	return {ticks, labels, secondaryLabels};
 }
 
+export function getSemesterStartsAxisSpec(
+	periodsScale: TPeriodsScale
+): TXAxisSpec {
+	const visibleDates = periodsScale.getAllVisibleDates();
+
+	const ticksDates = generateSemesterStartsNearestDates(visibleDates);
+
+	const ticks = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
+		};
+	});
+
+	const MARGIN_LEFT = 8;
+
+	const labels = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
+			textAnchor: 'start' as const,
+			label: getMonthName(date),
+			marginLeft: MARGIN_LEFT,
+		};
+	});
+
+	const visibleDomainDates = periodsScale.getVisibleDomainDates();
+
+	const visibleFirstJanuaryDates = periodsScale.allYearStartDates.filter(
+		(date) => {
+			const isBiggerEqThanLeft = date >= visibleDomainDates[0];
+			const isSmallerEqThanRight = date <= visibleDomainDates[1];
+			const isJanuary = date.getMonth() === 0;
+			return isBiggerEqThanLeft && isSmallerEqThanRight && isJanuary;
+		}
+	);
+
+	const secondaryLabels = visibleFirstJanuaryDates.map((d) => {
+		const index = periodsScale.getIndexFromDate(d);
+		const year = getYear(d);
+		return {
+			id: `secondaryLabel-year-${year}}`,
+			textAnchor: 'start' as const,
+			label: `${year}`,
+			periodFloatIndex: index,
+		};
+	});
+
+	return {ticks, labels, secondaryLabels};
+}
+
 function generateMonthStartsNearestDates(dates: Date[]): Date[] {
 	const datesList: Date[] = [];
 
@@ -294,6 +347,30 @@ function generateQuarterStartsNearestDates(dates: Date[]): Date[] {
 				previousMonthNumber !== 10;
 
 			if (isFirstMonthOfQuarter && prevDateNoQuarterStartMonth) {
+				datesList.push(currentDate);
+			}
+		}
+	}
+
+	return datesList;
+}
+
+function generateSemesterStartsNearestDates(dates: Date[]): Date[] {
+	const datesList: Date[] = [];
+
+	for (let i = 0; i < dates.length; i++) {
+		const currentDate = dates[i];
+		const monthNumber = currentDate.getMonth() + 1;
+
+		const isFirstMonthOfSemester = monthNumber === 1 || monthNumber === 7;
+
+		if (i !== 0) {
+			const previousDate = dates[i - 1];
+			const previousMonthNumber = previousDate.getMonth() + 1;
+			const prevDateNoSemesterStartMonth =
+				previousMonthNumber !== 1 && previousMonthNumber !== 7;
+
+			if (isFirstMonthOfSemester && prevDateNoSemesterStartMonth) {
 				datesList.push(currentDate);
 			}
 		}

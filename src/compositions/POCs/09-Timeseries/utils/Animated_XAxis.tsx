@@ -6,13 +6,7 @@ import {getEnterUpdateExits} from '../../../../acetti-ts-utils/utils';
 import {TypographyStyle} from '../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {usePage} from '../../../../acetti-components/PageContext';
 import {TXAxisSpec} from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
-import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
-import {
-	getIndicesAxisSpec,
-	getDaysAxisSpec,
-	getMonthStartsAxisSpec,
-	getQuarterStartsAxisSpec,
-} from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
+import {getAxisSpecType, getAxisSpec} from './xAxisSpecUtils_periodScale';
 import {TPeriodScaleAnimationContext} from './usePeriodScaleAnimation';
 
 // TODO from Theme
@@ -585,30 +579,4 @@ const getSecondaryLabel = (axisSpec: TXAxisSpec, labelId: string) => {
 	const labelObj = axisSpec.secondaryLabels.find((item) => item.id === labelId);
 	invariant(labelObj);
 	return labelObj;
-};
-
-const AXIS_SPEC_FUNCTIONS = {
-	indices: getIndicesAxisSpec,
-	days: getDaysAxisSpec,
-	monthStarts: getMonthStartsAxisSpec,
-	quarterStarts: getQuarterStartsAxisSpec,
-} as const;
-
-type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
-
-const getAxisSpecType = (periodsScale: TPeriodsScale): TSpecType => {
-	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
-	const SPEC_TYPE =
-		numberOfVisibleDaysFrom < 20
-			? 'days'
-			: numberOfVisibleDaysFrom < 200
-			? 'monthStarts'
-			: 'quarterStarts';
-
-	return SPEC_TYPE;
-};
-
-const getAxisSpec = (periodsScale: TPeriodsScale, specType: TSpecType) => {
-	const axisSpec = AXIS_SPEC_FUNCTIONS[specType](periodsScale);
-	return axisSpec;
 };
