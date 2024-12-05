@@ -32,5 +32,5 @@ export const BacktestChart = {
 	calculateMetadata,
 	fps,
 	durationInFrames: 18 * fps,
-	...videoSizes.linkedInWide,
+	...videoSizes.square,
 };

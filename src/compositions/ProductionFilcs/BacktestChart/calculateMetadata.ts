@@ -1,3 +1,4 @@
+import {fetchNerdyFinancePortfolioTotalValueTimeseries} from '../../../acetti-http/nerdy-finance/fetchNerdyFinancePortfolioTotalValueTimeseries';
 import {fetchNerdyFinancePriceChartData} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {fetchStrategyInfo} from '../../../acetti-http/nerdy-finance/fetchStrategyInfo';
 import {TBacktestChartCompositionSchema} from './BacktestChartComposition';
@@ -33,11 +34,21 @@ export const calculateMetadata = async ({
 		nerdyFinanceEnv
 	);
 
+	// TODO rename all to strategy instead of portfolio!?
+	const portfolioTotalValueTimeseries =
+		await fetchNerdyFinancePortfolioTotalValueTimeseries(
+			{
+				strategyTicker,
+			},
+			nerdyFinanceEnv
+		);
+
 	return {
 		props: {
 			...props,
 			apiPriceData,
 			strategyInfo,
+			strategyTotalValueTimeseries: portfolioTotalValueTimeseries,
 		},
 	};
 };

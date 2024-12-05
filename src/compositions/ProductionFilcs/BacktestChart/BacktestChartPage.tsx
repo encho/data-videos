@@ -1,16 +1,19 @@
-import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
+import {useVideoConfig, Sequence} from 'remotion';
 import {format} from 'date-fns';
 import {enGB} from 'date-fns/locale';
 
+import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {usePage} from '../../../acetti-components/PageContext';
 import {Page, PageHeader, PageFooter} from '../../../acetti-components/Page';
-import {TNerdyFinancePriceChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
 import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
+import {TNerdyFinancePortfolioTotalValueResult} from '../../../acetti-http/nerdy-finance/fetchNerdyFinancePortfolioTotalValueTimeseries';
+import {TNerdyFinance_strategyInfo} from '../../../acetti-http/nerdy-finance/types/nerdyFinance_types_strategyInfo';
+// import {formatDate} from '../../../acetti-ts-utils/utils';
 
 const formatDate = (date: Date): string => {
 	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
@@ -18,35 +21,25 @@ const formatDate = (date: Date): string => {
 
 export const BacktestChartPage: React.FC<{
 	chartTheme: ThemeType;
-	apiPriceData: TNerdyFinancePriceChartDataResult;
-}> = ({chartTheme, apiPriceData}) => {
+	strategyInfo: TNerdyFinance_strategyInfo;
+	strategyTotalValueTimeseries: TNerdyFinancePortfolioTotalValueResult; // TODO replcate with TimeSeries type...
+}> = ({chartTheme, strategyInfo, strategyTotalValueTimeseries}) => {
 	const {fps} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 	const {theme} = usePage();
+	const timeSeries = strategyTotalValueTimeseries;
 
-	if (!apiPriceData) {
-		return <AbsoluteFill />;
-	}
+	const getSubtitle = (ts: TimeSeries) => {
+		const startDate = ts[0].date;
+		const endDate = ts[ts.length - 1].date;
 
-	const timeSeries = apiPriceData.data.map((it) => ({
-		value: it.value,
-		date: new Date(it.index),
-	}));
-
-	const getSubtitle = (
-		nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
-	) => {
-		const startDate = nerdyPriceApiResult.data[0].index;
-		const endDate =
-			nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
-		const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
-
-		if (nerdyPriceApiResult.timePeriod === '2Y') {
-			return `2-Year Performance ${periodString}`;
-		}
-
-		return 'Implement subtitle for this timePeriod!!!';
+		return `Growth of $10,000 (${formatDate(startDate)} – ${formatDate(
+			endDate
+		)})`;
 	};
+
+	const title = strategyInfo.name + ' Performance';
+	const subtitle = getSubtitle(strategyTotalValueTimeseries);
 
 	return (
 		<Page>
@@ -60,8 +53,8 @@ export const BacktestChartPage: React.FC<{
 			>
 				<PageHeader>
 					<TitleWithSubtitle
-						title={apiPriceData.tickerMetadata.name}
-						subtitle={getSubtitle(apiPriceData)}
+						title={title}
+						subtitle={subtitle}
 						theme={theme}
 						innerDelayInSeconds={0.5}
 					/>
@@ -101,7 +94,7 @@ export const BacktestChartPage: React.FC<{
 								typographyStyle={theme.typography.textStyles.dataSource}
 							>
 								<TextAnimationSubtle innerDelayInSeconds={2.5}>
-									Data Source: Yahoo Finance API
+									Data Source: Yahoo Finance API, own calculations
 								</TextAnimationSubtle>
 							</TypographyStyle>
 						</div>

@@ -329,6 +329,7 @@ export const RemotionRoot: React.FC = () => {
 						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,
+						strategyTotalValueTimeseries: [],
 					}}
 				/>
 

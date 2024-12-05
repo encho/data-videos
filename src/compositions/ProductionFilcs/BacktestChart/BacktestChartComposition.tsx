@@ -22,6 +22,7 @@ import {
 import {KeyFramesSequence} from '../../POCs/Keyframes/Keyframes/KeyframesInspector';
 import {Page, PageLogo} from '../../../acetti-components/Page';
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
+import {zNerdyFinancePortfolioTotalValueResult} from '../../../acetti-http/nerdy-finance/fetchNerdyFinancePortfolioTotalValueTimeseries';
 
 export const zBacktestChartCompositionSchema = z.object({
 	strategyTicker: zNerdyFinance_availableStrategies,
@@ -32,6 +33,7 @@ export const zBacktestChartCompositionSchema = z.object({
 	theme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	chartTheme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	apiPriceData: zNerdyFinancePriceChartDataResult.optional(),
+	strategyTotalValueTimeseries: zNerdyFinancePortfolioTotalValueResult,
 });
 
 export type TBacktestChartCompositionSchema = z.infer<
@@ -45,6 +47,7 @@ export const BacktestChartComposition: React.FC<
 	chartTheme: chartThemeEnum,
 	apiPriceData,
 	strategyInfo,
+	strategyTotalValueTimeseries,
 }) => {
 	invariant(
 		strategyInfo,
@@ -104,7 +107,8 @@ export const BacktestChartComposition: React.FC<
 					>
 						<BacktestChartPage
 							chartTheme={chartTheme}
-							apiPriceData={apiPriceData}
+							strategyInfo={strategyInfo}
+							strategyTotalValueTimeseries={strategyTotalValueTimeseries}
 						/>
 					</KeyFramesSequence>
 				</>
