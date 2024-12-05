@@ -24,7 +24,7 @@ const videoSizes = {
 	},
 };
 
-const fps = 30;
+const fps = 90;
 
 export const BacktestChart = {
 	component: BacktestChartComposition,

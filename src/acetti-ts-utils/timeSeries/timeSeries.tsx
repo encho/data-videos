@@ -1,11 +1,21 @@
+import {z} from 'zod';
 import invariant from 'tiny-invariant';
 import {max, min} from 'd3-array';
 
 import {TPeriodsScale} from '../../acetti-ts-periodsScale/periodsScale';
 
-export type TimeSeriesItemValue = number | null;
-export type TimeSeriesItem = {date: Date; value: TimeSeriesItemValue};
-export type TimeSeries = TimeSeriesItem[];
+export const zTimeSeriesItemValue = z.number().nullable();
+
+export const zTimeSeriesItem = z.object({
+	date: z.date(),
+	value: zTimeSeriesItemValue,
+});
+
+export const zTimeSeries = z.array(zTimeSeriesItem);
+
+export type TimeSeriesItemValue = z.infer<typeof zTimeSeriesItemValue>;
+export type TimeSeriesItem = z.infer<typeof zTimeSeriesItem>;
+export type TimeSeries = z.infer<typeof zTimeSeries>;
 
 export function getFirstNItems(timeSeries: TimeSeries, n: number): TimeSeries {
 	return timeSeries.slice(0, n);

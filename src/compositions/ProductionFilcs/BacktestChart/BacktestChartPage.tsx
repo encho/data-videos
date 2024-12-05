@@ -11,18 +11,16 @@ import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDime
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-import {TNerdyFinancePortfolioTotalValueResult} from '../../../acetti-http/nerdy-finance/fetchNerdyFinancePortfolioTotalValueTimeseries';
 import {TNerdyFinance_strategyInfo} from '../../../acetti-http/nerdy-finance/types/nerdyFinance_types_strategyInfo';
-// import {formatDate} from '../../../acetti-ts-utils/utils';
 
 const formatDate = (date: Date): string => {
-	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
+	return format(date, 'd MMM yyyy', {locale: enGB}); // Formats to '1. Jan. 2024'
 };
 
 export const BacktestChartPage: React.FC<{
 	chartTheme: ThemeType;
 	strategyInfo: TNerdyFinance_strategyInfo;
-	strategyTotalValueTimeseries: TNerdyFinancePortfolioTotalValueResult; // TODO replcate with TimeSeries type...
+	strategyTotalValueTimeseries: TimeSeries;
 }> = ({chartTheme, strategyInfo, strategyTotalValueTimeseries}) => {
 	const {fps} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();

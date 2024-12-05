@@ -1,12 +1,8 @@
 import {z} from 'zod';
 
-// TODO use zTimeseries, which we need to create in ts-utils...
-export const zNerdyFinancePortfolioTotalValueResult = z.array(
-	z.object({
-		value: z.number().nullable(),
-		date: z.date(),
-	})
-);
+import {zTimeSeries} from '../../acetti-ts-utils/timeSeries/timeSeries';
+
+export const zNerdyFinancePortfolioTotalValueResult = zTimeSeries;
 
 export type TNerdyFinancePortfolioTotalValueResult = z.infer<
 	typeof zNerdyFinancePortfolioTotalValueResult
@@ -31,8 +27,6 @@ export const fetchNerdyFinancePortfolioTotalValueTimeseries = async (
 
 	const data = await fetch(apiUrl);
 
-	// TODO validate a specific return type
-	// maybe with zod it is possible?
 	const totalValueSeriesResult = await data.json();
 
 	const totalValueTimeseries: TNerdyFinancePortfolioTotalValueResult =
@@ -40,6 +34,18 @@ export const fetchNerdyFinancePortfolioTotalValueTimeseries = async (
 			value: it.total_value,
 			date: new Date(it.date),
 		}));
+
+	try {
+		// Validate the data
+		zTimeSeries.parse(totalValueTimeseries);
+	} catch (error) {
+		// Handle validation errors
+		if (error instanceof z.ZodError) {
+			console.error('Validation failed:', error.errors);
+		} else {
+			console.error('Unexpected error:', error);
+		}
+	}
 
 	return totalValueTimeseries;
 };

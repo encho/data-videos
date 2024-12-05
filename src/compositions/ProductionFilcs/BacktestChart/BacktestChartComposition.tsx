@@ -22,7 +22,7 @@ import {
 import {KeyFramesSequence} from '../../POCs/Keyframes/Keyframes/KeyframesInspector';
 import {Page, PageLogo} from '../../../acetti-components/Page';
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {zNerdyFinancePortfolioTotalValueResult} from '../../../acetti-http/nerdy-finance/fetchNerdyFinancePortfolioTotalValueTimeseries';
+import {zTimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const zBacktestChartCompositionSchema = z.object({
 	strategyTicker: zNerdyFinance_availableStrategies,
@@ -33,7 +33,7 @@ export const zBacktestChartCompositionSchema = z.object({
 	theme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	chartTheme: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	apiPriceData: zNerdyFinancePriceChartDataResult.optional(),
-	strategyTotalValueTimeseries: zNerdyFinancePortfolioTotalValueResult,
+	strategyTotalValueTimeseries: zTimeSeries,
 });
 
 export type TBacktestChartCompositionSchema = z.infer<
