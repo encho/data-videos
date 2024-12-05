@@ -1,11 +1,7 @@
 // import { differenceInCalendarDays } from 'date-fns';
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
-import {TPeriodsScale} from '../../../../acetti-ts-periodsScale/periodsScale';
 import {
-	getIndicesAxisSpec,
-	getDaysAxisSpec,
-	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 	getSemesterStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';

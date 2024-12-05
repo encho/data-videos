@@ -5,6 +5,7 @@ import {
 	getMonthStartsAxisSpec,
 	getQuarterStartsAxisSpec,
 	getSemesterStartsAxisSpec,
+	getYearStartsAxisSpec,
 } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 
 const AXIS_SPEC_FUNCTIONS = {
@@ -13,6 +14,7 @@ const AXIS_SPEC_FUNCTIONS = {
 	monthStarts: getMonthStartsAxisSpec,
 	quarterStarts: getQuarterStartsAxisSpec,
 	semesterStarts: getSemesterStartsAxisSpec,
+	yearStarts: getYearStartsAxisSpec,
 } as const;
 
 type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
@@ -32,7 +34,9 @@ export const getAxisSpecType = (
 			? 'monthStarts'
 			: numberOfVisibleDaysFrom < 900
 			? 'quarterStarts'
-			: 'semesterStarts';
+			: numberOfVisibleDaysFrom < 2000
+			? 'semesterStarts'
+			: 'yearStarts';
 
 	return SPEC_TYPE;
 };

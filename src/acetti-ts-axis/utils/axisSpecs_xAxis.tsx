@@ -305,6 +305,44 @@ export function getSemesterStartsAxisSpec(
 	return {ticks, labels, secondaryLabels};
 }
 
+export function getYearStartsAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
+	const visibleDomainDates = periodsScale.getVisibleDomainDates();
+
+	const visibleFirstJanuaryDates = periodsScale.allYearStartDates.filter(
+		(date) => {
+			const isBiggerEqThanLeft = date >= visibleDomainDates[0];
+			const isSmallerEqThanRight = date <= visibleDomainDates[1];
+			const isJanuary = date.getMonth() === 0;
+			return isBiggerEqThanLeft && isSmallerEqThanRight && isJanuary;
+		}
+	);
+
+	const ticksDates = visibleFirstJanuaryDates;
+
+	const ticks = ticksDates.map((date) => {
+		const id = date.getTime().toString();
+		return {
+			id,
+			periodFloatIndex: periodsScale.getBandFromDate(date).index,
+		};
+	});
+
+	const labels: TAxisLabelSpec[] = [];
+
+	const secondaryLabels = visibleFirstJanuaryDates.map((d) => {
+		const index = periodsScale.getIndexFromDate(d);
+		const year = getYear(d);
+		return {
+			id: `secondaryLabel-year-${year}}`,
+			textAnchor: 'start' as const,
+			label: `${year}`,
+			periodFloatIndex: index,
+		};
+	});
+
+	return {ticks, labels, secondaryLabels};
+}
+
 function generateMonthStartsNearestDates(dates: Date[]): Date[] {
 	const datesList: Date[] = [];
 
