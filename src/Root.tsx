@@ -324,7 +324,7 @@ export const RemotionRoot: React.FC = () => {
 					{...BacktestChart}
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
-						strategyTicker: 'GOLD_CRYPTO_60_40' as const,
+						strategyTicker: 'BITCOIN_GOLD_VOLA_BALANCED_360' as const,
 						timePeriod: '2Y' as const,
 						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,

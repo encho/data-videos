@@ -73,7 +73,7 @@ export const TimeseriesAnimationInside: React.FC<{
 	// TODO also allow for dates as indices eventually
 	// TODO fix with [0,0] ??? really
 	const tsDomainIndices = {
-		start: [0, 1] as [number, number],
+		start: [0, 100] as [number, number],
 		full: [0, timeSeries.length] as [number, number],
 	};
 

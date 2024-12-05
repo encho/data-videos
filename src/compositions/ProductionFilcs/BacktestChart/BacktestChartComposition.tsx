@@ -68,7 +68,7 @@ export const BacktestChartComposition: React.FC<
 				width={width}
 				height={height}
 				margin={60}
-				nrBaselines={60}
+				nrBaselines={70}
 				theme={theme}
 			>
 				<>
@@ -91,7 +91,6 @@ export const BacktestChartComposition: React.FC<
 							{({baseline}) => (
 								<TitleWithSubtitle
 									title={strategyInfo.name}
-									// subtitle={strategyInfo.description.slice(0, 4)}
 									subtitle={strategyInfo.description}
 									theme={theme}
 									baseline={baseline * 1.5}
@@ -124,7 +123,7 @@ export const BacktestChartComposition: React.FC<
 					width={width}
 					height={height}
 					margin={0}
-					nrBaselines={40}
+					nrBaselines={50}
 					theme={theme}
 				>
 					<LastLogoPage />

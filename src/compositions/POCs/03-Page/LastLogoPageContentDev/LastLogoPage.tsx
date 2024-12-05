@@ -126,7 +126,7 @@ export const LastLogoPageContent: React.FC<{
 				{/* www.linkedin.com/in/lorenzobertolini */}
 				{/* FINANCE & SPORTS DATA VISUALIZATION NERD */}
 				{/* DATA VISUALIZATION & DESIGN NERD */}
-				DATA DESIGN FOR FINTECHS
+				FINANCIAL DATA DESIGN (NERD)
 			</TypographyStyle>
 		</div>
 	);
