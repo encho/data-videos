@@ -169,6 +169,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 										xAxis_quarterStarts: chartLayout.areas.xAxis_quarterStarts,
 										xAxis_semesterStarts:
 											chartLayout.areas.xAxis_semesterStarts,
+										xAxis_yearStarts: chartLayout.areas.xAxis_yearStarts,
 									}}
 								/>
 							</>

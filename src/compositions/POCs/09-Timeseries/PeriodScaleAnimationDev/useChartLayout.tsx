@@ -17,6 +17,8 @@ const chartRowsRailSpec: TGridRailSpec = [
 	{type: 'pixel', value: 55, name: 'xAxis_quarterStarts'},
 	{type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
 	{type: 'pixel', value: 55, name: 'xAxis_semesterStarts'},
+	{type: 'pixel', value: ROW_SPACE_IN_PIXEL, name: 'space'},
+	{type: 'pixel', value: 55, name: 'xAxis_yearStarts'},
 ];
 
 const chartColsRailSpec: TGridRailSpec = [{type: 'fr', value: 1, name: 'plot'}];
@@ -56,6 +58,12 @@ const chartGridLayoutSpec = {
 			{name: 'xAxis_semesterStarts'},
 			{name: 'plot'},
 			{name: 'xAxis_semesterStarts'},
+			{name: 'plot'},
+		] as TGridLayoutAreaSpec,
+		xAxis_yearStarts: [
+			{name: 'xAxis_yearStarts'},
+			{name: 'plot'},
+			{name: 'xAxis_yearStarts'},
 			{name: 'plot'},
 		] as TGridLayoutAreaSpec,
 	},

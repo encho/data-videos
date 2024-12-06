@@ -17,7 +17,7 @@ const AXIS_SPEC_FUNCTIONS = {
 	yearStarts: getYearStartsAxisSpec,
 } as const;
 
-type TSpecType = keyof typeof AXIS_SPEC_FUNCTIONS;
+export type TAxisSpecTypeEnum = keyof typeof AXIS_SPEC_FUNCTIONS;
 
 // TODO this has actually to be used by timeseries charts...
 export const getAxisSpecType = (
@@ -25,7 +25,7 @@ export const getAxisSpecType = (
 	// xAxisAreaWidth: number, // TODO make dependant also on width (user based)
 	// theme: ThemeType, // TODO make dependant also on font size (user based)
 	// baseline: number // TODO make dependant also on font size (user based)
-): TSpecType => {
+): TAxisSpecTypeEnum => {
 	const numberOfVisibleDaysFrom = periodsScale.getVisibleDomain_NumberOfDays();
 	const SPEC_TYPE =
 		numberOfVisibleDaysFrom < 20
@@ -43,7 +43,7 @@ export const getAxisSpecType = (
 
 export const getAxisSpec = (
 	periodsScale: TPeriodsScale,
-	specType: TSpecType
+	specType: TAxisSpecTypeEnum
 ) => {
 	const axisSpec = AXIS_SPEC_FUNCTIONS[specType](periodsScale);
 	return axisSpec;
