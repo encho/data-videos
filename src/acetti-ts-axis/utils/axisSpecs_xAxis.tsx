@@ -305,6 +305,8 @@ export function getSemesterStartsAxisSpec(
 	return {ticks, labels, secondaryLabels};
 }
 
+const formatYearWithQuote = (year: number): string => `'${year % 100}`;
+
 export function getYearStartsAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 	const visibleDomainDates = periodsScale.getVisibleDomainDates();
 
@@ -327,18 +329,33 @@ export function getYearStartsAxisSpec(periodsScale: TPeriodsScale): TXAxisSpec {
 		};
 	});
 
-	const labels: TAxisLabelSpec[] = [];
+	const MARGIN_LEFT = 8;
 
-	const secondaryLabels = visibleFirstJanuaryDates.map((d) => {
+	const labels = visibleFirstJanuaryDates.map((d) => {
 		const index = periodsScale.getIndexFromDate(d);
 		const year = getYear(d);
 		return {
 			id: `secondaryLabel-year-${year}}`,
 			textAnchor: 'start' as const,
-			label: `${year}`,
+			// label: `${year}`,
+			label: formatYearWithQuote(year),
 			periodFloatIndex: index,
+			marginLeft: MARGIN_LEFT,
 		};
 	});
+
+	const secondaryLabels = visibleFirstJanuaryDates
+		.filter((date) => getYear(date) % 5 === 0)
+		.map((date) => {
+			const index = periodsScale.getIndexFromDate(date);
+			const year = getYear(date);
+			return {
+				id: `secondaryLabel-year-${year}}`,
+				textAnchor: 'start' as const,
+				label: `${year}`,
+				periodFloatIndex: index,
+			};
+		});
 
 	return {ticks, labels, secondaryLabels};
 }

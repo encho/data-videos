@@ -445,6 +445,7 @@ export const Animated_XAxis: React.FC<{
 					position: 'relative',
 					width: area.width,
 					height: area.height,
+					// backgroundColor: 'rgba(255,0,255,0.3)',
 				}}
 			>
 				{/* all labels */}

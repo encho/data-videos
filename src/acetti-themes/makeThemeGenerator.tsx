@@ -217,7 +217,7 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 					},
 					datavizSecondaryTickLabel: {
 						fontFamily: 'Inter-Bold',
-						capHeightInBaselines: 1,
+						capHeightInBaselines: 0.75,
 						lineGapInBaselines: 1,
 						color: palette.typography.axisSecondaryTickLabel.main,
 					},
