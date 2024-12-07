@@ -781,9 +781,17 @@ export const RemotionRoot: React.FC = () => {
 						height={videoSizes.widescreen_16x9.height * 2}
 						schema={periodScaleAnimationDevCompositionSchema}
 						defaultProps={{
-							firstDate: new Date('2008-12-01T11:36:55.563Z'),
+							firstDate: new Date('2020-01-01T11:36:55.563Z'),
 							lastDate: new Date('2024-12-02T11:38:25.120Z'),
 							themeEnum: 'LORENZOBERTOLINI_BRIGHT' as const,
+							compositionWidth: 2000,
+							baseline: 30,
+						}}
+						calculateMetadata={({props}) => {
+							return {
+								props,
+								width: props.compositionWidth,
+							};
 						}}
 					/>
 

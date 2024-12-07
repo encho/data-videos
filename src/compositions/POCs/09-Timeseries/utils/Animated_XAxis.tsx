@@ -62,21 +62,19 @@ export const Animated_XAxis: React.FC<{
 	debugUpdateColor,
 	debugExitColor,
 }) => {
-	const {theme: fullTheme, baseline: pageBaseline, sizes} = usePage();
-
-	const THE_BASELINE = pageBaseline;
+	const {theme: fullTheme, baseline, sizes} = usePage();
 
 	const TICK_LINE_SIZE_IN_BASELINES =
 		fullTheme.typography.textStyles.datavizTickLabel.capHeightInBaselines +
 		TICKLABEL_MARGIN_TOP_IN_BASELINES;
 
-	const TICK_LINE_SIZE = THE_BASELINE * TICK_LINE_SIZE_IN_BASELINES;
+	const TICK_LINE_SIZE = baseline * TICK_LINE_SIZE_IN_BASELINES;
 
 	const TICK_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
 	const AXIS_LINE_WIDTH = sizes.lineWidths.small; // TODO too generic?
 
 	const SECONDARY_TICKLABEL_TOP_Y =
-		TICK_LINE_SIZE + THE_BASELINE * SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES;
+		TICK_LINE_SIZE + baseline * SECONDARY_TICKLABEL_MARGIN_TOP_IN_BASELINES;
 
 	// TODO rename to xAxisTheme e.g.
 	const theme = fullTheme.xAxis;
@@ -90,11 +88,27 @@ export const Animated_XAxis: React.FC<{
 
 	const axisSpecFrom =
 		axisSpecFromProp ||
-		getAxisSpec(periodScaleFrom, getAxisSpecType(periodScaleFrom));
+		getAxisSpec(
+			periodScaleFrom,
+			getAxisSpecType({
+				periodsScale: periodScaleFrom,
+				width: area.width,
+				baseline,
+				theme: fullTheme,
+			})
+		);
 
 	const axisSpecTo =
 		axisSpecToProp ||
-		getAxisSpec(periodScaleTo, getAxisSpecType(periodScaleTo));
+		getAxisSpec(
+			periodScaleTo,
+			getAxisSpecType({
+				periodsScale: periodScaleTo,
+				width: area.width,
+				baseline,
+				theme: fullTheme,
+			})
+		);
 
 	// colors
 	// ------------------------------------------------------------
@@ -432,7 +446,7 @@ export const Animated_XAxis: React.FC<{
 
 	// typography
 	const tickLabelStyle = fullTheme.typography.textStyles.datavizTickLabel;
-	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * THE_BASELINE;
+	const tickLabelCapHeight = tickLabelStyle.capHeightInBaselines * baseline;
 
 	const secondaryTickLabelStyle =
 		fullTheme.typography.textStyles.datavizSecondaryTickLabel;
@@ -464,7 +478,7 @@ export const Animated_XAxis: React.FC<{
 							>
 								<TypographyStyle
 									typographyStyle={tickLabelStyle}
-									baseline={THE_BASELINE}
+									baseline={baseline}
 								>
 									<div
 										style={{
@@ -498,7 +512,7 @@ export const Animated_XAxis: React.FC<{
 								{/* // TODO: how to deal with textAnchor */}
 								<TypographyStyle
 									typographyStyle={secondaryTickLabelStyle} // TODO secondaryTickLabelStyle
-									baseline={THE_BASELINE}
+									baseline={baseline}
 								>
 									<div
 										style={{

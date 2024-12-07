@@ -16,14 +16,16 @@ import generateBrownianMotionTimeSeries from '../../../../acetti-ts-utils/timeSe
 import {TimeSeries} from '../../../../acetti-ts-utils/timeSeries/timeSeries';
 
 export const periodScaleAnimationDevCompositionSchema = z.object({
+	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
 	firstDate: z.date(),
 	lastDate: z.date(),
-	themeEnum: z.enum(['NERDY', 'LORENZOBERTOLINI', 'LORENZOBERTOLINI_BRIGHT']),
+	compositionWidth: z.number(),
+	baseline: z.number(),
 });
 
 export const PeriodScaleAnimationDevComposition: React.FC<
 	z.infer<typeof periodScaleAnimationDevCompositionSchema>
-> = ({firstDate, lastDate, themeEnum}) => {
+> = ({firstDate, lastDate, baseline, themeEnum}) => {
 	// TODO actually get height and with as props
 	const {height, width} = useVideoConfig();
 
@@ -62,6 +64,7 @@ export const PeriodScaleAnimationDevComposition: React.FC<
 								height={contentHeight}
 								timeSeries={timeseries}
 								theme={theme}
+								baseline={baseline}
 							/>
 						);
 					}}

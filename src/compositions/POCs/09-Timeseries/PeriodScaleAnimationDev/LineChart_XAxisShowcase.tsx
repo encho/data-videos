@@ -1,17 +1,14 @@
-// import { differenceInCalendarDays } from 'date-fns';
 import {Position} from '../../../../acetti-layout/atoms/Position';
 import {TGridLayoutArea} from '../../../../acetti-layout';
-// import {
-// 	getQuarterStartsAxisSpec,
-// 	getSemesterStartsAxisSpec,
-// } from '../../../../acetti-ts-axis/utils/axisSpecs_xAxis';
 import {Animated_XAxis} from '../utils/Animated_XAxis';
 import {TPeriodScaleAnimationContext} from '../utils/usePeriodScaleAnimation';
+import {usePage} from '../../../../acetti-components/PageContext';
 
 import {
 	getAxisSpecType,
 	getAxisSpec,
 	TAxisSpecTypeEnum,
+	getWidthInTickLabelSize,
 } from '../utils/xAxisSpecUtils_periodScale';
 
 export const LineChart_XAxisShowcase: React.FC<{
@@ -25,12 +22,25 @@ export const LineChart_XAxisShowcase: React.FC<{
 		xAxis_yearStarts: TGridLayoutArea;
 	};
 }> = ({periodScaleAnimation, layoutAreas}) => {
+	const {baseline, theme} = usePage();
+
 	const fromPeriodScale =
 		periodScaleAnimation.currentSliceInfo.periodsScaleFrom;
 	const toPeriodScale = periodScaleAnimation.currentSliceInfo.periodsScaleTo;
 
-	const fromSpecType = getAxisSpecType(fromPeriodScale);
-	const toSpecType = getAxisSpecType(toPeriodScale);
+	const fromSpecType = getAxisSpecType({
+		periodsScale: fromPeriodScale,
+		theme,
+		baseline,
+		width: layoutAreas.xAxis.width,
+	});
+
+	const toSpecType = getAxisSpecType({
+		periodsScale: toPeriodScale,
+		theme,
+		baseline,
+		width: layoutAreas.xAxis.width,
+	});
 
 	const axisSpecFrom = getAxisSpec(fromPeriodScale, fromSpecType);
 	const axisSpecTo = getAxisSpec(toPeriodScale, toSpecType);
@@ -44,6 +54,14 @@ export const LineChart_XAxisShowcase: React.FC<{
 	const numberOfVisibleDays =
 		periodScaleAnimation.periodsScale.getVisibleDomain_NumberOfDays();
 
+	// this metric is used in getAxisSpecType to determine wheter we have
+	// a scenario with large or small Fonts, relative to the x-axis area width
+	const widthInTickLabelSize = getWidthInTickLabelSize({
+		theme,
+		baseline,
+		width: layoutAreas.xAxis.width,
+	});
+
 	return (
 		<>
 			<div
@@ -56,8 +74,14 @@ export const LineChart_XAxisShowcase: React.FC<{
 					fontSize: 50,
 				}}
 			>
-				Number of visible days:{' '}
-				<span style={{fontWeight: 800}}>{numberOfVisibleDays}</span>
+				<div>
+					Number of visible days:{' '}
+					<span style={{fontWeight: 800}}>{numberOfVisibleDays}</span>
+				</div>
+				<div>
+					Width in TickLabel size:{' '}
+					<span style={{fontWeight: 800}}>{widthInTickLabelSize}</span>
+				</div>
 			</div>
 			<Position
 				position={{left: layoutAreas.xAxis.x1, top: layoutAreas.xAxis.y1}}

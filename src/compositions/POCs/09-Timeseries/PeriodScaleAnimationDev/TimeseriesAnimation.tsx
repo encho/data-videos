@@ -16,6 +16,7 @@ type TAnimatedLineChart2Props = {
 	height: number;
 	timeSeries: TimeSeries;
 	theme: ThemeType;
+	baseline: number;
 };
 
 export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
@@ -23,6 +24,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	height,
 	timeSeries,
 	theme,
+	baseline,
 }) => {
 	const {durationInFrames} = useVideoConfig();
 
@@ -141,7 +143,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				width={CHART_PAGE_WIDTH}
 				height={CHART_PAGE_HEIGHT}
 				margin={CHART_PAGE_MARGIN}
-				nrBaselines={30}
+				baseline={baseline}
 				theme={theme}
 			>
 				<Page

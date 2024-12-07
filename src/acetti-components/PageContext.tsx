@@ -1,4 +1,6 @@
 import {createContext, useContext, useMemo} from 'react';
+import invariant from 'tiny-invariant';
+
 import {ThemeType} from '../acetti-themes/themeTypes';
 import {Theme_sizes} from '../acetti-themes/makeThemeGenerator';
 import {theme as lorenzobertolinibright} from '../acetti-themes/lorenzobertolinibright';
@@ -38,21 +40,48 @@ export const pageContext = createContext<TPageContext>({
 	},
 });
 
-export const PageContext: React.FC<{
+type BaselineProp = {
+	baseline: number;
+	nrBaselines?: never; // Ensure the other prop can't coexist
+};
+
+type NrBaselinesProp = {
+	nrBaselines: number;
+	baseline?: never; // Ensure the other prop can't coexist
+};
+
+type BaselineRelatedProp = BaselineProp | NrBaselinesProp;
+
+type PageContextProps = BaselineRelatedProp & {
 	children: React.ReactNode;
 	width: number;
 	height: number;
 	margin: number;
-	nrBaselines: number;
 	theme: ThemeType;
-}> = ({children, width, height, margin, nrBaselines, theme}) => {
+};
+
+export const PageContext: React.FC<PageContextProps> = ({
+	children,
+	width,
+	height,
+	margin,
+	nrBaselines,
+	baseline: baselineProp,
+	theme,
+}) => {
+	invariant(
+		baselineProp || nrBaselines,
+		'PageContext: pass either baseline or nrBaselines!'
+	);
 	const marginTop = margin;
 	const marginBottom = margin;
 	const marginLeft = margin;
 	const marginRight = margin;
 	const contentHeight = height - marginTop - marginBottom;
 	const contentWidth = width - marginRight - marginLeft;
-	const baseline = contentHeight / nrBaselines;
+	const baseline = baselineProp
+		? baselineProp
+		: contentHeight / (nrBaselines as number);
 
 	const sizes = useMemo(
 		() => ({
