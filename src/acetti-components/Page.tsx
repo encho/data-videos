@@ -24,9 +24,11 @@ export function Page({
 	show = false,
 	borderRadius,
 	boxShadow: boxShadowProp = false,
+	backgroundColor: backgroundColorProp,
 }: {
 	children: PageChildren;
 	show?: boolean;
+	backgroundColor?: string;
 	boxShadow?: boolean;
 	borderRadius?: number; // TODO borderRadius: "S" | "NONE" | "M" | "XL"...
 }) {
@@ -49,7 +51,7 @@ export function Page({
 	return (
 		<div
 			style={{
-				backgroundColor: theme.global.backgroundColor,
+				backgroundColor: backgroundColorProp || theme.global.backgroundColor,
 				width: page.width,
 				height: page.height,
 				position: 'relative',
@@ -167,7 +169,7 @@ export const PageHeader: React.FC<{
 	);
 };
 
-export function PageLogo() {
+export function PageLogo({color}: {color?: string}) {
 	const page = usePage();
 
 	return (
@@ -183,6 +185,7 @@ export function PageLogo() {
 				baseline={page.baseline}
 				capHeightInBaselines={1.5}
 				theme={page.theme}
+				color={color}
 			/>
 		</div>
 	);

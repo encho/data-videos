@@ -123,10 +123,7 @@ export const LastLogoPageContent: React.FC<{
 					filter: `blur(${linkFilterPixels}px)`,
 				}}
 			>
-				{/* www.linkedin.com/in/lorenzobertolini */}
-				{/* FINANCE & SPORTS DATA VISUALIZATION NERD */}
-				{/* DATA VISUALIZATION & DESIGN NERD */}
-				FINANCIAL DATA DESIGN (NERD)
+				FINANCIAL DATA VIDEO GENERATION
 			</TypographyStyle>
 		</div>
 	);

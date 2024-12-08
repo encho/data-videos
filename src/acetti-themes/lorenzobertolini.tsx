@@ -35,7 +35,7 @@ const palette: ThemePalette = {
 			soft: GRAYS['400'],
 		},
 		dataSource: {
-			main: GRAYS['500'],
+			main: GRAYS['100'],
 			soft: GRAYS['400'],
 		},
 		logo: {

@@ -11,8 +11,19 @@ export const Animated_PercentageChangeArea: React.FC<{
 	area: TGridLayoutArea;
 	firstValue: number;
 	lastValue: number;
+	lineColor?: string;
+	gradientColor?: string;
+	textColor?: string;
 	// enterDurationInFrames: number; TODO re-enactivate
-}> = ({yScale, area, firstValue, lastValue}) => {
+}> = ({
+	yScale,
+	area,
+	firstValue,
+	lastValue,
+	lineColor: lineColorProp,
+	textColor: textColorProp,
+	gradientColor: gradientColorProp,
+}) => {
 	const currentFrame = useCurrentFrame();
 	const {fps} = useVideoConfig();
 
@@ -25,7 +36,17 @@ export const Animated_PercentageChangeArea: React.FC<{
 
 	// TODO address typography!
 	// TODO address multicolor requirement (green/red e.g.)
-	const {lineColor, gradientColor, textColor, lineStrokeWidth} = theme;
+	const {
+		lineColor: lineColorTheme,
+		gradientColor: gradientColorTheme,
+		textColor: textColorTheme,
+		lineStrokeWidth,
+	} = theme;
+
+	const lineColor = lineColorProp || lineColorTheme;
+	const textColor = textColorProp || textColorTheme;
+	const gradientColor = gradientColorProp || gradientColorTheme;
+
 	const fontWeight = 600;
 
 	const textBottomMargin = 12;
@@ -48,6 +69,8 @@ export const Animated_PercentageChangeArea: React.FC<{
 
 	const aPercentageChange = aLastValue / firstValue - 1;
 
+	const uniqueGradientID = `gradientID-${gradientColor}`;
+
 	return (
 		<Position
 			position={{
@@ -57,25 +80,25 @@ export const Animated_PercentageChangeArea: React.FC<{
 		>
 			<svg
 				style={{
-					// backgroundColor: 'cyan',
-					// opacity: easingPercentage,
 					width: area.width,
 					height: area.height,
 					overflow: 'visible',
 				}}
 			>
 				<defs>
-					{/* <linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%"> */}
-					<linearGradient id="greenGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+					<linearGradient
+						id={uniqueGradientID}
+						x1="0%"
+						y1="0%"
+						x2="0%"
+						y2="100%"
+					>
 						<stop
 							offset="0%"
-							// style={{stopColor: 'rgb(0,255,0)', stopOpacity: 1}}
 							style={{stopColor: gradientColor, stopOpacity: 1}}
 						/>
 						<stop
 							offset="100%"
-							// offset="50%"
-							// style={{stopColor: 'rgb(0,255,0)', stopOpacity: 0}}
 							style={{stopColor: gradientColor, stopOpacity: 0.2}}
 						/>
 					</linearGradient>
@@ -85,7 +108,7 @@ export const Animated_PercentageChangeArea: React.FC<{
 					y={mappedAnimatedLastValue}
 					width={area.width}
 					height={mappedFirstValue - mappedAnimatedLastValue}
-					fill="url(#greenGradient)"
+					fill={`url(#${uniqueGradientID})`}
 					opacity={0.2}
 				/>
 

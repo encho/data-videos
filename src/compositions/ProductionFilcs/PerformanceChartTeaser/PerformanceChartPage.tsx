@@ -2,7 +2,6 @@ import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
 import {format} from 'date-fns';
 import {enGB} from 'date-fns/locale';
 
-import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {usePage} from '../../../acetti-components/PageContext';
 import {Page, PageHeader, PageFooter} from '../../../acetti-components/Page';
 import {TNerdyFinancePriceChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
@@ -18,7 +17,8 @@ const formatDate = (date: Date): string => {
 
 export const PerformanceChartPage: React.FC<{
 	apiPriceData: TNerdyFinancePriceChartDataResult;
-}> = ({apiPriceData}) => {
+	lineColor: string;
+}> = ({apiPriceData, lineColor}) => {
 	const {fps} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 	const {theme} = usePage();
@@ -80,6 +80,7 @@ export const PerformanceChartPage: React.FC<{
 					{dimensions ? (
 						<Sequence from={Math.floor(fps * 0)} layout="none">
 							<TimeseriesAnimation
+								lineColor={lineColor}
 								width={dimensions.width}
 								height={dimensions.height}
 								timeSeries={timeSeries}
@@ -88,27 +89,6 @@ export const PerformanceChartPage: React.FC<{
 						</Sequence>
 					) : null}
 				</div>
-
-				{/* TODO introduce evtl. also absolute positioned footer */}
-				<PageFooter>
-					<div
-						style={{
-							display: 'flex',
-							justifyContent: 'space-between',
-							alignItems: 'flex-end',
-						}}
-					>
-						<div style={{maxWidth: '62%'}}>
-							<TypographyStyle
-								typographyStyle={theme.typography.textStyles.dataSource}
-							>
-								<TextAnimationSubtle innerDelayInSeconds={2.5}>
-									Data Source: Yahoo Finance API
-								</TextAnimationSubtle>
-							</TypographyStyle>
-						</div>
-					</div>
-				</PageFooter>
 			</div>
 		</Page>
 	);

@@ -20,6 +20,7 @@ type TAnimatedLineChart2Props = {
 	height: number;
 	timeSeries: TimeSeries;
 	theme: ThemeType;
+	lineColor: string;
 };
 
 export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
@@ -27,6 +28,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	height,
 	timeSeries,
 	theme,
+	lineColor,
 }) => {
 	const CHART_PAGE_MARGIN = 0;
 	const CHART_PAGE_WIDTH = width;
@@ -43,7 +45,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					theme={theme}
 				>
 					<Page>
-						<TimeseriesAnimationInside timeSeries={timeSeries} />
+						<TimeseriesAnimationInside
+							timeSeries={timeSeries}
+							lineColor={lineColor}
+						/>
 					</Page>
 				</PageContext>
 			</div>
@@ -53,7 +58,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 export const TimeseriesAnimationInside: React.FC<{
 	timeSeries: TimeSeries;
-}> = ({timeSeries}) => {
+	lineColor: string;
+}> = ({timeSeries, lineColor}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const {contentWidth, contentHeight} = usePage();
@@ -113,6 +119,7 @@ export const TimeseriesAnimationInside: React.FC<{
 			}}
 		>
 			<PerformanceChart
+				lineColor={lineColor}
 				periodScaleAnimation={periodScaleAnimation}
 				yScaleAnimation={yScaleAnimation}
 				timeSeries={timeSeries}
@@ -136,6 +143,10 @@ export const TimeseriesAnimationInside: React.FC<{
 						area={chartLayout.areas.plot}
 						firstValue={firstValue}
 						lastValue={lastValue}
+						//
+						lineColor={lineColor}
+						gradientColor={lineColor}
+						textColor={lineColor}
 					/>
 				</Position>
 			</Sequence>

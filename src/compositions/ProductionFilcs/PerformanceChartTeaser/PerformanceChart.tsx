@@ -19,7 +19,14 @@ export const PerformanceChart: React.FC<{
 		xAxis: TGridLayoutArea;
 		yAxis: TGridLayoutArea;
 	};
-}> = ({layoutAreas, timeSeries, periodScaleAnimation, yScaleAnimation}) => {
+	lineColor: string;
+}> = ({
+	layoutAreas,
+	timeSeries,
+	periodScaleAnimation,
+	yScaleAnimation,
+	lineColor,
+}) => {
 	useEffect(() => {
 		periodScaleAnimation.setPeriodScalesWidth(layoutAreas.plot.width);
 		yScaleAnimation.setYScalesHeight(layoutAreas.plot.height);
@@ -36,7 +43,7 @@ export const PerformanceChart: React.FC<{
 			>
 				{/* TODO port to Animated_Line */}
 				<AnimatedLine
-					lineColor="#f05122"
+					lineColor={lineColor}
 					periodsScale={periodScaleAnimation.periodsScale}
 					yScale={yScaleAnimation.yScale}
 					area={layoutAreas.plot}
