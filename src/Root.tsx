@@ -2,6 +2,7 @@ import {Composition, Folder} from 'remotion';
 
 // PRODUCTION FLICS
 import {PerformanceChart} from './compositions/ProductionFilcs/PerformanceChart';
+import {PerformanceChartTeaser} from './compositions/ProductionFilcs/PerformanceChartTeaser';
 import {PerformanceCompareChart} from './compositions/ProductionFilcs/PerformanceCompareChart';
 import {SelectedAssetsChartbook} from './compositions/ProductionFilcs/SelectedAssetsChartbook';
 import {BacktestChart} from './compositions/ProductionFilcs/BacktestChart';
@@ -288,6 +289,20 @@ export const RemotionRoot: React.FC = () => {
 						nerdyFinanceEnv: 'PROD' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,
+					}}
+				/>
+
+				<Composition
+					// You can take the "id" to render a video:
+					// npx remotion render src/index.ts <id> out/video.mp4
+					id="PerformanceChartTeaser"
+					{...PerformanceChartTeaser}
+					defaultProps={{
+						ticker: 'BTC-USD' as const,
+						timePeriod: '2Y' as const,
+						nerdyFinanceEnv: 'PROD' as const,
+						theme: 'LORENZOBERTOLINI' as const,
+						chartTheme: 'LORENZOBERTOLINI_BRIGHT' as const,
 					}}
 				/>
 
