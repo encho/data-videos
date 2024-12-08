@@ -8,6 +8,11 @@ import {BacktestChart} from './compositions/ProductionFilcs/BacktestChart';
 import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
 
 import {
+	BringForwardTileComposition,
+	bringForwardTileCompositionSchema,
+} from './compositions/POCs/3D-Experiments/BrintForwardTile/BringForwardTileComposition';
+
+import {
 	HorizontalBarsStar,
 	horizontalBarsStarSchema,
 } from './HorizontalBarsStar/HorizontalBarsStar';
@@ -851,6 +856,18 @@ export const RemotionRoot: React.FC = () => {
 						// {...videoSizes.square}
 						{...videoSizes.widescreen_16x9}
 						// {...videoSizes.linkedInTall}
+						defaultProps={{
+							themeEnum: 'LORENZOBERTOLINI' as const,
+							themeEnumPlatte: 'LORENZOBERTOLINI_BRIGHT' as const,
+						}}
+					/>
+					<Composition
+						id="BringForwardTile"
+						component={BringForwardTileComposition}
+						schema={bringForwardTileCompositionSchema}
+						durationInFrames={90 * 8} // Animation lasts 150 frames
+						fps={90} // 30 FPS
+						{...videoSizes.widescreen_16x9}
 						defaultProps={{
 							themeEnum: 'LORENZOBERTOLINI' as const,
 							themeEnumPlatte: 'LORENZOBERTOLINI_BRIGHT' as const,
