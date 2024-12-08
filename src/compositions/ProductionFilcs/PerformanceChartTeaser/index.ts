@@ -28,6 +28,6 @@ export const PerformanceChartTeaser = {
 	schema,
 	calculateMetadata,
 	fps,
-	durationInFrames: 8 * fps,
-	...videoSizes.square,
+	durationInFrames: 7 * fps,
+	...videoSizes.linkedInWide,
 };

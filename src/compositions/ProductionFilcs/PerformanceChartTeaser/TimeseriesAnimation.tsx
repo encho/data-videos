@@ -58,16 +58,11 @@ export const TimeseriesAnimationInside: React.FC<{
 
 	const {contentWidth, contentHeight} = usePage();
 
-	// TODO use keyframes perhaps
 	const td_buildup = Math.floor(durationInFrames * 0.1);
-	const td_freeze = durationInFrames - td_buildup;
 
 	const percentageChange_enter_start_keyframe = td_buildup;
 
-	// TODO also allow for dates as indices eventually
-	// TODO fix with [0,0] ??? really
 	const tsDomainIndices = {
-		start: [0, 1] as [number, number],
 		full: [0, timeSeries.length] as [number, number],
 	};
 
@@ -76,19 +71,10 @@ export const TimeseriesAnimationInside: React.FC<{
 		periodScalesInitialWidth: 500,
 		transitions: [
 			{
-				fromDomainIndices: tsDomainIndices.start, // if omitted & index===0, fill with [0,1]
-				toDomainIndices: tsDomainIndices.full,
-				transitionSpec: {
-					durationInFrames: td_buildup,
-					easingFunction: Easing.linear,
-					transitionType: 'DEFAULT',
-				},
-			},
-			{
 				fromDomainIndices: tsDomainIndices.full, // if omitted & index===0, fill with [0,1]
 				toDomainIndices: tsDomainIndices.full,
 				transitionSpec: {
-					durationInFrames: td_freeze,
+					durationInFrames,
 					easingFunction: Easing.linear,
 					transitionType: 'DEFAULT',
 				},
@@ -98,7 +84,7 @@ export const TimeseriesAnimationInside: React.FC<{
 
 	const xAxisHeight = useXAxisAreaHeight();
 
-	const yScaleAnimationUpper = useYScaleAnimation({
+	const yScaleAnimation = useYScaleAnimation({
 		periodScaleAnimation,
 		timeSeriesArray: [timeSeries],
 		tickFormatter: (tick) => `${tick} $`,
@@ -107,7 +93,7 @@ export const TimeseriesAnimationInside: React.FC<{
 		paddingPerc: 0.1,
 	});
 
-	const yAxisWidth = yScaleAnimationUpper.maxLabelComponentWidth;
+	const yAxisWidth = yScaleAnimation.maxLabelComponentWidth;
 
 	const chartLayout = useChartLayout({
 		width: contentWidth,
@@ -128,7 +114,7 @@ export const TimeseriesAnimationInside: React.FC<{
 		>
 			<PerformanceChart
 				periodScaleAnimation={periodScaleAnimation}
-				yScaleAnimation={yScaleAnimationUpper}
+				yScaleAnimation={yScaleAnimation}
 				timeSeries={timeSeries}
 				layoutAreas={{
 					xAxis: chartLayout.areas.xAxis,
@@ -144,10 +130,8 @@ export const TimeseriesAnimationInside: React.FC<{
 						top: chartLayout.areas.plot.y1,
 					}}
 				>
-					{/* TODO port to Animated_Line */}
 					<Animated_PercentageChangeArea
-						// periodsScale={periodScaleAnimation.periodsScale}
-						yScale={yScaleAnimationUpper.yScale}
+						yScale={yScaleAnimation.yScale}
 						//
 						area={chartLayout.areas.plot}
 						firstValue={firstValue}
