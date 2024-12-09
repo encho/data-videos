@@ -16,6 +16,7 @@ import {Position} from '../../../acetti-layout/atoms/Position';
 import {Animated_PercentageChangeArea} from '../../POCs/09-Timeseries/utils/Animated_PercentageChangeArea';
 import {OpacifyInAndOut} from '../../../SlideIn';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -38,7 +39,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	return (
 		<div style={{position: 'relative'}}>
-			<div>
+			<Platte3D_SlideInAndOut
+				width={CHART_PAGE_WIDTH}
+				height={CHART_PAGE_HEIGHT}
+			>
 				<PageContext
 					width={CHART_PAGE_WIDTH}
 					height={CHART_PAGE_HEIGHT}
@@ -46,16 +50,14 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 					nrBaselines={30}
 					theme={theme}
 				>
-					<OpacifyInAndOut>
-						<Page boxShadow borderRadius={5}>
-							<TimeseriesAnimationInside
-								timeSeries={timeSeries}
-								yAxisFormatString={yAxisFormatString}
-							/>
-						</Page>
-					</OpacifyInAndOut>
+					<Page boxShadow borderRadius={5}>
+						<TimeseriesAnimationInside
+							timeSeries={timeSeries}
+							yAxisFormatString={yAxisFormatString}
+						/>
+					</Page>
 				</PageContext>
-			</div>
+			</Platte3D_SlideInAndOut>
 		</div>
 	);
 };

@@ -15,6 +15,7 @@ import {HighlightPeriodsMulti} from '../../../acetti-ts-components/HighlightPeri
 import {SlideOut, SlideIn} from '../../../SlideIn';
 import {ObliquePlatte} from '../../../acetti-components/ObliquePlatte';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
+import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 
 type TAnimatedLineChart2Props = {
 	width: number;
@@ -37,30 +38,25 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 	return (
 		<div style={{position: 'relative'}}>
-			<SlideIn>
-				<SlideOut>
-					<PageContext
-						width={CHART_PAGE_WIDTH}
-						height={CHART_PAGE_HEIGHT}
-						margin={CHART_PAGE_MARGIN}
-						nrBaselines={30}
-						theme={theme}
-					>
-						<ObliquePlatte
-							width={CHART_PAGE_WIDTH}
-							height={CHART_PAGE_HEIGHT}
-							theme={theme.platte}
-						>
-							<Page boxShadow borderRadius={5}>
-								<TimeseriesAnimationInside
-									timeSeries1={timeSeries1}
-									timeSeries2={timeSeries2}
-								/>
-							</Page>
-						</ObliquePlatte>
-					</PageContext>
-				</SlideOut>
-			</SlideIn>
+			<Platte3D_SlideInAndOut
+				width={CHART_PAGE_WIDTH}
+				height={CHART_PAGE_HEIGHT}
+			>
+				<PageContext
+					width={CHART_PAGE_WIDTH}
+					height={CHART_PAGE_HEIGHT}
+					margin={CHART_PAGE_MARGIN}
+					nrBaselines={30}
+					theme={theme}
+				>
+					<Page boxShadow borderRadius={5}>
+						<TimeseriesAnimationInside
+							timeSeries1={timeSeries1}
+							timeSeries2={timeSeries2}
+						/>
+					</Page>
+				</PageContext>
+			</Platte3D_SlideInAndOut>
 		</div>
 	);
 };

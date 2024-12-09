@@ -302,22 +302,20 @@ export const SingleSparklineSlide: React.FC<{
 										stroke={DEBUG ? '#292929' : 'transparent'}
 									/>
 									<HtmlArea area={area_1}>
-										<Sequence layout="none">
-											<Sequence from={Math.floor(fps * 0.0)} layout="none">
-												<SparklineLarge
-													baseline={baseline}
-													id="001"
-													data={data}
-													width={area_1.width}
-													height={area_1.height}
-													theme={theme}
-													domain={domain as [number, number]}
-													lineColor={lineColor}
-													formatString={formatString}
-													showLayout={DEBUG}
-													xAxisFormatString="MMM yy"
-												/>
-											</Sequence>
+										<Sequence from={Math.floor(fps * 0.0)} layout="none">
+											<SparklineLarge
+												baseline={baseline}
+												id="001"
+												data={data}
+												width={area_1.width}
+												height={area_1.height}
+												theme={theme}
+												domain={domain as [number, number]}
+												lineColor={lineColor}
+												formatString={formatString}
+												showLayout={DEBUG}
+												xAxisFormatString="MMM yy"
+											/>
 										</Sequence>
 									</HtmlArea>
 								</div>
