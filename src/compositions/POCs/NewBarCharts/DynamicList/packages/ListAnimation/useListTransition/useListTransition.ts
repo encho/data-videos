@@ -5,6 +5,18 @@ import {useCallback} from 'react';
 import {TGridLayoutArea} from '../../../../../../../acetti-layout';
 import {getListLayout, TListLayout} from './getListLayout';
 
+type ListTransitionState<T> = {
+	items: T[];
+	itemHeight: number;
+	visibleIndices: [number, number];
+	visibleItems: T[];
+	layout: TListLayout;
+	visibleIndicesRange: [number, number];
+	visibleIndicesRangeSize: number;
+	justifyContentShift: number;
+	getListItemArea: (i: number | string) => TGridLayoutArea;
+};
+
 type ListTransitionContext_Common = {
 	frame: number;
 	globalAnimationFrame: number;
@@ -16,58 +28,18 @@ type ListTransitionContext_Common = {
 
 export type ListTransitionContext_Enter<T> = ListTransitionContext_Common & {
 	transitionType: 'enter';
-	to: {
-		items: T[];
-		itemHeight: number;
-		visibleIndices: [number, number];
-		visibleItems: T[];
-		layout: TListLayout;
-		visibleIndicesRange: [number, number];
-		visibleIndicesRangeSize: number;
-		justifyContentShift: number;
-		getListItemArea: (i: number | string) => TGridLayoutArea;
-	};
+	to: ListTransitionState<T>;
 };
 
 export type ListTransitionContext_Exit<T> = ListTransitionContext_Common & {
 	transitionType: 'exit';
-	from: {
-		items: T[];
-		itemHeight: number;
-		visibleIndices: [number, number];
-		visibleItems: T[];
-		layout: TListLayout;
-		visibleIndicesRange: [number, number];
-		visibleIndicesRangeSize: number;
-		justifyContentShift: number;
-		getListItemArea: (i: number | string) => TGridLayoutArea;
-	};
+	from: ListTransitionState<T>;
 };
 
 export type ListTransitionContext_Update<T> = ListTransitionContext_Common & {
 	transitionType: 'update';
-	from: {
-		items: T[];
-		itemHeight: number;
-		visibleIndices: [number, number];
-		visibleItems: T[];
-		layout: TListLayout;
-		visibleIndicesRange: [number, number];
-		visibleIndicesRangeSize: number;
-		justifyContentShift: number;
-		getListItemArea: (i: number | string) => TGridLayoutArea;
-	};
-	to: {
-		items: T[];
-		itemHeight: number;
-		visibleIndices: [number, number];
-		visibleItems: T[];
-		layout: TListLayout;
-		visibleIndicesRange: [number, number];
-		visibleIndicesRangeSize: number;
-		justifyContentShift: number;
-		getListItemArea: (i: number | string) => TGridLayoutArea;
-	};
+	from: ListTransitionState<T>;
+	to: ListTransitionState<T>;
 	transitionTypes: {
 		update: string[];
 		enter: string[];

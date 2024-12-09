@@ -42,6 +42,7 @@ type EditedListAnimationTransition<T> = {
 };
 
 export type ListAnimationContext<T extends {id: string}> = {
+	direction: 'vertical' | 'horizontal';
 	frame: number;
 	durationInFrames: number;
 	numberOfTransitions: number;
@@ -55,10 +56,11 @@ type UseListAnimationArgs<T> = {
 	width: number;
 	height: number;
 	itemHeight?: number;
-	fitItemHeights?: boolean;
+	fitItemSizes?: boolean;
 	transitions: ListAnimationTransition<T>[];
 	easing?: EasingFunction;
-	justifyContent?: 'start' | 'center';
+	justifyContent?: 'start' | 'center'; // TODO add "end"
+	direction?: 'vertical' | 'horizontal';
 };
 
 export function useListAnimation<T extends {id: string}>({
@@ -66,9 +68,10 @@ export function useListAnimation<T extends {id: string}>({
 	height,
 	transitions,
 	itemHeight = 100,
-	fitItemHeights = false,
+	fitItemSizes = false,
 	easing: easingProp = Easing.ease,
 	justifyContent = 'start',
+	direction = 'vertical',
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
 	const {
@@ -109,11 +112,11 @@ export function useListAnimation<T extends {id: string}>({
 			visibleIndicesTo
 		);
 
-		const itemHeightFrom = fitItemHeights
+		const itemHeightFrom = fitItemSizes
 			? height / visibleItemsFrom.length
 			: itemHeight;
 
-		const itemHeightTo = fitItemHeights
+		const itemHeightTo = fitItemSizes
 			? height / visibleItemsTo.length
 			: itemHeight;
 
@@ -121,7 +124,7 @@ export function useListAnimation<T extends {id: string}>({
 			? currentTransition.easing
 			: easingProp;
 
-		const editedTransition = {
+		const editedTransition: EditedListAnimationTransition<T> = {
 			easing,
 			frameRange: frameRanges[i],
 			durationInFrames: currentTransition.durationInFrames,
@@ -183,6 +186,7 @@ export function useListAnimation<T extends {id: string}>({
 	});
 
 	return {
+		direction,
 		frame,
 		durationInFrames,
 		numberOfTransitions: transitions.length,

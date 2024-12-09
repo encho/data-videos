@@ -137,8 +137,6 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
-	console.log({weirdTransitions});
-
 	const scrollingTransitions: ListAnimationTransition<{id: string}>[] = [
 		{
 			itemsTo: itemsFrom,
@@ -173,7 +171,7 @@ export const ListAnimationPage: React.FC = () => {
 		easing,
 		// transitions: weirdTransitions,
 		// justifyContent: 'center',
-		// fitItemHeights: true,
+		// fitItemSizes: true,
 	});
 
 	const {currentTransitionContext} = listAnimationContext;
@@ -283,6 +281,10 @@ export const ListAnimationPage: React.FC = () => {
 					<div style={{fontSize: 40}}>
 						<Row>LIST ANIMATION CONTEXT</Row>
 						<div>
+							<Row>
+								<div>direction</div>
+								<Value>{listAnimationContext.direction}</Value>
+							</Row>
 							<Row>
 								<div>numberOfTransitions</div>
 								<Value>{listAnimationContext.numberOfTransitions}</Value>

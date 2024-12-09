@@ -199,7 +199,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		transitions,
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemHeights: false,
+		fitItemSizes: false,
 		easing,
 		justifyContent: 'center',
 	});
@@ -212,7 +212,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_3.height,
 		transitions,
 		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemHeights: false,
+		fitItemSizes: false,
 		easing,
 		justifyContent: 'center',
 	});
