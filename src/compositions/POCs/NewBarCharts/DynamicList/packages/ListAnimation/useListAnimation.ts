@@ -29,13 +29,13 @@ type EditedListAnimationTransition<T> = {
 	frameRange: TFrameRange;
 	from: {
 		items: T[];
-		itemHeight: number;
+		itemSize: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 	};
 	to: {
 		items: T[];
-		itemHeight: number;
+		itemSize: number;
 		visibleIndices: [number, number];
 		visibleItems: T[];
 	};
@@ -112,12 +112,14 @@ export function useListAnimation<T extends {id: string}>({
 			visibleIndicesTo
 		);
 
-		const itemHeightFrom = fitItemSizes
-			? height / visibleItemsFrom.length
+		const itemsAvailableSpace = direction === 'vertical' ? height : width;
+
+		const itemSizeFrom = fitItemSizes
+			? itemsAvailableSpace / visibleItemsFrom.length
 			: itemHeight;
 
-		const itemHeightTo = fitItemSizes
-			? height / visibleItemsTo.length
+		const itemSizeTo = fitItemSizes
+			? itemsAvailableSpace / visibleItemsTo.length
 			: itemHeight;
 
 		const easing = currentTransition.easing
@@ -130,13 +132,13 @@ export function useListAnimation<T extends {id: string}>({
 			durationInFrames: currentTransition.durationInFrames,
 			from: {
 				items: itemsFrom,
-				itemHeight: itemHeightFrom,
+				itemSize: itemSizeFrom,
 				visibleIndices: visibleIndicesFrom,
 				visibleItems: visibleItemsFrom,
 			},
 			to: {
 				items: currentTransition.itemsTo,
-				itemHeight: itemHeightTo,
+				itemSize: itemSizeTo,
 				visibleIndices: visibleIndicesTo,
 				visibleItems: visibleItemsTo,
 			},
@@ -161,13 +163,13 @@ export function useListAnimation<T extends {id: string}>({
 			items: editedTransitions[currentTransitionIndex].from.items,
 			visibleIndices:
 				editedTransitions[currentTransitionIndex].from.visibleIndices,
-			itemHeight: editedTransitions[currentTransitionIndex].from.itemHeight,
+			itemHeight: editedTransitions[currentTransitionIndex].from.itemSize,
 		},
 		to: {
 			items: editedTransitions[currentTransitionIndex].to.items,
 			visibleIndices:
 				editedTransitions[currentTransitionIndex].to.visibleIndices,
-			itemHeight: editedTransitions[currentTransitionIndex].to.itemHeight,
+			itemHeight: editedTransitions[currentTransitionIndex].to.itemSize,
 		},
 		width,
 		height,
