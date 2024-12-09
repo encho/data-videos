@@ -171,7 +171,7 @@ export const ListAnimationPage: React.FC = () => {
 		height: area_1.height,
 		transitions: scrollingTransitions,
 		easing,
-		// direction: 'horizontal',
+		direction: 'vertical',
 		// transitions: weirdTransitions,
 		// justifyContent: 'center',
 		// fitItemSizes: true,

@@ -154,6 +154,7 @@ export function useListTransition<T extends {id: string}>({
 			// const height = itemHeightArg * visibleItems.length;
 
 			const layout = getListLayout({
+				direction,
 				width,
 				height,
 				items,
