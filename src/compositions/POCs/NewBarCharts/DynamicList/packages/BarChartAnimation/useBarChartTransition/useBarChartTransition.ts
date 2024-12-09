@@ -102,7 +102,7 @@ export function useBarChartTransition({
 		);
 
 		// TODO will be specific to current "from" transition spec.
-		const itemHeightFrom = listTransitionContext.from.itemHeight;
+		const itemHeightFrom = listTransitionContext.from.itemSize;
 		const negativeValueLabelWidthFrom =
 			hasNegativeValuesFrom || forceNegativeValueLabelWidth
 				? negativeValueLabelWidth
@@ -111,7 +111,7 @@ export function useBarChartTransition({
 			negativeValueLabelWidthFrom / negativeValueLabelWidth;
 
 		// TODO will be specific to current "to" transition spec.
-		const itemHeightTo = listTransitionContext.to.itemHeight;
+		const itemHeightTo = listTransitionContext.to.itemSize;
 		const negativeValueLabelWidthTo =
 			hasNegativeValuesTo || forceNegativeValueLabelWidth
 				? negativeValueLabelWidth
@@ -258,7 +258,7 @@ export function useBarChartTransition({
 		);
 
 		const barChartItemLayoutTo = getBarChartItemLayout({
-			height: listTransitionContext.to.itemHeight,
+			height: listTransitionContext.to.itemSize,
 			width,
 			baseline,
 			labelWidth,
@@ -312,7 +312,7 @@ export function useBarChartTransition({
 	);
 
 	const barChartItemLayoutFrom = getBarChartItemLayout({
-		height: listTransitionContext.from.itemHeight,
+		height: listTransitionContext.from.itemSize,
 		width,
 		baseline,
 		labelWidth,

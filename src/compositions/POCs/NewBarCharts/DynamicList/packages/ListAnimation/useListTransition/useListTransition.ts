@@ -7,7 +7,7 @@ import {getListLayout, TListLayout} from './getListLayout';
 
 type ListTransitionState<T> = {
 	items: T[];
-	itemHeight: number;
+	itemSize: number;
 	visibleIndices: [number, number];
 	visibleItems: T[];
 	layout: TListLayout;
@@ -177,7 +177,7 @@ export function useListTransition<T extends {id: string}>({
 
 			return {
 				items,
-				itemHeight: itemSizeArg,
+				itemSize: itemSizeArg,
 				visibleIndices,
 				visibleItems,
 				layout,
