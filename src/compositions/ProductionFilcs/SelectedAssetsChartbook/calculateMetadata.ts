@@ -8,7 +8,7 @@ export const calculateMetadata = async ({
 }: {
 	props: TSelectedAssetsChartbookSchema;
 }) => {
-	const nerdyENV = 'PROD';
+	const nerdyENV = 'DEV';
 
 	const spx = await fetchNerdyFinancePriceChartData(
 		{
@@ -141,37 +141,30 @@ export const calculateMetadata = async ({
 				{
 					ticker: 'SPX_INDEX',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '0,0.0',
 				},
 				{
 					ticker: 'DAX_INDEX',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '0,0.0',
 				},
 				{
 					ticker: 'XAU-USD',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '$0,0.0',
 				},
 				{
 					ticker: 'BTC-USD',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '$0,0',
 				},
 				{
 					ticker: 'ETH-USD',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '$0,0',
 				},
 				{
 					ticker: 'TESLA',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '$0.00',
 				},
 				{
 					ticker: 'AMZN',
 					color: theme.typography.textStyles.h1.color,
-					formatter: '$0.00',
 				},
 			],
 		},

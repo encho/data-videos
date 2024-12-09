@@ -37,10 +37,6 @@ import {
 	zBarChartItems,
 	TBarChartItems,
 } from '../../POCs/NewBarCharts/DynamicList/packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-// import {
-// 	zNerdyTickers,
-// 	zNerdyTimePeriod,
-// } from '../../../acetti-http/zNerdyTickers';
 
 export const selectedAssetsChartbookSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -70,7 +66,6 @@ type FlicProps = {
 		color: string;
 	}[];
 	data: TNerdyFinancePriceChartDataResult[];
-
 	singleSparklineDurationInSeconds: number;
 	barChartDurationInSeconds: number;
 	lastSlideDurationInSeconds: number;
@@ -196,7 +191,7 @@ export const ApiBasedSparklinesPresentationFlic: React.FC<FlicProps> = ({
 				}));
 
 				const lineColor = getDataColor(dataInfo, ticker);
-				const formatString = getDataFormatter(dataInfo, ticker);
+				const formatString = it.tickerMetadata.price_format_string;
 
 				return (
 					<Sequence key={ticker} layout="none" {...sequence}>
