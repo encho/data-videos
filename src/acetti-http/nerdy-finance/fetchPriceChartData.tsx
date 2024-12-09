@@ -49,9 +49,7 @@ export const fetchNerdyFinancePriceChartData = async (
 		typeof endDateProp === 'string' ? endDateProp : endDateProp.toISOString();
 
 	const apiUrl = `${apiBase}/flics/simple-price-chart?ticker=${ticker}&&endDate=${endDateString}&timePeriod=${timePeriod}`;
-
 	const data = await fetch(apiUrl);
-
 	const json = await data.json();
 
 	// TODO validate a specific return type
@@ -84,12 +82,28 @@ export const getSubtitle = (
 		nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
 	const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
 
-	if (nerdyPriceApiResult.timePeriod === '2Y') {
-		return `2-Year Performance ${periodString}`;
+	if (nerdyPriceApiResult.timePeriod === '1M') {
+		return `1-Month Performance ${periodString}`;
+	}
+
+	if (nerdyPriceApiResult.timePeriod === '3M') {
+		return `3-Month Performance ${periodString}`;
 	}
 
 	if (nerdyPriceApiResult.timePeriod === '1Y') {
 		return `1-Year Performance ${periodString}`;
+	}
+
+	if (nerdyPriceApiResult.timePeriod === '2Y') {
+		return `2-Year Performance ${periodString}`;
+	}
+
+	if (nerdyPriceApiResult.timePeriod === 'YTD') {
+		return `Year-to-Date Performance ${periodString}`;
+	}
+
+	if (nerdyPriceApiResult.timePeriod === 'QTD') {
+		return `Quarter-to-Date Performance ${periodString}`;
 	}
 
 	return 'Implement subtitle for this timePeriod!!!';

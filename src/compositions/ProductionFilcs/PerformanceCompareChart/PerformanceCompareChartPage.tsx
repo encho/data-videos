@@ -31,30 +31,6 @@ export const PerformanceCompareChartPage: React.FC<{
 	const {ref, dimensions} = useElementDimensions();
 	const {theme} = usePage();
 
-	// if (!apiPriceData) {
-	// 	return <AbsoluteFill />;
-	// }
-
-	// const timeSeries = apiPriceData.data.map((it) => ({
-	// 	value: it.value,
-	// 	date: new Date(it.index),
-	// }));
-
-	// const getSubtitle = (
-	// 	nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
-	// ) => {
-	// 	const startDate = nerdyPriceApiResult.data[0].index;
-	// 	const endDate =
-	// 		nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
-	// 	const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
-
-	// 	if (nerdyPriceApiResult.timePeriod === '2Y') {
-	// 		return `2-Year Performance ${periodString}`;
-	// 	}
-
-	// 	return 'Implement subtitle for this timePeriod!!!';
-	// };
-
 	return (
 		<Page>
 			<>

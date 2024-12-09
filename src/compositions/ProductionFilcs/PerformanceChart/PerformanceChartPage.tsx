@@ -1,6 +1,4 @@
 import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
-import {format} from 'date-fns';
-import {enGB} from 'date-fns/locale';
 
 import {ThemeType} from '../../../acetti-themes/themeTypes';
 import {usePage} from '../../../acetti-components/PageContext';
@@ -10,16 +8,15 @@ import {
 	PageFooter,
 	PageLogo,
 } from '../../../acetti-components/Page';
-import {TNerdyFinancePriceChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
+import {
+	TNerdyFinancePriceChartDataResult,
+	getSubtitle,
+} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
 import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
 import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
-
-const formatDate = (date: Date): string => {
-	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
-};
 
 export const PerformanceChartPage: React.FC<{
 	chartTheme: ThemeType;
@@ -39,21 +36,6 @@ export const PerformanceChartPage: React.FC<{
 	}));
 
 	const yAxisFormatString = apiPriceData.tickerMetadata.price_format_string;
-
-	const getSubtitle = (
-		nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
-	) => {
-		const startDate = nerdyPriceApiResult.data[0].index;
-		const endDate =
-			nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
-		const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
-
-		if (nerdyPriceApiResult.timePeriod === '2Y') {
-			return `2-Year Performance ${periodString}`;
-		}
-
-		return 'Implement subtitle for this timePeriod!!!';
-	};
 
 	return (
 		<Page>

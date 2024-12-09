@@ -285,7 +285,7 @@ export const RemotionRoot: React.FC = () => {
 					{...PerformanceChart}
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
-						timePeriod: '3M' as const,
+						timePeriod: 'QTD' as const,
 						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,

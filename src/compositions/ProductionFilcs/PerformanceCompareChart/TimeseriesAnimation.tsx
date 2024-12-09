@@ -15,7 +15,6 @@ import {HighlightPeriodsMulti} from '../../../acetti-ts-components/HighlightPeri
 import {SlideOut, SlideIn} from '../../../SlideIn';
 import {ObliquePlatte} from '../../../acetti-components/ObliquePlatte';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
-// import {DissolveExitFilter} from '../../01-TextEffects/SvgFilter/DissolveExitFilter';
 
 type TAnimatedLineChart2Props = {
 	width: number;
