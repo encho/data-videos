@@ -38,6 +38,8 @@ export const PerformanceChartPage: React.FC<{
 		date: new Date(it.index),
 	}));
 
+	const yAxisFormatString = apiPriceData.tickerMetadata.price_format_string;
+
 	const getSubtitle = (
 		nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
 	) => {
@@ -88,6 +90,7 @@ export const PerformanceChartPage: React.FC<{
 									height={dimensions.height}
 									timeSeries={timeSeries}
 									theme={chartTheme}
+									yAxisFormatString={yAxisFormatString}
 								/>
 							</Sequence>
 						) : null}

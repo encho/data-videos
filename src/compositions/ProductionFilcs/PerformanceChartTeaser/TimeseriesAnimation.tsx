@@ -21,6 +21,7 @@ type TAnimatedLineChart2Props = {
 	timeSeries: TimeSeries;
 	theme: ThemeType;
 	lineColor: string;
+	yTickLabelFormatter: (x: number) => string;
 };
 
 export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
@@ -29,6 +30,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	timeSeries,
 	theme,
 	lineColor,
+	yTickLabelFormatter,
 }) => {
 	const CHART_PAGE_MARGIN = 0;
 	const CHART_PAGE_WIDTH = width;
@@ -48,6 +50,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 						<TimeseriesAnimationInside
 							timeSeries={timeSeries}
 							lineColor={lineColor}
+							yTickLabelFormatter={yTickLabelFormatter}
 						/>
 					</Page>
 				</PageContext>
@@ -59,7 +62,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 export const TimeseriesAnimationInside: React.FC<{
 	timeSeries: TimeSeries;
 	lineColor: string;
-}> = ({timeSeries, lineColor}) => {
+	yTickLabelFormatter: (x: number) => string;
+}> = ({timeSeries, lineColor, yTickLabelFormatter}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const {contentWidth, contentHeight} = usePage();
@@ -93,7 +97,7 @@ export const TimeseriesAnimationInside: React.FC<{
 	const yScaleAnimation = useYScaleAnimation({
 		periodScaleAnimation,
 		timeSeriesArray: [timeSeries],
-		tickFormatter: (tick) => `${tick} $`,
+		tickFormatter: yTickLabelFormatter,
 		yScalesInitialHeight: 200,
 		domainType: 'VISIBLE',
 		paddingPerc: 0.1,

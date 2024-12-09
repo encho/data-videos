@@ -1,5 +1,6 @@
 import {useVideoConfig, Easing, Sequence} from 'remotion';
 import invariant from 'tiny-invariant';
+import numeral from 'numeral';
 
 import {usePeriodScaleAnimation} from '../../POCs/09-Timeseries/utils/usePeriodScaleAnimation';
 import {useYScaleAnimation} from '../../POCs/09-Timeseries/utils/useYScaleAnimation';
@@ -21,6 +22,7 @@ type TAnimatedLineChart2Props = {
 	height: number;
 	timeSeries: TimeSeries;
 	theme: ThemeType;
+	yAxisFormatString: string;
 };
 
 export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
@@ -28,6 +30,7 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 	height,
 	timeSeries,
 	theme,
+	yAxisFormatString,
 }) => {
 	const CHART_PAGE_MARGIN = 40;
 	const CHART_PAGE_WIDTH = width;
@@ -45,7 +48,10 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 				>
 					<OpacifyInAndOut>
 						<Page boxShadow borderRadius={5}>
-							<TimeseriesAnimationInside timeSeries={timeSeries} />
+							<TimeseriesAnimationInside
+								timeSeries={timeSeries}
+								yAxisFormatString={yAxisFormatString}
+							/>
 						</Page>
 					</OpacifyInAndOut>
 				</PageContext>
@@ -56,7 +62,8 @@ export const TimeseriesAnimation: React.FC<TAnimatedLineChart2Props> = ({
 
 export const TimeseriesAnimationInside: React.FC<{
 	timeSeries: TimeSeries;
-}> = ({timeSeries}) => {
+	yAxisFormatString: string;
+}> = ({timeSeries, yAxisFormatString}) => {
 	const {durationInFrames} = useVideoConfig();
 
 	const {contentWidth, contentHeight} = usePage();
@@ -104,7 +111,7 @@ export const TimeseriesAnimationInside: React.FC<{
 	const yScaleAnimationUpper = useYScaleAnimation({
 		periodScaleAnimation,
 		timeSeriesArray: [timeSeries],
-		tickFormatter: (tick) => `${tick} $`,
+		tickFormatter: (tick) => numeral(tick).format(yAxisFormatString),
 		yScalesInitialHeight: 200,
 		domainType: 'VISIBLE',
 		paddingPerc: 0.1,

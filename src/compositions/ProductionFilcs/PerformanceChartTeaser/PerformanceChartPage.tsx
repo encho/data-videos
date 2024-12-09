@@ -6,6 +6,7 @@ import {
 	useCurrentFrame,
 	interpolate,
 } from 'remotion';
+import numeral from 'numeral';
 import {format} from 'date-fns';
 import {enGB} from 'date-fns/locale';
 
@@ -18,6 +19,35 @@ import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithS
 
 const formatDate = (date: Date): string => {
 	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
+};
+
+// TODO put into nerdy finance api package
+const getSubtitle = (
+	nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
+) => {
+	const startDate = nerdyPriceApiResult.data[0].index;
+	const endDate =
+		nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
+	const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
+
+	if (nerdyPriceApiResult.timePeriod === '2Y') {
+		return `2-Year Performance ${periodString}`;
+	}
+
+	if (nerdyPriceApiResult.timePeriod === '1Y') {
+		return `1-Year Performance ${periodString}`;
+	}
+
+	return 'Implement subtitle for this timePeriod!!!';
+};
+
+const getTickLabelFormatter = (
+	nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
+) => {
+	return (tick: number) =>
+		numeral(tick).format(
+			nerdyPriceApiResult.tickerMetadata.price_format_string
+		);
 };
 
 export const PerformanceChartPage: React.FC<{
@@ -44,21 +74,6 @@ export const PerformanceChartPage: React.FC<{
 		value: it.value,
 		date: new Date(it.index),
 	}));
-
-	const getSubtitle = (
-		nerdyPriceApiResult: TNerdyFinancePriceChartDataResult
-	) => {
-		const startDate = nerdyPriceApiResult.data[0].index;
-		const endDate =
-			nerdyPriceApiResult.data[nerdyPriceApiResult.data.length - 1].index;
-		const periodString = `(${formatDate(startDate)}-${formatDate(endDate)})`;
-
-		if (nerdyPriceApiResult.timePeriod === '2Y') {
-			return `2-Year Performance ${periodString}`;
-		}
-
-		return 'Implement subtitle for this timePeriod!!!';
-	};
 
 	return (
 		<Page boxShadow borderRadius={20} opacity={opacity}>
@@ -98,6 +113,7 @@ export const PerformanceChartPage: React.FC<{
 								height={dimensions.height}
 								timeSeries={timeSeries}
 								theme={theme}
+								yTickLabelFormatter={getTickLabelFormatter(apiPriceData)}
 							/>
 						</Sequence>
 					) : null}

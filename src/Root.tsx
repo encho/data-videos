@@ -285,8 +285,8 @@ export const RemotionRoot: React.FC = () => {
 					{...PerformanceChart}
 					defaultProps={{
 						ticker: 'BTC-USD' as const,
-						timePeriod: '2Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
+						timePeriod: '3M' as const,
+						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI_BRIGHT' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,
 					}}
@@ -302,7 +302,7 @@ export const RemotionRoot: React.FC = () => {
 						tickerRight: 'XAU-USD' as const,
 						tickerCenter: 'DAX_INDEX' as const,
 						timePeriod: '1Y' as const,
-						nerdyFinanceEnv: 'PROD' as const,
+						nerdyFinanceEnv: 'DEV' as const,
 						theme: 'LORENZOBERTOLINI' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,
 					}}
@@ -670,7 +670,7 @@ export const RemotionRoot: React.FC = () => {
 				</Folder>
 
 				{/* <Folder name="05-BarCharts">
-        </Folder> */}
+</Folder> */}
 
 				<Folder name="06-ColumnCharts">
 					<Composition

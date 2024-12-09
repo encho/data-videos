@@ -9,6 +9,7 @@ export const zNerdyFinancePriceChartDataResult = z.object({
 		quote: z.string(),
 		name: z.string(),
 		type: z.string(),
+		price_format_string: z.string(),
 	}),
 	percentageChange: z.number(),
 	timePeriod: z.string(),
