@@ -25,9 +25,11 @@ export function Page({
 	borderRadius,
 	boxShadow: boxShadowProp = false,
 	backgroundColor: backgroundColorProp,
+	opacity,
 }: {
 	children: PageChildren;
 	show?: boolean;
+	opacity?: number;
 	backgroundColor?: string;
 	boxShadow?: boolean;
 	borderRadius?: number; // TODO borderRadius: "S" | "NONE" | "M" | "XL"...
@@ -57,6 +59,7 @@ export function Page({
 				position: 'relative',
 				borderRadius,
 				boxShadow,
+				opacity,
 			}}
 		>
 			<div style={{position: 'absolute', width: '100%', height: '100%'}}>

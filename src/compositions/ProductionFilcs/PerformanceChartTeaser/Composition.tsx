@@ -1,10 +1,12 @@
 import {
 	useVideoConfig,
 	Sequence,
-	Video,
+	// Video,
+	Img,
 	useCurrentFrame,
 	interpolate,
 	Easing,
+	AbsoluteFill,
 } from 'remotion';
 import {z} from 'zod';
 import invariant from 'tiny-invariant';
@@ -24,11 +26,16 @@ import {LastLogoPage} from '../../POCs/03-Page/LastLogoPageContentDev/LastLogoPa
 import {BringForwardCenterTile} from '../../POCs/3D-Experiments/BrintForwardCenterTile/BringForwardCenterTile';
 import {PageLogo, PageFooter, Page} from '../../../acetti-components/Page';
 
-const videoSources = {
-	SHAPES:
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/videos/5%3A3/Gen-3+Alpha+2885480945%2C+Moving+in+3d+space+%2C+lorenzobertolini_a_b%2C+M+5.mp4',
+// const videoSources = {
+// 	SHAPES:
+// 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/videos/5%3A3/Gen-3+Alpha+2885480945%2C+Moving+in+3d+space+%2C+lorenzobertolini_a_b%2C+M+5.mp4',
+// 	SYNTHWAVE:
+// 		'https://s3.eu-central-1.amazonaws.com/dataflics.com/videos/5%3A3/Gen-3+Alpha+2619336846%2C+Moving+in+3d+space+%2C+lorenzobertolini_an_%2C+M+5.mp4',
+// };
+
+const imageSources = {
 	SYNTHWAVE:
-		'https://s3.eu-central-1.amazonaws.com/dataflics.com/videos/5%3A3/Gen-3+Alpha+2619336846%2C+Moving+in+3d+space+%2C+lorenzobertolini_an_%2C+M+5.mp4',
+		'https://s3.eu-central-1.amazonaws.com/dataflics.com/midjourney-images/5%3A3/lorenzobertolini_an_gradient_background_with_synthwave_colors_85e9f31d-9a90-472d-9b5d-85b262dc8ac6_0.png',
 };
 
 export const schema = z.object({
@@ -66,7 +73,7 @@ export const Composition: React.FC<z.infer<typeof schema>> = ({
 	invariant(apiPriceDataCenter);
 	invariant(apiPriceDataRight);
 
-	const videoSrc = videoSources.SYNTHWAVE;
+	// const videoSrc = videoSources.SYNTHWAVE;
 	// const videoSrc = videoSources.SHAPES;
 
 	const lineColorLeft = '#FF736B';
@@ -88,7 +95,8 @@ export const Composition: React.FC<z.infer<typeof schema>> = ({
 						position: 'relative',
 					}}
 				>
-					<VideoBackground src={videoSrc} />
+					{/* <VideoBackground src={videoSrc} /> */}
+					<ImageBackground src={imageSources.SYNTHWAVE} />
 
 					<BringForwardCenterTile
 						leftTile={() => {
@@ -189,17 +197,16 @@ export const Composition: React.FC<z.infer<typeof schema>> = ({
 																calculations.
 															</TextAnimationSubtle>
 														</TypographyStyle>
-														<TypographyStyle
+														{/* <TypographyStyle
 															typographyStyle={
 																theme.typography.textStyles.dataSource
 															}
 														>
 															<TextAnimationSubtle innerDelayInSeconds={0.5}>
-																Background video generation: Midjourney & Runway
-																ML.
+																Background image generation: Midjourney ML.
 															</TextAnimationSubtle>
-														</TypographyStyle>
-														<TypographyStyle
+														</TypographyStyle> */}
+														{/* <TypographyStyle
 															typographyStyle={
 																theme.typography.textStyles.dataSource
 															}
@@ -207,7 +214,7 @@ export const Composition: React.FC<z.infer<typeof schema>> = ({
 															<TextAnimationSubtle innerDelayInSeconds={0.5}>
 																Video production: Remotion.js, d3.js, React.
 															</TextAnimationSubtle>
-														</TypographyStyle>
+														</TypographyStyle> */}
 														<TypographyStyle
 															typographyStyle={
 																theme.typography.textStyles.dataSource
@@ -244,7 +251,37 @@ export const Composition: React.FC<z.infer<typeof schema>> = ({
 	);
 };
 
-const VideoBackground = ({src}: {src: string}) => {
+// const VideoBackground = ({src}: {src: string}) => {
+// 	const frame = useCurrentFrame();
+// 	const {fps, durationInFrames} = useVideoConfig();
+
+// 	const opacity = interpolate(
+// 		frame,
+// 		[durationInFrames - Math.floor(fps * 1.5), durationInFrames - 1],
+// 		[1, 0],
+// 		{
+// 			extrapolateLeft: 'clamp',
+// 			extrapolateRight: 'clamp',
+// 			easing: Easing.ease,
+// 		}
+// 	);
+
+// 	return (
+// 		<AbsoluteFill>
+// 			<Video
+// 				src={src}
+// 				style={{
+// 					opacity,
+// 					width: '100%',
+// 					height: '100%',
+// 					objectFit: 'cover',
+// 				}}
+// 			/>
+// 		</AbsoluteFill>
+// 	);
+// };
+
+const ImageBackground = ({src}: {src: string}) => {
 	const frame = useCurrentFrame();
 	const {fps, durationInFrames} = useVideoConfig();
 
@@ -260,16 +297,16 @@ const VideoBackground = ({src}: {src: string}) => {
 	);
 
 	return (
-		<Video
-			src={src}
-			style={{
-				opacity,
-				position: 'absolute',
-				width: '100%',
-				height: '100%',
-				objectFit: 'cover',
-			}}
-			playbackRate={4 / 5}
-		/>
+		<AbsoluteFill>
+			<Img
+				src={src}
+				style={{
+					opacity,
+					width: '100%',
+					height: '100%',
+					objectFit: 'cover',
+				}}
+			/>
+		</AbsoluteFill>
 	);
 };

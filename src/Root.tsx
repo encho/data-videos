@@ -301,8 +301,8 @@ export const RemotionRoot: React.FC = () => {
 						ticker: 'ETH-USD',
 						tickerLeft: 'SPX_INDEX' as const,
 						tickerRight: 'XAU-USD' as const,
-						tickerCenter: 'BTC-USD' as const,
-						timePeriod: '2Y' as const,
+						tickerCenter: 'DAX_INDEX' as const,
+						timePeriod: '1Y' as const,
 						nerdyFinanceEnv: 'PROD' as const,
 						theme: 'LORENZOBERTOLINI' as const,
 						chartTheme: 'LORENZOBERTOLINI' as const,
@@ -368,7 +368,6 @@ export const RemotionRoot: React.FC = () => {
 					}}
 				/>
 			</Folder>
-
 			<Folder name="POCs">
 				<Folder name="01-TextEffects">
 					<Folder name="TextAnimations">
@@ -672,7 +671,7 @@ export const RemotionRoot: React.FC = () => {
 				</Folder>
 
 				{/* <Folder name="05-BarCharts">
-				</Folder> */}
+        </Folder> */}
 
 				<Folder name="06-ColumnCharts">
 					<Composition
@@ -1023,7 +1022,6 @@ export const RemotionRoot: React.FC = () => {
 					/>
 				</Folder>
 			</Folder>
-
 			<Folder name="Colors">
 				<Composition
 					// You can take the "id" to render a video:
@@ -1038,7 +1036,6 @@ export const RemotionRoot: React.FC = () => {
 					defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 				/>
 			</Folder>
-
 			<Folder name="BarCharts">
 				<Composition
 					id="HorizontalBarsStar"

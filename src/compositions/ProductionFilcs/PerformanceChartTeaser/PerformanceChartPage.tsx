@@ -1,15 +1,20 @@
-import {AbsoluteFill, useVideoConfig, Sequence} from 'remotion';
+import {
+	Easing,
+	AbsoluteFill,
+	useVideoConfig,
+	Sequence,
+	useCurrentFrame,
+	interpolate,
+} from 'remotion';
 import {format} from 'date-fns';
 import {enGB} from 'date-fns/locale';
 
 import {usePage} from '../../../acetti-components/PageContext';
-import {Page, PageHeader, PageFooter} from '../../../acetti-components/Page';
+import {Page, PageHeader} from '../../../acetti-components/Page';
 import {TNerdyFinancePriceChartDataResult} from '../../../acetti-http/nerdy-finance/fetchPriceChartData';
 import {TimeseriesAnimation} from './TimeseriesAnimation';
 import {useElementDimensions} from '../../POCs/03-Page/SimplePage/useElementDimensions';
 import {TitleWithSubtitle} from '../../POCs/03-Page/TitleWithSubtitle/TitleWithSubtitle';
-import {TypographyStyle} from '../../POCs/02-TypographicLayouts/TextStyles/TextStylesComposition';
-import {TextAnimationSubtle} from '../../POCs/01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 
 const formatDate = (date: Date): string => {
 	return format(date, 'P', {locale: enGB}); // Formats to '1. Jan. 2024'
@@ -19,9 +24,17 @@ export const PerformanceChartPage: React.FC<{
 	apiPriceData: TNerdyFinancePriceChartDataResult;
 	lineColor: string;
 }> = ({apiPriceData, lineColor}) => {
-	const {fps} = useVideoConfig();
+	const {fps, durationInFrames} = useVideoConfig();
 	const {ref, dimensions} = useElementDimensions();
 	const {theme} = usePage();
+	const frame = useCurrentFrame();
+
+	const opacity = interpolate(
+		frame,
+		[durationInFrames - Math.floor(fps * 0.8), durationInFrames - 1],
+		[1, 0],
+		{extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.ease}
+	);
 
 	if (!apiPriceData) {
 		return <AbsoluteFill />;
@@ -48,7 +61,7 @@ export const PerformanceChartPage: React.FC<{
 	};
 
 	return (
-		<Page boxShadow borderRadius={20}>
+		<Page boxShadow borderRadius={20} opacity={opacity}>
 			<div
 				style={{
 					display: 'flex',

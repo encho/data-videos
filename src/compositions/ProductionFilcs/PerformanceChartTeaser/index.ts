@@ -30,4 +30,6 @@ export const PerformanceChartTeaser = {
 	fps,
 	durationInFrames: 7 * fps,
 	...videoSizes.linkedInWide,
+	// ...videoSizes.square,
+	// ...videoSizes.widescreen_16x9,
 };

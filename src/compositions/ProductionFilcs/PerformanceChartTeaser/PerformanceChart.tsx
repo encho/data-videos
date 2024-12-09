@@ -59,7 +59,7 @@ export const PerformanceChart: React.FC<{
 					yScaleAnimation={yScaleAnimation}
 					area={layoutAreas.plot}
 					timeSeries={timeSeries}
-					dotColor="#f05122"
+					dotColor={lineColor}
 					radius={8}
 				/>
 			</Position>
