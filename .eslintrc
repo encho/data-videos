@@ -4,6 +4,7 @@
 		"node": true
 	},
 	"rules": {
+		"react/prefer-read-only-props": "off",
     "react/jsx-pascal-case": "off",
 		"camelcase": "off",
 		"react/boolean-prop-naming": "off", // TODO re-enable

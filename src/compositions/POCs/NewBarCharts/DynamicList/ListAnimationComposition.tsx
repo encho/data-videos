@@ -137,6 +137,8 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
+	console.log({weirdTransitions});
+
 	const scrollingTransitions: ListAnimationTransition<{id: string}>[] = [
 		{
 			itemsTo: itemsFrom,

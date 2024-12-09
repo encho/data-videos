@@ -298,7 +298,6 @@ export const RemotionRoot: React.FC = () => {
 					id="PerformanceChartTeaser"
 					{...PerformanceChartTeaser}
 					defaultProps={{
-						ticker: 'ETH-USD',
 						tickerLeft: 'SPX_INDEX' as const,
 						tickerRight: 'XAU-USD' as const,
 						tickerCenter: 'DAX_INDEX' as const,
