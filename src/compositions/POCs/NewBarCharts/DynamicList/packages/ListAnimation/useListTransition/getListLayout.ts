@@ -24,16 +24,16 @@ export function getListLayout({
 	width,
 	height,
 	items,
-	itemHeight,
-	itemMarginTop,
-	itemMarginBottom,
+	itemSize,
+	itemMarginBefore,
+	itemMarginAfter,
 }: {
 	height: number;
 	width: number;
 	items: {id: string}[];
-	itemHeight: number;
-	itemMarginTop: number;
-	itemMarginBottom: number;
+	itemSize: number;
+	itemMarginBefore: number;
+	itemMarginAfter: number;
 }): TListLayout {
 	const rows: TGridRailSpec = items
 		.map(() => {
@@ -41,20 +41,20 @@ export function getListLayout({
 
 			rowItems.push({
 				type: 'pixel',
-				value: itemMarginTop,
-				name: 'listItemPaddingUpper',
+				value: itemMarginBefore,
+				name: 'listItemPaddingUpper', // TODO change naming
 			});
 
 			rowItems.push({
 				type: 'pixel',
-				value: itemHeight,
+				value: itemSize,
 				name: 'listItem',
 			});
 
 			rowItems.push({
 				type: 'pixel',
-				value: itemMarginBottom,
-				name: 'listItemPaddingLower',
+				value: itemMarginAfter,
+				name: 'listItemPaddingLower', // TODO change naming
 			});
 
 			return rowItems;

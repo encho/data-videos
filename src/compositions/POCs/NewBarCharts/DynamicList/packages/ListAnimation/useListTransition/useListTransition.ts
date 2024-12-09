@@ -18,6 +18,7 @@ type ListTransitionState<T> = {
 };
 
 type ListTransitionContext_Common = {
+	direction: 'vertical' | 'horizontal';
 	frame: number;
 	globalAnimationFrame: number;
 	durationInFrames: number;
@@ -61,12 +62,13 @@ export type TDynamicListTransitionContext<T extends {id: string}> =
 // TODO, this actually represents only 1 animation step. the useListTransition will have to
 // deliver potentially multiple info on transiioons,  but at least the current one...
 export function useListTransition<T extends {id: string}>({
+	direction,
 	from: fromProp,
 	to: toProp,
 	width,
 	height,
-	itemMarginTop = 0,
-	itemMarginBottom = 0,
+	itemMarginBefore = 0,
+	itemMarginAfter = 0,
 	justifyContent = 'center',
 	frame,
 	durationInFrames,
@@ -75,6 +77,7 @@ export function useListTransition<T extends {id: string}>({
 	easing = Easing.linear,
 	frameRange,
 }: {
+	direction: 'vertical' | 'horizontal';
 	from: {
 		items: T[];
 		visibleIndices: [number, number];
@@ -88,8 +91,8 @@ export function useListTransition<T extends {id: string}>({
 	frameRange: {startFrame: number; endFrame: number};
 	width: number;
 	height: number;
-	itemMarginTop?: number; // TODO not optional
-	itemMarginBottom?: number; // TODO not optional
+	itemMarginBefore?: number; // TODO not optional
+	itemMarginAfter?: number; // TODO not optional
 	justifyContent?: 'center' | 'start';
 	frame: number;
 	globalAnimationFrame: number;
@@ -108,6 +111,7 @@ export function useListTransition<T extends {id: string}>({
 	);
 
 	const common = {
+		direction,
 		frame,
 		durationInFrames,
 		globalAnimationFrame,
@@ -153,9 +157,9 @@ export function useListTransition<T extends {id: string}>({
 				width,
 				height,
 				items,
-				itemHeight: itemSizeArg,
-				itemMarginTop,
-				itemMarginBottom,
+				itemSize: itemSizeArg,
+				itemMarginBefore,
+				itemMarginAfter,
 			});
 
 			const visibleIndicesRange = layout.getVisibleIndicesRange(visibleIndices);
@@ -195,7 +199,7 @@ export function useListTransition<T extends {id: string}>({
 				},
 			};
 		},
-		[itemMarginBottom, itemMarginTop, justifyContent, width, height]
+		[itemMarginAfter, itemMarginBefore, justifyContent, width, height]
 	);
 
 	if (transitionType === 'update') {

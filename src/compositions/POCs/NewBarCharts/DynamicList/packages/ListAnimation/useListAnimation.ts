@@ -74,13 +74,10 @@ export function useListAnimation<T extends {id: string}>({
 	direction = 'vertical',
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
-	const {
-		// fps,
-		durationInFrames,
-	} = useVideoConfig();
+	const {durationInFrames} = useVideoConfig();
 
-	const ITEM_MARGIN_TOP = 0;
-	const ITEM_MARGIN_BOTTOM = 0;
+	const ITEM_MARGIN_BEFORE = 0;
+	const ITEM_MARGIN_AFTER = 0;
 
 	const frameRanges = useMemo(() => {
 		const transitionDurations = transitions.map((it) => it.durationInFrames);
@@ -171,10 +168,11 @@ export function useListAnimation<T extends {id: string}>({
 				editedTransitions[currentTransitionIndex].to.visibleIndices,
 			itemSize: editedTransitions[currentTransitionIndex].to.itemSize,
 		},
+		direction,
 		width,
 		height,
-		itemMarginTop: ITEM_MARGIN_TOP,
-		itemMarginBottom: ITEM_MARGIN_BOTTOM,
+		itemMarginBefore: ITEM_MARGIN_BEFORE,
+		itemMarginAfter: ITEM_MARGIN_AFTER,
 		easing: editedTransitions[currentTransitionIndex].easing,
 		justifyContent,
 		frame: currentRelativeFrame,
