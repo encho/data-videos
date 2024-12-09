@@ -78,12 +78,12 @@ export function useListTransition<T extends {id: string}>({
 	from: {
 		items: T[];
 		visibleIndices: [number, number];
-		itemHeight: number;
+		itemSize: number;
 	};
 	to: {
 		items: T[];
 		visibleIndices: [number, number];
-		itemHeight: number;
+		itemSize: number;
 	};
 	frameRange: {startFrame: number; endFrame: number};
 	width: number;
@@ -137,11 +137,11 @@ export function useListTransition<T extends {id: string}>({
 		({
 			items,
 			visibleIndices,
-			itemHeight: itemHeightArg,
+			itemSize: itemSizeArg,
 		}: {
 			items: T[];
 			visibleIndices: [number, number];
-			itemHeight: number;
+			itemSize: number;
 		}) => {
 			const visibleItems = getVisibleItems<T>(items, visibleIndices);
 
@@ -153,7 +153,7 @@ export function useListTransition<T extends {id: string}>({
 				width,
 				height,
 				items,
-				itemHeight: itemHeightArg,
+				itemHeight: itemSizeArg,
 				itemMarginTop,
 				itemMarginBottom,
 			});
@@ -177,7 +177,7 @@ export function useListTransition<T extends {id: string}>({
 
 			return {
 				items,
-				itemHeight: itemHeightArg,
+				itemHeight: itemSizeArg,
 				visibleIndices,
 				visibleItems,
 				layout,

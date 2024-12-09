@@ -163,13 +163,13 @@ export function useListAnimation<T extends {id: string}>({
 			items: editedTransitions[currentTransitionIndex].from.items,
 			visibleIndices:
 				editedTransitions[currentTransitionIndex].from.visibleIndices,
-			itemHeight: editedTransitions[currentTransitionIndex].from.itemSize,
+			itemSize: editedTransitions[currentTransitionIndex].from.itemSize,
 		},
 		to: {
 			items: editedTransitions[currentTransitionIndex].to.items,
 			visibleIndices:
 				editedTransitions[currentTransitionIndex].to.visibleIndices,
-			itemHeight: editedTransitions[currentTransitionIndex].to.itemSize,
+			itemSize: editedTransitions[currentTransitionIndex].to.itemSize,
 		},
 		width,
 		height,
