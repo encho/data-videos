@@ -8,7 +8,7 @@ export const calculateMetadata = async ({
 }: {
 	props: TSelectedAssetsChartbookSchema;
 }) => {
-	const nerdyENV = 'STAGE';
+	const nerdyENV = 'DEV';
 
 	const spx = await fetchNerdyFinancePriceChartData(
 		{
