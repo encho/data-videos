@@ -255,7 +255,7 @@ export function getHorizontalListLayout({
 		const paddedAreaStart = getListItemPaddedArea(visibleIndices[0]);
 		const paddedAreaEnd = getListItemPaddedArea(visibleIndices[1] - 1);
 
-		return [paddedAreaStart.y1, paddedAreaEnd.y2] as [number, number];
+		return [paddedAreaStart.x1, paddedAreaEnd.x2] as [number, number];
 	};
 
 	return {

@@ -172,8 +172,9 @@ export const ListAnimationPage: React.FC = () => {
 		transitions: scrollingTransitions,
 		easing,
 		direction: 'vertical',
+		// direction: 'horizontal',
 		// transitions: weirdTransitions,
-		// justifyContent: 'center',
+		justifyContent: 'center',
 		// fitItemSizes: true,
 	});
 
@@ -193,7 +194,11 @@ export const ListAnimationPage: React.FC = () => {
 				<div style={{position: 'relative'}}>
 					{currentTransitionContext.transitionType === 'update' ||
 					currentTransitionContext.transitionType === 'exit' ? (
-						<HtmlArea area={area_1} fill="rgba(255,0,255,0.15)">
+						<HtmlArea
+							area={area_1}
+							fill="rgba(255,0,255,0.15)"
+							style={{overflow: 'hidden'}}
+						>
 							<DisplayGridRails
 								{...currentTransitionContext.from.layout.gridLayout}
 								stroke="rgba(255,0,255,1)"
@@ -229,7 +234,11 @@ export const ListAnimationPage: React.FC = () => {
 
 					{currentTransitionContext.transitionType === 'update' ||
 					currentTransitionContext.transitionType === 'enter' ? (
-						<HtmlArea area={area_2} fill="rgba(255,0,255,0.15)">
+						<HtmlArea
+							area={area_2}
+							fill="rgba(255,0,255,0.15)"
+							style={{overflow: 'hidden'}}
+						>
 							<DisplayGridRails
 								{...currentTransitionContext.to.layout.gridLayout}
 								stroke="rgba(255,0,255,1)"

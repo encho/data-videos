@@ -168,17 +168,18 @@ export function useListTransition<T extends {id: string}>({
 			const visibleIndicesRangeSize =
 				visibleIndicesRange[1] - visibleIndicesRange[0];
 
-			// justify content
-			const yStart =
-				justifyContent === 'center'
-					? (height - visibleIndicesRangeSize) / 2
-					: 0;
+			// justify content // TODO here direction agnostic!!!j
+			const availableItemsSize = direction === 'vertical' ? height : width;
+			const freeSpace = availableItemsSize - visibleIndicesRangeSize;
 
-			const yStartUnadjusted = layout.getListItemPaddedArea(
-				visibleItems[0].id
-			).y1;
+			const adjustedStart = justifyContent === 'center' ? freeSpace / 2 : 0;
 
-			const justifyContentShift = yStart - yStartUnadjusted;
+			const unadjustedStart =
+				direction === 'vertical'
+					? layout.getListItemPaddedArea(visibleItems[0].id).y1
+					: layout.getListItemPaddedArea(visibleItems[0].id).x1;
+
+			const justifyContentShift = adjustedStart - unadjustedStart;
 
 			return {
 				items,
@@ -191,16 +192,31 @@ export function useListTransition<T extends {id: string}>({
 				justifyContentShift,
 				getListItemArea: (x: number | string) => {
 					const area = layout.getListItemArea(x);
+					if (direction === 'vertical') {
+						const shiftedArea = {
+							...area,
+							y1: area.y1 + justifyContentShift,
+							y2: area.y2 + justifyContentShift,
+						};
+						return shiftedArea;
+					}
 					const shiftedArea = {
 						...area,
-						y1: area.y1 + justifyContentShift,
-						y2: area.y2 + justifyContentShift,
+						x1: area.x1 + justifyContentShift,
+						x2: area.x2 + justifyContentShift,
 					};
 					return shiftedArea;
 				},
 			};
 		},
-		[itemMarginAfter, itemMarginBefore, justifyContent, width, height]
+		[
+			itemMarginAfter,
+			itemMarginBefore,
+			justifyContent,
+			width,
+			height,
+			direction,
+		]
 	);
 
 	if (transitionType === 'update') {
