@@ -128,9 +128,9 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 				},
 				columnChartItem: {
 					columns: {
-						columnMarginLeft: 0.3,
-						columnWidth: 2,
-						columnMarginRight: 0.3,
+						columnMarginLeft: 0.75,
+						columnWidth: 2.75,
+						columnMarginRight: 0.75,
 					},
 					rows: {
 						labelMargin: 1,

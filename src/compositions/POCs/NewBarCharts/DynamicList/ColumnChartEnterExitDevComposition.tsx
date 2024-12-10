@@ -27,7 +27,6 @@ import {
 	ListAnimationTransition,
 } from './packages/ListAnimation/useListAnimation';
 import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
-import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
 import {ColumnsTransition} from './packages/ColumnChartAnimation/ColumnsTransition/ColumnsTransition';
 import {
 	getDefaultValueLabelComponent,
@@ -37,6 +36,7 @@ import {
 	DefaultLabelComponent,
 	MeasureLabels,
 } from './packages/ColumnChartAnimation/ColumnsTransition/LabelComponent';
+import {getColumnChartItemWidth} from './packages/ColumnChartAnimation/useColumnChartTransition/getColumnChartItemLayout';
 
 export const columnChartEnterExitDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -64,10 +64,12 @@ export const ColumnChartEnterExitDevComposition: React.FC<
 };
 
 export const ListAnimationPage: React.FC = () => {
-	const {theme, baseline, contentWidth, contentHeight} = usePage();
+	const {theme, contentWidth, contentHeight} = usePage();
 	const {durationInFrames, fps} = useVideoConfig();
 
-	const ibcsSizesSpec = theme.ibcsSizes.barChartItem;
+	const baseline = 30;
+
+	const ibcsSizesSpec = theme.ibcsSizes.columnChartItem;
 	const ibcsSizesSpec_COLUMNS = theme.ibcsSizes.columnChartItem;
 
 	const LabelComponent = DefaultLabelComponent;
@@ -181,7 +183,7 @@ export const ListAnimationPage: React.FC = () => {
 		},
 	];
 
-	const ibcsItemHeightForBaseline = getBarChartItemHeight({
+	const ibcsItemWidthForBaseline = getColumnChartItemWidth({
 		baseline,
 		ibcsSizesSpec,
 	});
@@ -191,8 +193,8 @@ export const ListAnimationPage: React.FC = () => {
 		width: area_3.width,
 		height: area_3.height,
 		transitions,
-		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemSizes: true,
+		itemHeight: ibcsItemWidthForBaseline, // TODO rename to itemSize, as here it refers to the width
+		// fitItemSizes: true,
 		easing,
 		justifyContent: 'center',
 	});
@@ -205,7 +207,7 @@ export const ListAnimationPage: React.FC = () => {
 		labelHeight: labelHeight || 0,
 		valueLabelHeight: valueLabelHeight || 0,
 		negativeValueLabelHeight: negativeValueLabelHeight || 0,
-		forceNegativeValueLabelHeight: true,
+		// forceNegativeValueLabelHeight: true,
 		ibcsSizesSpec: ibcsSizesSpec_COLUMNS,
 		// globalCustomDomain: [-100, 100],
 	});
@@ -287,7 +289,7 @@ export const ListAnimationPage: React.FC = () => {
 					<Page>
 						<TypographyStyle
 							typographyStyle={theme.typography.textStyles.h1}
-							baseline={baseline}
+							// baseline={baseline}
 							marginBottom={2}
 						>
 							Column Chart Enter Exit Dev
@@ -367,96 +369,66 @@ export const ListAnimationPage: React.FC = () => {
 
 const manyItemsWithNegatives = [
 	{
-		id: 'Id-001',
-		label: 'Item 001',
+		id: 'Id-2016',
+		label: '2016',
 		value: 10,
 		color: '#FF5733',
 	},
 	{
-		id: 'Id-002',
-		label: 'Item 002',
+		id: 'Id-2017',
+		label: '2017',
 		value: 20.5,
 		color: '#33FF57',
 	},
 	{
-		id: 'Id-003',
-		label: 'Item 003',
+		id: 'Id-2018',
+		label: '2018',
 		value: 30.75,
 		color: '#3357FF',
 	},
 	{
-		id: 'Id-004',
-		label: 'Item 004',
+		id: 'Id-2019',
+		label: '2019',
 		value: -40.25,
 		color: '#FF33A1',
 	},
 	{
-		id: 'Id-011',
-		label: 'Item 011',
-		value: -55.1,
-		color: '#A133FF',
+		id: 'Id-2020',
+		label: '2020',
+		value: -25.3,
+		color: '#ff0000',
 	},
 	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: -25.3,
-		color: '#33FFF3',
+		id: 'Id-2021',
+		label: '2021',
+		value: 25.3,
+		color: '#ffff00',
 	},
-	// {
-	// 	id: 'Id-006',
-	// 	label: 'Item 006',
-	// 	value: 60.6,
-	// 	color: '#FFC733',
-	// },
-	// {
-	// 	id: 'Id-007',
-	// 	label: 'Item 007',
-	// 	value: 35.8,
-	// 	color: '#C7FF33',
-	// },
-	// {
-	// 	id: 'Id-010',
-	// 	label: 'Item 010',
-	// 	value: 45.9,
-	// 	color: '#5733FF',
-	// },
 ];
 
 const fewItemsWithJustPositives = [
 	{
-		id: 'Id-009',
-		label: 'Item 009',
-		value: -70,
+		id: 'Id-2016',
+		label: '2016',
+		value: 10,
 		color: '#FF5733',
 	},
 	{
-		id: 'Id-003',
-		label: 'Item 003',
+		id: 'Id-2017',
+		label: '2017',
+		value: 20.5,
+		color: '#33FF57',
+	},
+	{
+		id: 'Id-2018',
+		label: '2018',
 		value: 30.75,
 		color: '#3357FF',
 	},
 	{
-		id: 'Id-007',
-		label: 'Item 007',
-		value: -20.8,
-		color: '#C7FF33',
+		id: 'Id-2019',
+		label: '2019',
+		value: 12.25,
+		color: '#FF33A1',
 	},
-	{
-		id: 'Id-002',
-		label: 'Item 002',
-		value: 20.5,
-		color: '#33FF57',
-	},
-	// {
-	// 	id: 'Id-005',
-	// 	label: 'Item 005',
-	// 	value: 33.3,
-	// 	color: '#33FFF3',
-	// },
-	// {
-	// 	id: 'Id-001',
-	// 	label: 'Item 001',
-	// 	value: 12,
-	// 	color: '#FF5733',
-	// },
 ];
