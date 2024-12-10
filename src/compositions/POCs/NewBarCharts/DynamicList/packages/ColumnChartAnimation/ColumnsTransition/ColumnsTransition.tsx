@@ -9,7 +9,7 @@ import {
 } from 'remotion';
 
 import {VerticalBar, TVerticalBarComponent, getColumnRect} from './VerticalBar';
-import {ZeroLine} from './ZeroLine';
+import {ZeroLine} from '../../components/ZeroLine';
 import {getEnterKeyframes, getExitKeyframes} from './getKeyframes';
 import {TBarChartValueLabelComponent} from './ValueLabelComponent';
 import {TBarChartLabelComponent} from './LabelComponent';

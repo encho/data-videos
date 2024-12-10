@@ -195,6 +195,7 @@ export const ListAnimationPage: React.FC = () => {
 	});
 
 	const listAnimationContextForDebug = useListAnimation({
+		direction: 'vertical',
 		width: area_1.width,
 		height: area_1.height,
 		transitions,
@@ -208,6 +209,7 @@ export const ListAnimationPage: React.FC = () => {
 		listAnimationContextForDebug.currentTransitionContext;
 
 	const listAnimationContext = useListAnimation({
+		direction: 'vertical',
 		width: area_3.width,
 		height: area_3.height,
 		transitions,

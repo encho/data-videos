@@ -1,8 +1,8 @@
 import {ThemeType} from '../../../../../../acetti-themes/themeTypes';
-import {
-	getXAxisHeight,
-	getXAxisMarginTop,
-} from './XAxisTransition/getStyles_XAxis';
+// import {
+// 	getXAxisHeight,
+// 	getXAxisMarginTop,
+// } from './XAxisTransition/getStyles_XAxis';
 import {getAllColumnChartItemsWidth} from './useColumnChartTransition/getColumnChartItemLayout';
 
 export function getPerfectBaselineForWidth({

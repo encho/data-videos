@@ -14,7 +14,7 @@ import {
 	THorizontalBarComponent,
 	getBarRect,
 } from './HorizontalBar';
-import {ZeroLine} from './ZeroLine';
+import {ZeroLine} from '../../components/ZeroLine';
 import {getEnterKeyframes, getExitKeyframes} from './getKeyframes';
 import {TBarChartValueLabelComponent} from './ValueLabelComponent';
 import {TBarChartLabelComponent} from './LabelComponent';
@@ -508,7 +508,8 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 
 			<ZeroLine
 				area={plotArea}
-				x={zeroLine_x1}
+				x1={zeroLine_x1}
+				x2={zeroLine_x1}
 				y1={zeroLine_y1}
 				y2={zeroLine_y2}
 				theme={theme}
@@ -714,7 +715,8 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 				return (
 					<ZeroLine
 						area={plotArea}
-						x={zeroLine_x1}
+						x1={zeroLine_x1}
+						x2={zeroLine_x1}
 						y1={zeroLine_y1}
 						y2={zeroLine_y2}
 						theme={theme}
@@ -915,7 +917,8 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 				return (
 					<ZeroLine
 						area={plotArea}
-						x={zeroLine_x1}
+						x1={zeroLine_x1}
+						x2={zeroLine_x1}
 						y1={zeroLine_y1}
 						y2={zeroLine_y2}
 						theme={theme}

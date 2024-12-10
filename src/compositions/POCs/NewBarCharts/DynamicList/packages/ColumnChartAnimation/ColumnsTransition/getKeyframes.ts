@@ -5,9 +5,8 @@ import {
 	TKeyFrameSpec,
 } from '../../../../../Keyframes/Keyframes/keyframes';
 
-import {TBarChartItem} from '../useColumnChartTransition/useColumnChartTransition';
+import {TColumnChartItem} from '../useColumnChartTransition/useColumnChartTransition';
 
-// TODO eventually as hook, as we can memoize labelStartKeyframes etc...
 export function getEnterKeyframes({
 	fps,
 	durationInFrames,
@@ -16,7 +15,7 @@ export function getEnterKeyframes({
 }: {
 	fps: number;
 	durationInFrames: number;
-	data: TBarChartItem[];
+	data: TColumnChartItem[];
 	keyframes?: TKeyFramesGroup;
 }) {
 	if (keyframesProp) {
@@ -127,7 +126,7 @@ export function getExitKeyframes({
 }: {
 	fps: number;
 	durationInFrames: number;
-	data: TBarChartItem[];
+	data: TColumnChartItem[];
 	keyframes?: TKeyFramesGroup;
 }) {
 	if (keyframesProp) {
@@ -197,7 +196,6 @@ export function getExitKeyframes({
 	);
 
 	const keyframes = buildKeyFramesGroup(durationInFrames, fps, [
-		// ...labelStartKeyframes,
 		...zeroLineKeyframes,
 		...barKeyframes,
 	]);

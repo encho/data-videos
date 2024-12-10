@@ -2,7 +2,10 @@ import React from 'react';
 import {ScaleLinear} from 'd3-scale';
 
 import {HtmlArea, TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {RoundedTopRect, RoundedBottomRect} from './RoundedRect/RoundedRect';
+import {
+	RoundedTopRect,
+	RoundedBottomRect,
+} from '../../components/RoundedRect/RoundedRect';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
 export type TVerticalBarComponentProps = {

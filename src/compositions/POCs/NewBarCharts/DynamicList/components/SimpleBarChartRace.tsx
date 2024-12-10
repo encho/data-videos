@@ -248,6 +248,7 @@ export const SimpleBarChartRace: React.FC<{
 	});
 
 	const listAnimationContext = useListAnimation({
+		direction: 'vertical',
 		width: barsArea.width,
 		height: barsArea.height,
 		transitions,

@@ -184,6 +184,7 @@ export const ListAnimationPage: React.FC = () => {
 	});
 
 	const listAnimationContext = useListAnimation({
+		direction: 'vertical',
 		width: area_3.width,
 		height: area_3.height,
 		transitions,

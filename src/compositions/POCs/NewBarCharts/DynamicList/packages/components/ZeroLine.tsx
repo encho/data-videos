@@ -1,7 +1,7 @@
 import React from 'react';
 
-import {HtmlArea, TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
+import {HtmlArea, TGridLayoutArea} from '../../../../../../acetti-layout';
+import {ThemeType} from '../../../../../../acetti-themes/themeTypes';
 
 export const ZeroLine: React.FC<{
 	area: TGridLayoutArea;

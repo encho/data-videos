@@ -60,10 +60,11 @@ type UseListAnimationArgs<T> = {
 	transitions: ListAnimationTransition<T>[];
 	easing?: EasingFunction;
 	justifyContent?: 'start' | 'center'; // TODO add "end"
-	direction?: 'vertical' | 'horizontal';
+	direction: 'vertical' | 'horizontal';
 };
 
 export function useListAnimation<T extends {id: string}>({
+	direction,
 	width,
 	height,
 	transitions,
@@ -71,7 +72,6 @@ export function useListAnimation<T extends {id: string}>({
 	fitItemSizes = false,
 	easing: easingProp = Easing.ease,
 	justifyContent = 'start',
-	direction = 'vertical',
 }: UseListAnimationArgs<T>): ListAnimationContext<T> {
 	const frame = useCurrentFrame();
 	const {durationInFrames} = useVideoConfig();

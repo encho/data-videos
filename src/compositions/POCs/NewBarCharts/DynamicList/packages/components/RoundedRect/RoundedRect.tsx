@@ -1,17 +1,5 @@
 import React from 'react';
 
-// interface HeightProp {
-// 	height: number;
-// 	baseline?: never; // Ensures baseline cannot be provided when height is present
-// }
-
-// interface BaselineProp {
-// 	baseline: number;
-// 	height?: never; // Ensures height cannot be provided when baseline is present
-// }
-
-// export type TBaselineOrHeight = HeightProp | BaselineProp;
-
 interface RoundedRectProps {
 	x: number; // X-coordinate of the rectangle's top-left corner
 	y: number; // Y-coordinate of the rectangle's top-left corner
@@ -22,6 +10,70 @@ interface RoundedRectProps {
 	stroke?: string;
 	strokeWidth?: number;
 }
+
+export const RoundedBottomRect: React.FC<RoundedRectProps> = ({
+	x,
+	y,
+	width,
+	height,
+	radius,
+	fill = 'magenta',
+	stroke = 'transparent',
+	strokeWidth = 0,
+}) => {
+	// Ensure the radius does not exceed half the width or height
+	const r = Math.min(radius, width / 2, height / 2);
+
+	// Define the path for a rectangle with only the bottom corners rounded
+	const path = `
+    M ${x} ${y}
+    H ${x + width}
+    V ${y + height - r}
+    A ${r} ${r} 0 0 1 ${x + width - r} ${y + height}
+    H ${x + r}
+    A ${r} ${r} 0 0 1 ${x} ${y + height - r}
+    V ${y}
+    Z
+  `;
+
+	return (
+		<svg>
+			<path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+		</svg>
+	);
+};
+
+export const RoundedTopRect: React.FC<RoundedRectProps> = ({
+	x,
+	y,
+	width,
+	height,
+	radius,
+	fill = 'magenta',
+	stroke = 'transparent',
+	strokeWidth = 0,
+}) => {
+	// Ensure the radius does not exceed half the width or height
+	const r = Math.min(radius, width / 2, height / 2);
+
+	// Define the path for a rectangle with only the top corners rounded
+	const path = `
+    M ${x + r} ${y}
+    H ${x + width - r}
+    A ${r} ${r} 0 0 1 ${x + width} ${y + r}
+    V ${y + height}
+    H ${x}
+    V ${y + r}
+    A ${r} ${r} 0 0 1 ${x + r} ${y}
+    Z
+  `;
+
+	return (
+		<svg>
+			<path d={path} fill={fill} stroke={stroke} strokeWidth={strokeWidth} />
+		</svg>
+	);
+};
 
 export const RoundedRightRect: React.FC<RoundedRectProps> = ({
 	x,
