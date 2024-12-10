@@ -132,43 +132,40 @@ export const ColumnsTransition: React.FC<TColumnsTransitionProps> = ({
 
 	invariant(listTransitionContext.transitionType === 'exit');
 
-	return (
-		<div
-			style={{
-				color: 'yellow',
-				padding: 50,
-				fontSize: 50,
-				backgroundColor: 'red',
-			}}
-		>
-			EXIT
-		</div>
-	);
-	// TODO implement:
 	// return (
-	// 	<BarsTransitionExit
-	// 		showLayout={showLayout}
-	// 		listTransitionContext={listTransitionContext}
-	// 		barChartTransitionContext={barChartTransitionContext}
-	// 		LabelComponent={LabelComponent}
-	// 		ValueLabelComponent={ValueLabelComponent}
-	// 		HorizontalBarComponent={HorizontalBarComponent}
-	// 		keyframes={exitKeyframes}
-	// 		theme={theme}
-	// 		baseline={baseline}
-	// 	/>
+	// 	<div
+	// 		style={{
+	// 			color: 'yellow',
+	// 			padding: 50,
+	// 			fontSize: 50,
+	// 			backgroundColor: 'red',
+	// 		}}
+	// 	>
+	// 		EXIT
+	// 	</div>
 	// );
+	return (
+		<ColumnsTransitionExit
+			showLayout={showLayout}
+			listTransitionContext={listTransitionContext}
+			columnChartTransitionContext={columnChartTransitionContext}
+			LabelComponent={LabelComponent}
+			ValueLabelComponent={ValueLabelComponent}
+			VerticalBarComponent={VerticalBarComponent}
+			keyframes={exitKeyframes}
+			theme={theme}
+			baseline={baseline}
+		/>
+	);
 };
 
 const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 	showLayout,
 	listTransitionContext,
 	columnChartTransitionContext,
-	//
 	LabelComponent,
 	ValueLabelComponent,
 	VerticalBarComponent,
-	//
 	keyframes: keyframesProp,
 	theme,
 	baseline,
@@ -771,207 +768,214 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 // TODO think about if we here do not need getListItems_Enter
 // also: these are not really hooks but just memoized functions of TListTransitionContext
 
-// const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
-// 	showLayout,
-// 	listTransitionContext,
-// 	LabelComponent,
-// 	ValueLabelComponent,
-// 	HorizontalBarComponent,
-// 	barChartTransitionContext,
-// 	keyframes: keyframesProp,
-// 	theme,
-// 	baseline,
-// }) => {
-// 	const {fps} = useVideoConfig();
+const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
+	showLayout,
+	listTransitionContext,
+	columnChartTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	VerticalBarComponent,
+	keyframes: keyframesProp,
+	theme,
+	baseline,
+}) => {
+	const {fps} = useVideoConfig();
 
-// 	const {frame, durationInFrames, frameRange} = listTransitionContext;
+	const {frame, durationInFrames, frameRange} = listTransitionContext;
 
-// 	const {visibleItems} = listTransitionContext.from;
+	const {visibleItems} = listTransitionContext.from;
 
-// 	const keyframes = getExitKeyframes({
-// 		fps,
-// 		durationInFrames,
-// 		data: visibleItems,
-// 		keyframes: keyframesProp,
-// 	});
+	const keyframes = getExitKeyframes({
+		fps,
+		durationInFrames,
+		data: visibleItems,
+		keyframes: keyframesProp,
+	});
 
-// 	const {xScale} = barChartTransitionContext;
+	const {yScale} = columnChartTransitionContext;
 
-// 	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
-// 		barChartTransitionContext.barChartItemLayout;
+	const {columnArea, labelArea, valueLabelArea, negativeValueLabelArea} =
+		columnChartTransitionContext.columnChartItemLayout;
 
-// 	const rowsInfo = visibleItems.map((dataItem) => {
-// 		const area = listTransitionContext.from.getListItemArea(dataItem.id);
-// 		return {area, dataItem};
-// 	});
+	const columnsInfo = visibleItems.map((dataItem) => {
+		const area = listTransitionContext.from.getListItemArea(dataItem.id);
+		return {area, dataItem};
+	});
 
-// 	// const GRID_RAILS_COLOR = 'magenta';
-// 	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
+	// const GRID_RAILS_COLOR = 'magenta';
+	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
 
-// 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
-// 	const {plotArea} = barChartTransitionContext;
-// 	const zeroLine_x1 = xScale(0);
+	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
+	const {plotArea} = columnChartTransitionContext;
+	const zeroLine_y1 = yScale(0);
 
-// 	return (
-// 		<Sequence
-// 			from={frameRange.startFrame}
-// 			durationInFrames={durationInFrames}
-// 			layout="none"
-// 		>
-// 			{rowsInfo.map(({dataItem, area}) => {
-// 				const keyframe_valueLabel_disappear = getKeyFrame(
-// 					keyframes,
-// 					'VALUE_LABEL_DISAPPEAR__' + dataItem.id
-// 				);
+	return (
+		<Sequence
+			from={frameRange.startFrame}
+			durationInFrames={durationInFrames}
+			layout="none"
+		>
+			{columnsInfo.map(({dataItem, area}) => {
+				const keyframe_valueLabel_disappear = getKeyFrame(
+					keyframes,
+					'VALUE_LABEL_DISAPPEAR__' + dataItem.id
+				);
 
-// 				const currentValueEasingPercentage = getKeyFramesInterpolator(
-// 					keyframes,
-// 					[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
-// 					[0, 1],
-// 					[Easing.ease]
-// 				);
+				const currentValueEasingPercentage = getKeyFramesInterpolator(
+					keyframes,
+					[`BAR_EXIT_START__${dataItem.id}`, `BAR_EXIT_END__${dataItem.id}`],
+					[0, 1],
+					[Easing.ease]
+				);
 
-// 				const currentValue = interpolate(
-// 					currentValueEasingPercentage(frame),
-// 					[0, 1],
-// 					[dataItem.value, 0]
-// 				);
+				const currentValue = interpolate(
+					currentValueEasingPercentage(frame),
+					[0, 1],
+					[dataItem.value, 0]
+				);
 
-// 				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+				// const currentBarWidth = Math.abs(yScale(currentValue) - zeroLine_y1);
 
-// 				const relativeBarPositions = {
-// 					y: 0,
-// 					x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-// 					height: barArea.height,
-// 					width: currentBarWidth,
-// 				};
+				// const relativeBarPositions = {
+				// 	y: 0,
+				// 	x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
+				// 	height: barArea.height,
+				// 	width: currentBarWidth,
+				// };
 
-// 				// the value label margins
-// 				const positiveValueLabelMarginLeft =
-// 					-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
+				const relativeBarPositions = getColumnRect({
+					area: columnArea,
+					value: currentValue,
+					yScale,
+				});
 
-// 				const negativeValueLabelMarginLeft = relativeBarPositions.x;
+				// the value label margins
+				// const positiveValueLabelMarginLeft =
+				// 	-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
 
-// 				const barColor = dataItem.color;
+				// const negativeValueLabelMarginLeft = relativeBarPositions.x;
 
-// 				const isPositiveBarOrZero = dataItem.value >= 0;
+				const barColor = dataItem.color;
 
-// 				return (
-// 					<HtmlArea key={dataItem.id} area={area}>
-// 						{showLayout ? (
-// 							<div style={{position: 'absolute'}}>
-// 								<DisplayGridRails
-// 									{...barChartTransitionContext.barChartItemLayout.gridLayout}
-// 									stroke={GRID_RAILS_COLOR}
-// 								/>
-// 							</div>
-// 						) : null}
+				const isPositiveBarOrZero = dataItem.value >= 0;
 
-// 						{/* the label */}
-// 						<HtmlArea area={labelArea}>
-// 							<LabelComponent
-// 								animateExit
-// 								animateEnter={false}
-// 								id={dataItem.id}
-// 								baseline={baseline}
-// 								theme={theme}
-// 								label={dataItem.label}
-// 							/>
-// 						</HtmlArea>
+				return (
+					<HtmlArea key={dataItem.id} area={area}>
+						{showLayout ? (
+							<div style={{position: 'absolute'}}>
+								<DisplayGridRails
+									{...columnChartTransitionContext.columnChartItemLayout
+										.gridLayout}
+									stroke={GRID_RAILS_COLOR}
+								/>
+							</div>
+						) : null}
 
-// 						<HorizontalBarComponent
-// 							animateExit
-// 							animateEnter={false}
-// 							id={dataItem.id}
-// 							label={dataItem.label}
-// 							baseline={baseline}
-// 							theme={theme}
-// 							valueFrom={dataItem.value}
-// 							currentValue={currentValue}
-// 							currentColor={barColor}
-// 							xScale={xScale}
-// 							area={barArea}
-// 						/>
+						{/* the label */}
+						<HtmlArea area={labelArea}>
+							<LabelComponent
+								animateExit
+								animateEnter={false}
+								id={dataItem.id}
+								baseline={baseline}
+								theme={theme}
+								label={dataItem.label}
+							/>
+						</HtmlArea>
 
-// 						{/* the negative value label */}
-// 						<Sequence
-// 							durationInFrames={keyframe_valueLabel_disappear.frame}
-// 							layout="none"
-// 						>
-// 							{isPositiveBarOrZero ? null : (
-// 								<HtmlArea
-// 									area={negativeValueLabelArea}
-// 									style={{marginLeft: negativeValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										animateExit
-// 										animateEnter={false}
-// 										id={dataItem.id}
-// 										baseline={baseline}
-// 										theme={theme}
-// 										value={dataItem.value}
-// 										label={dataItem.label}
-// 									/>
-// 								</HtmlArea>
-// 							)}
+						<VerticalBarComponent
+							animateExit
+							animateEnter={false}
+							id={dataItem.id}
+							label={dataItem.label}
+							baseline={baseline}
+							theme={theme}
+							valueFrom={dataItem.value}
+							currentValue={currentValue}
+							currentColor={barColor}
+							yScale={yScale}
+							area={columnArea}
+						/>
 
-// 							{/* the value label */}
-// 							{isPositiveBarOrZero ? (
-// 								<HtmlArea
-// 									area={valueLabelArea}
-// 									style={{marginLeft: positiveValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										animateExit
-// 										animateEnter={false}
-// 										id={dataItem.id}
-// 										baseline={baseline}
-// 										theme={theme}
-// 										value={dataItem.value}
-// 										label={dataItem.label}
-// 									/>
-// 								</HtmlArea>
-// 							) : null}
-// 						</Sequence>
-// 					</HtmlArea>
-// 				);
-// 			})}
+						{/* the negative value label */}
+						<Sequence
+							durationInFrames={keyframe_valueLabel_disappear.frame}
+							layout="none"
+						>
+							{isPositiveBarOrZero ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									// style={{marginLeft: negativeValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
+										animateExit
+										animateEnter={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										value={dataItem.value}
+										label={dataItem.label}
+									/>
+								</HtmlArea>
+							)}
 
-// 			{/* the zero line */}
-// 			{(() => {
-// 				const zeroLine_y1_full = 0;
-// 				const zeroLine_y2_full = plotArea.height;
+							{/* the value label */}
+							{isPositiveBarOrZero ? (
+								<HtmlArea
+									area={valueLabelArea}
+									// style={{marginLeft: positiveValueLabelMarginLeft}}
+								>
+									<ValueLabelComponent
+										animateExit
+										animateEnter={false}
+										id={dataItem.id}
+										baseline={baseline}
+										theme={theme}
+										value={dataItem.value}
+										label={dataItem.label}
+									/>
+								</HtmlArea>
+							) : null}
+						</Sequence>
+					</HtmlArea>
+				);
+			})}
 
-// 				// TODO eventually useCallback at start of the component to have more efficiency
-// 				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
-// 					keyframes,
-// 					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
-// 					[zeroLine_y1_full, zeroLine_y2_full],
-// 					[Easing.ease]
-// 				);
+			{/* the zero line */}
+			{/* {(() => {
+				const zeroLine_y1_full = 0;
+				const zeroLine_y2_full = plotArea.height;
 
-// 				// TODO eventually useCallback at start of the component to have more efficiency
-// 				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
-// 					keyframes,
-// 					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
-// 					[zeroLine_y2_full, zeroLine_y2_full],
-// 					[Easing.ease]
-// 				);
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
+					[zeroLine_y1_full, zeroLine_y2_full],
+					[Easing.ease]
+				);
 
-// 				const zeroLine_y1 = interpolateZeroLine__y1(frame);
-// 				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+				// TODO eventually useCallback at start of the component to have more efficiency
+				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+					keyframes,
+					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
+					[zeroLine_y2_full, zeroLine_y2_full],
+					[Easing.ease]
+				);
 
-// 				return (
-// 					<ZeroLine
-// 						area={plotArea}
-// 						x={zeroLine_x1}
-// 						y1={zeroLine_y1}
-// 						y2={zeroLine_y2}
-// 						theme={theme}
-// 						baseline={baseline}
-// 					/>
-// 				);
-// 			})()}
-// 		</Sequence>
-// 	);
-// };
+				const zeroLine_y1 = interpolateZeroLine__y1(frame);
+				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+
+				return (
+					<ZeroLine
+						area={plotArea}
+						x={zeroLine_x1}
+						y1={zeroLine_y1}
+						y2={zeroLine_y2}
+						theme={theme}
+						baseline={baseline}
+					/>
+				);
+			})()} */}
+		</Sequence>
+	);
+};
