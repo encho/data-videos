@@ -26,7 +26,7 @@ import {
 	useListAnimation,
 	ListAnimationTransition,
 } from './packages/ListAnimation/useListAnimation';
-import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {TColumnChartItem} from './packages/ColumnChartAnimation/useColumnChartTransition/useColumnChartTransition';
 import {ColumnsTransition} from './packages/ColumnChartAnimation/ColumnsTransition/ColumnsTransition';
 import {
 	getDefaultValueLabelComponent,
@@ -160,7 +160,7 @@ export const ListAnimationPage: React.FC = () => {
 	const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 	// const easing = Easing.bounce;
 
-	const transitions: ListAnimationTransition<TBarChartItem>[] = [
+	const transitions: ListAnimationTransition<TColumnChartItem>[] = [
 		{
 			itemsTo: fewItemsWithJustPositives,
 			durationInFrames: duration_0,
@@ -389,7 +389,7 @@ const manyItemsWithNegatives = [
 	{
 		id: 'Id-2019',
 		label: '2019',
-		value: -40.25,
+		value: 12.25,
 		color: '#FF33A1',
 	},
 	{
