@@ -293,7 +293,6 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									// style={{margin: negativeValueLabelMarginLeft}}
 									style={{marginTop: negativeValueLabelMarginTop}}
 								>
 									<ValueLabelComponent
@@ -843,17 +842,17 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 				// 	width: currentBarWidth,
 				// };
 
-				const relativeBarPositions = getColumnRect({
+				const columnRect = getColumnRect({
 					area: columnArea,
 					value: currentValue,
 					yScale,
 				});
 
 				// the value label margins
-				// const positiveValueLabelMarginLeft =
-				// 	-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
+				const positiveValueLabelMarginTop = columnRect.y;
 
-				// const negativeValueLabelMarginLeft = relativeBarPositions.x;
+				const negativeValueLabelMarginTop =
+					-1 * (columnArea.height - columnRect.y - columnRect.height);
 
 				const barColor = dataItem.color;
 
@@ -905,7 +904,7 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									// style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginTop: negativeValueLabelMarginTop}}
 								>
 									<ValueLabelComponent
 										animateExit
@@ -923,7 +922,7 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									// style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginTop: positiveValueLabelMarginTop}}
 								>
 									<ValueLabelComponent
 										animateExit
@@ -942,40 +941,41 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 			})}
 
 			{/* the zero line */}
-			{/* {(() => {
-				const zeroLine_y1_full = 0;
-				const zeroLine_y2_full = plotArea.height;
+			{(() => {
+				const zeroLine_x1_full = 0;
+				const zeroLine_x2_full = plotArea.width;
 
 				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+				const interpolateZeroLine__x1 = getKeyFramesInterpolator(
 					keyframes,
 					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
-					[zeroLine_y1_full, zeroLine_y2_full],
+					[zeroLine_x1_full, zeroLine_x2_full],
 					[Easing.ease]
 				);
 
 				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+				const interpolateZeroLine__x2 = getKeyFramesInterpolator(
 					keyframes,
 					['ZEROLINE_EXIT_START', 'ZEROLINE_EXIT_END'],
-					[zeroLine_y2_full, zeroLine_y2_full],
+					[zeroLine_x2_full, zeroLine_x2_full],
 					[Easing.ease]
 				);
 
-				const zeroLine_y1 = interpolateZeroLine__y1(frame);
-				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+				const zeroLine_x1 = interpolateZeroLine__x1(frame);
+				const zeroLine_x2 = interpolateZeroLine__x2(frame);
 
 				return (
 					<ZeroLine
 						area={plotArea}
-						x={zeroLine_x1}
+						x1={zeroLine_x1}
+						x2={zeroLine_x2}
 						y1={zeroLine_y1}
-						y2={zeroLine_y2}
+						y2={zeroLine_y1}
 						theme={theme}
 						baseline={baseline}
 					/>
 				);
-			})()} */}
+			})()}
 		</Sequence>
 	);
 };
