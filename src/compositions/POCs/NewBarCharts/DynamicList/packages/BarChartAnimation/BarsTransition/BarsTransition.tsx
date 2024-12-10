@@ -8,7 +8,12 @@ import {
 	Easing,
 } from 'remotion';
 
-import {HorizontalBar, THorizontalBarComponent} from './HorizontalBar';
+import {TGridLayoutArea} from '../../../../../../../acetti-layout';
+import {
+	HorizontalBar,
+	THorizontalBarComponent,
+	getBarRect,
+} from './HorizontalBar';
 import {ZeroLine} from './ZeroLine';
 import {getEnterKeyframes, getExitKeyframes} from './getKeyframes';
 import {TBarChartValueLabelComponent} from './ValueLabelComponent';
@@ -185,20 +190,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						{}
 					);
 
-					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					const barRect = getBarRect({
+						value: currentValue,
+						area: barArea,
+						xScale,
+					});
 
-					const relativeBarPositions = {
-						y: 0,
-						x: item.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-						height: barArea.height,
-						width: currentBarWidth,
-					};
-
-					// the value label margins
-					const positiveValueLabelMarginLeft =
-						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
-
-					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+					const {leftSpace, rightSpace} = getBarRectSpaceInArea({
+						barRect,
+						area: barArea,
+					});
 
 					const isPositiveBarOrZero = item.value >= 0;
 
@@ -243,7 +244,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginLeft: leftSpace}}
 								>
 									<ValueLabelComponent
 										id={item.id}
@@ -260,7 +261,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginLeft: -1 * rightSpace}}
 								>
 									<ValueLabelComponent
 										id={item.id}
@@ -292,23 +293,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						{}
 					);
 
-					// see also useAnimatedBarChartLayout line 100 ff.
-					// const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
-					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					const barRect = getBarRect({
+						value: currentValue,
+						area: barArea,
+						xScale,
+					});
 
-					// TODO rather as Area format with x1 x2 y1 y2 height width
-					const relativeBarPositions = {
-						y: 0,
-						x: item.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-						height: barArea.height,
-						width: currentBarWidth,
-					};
-
-					// the value label margins
-					const positiveValueLabelMarginLeft =
-						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
-
-					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+					const {leftSpace, rightSpace} = getBarRectSpaceInArea({
+						barRect,
+						area: barArea,
+					});
 
 					const barColor = item.color;
 
@@ -354,7 +348,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginLeft: leftSpace}}
 								>
 									<ValueLabelComponent
 										animateEnter
@@ -371,7 +365,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginLeft: -1 * rightSpace}}
 								>
 									<ValueLabelComponent
 										id={item.id}
@@ -405,21 +399,16 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 						[itemFrom.value, itemTo.value]
 					);
 
-					// see also useAnimatedBarChartLayout line 100 ff.
-					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					const barRect = getBarRect({
+						value: currentValue,
+						area: barArea,
+						xScale,
+					});
 
-					const relativeBarPositions = {
-						y: 0,
-						x: currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-						height: barArea.height,
-						width: currentBarWidth,
-					};
-
-					// the value label margins
-					const positiveValueLabelMarginLeft =
-						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
-
-					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+					const {leftSpace, rightSpace} = getBarRectSpaceInArea({
+						barRect,
+						area: barArea,
+					});
 
 					const isPositiveBarOrZero = currentValue >= 0;
 
@@ -476,7 +465,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginLeft: leftSpace}}
 								>
 									<ValueLabelComponent
 										animateEnter
@@ -499,7 +488,7 @@ const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginLeft: -1 * rightSpace}}
 								>
 									<ValueLabelComponent
 										id={itemTo.id}
@@ -603,20 +592,16 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 					[0, dataItem.value]
 				);
 
-				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+				const barRect = getBarRect({
+					value: currentValue,
+					area: barArea,
+					xScale,
+				});
 
-				const relativeBarPositions = {
-					y: 0,
-					x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-					height: barArea.height,
-					width: currentBarWidth,
-				};
-
-				// the value label margins
-				const positiveValueLabelMarginLeft =
-					-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
-
-				const negativeValueLabelMarginLeft = relativeBarPositions.x;
+				const {leftSpace, rightSpace} = getBarRectSpaceInArea({
+					barRect,
+					area: barArea,
+				});
 
 				const isPositiveBarOrZero = dataItem.value >= 0;
 
@@ -666,7 +651,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginLeft: leftSpace}}
 								>
 									<ValueLabelComponent
 										animateEnter
@@ -684,7 +669,7 @@ const BarsTransitionEnter: React.FC<TBarsTransitionEnterProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginLeft: -1 * rightSpace}}
 								>
 									<ValueLabelComponent
 										animateEnter
@@ -807,20 +792,16 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 					[dataItem.value, 0]
 				);
 
-				const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+				const barRect = getBarRect({
+					value: currentValue,
+					area: barArea,
+					xScale,
+				});
 
-				const relativeBarPositions = {
-					y: 0,
-					x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-					height: barArea.height,
-					width: currentBarWidth,
-				};
-
-				// the value label margins
-				const positiveValueLabelMarginLeft =
-					-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
-
-				const negativeValueLabelMarginLeft = relativeBarPositions.x;
+				const {leftSpace, rightSpace} = getBarRectSpaceInArea({
+					barRect,
+					area: barArea,
+				});
 
 				const barColor = dataItem.color;
 
@@ -871,7 +852,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginLeft: negativeValueLabelMarginLeft}}
+									style={{marginLeft: leftSpace}}
 								>
 									<ValueLabelComponent
 										animateExit
@@ -889,7 +870,7 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 							{isPositiveBarOrZero ? (
 								<HtmlArea
 									area={valueLabelArea}
-									style={{marginLeft: positiveValueLabelMarginLeft}}
+									style={{marginLeft: -1 * rightSpace}}
 								>
 									<ValueLabelComponent
 										animateExit
@@ -944,4 +925,17 @@ const BarsTransitionExit: React.FC<TBarsTransitionExitProps> = ({
 			})()}
 		</Sequence>
 	);
+};
+
+const getBarRectSpaceInArea = ({
+	barRect,
+	area,
+}: {
+	barRect: {x: number; y: number; width: number; height: number};
+	area: TGridLayoutArea;
+}) => {
+	const leftSpace = barRect.x;
+	const rightSpace = area.width - (barRect.x + barRect.width);
+
+	return {leftSpace, rightSpace};
 };

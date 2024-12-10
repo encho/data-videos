@@ -75,3 +75,26 @@ export const HorizontalBar: React.FC<THorizontalBarComponentProps> = ({
 		</HtmlArea>
 	);
 };
+
+export function getBarRect({
+	area,
+	xScale,
+	value,
+}: {
+	area: TGridLayoutArea;
+	xScale: ScaleLinear<number, number>;
+	value: number;
+}) {
+	const zeroLine_x = xScale(0);
+
+	const currentBarWidth = Math.abs(xScale(value) - zeroLine_x);
+
+	const barRect = {
+		y: 0,
+		x: value >= 0 ? zeroLine_x : zeroLine_x - currentBarWidth,
+		height: area.height,
+		width: currentBarWidth,
+	};
+
+	return barRect;
+}
