@@ -9,6 +9,11 @@ import {BacktestChart} from './compositions/ProductionFilcs/BacktestChart';
 import {BundesligaTabelle} from './compositions/ProductionFilcs/BundesligaTabelle';
 
 import {
+	ColumnChartEnterExitDevComposition,
+	columnChartEnterExitDevCompositionSchema,
+} from './compositions/POCs/NewBarCharts/DynamicList/ColumnChartEnterExitDevComposition';
+
+import {
 	BringForwardCenterTileComposition,
 	bringForwardCenterTileCompositionSchema,
 } from './compositions/POCs/3D-Experiments/BrintForwardCenterTile/BringForwardCenterTileComposition';
@@ -962,6 +967,18 @@ export const RemotionRoot: React.FC = () => {
 						{...videoSizes.widescreen_16x9}
 						height={2500}
 						schema={barChartEnterExitDevCompositionSchema}
+						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
+					/>
+					<Composition
+						// You can take the "id" to render a video:
+						// npx remotion render src/index.ts <id> out/video.mp4
+						id="ColumnChartEnterExitDev"
+						component={ColumnChartEnterExitDevComposition}
+						durationInFrames={30 * 12}
+						fps={30}
+						{...videoSizes.widescreen_16x9}
+						height={2500}
+						schema={columnChartEnterExitDevCompositionSchema}
 						defaultProps={{themeEnum: 'LORENZOBERTOLINI' as const}}
 					/>
 					<Composition
