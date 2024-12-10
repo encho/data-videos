@@ -42,9 +42,7 @@ export const selectedAssetsChartbookSchema = z.object({
 	themeEnum: zThemeEnum,
 	data: z.array(zNerdyFinancePriceChartDataResult),
 	barChartData: zBarChartItems,
-	dataInfo: z.array(
-		z.object({ticker: z.string(), formatter: z.string(), color: zColor()})
-	),
+	dataInfo: z.array(z.object({ticker: z.string(), color: zColor()})),
 	singleSparklineDurationInSeconds: z.number(),
 	barChartDurationInSeconds: z.number(),
 	lastSlideDurationInSeconds: z.number(),
@@ -62,7 +60,6 @@ type FlicProps = {
 	barChartData: TBarChartItems;
 	dataInfo: {
 		ticker: string;
-		formatter: string;
 		color: string;
 	}[];
 	data: TNerdyFinancePriceChartDataResult[];
@@ -72,19 +69,10 @@ type FlicProps = {
 };
 
 function getDataColor(
-	dataInfo: {ticker: string; color: string; formatter: string}[],
+	dataInfo: {ticker: string; color: string}[],
 	ticker: string
 ) {
 	const color = dataInfo.find((it) => it.ticker === ticker)?.color || 'magenta';
-	return color;
-}
-
-function getDataFormatter(
-	dataInfo: {ticker: string; color: string; formatter: string}[],
-	ticker: string
-) {
-	const color =
-		dataInfo.find((it) => it.ticker === ticker)?.formatter || '0.00';
 	return color;
 }
 
