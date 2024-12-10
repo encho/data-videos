@@ -91,18 +91,6 @@ export const ColumnsTransition: React.FC<TColumnsTransitionProps> = ({
 	baseline,
 }) => {
 	if (listTransitionContext.transitionType === 'update') {
-		// return (
-		// 	<div
-		// 		style={{
-		// 			color: 'yellow',
-		// 			padding: 50,
-		// 			fontSize: 50,
-		// 			backgroundColor: 'red',
-		// 		}}
-		// 	>
-		// 		UPDATE
-		// 	</div>
-		// );
 		return (
 			<ColumnsTransitionUpdate
 				showLayout={showLayout}
