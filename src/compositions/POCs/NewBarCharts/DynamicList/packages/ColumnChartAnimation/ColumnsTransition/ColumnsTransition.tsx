@@ -833,15 +833,6 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 					[dataItem.value, 0]
 				);
 
-				// const currentBarWidth = Math.abs(yScale(currentValue) - zeroLine_y1);
-
-				// const relativeBarPositions = {
-				// 	y: 0,
-				// 	x: dataItem.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-				// 	height: barArea.height,
-				// 	width: currentBarWidth,
-				// };
-
 				const columnRect = getColumnRect({
 					area: columnArea,
 					value: currentValue,
