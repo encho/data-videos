@@ -12,8 +12,6 @@ import {PerformanceCompareChart} from './PerformanceCompareChart';
 import {DisplayGridLayout} from '../../../acetti-layout';
 import {useXAxisAreaHeight} from '../../POCs/09-Timeseries/utils/Animated_XAxis';
 import {HighlightPeriodsMulti} from '../../../acetti-ts-components/HighlightPeriodsMulti';
-import {SlideOut, SlideIn} from '../../../SlideIn';
-import {ObliquePlatte} from '../../../acetti-components/ObliquePlatte';
 import {TimeSeries} from '../../../acetti-ts-utils/timeSeries/timeSeries';
 import {Platte3D_SlideInAndOut} from '../../POCs/3D-Experiments/ShearedWrappers/Platte3D_SlideInAndOut';
 

@@ -251,8 +251,8 @@ export const SimpleBarChartRace: React.FC<{
 		width: barsArea.width,
 		height: barsArea.height,
 		transitions,
-		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemSizes: fitItemsHeight, // TODO rename to fitItemsHeight
+		itemSize: ibcsItemHeightForBaseline,
+		fitItemSizes: fitItemsHeight,
 		easing,
 		justifyContent,
 	});

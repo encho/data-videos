@@ -434,10 +434,7 @@ export const SimpleBarChart_2x2: React.FC<{
 						</HtmlArea>
 
 						<Sequence from={Math.floor(fps * 0.5)} layout="none">
-							<HtmlArea
-								area={areaLowerLeft}
-								// fill="rgba(255,0,255,0.2)"
-							>
+							<HtmlArea area={areaLowerLeft}>
 								<SimpleBarChart
 									forceNegativeValueLabelWidth={isThereAnyNegativeData}
 									showLayout={showLayout}

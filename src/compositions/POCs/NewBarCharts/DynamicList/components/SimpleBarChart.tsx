@@ -217,7 +217,6 @@ export const SimpleBarChart: React.FC<{
 	const duration_enter = Math.floor(fps * 3);
 	const duration_exit = durationInFrames - duration_enter;
 
-	// const easing = Easing.bezier(0.16, 1, 0.3, 1); // easeOutExpo
 	const easing = Easing.bounce;
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
@@ -240,8 +239,8 @@ export const SimpleBarChart: React.FC<{
 		width: barsArea.width,
 		height: barsArea.height,
 		transitions,
-		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
-		fitItemSizes: fitItemsHeight, // TODO rename to fitItemsHeight
+		itemSize: ibcsItemHeightForBaseline,
+		fitItemSizes: fitItemsHeight,
 		easing,
 		justifyContent,
 	});

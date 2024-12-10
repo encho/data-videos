@@ -55,7 +55,7 @@ export type ListAnimationContext<T extends {id: string}> = {
 type UseListAnimationArgs<T> = {
 	width: number;
 	height: number;
-	itemHeight?: number;
+	itemSize?: number;
 	fitItemSizes?: boolean;
 	transitions: ListAnimationTransition<T>[];
 	easing?: EasingFunction;
@@ -67,7 +67,7 @@ export function useListAnimation<T extends {id: string}>({
 	width,
 	height,
 	transitions,
-	itemHeight = 100,
+	itemSize = 100,
 	fitItemSizes = false,
 	easing: easingProp = Easing.ease,
 	justifyContent = 'start',
@@ -113,11 +113,11 @@ export function useListAnimation<T extends {id: string}>({
 
 		const itemSizeFrom = fitItemSizes
 			? itemsAvailableSpace / visibleItemsFrom.length
-			: itemHeight;
+			: itemSize;
 
 		const itemSizeTo = fitItemSizes
 			? itemsAvailableSpace / visibleItemsTo.length
-			: itemHeight;
+			: itemSize;
 
 		const easing = currentTransition.easing
 			? currentTransition.easing

@@ -187,7 +187,7 @@ export const ListAnimationPage: React.FC = () => {
 		width: area_3.width,
 		height: area_3.height,
 		transitions,
-		itemHeight: ibcsItemHeightForBaseline, // TODO actually itemHeightFrom itemHeightTo in transitions optionally to override this
+		itemSize: ibcsItemHeightForBaseline,
 		fitItemSizes: true,
 		easing,
 		justifyContent: 'center',

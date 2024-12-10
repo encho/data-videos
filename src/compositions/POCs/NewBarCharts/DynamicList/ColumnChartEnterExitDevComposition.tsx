@@ -193,7 +193,7 @@ export const ListAnimationPage: React.FC = () => {
 		width: area_3.width,
 		height: area_3.height,
 		transitions,
-		itemHeight: ibcsItemWidthForBaseline, // TODO rename to itemSize, as here it refers to the width
+		itemSize: ibcsItemWidthForBaseline,
 		// fitItemSizes: true,
 		easing,
 		justifyContent: 'center',

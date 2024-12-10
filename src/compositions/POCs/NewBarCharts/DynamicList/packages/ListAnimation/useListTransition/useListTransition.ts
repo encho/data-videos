@@ -222,16 +222,6 @@ export function useListTransition<T extends {id: string}>({
 	);
 
 	if (transitionType === 'update') {
-		// const from = getTransitionStateData({
-		// 	items: fromProp.items,
-		// 	visibleIndices: fromProp.visibleIndices,
-		// 	itemHeight: fromProp.itemHeight,
-		// });
-		// const to = getTransitionStateData({
-		// 	items: toProp.items,
-		// 	visibleIndices: toProp.visibleIndices,
-		// 	itemHeight: toProp.itemHeight,
-		// });
 		const from = getTransitionStateData(fromProp);
 		const to = getTransitionStateData(toProp);
 		const transitionTypes = getTransitionTypes({
