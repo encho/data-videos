@@ -2,16 +2,16 @@ import React from 'react';
 import {ScaleLinear} from 'd3-scale';
 
 import {HtmlArea, TGridLayoutArea} from '../../../../../../../acetti-layout';
-import {RoundedRightRect, RoundedLeftRect} from './RoundedRect/RoundedRect';
+import {RoundedTopRect, RoundedBottomRect} from './RoundedRect/RoundedRect';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
 
-export type THorizontalBarComponentProps = {
+export type TVerticalBarComponentProps = {
 	area: TGridLayoutArea;
 	valueFrom?: number;
 	valueTo?: number;
 	currentValue: number;
 	currentColor: string;
-	xScale: ScaleLinear<number, number>;
+	yScale: ScaleLinear<number, number>;
 	baseline: number;
 	theme: ThemeType;
 	id: string;
@@ -24,28 +24,46 @@ export type THorizontalBarComponentProps = {
 	// statusTo:
 };
 
-export type THorizontalBarComponent =
-	React.ComponentType<THorizontalBarComponentProps>;
+export type TVerticalBarComponent =
+	React.ComponentType<TVerticalBarComponentProps>;
 
-export const HorizontalBar: React.FC<THorizontalBarComponentProps> = ({
+export function getColumnRect({
+	area,
+	yScale,
+	value,
+}: {
+	area: TGridLayoutArea;
+	yScale: ScaleLinear<number, number>;
+	value: number;
+}) {
+	const zeroLine_y = yScale(0);
+
+	const columnHeight = Math.abs(zeroLine_y - yScale(value));
+
+	const columnRect = {
+		x: 0,
+		y: value >= 0 ? zeroLine_y - columnHeight : zeroLine_y,
+		width: area.width,
+		height: columnHeight,
+	};
+
+	return columnRect;
+}
+
+export const VerticalBar: React.FC<TVerticalBarComponentProps> = ({
 	area,
 	currentValue,
 	currentColor,
-	xScale,
+	yScale,
 	baseline,
 }) => {
-	const zeroLine_x = xScale(0);
+	const barRadius = 0.25 * baseline; // TODO 0.25 from theme
 
-	const barRadius = baseline / 4;
-
-	const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x);
-
-	const relativeBarPositions = {
-		y: 0,
-		x: currentValue >= 0 ? zeroLine_x : zeroLine_x - currentBarWidth,
-		height: area.height,
-		width: currentBarWidth,
-	};
+	const relativeBarPositions = getColumnRect({
+		area,
+		value: currentValue,
+		yScale,
+	});
 
 	const barColor = currentColor;
 
@@ -53,7 +71,7 @@ export const HorizontalBar: React.FC<THorizontalBarComponentProps> = ({
 		<HtmlArea area={area}>
 			<svg width={area.width} height={area.height}>
 				{currentValue > 0 && area.width ? (
-					<RoundedRightRect
+					<RoundedTopRect
 						y={relativeBarPositions.y}
 						x={relativeBarPositions.x}
 						height={relativeBarPositions.height}
@@ -62,7 +80,7 @@ export const HorizontalBar: React.FC<THorizontalBarComponentProps> = ({
 						radius={barRadius}
 					/>
 				) : currentValue < 0 && area.width ? (
-					<RoundedLeftRect
+					<RoundedBottomRect
 						y={relativeBarPositions.y}
 						x={relativeBarPositions.x}
 						height={relativeBarPositions.height}

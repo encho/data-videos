@@ -3,7 +3,7 @@ import {memo, forwardRef} from 'react';
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
-import {TBarChartItem} from '../useColumnChartTransition/useColumnChartTransition';
+import {TColumnChartItem} from '../useColumnChartTransition/useColumnChartTransition';
 
 type TValueLabelProps = {
 	id: string;
@@ -50,11 +50,11 @@ export const getDefaultValueLabelComponent = ({
 				<div
 					style={{
 						display: 'flex',
-						justifyContent: value >= 0 ? 'flex-start' : 'flex-end',
+						justifyContent: 'center',
 						alignItems: 'center',
-						height: '100%',
 						// QUICK-FIX: for safety, as we are not measuring all interpolated values, just the from -and to values
 						textWrap: 'nowrap',
+						backgroundColor: 'rgba(255,0,255,0.2)',
 					}}
 				>
 					<TypographyStyle
@@ -76,7 +76,7 @@ export const getDefaultValueLabelComponent = ({
 	);
 
 interface ValueLabelsDivProps {
-	data: TBarChartItem[];
+	data: TColumnChartItem[];
 	theme: ThemeType;
 	baseline: number;
 	Component: TBarChartValueLabelComponent;
@@ -97,18 +97,20 @@ export const MeasureValueLabels = forwardRef<
 				visibility: 'hidden',
 			}}
 		>
-			{data.map((it, i) => (
-				<Component
-					key={it.id + i}
-					id={it.id}
-					label={it.label}
-					theme={theme}
-					baseline={baseline}
-					animateEnter={false}
-					animateExit={false}
-					value={it.value}
-				/>
-			))}
+			<div style={{display: 'flex', flexDirection: 'row'}}>
+				{data.map((it, i) => (
+					<Component
+						key={it.id + i}
+						id={it.id}
+						label={it.label}
+						theme={theme}
+						baseline={baseline}
+						animateEnter={false}
+						animateExit={false}
+						value={it.value}
+					/>
+				))}
+			</div>
 		</div>
 	);
 });

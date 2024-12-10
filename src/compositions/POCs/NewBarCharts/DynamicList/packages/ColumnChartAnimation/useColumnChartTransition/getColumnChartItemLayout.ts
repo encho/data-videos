@@ -145,8 +145,8 @@ export function getColumnChartItemLayout({
 		},
 		{
 			type: 'pixel',
-			value: valueLabelHeight,
-			name: 'valueLabel',
+			value: labelHeight,
+			name: 'label',
 		},
 	];
 

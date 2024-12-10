@@ -3,7 +3,7 @@ import {memo, forwardRef} from 'react';
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {ThemeType} from '../../../../../../../acetti-themes/themeTypes';
-import {TBarChartItem} from '../useColumnChartTransition/useColumnChartTransition';
+import {TColumnChartItem} from '../useColumnChartTransition/useColumnChartTransition';
 
 type TLabelComponentProps = {
 	label: string;
@@ -39,11 +39,13 @@ export const DefaultLabelComponent = memo(
 			<div
 				style={{
 					display: 'flex',
-					justifyContent: 'flex-end',
+					// justifyContent: 'flex-end',
+					justifyContent: 'center',
 					alignItems: 'center',
-					height: '100%',
+					// height: '100%',
 					// QUICK-FIX: would not be neeed actually, why is text wrapping in some cases??
 					textWrap: 'nowrap',
+					backgroundColor: 'rgba(255,0,255,0.2)',
 				}}
 			>
 				<TypographyStyle
@@ -65,7 +67,7 @@ export const DefaultLabelComponent = memo(
 );
 
 interface LabelsDivProps {
-	data: TBarChartItem[];
+	data: TColumnChartItem[];
 	theme: ThemeType;
 	baseline: number;
 	Component: TBarChartLabelComponent;
@@ -84,17 +86,19 @@ export const MeasureLabels = forwardRef<HTMLDivElement, LabelsDivProps>(
 					visibility: 'hidden',
 				}}
 			>
-				{data.map((it, i) => (
-					<Component
-						key={it.id + i}
-						id={it.id}
-						label={it.label}
-						theme={theme}
-						baseline={baseline}
-						animateEnter={false}
-						animateExit={false}
-					/>
-				))}
+				<div style={{display: 'flex', flexDirection: 'row'}}>
+					{data.map((it, i) => (
+						<Component
+							key={it.id + i}
+							id={it.id}
+							label={it.label}
+							theme={theme}
+							baseline={baseline}
+							animateEnter={false}
+							animateExit={false}
+						/>
+					))}
+				</div>
 			</div>
 		);
 	}

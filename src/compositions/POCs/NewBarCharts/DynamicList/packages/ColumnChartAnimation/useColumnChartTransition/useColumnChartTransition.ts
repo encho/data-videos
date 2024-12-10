@@ -390,7 +390,8 @@ function getYScale({
 
 	const yScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(domain)
-		.range([0, yAxisHeight]); // TODO eventually umkehren
+		// .range([0, yAxisHeight]); // TODO eventually umkehren
+		.range([yAxisHeight, 0]); // TODO eventually umkehren
 
 	return yScale;
 }

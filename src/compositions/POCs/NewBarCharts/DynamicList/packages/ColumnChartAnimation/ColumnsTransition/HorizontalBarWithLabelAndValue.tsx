@@ -6,7 +6,7 @@ import {RoundedRightRect, RoundedLeftRect} from './RoundedRect/RoundedRect';
 import {
 	THorizontalBarComponentProps,
 	THorizontalBarComponent,
-} from './HorizontalBar';
+} from './VerticalBar';
 import {TypographyStyle} from '../../../../../02-TypographicLayouts/TextStyles/TextStylesComposition';
 import {TextAnimationSubtle} from '../../../../../01-TextEffects/TextAnimations/TextAnimationSubtle/TextAnimationSubtle';
 

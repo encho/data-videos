@@ -3,6 +3,7 @@ import React, {useCallback} from 'react';
 import {useVideoConfig, Easing} from 'remotion';
 import {isNumber} from 'lodash';
 
+import {useColumnChartTransition} from './packages/ColumnChartAnimation/useColumnChartTransition/useColumnChartTransition';
 import {KeyFramesInspector} from '../../Keyframes/Keyframes/KeyframesInspector';
 import {
 	getEnterKeyframes,
@@ -25,18 +26,17 @@ import {
 	useListAnimation,
 	ListAnimationTransition,
 } from './packages/ListAnimation/useListAnimation';
-import {BarsTransition} from './packages/BarChartAnimation/BarsTransition/BarsTransition';
 import {TBarChartItem} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
 import {getBarChartItemHeight} from './packages/BarChartAnimation/useBarChartTransition/getBarChartItemLayout';
-import {useBarChartTransition} from './packages/BarChartAnimation/useBarChartTransition/useBarChartTransition';
+import {ColumnsTransition} from './packages/ColumnChartAnimation/ColumnsTransition/ColumnsTransition';
 import {
 	getDefaultValueLabelComponent,
 	MeasureValueLabels,
-} from './packages/BarChartAnimation/BarsTransition/ValueLabelComponent';
+} from './packages/ColumnChartAnimation/ColumnsTransition/ValueLabelComponent';
 import {
 	DefaultLabelComponent,
 	MeasureLabels,
-} from './packages/BarChartAnimation/BarsTransition/LabelComponent';
+} from './packages/ColumnChartAnimation/ColumnsTransition/LabelComponent';
 
 export const columnChartEnterExitDevCompositionSchema = z.object({
 	themeEnum: zThemeEnum,
@@ -68,6 +68,7 @@ export const ListAnimationPage: React.FC = () => {
 	const {durationInFrames, fps} = useVideoConfig();
 
 	const ibcsSizesSpec = theme.ibcsSizes.barChartItem;
+	const ibcsSizesSpec_COLUMNS = theme.ibcsSizes.columnChartItem;
 
 	const LabelComponent = DefaultLabelComponent;
 	const ValueLabelComponent = getDefaultValueLabelComponent({});
@@ -119,14 +120,16 @@ export const ListAnimationPage: React.FC = () => {
 		[baseline, theme, ValueLabelComponent]
 	);
 
-	const labelWidthProp = undefined;
-	const valueLabelWidthProp = undefined;
-	const negativeValueLabelWidthProp = undefined;
+	const labelHeightProp = undefined;
+	const labelHeight = labelHeightProp || labelsDimensions?.height;
 
-	const labelWidth = labelWidthProp || labelsDimensions?.width;
-	const valueLabelWidth = valueLabelWidthProp || valueLabelsDimensions?.width;
-	const negativeValueLabelWidth =
-		negativeValueLabelWidthProp || negativeValueLabelsDimensions?.width;
+	const valueLabelHeightProp = undefined;
+	const valueLabelHeight =
+		valueLabelHeightProp || valueLabelsDimensions?.height;
+
+	const negativeValueLabelHeightProp = undefined;
+	const negativeValueLabelHeight =
+		negativeValueLabelHeightProp || negativeValueLabelsDimensions?.height;
 
 	const matrixLayout = useMatrixLayout({
 		width: contentWidth,
@@ -157,19 +160,19 @@ export const ListAnimationPage: React.FC = () => {
 
 	const transitions: ListAnimationTransition<TBarChartItem>[] = [
 		{
-			itemsTo: manyItemsWithNegatives,
+			itemsTo: fewItemsWithJustPositives,
 			durationInFrames: duration_0,
 		},
 		{
-			itemsTo: fewItemsWithJustPositives,
+			itemsTo: manyItemsWithNegatives,
 			durationInFrames: duration_1,
 		},
 		{
-			itemsTo: manyItemsWithNegatives,
+			itemsTo: fewItemsWithJustPositives,
 			durationInFrames: duration_2,
 		},
 		{
-			itemsTo: fewItemsWithJustPositives,
+			itemsTo: manyItemsWithNegatives,
 			durationInFrames: duration_3,
 		},
 		{
@@ -184,6 +187,7 @@ export const ListAnimationPage: React.FC = () => {
 	});
 
 	const listAnimationContext = useListAnimation({
+		direction: 'horizontal',
 		width: area_3.width,
 		height: area_3.height,
 		transitions,
@@ -195,13 +199,14 @@ export const ListAnimationPage: React.FC = () => {
 
 	const listTransitionContext = listAnimationContext.currentTransitionContext;
 
-	const barChartTransitionContext = useBarChartTransition({
+	const columnChartTransitionContext = useColumnChartTransition({
 		listTransitionContext,
 		baseline,
-		labelWidth: labelWidth || 0,
-		valueLabelWidth: valueLabelWidth || 0,
-		negativeValueLabelWidth: negativeValueLabelWidth || 0,
-		ibcsSizesSpec,
+		labelHeight: labelHeight || 0,
+		valueLabelHeight: valueLabelHeight || 0,
+		negativeValueLabelHeight: negativeValueLabelHeight || 0,
+		forceNegativeValueLabelHeight: true,
+		ibcsSizesSpec: ibcsSizesSpec_COLUMNS,
 		// globalCustomDomain: [-100, 100],
 	});
 
@@ -275,9 +280,9 @@ export const ListAnimationPage: React.FC = () => {
 				Component={MeasureValueLabelComponent}
 			/>
 
-			{isNumber(labelWidth) &&
-			isNumber(valueLabelWidth) &&
-			isNumber(negativeValueLabelWidth) ? (
+			{isNumber(labelHeight) &&
+			isNumber(valueLabelHeight) &&
+			isNumber(negativeValueLabelHeight) ? (
 				<>
 					<Page>
 						<TypographyStyle
@@ -290,10 +295,10 @@ export const ListAnimationPage: React.FC = () => {
 
 						<div style={{position: 'relative'}}>
 							<HtmlArea area={area_3}>
-								<BarsTransition
+								<ColumnsTransition
 									showLayout
 									listTransitionContext={listTransitionContext}
-									barChartTransitionContext={barChartTransitionContext}
+									columnChartTransitionContext={columnChartTransitionContext}
 									LabelComponent={LabelComponent}
 									ValueLabelComponent={ValueLabelComponent}
 									enterKeyframes={enterKeyframes}
@@ -397,31 +402,31 @@ const manyItemsWithNegatives = [
 		value: -25.3,
 		color: '#33FFF3',
 	},
-	{
-		id: 'Id-006',
-		label: 'Item 006',
-		value: 60.6,
-		color: '#FFC733',
-	},
-	{
-		id: 'Id-007',
-		label: 'Item 007',
-		value: 35.8,
-		color: '#C7FF33',
-	},
-	{
-		id: 'Id-010',
-		label: 'Item 010',
-		value: 45.9,
-		color: '#5733FF',
-	},
+	// {
+	// 	id: 'Id-006',
+	// 	label: 'Item 006',
+	// 	value: 60.6,
+	// 	color: '#FFC733',
+	// },
+	// {
+	// 	id: 'Id-007',
+	// 	label: 'Item 007',
+	// 	value: 35.8,
+	// 	color: '#C7FF33',
+	// },
+	// {
+	// 	id: 'Id-010',
+	// 	label: 'Item 010',
+	// 	value: 45.9,
+	// 	color: '#5733FF',
+	// },
 ];
 
 const fewItemsWithJustPositives = [
 	{
 		id: 'Id-009',
 		label: 'Item 009',
-		value: 70,
+		value: -70,
 		color: '#FF5733',
 	},
 	{
@@ -433,7 +438,7 @@ const fewItemsWithJustPositives = [
 	{
 		id: 'Id-007',
 		label: 'Item 007',
-		value: 20.8,
+		value: -20.8,
 		color: '#C7FF33',
 	},
 	{
@@ -442,16 +447,16 @@ const fewItemsWithJustPositives = [
 		value: 20.5,
 		color: '#33FF57',
 	},
-	{
-		id: 'Id-005',
-		label: 'Item 005',
-		value: 33.3,
-		color: '#33FFF3',
-	},
-	{
-		id: 'Id-001',
-		label: 'Item 001',
-		value: 12,
-		color: '#FF5733',
-	},
+	// {
+	// 	id: 'Id-005',
+	// 	label: 'Item 005',
+	// 	value: 33.3,
+	// 	color: '#33FFF3',
+	// },
+	// {
+	// 	id: 'Id-001',
+	// 	label: 'Item 001',
+	// 	value: 12,
+	// 	color: '#FF5733',
+	// },
 ];
