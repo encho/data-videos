@@ -200,6 +200,7 @@ export function useColumnChartTransition({
 			.range([columnChartItemLayout.columnArea.height, 0]);
 
 		// determine plotArea
+		// ----------------------------------------------------------------------
 		const firstListItemAreaFrom = listTransitionContext.from.getListItemArea(0);
 		const lastListItemAreaFrom = listTransitionContext.from.getListItemArea(
 			listTransitionContext.from.visibleItems.length - 1
@@ -222,13 +223,13 @@ export function useColumnChartTransition({
 		const plotArea_x1 = interpolate(
 			easingPercentage,
 			[0, 1],
-			[firstListItemAreaFrom.x1, lastListItemAreaTo.x1]
+			[firstListItemAreaFrom.x1, firstListItemAreaTo.x1]
 		);
 
 		const plotArea_x2 = interpolate(
 			easingPercentage,
 			[0, 1],
-			[firstListItemAreaFrom.x2, lastListItemAreaTo.x2]
+			[lastListItemAreaFrom.x2, lastListItemAreaTo.x2]
 		);
 
 		const plotArea = {
@@ -236,8 +237,8 @@ export function useColumnChartTransition({
 			y2: columnChartItemLayout.columnArea.y2,
 			x1: plotArea_x1,
 			x2: plotArea_x2,
-			width: columnChartItemLayout.columnArea.width,
-			height: plotArea_width,
+			height: columnChartItemLayout.columnArea.height,
+			width: plotArea_width,
 		};
 
 		return {

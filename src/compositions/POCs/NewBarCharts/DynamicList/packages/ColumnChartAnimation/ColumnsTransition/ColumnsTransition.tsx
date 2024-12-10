@@ -384,6 +384,7 @@ const ColumnsTransitionUpdate: React.FC<TColumnsTransitionUpdateProps> = ({
 
 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
 	const {plotArea} = columnChartTransitionContext;
+
 	const zeroLine_y1 = yScale(0);
 	const zeroLine_x1 = 0;
 	const zeroLine_x2 = plotArea.width;
@@ -509,10 +510,6 @@ const ColumnsTransitionUpdate: React.FC<TColumnsTransitionUpdateProps> = ({
 						[item.value, 0],
 						{}
 					);
-
-					// see also useAnimatedBarChartLayout line 100 ff.
-					// const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
-					// const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
 					const columnRect = getColumnRect({
 						area: columnArea,
@@ -725,14 +722,15 @@ const ColumnsTransitionUpdate: React.FC<TColumnsTransitionUpdateProps> = ({
 				})}
 			</div>
 
-			{/* <ZeroLine
+			<ZeroLine
 				area={plotArea}
-				x={zeroLine_x1}
+				x1={zeroLine_x1}
+				x2={zeroLine_x2}
 				y1={zeroLine_y1}
-				y2={zeroLine_y2}
+				y2={zeroLine_y1}
 				theme={theme}
 				baseline={baseline}
-			/> */}
+			/>
 		</div>
 	);
 };
