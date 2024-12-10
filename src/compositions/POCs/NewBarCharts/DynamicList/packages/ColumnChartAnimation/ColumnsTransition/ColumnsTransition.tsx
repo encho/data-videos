@@ -24,7 +24,11 @@ import {
 	getListItems_Disappear,
 } from '../../ListAnimation/useListTransition/useListTransition';
 import {TColumnChartTransitionContext} from '../useColumnChartTransition/useColumnChartTransition';
-import {HtmlArea, DisplayGridRails} from '../../../../../../../acetti-layout';
+import {
+	HtmlArea,
+	DisplayGridRails,
+	TGridLayoutArea,
+} from '../../../../../../../acetti-layout';
 import {TColumnChartItem} from '../useColumnChartTransition/useColumnChartTransition';
 import {
 	getKeyFrame,
@@ -87,31 +91,30 @@ export const ColumnsTransition: React.FC<TColumnsTransitionProps> = ({
 	baseline,
 }) => {
 	if (listTransitionContext.transitionType === 'update') {
-		return (
-			<div
-				style={{
-					color: 'yellow',
-					padding: 50,
-					fontSize: 50,
-					backgroundColor: 'red',
-				}}
-			>
-				UPDATE
-			</div>
-		);
-		// TODO implement:
 		// return (
-		// 	<BarsTransitionUpdate
-		// 		showLayout={showLayout}
-		// 		listTransitionContext={listTransitionContext}
-		// 		barChartTransitionContext={barChartTransitionContext}
-		// 		LabelComponent={LabelComponent}
-		// 		ValueLabelComponent={ValueLabelComponent}
-		// 		HorizontalBarComponent={HorizontalBarComponent}
-		// 		theme={theme}
-		// 		baseline={baseline}
-		// 	/>
+		// 	<div
+		// 		style={{
+		// 			color: 'yellow',
+		// 			padding: 50,
+		// 			fontSize: 50,
+		// 			backgroundColor: 'red',
+		// 		}}
+		// 	>
+		// 		UPDATE
+		// 	</div>
 		// );
+		return (
+			<ColumnsTransitionUpdate
+				showLayout={showLayout}
+				listTransitionContext={listTransitionContext}
+				columnChartTransitionContext={columnChartTransitionContext}
+				LabelComponent={LabelComponent}
+				ValueLabelComponent={ValueLabelComponent}
+				VerticalBarComponent={VerticalBarComponent}
+				theme={theme}
+				baseline={baseline}
+			/>
+		);
 	}
 
 	if (listTransitionContext.transitionType === 'enter') {
@@ -132,18 +135,6 @@ export const ColumnsTransition: React.FC<TColumnsTransitionProps> = ({
 
 	invariant(listTransitionContext.transitionType === 'exit');
 
-	// return (
-	// 	<div
-	// 		style={{
-	// 			color: 'yellow',
-	// 			padding: 50,
-	// 			fontSize: 50,
-	// 			backgroundColor: 'red',
-	// 		}}
-	// 	>
-	// 		EXIT
-	// 	</div>
-	// );
 	return (
 		<ColumnsTransitionExit
 			showLayout={showLayout}
@@ -238,10 +229,10 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 				});
 
 				// the value label margins
-				const positiveValueLabelMarginTop = columnRect.y;
-
-				const negativeValueLabelMarginTop =
-					-1 * (columnArea.height - columnRect.y - columnRect.height);
+				const {upperSpace, lowerSpace} = getColumnRectSpaceInArea({
+					area: columnArea,
+					columnRect,
+				});
 
 				const isPositiveBarOrZero = dataItem.value >= 0;
 
@@ -293,7 +284,7 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginTop: negativeValueLabelMarginTop}}
+									style={{marginTop: -1 * lowerSpace}}
 								>
 									<ValueLabelComponent
 										animateEnter
@@ -309,10 +300,7 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 
 							{/* the value label */}
 							{isPositiveBarOrZero ? (
-								<HtmlArea
-									area={valueLabelArea}
-									style={{marginTop: positiveValueLabelMarginTop}}
-								>
+								<HtmlArea area={valueLabelArea} style={{marginTop: upperSpace}}>
 									<ValueLabelComponent
 										animateEnter
 										animateExit={false}
@@ -369,400 +357,385 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 	);
 };
 
-// const BarsTransitionUpdate: React.FC<TBarsTransitionUpdateProps> = ({
-// 	showLayout,
-// 	listTransitionContext,
-// 	LabelComponent,
-// 	ValueLabelComponent,
-// 	HorizontalBarComponent,
-// 	barChartTransitionContext,
-// 	theme,
-// 	baseline,
-// }) => {
-// 	const {frame, durationInFrames} = listTransitionContext;
+const ColumnsTransitionUpdate: React.FC<TColumnsTransitionUpdateProps> = ({
+	showLayout,
+	listTransitionContext,
+	columnChartTransitionContext,
+	LabelComponent,
+	ValueLabelComponent,
+	VerticalBarComponent,
+	theme,
+	baseline,
+}) => {
+	const {frame, durationInFrames} = listTransitionContext;
 
-// 	const {xScale} = barChartTransitionContext;
-// 	const {barArea, labelArea, valueLabelArea, negativeValueLabelArea} =
-// 		barChartTransitionContext.barChartItemLayout;
+	const {yScale} = columnChartTransitionContext;
+	const {columnArea, labelArea, valueLabelArea, negativeValueLabelArea} =
+		columnChartTransitionContext.columnChartItemLayout;
 
-// 	// const GRID_RAILS_COLOR = 'magenta';
-// 	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
+	// const GRID_RAILS_COLOR = 'magenta';
+	const GRID_RAILS_COLOR = 'rgba(255,0,255,0.2)';
 
-// 	const enterItems = getListItems_Enter(listTransitionContext);
-// 	const exitItems = getListItems_Exit(listTransitionContext);
-// 	const appearItems = getListItems_Appear(listTransitionContext);
-// 	const disappearItems = getListItems_Disappear(listTransitionContext);
-// 	const updateItems = getListItems_Update(listTransitionContext);
+	const enterItems = getListItems_Enter(listTransitionContext);
+	const exitItems = getListItems_Exit(listTransitionContext);
+	const appearItems = getListItems_Appear(listTransitionContext);
+	const disappearItems = getListItems_Disappear(listTransitionContext);
+	const updateItems = getListItems_Update(listTransitionContext);
 
-// 	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
-// 	const {plotArea} = barChartTransitionContext;
-// 	const zeroLine_x1 = xScale(0);
-// 	const zeroLine_y1 = 0;
-// 	const zeroLine_y2 = plotArea.height;
+	// TODO see how it was done in SimpleBarChart.tsx line 450 ff..
+	const {plotArea} = columnChartTransitionContext;
+	const zeroLine_y1 = yScale(0);
+	const zeroLine_x1 = 0;
+	const zeroLine_x2 = plotArea.width;
 
-// 	return (
-// 		<div>
-// 			<div>
-// 				{[...enterItems].map((enterItem) => {
-// 					const {opacity, item, area} = enterItem;
+	return (
+		<div>
+			<div>
+				{[...enterItems].map((enterItem) => {
+					const {opacity, item, area} = enterItem;
 
-// 					const valueAnimationPercentage = interpolate(
-// 						frame,
-// 						[0, durationInFrames - 1],
-// 						[0, 1]
-// 					);
+					const valueAnimationPercentage = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[0, 1]
+					);
 
-// 					// TODO this may have to happen quicker than the whole durationInFrames
-// 					const currentValue = interpolate(
-// 						valueAnimationPercentage,
-// 						[0, 1],
-// 						[0, item.value],
-// 						{}
-// 					);
+					// TODO this may have to happen quicker than the whole durationInFrames
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
+						[0, item.value],
+						{}
+					);
 
-// 					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					const columnRect = getColumnRect({
+						area: columnArea,
+						value: currentValue,
+						yScale,
+					});
 
-// 					const relativeBarPositions = {
-// 						y: 0,
-// 						x: item.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-// 						height: barArea.height,
-// 						width: currentBarWidth,
-// 					};
+					// the value label margins
+					const {upperSpace, lowerSpace} = getColumnRectSpaceInArea({
+						area: columnArea,
+						columnRect,
+					});
 
-// 					// the value label margins
-// 					const positiveValueLabelMarginLeft =
-// 						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
+					const isPositiveBarOrZero = item.value >= 0;
 
-// 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+					const barColor = item.color;
 
-// 					const isPositiveBarOrZero = item.value >= 0;
+					return (
+						<HtmlArea key={item.id} area={area} opacity={opacity}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...columnChartTransitionContext.columnChartItemLayout
+											.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
+							<HtmlArea area={labelArea}>
+								<LabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									label={item.label}
+								/>
+							</HtmlArea>
 
-// 					const barColor = item.color;
+							<VerticalBarComponent
+								id={item.id}
+								label={item.label}
+								baseline={baseline}
+								theme={theme}
+								area={columnArea}
+								currentValue={currentValue}
+								valueTo={item.value}
+								currentColor={barColor}
+								yScale={yScale}
+								animateExit={false}
+								animateEnter={false}
+							/>
 
-// 					return (
-// 						<HtmlArea key={item.id} area={area} opacity={opacity}>
-// 							{showLayout ? (
-// 								<div style={{position: 'absolute'}}>
-// 									<DisplayGridRails
-// 										{...barChartTransitionContext.barChartItemLayout.gridLayout}
-// 										stroke={GRID_RAILS_COLOR}
-// 									/>
-// 								</div>
-// 							) : null}
-// 							<HtmlArea area={labelArea}>
-// 								<LabelComponent
-// 									id={item.id}
-// 									animateExit={false}
-// 									animateEnter={false}
-// 									baseline={baseline}
-// 									theme={theme}
-// 									label={item.label}
-// 								/>
-// 							</HtmlArea>
+							{/* the negative value label */}
+							{isPositiveBarOrZero ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									style={{marginTop: -1 * lowerSpace}}
+								>
+									<ValueLabelComponent
+										id={item.id}
+										label={item.label}
+										value={currentValue}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+									/>
+								</HtmlArea>
+							)}
 
-// 							<HorizontalBarComponent
-// 								id={item.id}
-// 								label={item.label}
-// 								baseline={baseline}
-// 								theme={theme}
-// 								area={barArea}
-// 								currentValue={currentValue}
-// 								valueTo={item.value}
-// 								currentColor={barColor}
-// 								xScale={xScale}
-// 								animateExit={false}
-// 								animateEnter={false}
-// 							/>
+							{isPositiveBarOrZero ? (
+								<HtmlArea area={valueLabelArea} style={{marginTop: upperSpace}}>
+									<ValueLabelComponent
+										id={item.id}
+										label={item.label}
+										value={currentValue}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+									/>
+								</HtmlArea>
+							) : null}
+						</HtmlArea>
+					);
+				})}
+				{[...exitItems].map((exitItem) => {
+					const {opacity, item, area} = exitItem;
 
-// 							{/* the negative value label */}
-// 							{isPositiveBarOrZero ? null : (
-// 								<HtmlArea
-// 									area={negativeValueLabelArea}
-// 									style={{marginLeft: negativeValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										id={item.id}
-// 										label={item.label}
-// 										value={currentValue}
-// 										animateExit={false}
-// 										animateEnter={false}
-// 										baseline={baseline}
-// 										theme={theme}
-// 									/>
-// 								</HtmlArea>
-// 							)}
+					const valueAnimationPercentage = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[0, 1]
+					);
 
-// 							{isPositiveBarOrZero ? (
-// 								<HtmlArea
-// 									area={valueLabelArea}
-// 									style={{marginLeft: positiveValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										id={item.id}
-// 										label={item.label}
-// 										value={currentValue}
-// 										animateExit={false}
-// 										animateEnter={false}
-// 										baseline={baseline}
-// 										theme={theme}
-// 									/>
-// 								</HtmlArea>
-// 							) : null}
-// 						</HtmlArea>
-// 					);
-// 				})}
-// 				{[...exitItems].map((exitItem) => {
-// 					const {opacity, item, area} = exitItem;
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
+						[item.value, 0],
+						{}
+					);
 
-// 					const valueAnimationPercentage = interpolate(
-// 						frame,
-// 						[0, durationInFrames - 1],
-// 						[0, 1]
-// 					);
+					// see also useAnimatedBarChartLayout line 100 ff.
+					// const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
+					// const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
 
-// 					const currentValue = interpolate(
-// 						valueAnimationPercentage,
-// 						[0, 1],
-// 						[item.value, 0],
-// 						{}
-// 					);
+					const columnRect = getColumnRect({
+						area: columnArea,
+						value: currentValue,
+						yScale,
+					});
 
-// 					// see also useAnimatedBarChartLayout line 100 ff.
-// 					// const currentBarWidth = Math.abs(xScale(item.value) - zeroLine_x1);
-// 					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					// the value label margins
+					const {upperSpace, lowerSpace} = getColumnRectSpaceInArea({
+						area: columnArea,
+						columnRect,
+					});
 
-// 					// TODO rather as Area format with x1 x2 y1 y2 height width
-// 					const relativeBarPositions = {
-// 						y: 0,
-// 						x: item.value >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-// 						height: barArea.height,
-// 						width: currentBarWidth,
-// 					};
+					const barColor = item.color;
 
-// 					// the value label margins
-// 					const positiveValueLabelMarginLeft =
-// 						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
+					const isPositiveBarOrZero = item.value >= 0;
 
-// 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+					return (
+						<HtmlArea key={item.id} area={area} opacity={opacity}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...columnChartTransitionContext.columnChartItemLayout
+											.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
 
-// 					const barColor = item.color;
+							<HtmlArea area={labelArea}>
+								<LabelComponent
+									id={item.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									label={item.label}
+								/>
+							</HtmlArea>
 
-// 					const isPositiveBarOrZero = item.value >= 0;
+							<VerticalBarComponent
+								id={item.id}
+								label={item.label}
+								baseline={baseline}
+								theme={theme}
+								area={columnArea}
+								valueFrom={item.value}
+								currentValue={currentValue}
+								currentColor={barColor}
+								yScale={yScale}
+								animateExit={false}
+								animateEnter={false}
+							/>
 
-// 					return (
-// 						<HtmlArea key={item.id} area={area} opacity={opacity}>
-// 							{showLayout ? (
-// 								<div style={{position: 'absolute'}}>
-// 									<DisplayGridRails
-// 										{...barChartTransitionContext.barChartItemLayout.gridLayout}
-// 										stroke={GRID_RAILS_COLOR}
-// 									/>
-// 								</div>
-// 							) : null}
+							{/* the negative value label */}
+							{isPositiveBarOrZero ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									style={{marginTop: -1 * lowerSpace}}
+								>
+									<ValueLabelComponent
+										animateEnter
+										animateExit={false}
+										id={item.id}
+										value={currentValue}
+										label={item.label}
+										baseline={baseline}
+										theme={theme}
+									/>
+								</HtmlArea>
+							)}
 
-// 							<HtmlArea area={labelArea}>
-// 								<LabelComponent
-// 									id={item.id}
-// 									animateExit={false}
-// 									animateEnter={false}
-// 									baseline={baseline}
-// 									theme={theme}
-// 									label={item.label}
-// 								/>
-// 							</HtmlArea>
+							{isPositiveBarOrZero ? (
+								<HtmlArea area={valueLabelArea} style={{marginTop: upperSpace}}>
+									<ValueLabelComponent
+										id={item.id}
+										value={currentValue}
+										label={item.label}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+									/>
+								</HtmlArea>
+							) : null}
+						</HtmlArea>
+					);
+				})}
+				{[...appearItems, ...disappearItems, ...updateItems].map((listItem) => {
+					const {opacity, itemFrom, itemTo, area} = listItem;
 
-// 							<HorizontalBarComponent
-// 								id={item.id}
-// 								label={item.label}
-// 								baseline={baseline}
-// 								theme={theme}
-// 								area={barArea}
-// 								valueFrom={item.value}
-// 								currentValue={currentValue}
-// 								currentColor={barColor}
-// 								xScale={xScale}
-// 								animateExit={false}
-// 								animateEnter={false}
-// 							/>
+					// TODO this could be brought into the context
+					const valueAnimationPercentage = interpolate(
+						frame,
+						[0, durationInFrames - 1],
+						[0, 1],
+						{}
+					);
 
-// 							{/* the negative value label */}
-// 							{isPositiveBarOrZero ? null : (
-// 								<HtmlArea
-// 									area={negativeValueLabelArea}
-// 									style={{marginLeft: negativeValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										animateEnter
-// 										animateExit={false}
-// 										id={item.id}
-// 										value={currentValue}
-// 										label={item.label}
-// 										baseline={baseline}
-// 										theme={theme}
-// 									/>
-// 								</HtmlArea>
-// 							)}
+					// TODO this could be brought into the context
+					const currentValue = interpolate(
+						valueAnimationPercentage,
+						[0, 1],
+						[itemFrom.value, itemTo.value]
+					);
 
-// 							{isPositiveBarOrZero ? (
-// 								<HtmlArea
-// 									area={valueLabelArea}
-// 									style={{marginLeft: positiveValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										id={item.id}
-// 										value={currentValue}
-// 										label={item.label}
-// 										animateExit={false}
-// 										animateEnter={false}
-// 										baseline={baseline}
-// 										theme={theme}
-// 									/>
-// 								</HtmlArea>
-// 							) : null}
-// 						</HtmlArea>
-// 					);
-// 				})}
-// 				{[...appearItems, ...disappearItems, ...updateItems].map((listItem) => {
-// 					const {opacity, itemFrom, itemTo, area} = listItem;
+					const columnRect = getColumnRect({
+						area: columnArea,
+						value: currentValue,
+						yScale,
+					});
 
-// 					// TODO this could be brought into the context
-// 					const valueAnimationPercentage = interpolate(
-// 						frame,
-// 						[0, durationInFrames - 1],
-// 						[0, 1],
-// 						{}
-// 					);
+					// the value label margins
+					const {upperSpace, lowerSpace} = getColumnRectSpaceInArea({
+						area: columnArea,
+						columnRect,
+					});
 
-// 					// TODO this could be brought into the context
-// 					const currentValue = interpolate(
-// 						valueAnimationPercentage,
-// 						[0, 1],
-// 						[itemFrom.value, itemTo.value]
-// 					);
+					const isPositiveBarOrZero = currentValue >= 0;
 
-// 					// see also useAnimatedBarChartLayout line 100 ff.
-// 					const currentBarWidth = Math.abs(xScale(currentValue) - zeroLine_x1);
+					const currentBarColor = interpolateColors(
+						frame,
+						[0, durationInFrames - 1],
+						[itemFrom.color, itemTo.color]
+					);
 
-// 					const relativeBarPositions = {
-// 						y: 0,
-// 						x: currentValue >= 0 ? zeroLine_x1 : zeroLine_x1 - currentBarWidth,
-// 						height: barArea.height,
-// 						width: currentBarWidth,
-// 					};
+					return (
+						<HtmlArea key={itemTo.id} area={area} opacity={opacity}>
+							{showLayout ? (
+								<div style={{position: 'absolute'}}>
+									<DisplayGridRails
+										{...columnChartTransitionContext.columnChartItemLayout
+											.gridLayout}
+										stroke={GRID_RAILS_COLOR}
+									/>
+								</div>
+							) : null}
 
-// 					// the value label margins
-// 					const positiveValueLabelMarginLeft =
-// 						-1 * (barArea.width - (relativeBarPositions.x + currentBarWidth));
+							<HtmlArea area={labelArea}>
+								<LabelComponent
+									id={itemTo.id}
+									animateExit={false}
+									animateEnter={false}
+									baseline={baseline}
+									theme={theme}
+									label={itemTo.label} // TODO deprecate
+									// TODO
+									// statusFrom={itemTo.status || "default"}
+									// statusTo={itemTo.status || "default"}
+									// upperValue={currentUpperValue} // although not really used mostly
+									// lowerValue={currentLowerValue} // ...
+									// value={currentValue} // ...
+								/>
+							</HtmlArea>
 
-// 					const negativeValueLabelMarginLeft = relativeBarPositions.x;
+							<VerticalBarComponent
+								id={itemTo.id}
+								label={itemTo.label}
+								baseline={baseline}
+								theme={theme}
+								area={columnArea}
+								valueFrom={itemFrom.value}
+								valueTo={itemTo.value}
+								currentValue={currentValue}
+								currentColor={currentBarColor}
+								yScale={yScale}
+								animateExit={false}
+								animateEnter={false}
+							/>
 
-// 					const isPositiveBarOrZero = currentValue >= 0;
+							{/* the negative value label */}
+							{isPositiveBarOrZero ? null : (
+								<HtmlArea
+									area={negativeValueLabelArea}
+									style={{marginTop: -1 * lowerSpace}}
+								>
+									<ValueLabelComponent
+										animateEnter
+										animateExit={false}
+										id={itemTo.id}
+										value={currentValue}
+										label={itemTo.label}
+										baseline={baseline}
+										theme={theme}
+										// TODO
+										// label={itemTo.label} // althogh not often used...
+										// statusFrom={itemTo.status || "default"}
+										// statusTo={itemTo.status || "default"}
+										// upperValue={currentUpperValue}
+										// lowerValue={currentLowerValue}
+									/>
+								</HtmlArea>
+							)}
 
-// 					const currentBarColor = interpolateColors(
-// 						frame,
-// 						[0, durationInFrames - 1],
-// 						[itemFrom.color, itemTo.color]
-// 					);
+							{isPositiveBarOrZero ? (
+								<HtmlArea area={valueLabelArea} style={{marginTop: upperSpace}}>
+									<ValueLabelComponent
+										id={itemTo.id}
+										label={itemTo.label}
+										animateExit={false}
+										animateEnter={false}
+										baseline={baseline}
+										theme={theme}
+										value={currentValue}
+									/>
+								</HtmlArea>
+							) : null}
+						</HtmlArea>
+					);
+				})}
+			</div>
 
-// 					return (
-// 						<HtmlArea key={itemTo.id} area={area} opacity={opacity}>
-// 							{showLayout ? (
-// 								<div style={{position: 'absolute'}}>
-// 									<DisplayGridRails
-// 										{...barChartTransitionContext.barChartItemLayout.gridLayout}
-// 										stroke={GRID_RAILS_COLOR}
-// 									/>
-// 								</div>
-// 							) : null}
-
-// 							<HtmlArea area={labelArea}>
-// 								<LabelComponent
-// 									id={itemTo.id}
-// 									animateExit={false}
-// 									animateEnter={false}
-// 									baseline={baseline}
-// 									theme={theme}
-// 									label={itemTo.label} // TODO deprecate
-// 									// TODO
-// 									// statusFrom={itemTo.status || "default"}
-// 									// statusTo={itemTo.status || "default"}
-// 									// upperValue={currentUpperValue} // although not really used mostly
-// 									// lowerValue={currentLowerValue} // ...
-// 									// value={currentValue} // ...
-// 								/>
-// 							</HtmlArea>
-
-// 							<HorizontalBarComponent
-// 								id={itemTo.id}
-// 								label={itemTo.label}
-// 								baseline={baseline}
-// 								theme={theme}
-// 								area={barArea}
-// 								valueFrom={itemFrom.value}
-// 								valueTo={itemTo.value}
-// 								currentValue={currentValue}
-// 								currentColor={currentBarColor}
-// 								xScale={xScale}
-// 								animateExit={false}
-// 								animateEnter={false}
-// 							/>
-
-// 							{/* the negative value label */}
-// 							{isPositiveBarOrZero ? null : (
-// 								<HtmlArea
-// 									area={negativeValueLabelArea}
-// 									style={{marginLeft: negativeValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										animateEnter
-// 										animateExit={false}
-// 										id={itemTo.id}
-// 										value={currentValue}
-// 										label={itemTo.label}
-// 										baseline={baseline}
-// 										theme={theme}
-// 										// TODO
-// 										// label={itemTo.label} // althogh not often used...
-// 										// statusFrom={itemTo.status || "default"}
-// 										// statusTo={itemTo.status || "default"}
-// 										// upperValue={currentUpperValue}
-// 										// lowerValue={currentLowerValue}
-// 									/>
-// 								</HtmlArea>
-// 							)}
-
-// 							{isPositiveBarOrZero ? (
-// 								<HtmlArea
-// 									area={valueLabelArea}
-// 									style={{marginLeft: positiveValueLabelMarginLeft}}
-// 								>
-// 									<ValueLabelComponent
-// 										id={itemTo.id}
-// 										label={itemTo.label}
-// 										animateExit={false}
-// 										animateEnter={false}
-// 										baseline={baseline}
-// 										theme={theme}
-// 										value={currentValue}
-// 									/>
-// 								</HtmlArea>
-// 							) : null}
-// 						</HtmlArea>
-// 					);
-// 				})}
-// 			</div>
-
-// 			<ZeroLine
-// 				area={plotArea}
-// 				x={zeroLine_x1}
-// 				y1={zeroLine_y1}
-// 				y2={zeroLine_y2}
-// 				theme={theme}
-// 				baseline={baseline}
-// 			/>
-// 		</div>
-// 	);
-// };
+			{/* <ZeroLine
+				area={plotArea}
+				x={zeroLine_x1}
+				y1={zeroLine_y1}
+				y2={zeroLine_y2}
+				theme={theme}
+				baseline={baseline}
+			/> */}
+		</div>
+	);
+};
 
 // TODO think about if we here do not need getListItems_Enter
 // also: these are not really hooks but just memoized functions of TListTransitionContext
@@ -839,11 +812,10 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 					yScale,
 				});
 
-				// the value label margins
-				const positiveValueLabelMarginTop = columnRect.y;
-
-				const negativeValueLabelMarginTop =
-					-1 * (columnArea.height - columnRect.y - columnRect.height);
+				const {upperSpace, lowerSpace} = getColumnRectSpaceInArea({
+					area: columnArea,
+					columnRect,
+				});
 
 				const barColor = dataItem.color;
 
@@ -895,7 +867,7 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 							{isPositiveBarOrZero ? null : (
 								<HtmlArea
 									area={negativeValueLabelArea}
-									style={{marginTop: negativeValueLabelMarginTop}}
+									style={{marginTop: -1 * lowerSpace}}
 								>
 									<ValueLabelComponent
 										animateExit
@@ -911,10 +883,7 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 
 							{/* the value label */}
 							{isPositiveBarOrZero ? (
-								<HtmlArea
-									area={valueLabelArea}
-									style={{marginTop: positiveValueLabelMarginTop}}
-								>
+								<HtmlArea area={valueLabelArea} style={{marginTop: upperSpace}}>
 									<ValueLabelComponent
 										animateExit
 										animateEnter={false}
@@ -969,4 +938,17 @@ const ColumnsTransitionExit: React.FC<TColumnsTransitionExitProps> = ({
 			})()}
 		</Sequence>
 	);
+};
+
+const getColumnRectSpaceInArea = ({
+	columnRect,
+	area,
+}: {
+	columnRect: {x: number; y: number; width: number; height: number};
+	area: TGridLayoutArea;
+}) => {
+	const upperSpace = columnRect.y;
+	const lowerSpace = area.height - columnRect.y - columnRect.height;
+
+	return {upperSpace, lowerSpace};
 };

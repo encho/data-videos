@@ -197,7 +197,7 @@ export function useColumnChartTransition({
 
 		const yScale: ScaleLinear<number, number> = scaleLinear()
 			.domain([interpolatedExtent_0, interpolatedExtent_1] as [number, number])
-			.range([0, columnChartItemLayout.columnArea.height]);
+			.range([columnChartItemLayout.columnArea.height, 0]);
 
 		// determine plotArea
 		const firstListItemAreaFrom = listTransitionContext.from.getListItemArea(0);
@@ -381,17 +381,19 @@ function getYScale({
 				number
 			];
 			invariant(isNumber(dataExtent[0]) && isNumber(dataExtent[1]));
-			return dataExtent[0] > 0
-				? ([0, dataExtent[1]] as [number, number])
-				: dataExtent[1] < 0
-				? ([dataExtent[0], 0] as [number, number])
-				: dataExtent;
+			const calculatedDomain =
+				dataExtent[0] > 0
+					? ([0, dataExtent[1]] as [number, number])
+					: dataExtent[1] < 0
+					? ([dataExtent[0], 0] as [number, number])
+					: dataExtent;
+
+			return calculatedDomain;
 		})();
 
 	const yScale: ScaleLinear<number, number> = scaleLinear()
 		.domain(domain)
-		// .range([0, yAxisHeight]); // TODO eventually umkehren
-		.range([yAxisHeight, 0]); // TODO eventually umkehren
+		.range([yAxisHeight, 0]);
 
 	return yScale;
 }
