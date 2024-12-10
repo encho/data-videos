@@ -26,6 +26,17 @@ const zTheme_ibcsSizes = z.object({
 			valueLabelMargin: z.number(),
 		}),
 	}),
+	columnChartItem: z.object({
+		columns: z.object({
+			columnMarginLeft: z.number(),
+			columnWidth: z.number(),
+			columnMarginRight: z.number(),
+		}),
+		rows: z.object({
+			labelMargin: z.number(),
+			valueLabelMargin: z.number(),
+		}),
+	}),
 });
 
 export type Theme_IBCS_Sizes_BarChartItem = z.infer<typeof zTheme_ibcsSizes>;

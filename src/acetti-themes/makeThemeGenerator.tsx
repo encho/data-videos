@@ -126,6 +126,17 @@ export function makeThemeGenerator({palette}: {palette: ThemePalette}) {
 						valueLabelMargin: 0.75,
 					},
 				},
+				columnChartItem: {
+					columns: {
+						columnMarginLeft: 0.3,
+						columnWidth: 2,
+						columnMarginRight: 0.3,
+					},
+					rows: {
+						labelMargin: 1,
+						valueLabelMargin: 0.75,
+					},
+				},
 			},
 			sizes: {
 				lineWidths: {

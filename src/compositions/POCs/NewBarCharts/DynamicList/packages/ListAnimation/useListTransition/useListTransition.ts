@@ -23,6 +23,7 @@ type ListTransitionContext_Common = {
 	globalAnimationFrame: number;
 	durationInFrames: number;
 	width: number;
+	height: number;
 	easingPercentage: number;
 	frameRange: {startFrame: number; endFrame: number};
 };
@@ -121,6 +122,7 @@ export function useListTransition<T extends {id: string}>({
 		// transitionTypes, // in update instead
 		// itemHeight,
 		width,
+		height,
 	};
 
 	const isEnterTransition = fromProp.items.length === 0;
