@@ -115,19 +115,6 @@ export const ColumnsTransition: React.FC<TColumnsTransitionProps> = ({
 	}
 
 	if (listTransitionContext.transitionType === 'enter') {
-		// return (
-		// 	<div
-		// 		style={{
-		// 			color: 'yellow',
-		// 			padding: 50,
-		// 			fontSize: 50,
-		// 			backgroundColor: 'red',
-		// 		}}
-		// 	>
-		// 		ENTER
-		// 	</div>
-		// );
-		// TODO implement
 		return (
 			<ColumnsTransitionEnter
 				showLayout={showLayout}
@@ -247,34 +234,17 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 					[0, dataItem.value]
 				);
 
-				// const currentColumnHeight = Math.abs(
-				// 	yScale(currentValue) - zeroLine_y1
-				// );
-
-				const relativeColumnPositions = getColumnRect({
+				const columnRect = getColumnRect({
 					area: columnArea,
 					value: currentValue,
 					yScale,
 				});
 
-				// const relativeColumnPositions = {
-				// 	x: 0,
-				// 	width: columnArea.width,
-				// 	y:
-				// 		dataItem.value >= 0
-				// 			? zeroLine_y1
-				// 			: zeroLine_y1 - currentColumnHeight,
-				// 	height: currentColumnHeight,
-				// };
-
 				// the value label margins
-				const positiveValueLabelMarginTop = relativeColumnPositions.y;
+				const positiveValueLabelMarginTop = columnRect.y;
 
 				const negativeValueLabelMarginTop =
-					-1 *
-					(columnArea.height -
-						relativeColumnPositions.y -
-						relativeColumnPositions.height);
+					-1 * (columnArea.height - columnRect.y - columnRect.height);
 
 				const isPositiveBarOrZero = dataItem.value >= 0;
 
@@ -364,40 +334,41 @@ const ColumnsTransitionEnter: React.FC<TColumnsTransitionEnterProps> = ({
 			})}
 
 			{/* the zero line */}
-			{/* {(() => {
-				const zeroLine_y1_full = 0;
-				const zeroLine_y2_full = plotArea.height;
+			{(() => {
+				const zeroLine_x1_full = 0;
+				const zeroLine_x2_full = plotArea.width;
 
 				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y1 = getKeyFramesInterpolator(
+				const interpolateZeroLine__x1 = getKeyFramesInterpolator(
 					keyframes,
 					['ZEROLINE_ENTER_START', 'ZEROLINE_ENTER_END'],
-					[zeroLine_y1_full, zeroLine_y1_full],
+					[zeroLine_x1_full, zeroLine_x1_full],
 					[Easing.ease]
 				);
 
 				// TODO eventually useCallback at start of the component to have more efficiency
-				const interpolateZeroLine__y2 = getKeyFramesInterpolator(
+				const interpolateZeroLine__x2 = getKeyFramesInterpolator(
 					keyframes,
 					['ZEROLINE_ENTER_START', 'ZEROLINE_ENTER_END'],
-					[0, zeroLine_y2_full],
+					[0, zeroLine_x2_full],
 					[Easing.ease]
 				);
 
-				const zeroLine_y1 = interpolateZeroLine__y1(frame);
-				const zeroLine_y2 = interpolateZeroLine__y2(frame);
+				const zeroLine_x1 = interpolateZeroLine__x1(frame);
+				const zeroLine_x2 = interpolateZeroLine__x2(frame);
 
 				return (
 					<ZeroLine
 						area={plotArea}
-						x={zeroLine_x1}
+						x1={zeroLine_x1}
+						x2={zeroLine_x2}
 						y1={zeroLine_y1}
-						y2={zeroLine_y2}
+						y2={zeroLine_y1}
 						theme={theme}
 						baseline={baseline}
 					/>
 				);
-			})()} */}
+			})()}
 		</Sequence>
 	);
 };
